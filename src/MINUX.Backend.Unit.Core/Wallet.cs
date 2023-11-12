@@ -1,0 +1,12 @@
+﻿namespace MINUX.Backend.Unit.Core;
+
+public class Wallet
+{
+    public Guid Id { get; set; }
+
+    public string Name { get; set; }
+
+    public string Source { get; set; }
+
+    public string Address { get; set; }
+}
