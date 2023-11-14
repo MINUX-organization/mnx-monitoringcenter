@@ -2,7 +2,7 @@
 
 namespace MINUX.Backend.Unit.UseCases.Abstractions;
 
-public interface ICryptocurrencyRepository
+public interface ICryptocurrencyRepository : IRepository
 {
     public IAsyncEnumerable<Cryptocurrency> GetAll();
 

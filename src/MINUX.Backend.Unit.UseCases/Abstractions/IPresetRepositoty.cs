@@ -2,7 +2,7 @@
 
 namespace MINUX.Backend.Unit.UseCases.Abstractions;
 
-public interface IPresetRepositoty
+public interface IPresetRepositoty : IRepository
 {
     public IAsyncEnumerable<Preset> GetAll();
 

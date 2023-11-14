@@ -2,7 +2,7 @@
 
 namespace MINUX.Backend.Unit.UseCases.Abstractions;
 
-public interface IPoolRepository
+public interface IPoolRepository : IRepository
 {
     public IAsyncEnumerable<Pool> GetAll();
 

@@ -1,4 +1,6 @@
-﻿namespace MINUX.Backend.Unit.Core;
+﻿using MINUX.Backend.Unit.Core.StaticData;
+
+namespace MINUX.Backend.Unit.Core;
 
 public class FlightSheet
 {

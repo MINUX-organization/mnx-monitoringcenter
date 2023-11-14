@@ -2,7 +2,7 @@
 
 namespace MINUX.Backend.Unit.UseCases.Abstractions;
 
-public interface IWalletRepository
+public interface IWalletRepository : IRepository
 {
     public IAsyncEnumerable<Wallet> GetAll();
 

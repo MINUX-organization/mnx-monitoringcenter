@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using Kernel.UseCases;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MINUX.Backend.Unit.Core;
+using MINUX.Backend.Unit.UseCases.Commands.DeleteCommand;
 using MINUX.Backend.Unit.UseCases.Queries.GetCryptocurrenciesQuery;
 
 namespace MINUX.Backend.Unit.Controllers;
@@ -29,8 +31,10 @@ public class CryptocurrencyController : ControllerBase
     }
 
     [HttpDelete("{shortName}")]
-    public Task<IActionResult> Delete(string shortName)
+    public async Task<IActionResult> Delete(string shortName)
     {
         throw new NotImplementedException();
+        var result = await _mediator.Send(new DeleteCommand(DeleteCommandEnum.DeleteCryptocurrencyCommand, Guid.NewGuid()));
+        return result.ToActionResult();
     }
 }

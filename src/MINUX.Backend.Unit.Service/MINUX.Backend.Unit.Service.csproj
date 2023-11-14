@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MINUX.Backend.Unit.DataAccess\MINUX.Backend.Unit.DataAccess.csproj" />
     <ProjectReference Include="..\MINUX.Backend.Unit.UseCases\MINUX.Backend.Unit.UseCases.csproj" />
   </ItemGroup>
 

@@ -11,7 +11,7 @@ public class StaticData
 
     public Cpu Cpu { get; set; } = new();
 
-    public List<AvailableMiner> Miners { get; set; } = new();
+    public List<Miner> Miners { get; set; } = new();
 
     public List<Ram> Rams { get; set; } = new();
 

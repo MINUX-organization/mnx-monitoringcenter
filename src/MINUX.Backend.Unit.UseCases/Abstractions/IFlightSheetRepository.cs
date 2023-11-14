@@ -2,7 +2,7 @@
 
 namespace MINUX.Backend.Unit.UseCases.Abstractions;
 
-public interface IFlightSheetRepository
+public interface IFlightSheetRepository : IRepository
 {
     /// <summary>
     /// Получить список всех полётных листов
