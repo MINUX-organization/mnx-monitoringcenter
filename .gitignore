@@ -401,4 +401,3 @@ FodyWeavers.xsd
 *.db-shm
 *.db-wal
 *.db
-/src/MINUX.Backend.Unit.Service/Minux.db

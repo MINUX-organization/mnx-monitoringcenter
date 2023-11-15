@@ -18,6 +18,8 @@ public class MainRepository : IMainRepository
 
     public IAlgorithmRepository Algorithms { get; }
 
+    public IMinerRepository Miners {  get; }
+
     public MainRepository(Context context)
     {
         _context = context;
@@ -27,6 +29,7 @@ public class MainRepository : IMainRepository
         Presets = new PresetRepository(context);
         Wallets = new WalletRepository(context);
         Algorithms = new AlgorithmRepository(context);
+        Miners = new MinerRepository(context);
     }
 
     public async Task SaveChangesAsync()

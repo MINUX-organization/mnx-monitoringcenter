@@ -14,5 +14,7 @@ public interface IMainRepository
 
     IAlgorithmRepository Algorithms { get; }
 
+    IMinerRepository Miners { get; }
+
     Task SaveChangesAsync();
 }

@@ -2,7 +2,7 @@
 
 public class MinerAlgorithm
 {
-    public Guid MinerId { get; set; }
+    public string MinerName { get; set; }
 
-    public Guid AlgorithmId { get; set; }
+    public string AlgorithmName { get; set; }
 }
