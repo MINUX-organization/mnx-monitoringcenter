@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MINUX.Backend.Unit.Core;
 using MINUX.Backend.Unit.UseCases.Abstractions;
 
 namespace MINUX.Backend.Unit.DataAccess.Repositories;
@@ -13,9 +12,9 @@ public class AlgorithmRepository : IAlgorithmRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
-    public IAsyncEnumerable<Algorithm> GetAll()
+    public IAsyncEnumerable<string> GetNamesOfAvailableAlgorithms()
     {
-        return _context.Algorithms.AsNoTracking().AsAsyncEnumerable();
+        return _context.Algorithms.AsNoTracking().Select(x => x.Name).AsAsyncEnumerable();
     }
 
     public async Task<bool> Exists(string name)
