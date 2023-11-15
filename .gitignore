@@ -396,3 +396,9 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# DB
+*.db-shm
+*.db-wal
+*.db
+/src/MINUX.Backend.Unit.Service/Minux.db
