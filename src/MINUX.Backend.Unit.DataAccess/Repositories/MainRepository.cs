@@ -16,6 +16,8 @@ public class MainRepository : IMainRepository
 
     public IWalletRepository Wallets { get; }
 
+    public IAlgorithmRepository Algorithms { get; }
+
     public MainRepository(Context context)
     {
         _context = context;
@@ -24,6 +26,7 @@ public class MainRepository : IMainRepository
         Pools = new PoolRepository(context);
         Presets = new PresetRepository(context);
         Wallets = new WalletRepository(context);
+        Algorithms = new AlgorithmRepository(context);
     }
 
     public async Task SaveChangesAsync()

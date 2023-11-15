@@ -1,4 +1,5 @@
-﻿using MINUX.Backend.Unit.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using MINUX.Backend.Unit.Core;
 using MINUX.Backend.Unit.UseCases.Abstractions;
 
 namespace MINUX.Backend.Unit.DataAccess.Repositories;
@@ -12,18 +13,19 @@ public class WalletRepository : IWalletRepository
         _context = context;
     }
 
-    public Task Add(Wallet cryptocurrency)
-    {
-        throw new NotImplementedException();
-    }
-
     public IAsyncEnumerable<Wallet> GetAll()
     {
-        throw new NotImplementedException();
+        return _context.Wallets.AsNoTracking().AsAsyncEnumerable();
     }
 
-    public Task Remove(Guid id)
+    public async Task<Guid> Add(Wallet wallet)
     {
-        throw new NotImplementedException();
+        await _context.Wallets.AddAsync(wallet);
+        return wallet.Id;
+    }
+
+    public void Remove(Wallet wallet)
+    {
+        _context.Wallets.Remove(wallet);
     }
 }

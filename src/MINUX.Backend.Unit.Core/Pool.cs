@@ -9,6 +9,4 @@ public class Pool
     public int Port { get; set; }
 
     public Guid CryptocurrencyId { get; set; }
-
-    public Cryptocurrency Cryptocurrency { get; set; }
 }

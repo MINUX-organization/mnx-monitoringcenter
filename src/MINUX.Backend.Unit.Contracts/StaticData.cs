@@ -1,4 +1,5 @@
-﻿using MINUX.Backend.Unit.Core.StaticData;
+﻿using MINUX.Backend.Unit.Core;
+using MINUX.Backend.Unit.Core.StaticData;
 using MINUX.Backend.Unit.Core.StaticData.Cpu;
 using MINUX.Backend.Unit.Core.StaticData.Gpu;
 using MINUX.Backend.Unit.Core.StaticData.Motherboard;

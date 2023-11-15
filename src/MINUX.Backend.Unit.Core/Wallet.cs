@@ -1,6 +1,4 @@
-﻿using MINUX.Backend.Unit.Core.StaticData;
-
-namespace MINUX.Backend.Unit.Core;
+﻿namespace MINUX.Backend.Unit.Core;
 
 public class Wallet
 {
@@ -13,6 +11,4 @@ public class Wallet
     public string Address { get; set; }
 
     public Guid CryptocurrencyId { get; set; }
-
-    public Cryptocurrency Cryptocurrency { get; set; }
 }

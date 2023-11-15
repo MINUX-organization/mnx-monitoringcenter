@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using Kernel.UseCases;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MINUX.Backend.Unit.Core;
+using MINUX.Backend.Unit.UseCases.Commands.AddWalletCommand;
 using MINUX.Backend.Unit.UseCases.Queries.GetWalletsQuery;
 
 namespace MINUX.Backend.Unit.Controllers;
@@ -23,9 +25,10 @@ public class WalletController : ControllerBase
     }
 
     [HttpPost]
-    public Task<IActionResult> Create()
+    public async Task<IActionResult> Create(AddWalletCommand request)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(request);
+        return result.ToActionResult();
     }
 
     [HttpDelete("{id:Guid}")]

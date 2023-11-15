@@ -6,7 +6,7 @@ public interface IWalletRepository : IRepository
 {
     public IAsyncEnumerable<Wallet> GetAll();
 
-    public Task Add(Wallet cryptocurrency);
+    public Task<Guid> Add(Wallet wallet);
 
-    public Task Remove(Guid id);
+    public void Remove(Wallet wallet);
 }

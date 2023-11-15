@@ -4,9 +4,9 @@ namespace MINUX.Backend.Unit.UseCases.Abstractions;
 
 public interface IPoolRepository : IRepository
 {
-    public IAsyncEnumerable<Pool> GetAll();
+    IAsyncEnumerable<Pool> GetAll();
 
-    public Task Add(Pool cryptocurrency);
+    Task<Guid> Add(Pool pool);
 
-    public Task Remove(Guid id);
+    void Remove(Pool pool);
 }

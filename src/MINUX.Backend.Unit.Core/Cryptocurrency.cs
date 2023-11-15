@@ -1,16 +1,16 @@
-﻿using MINUX.Backend.Unit.Core.StaticData;
-
-namespace MINUX.Backend.Unit.Core;
+﻿namespace MINUX.Backend.Unit.Core;
 
 public class Cryptocurrency
 {
+    public Guid Id { get; set; }
+
     public string ShortName { get; set; }
 
     public string FullName { get; set; }
 
-    public Guid AlgorithmId { get; set; }
+    public string AlgorithmName { get; set; }
 
-    public Algorithm Algorithm { get; set; }
+    //public MinerAlgorithm? Algorithm { get; set; }
 
     public List<Wallet> Wallets { get; set; } = new();
 

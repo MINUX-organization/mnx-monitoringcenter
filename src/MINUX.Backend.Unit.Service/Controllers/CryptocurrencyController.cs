@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MINUX.Backend.Unit.Core;
+using MINUX.Backend.Unit.UseCases.Commands.AddCryptocurrencyCommand;
 using MINUX.Backend.Unit.UseCases.Commands.DeleteCommand;
 using MINUX.Backend.Unit.UseCases.Queries.GetCryptocurrenciesQuery;
 
@@ -25,9 +26,10 @@ public class CryptocurrencyController : ControllerBase
     }
 
     [HttpPost]
-    public Task<IActionResult> Create(string shortName)
+    public async Task<IActionResult> Create(AddCryptocurrencyCommand request)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(request);
+        return result.ToActionResult();
     }
 
     [HttpDelete("{shortName}")]

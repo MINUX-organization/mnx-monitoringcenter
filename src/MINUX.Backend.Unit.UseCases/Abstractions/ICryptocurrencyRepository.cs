@@ -4,9 +4,13 @@ namespace MINUX.Backend.Unit.UseCases.Abstractions;
 
 public interface ICryptocurrencyRepository : IRepository
 {
-    public IAsyncEnumerable<Cryptocurrency> GetAll();
+    IAsyncEnumerable<Cryptocurrency> GetAll();
 
-    public Task Add(Cryptocurrency cryptocurrency);
+    Task<bool> Exists(Guid id);
 
-    public Task Remove(string shortName);
+    Task<bool> Exists(string shortName, string fullName);
+
+    Task<Guid> Add(Cryptocurrency cryptocurrency);
+
+    void Remove(Cryptocurrency cryptocurrency);
 }

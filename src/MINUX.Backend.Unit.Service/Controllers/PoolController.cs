@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MINUX.Backend.Unit.Core;
+using MINUX.Backend.Unit.UseCases.Commands.AddPoolCommand;
 using MINUX.Backend.Unit.UseCases.Queries.GetPoolsQuery;
+using Kernel.UseCases;
 
 namespace MINUX.Backend.Unit.Controllers;
 
@@ -13,7 +15,7 @@ public class PoolController : ControllerBase
 
     public PoolController(IMediator mediator)
     {
-        _mediator = mediator;
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     [HttpGet]
@@ -23,9 +25,10 @@ public class PoolController : ControllerBase
     }
 
     [HttpPost]
-    public Task<IActionResult> Create()
+    public async Task<IActionResult> Create(AddPoolCommand request)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(request);
+        return result.ToActionResult();
     }
 
     [HttpDelete("{id:Guid}")]

@@ -12,5 +12,7 @@ public interface IMainRepository
 
     IWalletRepository Wallets { get; }
 
+    IAlgorithmRepository Algorithms { get; }
+
     Task SaveChangesAsync();
 }

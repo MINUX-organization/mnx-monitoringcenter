@@ -1,4 +1,5 @@
-﻿using MINUX.Backend.Unit.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using MINUX.Backend.Unit.Core;
 using MINUX.Backend.Unit.UseCases.Abstractions;
 
 namespace MINUX.Backend.Unit.DataAccess.Repositories;
@@ -12,18 +13,35 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
         _context = context;
     }
 
-    public Task Add(Cryptocurrency cryptocurrency)
-    {
-        throw new NotImplementedException();
-    }
-
     public IAsyncEnumerable<Cryptocurrency> GetAll()
     {
-        throw new NotImplementedException();
+        return _context.Cryptocurrencies
+                       .AsNoTracking()
+                       .Include(x => x.Wallets)
+                       .Include(x => x.Pools)
+                       .AsAsyncEnumerable();
     }
 
-    public Task Remove(string shortName)
+    public async Task<bool> Exists(Guid id)
     {
-        throw new NotImplementedException();
+        return ! (await _context.Cryptocurrencies.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id) == null);
+    }
+
+    public async Task<bool> Exists(string shortName, string fullName)
+    {
+        return ! (await _context.Cryptocurrencies
+                                .AsNoTracking()
+                                .FirstOrDefaultAsync(x => x.ShortName == shortName || x.FullName == fullName) == null);
+    }
+    
+    public async Task<Guid> Add(Cryptocurrency cryptocurrency)
+    {
+        await _context.Cryptocurrencies.AddAsync(cryptocurrency);
+        return cryptocurrency.Id;
+    }
+
+    public void Remove(Cryptocurrency cryptocurrency)
+    {
+        _context.Cryptocurrencies.Remove(cryptocurrency);
     }
 }

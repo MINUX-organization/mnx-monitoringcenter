@@ -1,4 +1,5 @@
-﻿using MINUX.Backend.Unit.Core;
+﻿using Microsoft.EntityFrameworkCore;
+using MINUX.Backend.Unit.Core;
 using MINUX.Backend.Unit.UseCases.Abstractions;
 
 namespace MINUX.Backend.Unit.DataAccess.Repositories;
@@ -12,18 +13,19 @@ public class PoolRepository : IPoolRepository
         _context = context;
     }
 
-    public Task Add(Pool cryptocurrency)
-    {
-        throw new NotImplementedException();
-    }
-
     public IAsyncEnumerable<Pool> GetAll()
     {
-        throw new NotImplementedException();
+        return _context.Pools.AsNoTracking().AsAsyncEnumerable();
     }
 
-    public Task Remove(Guid id)
+    public async Task<Guid> Add(Pool pool)
     {
-        throw new NotImplementedException();
+        await _context.Pools.AddAsync(pool);
+        return pool.Id;
+    }
+
+    public void Remove(Pool pool)
+    {
+        _context.Pools.Remove(pool);
     }
 }
