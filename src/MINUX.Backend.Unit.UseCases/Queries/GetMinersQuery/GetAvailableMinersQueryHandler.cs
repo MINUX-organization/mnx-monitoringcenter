@@ -9,15 +9,15 @@ namespace MINUX.Backend.Unit.UseCases.Queries.GetMinersQuery;
 /// </summary>
 public class GetAvailableMinersQueryHandler : IStreamRequestHandler<GetAvailableMinersQuery, Miner>
 {
-    private readonly IMainRepository _repository;
+    private readonly IMinerRepository _repository;
 
-    public GetAvailableMinersQueryHandler(IMainRepository repository)
+    public GetAvailableMinersQueryHandler(IMinerRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public IAsyncEnumerable<Miner> Handle(GetAvailableMinersQuery request, CancellationToken cancellationToken)
     {
-        return _repository.Miners.GetAvailableMiners();
+        return _repository.GetAvailableMiners();
     }
 }

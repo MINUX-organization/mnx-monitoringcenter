@@ -3,7 +3,7 @@ using MINUX.Backend.Unit.UseCases.Abstractions;
 
 namespace MINUX.Backend.Unit.DataAccess.Repositories;
 
-public class PresetRepository : IPresetRepositoty
+public class PresetRepository : IPresetRepository
 {
     private readonly Context _context;
 

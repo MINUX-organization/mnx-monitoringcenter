@@ -20,12 +20,15 @@ public class PoolRepository : IPoolRepository
 
     public async Task<Guid> Add(Pool pool)
     {
-        await _context.Pools.AddAsync(pool);
+        await _context.Pools.AddAsync(pool).ConfigureAwait(false);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
+
         return pool.Id;
     }
 
-    public void Remove(Pool pool)
+    public async Task Remove(Pool pool)
     {
         _context.Pools.Remove(pool);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 }

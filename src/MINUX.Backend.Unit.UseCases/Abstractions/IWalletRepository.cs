@@ -2,11 +2,11 @@
 
 namespace MINUX.Backend.Unit.UseCases.Abstractions;
 
-public interface IWalletRepository : IRepository
+public interface IWalletRepository
 {
     public IAsyncEnumerable<Wallet> GetAll();
 
     public Task<Guid> Add(Wallet wallet);
 
-    public void Remove(Wallet wallet);
+    public Task Remove(Wallet wallet);
 }

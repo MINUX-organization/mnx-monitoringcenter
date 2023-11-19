@@ -19,6 +19,8 @@ public class AlgorithmRepository : IAlgorithmRepository
 
     public async Task<bool> Exists(string name)
     {
-        return ! (await _context.Algorithms.AsNoTracking().FirstOrDefaultAsync(x => x.Name == name) == null);
+        return await _context.Algorithms
+                             .AnyAsync(x => x.Name.Equals(name))
+                             .ConfigureAwait(false);
     }
 }

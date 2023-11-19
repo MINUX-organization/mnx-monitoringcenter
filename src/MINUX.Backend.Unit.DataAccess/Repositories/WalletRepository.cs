@@ -20,12 +20,15 @@ public class WalletRepository : IWalletRepository
 
     public async Task<Guid> Add(Wallet wallet)
     {
-        await _context.Wallets.AddAsync(wallet);
+        await _context.Wallets.AddAsync(wallet).ConfigureAwait(false);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
+
         return wallet.Id;
     }
 
-    public void Remove(Wallet wallet)
+    public async Task Remove(Wallet wallet)
     {
         _context.Wallets.Remove(wallet);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 }

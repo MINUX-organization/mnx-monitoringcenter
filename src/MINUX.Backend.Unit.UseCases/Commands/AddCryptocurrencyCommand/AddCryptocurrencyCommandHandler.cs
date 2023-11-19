@@ -11,30 +11,34 @@ namespace MINUX.Backend.Unit.UseCases.Commands.AddCryptocurrencyCommand;
 /// </summary>
 public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrencyCommand, Result<Guid>>
 {
-    private readonly IMainRepository _repository;
+    private readonly ICryptocurrencyRepository _cryptocurrencyRepository;
+
+    private readonly IAlgorithmRepository _algorithmRepository;
 
     private readonly IMapper _mapper;
 
-    public AddCryptocurrencyCommandHandler(IMainRepository repository, IMapper mapper)
+    public AddCryptocurrencyCommandHandler(ICryptocurrencyRepository cryptocurrencyRepository,
+                                           IAlgorithmRepository algorithmRepository,
+                                           IMapper mapper)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _cryptocurrencyRepository = cryptocurrencyRepository ?? throw new ArgumentNullException(nameof(cryptocurrencyRepository));
+        _algorithmRepository = algorithmRepository ?? throw new ArgumentNullException(nameof(algorithmRepository));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     public async Task<Result<Guid>> Handle(AddCryptocurrencyCommand request, CancellationToken cancellationToken)
     {
-        if (await _repository.Cryptocurrencies.Exists(request.ShortName, request.FullName))
+        if (await _cryptocurrencyRepository.Exists(request.ShortName, request.FullName))
         {
             return Result<Guid>.Conflict("Cryptocurrency already exists");
         }
 
-        if (!await _repository.Algorithms.Exists(request.Algorithm))
+        if (!await _algorithmRepository.Exists(request.Algorithm))
         {
             return Result<Guid>.NotFound("Algorithm wasn't found");
         }
 
-        var id = await _repository.Cryptocurrencies.Add(_mapper.Map<Cryptocurrency>(request));
-        await _repository.SaveChangesAsync();
+        var id = await _cryptocurrencyRepository.Add(_mapper.Map<Cryptocurrency>(request));
 
         return Result<Guid>.SuccessfullyCreated(id);
     }

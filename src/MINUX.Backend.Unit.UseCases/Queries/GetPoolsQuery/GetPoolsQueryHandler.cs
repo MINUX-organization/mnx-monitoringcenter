@@ -6,15 +6,15 @@ namespace MINUX.Backend.Unit.UseCases.Queries.GetPoolsQuery;
 
 public class GetPoolsQueryHandler : IStreamRequestHandler<GetPoolsQuery, Pool>
 {
-    private readonly IMainRepository _repository;
+    private readonly IPoolRepository _repository;
 
-    public GetPoolsQueryHandler(IMainRepository repository)
+    public GetPoolsQueryHandler(IPoolRepository repository)
     {
-        _repository = repository;
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public IAsyncEnumerable<Pool> Handle(GetPoolsQuery request, CancellationToken cancellationToken)
     {
-        return _repository.Pools.GetAll();
+        return _repository.GetAll();
     }
 }

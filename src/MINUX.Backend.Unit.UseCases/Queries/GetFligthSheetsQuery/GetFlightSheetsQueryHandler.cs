@@ -6,15 +6,15 @@ namespace MINUX.Backend.Unit.UseCases.Queries.GetCryptocurrenciesQuery;
 
 public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheetsQuery, FlightSheet>
 {
-    private readonly IMainRepository _repository;
+    private readonly IFlightSheetRepository _repository;
 
-    public GetFlightSheetsQueryHandler(IMainRepository repository)
+    public GetFlightSheetsQueryHandler(IFlightSheetRepository repository)
     {
-        _repository = repository;
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public IAsyncEnumerable<FlightSheet> Handle(GetFlightSheetsQuery request, CancellationToken cancellationToken)
     {
-        return _repository.FlightSheets.GetAll();
+        return _repository.GetAll();
     }
 }

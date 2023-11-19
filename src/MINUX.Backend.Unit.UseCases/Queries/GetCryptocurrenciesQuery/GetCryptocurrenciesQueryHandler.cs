@@ -6,15 +6,15 @@ namespace MINUX.Backend.Unit.UseCases.Queries.GetCryptocurrenciesQuery;
 
 public class GetCryptocurrenciesQueryHandler : IStreamRequestHandler<GetCryptocurrenciesQuery, Cryptocurrency>
 {
-    private readonly IMainRepository _repository;
+    private readonly ICryptocurrencyRepository _repository;
 
-    public GetCryptocurrenciesQueryHandler(IMainRepository repository)
+    public GetCryptocurrenciesQueryHandler(ICryptocurrencyRepository repository)
     {
-        _repository = repository;
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public IAsyncEnumerable<Cryptocurrency> Handle(GetCryptocurrenciesQuery request, CancellationToken cancellationToken)
     {
-        return _repository.Cryptocurrencies.GetAll();
+        return _repository.GetAll();
     }
 }

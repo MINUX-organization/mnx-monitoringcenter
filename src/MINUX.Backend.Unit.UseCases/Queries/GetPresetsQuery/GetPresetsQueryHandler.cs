@@ -6,15 +6,15 @@ namespace MINUX.Backend.Unit.UseCases.Queries.GetPresetsQuery;
 
 public class GetPresetsQueryHandler : IStreamRequestHandler<GetPresetsQuery, Preset>
 {
-    private readonly IMainRepository _repository;
+    private readonly IPresetRepository _repository;
 
-    public GetPresetsQueryHandler(IMainRepository repository)
+    public GetPresetsQueryHandler(IPresetRepository repository)
     {
-        _repository = repository;
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public IAsyncEnumerable<Preset> Handle(GetPresetsQuery request, CancellationToken cancellationToken)
     {
-        return _repository.Presets.GetAll();
+        return _repository.GetAll();
     }
 }

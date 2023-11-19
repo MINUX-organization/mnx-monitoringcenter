@@ -25,6 +25,6 @@ public class AlgorithmController : ControllerBase
     [HttpGet("available")]
     public IAsyncEnumerable<string> GetAvailable()
     {
-        return _mediator.CreateStream(new GetAvailableAlgoritmsQuery());
+        return _mediator.CreateStream(new GetAvailableAlgorithmsQuery());
     }
 }

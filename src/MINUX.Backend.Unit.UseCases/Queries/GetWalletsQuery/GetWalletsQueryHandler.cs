@@ -6,15 +6,15 @@ namespace MINUX.Backend.Unit.UseCases.Queries.GetWalletsQuery;
 
 public class GetWalletsQueryHandler : IStreamRequestHandler<GetWalletsQuery, Wallet>
 {
-    private readonly IMainRepository _repository;
+    private readonly IWalletRepository _repository;
 
-    public GetWalletsQueryHandler(IMainRepository repository)
+    public GetWalletsQueryHandler(IWalletRepository repository)
     {
-        _repository = repository;
+        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public IAsyncEnumerable<Wallet> Handle(GetWalletsQuery request, CancellationToken cancellationToken)
     {
-        return _repository.Wallets.GetAll();
+        return _repository.GetAll();
     }
 }
