@@ -9,13 +9,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0971EE51
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MINUX.Backend.Unit.Service", "src\MINUX.Backend.Unit.Service\MINUX.Backend.Unit.Service.csproj", "{CFC4A9B6-DAE7-4E22-86E0-B235D9A2F999}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MINUX.Backend.Unit.UseCases", "src\MINUX.Backend.Unit.UseCases\MINUX.Backend.Unit.UseCases.csproj", "{C50F416A-7B13-4A82-9937-B3173A9E6F1D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MINUX.Backend.Unit.UseCases", "src\MINUX.Backend.Unit.UseCases\MINUX.Backend.Unit.UseCases.csproj", "{C50F416A-7B13-4A82-9937-B3173A9E6F1D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MINUX.Backend.Unit.Core", "src\MINUX.Backend.Unit.Core\MINUX.Backend.Unit.Core.csproj", "{B73EA038-CFF7-40CE-A05B-0452E135FB87}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MINUX.Backend.Unit.Core", "src\MINUX.Backend.Unit.Core\MINUX.Backend.Unit.Core.csproj", "{B73EA038-CFF7-40CE-A05B-0452E135FB87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MINUX.Backend.Unit.Contracts", "src\MINUX.Backend.Unit.Contracts\MINUX.Backend.Unit.Contracts.csproj", "{7D3E646A-9C17-429C-95A3-BFB375C8F7E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MINUX.Backend.Unit.Contracts", "src\MINUX.Backend.Unit.Contracts\MINUX.Backend.Unit.Contracts.csproj", "{7D3E646A-9C17-429C-95A3-BFB375C8F7E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MINUX.Backend.Unit.DataAccess", "src\MINUX.Backend.Unit.DataAccess\MINUX.Backend.Unit.DataAccess.csproj", "{787011E1-9D47-4750-B9CC-F39B272605EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MINUX.Backend.Unit.DataAccess", "src\MINUX.Backend.Unit.DataAccess\MINUX.Backend.Unit.DataAccess.csproj", "{787011E1-9D47-4750-B9CC-F39B272605EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MINUX.Packages", "MINUX.Packages", "{4282C039-7DD9-46FD-ADF4-497E6EF0725E}"
 EndProject
