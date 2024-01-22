@@ -4,6 +4,7 @@ using MINUX.Backend.Worker.DataAccess.Repositories;
 using MINUX.Backend.Worker.UseCases;
 using MINUX.Backend.Worker.UseCases.Abstractions;
 using MINUX.Backend.Worker.UseCases.Queries.GetAlgorithmsQuery;
+using Kernel.UseCases.DI;
 using NLog;
 using NLog.Web;
 
@@ -39,11 +40,12 @@ public class Program
 
         var services = builder.Services;
 
-        builder.Services.AddControllers();
+        services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-        builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
-        builder.Services.AddHealthChecks();
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+        services.AddValidationPipelines();
+        services.AddHealthChecks();
 
         ConfigureDI(services, builder.Configuration);
 

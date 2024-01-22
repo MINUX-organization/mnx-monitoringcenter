@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
   </PropertyGroup>
@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MINUX.packages\Kernel.UseCases\Kernel.UseCases.csproj" />
+    <ProjectReference Include="..\..\MINUX.packages\MNX.Kernel.UseCases\MNX.Kernel.UseCases.csproj" />
     <ProjectReference Include="..\MINUX.Backend.Worker.Contracts\MINUX.Backend.Worker.Contracts.csproj" />
   </ItemGroup>
 

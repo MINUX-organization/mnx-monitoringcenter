@@ -17,26 +17,38 @@ public class PresetRepository : IPresetRepository
     {
         if (!string.IsNullOrWhiteSpace(gpuName))
         {
-            return _context.Presets.Where(x => x.GpuName == gpuName).AsAsyncEnumerable();
+            return _context.Presets
+                           .Where(x => x.GpuName == gpuName)
+                           .AsNoTracking()
+                           .AsAsyncEnumerable();
         }
 
-        return _context.Presets.AsAsyncEnumerable();
+        return _context.Presets.AsNoTracking().AsAsyncEnumerable();
+    }
+
+    public async Task<Preset?> GetById(Guid id)
+    {
+        return await _context.Presets
+                             .AsNoTracking()
+                             .FirstOrDefaultAsync(x => x.Id == id)
+                             .ConfigureAwait(false);
     }
 
     public async Task Save(Preset preset)
     {
-        await _context.Presets.AddAsync(preset);
-        await _context.SaveChangesAsync();
+        await _context.Presets.AddAsync(preset).ConfigureAwait(false);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
-    public Task Update(Preset preset)
+    public async Task Update(Preset preset)
     {
-        throw new NotImplementedException();
+        _context.Presets.Update(preset);
+        await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
     public async Task Remove(Preset preset)
     {
         _context.Remove(preset);
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 }

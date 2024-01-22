@@ -1,18 +1,10 @@
-﻿using Kernel.UseCases;
-using MediatR;
-
-namespace MINUX.Backend.Worker.UseCases.Commands.SavePresetCommand;
+﻿namespace MINUX.Backend.Worker.UseCases.Commands.Presets;
 
 /// <summary>
-/// Команда сохранение пресета для выбранной серии GPU
+/// Модель пресета
 /// </summary>
-public class SavePresetCommand : IRequest<Result<Unit>>
+public class PresetModel
 {
-    /// <summary>
-    /// Название GPU
-    /// </summary>
-    public string GpuName { get; }
-
     /// <summary>
     /// Тактовая чатсота памяти в мегагерцах
     /// </summary>
@@ -38,9 +30,8 @@ public class SavePresetCommand : IRequest<Result<Unit>>
     /// </summary>
     public int FanSpeed { get; }
 
-    public SavePresetCommand(string gpuName, int memoryClock, int coreClock, int powerLimit, int criticalTemperature, int fanSpeed)
+    public PresetModel(int memoryClock, int coreClock, int powerLimit, int criticalTemperature, int fanSpeed)
     {
-        GpuName = gpuName;
         MemoryClock = memoryClock;
         CoreClock = coreClock;
         PowerLimit = powerLimit;

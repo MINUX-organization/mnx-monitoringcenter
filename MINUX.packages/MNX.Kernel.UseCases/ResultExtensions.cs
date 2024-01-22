@@ -23,7 +23,6 @@ public static class ResultExtensions
             ResultStatus.NoContent => new NoContentResult(),
             ResultStatus.Error => new ObjectResult(result.Errors) { StatusCode = (int)result.Status },
             ResultStatus.Invalid => new ObjectResult(result.Errors) { StatusCode = (int)result.Status },
-            ResultStatus.NotFound => new NotFoundObjectResult(result.Errors),
             ResultStatus.Conflict => new ConflictObjectResult(result.Errors),
             ResultStatus.Forbidden => new ForbidResult(),
             _ => throw new NotSupportedException(), // todo

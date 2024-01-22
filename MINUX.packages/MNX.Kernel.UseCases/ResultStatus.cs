@@ -34,10 +34,6 @@ public enum ResultStatus
     /// </summary>
     Forbidden = 403,
     /// <summary>
-    /// Объект не найден
-    /// </summary>
-    NotFound = 404,
-    /// <summary>
     /// Объект для создания конфликтует с уже существующими объектами
     /// </summary>
     Conflict = 409,

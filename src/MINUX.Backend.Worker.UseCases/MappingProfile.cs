@@ -2,8 +2,8 @@
 using MINUX.Backend.Worker.Core;
 using MINUX.Backend.Worker.UseCases.Commands.AddCryptocurrencyCommand;
 using MINUX.Backend.Worker.UseCases.Commands.AddPoolCommand;
-using MINUX.Backend.Worker.UseCases.Commands.SavePresetCommand;
 using MINUX.Backend.Worker.UseCases.Commands.AddWalletCommand;
+using MINUX.Backend.Worker.UseCases.Commands.Presets;
 
 namespace MINUX.Backend.Worker.UseCases;
 
@@ -18,6 +18,6 @@ public class MappingProfile : Profile
 
         CreateMap<AddPoolCommand, Pool>();
 
-        CreateMap<SavePresetCommand, Preset>();
+        CreateMap<PresetModel, Preset>();
     }
 }

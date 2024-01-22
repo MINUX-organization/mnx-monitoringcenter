@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -17,6 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MINUX.packages\MNX.Kernel.UseCases.DI\MNX.Kernel.UseCases.DI.csproj" />
     <ProjectReference Include="..\MINUX.Backend.Worker.DataAccess\MINUX.Backend.Worker.DataAccess.csproj" />
   </ItemGroup>
 
