@@ -30,7 +30,7 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
     {
         if (!await _cryptocurrencyRepository.Exists(request.CryptocurrencyId))
         {
-            return Result<Guid>.NotFound("Cryptocurrency wasn't found");
+            return Result<Guid>.Invalid("Cryptocurrency wasn't found");
         }
 
         var id = await _walletRepository.Add(_mapper.Map<Wallet>(request));

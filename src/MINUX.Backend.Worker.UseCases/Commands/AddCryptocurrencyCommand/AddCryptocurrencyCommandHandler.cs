@@ -35,7 +35,7 @@ public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrency
 
         if (!await _algorithmRepository.Exists(request.Algorithm))
         {
-            return Result<Guid>.NotFound("Algorithm wasn't found");
+            return Result<Guid>.Invalid("Algorithm wasn't found");
         }
 
         var id = await _cryptocurrencyRepository.Add(_mapper.Map<Cryptocurrency>(request));

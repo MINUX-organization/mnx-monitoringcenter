@@ -36,6 +36,6 @@ public class Context : DbContext
 
         modelBuilder.Entity<Algorithm>().HasData(new Algorithm() { Name = "Algorithm" });
         modelBuilder.Entity<MinerDto>().HasData(new MinerDto() { Name = "Miner" });
-        modelBuilder.Entity<MinerAlgorithm>().HasData(new MinerAlgorithm() { MinerName = "Miner", AlgorithmName = "Algorithm1" });
+        modelBuilder.Entity<MinerAlgorithm>().HasData(new MinerAlgorithm() { MinerName = "Miner", AlgorithmName = "Algorithm" });
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace MINUX.Backend.Worker.Core.StaticData.Cpu;
+﻿namespace MINUX.Backend.Worker.Core.HardwareParameters.Cpu;
 
 // TODO: Уточнить на сёт модели
 public class CpuCores

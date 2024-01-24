@@ -1,4 +1,4 @@
-﻿namespace MINUX.Backend.Worker.Core.StaticData;
+﻿namespace MINUX.Backend.Worker.Core.HardwareParameters;
 
 public class Ram
 {

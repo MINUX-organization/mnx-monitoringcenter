@@ -9,7 +9,7 @@
     }
   },
   "profiles": {
-    "MINUX.Backend.Unit": {
+    "MINUX.Backend.Worker": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

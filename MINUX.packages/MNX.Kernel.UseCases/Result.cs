@@ -47,18 +47,6 @@ public readonly struct Result<TResponseValue>
     /// <returns>Результат выполнения команды</returns>
     public static Result<TResponseValue> Invalid(string error) => new(new List<string> { error }, ResultStatus.Invalid);
     /// <summary>
-    /// Объект не найден.
-    /// </summary>
-    /// <param name="error"> Ошибка. </param>
-    /// <returns> Результат выполнения команды. </returns>
-    public static Result<TResponseValue> NotFound(string error) => new(new List<string> { error }, ResultStatus.NotFound);
-    /// <summary>
-    /// Объект не найден.
-    /// </summary>
-    /// <param name="error"> Список ошибок. </param>
-    /// <returns> Результат выполнения команды. </returns>
-    public static Result<TResponseValue> NotFound(IReadOnlyCollection<string> errors) => new(errors, ResultStatus.NotFound);
-    /// <summary>
     /// Объект для создания конфликтует с уже существующими объектами
     /// </summary>
     /// <param name="error"> Ошибка. </param>

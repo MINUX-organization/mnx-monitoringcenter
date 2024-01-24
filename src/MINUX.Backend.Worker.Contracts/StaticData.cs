@@ -1,8 +1,8 @@
 ﻿using MINUX.Backend.Worker.Core;
-using MINUX.Backend.Worker.Core.StaticData;
-using MINUX.Backend.Worker.Core.StaticData.Cpu;
-using MINUX.Backend.Worker.Core.StaticData.Gpu;
-using MINUX.Backend.Worker.Core.StaticData.Motherboard;
+using MINUX.Backend.Worker.Core.HardwareParameters;
+using MINUX.Backend.Worker.Core.HardwareParameters.Cpu;
+using MINUX.Backend.Worker.Core.HardwareParameters.Gpu;
+using MINUX.Backend.Worker.Core.HardwareParameters.Motherboard;
 
 namespace MINUX.Backend.Worker.Contracts;
 

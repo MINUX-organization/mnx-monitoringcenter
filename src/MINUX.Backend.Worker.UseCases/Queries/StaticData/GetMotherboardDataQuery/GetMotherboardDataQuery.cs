@@ -1,6 +1,6 @@
 ﻿using Kernel.UseCases;
 using MediatR;
-using MINUX.Backend.Worker.Core.StaticData.Motherboard;
+using MINUX.Backend.Worker.Core.HardwareParameters.Motherboard;
 
 namespace MINUX.Backend.Worker.UseCases.Queries.GetMotherboardDataQuery;
 

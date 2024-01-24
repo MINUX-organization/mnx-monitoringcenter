@@ -1,4 +1,4 @@
-﻿namespace MINUX.Backend.Worker.Core.StaticData.Gpu;
+﻿namespace MINUX.Backend.Worker.Core.HardwareParameters.Gpu;
 
 public class GpuPower
 {

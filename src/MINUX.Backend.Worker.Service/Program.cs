@@ -7,6 +7,7 @@ using MINUX.Backend.Worker.UseCases.Queries.GetAlgorithmsQuery;
 using Kernel.UseCases.DI;
 using NLog;
 using NLog.Web;
+using MINUX.Backend.Worker.UseCases.Commands.Presets.SavePreset;
 
 namespace MINUX.Backend.Worker;
 
@@ -44,7 +45,7 @@ public class Program
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        services.AddValidationPipelines();
+        services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddHealthChecks();
 
         ConfigureDI(services, builder.Configuration);
@@ -83,12 +84,9 @@ public class Program
 
         app.UseAuthorization();
 
-        app.UseEndpoints(endpoints =>
-        {
-            endpoints.MapControllers();
-            endpoints.MapHealthChecks("/health");
-            endpoints.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName));
-        });
+        app.MapControllers();
+        app.MapHealthChecks("/health");
+        app.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName));
 
         await app.RunAsync();
     }

@@ -1,9 +1,9 @@
 ﻿using Kernel.UseCases;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MINUX.Backend.Worker.Core.StaticData;
-using MINUX.Backend.Worker.Core.StaticData.Gpu;
-using MINUX.Backend.Worker.Core.StaticData.Harddrive;
+using MINUX.Backend.Worker.Core.HardwareParameters;
+using MINUX.Backend.Worker.Core.HardwareParameters.Gpu;
+using MINUX.Backend.Worker.Core.HardwareParameters.Harddrive;
 using MINUX.Backend.Worker.UseCases.Queries.GetCpuQuery;
 using MINUX.Backend.Worker.UseCases.Queries.GetGpuDataQuery;
 using MINUX.Backend.Worker.UseCases.Queries.GetHarddriveDataQuery;

@@ -1,4 +1,4 @@
-﻿namespace MINUX.Backend.Worker.Core.StaticData.Harddrive;
+﻿namespace MINUX.Backend.Worker.Core.HardwareParameters.Harddrive;
 
 public class HarddriveInfo
 {

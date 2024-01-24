@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MINUX.Backend.Worker.Core.StaticData.Gpu;
+using MINUX.Backend.Worker.Core.HardwareParameters.Gpu;
 
 namespace MINUX.Backend.Worker.UseCases.Queries.GetGpuDataQuery;
 

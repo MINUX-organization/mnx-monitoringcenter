@@ -22,7 +22,7 @@ public class RemovePresetCommandHandler : IRequestHandler<RemovePresetCommand, R
 
         if (preset == null)
         {
-            return Result<Unit>.Error("Preset with this id wasn`t found");
+            return Result<Unit>.Invalid("Preset with this id wasn`t found");
         }
 
         await _repository.Remove(preset);

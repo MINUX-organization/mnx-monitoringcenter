@@ -1,8 +1,10 @@
-﻿namespace MINUX.Backend.Worker.Core.StaticData.Gpu;
+﻿namespace MINUX.Backend.Worker.Core.HardwareParameters.Gpu;
 
 public class Gpu
 {
     public string Id { get; set; }
+
+    public string Name { get; set; }
 
     public GpuClocks Clocks { get; set; }
 

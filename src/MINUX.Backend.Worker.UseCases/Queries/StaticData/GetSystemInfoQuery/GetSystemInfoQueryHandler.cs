@@ -1,6 +1,6 @@
 ﻿using Kernel.UseCases;
 using MediatR;
-using MINUX.Backend.Worker.Core.StaticData;
+using MINUX.Backend.Worker.Core.HardwareParameters;
 
 namespace MINUX.Backend.Worker.UseCases.Queries.GetSystemInfoQuery;
 

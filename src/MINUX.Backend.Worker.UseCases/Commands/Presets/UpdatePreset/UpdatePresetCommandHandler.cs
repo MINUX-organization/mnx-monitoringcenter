@@ -27,7 +27,7 @@ public class UpdatePresetCommandHandler : IRequestHandler<UpdatePresetCommand, R
 
         if (preset == null)
         {
-            return Result<Unit>.Error("Preset with this Id wasn`t found");
+            return Result<Unit>.Invalid("Preset with this Id wasn`t found");
         }
 
         var newPreset = _mapper.Map<Preset>(request.Model);

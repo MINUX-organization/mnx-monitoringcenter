@@ -1,4 +1,4 @@
-﻿namespace MINUX.Backend.Worker.Core.StaticData.Motherboard;
+﻿namespace MINUX.Backend.Worker.Core.HardwareParameters.Motherboard;
 
 public class MotherboardSlots
 {

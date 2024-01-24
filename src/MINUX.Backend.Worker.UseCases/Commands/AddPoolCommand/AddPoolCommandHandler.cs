@@ -30,7 +30,7 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Guid
     {
         if (!await _cryptocurrencyRepository.Exists(request.CryptocurrencyId))
         {
-            return Result<Guid>.NotFound("Cryptocurrency wasn't found");
+            return Result<Guid>.Invalid("Cryptocurrency wasn't found");
         }
 
         var id = await _poolRepository.Add(_mapper.Map<Pool>(request));
