@@ -9,7 +9,7 @@ namespace MINUX.Backend.Worker.UseCases.Commands.AddCryptocurrencyCommand;
 /// <summary>
 /// Обработчик команды добавления криптовалюты
 /// </summary>
-public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrencyCommand, Result<Guid>>
+public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrencyCommand, Result<Unit>>
 {
     private readonly ICryptocurrencyRepository _cryptocurrencyRepository;
 
@@ -26,20 +26,20 @@ public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrency
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<Guid>> Handle(AddCryptocurrencyCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(AddCryptocurrencyCommand request, CancellationToken cancellationToken)
     {
-        if (await _cryptocurrencyRepository.Exists(request.ShortName, request.FullName))
+        if (await _cryptocurrencyRepository.Exists(request.FullName, request.ShortName))
         {
-            return Result<Guid>.Conflict("Cryptocurrency already exists");
+            return Result<Unit>.Conflict("Cryptocurrency already exists");
         }
 
         if (!await _algorithmRepository.Exists(request.Algorithm))
         {
-            return Result<Guid>.Invalid("Algorithm wasn't found");
+            return Result<Unit>.Invalid("Algorithm wasn't found");
         }
 
-        var id = await _cryptocurrencyRepository.Add(_mapper.Map<Cryptocurrency>(request));
+        await _cryptocurrencyRepository.Add(_mapper.Map<Cryptocurrency>(request));
 
-        return Result<Guid>.SuccessfullyCreated(id);
+        return Result<Unit>.SuccessfullyCreated(Unit.Value);
     }
 }

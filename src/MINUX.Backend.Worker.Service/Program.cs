@@ -66,6 +66,7 @@ public class Program
         services.AddScoped<IPoolRepository, PoolRepository>();
         services.AddScoped<IPresetRepository, PresetRepository>();
         services.AddScoped<IWalletRepository, WalletRepository>();
+        services.AddScoped<IHardwareParametersRepository, HardwareParametersRepository>();
     }
 
     private static async Task RunApp(WebApplicationBuilder builder)

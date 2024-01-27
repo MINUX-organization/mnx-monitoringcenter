@@ -22,26 +22,18 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
                        .AsAsyncEnumerable();
     }
 
-    public async Task<bool> Exists(Guid id)
+    public async Task<bool> Exists(string fullName, string? shortName = null)
     {
         return await _context.Cryptocurrencies
-                             .AnyAsync(x => x.Id.Equals(id))
-                             .ConfigureAwait(false);
-    }
-
-    public async Task<bool> Exists(string shortName, string fullName)
-    {
-        return await _context.Cryptocurrencies
-                             .AnyAsync(x => x.ShortName.Equals(shortName) || x.FullName.Equals(fullName))
+                             .AsNoTracking()
+                             .AnyAsync(x => x.FullName.Equals(fullName) || x.ShortName.Equals(shortName))
                              .ConfigureAwait(false);
     }
     
-    public async Task<Guid> Add(Cryptocurrency cryptocurrency)
+    public async Task Add(Cryptocurrency cryptocurrency)
     {
         await _context.Cryptocurrencies.AddAsync(cryptocurrency).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
-
-        return cryptocurrency.Id;
     }
 
     public async Task Remove(Cryptocurrency cryptocurrency)

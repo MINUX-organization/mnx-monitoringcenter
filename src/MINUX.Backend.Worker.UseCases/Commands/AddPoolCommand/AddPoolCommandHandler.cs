@@ -28,7 +28,7 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Guid
 
     public async Task<Result<Guid>> Handle(AddPoolCommand request, CancellationToken cancellationToken)
     {
-        if (!await _cryptocurrencyRepository.Exists(request.CryptocurrencyId))
+        if (!await _cryptocurrencyRepository.Exists(request.CryptocurrencyFullName))
         {
             return Result<Guid>.Invalid("Cryptocurrency wasn't found");
         }

@@ -19,14 +19,14 @@ public class AddPoolCommand : IRequest<Result<Guid>>
     public int Port { get; }
 
     /// <summary>
-    /// Идентификатор криптовалюты
+    /// Полное название криптовалюты
     /// </summary>
-    public Guid CryptocurrencyId { get; }
+    public string CryptocurrencyFullName { get; }
 
-    public AddPoolCommand(string host, int port, Guid cryptocurrencyId)
+    public AddPoolCommand(string host, int port, string cryptocurrencyFullName)
     {
         Host = host;
         Port = port;
-        CryptocurrencyId = cryptocurrencyId;
+        CryptocurrencyFullName = cryptocurrencyFullName;
     }
 }

@@ -4,7 +4,7 @@ using MediatR;
 using MINUX.Backend.Worker.Core;
 using MINUX.Backend.Worker.UseCases.Abstractions;
 
-namespace MINUX.Backend.Worker.UseCases.Commands.AddWalletCommand;
+namespace MINUX.Backend.Worker.UseCases.Commands.Wallets.AddWallet;
 
 /// <summary>
 /// Обработчик команды добавления кошелька
@@ -28,12 +28,17 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
 
     public async Task<Result<Guid>> Handle(AddWalletCommand request, CancellationToken cancellationToken)
     {
-        if (!await _cryptocurrencyRepository.Exists(request.CryptocurrencyId))
+        if (await _walletRepository.Exists(request.Model.Name, request.Model.Address))
+        {
+            return Result<Guid>.Invalid("Wallet already exists");
+        }
+
+        if (! await _cryptocurrencyRepository.Exists(request.Model.CryptocurrencyFullName))
         {
             return Result<Guid>.Invalid("Cryptocurrency wasn't found");
         }
 
-        var id = await _walletRepository.Add(_mapper.Map<Wallet>(request));
+        var id = await _walletRepository.Add(_mapper.Map<Wallet>(request.Model));
 
         return Result<Guid>.SuccessfullyCreated(id);
     }

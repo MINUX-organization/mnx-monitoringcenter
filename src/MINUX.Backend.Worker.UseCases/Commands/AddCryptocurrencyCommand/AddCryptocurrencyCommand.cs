@@ -6,7 +6,7 @@ namespace MINUX.Backend.Worker.UseCases.Commands.AddCryptocurrencyCommand;
 /// <summary>
 /// Команда добавления криптовалюты
 /// </summary>
-public class AddCryptocurrencyCommand : IRequest<Result<Guid>>
+public class AddCryptocurrencyCommand : IRequest<Result<Unit>>
 {
     /// <summary>
     /// Короткое название
