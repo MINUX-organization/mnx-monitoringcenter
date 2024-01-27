@@ -34,10 +34,12 @@ public class PresetRepository : IPresetRepository
                              .ConfigureAwait(false);
     }
 
-    public async Task Save(Preset preset)
+    public async Task<Guid> Save(Preset preset)
     {
         await _context.Presets.AddAsync(preset).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
+
+        return preset.Id;
     }
 
     public async Task Update(Preset preset)

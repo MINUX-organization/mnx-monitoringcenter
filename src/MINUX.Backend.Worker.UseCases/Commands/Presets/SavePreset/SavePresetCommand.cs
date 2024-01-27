@@ -1,12 +1,11 @@
-﻿using MediatR;
-using Kernel.UseCases;
+﻿using Kernel.UseCases;
 
 namespace MINUX.Backend.Worker.UseCases.Commands.Presets.SavePreset;
 
 /// <summary>
 /// Команда сохранение пресета для выбранной серии GPU
 /// </summary>
-public class SavePresetCommand : IValidateableCommand<Unit>
+public class SavePresetCommand : IValidateableCommand<Guid>
 {
     /// <summary>
     /// Название GPU

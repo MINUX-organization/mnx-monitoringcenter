@@ -24,19 +24,4 @@ public class Wallet
     /// Полное название криптовалюты
     /// </summary>
     public string Cryptocurrency { get; set; }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj is Wallet otherWallet)
-        {
-            return Name == otherWallet.Name && Address == otherWallet.Address;
-        }
-
-        return false;
-    }
-
-    public override int GetHashCode()
-    {
-        return (Name + Address).GetHashCode();
-    }
 }

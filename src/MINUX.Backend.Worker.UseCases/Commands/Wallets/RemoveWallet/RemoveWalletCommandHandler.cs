@@ -26,6 +26,6 @@ public class RemoveWalletCommandHandler : IRequestHandler<RemoveWalletCommand, R
         }
 
         await _repository.Remove(wallet);
-        return Result<Unit>.Success(Unit.Value);
+        return Result<Unit>.Empty();
     }
 }

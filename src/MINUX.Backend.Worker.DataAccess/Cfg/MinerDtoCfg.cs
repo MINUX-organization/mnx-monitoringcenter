@@ -4,7 +4,7 @@ using MINUX.Backend.Worker.DataAccess.Dto;
 
 namespace MINUX.Backend.Worker.DataAccess.Cfg;
 
-public class MinerDtoCfg : IEntityTypeConfiguration<MinerDto>
+internal class MinerDtoCfg : IEntityTypeConfiguration<MinerDto>
 {
     public void Configure(EntityTypeBuilder<MinerDto> builder)
     {

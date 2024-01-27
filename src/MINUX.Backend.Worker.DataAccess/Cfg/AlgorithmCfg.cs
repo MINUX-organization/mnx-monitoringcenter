@@ -4,7 +4,7 @@ using MINUX.Backend.Worker.Core;
 
 namespace MINUX.Backend.Worker.DataAccess.Cfg;
 
-public class AlgorithmCfg : IEntityTypeConfiguration<Algorithm>
+internal class AlgorithmCfg : IEntityTypeConfiguration<Algorithm>
 {
     public void Configure(EntityTypeBuilder<Algorithm> builder)
     {

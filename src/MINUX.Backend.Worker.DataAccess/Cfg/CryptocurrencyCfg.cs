@@ -4,7 +4,7 @@ using MINUX.Backend.Worker.Core;
 
 namespace MINUX.Backend.Worker.DataAccess.Cfg;
 
-public class CryptocurrencyCfg : IEntityTypeConfiguration<Cryptocurrency>
+internal class CryptocurrencyCfg : IEntityTypeConfiguration<Cryptocurrency>
 {
     public void Configure(EntityTypeBuilder<Cryptocurrency> builder)
     {

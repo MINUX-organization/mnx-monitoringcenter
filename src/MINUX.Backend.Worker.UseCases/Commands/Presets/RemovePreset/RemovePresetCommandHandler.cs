@@ -26,6 +26,6 @@ public class RemovePresetCommandHandler : IRequestHandler<RemovePresetCommand, R
         }
 
         await _repository.Remove(preset);
-        return Result<Unit>.Success(Unit.Value);
+        return Result<Unit>.Empty();
     }
 }

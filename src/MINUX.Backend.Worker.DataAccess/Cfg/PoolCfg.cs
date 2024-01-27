@@ -4,9 +4,9 @@ using MINUX.Backend.Worker.Core;
 
 namespace MINUX.Backend.Worker.DataAccess.Cfg;
 
-internal class WalletCfg : IEntityTypeConfiguration<Wallet>
+internal class PoolCfg : IEntityTypeConfiguration<Pool>
 {
-    public void Configure(EntityTypeBuilder<Wallet> builder)
+    public void Configure(EntityTypeBuilder<Pool> builder)
     {
         builder.HasOne<Cryptocurrency>()
                .WithMany()

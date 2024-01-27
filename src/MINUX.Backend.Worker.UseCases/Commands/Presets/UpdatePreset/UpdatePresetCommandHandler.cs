@@ -35,6 +35,6 @@ public class UpdatePresetCommandHandler : IRequestHandler<UpdatePresetCommand, R
         newPreset.GpuName = preset.GpuName;
         await _repository.Update(newPreset).ConfigureAwait(false);
 
-        return Result<Unit>.Success(Unit.Value);
+        return Result<Unit>.Empty();
     }
 }

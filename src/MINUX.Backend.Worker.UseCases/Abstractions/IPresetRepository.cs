@@ -25,7 +25,7 @@ public interface IPresetRepository
     /// Сохранить пресет для выбранной 
     /// </summary>
     /// <param name="preset"> Пресет </param>
-    public Task Save(Preset preset);
+    public Task<Guid> Save(Preset preset);
 
     /// <summary>
     /// Обновить пресет

@@ -34,6 +34,7 @@ public class Context : DbContext
         modelBuilder.ApplyConfiguration(new MinerDtoCfg());
         modelBuilder.ApplyConfiguration(new MinerAlgorithmCfg());
         modelBuilder.ApplyConfiguration(new WalletCfg());
+        modelBuilder.ApplyConfiguration(new PoolCfg());
 
         modelBuilder.Entity<Algorithm>().HasData(new Algorithm() { Name = "Algorithm" });
         modelBuilder.Entity<MinerDto>().HasData(new MinerDto() { Name = "Miner" });

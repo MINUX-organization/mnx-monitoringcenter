@@ -39,7 +39,7 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
 
         if (WalletsIsEquals(wallet, request.Model))
         {
-            return Result<Unit>.Success(Unit.Value);
+            return Result<Unit>.Empty();
         }
 
         if (await _walletRepository.Exists(request.Model.Name, request.Model.Address, request.Id))
@@ -55,7 +55,7 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
         var newWallet = _mapper.Map<Wallet>(request.Model);
         newWallet.Id = request.Id;
         await _walletRepository.Update(newWallet);
-        return Result<Unit>.Success(Unit.Value);
+        return Result<Unit>.Empty();
     }
 
     /// <summary>

@@ -4,7 +4,7 @@ using MediatR;
 using MINUX.Backend.Worker.Core;
 using MINUX.Backend.Worker.UseCases.Abstractions;
 
-namespace MINUX.Backend.Worker.UseCases.Commands.AddPoolCommand;
+namespace MINUX.Backend.Worker.UseCases.Commands.Pools.AddPool;
 
 /// <summary>
 /// Обработчик команды добавления пула
@@ -28,12 +28,17 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Guid
 
     public async Task<Result<Guid>> Handle(AddPoolCommand request, CancellationToken cancellationToken)
     {
-        if (!await _cryptocurrencyRepository.Exists(request.CryptocurrencyFullName))
+        if (await _poolRepository.Exists(request.Model.Domain, request.Model.Port))
+        {
+            return Result<Guid>.Invalid("Pool already exists");
+        }
+
+        if (! await _cryptocurrencyRepository.Exists(request.Model.CryptocurrencyFullName))
         {
             return Result<Guid>.Invalid("Cryptocurrency wasn't found");
         }
 
-        var id = await _poolRepository.Add(_mapper.Map<Pool>(request));
+        var id = await _poolRepository.Add(_mapper.Map<Pool>(request.Model));
 
         return Result<Guid>.SuccessfullyCreated(id);
     }

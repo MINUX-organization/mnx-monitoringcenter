@@ -51,8 +51,8 @@ public class PresetController : ControllerBase
     /// Переданные параметры не прошли валидацию или не была найдена GPU с указанным названием
     /// </response>
     [HttpPost]
-    [ProducesResponseType(201)]
-    [ProducesResponseType(typeof(List<Preset>), 400)]
+    [ProducesResponseType(typeof(Guid), 201)]
+    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Save(SavePresetCommand command)
     {
         var result = await _mediator.Send(command);
@@ -65,13 +65,13 @@ public class PresetController : ControllerBase
     /// <param name="id"> Уникальный идентификатор </param>
     /// <param name="model"> Модель пресета </param>
     /// <returns> Результат выполнения команды </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="204"> Успешно </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id
     /// </response>
     [HttpPut("{id:Guid}")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(typeof(List<Preset>), 400)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Update(Guid id, PresetModel model)
     {
         var result = await _mediator.Send(new UpdatePresetCommand(id, model));
@@ -83,11 +83,11 @@ public class PresetController : ControllerBase
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
     /// <returns> Результат выполнения команды </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="204"> Успешно </response>
     /// <response code="400"> Не был найден пресет с переданным идентификатором </response>
     [HttpDelete("{id:Guid}")]
-    [ProducesResponseType(200)]
-    [ProducesResponseType(typeof(List<Preset>), 400)]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Remove(Guid id)
     {
         var result = await _mediator.Send(new RemovePresetCommand(id));

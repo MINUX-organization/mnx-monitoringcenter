@@ -1,17 +1,14 @@
-﻿using Kernel.UseCases;
-using MediatR;
-
-namespace MINUX.Backend.Worker.UseCases.Commands.AddPoolCommand;
+﻿namespace MINUX.Backend.Worker.UseCases.Commands.Pools;
 
 /// <summary>
-/// Команда добавления пула
+/// Модель пула
 /// </summary>
-public class AddPoolCommand : IRequest<Result<Guid>>
+public class PoolModel
 {
     /// <summary>
-    /// Хост
+    /// Домен
     /// </summary>
-    public string Host { get; }
+    public string Domain { get; }
 
     /// <summary>
     /// Порт
@@ -23,9 +20,9 @@ public class AddPoolCommand : IRequest<Result<Guid>>
     /// </summary>
     public string CryptocurrencyFullName { get; }
 
-    public AddPoolCommand(string host, int port, string cryptocurrencyFullName)
+    public PoolModel(string domain, int port, string cryptocurrencyFullName)
     {
-        Host = host;
+        Domain = domain;
         Port = port;
         CryptocurrencyFullName = cryptocurrencyFullName;
     }

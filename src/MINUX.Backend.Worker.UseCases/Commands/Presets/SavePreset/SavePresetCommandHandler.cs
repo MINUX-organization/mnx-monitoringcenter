@@ -9,7 +9,7 @@ namespace MINUX.Backend.Worker.UseCases.Commands.Presets.SavePreset;
 /// <summary>
 /// Обработчик команды сохранения пресета для выбранной серии GPU
 /// </summary>
-public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Result<Unit>>
+public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Result<Guid>>
 {
     private readonly IPresetRepository _presetRepository;
 
@@ -26,16 +26,16 @@ public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Resul
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<Unit>> Handle(SavePresetCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(SavePresetCommand request, CancellationToken cancellationToken)
     {
         if (!(await _hardwareRepository.GetGpusParameters()).Any(gpu => gpu.Name == request.GpuName))
         {
-            return Result<Unit>.Invalid("GPU with this name wasn`t found");
+            return Result<Guid>.Invalid("GPU with this name wasn`t found");
         }
 
         var preset = _mapper.Map<Preset>(request.Model);
         preset.GpuName = request.GpuName;
-        await _presetRepository.Save(preset);
-        return Result<Unit>.SuccessfullyCreated(Unit.Value);
+        var id = await _presetRepository.Save(preset);
+        return Result<Guid>.SuccessfullyCreated(id);
     }
 }
