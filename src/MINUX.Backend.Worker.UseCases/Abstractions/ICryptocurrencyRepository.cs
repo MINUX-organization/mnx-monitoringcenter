@@ -14,6 +14,13 @@ public interface ICryptocurrencyRepository
     IAsyncEnumerable<Cryptocurrency> GetAll();
 
     /// <summary>
+    /// Получить криптовалюту по полному названию
+    /// </summary>
+    /// <param name="fullName"> Полное название монеты </param>
+    /// <returns> Криптовалюта </returns>
+    Task<Cryptocurrency?> GetByFullName(string fullName);
+
+    /// <summary>
     /// Проверить наличие криптовалюты по полному и/или короткому названию
     /// </summary>
     /// <param name="id">  Уникальный идентификатор </param>

@@ -18,12 +18,11 @@ namespace MINUX.Backend.Worker.Controllers;
 [ApiController]
 public class StaticDataController : ControllerBase
 {
-
     private readonly IMediator _mediator;
 
     public StaticDataController(IMediator mediator)
     {
-        _mediator = mediator;
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     [HttpGet]

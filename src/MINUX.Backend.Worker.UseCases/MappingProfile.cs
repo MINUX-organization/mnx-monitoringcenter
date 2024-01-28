@@ -1,12 +1,15 @@
 ﻿using AutoMapper;
 using MINUX.Backend.Worker.Core;
-using MINUX.Backend.Worker.UseCases.Commands.AddCryptocurrencyCommand;
+using MINUX.Backend.Worker.UseCases.Commands.Crypto.AddCryptocurrency;
 using MINUX.Backend.Worker.UseCases.Commands.Pools;
 using MINUX.Backend.Worker.UseCases.Commands.Presets;
 using MINUX.Backend.Worker.UseCases.Commands.Wallets;
 
 namespace MINUX.Backend.Worker.UseCases;
 
+/// <summary>
+/// Конфигурация автомаппера
+/// </summary>
 public class MappingProfile : Profile
 {
     public MappingProfile()

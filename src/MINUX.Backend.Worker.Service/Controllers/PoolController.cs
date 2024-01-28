@@ -30,7 +30,7 @@ public class PoolController : ControllerBase
     /// <returns> Список пулов </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Preset>), 200)]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Pool>), 200)]
     public IAsyncEnumerable<Pool> GetAll()
     {
         return _mediator.CreateStream(new GetPoolsQuery());
@@ -65,7 +65,7 @@ public class PoolController : ControllerBase
     /// Переданные параметры не прошли валидацию или не был найден пул с переданным id
     /// </response>
     [HttpPut("{id:Guid}")]
-    [ProducesResponseType(typeof(Guid), 204)]
+    [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Update(Guid id, PoolModel request)
     {
@@ -81,7 +81,7 @@ public class PoolController : ControllerBase
     /// <response code="204"> Успешно </response>
     /// <response code="400"> Не был найден пул с переданным идентификатором </response>
     [HttpDelete("{id:Guid}")]
-    [ProducesResponseType(typeof(Guid), 204)]
+    [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {

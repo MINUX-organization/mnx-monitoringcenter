@@ -2,11 +2,15 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MINUX.Backend.Worker.Core;
-using MINUX.Backend.Worker.UseCases.Commands.AddCryptocurrencyCommand;
+using MINUX.Backend.Worker.UseCases.Commands.Crypto.AddCryptocurrency;
+using MINUX.Backend.Worker.UseCases.Commands.Crypto.RemoveCryptocurrency;
 using MINUX.Backend.Worker.UseCases.Queries.GetCryptocurrenciesQuery;
 
 namespace MINUX.Backend.Worker.Controllers;
 
+/// <summary>
+/// Контроллер, предоставляющий Rest API для работы с криптовалютой
+/// </summary>
 [Route("api/cryptocurrency")]
 [ApiController]
 public class CryptocurrencyController : ControllerBase
@@ -15,25 +19,50 @@ public class CryptocurrencyController : ControllerBase
 
     public CryptocurrencyController(IMediator mediator)
     {
-        _mediator = mediator;
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
+    /// <summary>
+    /// Получить список всех криптовалют
+    /// </summary>
+    /// <returns> Список криптовалют </returns>
+    /// <response code="200"> Успешно </response>
     [HttpGet]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Cryptocurrency>), 200)]
     public IAsyncEnumerable<Cryptocurrency> GetAll()
     {
         return _mediator.CreateStream(new GetCryptocurrenciesQuery());
     }
 
+    /// <summary>
+    /// Добавить криптовалюту
+    /// </summary>
+    /// <param name="request"> Команда добавления криптовалюты </param>
+    /// <response code="201"> Успешно </response>
+    /// <response code="400">
+    /// Переданные параметры не прошли валидацию или не был найден алгоритм с указанным названием
+    /// </response>
     [HttpPost]
-    public async Task<IActionResult> Create(AddCryptocurrencyCommand request)
+    [ProducesResponseType(201)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> Add(AddCryptocurrencyCommand request)
     {
         var result = await _mediator.Send(request);
         return result.ToActionResult();
     }
 
-    [HttpDelete("{shortName}")]
-    public async Task<IActionResult> Delete(string shortName)
+    /// <summary>
+    /// Удалить криптовалюту
+    /// </summary>
+    /// <param name="fullName"> Полное название криптовалюты </param>
+    /// <response code="204"> Успешно </response>
+    /// <response code="400"> Не была найдена монета с переданным именем </response>
+    [HttpDelete("{fullName}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> Delete(string fullName)
     {
-        throw new NotImplementedException();
+        var result = await _mediator.Send(new RemoveCryptocurrencyCommand(fullName));
+        return result.ToActionResult();
     }
 }

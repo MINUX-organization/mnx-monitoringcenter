@@ -21,7 +21,7 @@ public class WalletController : ControllerBase
 
     public WalletController(IMediator mediator)
     {
-        _mediator = mediator;
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public class WalletController : ControllerBase
     /// <returns> Список криптокошельков </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Preset>), 200)]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Wallet>), 200)]
     public IAsyncEnumerable<Wallet> GetAll()
     {
         return _mediator.CreateStream(new GetWalletsQuery());
@@ -65,7 +65,7 @@ public class WalletController : ControllerBase
     /// Переданные параметры не прошли валидацию или не был найден кошелёк с переданным id
     /// </response>
     [HttpPut("{id:Guid}")]
-    [ProducesResponseType(typeof(Guid), 204)]
+    [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Edit(Guid id, WalletModel model)
     {
@@ -81,7 +81,7 @@ public class WalletController : ControllerBase
     /// <response code="204"> Успешно </response>
     /// <response code="400"> Не был найден кошелёк с переданным идентификатором </response>
     [HttpDelete("{id:Guid}")]
-    [ProducesResponseType(typeof(Guid), 204)]
+    [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {

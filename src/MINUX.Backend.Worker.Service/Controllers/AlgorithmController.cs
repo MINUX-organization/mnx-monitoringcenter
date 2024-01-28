@@ -22,7 +22,9 @@ public class AlgorithmController : ControllerBase
     /// Получить список доступных алгоритмов
     /// </summary>
     /// <returns> Список доступных алгоритмов </returns>
+    /// <response code="200"> Успешно </response>
     [HttpGet("available")]
+    [ProducesResponseType(typeof(IAsyncEnumerable<string>), 200)]
     public IAsyncEnumerable<string> GetAvailable()
     {
         return _mediator.CreateStream(new GetAvailableAlgorithmsQuery());

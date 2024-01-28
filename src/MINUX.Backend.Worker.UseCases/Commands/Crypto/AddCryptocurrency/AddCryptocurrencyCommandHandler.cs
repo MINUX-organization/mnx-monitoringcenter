@@ -4,7 +4,7 @@ using MediatR;
 using MINUX.Backend.Worker.Core;
 using MINUX.Backend.Worker.UseCases.Abstractions;
 
-namespace MINUX.Backend.Worker.UseCases.Commands.AddCryptocurrencyCommand;
+namespace MINUX.Backend.Worker.UseCases.Commands.Crypto.AddCryptocurrency;
 
 /// <summary>
 /// Обработчик команды добавления криптовалюты

@@ -1,7 +1,7 @@
 ﻿using Kernel.UseCases;
 using MediatR;
 
-namespace MINUX.Backend.Worker.UseCases.Commands.AddCryptocurrencyCommand;
+namespace MINUX.Backend.Worker.UseCases.Commands.Crypto.AddCryptocurrency;
 
 /// <summary>
 /// Команда добавления криптовалюты

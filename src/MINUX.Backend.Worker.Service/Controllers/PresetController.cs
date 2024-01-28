@@ -21,7 +21,7 @@ public class PresetController : ControllerBase
 
     public PresetController(IMediator mediator)
     {
-        _mediator = mediator;
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     /// <summary>
