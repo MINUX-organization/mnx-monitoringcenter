@@ -10,7 +10,7 @@ public class StaticData
 {
     public List<Gpu> Gpus { get; set; } = new();
 
-    public Cpu Cpu { get; set; } = new();
+    public List<Cpu> Cpus { get; set; } = new();
 
     public List<Miner> Miners { get; set; } = new();
 

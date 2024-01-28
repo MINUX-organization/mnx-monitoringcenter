@@ -15,31 +15,31 @@ public interface IHardwareParametersRepository
     /// Получить параметры для всех CPU
     /// </summary>
     /// <returns> Параметры для всех CPU </returns>
-    Task<List<Cpu>> GetCpusParameters();
+    IAsyncEnumerable<Cpu> GetCpusParameters();
 
     /// <summary>
     /// Получить параметры для всех GPU
     /// </summary>
     /// <returns> Параметры для всех GPU </returns>
-    Task<List<Gpu>> GetGpusParameters();
+    IAsyncEnumerable<Gpu> GetGpusParameters();
 
     /// <summary>
     /// Получить параметры всех дисков
     /// </summary>
     /// <returns> Параметры для всех дисков </returns>
-    Task<List<Harddrive>> GetHarddrivesParameters();
+    IAsyncEnumerable<Harddrive> GetHarddrivesParameters();
+
+    /// <summary>
+    /// Получить параметры оперативной памяти
+    /// </summary>
+    /// <returns> Параметры оперативной памяти </returns>
+    IAsyncEnumerable<Ram> GetRamsParameters();
 
     /// <summary>
     /// Получить парамметры материнской платы
     /// </summary>
     /// <returns> Параметры материнской платы </returns>
     Task<Motherboard> GetMotherboardParameters();
-
-    /// <summary>
-    /// Получить параметры оперативной памяти
-    /// </summary>
-    /// <returns> Параметры оперативной памяти </returns>
-    Task<Ram> GetRamParameters();
 
     /// <summary>
     /// Получить информацию о системе

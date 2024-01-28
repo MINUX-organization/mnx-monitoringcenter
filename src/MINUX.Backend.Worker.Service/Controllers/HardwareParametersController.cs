@@ -2,47 +2,42 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MINUX.Backend.Worker.Core.HardwareParameters;
+using MINUX.Backend.Worker.Core.HardwareParameters.Cpu;
 using MINUX.Backend.Worker.Core.HardwareParameters.Gpu;
 using MINUX.Backend.Worker.Core.HardwareParameters.Harddrive;
-using MINUX.Backend.Worker.UseCases.Queries.GetCpuQuery;
-using MINUX.Backend.Worker.UseCases.Queries.GetGpuDataQuery;
-using MINUX.Backend.Worker.UseCases.Queries.GetHarddriveDataQuery;
-using MINUX.Backend.Worker.UseCases.Queries.GetMotherboardDataQuery;
-using MINUX.Backend.Worker.UseCases.Queries.GetRamDataQuery;
-using MINUX.Backend.Worker.UseCases.Queries.GetStaticDataQuery;
-using MINUX.Backend.Worker.UseCases.Queries.GetSystemInfoQuery;
+using MINUX.Backend.Worker.UseCases.Queries.HardwareParameters.GetCpusData;
+using MINUX.Backend.Worker.UseCases.Queries.HardwareParameters.GetGpuData;
+using MINUX.Backend.Worker.UseCases.Queries.HardwareParameters.GetHarddriveData;
+using MINUX.Backend.Worker.UseCases.Queries.HardwareParameters.GetMotherboardData;
+using MINUX.Backend.Worker.UseCases.Queries.HardwareParameters.GetRamsData;
+using MINUX.Backend.Worker.UseCases.Queries.HardwareParameters.GetSystemInfo;
 
 namespace MINUX.Backend.Worker.Controllers;
 
-[Route("api/staticData")]
+/// <summary>
+/// Контроллер, предоставляющий Rest API для получения параметров железа и системы
+/// </summary>
+[Route("api/hardwareParameters")]
 [ApiController]
-public class StaticDataController : ControllerBase
+public class HardwareParametersController : ControllerBase
 {
     private readonly IMediator _mediator;
 
-    public StaticDataController(IMediator mediator)
+    public HardwareParametersController(IMediator mediator)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
-    [HttpGet]
-    public async Task<IActionResult> GetFullStaticData()
+    [HttpGet("cpu")]
+    public IAsyncEnumerable<Cpu> GetCpuStaticData()
     {
-        var result = await _mediator.Send(new GetStaticDataQuery());
-        return result.ToActionResult();
+        return _mediator.CreateStream(new GetCpusDataQuery());
     }
 
     [HttpGet("gpu")]
     public IAsyncEnumerable<Gpu> GetGpusStaticData()
     {
         return _mediator.CreateStream(new GetGpusDataQuery());
-    }
-
-    [HttpGet("cpu")]
-    public async Task<IActionResult> GetCpuStaticData()
-    {
-        var result = await _mediator.Send(new GetCpuQuery());
-        return result.ToActionResult();
     }
 
     [HttpGet("harddrive")]
