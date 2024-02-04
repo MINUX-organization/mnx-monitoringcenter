@@ -6,9 +6,9 @@ namespace MINUX.Backend.Worker.DataAccess.Repositories;
 
 public class WalletRepository : IWalletRepository
 {
-    private readonly Context _context;
+    private readonly DataBaseContext _context;
 
-    public WalletRepository(Context context)
+    public WalletRepository(DataBaseContext context)
     {
         _context = context;
     }

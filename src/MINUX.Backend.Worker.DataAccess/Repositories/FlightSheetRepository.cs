@@ -5,9 +5,9 @@ namespace MINUX.Backend.Worker.DataAccess.Repositories;
 
 public class FlightSheetRepository : IFlightSheetRepository
 {
-    private readonly Context _context;
+    private readonly DataBaseContext _context;
 
-    public FlightSheetRepository(Context context)
+    public FlightSheetRepository(DataBaseContext context)
     {
         _context = context;
     }

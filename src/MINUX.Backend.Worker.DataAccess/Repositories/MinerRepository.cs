@@ -9,9 +9,9 @@ namespace MINUX.Backend.Worker.DataAccess.Repositories;
 /// </summary>
 public class MinerRepository : IMinerRepository
 {
-    private readonly Context _context;
+    private readonly DataBaseContext _context;
 
-    public MinerRepository(Context context)
+    public MinerRepository(DataBaseContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }

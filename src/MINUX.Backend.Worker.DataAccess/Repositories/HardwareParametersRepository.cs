@@ -1,4 +1,5 @@
-﻿using MINUX.Backend.Worker.Core.HardwareParameters;
+﻿using Microsoft.Extensions.Caching.Memory;
+using MINUX.Backend.Worker.Core.HardwareParameters;
 using MINUX.Backend.Worker.Core.HardwareParameters.Cpu;
 using MINUX.Backend.Worker.Core.HardwareParameters.Gpu;
 using MINUX.Backend.Worker.Core.HardwareParameters.Harddrive;
@@ -7,35 +8,42 @@ using MINUX.Backend.Worker.UseCases.Abstractions;
 
 namespace MINUX.Backend.Worker.DataAccess.Repositories;
 
-public class HardwareParametersRepository : IHardwareParametersRepository
+public class HardwareParametersRepository //: IHardwareParametersRepository
 {
-    public Task<List<Cpu>> GetCpusParameters()
+    private readonly IMemoryCache _cache;
+
+    public HardwareParametersRepository(IMemoryCache cache)
     {
-        throw new NotImplementedException();
+        _cache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
-    public Task<List<Gpu>> GetGpusParameters()
+    public List<Cpu> GetCpusParameters()
     {
-        throw new NotImplementedException();
+        return (List<Cpu>)_cache.Get("cpu");
     }
 
-    public Task<List<Harddrive>> GetHarddrivesParameters()
+    public List<Gpu> GetGpusParameters()
     {
-        throw new NotImplementedException();
+        return (List<Gpu>)_cache.Get("gpu");
     }
 
-    public Task<Motherboard> GetMotherboardParameters()
+    public List<Harddrive> GetHarddrivesParameters()
     {
-        throw new NotImplementedException();
+        return (List<Harddrive>)_cache.Get("harddrive");
     }
 
-    public Task<Ram> GetRamParameters()
+    public Motherboard GetMotherboardParameters()
     {
-        throw new NotImplementedException();
+        return (Motherboard)_cache.Get("motherboard");
     }
 
-    public Task<SystemInfo> GetSystemInfo()
+    public List<Ram> GetRamsParameters()
     {
-        throw new NotImplementedException();
+        return (List<Ram>)_cache.Get("ram");
+    }
+
+    public SystemInfo GetSystemInfo()
+    {
+        return (SystemInfo)_cache.Get("systemInfo");
     }
 }

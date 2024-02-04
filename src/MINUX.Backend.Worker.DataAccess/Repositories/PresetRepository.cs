@@ -6,9 +6,9 @@ namespace MINUX.Backend.Worker.DataAccess.Repositories;
 
 public class PresetRepository : IPresetRepository
 {
-    private readonly Context _context;
+    private readonly DataBaseContext _context;
 
-    public PresetRepository(Context context)
+    public PresetRepository(DataBaseContext context)
     {
         _context = context;
     }

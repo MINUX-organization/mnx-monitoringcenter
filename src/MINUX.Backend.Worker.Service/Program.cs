@@ -57,7 +57,7 @@ public class Program
     {
         services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAvailableAlgorithmsQuery).Assembly));
-        services.AddDbContext<Context>(options => options.UseSqlite("Data Source = Minux.db"));
+        services.AddDbContext<DataBaseContext>(options => options.UseSqlite("Data Source = Minux.db"));
 
         services.AddScoped<IAlgorithmRepository, AlgorithmRepository>();
         services.AddScoped<ICryptocurrencyRepository, CryptocurrencyRepository>();

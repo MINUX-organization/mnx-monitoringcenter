@@ -6,9 +6,9 @@ namespace MINUX.Backend.Worker.DataAccess.Repositories;
 
 public class PoolRepository : IPoolRepository
 {
-    private readonly Context _context;
+    private readonly DataBaseContext _context;
 
-    public PoolRepository(Context context)
+    public PoolRepository(DataBaseContext context)
     {
         _context = context;
     }

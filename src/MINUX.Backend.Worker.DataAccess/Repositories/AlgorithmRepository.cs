@@ -5,9 +5,9 @@ namespace MINUX.Backend.Worker.DataAccess.Repositories;
 
 public class AlgorithmRepository : IAlgorithmRepository
 {
-    private readonly Context _context;
+    private readonly DataBaseContext _context;
 
-    public AlgorithmRepository(Context context)
+    public AlgorithmRepository(DataBaseContext context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }

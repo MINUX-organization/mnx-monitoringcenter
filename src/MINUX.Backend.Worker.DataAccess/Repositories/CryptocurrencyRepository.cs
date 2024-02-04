@@ -6,9 +6,9 @@ namespace MINUX.Backend.Worker.DataAccess.Repositories;
 
 public class CryptocurrencyRepository : ICryptocurrencyRepository
 {
-    private readonly Context _context;
+    private readonly DataBaseContext _context;
 
-    public CryptocurrencyRepository(Context context)
+    public CryptocurrencyRepository(DataBaseContext context)
     {
         _context = context;
     }

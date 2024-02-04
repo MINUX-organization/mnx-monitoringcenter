@@ -5,7 +5,7 @@ using MINUX.Backend.Worker.DataAccess.Dto;
 
 namespace MINUX.Backend.Worker.DataAccess;
 
-public class Context : DbContext
+public class DataBaseContext : DbContext
 {
     public DbSet<Cryptocurrency> Cryptocurrencies { get; set; }
 
@@ -21,7 +21,7 @@ public class Context : DbContext
 
     public DbSet<Preset> Presets { get; set; }
 
-    public Context(DbContextOptions<Context> option) : base(option)
+    public DataBaseContext(DbContextOptions<DataBaseContext> option) : base(option)
     {
         //Database.EnsureDeleted();
         Database.EnsureCreated();
