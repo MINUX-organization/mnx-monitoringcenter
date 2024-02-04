@@ -1,2 +1,2 @@
-# MINUX.Backend.Unit
-Локальный backend, расположенные на юнитах (фермах)
+# MNX.MonitoringCenter.Management
+Сервис центра мониторинга для управления фермами
