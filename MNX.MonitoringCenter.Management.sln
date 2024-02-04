@@ -1,0 +1,76 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B019F5E8-535B-4FBB-9495-B64EF4079E92}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{0971EE51-2886-44E6-8FA4-11B606DBFD61}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MINUX.Packages", "MINUX.Packages", "{4282C039-7DD9-46FD-ADF4-497E6EF0725E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.Kernel.UseCases.DI", "MINUX.packages\MNX.Kernel.UseCases.DI\MNX.Kernel.UseCases.DI.csproj", "{4FE440FA-F3EA-4046-B323-440C3472A5E5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.Kernel.UseCases", "MINUX.packages\MNX.Kernel.UseCases\MNX.Kernel.UseCases.csproj", "{0A1AE0E4-6FB8-4220-997D-419734134E9A}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.Contracts", "src\MNX.MonitoringCenter.Management.Contracts\MNX.MonitoringCenter.Management.Contracts.csproj", "{D0B418EA-8046-450E-BCF9-4D4651764349}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.Core", "src\MNX.MonitoringCenter.Management.Core\MNX.MonitoringCenter.Management.Core.csproj", "{24D43FE9-891B-4D7B-A293-2F7EEC9A6857}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.DataAccess", "src\MNX.MonitoringCenter.Management.DataAccess\MNX.MonitoringCenter.Management.DataAccess.csproj", "{2FCFF34D-6E0C-4C6B-8140-9EC28C4D0047}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.Service", "src\MNX.MonitoringCenter.Management.Service\MNX.MonitoringCenter.Management.Service.csproj", "{6A281ADB-2961-41E5-A7D8-D5C363A2FE87}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.UseCases", "src\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj", "{65A81F0E-F729-45D3-AF94-49C81C76FF1B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4FE440FA-F3EA-4046-B323-440C3472A5E5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4FE440FA-F3EA-4046-B323-440C3472A5E5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4FE440FA-F3EA-4046-B323-440C3472A5E5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4FE440FA-F3EA-4046-B323-440C3472A5E5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0A1AE0E4-6FB8-4220-997D-419734134E9A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A1AE0E4-6FB8-4220-997D-419734134E9A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A1AE0E4-6FB8-4220-997D-419734134E9A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A1AE0E4-6FB8-4220-997D-419734134E9A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0B418EA-8046-450E-BCF9-4D4651764349}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0B418EA-8046-450E-BCF9-4D4651764349}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0B418EA-8046-450E-BCF9-4D4651764349}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0B418EA-8046-450E-BCF9-4D4651764349}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24D43FE9-891B-4D7B-A293-2F7EEC9A6857}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24D43FE9-891B-4D7B-A293-2F7EEC9A6857}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24D43FE9-891B-4D7B-A293-2F7EEC9A6857}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24D43FE9-891B-4D7B-A293-2F7EEC9A6857}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FCFF34D-6E0C-4C6B-8140-9EC28C4D0047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FCFF34D-6E0C-4C6B-8140-9EC28C4D0047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FCFF34D-6E0C-4C6B-8140-9EC28C4D0047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FCFF34D-6E0C-4C6B-8140-9EC28C4D0047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A281ADB-2961-41E5-A7D8-D5C363A2FE87}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A281ADB-2961-41E5-A7D8-D5C363A2FE87}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6A281ADB-2961-41E5-A7D8-D5C363A2FE87}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6A281ADB-2961-41E5-A7D8-D5C363A2FE87}.Release|Any CPU.Build.0 = Release|Any CPU
+		{65A81F0E-F729-45D3-AF94-49C81C76FF1B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{65A81F0E-F729-45D3-AF94-49C81C76FF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{65A81F0E-F729-45D3-AF94-49C81C76FF1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{65A81F0E-F729-45D3-AF94-49C81C76FF1B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{4FE440FA-F3EA-4046-B323-440C3472A5E5} = {4282C039-7DD9-46FD-ADF4-497E6EF0725E}
+		{0A1AE0E4-6FB8-4220-997D-419734134E9A} = {4282C039-7DD9-46FD-ADF4-497E6EF0725E}
+		{D0B418EA-8046-450E-BCF9-4D4651764349} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{24D43FE9-891B-4D7B-A293-2F7EEC9A6857} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{2FCFF34D-6E0C-4C6B-8140-9EC28C4D0047} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{6A281ADB-2961-41E5-A7D8-D5C363A2FE87} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{65A81F0E-F729-45D3-AF94-49C81C76FF1B} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}
+	EndGlobalSection
+EndGlobal

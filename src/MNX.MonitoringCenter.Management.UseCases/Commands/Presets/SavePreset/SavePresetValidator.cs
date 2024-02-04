@@ -1,0 +1,22 @@
+﻿using FluentValidation;
+using MNX.MonitoringCenter.Management.UseCases.Commands.ModelValidators;
+
+namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
+
+/// <summary>
+/// Валидатор каманды сохранения пресета
+/// </summary>
+public class SavePresetValidator : AbstractValidator<SavePresetCommand>
+{
+    public SavePresetValidator()
+    {
+        RuleFor(x => x.GpuName)
+            .NotEmpty()
+            .WithMessage("Название GPU не должно быть пустым");
+
+        RuleFor(x => x.Model)
+            .NotNull()
+            .WithMessage("Данные для пресета обязательны")
+            .SetValidator(x => new PresetModelValidator());
+    }
+}

@@ -1,0 +1,13 @@
+﻿{
+  "profiles": {
+    "MNX.MonitoringCenter.Management.Service": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "applicationUrl": "http://192.168.0.101:8000"
+      },
+      "applicationUrl": "http://192.168.0.101:8000"
+    }
+  }
+}

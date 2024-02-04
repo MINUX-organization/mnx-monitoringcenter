@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\MINUX.packages\MNX.Kernel.UseCases\MNX.Kernel.UseCases.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.Management.Contracts\MNX.MonitoringCenter.Management.Contracts.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.Management.Core\MNX.MonitoringCenter.Management.Core.csproj" />
+  </ItemGroup>
+
+</Project>
