@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Manage
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.UseCases", "src\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj", "{65A81F0E-F729-45D3-AF94-49C81C76FF1B}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.UseCases.Tests", "tests\MNX.MonitoringCenter.Management.UseCases.Tests\MNX.MonitoringCenter.Management.UseCases.Tests.csproj", "{8C483D96-C026-4DD9-8E13-941BD0E1464D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{65A81F0E-F729-45D3-AF94-49C81C76FF1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65A81F0E-F729-45D3-AF94-49C81C76FF1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65A81F0E-F729-45D3-AF94-49C81C76FF1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8C483D96-C026-4DD9-8E13-941BD0E1464D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8C483D96-C026-4DD9-8E13-941BD0E1464D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8C483D96-C026-4DD9-8E13-941BD0E1464D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8C483D96-C026-4DD9-8E13-941BD0E1464D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

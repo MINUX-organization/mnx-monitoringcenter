@@ -9,6 +9,7 @@ using NLog;
 using NLog.Web;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using Refit;
+using System.Reflection;
 
 namespace MNX.MonitoringCenter.Management;
 
@@ -45,7 +46,15 @@ public class Program
         services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+
+        services.AddSwaggerGen(options =>
+        {
+            var basePath = AppContext.BaseDirectory;
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(basePath, xmlFile);
+            options.IncludeXmlComments(xmlPath);
+        });
+
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddHealthChecks();
 
