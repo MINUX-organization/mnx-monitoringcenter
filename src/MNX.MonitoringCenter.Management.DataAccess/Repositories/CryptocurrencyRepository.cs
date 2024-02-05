@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
 public class CryptocurrencyRepository : ICryptocurrencyRepository
 {
-    private readonly DataBaseContext _context;
+    private readonly Context _context;
 
-    public CryptocurrencyRepository(DataBaseContext context)
+    public CryptocurrencyRepository(Context context)
     {
         _context = context;
     }

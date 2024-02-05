@@ -5,9 +5,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
 public class FlightSheetRepository : IFlightSheetRepository
 {
-    private readonly DataBaseContext _context;
+    private readonly Context _context;
 
-    public FlightSheetRepository(DataBaseContext context)
+    public FlightSheetRepository(Context context)
     {
         _context = context;
     }

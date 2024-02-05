@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
 public class WalletRepository : IWalletRepository
 {
-    private readonly DataBaseContext _context;
+    private readonly Context _context;
 
-    public WalletRepository(DataBaseContext context)
+    public WalletRepository(Context context)
     {
         _context = context;
     }

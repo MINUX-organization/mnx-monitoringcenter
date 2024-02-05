@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
 public class PresetRepository : IPresetRepository
 {
-    private readonly DataBaseContext _context;
+    private readonly Context _context;
 
-    public PresetRepository(DataBaseContext context)
+    public PresetRepository(Context context)
     {
         _context = context;
     }

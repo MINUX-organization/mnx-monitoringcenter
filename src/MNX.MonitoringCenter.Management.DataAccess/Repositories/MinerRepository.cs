@@ -9,9 +9,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 /// </summary>
 public class MinerRepository : IMinerRepository
 {
-    private readonly DataBaseContext _context;
+    private readonly Context _context;
 
-    public MinerRepository(DataBaseContext context)
+    public MinerRepository(Context context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }

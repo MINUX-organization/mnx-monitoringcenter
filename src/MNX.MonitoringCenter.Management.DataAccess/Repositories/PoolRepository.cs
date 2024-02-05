@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
 public class PoolRepository : IPoolRepository
 {
-    private readonly DataBaseContext _context;
+    private readonly Context _context;
 
-    public PoolRepository(DataBaseContext context)
+    public PoolRepository(Context context)
     {
         _context = context;
     }

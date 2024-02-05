@@ -5,9 +5,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
 public class AlgorithmRepository : IAlgorithmRepository
 {
-    private readonly DataBaseContext _context;
+    private readonly Context _context;
 
-    public AlgorithmRepository(DataBaseContext context)
+    public AlgorithmRepository(Context context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }

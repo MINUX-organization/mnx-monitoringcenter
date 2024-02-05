@@ -5,7 +5,7 @@ using MNX.MonitoringCenter.Management.DataAccess.Dto;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
-public class DataBaseContext : DbContext
+public class Context : DbContext
 {
     public DbSet<Cryptocurrency> Cryptocurrencies { get; set; }
 
@@ -21,7 +21,7 @@ public class DataBaseContext : DbContext
 
     public DbSet<Preset> Presets { get; set; }
 
-    public DataBaseContext(DbContextOptions<DataBaseContext> option) : base(option)
+    public Context(DbContextOptions<Context> option) : base(option)
     {
         //Database.EnsureDeleted();
         Database.EnsureCreated();

@@ -13,25 +13,25 @@ public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Resul
 {
     private readonly IPresetRepository _presetRepository;
 
-    private readonly IHardwareParametersRepository _hardwareRepository;
+    private readonly IMonitoringClient _monitoringClient;
 
     private readonly IMapper _mapper;
 
     public SavePresetCommandHandler(IPresetRepository repository,
-                                    IHardwareParametersRepository hardwareRepository,
+                                    IMonitoringClient monitoringClient,
                                     IMapper mapper)
     {
         _presetRepository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _hardwareRepository = hardwareRepository ?? throw new ArgumentNullException(nameof(hardwareRepository));
+        _monitoringClient = monitoringClient ?? throw new ArgumentNullException(nameof(monitoringClient));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     public async Task<Result<Guid>> Handle(SavePresetCommand request, CancellationToken cancellationToken)
     {
-        /*if (! (await _hardwareRepository.GetGpusParameters()).Any(gpu => gpu.Name == request.GpuName))
+        if (! await _monitoringClient.GpuExists(request.GpuName))
         {
             return Result<Guid>.Invalid("GPU with this name wasn`t found");
-        }*/
+        }
 
         var preset = _mapper.Map<Preset>(request.Model);
         preset.GpuName = request.GpuName;

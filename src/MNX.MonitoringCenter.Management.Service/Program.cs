@@ -8,6 +8,7 @@ using Kernel.UseCases.DI;
 using NLog;
 using NLog.Web;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
+using Refit;
 
 namespace MNX.MonitoringCenter.Management;
 
@@ -57,8 +58,13 @@ public class Program
     {
         services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAvailableAlgorithmsQuery).Assembly));
-        services.AddDbContext<DataBaseContext>(options => options.UseSqlite("Data Source = Minux.db"));
+        services.AddDbContext<Context>(options => options.UseSqlite("Data Source = Minux.db"));
         services.AddMemoryCache();
+
+        var monitoringUri = configuration["MonitoringUri"]
+            ?? throw new ArgumentNullException("MonitoringUri", "Uri адрес сервиса мониторинга не указан");
+        services.AddRefitClient<IMonitoringClient>()
+                .ConfigureHttpClient(client => client.BaseAddress = new Uri(monitoringUri));
 
         services.AddScoped<IAlgorithmRepository, AlgorithmRepository>();
         services.AddScoped<ICryptocurrencyRepository, CryptocurrencyRepository>();
@@ -67,7 +73,6 @@ public class Program
         services.AddScoped<IPoolRepository, PoolRepository>();
         services.AddScoped<IPresetRepository, PresetRepository>();
         services.AddScoped<IWalletRepository, WalletRepository>();
-        services.AddScoped<IHardwareParametersRepository, HardwareParametersRepository>();
     }
 
     private static async Task RunApp(WebApplicationBuilder builder)
