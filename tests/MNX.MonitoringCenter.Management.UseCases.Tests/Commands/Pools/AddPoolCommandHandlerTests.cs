@@ -8,11 +8,13 @@ using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools;
 
+[TestFixture]
 public class AddPoolCommandHandlerTests
 {
     [Test]
     public async Task AddPool_ReturnsId()
     {
+        // Arrange
         Guid id = Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000");
 
         var poolRepository = new Mock<IPoolRepository>();
@@ -33,17 +35,25 @@ public class AddPoolCommandHandlerTests
         var handler = new AddPoolCommandHandler(poolRepository.Object,
                                                 cryptoRepository.Object,
                                                 mapper.Object);
-
+        // Act
         var result = await handler.Handle(GetCommand(), default);
 
-        Assert.NotNull(result);
-        Assert.IsTrue(result.IsSuccess);
-        Assert.That(result.GetValue(), Is.EqualTo(id));
+        // Assert
+        Assert.Multiple(() =>
+        {   
+            Assert.That(result.IsSuccess, Is.True);
+            Assert.That(result.Errors, Is.Null);
+            Assert.That(result, Is.TypeOf<Result<Guid>>());
+            Assert.That(result, Is.EqualTo(Result<Guid>.SuccessfullyCreated(id)));
+            Assert.That(result.GetValue(), Is.EqualTo(id));    
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Created));
+        });
     }
 
     [Test]
     public async Task AddPool_WhenPoolAlreadyExists_ReturnsError()
     {
+        // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
         poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
@@ -56,18 +66,25 @@ public class AddPoolCommandHandlerTests
                                                 cryptoRepository.Object,
                                                 mapper.Object);
 
+        // Act
         var result = await handler.Handle(GetCommand(), default);
 
-        Assert.NotNull(result);
-        Assert.IsFalse(result.IsSuccess);
-        Assert.NotNull(result.Errors);
-        Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
-        Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool already exists"));
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.Errors, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<Result<Guid>>());
+            Assert.That(result, Is.Not.EqualTo(Result<Guid>.Empty()));
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
+            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool already exists"));
+        });
     }
 
     [Test]
     public async Task AddPool_WhenCoinDoesNotExist_ReturnsError()
     {
+        // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
         poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
@@ -83,13 +100,19 @@ public class AddPoolCommandHandlerTests
                                                 cryptoRepository.Object,
                                                 mapper.Object);
 
+        // Act
         var result = await handler.Handle(GetCommand(), default);
 
-        Assert.NotNull(result);
-        Assert.IsFalse(result.IsSuccess);
-        Assert.NotNull(result.Errors);
-        Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
-        Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Cryptocurrency wasn't found"));
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.False);
+            Assert.That(result.Errors, Is.Not.Null);
+            Assert.That(result, Is.TypeOf<Result<Guid>>());
+            Assert.That(result, Is.Not.EqualTo(Result<Guid>.Empty()));
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
+            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Cryptocurrency wasn't found"));
+        });
     }
 
     private static AddPoolCommand GetCommand()
