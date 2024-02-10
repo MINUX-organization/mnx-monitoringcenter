@@ -25,7 +25,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
 
             var mapper = new Mock<IMapper>();
             mapper
-                .Setup(x=>x.Map<Cryptocurrency>(It.IsAny<Cryptocurrency>()))
+                .Setup(x=>x.Map<Cryptocurrency>(
+                    It.IsAny<AddCryptocurrencyCommand>()))
                 .Returns(new Cryptocurrency());
 
             var handler = new AddCryptocurrencyCommandHandler(
