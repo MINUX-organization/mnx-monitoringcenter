@@ -35,6 +35,9 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
 
             var result = await handler.Handle(GetCommand(), default);
 
+            cryptoRepository
+                .Verify(x => x.Add(It.IsAny<Cryptocurrency>()), Times.Once);
+
             Assert.NotNull(result);
             Assert.IsTrue(result.IsSuccess);
             Assert.That(result.GetValue(), Is.EqualTo(Unit.Value));
@@ -57,6 +60,9 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
                 mapper.Object);
 
             var result = await handler.Handle(GetCommand(), default);
+
+            cryptoRepository
+                .Verify(x => x.Add(It.IsAny<Cryptocurrency>()), Times.Never);
 
             Assert.NotNull(result);
             Assert.IsFalse(result.IsSuccess);
@@ -87,6 +93,9 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
                 mapper.Object);
 
             var result = await handler.Handle(GetCommand(), default);
+
+            cryptoRepository
+                .Verify(x => x.Add(It.IsAny<Cryptocurrency>()), Times.Never);
 
             Assert.NotNull(result);
             Assert.IsFalse(result.IsSuccess);
