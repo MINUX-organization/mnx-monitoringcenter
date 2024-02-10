@@ -42,13 +42,20 @@ public class UpdatePoolCommandHandlerTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Errors, Is.Null);
-            Assert.That(result, Is.TypeOf<Result<Unit>>());
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()));
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent));
-            Assert.That(PoolsAreEquals(new Pool(), new PoolModel("domain", 8000, "Bitcoin")), Is.False);
+            Assert.That(result.IsSuccess, Is.True,
+                "Операция завершилась неудачно");
+            Assert.That(result.Errors, Is.Null, 
+                "Список ошибок не пуст");
+            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+                "Неверный тип результата");
+            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
+                "Результат не пуст");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
+                "Статус результата не 'NoContent'");
         });
+
+        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Once);
     }
 
     [Test]
@@ -57,7 +64,7 @@ public class UpdatePoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync((Pool)null);
+        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Pool);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
 
@@ -73,21 +80,30 @@ public class UpdatePoolCommandHandlerTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Errors, Is.Not.Null);
-            Assert.That(result, Is.TypeOf<Result<Unit>>());
-            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()));
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
-            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"));
+            Assert.That(result.IsSuccess, Is.False,
+                "Операция завершилась успешно, когда ожидалась неудача");
+            Assert.That(result.Errors, Is.Not.Null,
+                "Список ошибок пуст");
+            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+                "Неверный тип результата");
+            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()),
+                "Результат пуст");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
+                "Статус результата не 'Invalid'");
+            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"),
+                 "Сообщение об ошибке отличается от ожидаемого");
         });
+
+        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
     [Test]
-    public async Task UpdatePool_WhenPoolsAreEquals_ReturnsError()
+    public async Task UpdatePool_WhenPoolsAreEquals_ReturnsEmptyResult()
     {
         // Arrange
-        var pool = new Pool() 
-        { 
+        var pool = new Pool()
+        {
             Id = It.IsAny<Guid>(),
             Domain = "domain",
             Port = 8000,
@@ -96,7 +112,7 @@ public class UpdatePoolCommandHandlerTests
 
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Pool());
+        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(pool);
 
         poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
                     .ReturnsAsync(false);
@@ -118,13 +134,22 @@ public class UpdatePoolCommandHandlerTests
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(PoolsAreEquals(pool, new PoolModel("domain", 8000, "Bitcoin")), Is.True);
-            Assert.That(result.Errors, Is.Null);
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent));
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()));
-            Assert.That(result, Is.TypeOf<Result<Unit>>());
+            Assert.That(result.IsSuccess, Is.True,
+                 "Операция завершилась неудачно");
+            Assert.That(result.Errors, Is.Null,
+                "Список не ошибок пуст");
+            Assert.That(PoolsIsEquals(pool, GetCommand().Model), Is.True,
+                "Пули не равны");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
+                "Статус результата не 'NoContent'");
+            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
+                "Результат не пуст");
+            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+                 "Неверный тип результата");
         });
+
+        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
     [Test]
@@ -152,13 +177,20 @@ public class UpdatePoolCommandHandlerTests
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Errors, Is.Not.Null);
-            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool already exists"));
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
-            Assert.That(result, Is.TypeOf<Result<Unit>>());
-            Assert.That(PoolsAreEquals(new Pool(), new PoolModel("domain", 8000, "Bitcoin")), Is.False);
+            Assert.That(result.IsSuccess, Is.False,
+                "Операция завершилась успешно, когда ожидалась неудача");
+            Assert.That(result.Errors, Is.Not.Null,
+                "Список ошибок пуст");
+            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool already exists"),
+                 "Сообщение об ошибке отличается от ожидаемого");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
+                "Статус результата не 'Invalid'");
+            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+                 "Неверный тип результата");
         });
+
+        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
     [Test]
@@ -188,13 +220,20 @@ public class UpdatePoolCommandHandlerTests
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Errors, Is.Not.Null);
-            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Cryptocurrency wasn't found"));
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
-            Assert.That(result, Is.TypeOf<Result<Unit>>());
-            Assert.That(PoolsAreEquals(new Pool(), new PoolModel("domain", 8000, "Bitcoin")), Is.False);
+            Assert.That(result.IsSuccess, Is.False, 
+                "Операция завершилась успешно, когда ожидалась неудача");
+            Assert.That(result.Errors, Is.Not.Null,
+                "Список ошибок пуст");
+            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Cryptocurrency wasn't found"),
+                 "Сообщение об ошибке отличается от ожидаемого");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
+                "Статус результата не 'Invalid'");
+            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+                 "Неверный тип результата");
         });
+
+        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
     private static UpdatePoolCommand GetCommand()
@@ -202,7 +241,7 @@ public class UpdatePoolCommandHandlerTests
         return new UpdatePoolCommand(It.IsAny<Guid>(), new PoolModel("domain", 8000, "Bitcoin"));
     }
 
-    private static bool PoolsAreEquals(Pool pool, PoolModel newPool)
+    private static bool PoolsIsEquals(Pool pool, PoolModel newPool)
     {
         return pool.Domain == newPool.Domain && pool.Port == newPool.Port;
     }

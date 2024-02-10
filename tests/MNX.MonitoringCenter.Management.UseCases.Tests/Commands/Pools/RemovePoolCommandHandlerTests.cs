@@ -18,6 +18,8 @@ public class RemovePoolCommandHandlerTests
 
         poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Pool());
 
+        poolRepository.Setup(x => x.Remove(It.IsAny<Pool>()));
+
         var handler = new RemovePoolCommandHandler(poolRepository.Object);
 
         // Act
@@ -26,12 +28,20 @@ public class RemovePoolCommandHandlerTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.True);
-            Assert.That(result.Errors, Is.Null);
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()));
-            Assert.That(result, Is.TypeOf<Result<Unit>>());
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent));
+            Assert.That(result.IsSuccess, Is.True, 
+                "Операция завершилась неудачно");
+            Assert.That(result.Errors, Is.Null, 
+                "Список ошибок не пуст");
+            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()), 
+                "Результат не пуст");
+            Assert.That(result, Is.TypeOf<Result<Unit>>(), 
+                "Неверный тип результата");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent), 
+                "Статус результата не 'NoContent'");
         });
+
+        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.Remove(It.IsAny<Pool>()), Times.Once);
     }
 
     [Test]
@@ -39,7 +49,7 @@ public class RemovePoolCommandHandlerTests
     {
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync((Pool)null);
+        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Pool);
 
         var handler = new RemovePoolCommandHandler(poolRepository.Object);
 
@@ -49,13 +59,22 @@ public class RemovePoolCommandHandlerTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.False);
-            Assert.That(result.Errors, Is.Not.Null);
-            Assert.That(result, Is.TypeOf<Result<Unit>>());
-            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()));
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
-            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"));   
+            Assert.That(result.IsSuccess, Is.False, 
+                "Операция была успешной, когда ожидалась неудача");
+            Assert.That(result.Errors, Is.Not.Null, 
+                "Список ошибок пуст");
+            Assert.That(result, Is.TypeOf<Result<Unit>>(), 
+                "Неверный тип результата");
+            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()), 
+                "Результат пуст");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid), 
+                "Статус результата не 'Invalid'");
+            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"), 
+                "Сообщение об ошибке отличается от ожидаемого");   
         });
+
+        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.Remove(It.IsAny<Pool>()), Times.Never);
     }
 
     private static RemovePoolCommand GetCommand()
