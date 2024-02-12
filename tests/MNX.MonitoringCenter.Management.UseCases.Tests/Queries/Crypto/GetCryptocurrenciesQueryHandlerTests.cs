@@ -3,7 +3,7 @@ using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Crypto
 {
     public class GetCryptocurrenciesQueryHandlerTests
     {
