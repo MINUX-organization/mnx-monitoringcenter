@@ -238,9 +238,4 @@ public class UpdatePoolCommandHandlerTests
     {
         return new UpdatePoolCommand(It.IsAny<Guid>(), new PoolModel("domain", 8000, "Bitcoin"));
     }
-
-    private static bool PoolsIsEquals(Pool pool, PoolModel newPool)
-    {
-        return pool.Domain == newPool.Domain && pool.Port == newPool.Port;
-    }
 }
