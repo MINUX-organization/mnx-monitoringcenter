@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MINUX.packages\MNX.Kernel.UseCases.DI\MNX.Kernel.UseCases.DI.csproj" />
+    <ProjectReference Include="..\..\..\MINUX.packages\MNX.Kernel.UseCases.DI\MNX.Kernel.UseCases.DI.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.DataAccess\MNX.MonitoringCenter.Management.DataAccess.csproj" />
   </ItemGroup>
 
