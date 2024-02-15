@@ -1,2 +1,2 @@
-# MNX.MonitoringCenter.Management
-Сервис центра мониторинга для управления фермами
+# MNX.MonitoringCenter
+Сервисы для мониторинга ферм и их управления
