@@ -2,175 +2,119 @@
 using FluentValidation.TestHelper;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.SavePreset
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.SavePreset;
+
+[TestFixture]
+public class SavePresetValidatorTests
 {
-    [TestFixture]
-    public class SavePresetValidatorTests
+    private SavePresetValidator _validator;
+
+    [SetUp]
+    public void Setup()
     {
-        private SavePresetValidator _validator;
+        _validator = new SavePresetValidator();
+    }
 
-        private SavePresetCommand? _command;
+    [Test]
+    public void SavePresetCommand_WhenGpuNameNotEmpty_ShouldNotErrors()
+    {
+        var command = GetCommand("GeForce RTX 4090");
+        var result = _validator.TestValidate(command);
 
-        private TestValidationResult<SavePresetCommand>? _result;
+        result.ShouldNotHaveValidationErrorFor(x => x.GpuName);
+    }
 
-        [SetUp]
-        public void Setup()
-        {
-            _validator = new SavePresetValidator();
-        }
+    [Test]
+    public void SavePresetCommand_WhenGpuNameEmpty_ShouldErrors()
+    {
+        var command = GetCommand(string.Empty);
+        var result = _validator.TestValidate(command);
 
-        [Test]
-        public void GpuNameNotEmpty()
-        {
-            _command = GetCommand("GeForce RTX 4090");
-            _result = _validator.TestValidate(_command);
+        result.ShouldHaveValidationErrorFor(x => x.GpuName)
+            .WithErrorMessage("Название GPU не должно быть пустым");
+    }
 
-            _result.ShouldNotHaveValidationErrorFor(x => x.GpuName);
-        }
+    [Test]
+    public void SavePresetCommand_WhenModelNotNull_ShouldNotErrors()
+    {
+        var command = GetCommand("GeForce RTX 4090");
+        var result = _validator.TestValidate(command);
 
-        [Test]
-        public void GpuNameEmpty()
-        {
-            _command = GetCommand("");
-            _result = _validator.TestValidate(_command);
+        result.ShouldNotHaveValidationErrorFor(x => x.Model);
+    }
 
-            _result.ShouldHaveValidationErrorFor(x => x.GpuName)
-                .WithErrorMessage("Название GPU не должно быть пустым");
-        }
+    [Test]
+    public void SavePresetCommand_WhenModelNull_ShouldErrors()
+    {
+        var command = new SavePresetCommand("GeForce RTX 4090", null!);
+        var result = _validator.TestValidate(command);
 
-        [Test]
-        [TestCaseSource(typeof(PresetCommandTestCase),
-                    nameof(PresetCommandTestCase.GetCommandTestCases))]
-        public void PropertiesModelAreValid(PresetModel presetModel)
-        {
-            _command = new SavePresetCommand("GeForce RTX 4090", presetModel);
-            _result = _validator.TestValidate(_command);
+        result.ShouldHaveValidationErrorFor(x => x.Model)
+              .WithErrorMessage("Данные для пресета обязательны");
+    }
 
-            _result.ShouldNotHaveValidationErrorFor(
-                x => x.Model);
+    [TestCaseSource(typeof(PresetCommandTestCase),
+                    nameof(PresetCommandTestCase.CreateCorrectPresetModel))]
+    public void SavePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(PresetModel model)
+    {
+        var command = new SavePresetCommand("GeForce RTX 4090", model);
+        var result = _validator.TestValidate(command);
 
-            var errorsList = _result.Errors.ToList();
+        result.ShouldNotHaveValidationErrorFor(x => x.Model.CoreClock);
 
-            if (errorsList.Count != 0)
-            {
-                var errorsMessageList =
-                    errorsList.Select(error => error.ErrorMessage).ToList();
+        result.ShouldNotHaveValidationErrorFor(x => x.Model.MemoryClock);
 
-                if (errorsMessageList.Contains("Значение тактовой частоты" +
-                    " ядра не должно выходить за диапазон [1000; 5000] Мгц"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(x => x.Model.CoreClock)
-                        .WithErrorMessage("Значение тактовой частоты ядра" +
-                        " не должно выходить за диапазон [1000; 5000] Мгц");
-                }
+        result.ShouldNotHaveValidationErrorFor(x => x.Model.PowerLimit);
 
-                if (errorsMessageList.Contains("Значение тактовой частоты" +
-                    " памяти не должно выходить за диапазон [1000; 5000] Мгц"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(x => x.Model.MemoryClock)
-                        .WithErrorMessage("Значение тактовой частоты памяти" +
-                        " не должно выходить за диапазон [1000; 5000] Мгц");
-                }
+        result.ShouldNotHaveValidationErrorFor(x => x.Model.CriticalTemperature);
 
-                if (errorsMessageList.Contains("Значение ограничения " +
-                    "мощности не должно выходить за диапазон [100; 150] Ватт"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(x => x.Model.PowerLimit)
-                        .WithErrorMessage("Значение ограничения мощности не" +
-                        " должно выходить за диапазон [100; 150] Ватт");
-                }
+        result.ShouldNotHaveValidationErrorFor(x => x.Model.FanSpeed);
+    }
 
-                if (errorsMessageList.Contains("Значение критической" +
-                    " температуры не должно выходить за диапазон [0; 110]" +
-                    " гадусов Цельсия"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(
-                            x => x.Model.CriticalTemperature)
-                        .WithErrorMessage("Значение критической температуры" +
-                        " не должно выходить за диапазон [0; 110] гадусов" +
-                        " Цельсия");
-                }
+    [TestCaseSource(typeof(PresetCommandTestCase),
+                    nameof(PresetCommandTestCase.CreateIncorrectPresetModel))]
+    public void SavePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(PresetModel model)
+    {
+        var command = new SavePresetCommand("GeForce RTX 4090", model);
+        var result = _validator.TestValidate(command);
 
-                if (errorsMessageList.Contains("Значение скорости" +
-                    " вентилятора не должно выходить за диапазон [0; 100] %"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(
-                            x => x.Model.FanSpeed)
-                        .WithErrorMessage("Значение скорости вентилятора не" +
-                        " должно выходить за диапазон [0; 100] %");
-                }
-            }
-            else
-            {
-                _result.ShouldNotHaveValidationErrorFor(
-                x => x.Model.CoreClock);
-                _result.ShouldNotHaveValidationErrorFor(
-                    x => x.Model.MemoryClock);
-                _result.ShouldNotHaveValidationErrorFor(
-                    x => x.Model.PowerLimit);
-                _result.ShouldNotHaveValidationErrorFor(
-                    x => x.Model.CriticalTemperature);
-                _result.ShouldNotHaveValidationErrorFor(
-                    x => x.Model.FanSpeed);
-            }
-        }
+        result.ShouldNotHaveValidationErrorFor(x => x.Model);
 
-        [Test]
-        public void ModelNotNull()
-        {
-            _command = GetCommand("GeForce RTX 4090");
-            _result = _validator.TestValidate(_command);
+        result.ShouldHaveValidationErrorFor(x => x.Model.CoreClock)
+              .WithErrorMessage("Значение тактовой частоты ядра" +
+                    " не должно выходить за диапазон [1000; 5000] Мгц");
 
-            _result.ShouldNotHaveValidationErrorFor(
-                x => x.Model);
-        }
+        result.ShouldHaveValidationErrorFor(x => x.Model.MemoryClock)
+              .WithErrorMessage("Значение тактовой частоты памяти" +
+                    " не должно выходить за диапазон [1000; 5000] Мгц");
 
-        [Test]
-        public void ModelNull()
-        {
-            _command = new SavePresetCommand("GeForce RTX 4090", null);
-            _result = _validator.TestValidate(_command);
+        result.ShouldHaveValidationErrorFor(x => x.Model.PowerLimit)
+              .WithErrorMessage("Значение ограничения мощности не" +
+                    " должно выходить за диапазон [100; 150] Ватт");
 
-            _result.ShouldHaveValidationErrorFor(x => x.Model)
-                .WithErrorMessage("Данные для пресета обязательны");
-        }
+        result.ShouldHaveValidationErrorFor(x => x.Model.CriticalTemperature)
+              .WithErrorMessage("Значение критической температуры" +
+                    " не должно выходить за диапазон [0; 110] гадусов" +
+                    " Цельсия");
 
-        private static SavePresetCommand GetCommand(string name)
-        {
-            var presetModel = CreatePresetModel();
+        result.ShouldHaveValidationErrorFor(x => x.Model.FanSpeed)
+              .WithErrorMessage("Значение скорости вентилятора не" +
+                    " должно выходить за диапазон [0; 100] %");
+    }
 
-            return new SavePresetCommand(name, presetModel);
-        }
+    private static SavePresetCommand GetCommand(string name)
+    {
+        var presetModel = CreatePresetModel();
 
-        private static PresetModel CreatePresetModel()
-        {
-            var memoryClock = 1313;
-            var coreClock = 2235;
-            var powerLimit = 150;
-            var criticalTemperature = 105;
-            var fanSpeed = 99;
+        return new SavePresetCommand(name, presetModel);
+    }
 
-            return new PresetModel(
-                memoryClock, coreClock, powerLimit,
-                criticalTemperature, fanSpeed);
-        }
-
-        private static PresetModel CreateIncorrectPresetModel()
-        {
-            var memoryClock = 1;
-            var coreClock = 1;
-            var powerLimit = 1;
-            var criticalTemperature = 1;
-            var fanSpeed = 1;
-
-            return new PresetModel(
-                memoryClock, coreClock, powerLimit,
-                criticalTemperature, fanSpeed);
-        }
+    private static PresetModel CreatePresetModel()
+    {
+        return new PresetModel(memoryClock: 1313,
+                               coreClock: 2235,
+                               powerLimit: 150,
+                               criticalTemperature: 105,
+                               fanSpeed: 99);
     }
 }

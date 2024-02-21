@@ -1,7 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 using FluentValidation.TestHelper;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.UpdatePreset
 {
@@ -10,10 +9,6 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
     {
         private UpdatePresetValidator _validator;
 
-        private UpdatePresetCommand? _command;
-
-        private TestValidationResult<UpdatePresetCommand>? _result;
-
         [SetUp]
         public void Setup()
         {
@@ -21,107 +16,71 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
         }
 
         [Test]
-        public void ModelNotNull()
+        public void SavePresetCommand_WhenModelNotNull_ShouldNotErrors()
         {
-            _command = GetCommand(CreatePresetModel());
-            _result = _validator.TestValidate(_command);
+            var command = GetCommand(CreatePresetModel());
+            var result = _validator.TestValidate(command);
 
-            _result.ShouldNotHaveValidationErrorFor(x => x.Model);
+            result.ShouldNotHaveValidationErrorFor(x => x.Model);
         }
 
         [Test]
-        public void ModelNull()
+        public void SavePresetCommand_WhenModelNull_ShouldErrors()
         {
-            _command = GetCommand(null);
-            _result = _validator.TestValidate(_command);
+            var command = GetCommand(null!);
+            var result = _validator.TestValidate(command);
 
-            _result.ShouldHaveValidationErrorFor(x => x.Model)
-                .WithErrorMessage("Данные для пресета обязательны");
+            result.ShouldHaveValidationErrorFor(x => x.Model)
+                  .WithErrorMessage("Данные для пресета обязательны");
         }
 
-        [Test]
         [TestCaseSource(typeof(PresetCommandTestCase),
-                    nameof(PresetCommandTestCase.GetCommandTestCases))]
-        public void PropertiesModelAreValid(PresetModel presetModel)
+                        nameof(PresetCommandTestCase.CreateCorrectPresetModel))]
+        public void UpdatePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(PresetModel model)
         {
-            _command = GetCommand(presetModel);
-            _result = _validator.TestValidate(_command);
+            var command = new UpdatePresetCommand(Guid.NewGuid(), model);
+            var result = _validator.TestValidate(command);
 
-            _result.ShouldNotHaveValidationErrorFor(x => x.Model);
+            result.ShouldNotHaveValidationErrorFor(x => x.Model.CoreClock);
 
-            var errorsList = _result.Errors.ToList();
+            result.ShouldNotHaveValidationErrorFor(x => x.Model.MemoryClock);
 
-            if (errorsList.Count != 0)
-            {
-                var errorsMessageList = new List<string>();
+            result.ShouldNotHaveValidationErrorFor(x => x.Model.PowerLimit);
 
-                foreach (var error in errorsList)
-                {
-                    errorsMessageList.Add(error.ErrorMessage);
-                }
+            result.ShouldNotHaveValidationErrorFor(x => x.Model.CriticalTemperature);
 
-                if (errorsMessageList.Contains("Значение тактовой частоты" +
-                    " ядра не должно выходить за диапазон [1000; 5000] Мгц"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(x => x.Model.CoreClock)
-                        .WithErrorMessage("Значение тактовой частоты ядра" +
+            result.ShouldNotHaveValidationErrorFor(x => x.Model.FanSpeed);
+        }
+
+        [TestCaseSource(typeof(PresetCommandTestCase),
+                        nameof(PresetCommandTestCase.CreateIncorrectPresetModel))]
+        public void UpdatePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(PresetModel model)
+        {
+            var command = new UpdatePresetCommand(Guid.NewGuid(), model);
+            var result = _validator.TestValidate(command);
+
+            result.ShouldNotHaveValidationErrorFor(x => x.Model);
+
+            result.ShouldHaveValidationErrorFor(x => x.Model.CoreClock)
+                  .WithErrorMessage("Значение тактовой частоты ядра" +
                         " не должно выходить за диапазон [1000; 5000] Мгц");
-                }
 
-                if (errorsMessageList.Contains("Значение тактовой частоты" +
-                    " памяти не должно выходить за диапазон [1000; 5000] Мгц"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(x => x.Model.MemoryClock)
-                        .WithErrorMessage("Значение тактовой частоты памяти" +
+            result.ShouldHaveValidationErrorFor(x => x.Model.MemoryClock)
+                  .WithErrorMessage("Значение тактовой частоты памяти" +
                         " не должно выходить за диапазон [1000; 5000] Мгц");
-                }
 
-                if (errorsMessageList.Contains("Значение ограничения " +
-                    "мощности не должно выходить за диапазон [100; 150] Ватт"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(x => x.Model.PowerLimit)
-                        .WithErrorMessage("Значение ограничения мощности не" +
+            result.ShouldHaveValidationErrorFor(x => x.Model.PowerLimit)
+                  .WithErrorMessage("Значение ограничения мощности не" +
                         " должно выходить за диапазон [100; 150] Ватт");
-                }
 
-                if (errorsMessageList.Contains("Значение критической" +
-                    " температуры не должно выходить за диапазон [0; 110]" +
-                    " гадусов Цельсия"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(
-                            x => x.Model.CriticalTemperature)
-                        .WithErrorMessage("Значение критической температуры" +
+            result.ShouldHaveValidationErrorFor(x => x.Model.CriticalTemperature)
+                  .WithErrorMessage("Значение критической температуры" +
                         " не должно выходить за диапазон [0; 110] гадусов" +
                         " Цельсия");
-                }
 
-                if (errorsMessageList.Contains("Значение скорости" +
-                    " вентилятора не должно выходить за диапазон [0; 100] %"))
-                {
-                    _result
-                        .ShouldHaveValidationErrorFor(
-                            x => x.Model.FanSpeed)
-                        .WithErrorMessage("Значение скорости вентилятора не" +
+            result.ShouldHaveValidationErrorFor(x => x.Model.FanSpeed)
+                  .WithErrorMessage("Значение скорости вентилятора не" +
                         " должно выходить за диапазон [0; 100] %");
-                }
-            }
-            else
-            {
-                _result.ShouldNotHaveValidationErrorFor(
-                x => x.Model.CoreClock);
-                _result.ShouldNotHaveValidationErrorFor(
-                    x => x.Model.MemoryClock);
-                _result.ShouldNotHaveValidationErrorFor(
-                    x => x.Model.PowerLimit);
-                _result.ShouldNotHaveValidationErrorFor(
-                    x => x.Model.CriticalTemperature);
-                _result.ShouldNotHaveValidationErrorFor(
-                    x => x.Model.FanSpeed);
-            }
         }
 
         private static UpdatePresetCommand GetCommand(PresetModel presetModel)
@@ -133,15 +92,11 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
 
         private static PresetModel CreatePresetModel()
         {
-            var memoryClock = 1313;
-            var coreClock = 5235;
-            var powerLimit = 150;
-            var criticalTemperature = 105;
-            var fanSpeed = 99;
-
-            return new PresetModel(
-                memoryClock, coreClock, powerLimit,
-                criticalTemperature, fanSpeed);
+            return new PresetModel(memoryClock: 1313,
+                                   coreClock: 2235,
+                                   powerLimit: 150,
+                                   criticalTemperature: 105,
+                                   fanSpeed: 99);
         }
     }
 }
