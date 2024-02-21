@@ -6,37 +6,51 @@ using Kernel.UseCases;
 using MediatR;
 using MNX.MonitoringCenter.Management.Core;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryptocurrency
 {
+    [TestFixture]
     public class AddCryptocurrencyCommandHandlerTests
     {
+        private Mock<ICryptocurrencyRepository> _cryptoRepository;
+
+        private Mock<IAlgorithmRepository> _algorithmRepository;
+
+        private Mock<IMapper> _mapper;
+
+        private AddCryptocurrencyCommandHandler _handler;
+
+        [SetUp]
+        public void Setup()
+        {
+            _cryptoRepository = new Mock<ICryptocurrencyRepository>();
+            _algorithmRepository = new Mock<IAlgorithmRepository>();
+            _mapper = new Mock<IMapper>();
+
+            _handler = new AddCryptocurrencyCommandHandler(
+                _cryptoRepository.Object,
+                _algorithmRepository.Object,
+                _mapper.Object);
+        }
+
         [Test]
         public async Task AddCrypto_ReturnsUnitValue()
         {
-            var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-            cryptoRepository
-                .Setup(x=>x.Exists(It.IsAny<string>(), It.IsAny<string>()))
+            _cryptoRepository
+                .Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            var algorithmRepository = new Mock<IAlgorithmRepository>();
-            algorithmRepository
-                .Setup(x=>x.Exists(It.IsAny<string>()))
+            _algorithmRepository
+                .Setup(x => x.Exists(It.IsAny<string>()))
                 .ReturnsAsync(true);
 
-            var mapper = new Mock<IMapper>();
-            mapper
-                .Setup(x=>x.Map<Cryptocurrency>(
+            _mapper
+                .Setup(x => x.Map<Cryptocurrency>(
                     It.IsAny<AddCryptocurrencyCommand>()))
                 .Returns(new Cryptocurrency());
 
-            var handler = new AddCryptocurrencyCommandHandler(
-                cryptoRepository.Object,
-                algorithmRepository.Object,
-                mapper.Object);
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var result = await handler.Handle(GetCommand(), default);
-
-            cryptoRepository
+            _cryptoRepository
                 .Verify(x => x.Add(It.IsAny<Cryptocurrency>()), Times.Once);
 
             Assert.NotNull(result);
@@ -47,22 +61,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
         [Test]
         public async Task AddCrypto_WhenCryptoAlreadyExists_ReturnsError()
         {
-            var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-            cryptoRepository
-                .Setup(x=>x.Exists(It.IsAny<string>(), It.IsAny<string>()))
+            _cryptoRepository
+                .Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
 
-            var algorithmRepository = new Mock<IAlgorithmRepository>();
-            var mapper = new Mock<IMapper>();
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var handler = new AddCryptocurrencyCommandHandler(
-                cryptoRepository.Object,
-                algorithmRepository.Object, 
-                mapper.Object);
-
-            var result = await handler.Handle(GetCommand(), default);
-
-            cryptoRepository
+            _cryptoRepository
                 .Verify(x => x.Add(It.IsAny<Cryptocurrency>()), Times.Never);
 
             Assert.NotNull(result);
@@ -76,26 +81,17 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
         [Test]
         public async Task AddCrypto_WhenAlgorithmDoesNotExist_ReturnsError()
         {
-            var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-            cryptoRepository
+            _cryptoRepository
                 .Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            var algorithmRepository = new Mock<IAlgorithmRepository>();
-            algorithmRepository
+            _algorithmRepository
                 .Setup(x => x.Exists(It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            var mapper = new Mock<IMapper>();
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var handler = new AddCryptocurrencyCommandHandler(
-                cryptoRepository.Object,
-                algorithmRepository.Object,
-                mapper.Object);
-
-            var result = await handler.Handle(GetCommand(), default);
-
-            cryptoRepository
+            _cryptoRepository
                 .Verify(x => x.Add(It.IsAny<Cryptocurrency>()), Times.Never);
 
             Assert.NotNull(result);

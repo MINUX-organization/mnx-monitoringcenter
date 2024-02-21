@@ -7,7 +7,7 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools;
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools.UpdatePool;
 
 [TestFixture]
 public class UpdatePoolCommandHandlerTests
@@ -44,7 +44,7 @@ public class UpdatePoolCommandHandlerTests
         {
             Assert.That(result.IsSuccess, Is.True,
                 "Операция завершилась неудачно");
-            Assert.That(result.Errors, Is.Null, 
+            Assert.That(result.Errors, Is.Null,
                 "Список ошибок не пуст");
             Assert.That(result, Is.TypeOf<Result<Unit>>(),
                 "Неверный тип результата");
@@ -218,7 +218,7 @@ public class UpdatePoolCommandHandlerTests
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.False, 
+            Assert.That(result.IsSuccess, Is.False,
                 "Операция завершилась успешно, когда ожидалась неудача");
             Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");

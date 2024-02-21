@@ -6,38 +6,53 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.SavePreset
 {
+    [TestFixture]
     public class SavePresetCommandHandlerTests
     {
+        private Mock<IMonitoringClient> _monitoringClient;
+
+        private Mock<IPresetRepository> _presetRepository;
+
+        private Mock<IMapper> _mapper;
+
+        private SavePresetCommandHandler _handler;
+
+        [SetUp]
+        public void Setup()
+        {
+            _monitoringClient = new Mock<IMonitoringClient>();
+            _presetRepository = new Mock<IPresetRepository>();
+            _mapper = new Mock<IMapper>();
+
+            _handler = new SavePresetCommandHandler(
+                _presetRepository.Object,
+                _monitoringClient.Object,
+                _mapper.Object);
+        }
+
+
         [Test]
         public async Task SavePreset_ReturnsId()
         {
             Guid id = Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000");
 
-            var monitoringClient = new Mock<IMonitoringClient>();
-            monitoringClient
+            _monitoringClient
                 .Setup(x => x.GpuExists(It.IsAny<string>()))
                 .ReturnsAsync(true);
 
-            var presetRepository = new Mock<IPresetRepository>();
-            presetRepository
+            _presetRepository
                 .Setup(x => x.Save(It.IsAny<Preset>()))
                 .ReturnsAsync(id);
 
-            var mapper = new Mock<IMapper>();
-            mapper
+            _mapper
                 .Setup(x => x.Map<Preset>(It.IsAny<PresetModel>()))
                 .Returns(new Preset());
 
-            var handler = new SavePresetCommandHandler(
-                presetRepository.Object,
-                monitoringClient.Object,
-                mapper.Object);
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var result = await handler.Handle(GetCommand(), default);
-
-            presetRepository
+            _presetRepository
                 .Verify(x => x.Save(It.IsAny<Preset>()), Times.Once);
 
             Assert.NotNull(result);
@@ -48,22 +63,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets
         [Test]
         public async Task SavePreset_WhenGpuDoesNotExist()
         {
-            var monitoringClient = new Mock<IMonitoringClient>();
-            monitoringClient
-                .Setup(x=>x.GpuExists(It.IsAny<string>()))
+            _monitoringClient
+                .Setup(x => x.GpuExists(It.IsAny<string>()))
                 .ReturnsAsync(false);
 
-            var presetRepository = new Mock<IPresetRepository>();
-            var mapper = new Mock<IMapper>();
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var handler = new SavePresetCommandHandler(
-                presetRepository.Object,
-                monitoringClient.Object,
-                mapper.Object);
-
-            var result = await handler.Handle(GetCommand(), default);
-
-            presetRepository
+            _presetRepository
                 .Verify(x => x.Save(It.IsAny<Preset>()), Times.Never);
 
             Assert.NotNull(result);

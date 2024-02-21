@@ -5,15 +5,26 @@ using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.RemovePreset
 {
+    [TestFixture]
     public class RemovePresetCommandHandlerTests
     {
+        private Mock<IPresetRepository> _presetRepository;
+
+        private RemovePresetCommandHandler _handler;
+
+        [SetUp]
+        public void Setup()
+        {
+            _presetRepository = new Mock<IPresetRepository>();
+            _handler = new RemovePresetCommandHandler(
+                _presetRepository.Object);
+        }
+
         [Test]
         public async Task RemovePreset_ReturnsEmpty()
         {
-            var presetRepository = new Mock<IPresetRepository>();
-
             var preset = new Preset
             {
                 Id = Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000"),
@@ -25,18 +36,15 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets
                 FanSpeed = 99,
             };
 
-            presetRepository
+            _presetRepository
                 .Setup(x => x.GetById(It.IsAny<Guid>()))
                 .ReturnsAsync(preset);
 
-            var handler = new RemovePresetCommandHandler(
-                presetRepository.Object);
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var result = await handler.Handle(GetCommand(), default);
-
-            presetRepository
+            _presetRepository
                 .Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once());
-            presetRepository
+            _presetRepository
                 .Verify(x => x.Remove(preset), Times.Once());
 
             Assert.NotNull(result);
@@ -47,17 +55,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets
         [Test]
         public async Task RemovePreset_WhenPresetDoesNotExist_ReturnsError()
         {
-            var presetRepository = new Mock<IPresetRepository>();
-            presetRepository
+            _presetRepository
                 .Setup(x => x.GetById(It.IsAny<Guid>()))
                 .ReturnsAsync(null as Preset);
 
-            var handler = new RemovePresetCommandHandler(
-                presetRepository.Object);
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var result = await handler.Handle(GetCommand(), default);
-
-            presetRepository
+            _presetRepository
                 .Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once());
 
             Assert.NotNull(result);

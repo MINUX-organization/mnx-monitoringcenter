@@ -9,33 +9,45 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 using MediatR;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.UpdatePreset
 {
+    [TestFixture]
     public class UpdatePresetCommandHandlerTests
     {
+        private Mock<IPresetRepository> _presetRepository;
+
+        private Mock<IMapper> _mapper;
+
+        private UpdatePresetCommandHandler _handler;
+
+        [SetUp]
+        public void Setup()
+        {
+            _presetRepository = new Mock<IPresetRepository>();
+            _mapper = new Mock<IMapper>();
+
+            _handler = new UpdatePresetCommandHandler(
+                _presetRepository.Object,
+                _mapper.Object);
+        }
+
         [Test]
         public async Task UpdatePreset_ReturnsEmpty()
         {
-            var presetRepository = new Mock<IPresetRepository>();
-            presetRepository
+            _presetRepository
                 .Setup(x => x.GetById(It.IsAny<Guid>()))
                 .ReturnsAsync(new Preset());
 
-            presetRepository
+            _presetRepository
                 .Setup(x => x.Update(It.IsAny<Preset>()));
 
-            var mapper = new Mock<IMapper>();
-            mapper
+            _mapper
                 .Setup(x => x.Map<Preset>(It.IsAny<PresetModel>()))
                 .Returns(new Preset());
 
-            var handler = new UpdatePresetCommandHandler(
-                presetRepository.Object,
-                mapper.Object);
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var result = await handler.Handle(GetCommand(), default);
-
-            presetRepository
+            _presetRepository
                 .Verify(x => x.Update(It.IsAny<Preset>()), Times.Once);
 
             Assert.NotNull(result);
@@ -46,20 +58,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets
         [Test]
         public async Task UpdatePreset_WhenPresetDoesNotExist_ReturnsError()
         {
-            var presetRepository = new Mock<IPresetRepository>();
-            presetRepository
+            _presetRepository
                 .Setup(x => x.GetById(It.IsAny<Guid>()))
                 .ReturnsAsync(null as Preset);
 
-            var mapper = new Mock<IMapper>();
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var handler = new UpdatePresetCommandHandler(
-                presetRepository.Object,
-                mapper.Object);
-
-            var result = await handler.Handle(GetCommand(), default);
-
-            presetRepository
+            _presetRepository
                 .Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once());
 
             Assert.NotNull(result);
