@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
@@ -24,5 +25,8 @@ public class MappingProfile : Profile
             .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.CryptocurrencyFullName));
 
         CreateMap<PresetModel, Preset>();
+
+        CreateMap<Cryptocurrency, CryptocurrencyModel>()
+            .ForMember(destination => destination.Algorithm, options => options.MapFrom(source => source.AlgorithmName));
     }
 }
