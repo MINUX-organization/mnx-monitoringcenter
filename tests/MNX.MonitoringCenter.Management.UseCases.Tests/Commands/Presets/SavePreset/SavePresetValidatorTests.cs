@@ -58,17 +58,9 @@ public class SavePresetValidatorTests
     public void SavePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(PresetModel model)
     {
         var command = new SavePresetCommand("GeForce RTX 4090", model);
-        var result = _validator.TestValidate(command);
 
-        result.ShouldNotHaveValidationErrorFor(x => x.Model.CoreClock);
-
-        result.ShouldNotHaveValidationErrorFor(x => x.Model.MemoryClock);
-
-        result.ShouldNotHaveValidationErrorFor(x => x.Model.PowerLimit);
-
-        result.ShouldNotHaveValidationErrorFor(x => x.Model.CriticalTemperature);
-
-        result.ShouldNotHaveValidationErrorFor(x => x.Model.FanSpeed);
+        PresetValidatorTests.
+            ValidatePresetModel_WhenPresetModelAreValid(command.Model);
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
@@ -76,30 +68,9 @@ public class SavePresetValidatorTests
     public void SavePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(PresetModel model)
     {
         var command = new SavePresetCommand("GeForce RTX 4090", model);
-        var result = _validator.TestValidate(command);
 
-        result.ShouldNotHaveValidationErrorFor(x => x.Model);
-
-        result.ShouldHaveValidationErrorFor(x => x.Model.CoreClock)
-              .WithErrorMessage("Значение тактовой частоты ядра" +
-                    " не должно выходить за диапазон [1000; 5000] Мгц");
-
-        result.ShouldHaveValidationErrorFor(x => x.Model.MemoryClock)
-              .WithErrorMessage("Значение тактовой частоты памяти" +
-                    " не должно выходить за диапазон [1000; 5000] Мгц");
-
-        result.ShouldHaveValidationErrorFor(x => x.Model.PowerLimit)
-              .WithErrorMessage("Значение ограничения мощности не" +
-                    " должно выходить за диапазон [100; 150] Ватт");
-
-        result.ShouldHaveValidationErrorFor(x => x.Model.CriticalTemperature)
-              .WithErrorMessage("Значение критической температуры" +
-                    " не должно выходить за диапазон [0; 110] гадусов" +
-                    " Цельсия");
-
-        result.ShouldHaveValidationErrorFor(x => x.Model.FanSpeed)
-              .WithErrorMessage("Значение скорости вентилятора не" +
-                    " должно выходить за диапазон [0; 100] %");
+        PresetValidatorTests.
+            ValidatePresetModel_WhenPresetModelAreNotValid(command.Model);
     }
 
     private static SavePresetCommand GetCommand(string name)

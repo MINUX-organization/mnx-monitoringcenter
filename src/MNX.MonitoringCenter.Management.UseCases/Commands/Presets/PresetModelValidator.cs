@@ -5,9 +5,9 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 /// <summary>
 /// Валидатор модели пресета
 /// </summary>
-internal class PresetModelValidator : AbstractValidator<PresetModel>
+public class PresetModelValidator : AbstractValidator<PresetModel>
 {
-    internal PresetModelValidator()
+    public PresetModelValidator()
     {
         RuleFor(x => x.CoreClock)
             .Must(coreClock => 1000 <= coreClock && coreClock <= 5000)
