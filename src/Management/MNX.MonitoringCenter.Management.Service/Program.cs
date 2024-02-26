@@ -55,6 +55,16 @@ public class Program
             options.IncludeXmlComments(xmlPath);
         });
 
+        services.AddCors(options =>
+        {
+            options.AddDefaultPolicy(policy =>
+            {
+                policy.AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod();
+            });
+        });
+
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddHealthChecks();
 
@@ -98,6 +108,7 @@ public class Program
         }
 
         app.UseRouting();
+        app.UseCors();
 
         app.UseAuthorization();
 

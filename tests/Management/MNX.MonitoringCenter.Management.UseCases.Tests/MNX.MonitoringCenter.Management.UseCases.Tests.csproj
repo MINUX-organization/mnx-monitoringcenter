@@ -20,7 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj" />
+    <ProjectReference Include="..\..\..\src\Management\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MINUX.packages\MNX.Kernel.UseCases\MNX.Kernel.UseCases.csproj" />
+    <ProjectReference Include="..\..\..\MINUX.packages\MNX.Kernel.UseCases\MNX.Kernel.UseCases.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.Contracts\MNX.MonitoringCenter.Management.Contracts.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.Core\MNX.MonitoringCenter.Management.Core.csproj" />
   </ItemGroup>
