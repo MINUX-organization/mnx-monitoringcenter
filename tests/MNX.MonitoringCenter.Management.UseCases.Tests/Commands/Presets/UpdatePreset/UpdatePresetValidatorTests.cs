@@ -1,8 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 using FluentValidation.TestHelper;
-using FluentValidation;
-using System.ComponentModel.DataAnnotations;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.UpdatePreset;
 
