@@ -8,8 +8,7 @@ internal class CryptocurrencyCfg : IEntityTypeConfiguration<Cryptocurrency>
 {
     public void Configure(EntityTypeBuilder<Cryptocurrency> builder)
     {
-        builder.HasKey(x => x.FullName);
-        builder.HasIndex(x => new { x.FullName, x.ShortName });
+        builder.HasIndex(x => new {x.Id, x.FullName, x.ShortName });
 
         builder.HasOne<Algorithm>()
                .WithMany()

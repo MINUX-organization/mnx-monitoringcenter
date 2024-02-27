@@ -21,6 +21,7 @@ public class PoolRepository : IPoolRepository
     public async Task<Pool?> GetById(Guid id)
     {
         return await _context.Pools
+                             .Include(x => x.Cryptocurrency)
                              .AsNoTracking()
                              .FirstOrDefaultAsync(x => x.Id == id)
                              .ConfigureAwait(false);

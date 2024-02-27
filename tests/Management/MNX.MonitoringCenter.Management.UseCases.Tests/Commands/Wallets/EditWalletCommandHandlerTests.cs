@@ -30,7 +30,7 @@ public class EditWalletCommandHandlerTests
 
         var mapper = new Mock<IMapper>();
 
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletModel>())).Returns(new Wallet());
+        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
                                                 cryptocurrencyRepository.Object,
@@ -76,7 +76,7 @@ public class EditWalletCommandHandlerTests
 
         var mapper = new Mock<IMapper>();
 
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletModel>())).Returns(new Wallet());
+        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
                                                 cryptocurrencyRepository.Object,
@@ -130,7 +130,7 @@ public class EditWalletCommandHandlerTests
         cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default)).ReturnsAsync(true);
 
         var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletModel>())).Returns(new Wallet());
+        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
                                                 cryptocurrencyRepository.Object,
@@ -176,7 +176,7 @@ public class EditWalletCommandHandlerTests
 
         var mapper = new Mock<IMapper>();
 
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletModel>())).Returns(new Wallet());
+        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
                                                 cryptocurrencyRepository.Object,
@@ -222,7 +222,7 @@ public class EditWalletCommandHandlerTests
 
         var mapper = new Mock<IMapper>();
 
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletModel>())).Returns(new Wallet());
+        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
                                                 cryptocurrencyRepository.Object,
@@ -252,6 +252,6 @@ public class EditWalletCommandHandlerTests
 
     private static EditWalletCommand GetCommand()
     {
-        return new EditWalletCommand(It.IsAny<Guid>(), new WalletModel("Nikita", "Tomsk", "Bitcoin"));
+        return new EditWalletCommand(It.IsAny<Guid>(), new WalletInputModel("Nikita", "Tomsk", "Bitcoin"));
     }
 }

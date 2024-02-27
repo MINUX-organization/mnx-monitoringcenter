@@ -146,6 +146,6 @@ public class AddWalletComandHandlerTests
 
     private static AddWalletCommand GetCommand()
     {
-        return new AddWalletCommand(new WalletModel("Nikita", "Tomsk", "Bitcoin"));
+        return new AddWalletCommand(new WalletInputModel("Nikita", "Tomsk", "Bitcoin"));
     }
 }

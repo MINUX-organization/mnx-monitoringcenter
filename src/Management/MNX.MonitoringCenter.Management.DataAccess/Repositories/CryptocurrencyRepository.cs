@@ -17,8 +17,6 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     {
         return _context.Cryptocurrencies
                        .AsNoTracking()
-                       .Include(x => x.Wallets)
-                       .Include(x => x.Pools)
                        .AsAsyncEnumerable();
     }
 

@@ -1,6 +1,7 @@
 ﻿using Kernel.UseCases;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
@@ -30,7 +31,7 @@ public class WalletController : ControllerBase
     /// <returns> Список криптокошельков </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Wallet>), 200)]
+    [ProducesResponseType(typeof(IAsyncEnumerable<WalletModel>), 200)]
     public IAsyncEnumerable<Wallet> GetAll()
     {
         return _mediator.CreateStream(new GetWalletsQuery());
@@ -48,7 +49,7 @@ public class WalletController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Guid), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Add(WalletModel model)
+    public async Task<IActionResult> Add(WalletInputModel model)
     {
         var result = await _mediator.Send(new AddWalletCommand(model));
         return result.ToActionResult();
@@ -67,7 +68,7 @@ public class WalletController : ControllerBase
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Edit(Guid id, WalletModel model)
+    public async Task<IActionResult> Edit(Guid id, WalletInputModel model)
     {
         var result = await _mediator.Send(new EditWalletCommand(id, model));
         return result.ToActionResult();

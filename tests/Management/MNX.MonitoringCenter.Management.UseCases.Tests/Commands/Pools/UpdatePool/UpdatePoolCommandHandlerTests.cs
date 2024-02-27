@@ -30,7 +30,7 @@ public class UpdatePoolCommandHandlerTests
                         .ReturnsAsync(true);
 
         var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolModel>())).Returns(new Pool());
+        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(new Pool());
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
                                                     cryptoRepository.Object,
@@ -122,7 +122,7 @@ public class UpdatePoolCommandHandlerTests
                         .ReturnsAsync(true);
 
         var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolModel>())).Returns(new Pool());
+        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(new Pool());
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
                                                     cryptoRepository.Object,
@@ -236,6 +236,6 @@ public class UpdatePoolCommandHandlerTests
 
     private static UpdatePoolCommand GetCommand()
     {
-        return new UpdatePoolCommand(It.IsAny<Guid>(), new PoolModel("domain", 8000, "Bitcoin"));
+        return new UpdatePoolCommand(It.IsAny<Guid>(), new PoolInputModel("domain", 8000, "Bitcoin"));
     }
 }

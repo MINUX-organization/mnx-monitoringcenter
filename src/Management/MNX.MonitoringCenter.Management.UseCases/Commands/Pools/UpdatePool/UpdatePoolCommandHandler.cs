@@ -56,7 +56,7 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
         return Result<Unit>.Empty();
     }
 
-    private static bool PoolsIsEquals(Pool pool, PoolModel newPool)
+    private static bool PoolsIsEquals(Pool pool, PoolInputModel newPool)
     {
         return pool.Domain == newPool.Domain && pool.Port == newPool.Port;
     }

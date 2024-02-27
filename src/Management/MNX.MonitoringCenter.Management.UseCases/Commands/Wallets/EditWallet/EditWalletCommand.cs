@@ -16,9 +16,9 @@ public class EditWalletCommand : IRequest<Result<Unit>>
     /// <summary>
     /// Модель кошелька
     /// </summary>
-    public WalletModel Model { get; }
+    public WalletInputModel Model { get; }
 
-    public EditWalletCommand(Guid id, WalletModel model)
+    public EditWalletCommand(Guid id, WalletInputModel model)
     {
         Id = id;
         Model = model;

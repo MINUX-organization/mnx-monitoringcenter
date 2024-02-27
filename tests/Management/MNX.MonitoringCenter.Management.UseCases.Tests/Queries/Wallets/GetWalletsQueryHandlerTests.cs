@@ -19,7 +19,12 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets
                     Id = Guid.NewGuid(),
                     Name = "test1",
                     Address = "Tomsk",
-                    Cryptocurrency = "Ethereum"
+                    Cryptocurrency = new()
+                    {
+                        FullName = "Etherium",
+                        ShortName = "ETH",
+                        AlgorithmName = "Algorithm"
+                    }
                 },
 
                 new Wallet()
@@ -27,7 +32,12 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets
                     Id = Guid.NewGuid(),
                     Name = "test2",
                     Address = "Moscow",
-                    Cryptocurrency = "Bitcoin"
+                    Cryptocurrency = new()
+                    {
+                        FullName = "Bitcoin",
+                        ShortName = "BCT",
+                        AlgorithmName = "Algorithm"
+                    }
                 }
             };
 

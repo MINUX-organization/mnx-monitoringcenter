@@ -21,6 +21,7 @@ public class WalletRepository : IWalletRepository
     public async Task<Wallet?> GetById(Guid Id)
     {
         return await _context.Wallets
+                             .Include(x => x.Cryptocurrency)
                              .AsNoTracking()
                              .FirstOrDefaultAsync(x => x.Id == Id)
                              .ConfigureAwait(false);
