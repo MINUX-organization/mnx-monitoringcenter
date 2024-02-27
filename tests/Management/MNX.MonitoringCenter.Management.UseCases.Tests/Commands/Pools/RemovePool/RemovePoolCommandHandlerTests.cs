@@ -5,7 +5,7 @@ using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools;
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools.RemovePool;
 
 [TestFixture]
 public class RemovePoolCommandHandlerTests
@@ -28,15 +28,15 @@ public class RemovePoolCommandHandlerTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.True, 
+            Assert.That(result.IsSuccess, Is.True,
                 "Операция завершилась неудачно");
-            Assert.That(result.Errors, Is.Null, 
+            Assert.That(result.Errors, Is.Null,
                 "Список ошибок не пуст");
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()), 
+            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
                 "Результат не пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(), 
+            Assert.That(result, Is.TypeOf<Result<Unit>>(),
                 "Неверный тип результата");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent), 
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
                 "Статус результата не 'NoContent'");
         });
 
@@ -59,18 +59,18 @@ public class RemovePoolCommandHandlerTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.False, 
+            Assert.That(result.IsSuccess, Is.False,
                 "Операция была успешной, когда ожидалась неудача");
-            Assert.That(result.Errors, Is.Not.Null, 
+            Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(), 
+            Assert.That(result, Is.TypeOf<Result<Unit>>(),
                 "Неверный тип результата");
-            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()), 
+            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()),
                 "Результат пуст");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid), 
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
                 "Статус результата не 'Invalid'");
-            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"), 
-                "Сообщение об ошибке отличается от ожидаемого");   
+            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"),
+                "Сообщение об ошибке отличается от ожидаемого");
         });
 
         poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);

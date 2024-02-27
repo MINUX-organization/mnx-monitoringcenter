@@ -4,28 +4,36 @@ using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;
 using Moq;
-using NUnit.Framework.Constraints;
-using NUnit.Framework.Internal.Commands;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.RemoveCryptocurrency
 {
+    [TestFixture]
     public class RemoveCryptocurrencyCommandHandlerTests
     {
+        private Mock<ICryptocurrencyRepository> _cryptoRepository;
+
+        private RemoveCryptocurrencyCommandHandler _handler;
+
+        [SetUp]
+        public void Setup()
+        {
+            _cryptoRepository = new Mock<ICryptocurrencyRepository>();
+
+            _handler = new RemoveCryptocurrencyCommandHandler(
+                _cryptoRepository.Object);
+        }
+
         [Test]
         public async Task RemoveCrypto_ReturnsEmpty()
         {
-            var cryptoRepository = new Mock<ICryptocurrencyRepository>();
             var cryptocurrency = new Cryptocurrency { FullName = "Bitcoin" };
-            cryptoRepository
+            _cryptoRepository
                 .Setup(x => x.GetByFullName(It.IsAny<string>()))
                 .ReturnsAsync(cryptocurrency);
 
-            var handler = new RemoveCryptocurrencyCommandHandler(
-                cryptoRepository.Object);
+            var result = await _handler.Handle(GetCommand(), default);
 
-            var result = await handler.Handle(GetCommand(), default);
-
-            cryptoRepository
+            _cryptoRepository
                 .Verify(x => x.Remove(cryptocurrency), Times.Once());
 
             Assert.NotNull(result);
@@ -36,15 +44,11 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto
         [Test]
         public async Task RemoveCrypto_WhenCryptoDoesNotExist_ReturnsError()
         {
-            var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-            cryptoRepository
+            _cryptoRepository
                 .Setup(x => x.GetByFullName(It.IsAny<string>()))
                 .ReturnsAsync(null as Cryptocurrency);
 
-            var handler = new RemoveCryptocurrencyCommandHandler(
-                cryptoRepository.Object);
-
-            var result = await handler.Handle(GetCommand(), default);
+            var result = await _handler.Handle(GetCommand(), default);
 
             Assert.NotNull(result);
             Assert.IsFalse(result.IsSuccess);

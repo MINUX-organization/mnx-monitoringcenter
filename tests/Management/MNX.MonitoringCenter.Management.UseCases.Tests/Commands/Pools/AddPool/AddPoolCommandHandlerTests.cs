@@ -6,7 +6,7 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools;
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools.AddPool;
 
 [TestFixture]
 public class AddPoolCommandHandlerTests
@@ -38,17 +38,17 @@ public class AddPoolCommandHandlerTests
 
         // Assert
         Assert.Multiple(() =>
-        {   
+        {
             Assert.That(result.IsSuccess, Is.True,
                 "Операция завершилась неудачно");
-            Assert.That(result.Errors, Is.Null, 
+            Assert.That(result.Errors, Is.Null,
                 "Список ошибок не пуст");
             Assert.That(result, Is.TypeOf<Result<Guid>>(),
                 "Неверный тип результата");
             Assert.That(result, Is.EqualTo(Result<Guid>.SuccessfullyCreated(It.IsAny<Guid>())),
                 "Результат не соответствует успешному созданию");
-            Assert.That(result.GetValue(), Is.EqualTo(It.IsAny<Guid>()), 
-                "Возвращенное значение не совпадает с ожидаемым идентификатором");    
+            Assert.That(result.GetValue(), Is.EqualTo(It.IsAny<Guid>()),
+                "Возвращенное значение не совпадает с ожидаемым идентификатором");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Created),
                 "Статус результата не 'Created'");
         });
@@ -80,7 +80,7 @@ public class AddPoolCommandHandlerTests
         {
             Assert.That(result.IsSuccess, Is.False,
                 "Операция завершилась успешно, когда ожидалась неудача");
-            Assert.That(result.Errors, Is.Not.Null, 
+            Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");
             Assert.That(result, Is.TypeOf<Result<Guid>>(),
                 "Неверный тип результата");
@@ -139,6 +139,6 @@ public class AddPoolCommandHandlerTests
 
     private static AddPoolCommand GetCommand()
     {
-        return new AddPoolCommand(new PoolModel("domain",  8000, "Bitcoin"));
+        return new AddPoolCommand(new PoolModel("domain", 8000, "Bitcoin"));
     }
 }

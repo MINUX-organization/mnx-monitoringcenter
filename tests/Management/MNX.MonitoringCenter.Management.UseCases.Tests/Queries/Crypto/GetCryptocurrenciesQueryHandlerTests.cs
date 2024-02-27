@@ -1,46 +1,74 @@
-﻿using MNX.MonitoringCenter.Management.Core;
+﻿using AutoMapper;
+using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Crypto
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Crypto;
+
+[TestFixture]
+public class GetCryptocurrenciesQueryHandlerTests
 {
-    public class GetCryptocurrenciesQueryHandlerTests
+    [Test]
+    public async Task GetCryptoQuery_ReturnsQuery()
     {
-        [Test]
-        public async Task GetCryptoQuery_ReturnsQuery()
+        var cryptocurrencies = new List<Cryptocurrency>
         {
-            var cryptocurrencies = new List<Cryptocurrency>
+            new() {
+                ShortName = "BTC",
+                FullName = "Bitcoin",
+                AlgorithmName = "SHA-256"
+            },
+
+            new() {
+                ShortName = "Eht",
+                FullName = "Ethereum",
+                AlgorithmName = "KECCAK-256"
+            }
+        };
+
+        var cryptocurrenciesModel = cryptocurrencies
+            .Select(x => new CryptocurrencyModel
+        {
+            FullName = x.FullName,
+            ShortName = x.ShortName,
+            Algorithm = x.AlgorithmName
+        });
+
+        var cryptoRepository = new Mock<ICryptocurrencyRepository>();
+
+        cryptoRepository
+            .Setup(x => x.GetAll())
+            .Returns(cryptocurrencies.ToAsyncEnumerable());
+
+        var mapper = new Mock<IMapper>();
+
+        mapper
+            .Setup(x => x.Map<CryptocurrencyModel>(It.IsAny<Cryptocurrency>()))
+            .Returns<Cryptocurrency>(x => new CryptocurrencyModel
             {
-                new Cryptocurrency
-                {
-                    ShortName = "BTC",
-                    FullName = "Bitcoin",
-                    AlgorithmName = "SHA-256"
-                },
+                FullName = x.FullName,
+                ShortName = x.ShortName,
+                Algorithm = x.AlgorithmName
+            });
 
-                new Cryptocurrency
-                {
-                    ShortName = "Eht",
-                    FullName = "Ethereum",
-                    AlgorithmName = "KECCAK-256"
-                }
-            };
+        var handler = new GetCryptocurrenciesQueryHandler(
+            cryptoRepository.Object,
+            mapper.Object);
 
-            var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-            cryptoRepository
-                .Setup(x => x.GetAll())
-                .Returns(cryptocurrencies.ToAsyncEnumerable());
+        var query = new GetCryptocurrenciesQuery();
 
-            var handler = new GetCryptocurrenciesQueryHandler(
-                cryptoRepository.Object);
+        var result = await handler.Handle(query, default).ToListAsync();
 
-            var query = new GetCryptocurrenciesQuery();
+        Assert.That(result.Count, Is.EqualTo(cryptocurrenciesModel.Count()));
 
-            var result = await handler.Handle(query, default).ToListAsync();
-
-            Assert.NotNull(result);
-            Assert.That(result, Is.EqualTo(cryptocurrencies));
+        foreach (var cryptoModel in cryptocurrenciesModel)
+        {
+            Assert.IsTrue(result.Any(resultCrypto =>
+                resultCrypto.FullName == cryptoModel.FullName &&
+                resultCrypto.ShortName == cryptoModel.ShortName &&
+                resultCrypto.Algorithm == cryptoModel.Algorithm));
         }
     }
 }

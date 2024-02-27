@@ -1,29 +1,28 @@
 ﻿using FluentValidation;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Commands.ModelValidators;
+namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 
 /// <summary>
 /// Валидатор модели пресета
 /// </summary>
-internal class PresetModelValidator : AbstractValidator<PresetModel>
+public class PresetModelValidator : AbstractValidator<PresetModel>
 {
-    internal PresetModelValidator()
+    public PresetModelValidator()
     {
         RuleFor(x => x.CoreClock)
             .Must(coreClock => 1000 <= coreClock && coreClock <= 5000)
-            .WithMessage("Значение тактовой чатсоты ядра не должно выходить за диапазон [1000; 5000] Мгц");
+            .WithMessage("Значение тактовой частоты ядра не должно выходить за диапазон [1000; 5000] Мгц");
 
         RuleFor(x => x.MemoryClock)
             .Must(memoryClock => 1000 <= memoryClock && memoryClock <= 5000)
-            .WithMessage("Значение тактовой чатсоты памяти не должно выходить за диапазон [1000; 5000] Мгц");
+            .WithMessage("Значение тактовой частоты памяти не должно выходить за диапазон [1000; 5000] Мгц");
 
         RuleFor(x => x.PowerLimit)
             .Must(powerLimit => 100 <= powerLimit && powerLimit <= 150)
             .WithMessage("Значение ограничения мощности не должно выходить за диапазон [100; 150] Ватт");
 
         RuleFor(x => x.CriticalTemperature)
-            .Must(criticalTemperature => 100 <= criticalTemperature && criticalTemperature <= 150)
+            .Must(criticalTemperature => 0 <= criticalTemperature && criticalTemperature <= 110)
             .WithMessage("Значение критической температуры не должно выходить за диапазон [0; 110] гадусов Цельсия");
 
         RuleFor(x => x.FanSpeed)
