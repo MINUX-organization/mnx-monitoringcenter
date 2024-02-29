@@ -43,7 +43,7 @@ public class CryptocurrencyController : ControllerBase
     /// Переданные параметры не прошли валидацию или не был найден алгоритм с указанным названием
     /// </response>
     [HttpPost]
-    [ProducesResponseType(201)]
+    [ProducesResponseType(typeof(Cryptocurrency), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(AddCryptocurrencyCommand request)
     {

@@ -3,7 +3,6 @@ using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 using Moq;
 using Kernel.UseCases;
-using MediatR;
 using MNX.MonitoringCenter.Management.Core;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryptocurrency
@@ -35,6 +34,14 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
         [Test]
         public async Task AddCrypto_ReturnsUnitValue()
         {
+            var cryptocurrency = new Cryptocurrency()
+            {
+                Id = 1,
+                FullName = "Test",
+                ShortName = "Test",
+                AlgorithmName = "Test"
+            };
+
             _cryptoRepository
                 .Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(false);
@@ -46,7 +53,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
             _mapper
                 .Setup(x => x.Map<Cryptocurrency>(
                     It.IsAny<AddCryptocurrencyCommand>()))
-                .Returns(new Cryptocurrency());
+                .Returns(cryptocurrency);
 
             var result = await _handler.Handle(GetCommand(), default);
 
@@ -55,7 +62,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
 
             Assert.NotNull(result);
             Assert.IsTrue(result.IsSuccess);
-            Assert.That(result.GetValue(), Is.EqualTo(Unit.Value));
+            Assert.That(result.GetValue(), Is.EqualTo(cryptocurrency));
         }
 
         [Test]

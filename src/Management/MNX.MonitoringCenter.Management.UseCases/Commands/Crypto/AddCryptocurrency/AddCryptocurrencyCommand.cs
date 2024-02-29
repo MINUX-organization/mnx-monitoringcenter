@@ -1,12 +1,13 @@
 ﻿using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Core;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 
 /// <summary>
 /// Команда добавления криптовалюты
 /// </summary>
-public class AddCryptocurrencyCommand : IRequest<Result<Unit>>
+public class AddCryptocurrencyCommand : IRequest<Result<Cryptocurrency>>
 {
     /// <summary>
     /// Короткое название
