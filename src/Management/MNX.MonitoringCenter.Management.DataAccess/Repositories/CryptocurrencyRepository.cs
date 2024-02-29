@@ -20,11 +20,11 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
                        .AsAsyncEnumerable();
     }
 
-    public async Task<Cryptocurrency?> GetByFullName(string fullName)
+    public async Task<Cryptocurrency?> GetById(int id)
     {
         return await _context.Cryptocurrencies
                              .AsNoTracking()
-                             .FirstOrDefaultAsync(x => x.FullName == fullName)
+                             .FirstOrDefaultAsync(x => x.Id == id)
                              .ConfigureAwait(false);
     }
 

@@ -1,7 +1,7 @@
 ﻿using Kernel.UseCases;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
@@ -28,8 +28,8 @@ public class CryptocurrencyController : ControllerBase
     /// <returns> Список криптовалют </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<CryptocurrencyModel>), 200)]
-    public IAsyncEnumerable<CryptocurrencyModel> GetAll()
+    [ProducesResponseType(typeof(IAsyncEnumerable<Cryptocurrency>), 200)]
+    public IAsyncEnumerable<Cryptocurrency> GetAll()
     {
         return _mediator.CreateStream(new GetCryptocurrenciesQuery());
     }
@@ -54,15 +54,15 @@ public class CryptocurrencyController : ControllerBase
     /// <summary>
     /// Удалить криптовалюту
     /// </summary>
-    /// <param name="fullName"> Полное название криптовалюты </param>
+    /// <param name="id"> Идентификатор криптовалюты </param>
     /// <response code="204"> Успешно </response>
-    /// <response code="400"> Не была найдена монета с переданным именем </response>
-    [HttpDelete("{fullName}")]
+    /// <response code="400"> Не была найдена монета с переданным идентификатором </response>
+    [HttpDelete("{id:int}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Delete(string fullName)
+    public async Task<IActionResult> Delete(int id)
     {
-        var result = await _mediator.Send(new RemoveCryptocurrencyCommand(fullName));
+        var result = await _mediator.Send(new RemoveCryptocurrencyCommand(id));
         return result.ToActionResult();
     }
 }

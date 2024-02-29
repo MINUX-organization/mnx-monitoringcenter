@@ -32,7 +32,7 @@ public class WalletController : ControllerBase
     /// <response code="200"> Успешно </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<WalletModel>), 200)]
-    public IAsyncEnumerable<Wallet> GetAll()
+    public IAsyncEnumerable<WalletModel> GetAll()
     {
         return _mediator.CreateStream(new GetWalletsQuery());
     }

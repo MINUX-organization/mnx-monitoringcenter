@@ -31,8 +31,5 @@ public class MappingProfile : Profile
             .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.Cryptocurrency!.FullName));
 
         CreateMap<PresetModel, Preset>();
-
-        CreateMap<Cryptocurrency, CryptocurrencyModel>()
-            .ForMember(destination => destination.Algorithm, options => options.MapFrom(source => source.AlgorithmName));
     }
 }

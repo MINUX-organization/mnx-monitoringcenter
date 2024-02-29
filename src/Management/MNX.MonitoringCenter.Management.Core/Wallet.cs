@@ -23,7 +23,7 @@ public class Wallet
     /// <summary>
     /// Идентификатор криптовалюты
     /// </summary>
-    public Guid CryptocurrencyId { get; set; }
+    public int CryptocurrencyId { get; set; }
 
     /// <summary>
     /// Криптовалюта

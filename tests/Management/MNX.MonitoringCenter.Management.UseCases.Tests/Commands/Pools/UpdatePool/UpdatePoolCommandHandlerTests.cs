@@ -107,7 +107,14 @@ public class UpdatePoolCommandHandlerTests
             Id = It.IsAny<Guid>(),
             Domain = "domain",
             Port = 8000,
-            Cryptocurrency = "Bitcoin"
+            CryptocurrencyId = 1,
+            Cryptocurrency = new()
+            {
+                Id = 1,
+                FullName = "Bitcoin",
+                ShortName = "BCT",
+                AlgorithmName = "Algorithm"
+            }
         };
 
         var poolRepository = new Mock<IPoolRepository>();
