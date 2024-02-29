@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.Core;
+﻿using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
 using Moq;
@@ -28,47 +26,26 @@ public class GetCryptocurrenciesQueryHandlerTests
             }
         };
 
-        var cryptocurrenciesModel = cryptocurrencies
-            .Select(x => new CryptocurrencyModel
-        {
-            FullName = x.FullName,
-            ShortName = x.ShortName,
-            Algorithm = x.AlgorithmName
-        });
-
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
 
         cryptoRepository
             .Setup(x => x.GetAll())
             .Returns(cryptocurrencies.ToAsyncEnumerable());
 
-        var mapper = new Mock<IMapper>();
-
-        mapper
-            .Setup(x => x.Map<CryptocurrencyModel>(It.IsAny<Cryptocurrency>()))
-            .Returns<Cryptocurrency>(x => new CryptocurrencyModel
-            {
-                FullName = x.FullName,
-                ShortName = x.ShortName,
-                Algorithm = x.AlgorithmName
-            });
-
-        var handler = new GetCryptocurrenciesQueryHandler(
-            cryptoRepository.Object,
-            mapper.Object);
+        var handler = new GetCryptocurrenciesQueryHandler(cryptoRepository.Object);
 
         var query = new GetCryptocurrenciesQuery();
 
         var result = await handler.Handle(query, default).ToListAsync();
 
-        Assert.That(result.Count, Is.EqualTo(cryptocurrenciesModel.Count()));
+        Assert.That(result.Count, Is.EqualTo(cryptocurrencies.Count()));
 
-        foreach (var cryptoModel in cryptocurrenciesModel)
+        foreach (var cryptoModel in cryptocurrencies)
         {
             Assert.IsTrue(result.Any(resultCrypto =>
-                resultCrypto.FullName == cryptoModel.FullName &&
-                resultCrypto.ShortName == cryptoModel.ShortName &&
-                resultCrypto.Algorithm == cryptoModel.Algorithm));
+                                     resultCrypto.FullName == cryptoModel.FullName &&
+                                     resultCrypto.ShortName == cryptoModel.ShortName &&
+                                     resultCrypto.AlgorithmName == cryptoModel.AlgorithmName));
         }
     }
 }

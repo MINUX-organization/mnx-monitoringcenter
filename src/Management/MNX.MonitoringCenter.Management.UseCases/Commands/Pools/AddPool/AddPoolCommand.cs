@@ -11,9 +11,9 @@ public class AddPoolCommand : IRequest<Result<Guid>>
     /// <summary>
     /// Модель пула
     /// </summary>
-    public PoolModel Model { get; }
+    public PoolInputModel Model { get; }
 
-    public AddPoolCommand(PoolModel model)
+    public AddPoolCommand(PoolInputModel model)
     {
         Model = model;
     }

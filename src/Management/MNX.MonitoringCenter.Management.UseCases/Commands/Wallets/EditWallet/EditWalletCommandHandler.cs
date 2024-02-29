@@ -64,10 +64,10 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
     /// <param name="currentWallet"> Текущий кошелёк </param>
     /// <param name="newWallet"> Новый кошелёк </param>
     /// <returns> <see langword="true"/>, если данные моделей равны, иначе <see langword="false"/> </returns>
-    private static bool WalletsIsEquals(Wallet currentWallet, WalletModel newWallet)
+    private static bool WalletsIsEquals(Wallet currentWallet, WalletInputModel newWallet)
     {
         return currentWallet.Name == newWallet.Name &&
                currentWallet.Address == newWallet.Address &&
-               currentWallet.Cryptocurrency == newWallet.CryptocurrencyFullName;
+               currentWallet.Cryptocurrency?.FullName == newWallet.CryptocurrencyFullName;
     }
 }

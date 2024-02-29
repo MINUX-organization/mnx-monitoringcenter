@@ -24,8 +24,6 @@ public class MinerRepository : IMinerRepository
     {
         return _context.Miners
                        .AsNoTracking()
-                       .Include(miner => miner.Algorithms)
-                       .Select(x => new Miner() { Name = x.Name, Algorithms = x.Algorithms.Select(x => new Algorithm() { Name = x.AlgorithmName }).ToList() })
                        .AsAsyncEnumerable();
     }
 }

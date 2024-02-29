@@ -16,9 +16,9 @@ public class UpdatePoolCommand : IRequest<Result<Unit>>
     /// <summary>
     /// Модель пула
     /// </summary>
-    public PoolModel Model { get; }
+    public PoolInputModel Model { get; }
 
-    public UpdatePoolCommand(Guid id, PoolModel model)
+    public UpdatePoolCommand(Guid id, PoolInputModel model)
     {
         Id = id;
         Model = model;

@@ -1,9 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Core;
+﻿namespace MNX.MonitoringCenter.Management.Contracts;
 
-/// <summary>
-/// Кошулёк
-/// </summary>
-public class Wallet
+public class WalletModel
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -21,12 +18,7 @@ public class Wallet
     public string Address { get; set; }
 
     /// <summary>
-    /// Идентификатор криптовалюты
+    /// Полное название криптовалюты
     /// </summary>
-    public int CryptocurrencyId { get; set; }
-
-    /// <summary>
-    /// Криптовалюта
-    /// </summary>
-    public Cryptocurrency? Cryptocurrency { get; set; }
+    public string Cryptocurrency { get; set; }
 }

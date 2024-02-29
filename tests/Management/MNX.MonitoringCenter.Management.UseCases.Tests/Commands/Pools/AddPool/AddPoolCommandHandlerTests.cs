@@ -28,7 +28,7 @@ public class AddPoolCommandHandlerTests
                         .ReturnsAsync(true);
 
         var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolModel>())).Returns(new Pool());
+        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(new Pool());
 
         var handler = new AddPoolCommandHandler(poolRepository.Object,
                                                 cryptoRepository.Object,
@@ -139,6 +139,6 @@ public class AddPoolCommandHandlerTests
 
     private static AddPoolCommand GetCommand()
     {
-        return new AddPoolCommand(new PoolModel("domain", 8000, "Bitcoin"));
+        return new AddPoolCommand(new PoolInputModel("domain", 8000, "Bitcoin"));
     }
 }

@@ -11,9 +11,9 @@ public class AddWalletCommand : IRequest<Result<Guid>>
     /// <summary>
     /// Модель кошелька
     /// </summary>
-    public WalletModel Model { get; }
+    public WalletInputModel Model { get; }
 
-    public AddWalletCommand(WalletModel model)
+    public AddWalletCommand(WalletInputModel model)
     {
         Model = model;
     }

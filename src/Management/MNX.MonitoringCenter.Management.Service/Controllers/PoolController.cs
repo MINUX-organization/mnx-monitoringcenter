@@ -7,6 +7,7 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -31,7 +32,7 @@ public class PoolController : ControllerBase
     /// <response code="200"> Успешно </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<Pool>), 200)]
-    public IAsyncEnumerable<Pool> GetAll()
+    public IAsyncEnumerable<PoolModel> GetAll()
     {
         return _mediator.CreateStream(new GetPoolsQuery());
     }
@@ -48,7 +49,7 @@ public class PoolController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Guid), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Add(PoolModel request)
+    public async Task<IActionResult> Add(PoolInputModel request)
     {
         var result = await _mediator.Send(new AddPoolCommand(request));
         return result.ToActionResult();
@@ -67,7 +68,7 @@ public class PoolController : ControllerBase
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Update(Guid id, PoolModel request)
+    public async Task<IActionResult> Update(Guid id, PoolInputModel request)
     {
         var result = await _mediator.Send(new UpdatePoolCommand(id, request));
         return result.ToActionResult();

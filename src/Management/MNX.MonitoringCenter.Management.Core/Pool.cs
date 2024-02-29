@@ -21,7 +21,12 @@ public class Pool
     public int Port { get; set; }
 
     /// <summary>
-    /// Полное название криптовалюты
+    /// Идентификатор криптовалюты
     /// </summary>
-    public string Cryptocurrency { get; set; }
+    public int CryptocurrencyId { get; set; }
+
+    /// <summary>
+    /// Криптовалюта
+    /// </summary>
+    public Cryptocurrency? Cryptocurrency { get; set; }
 }

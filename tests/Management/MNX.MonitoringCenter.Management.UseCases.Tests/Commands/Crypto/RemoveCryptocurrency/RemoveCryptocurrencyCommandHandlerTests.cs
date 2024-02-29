@@ -28,7 +28,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.RemoveC
         {
             var cryptocurrency = new Cryptocurrency { FullName = "Bitcoin" };
             _cryptoRepository
-                .Setup(x => x.GetByFullName(It.IsAny<string>()))
+                .Setup(x => x.GetById(It.IsAny<int>()))
                 .ReturnsAsync(cryptocurrency);
 
             var result = await _handler.Handle(GetCommand(), default);
@@ -45,7 +45,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.RemoveC
         public async Task RemoveCrypto_WhenCryptoDoesNotExist_ReturnsError()
         {
             _cryptoRepository
-                .Setup(x => x.GetByFullName(It.IsAny<string>()))
+                .Setup(x => x.GetById(It.IsAny<int>()))
                 .ReturnsAsync(null as Cryptocurrency);
 
             var result = await _handler.Handle(GetCommand(), default);
@@ -60,7 +60,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.RemoveC
 
         private static RemoveCryptocurrencyCommand GetCommand()
         {
-            return new RemoveCryptocurrencyCommand("Bitcoin");
+            return new RemoveCryptocurrencyCommand(1);
         }
     }
 }
