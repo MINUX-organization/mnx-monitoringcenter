@@ -33,7 +33,7 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Guid
             return Result<Guid>.Invalid("Pool already exists");
         }
 
-        if (! await _cryptocurrencyRepository.Exists(request.Model.CryptocurrencyFullName))
+        if ((await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId)) is null)
         {
             return Result<Guid>.Invalid("Cryptocurrency wasn't found");
         }

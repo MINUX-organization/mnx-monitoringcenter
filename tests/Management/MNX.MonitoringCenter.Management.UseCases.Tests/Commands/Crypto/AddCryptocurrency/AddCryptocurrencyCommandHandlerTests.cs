@@ -36,10 +36,10 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
         {
             var cryptocurrency = new Cryptocurrency()
             {
-                Id = 1,
+                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
                 FullName = "Test",
                 ShortName = "Test",
-                AlgorithmName = "Test"
+                Algorithm = "Test"
             };
 
             _cryptoRepository

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
 using Kernel.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
@@ -31,7 +30,7 @@ public class PoolController : ControllerBase
     /// <returns> Список пулов </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Pool>), 200)]
+    [ProducesResponseType(typeof(IAsyncEnumerable<PoolModel>), 200)]
     public IAsyncEnumerable<PoolModel> GetAll()
     {
         return _mediator.CreateStream(new GetPoolsQuery());

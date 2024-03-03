@@ -11,9 +11,9 @@ public class RemoveCryptocurrencyCommand : IRequest<Result<Unit>>
     /// <summary>
     /// Идентификатор криптовалюты
     /// </summary>
-    public int Id { get; }
+    public Guid Id { get; }
 
-    public RemoveCryptocurrencyCommand(int id)
+    public RemoveCryptocurrencyCommand(Guid id)
     {
         Id = id;
     }

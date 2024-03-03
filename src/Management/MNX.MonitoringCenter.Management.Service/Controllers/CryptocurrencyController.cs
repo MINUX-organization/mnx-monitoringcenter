@@ -57,10 +57,10 @@ public class CryptocurrencyController : ControllerBase
     /// <param name="id"> Идентификатор криптовалюты </param>
     /// <response code="204"> Успешно </response>
     /// <response code="400"> Не была найдена монета с переданным идентификатором </response>
-    [HttpDelete("{id:int}")]
+    [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Delete(int id)
+    public async Task<IActionResult> Delete(Guid id)
     {
         var result = await _mediator.Send(new RemoveCryptocurrencyCommand(id));
         return result.ToActionResult();

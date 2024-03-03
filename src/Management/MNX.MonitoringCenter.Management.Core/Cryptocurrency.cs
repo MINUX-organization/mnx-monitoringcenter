@@ -8,7 +8,7 @@ public class Cryptocurrency
     /// <summary>
     /// Идентификатор
     /// </summary>
-    public int Id { get; set; }
+    public Guid Id { get; set; }
 
     /// <summary>
     /// Короткое название
@@ -21,7 +21,7 @@ public class Cryptocurrency
     public string FullName { get; set; }
 
     /// <summary>
-    /// Алгоритма
+    /// Алгоритм
     /// </summary>
-    public string AlgorithmName { get; set; }
+    public string Algorithm { get; set; }
 }

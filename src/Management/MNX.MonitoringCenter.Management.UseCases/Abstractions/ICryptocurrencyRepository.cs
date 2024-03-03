@@ -18,16 +18,17 @@ public interface ICryptocurrencyRepository
     /// </summary>
     /// <param name="id"> Идентификатор монеты </param>
     /// <returns> Криптовалюта </returns>
-    Task<Cryptocurrency?> GetById(int id);
+    Task<Cryptocurrency?> GetById(Guid id);
 
     /// <summary>
     /// Проверить наличие криптовалюты по полному и/или короткому названию
     /// </summary>
-    /// <param name="id">  Уникальный идентификатор </param>
+    /// <param name="fullName"> Полное название криптовалюты. </param>
+    /// <param name="shortName"> Сокращённое название криптовалюты. </param>
     /// <returns>
     /// <see langword="true"/>, если криптовалюта была найдена хотя бы по одному параметру, иначе <see langword="false"/>
     /// </returns>
-    Task<bool> Exists(string fullName, string? shortName = null);
+    Task<bool> Exists(string fullName, string shortName);
 
     /// <summary>
     /// Добавить криптовалюту

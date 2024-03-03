@@ -16,13 +16,13 @@ public class GetCryptocurrenciesQueryHandlerTests
             new() {
                 ShortName = "BTC",
                 FullName = "Bitcoin",
-                AlgorithmName = "SHA-256"
+                Algorithm = "SHA-256"
             },
 
             new() {
                 ShortName = "Eht",
                 FullName = "Ethereum",
-                AlgorithmName = "KECCAK-256"
+                Algorithm = "KECCAK-256"
             }
         };
 
@@ -45,7 +45,7 @@ public class GetCryptocurrenciesQueryHandlerTests
             Assert.IsTrue(result.Any(resultCrypto =>
                                      resultCrypto.FullName == cryptoModel.FullName &&
                                      resultCrypto.ShortName == cryptoModel.ShortName &&
-                                     resultCrypto.AlgorithmName == cryptoModel.AlgorithmName));
+                                     resultCrypto.Algorithm == cryptoModel.Algorithm));
         }
     }
 }

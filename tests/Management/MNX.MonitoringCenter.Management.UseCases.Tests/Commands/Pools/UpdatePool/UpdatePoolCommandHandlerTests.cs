@@ -26,8 +26,8 @@ public class UpdatePoolCommandHandlerTests
         poolRepository.Setup(x => x.Update(It.IsAny<Pool>()));
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-        cryptoRepository.Setup(x => x.Exists(It.IsAny<string>(), null))
-                        .ReturnsAsync(true);
+        cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                        .ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
         mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(new Pool());
@@ -107,13 +107,13 @@ public class UpdatePoolCommandHandlerTests
             Id = It.IsAny<Guid>(),
             Domain = "domain",
             Port = 8000,
-            CryptocurrencyId = 1,
+            CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
             Cryptocurrency = new()
             {
-                Id = 1,
+                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
                 FullName = "Bitcoin",
                 ShortName = "BCT",
-                AlgorithmName = "Algorithm"
+                Algorithm = "Algorithm"
             }
         };
 
@@ -125,8 +125,8 @@ public class UpdatePoolCommandHandlerTests
                     .ReturnsAsync(false);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-        cryptoRepository.Setup(x => x.Exists(It.IsAny<string>(), null))
-                        .ReturnsAsync(true);
+        cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                        .ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
         mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(new Pool());
@@ -210,8 +210,8 @@ public class UpdatePoolCommandHandlerTests
                     .ReturnsAsync(false);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-        cryptoRepository.Setup(x => x.Exists(It.IsAny<string>(), null))
-                        .ReturnsAsync(false);
+        cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                        .ReturnsAsync(null as Cryptocurrency);
 
         var mapper = new Mock<IMapper>();
 
@@ -243,6 +243,9 @@ public class UpdatePoolCommandHandlerTests
 
     private static UpdatePoolCommand GetCommand()
     {
-        return new UpdatePoolCommand(It.IsAny<Guid>(), new PoolInputModel("domain", 8000, "Bitcoin"));
+        return new UpdatePoolCommand(It.IsAny<Guid>(),
+                                    new PoolInputModel("domain",
+                                                       8000,
+                                                       Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")));
     }
 }

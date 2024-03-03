@@ -25,7 +25,8 @@ public class AddWalletComandHandlerTests
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default)).ReturnsAsync(true);
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                                .ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
 
@@ -70,7 +71,8 @@ public class AddWalletComandHandlerTests
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default)).ReturnsAsync(true);
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                                .ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
 
@@ -114,7 +116,8 @@ public class AddWalletComandHandlerTests
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default)).ReturnsAsync(false);
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                                .ReturnsAsync(null as Cryptocurrency);
 
         var mapper = new Mock<IMapper>();
 
@@ -146,6 +149,6 @@ public class AddWalletComandHandlerTests
 
     private static AddWalletCommand GetCommand()
     {
-        return new AddWalletCommand(new WalletInputModel("Nikita", "Tomsk", "Bitcoin"));
+        return new AddWalletCommand(new WalletInputModel("Nikita", "Tomsk", Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")));
     }
 }

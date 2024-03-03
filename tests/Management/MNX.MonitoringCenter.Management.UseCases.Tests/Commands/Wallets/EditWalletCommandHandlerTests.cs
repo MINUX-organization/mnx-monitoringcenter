@@ -26,15 +26,15 @@ public class EditWalletCommandHandlerTests
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default)).ReturnsAsync(true);
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
 
         mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
-                                                cryptocurrencyRepository.Object,
-                                                mapper.Object);
+                                                   cryptocurrencyRepository.Object,
+                                                   mapper.Object);
 
         // Act
         var result = await handler.Handle(GetCommand(), default);
@@ -72,7 +72,7 @@ public class EditWalletCommandHandlerTests
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default)).ReturnsAsync(true);
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
 
@@ -115,13 +115,13 @@ public class EditWalletCommandHandlerTests
             Id = Guid.NewGuid(),
             Name = "Nikita",
             Address = "Tomsk",
-            CryptocurrencyId = 1,
+            CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
             Cryptocurrency = new()
             {
-                Id = 1,
+                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
                 FullName = "Bitcoin",
                 ShortName = "BTC",
-                AlgorithmName = "Algorithm"
+                Algorithm = "Algorithm"
             }
         };
 
@@ -134,7 +134,7 @@ public class EditWalletCommandHandlerTests
         walletRepository.Setup(x => x.Update(It.IsAny<Wallet>()));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
-        cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default));
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()));
 
         var mapper = new Mock<IMapper>();
         mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>()));
@@ -179,7 +179,7 @@ public class EditWalletCommandHandlerTests
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default)).ReturnsAsync(false);
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Cryptocurrency);
 
         var mapper = new Mock<IMapper>();
 
@@ -225,7 +225,7 @@ public class EditWalletCommandHandlerTests
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.Exists(It.IsAny<string>(), default)).ReturnsAsync(false);
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Cryptocurrency);
 
         var mapper = new Mock<IMapper>();
 
@@ -259,6 +259,6 @@ public class EditWalletCommandHandlerTests
 
     private static EditWalletCommand GetCommand()
     {
-        return new EditWalletCommand(It.IsAny<Guid>(), new WalletInputModel("Nikita", "Tomsk", "Bitcoin"));
+        return new EditWalletCommand(It.IsAny<Guid>(), new WalletInputModel("Nikita", "Tomsk", Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")));
     }
 }

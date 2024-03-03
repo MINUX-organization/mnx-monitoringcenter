@@ -15,17 +15,14 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<AddCryptocurrencyCommand, Cryptocurrency>()
-            .ForMember(destination => destination.AlgorithmName, options => options.MapFrom(source => source.Algorithm));
+        CreateMap<AddCryptocurrencyCommand, Cryptocurrency>();
 
-        CreateMap<WalletInputModel, Wallet>()
-            .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.CryptocurrencyFullName));
+        CreateMap<WalletInputModel, Wallet>();
 
         CreateMap<Wallet, WalletModel>()
             .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.Cryptocurrency!.FullName));
 
-        CreateMap<PoolInputModel, Pool>()
-            .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.CryptocurrencyFullName));
+        CreateMap<PoolInputModel, Pool>();
 
         CreateMap<Pool, PoolModel>()
             .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.Cryptocurrency!.FullName));

@@ -16,31 +16,33 @@ public class GetPoolsQueryHandlerTests
         //Arrange
         var poolsList = new List<Pool>()
         {
-            new() 
-            { 
+            new()
+            {
                 Id = Guid.Parse("d60c4407-ccd5-4cf8-b5a2-064b51c20be9"),
                 Domain = "Pool 1",
                 Port = 1,
-                CryptocurrencyId = 1,
+                CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
                 Cryptocurrency = new()
                 {
+                    Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
                     FullName = "Etherium",
                     ShortName = "ETH",
-                    AlgorithmName = "Algorithm"
+                    Algorithm = "Algorithm"
                 }
             },
 
-            new() 
-            { 
+            new()
+            {
                 Id = Guid.Parse("33fef879-06ff-420d-989a-a3b362129d77"),
                 Domain = "Pool 2",
                 Port = 2,
-                CryptocurrencyId = 2,
+                CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
                 Cryptocurrency = new()
                 {
+                    Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
                     FullName = "Bitcoin",
                     ShortName = "BCT",
-                    AlgorithmName = "Algorithm"
+                    Algorithm = "Algorithm"
                 }
             },
     };

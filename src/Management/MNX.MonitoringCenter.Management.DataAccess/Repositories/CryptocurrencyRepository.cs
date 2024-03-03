@@ -20,7 +20,7 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
                        .AsAsyncEnumerable();
     }
 
-    public async Task<Cryptocurrency?> GetById(int id)
+    public async Task<Cryptocurrency?> GetById(Guid id)
     {
         return await _context.Cryptocurrencies
                              .AsNoTracking()
@@ -28,14 +28,14 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
                              .ConfigureAwait(false);
     }
 
-    public async Task<bool> Exists(string fullName, string? shortName = null)
+    public async Task<bool> Exists(string fullName, string shortName)
     {
         return await _context.Cryptocurrencies
                              .AsNoTracking()
                              .AnyAsync(x => x.FullName.Equals(fullName) || x.ShortName.Equals(shortName))
                              .ConfigureAwait(false);
     }
-    
+
     public async Task Add(Cryptocurrency cryptocurrency)
     {
         await _context.Cryptocurrencies.AddAsync(cryptocurrency).ConfigureAwait(false);

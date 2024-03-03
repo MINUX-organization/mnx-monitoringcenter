@@ -21,12 +21,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets
                     Id = Guid.NewGuid(),
                     Name = "test1",
                     Address = "Tomsk",
-                    CryptocurrencyId = 1,
+                    CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
                     Cryptocurrency = new()
                     {
+                        Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
                         FullName = "Etherium",
                         ShortName = "ETH",
-                        AlgorithmName = "Algorithm"
+                        Algorithm = "Algorithm"
                     }
                 },
 
@@ -35,12 +36,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets
                     Id = Guid.NewGuid(),
                     Name = "test2",
                     Address = "Moscow",
-                    CryptocurrencyId = 2,
+                    CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
                     Cryptocurrency = new()
                     {
+                        Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
                         FullName = "Bitcoin",
                         ShortName = "BCT",
-                        AlgorithmName = "Algorithm"
+                        Algorithm = "Algorithm"
                     }
                 }
             };

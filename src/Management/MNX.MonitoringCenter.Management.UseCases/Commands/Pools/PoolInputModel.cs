@@ -16,14 +16,14 @@ public class PoolInputModel
     public int Port { get; }
 
     /// <summary>
-    /// Полное название криптовалюты
+    /// Идентификатор криптовалюты
     /// </summary>
-    public string CryptocurrencyFullName { get; }
+    public Guid CryptocurrencyId { get; }
 
-    public PoolInputModel(string domain, int port, string cryptocurrencyFullName)
+    public PoolInputModel(string domain, int port, Guid cryptocurrencyId)
     {
         Domain = domain;
         Port = port;
-        CryptocurrencyFullName = cryptocurrencyFullName;
+        CryptocurrencyId = cryptocurrencyId;
     }
 }

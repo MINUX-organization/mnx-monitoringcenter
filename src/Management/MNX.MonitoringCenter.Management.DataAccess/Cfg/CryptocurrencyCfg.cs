@@ -12,8 +12,8 @@ internal class CryptocurrencyCfg : IEntityTypeConfiguration<Cryptocurrency>
 
         builder.HasOne<Algorithm>()
                .WithMany()
-               .HasForeignKey(x => x.AlgorithmName);
+               .HasForeignKey(x => x.Algorithm);
 
-        builder.Property(x => x.AlgorithmName).IsRequired();
+        builder.Property(x => x.Algorithm).IsRequired();
     }
 }
