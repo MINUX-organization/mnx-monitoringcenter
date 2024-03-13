@@ -4,6 +4,9 @@ using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
+/// <summary>
+/// Реализация <see cref="IWalletRepository"/>
+/// </summary>
 public class WalletRepository : IWalletRepository
 {
     private readonly Context _context;
@@ -13,11 +16,15 @@ public class WalletRepository : IWalletRepository
         _context = context;
     }
 
+    /// <inheritdoc/>
     public IAsyncEnumerable<Wallet> GetAll()
     {
-        return _context.Wallets.AsNoTracking().AsAsyncEnumerable();
+        return _context.Wallets.Include(x => x.Cryptocurrency)
+                               .AsNoTracking()
+                               .AsAsyncEnumerable();
     }
 
+    /// <inheritdoc/>
     public async Task<Wallet?> GetById(Guid Id)
     {
         return await _context.Wallets
@@ -27,6 +34,7 @@ public class WalletRepository : IWalletRepository
                              .ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> Exists(string name, string address)
     {
         return await _context.Wallets
@@ -35,6 +43,7 @@ public class WalletRepository : IWalletRepository
                              .ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public async Task<bool> Exists(string name, string address, Guid exceptId)
     {
         return await _context.Wallets
@@ -43,20 +52,21 @@ public class WalletRepository : IWalletRepository
                              .ConfigureAwait(false);
     }
 
-    public async Task<Guid> Add(Wallet wallet)
+    /// <inheritdoc/>
+    public async Task Add(Wallet wallet)
     {
         await _context.Wallets.AddAsync(wallet).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
-
-        return wallet.Id;
     }
 
+    /// <inheritdoc/>
     public async Task Update(Wallet wallet)
     {
         _context.Wallets.Update(wallet);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public async Task Remove(Wallet wallet)
     {
         _context.Wallets.Remove(wallet);

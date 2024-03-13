@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Kernel.UseCases;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
@@ -12,7 +13,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets;
 public class AddWalletComandHandlerTests
 {
     [Test]
-    public async Task AddWallet_ReturnsId()
+    public async Task AddWallet_ReturnsWalletModel()
     {
         // Arrange
         var id = Guid.Parse("fb0637f2-5520-490f-9ba1-8591e7b72755");
@@ -21,7 +22,7 @@ public class AddWalletComandHandlerTests
 
         walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
 
-        walletRepository.Setup(x => x.Add(It.IsAny<Wallet>())).ReturnsAsync(id);
+        walletRepository.Setup(x => x.Add(It.IsAny<Wallet>()));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
@@ -29,10 +30,12 @@ public class AddWalletComandHandlerTests
                                 .ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
+        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(GetWallet());
+        mapper.Setup(x => x.Map<WalletModel>(It.IsAny<Wallet>())).Returns(GetWalletModel());
 
         var handler = new AddWalletCommandHandler(walletRepository.Object,
-                                                cryptocurrencyRepository.Object,
-                                                mapper.Object);
+                                                  cryptocurrencyRepository.Object,
+                                                  mapper.Object);
 
         // Act
         var result = await handler.Handle(GetCommand(), default);
@@ -44,11 +47,9 @@ public class AddWalletComandHandlerTests
                 "Операция завершилась неудачно");
             Assert.That(result.Errors, Is.Null,
                 "Список ошибок не пуст");
-            Assert.That(result, Is.TypeOf<Result<Guid>>(),
+            Assert.That(result, Is.TypeOf<Result<WalletModel>>(),
                 "Неверный тип результата");
-            Assert.That(result, Is.EqualTo(Result<Guid>.SuccessfullyCreated(id)),
-                "Результат не соответствует успешному созданию");
-            Assert.That(result.GetValue(), Is.EqualTo(id),
+            Assert.That(result.GetValue().Id, Is.EqualTo(GetWalletModel().Id),
                 "Возвращенное значение не совпадает с ожидаемым идентификатором");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Created),
                 "Статус результата не 'Created'");
@@ -67,7 +68,7 @@ public class AddWalletComandHandlerTests
 
         walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
-        walletRepository.Setup(x => x.Add(It.IsAny<Wallet>())).ReturnsAsync(id);
+        walletRepository.Setup(x => x.Add(It.IsAny<Wallet>()));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
@@ -89,10 +90,8 @@ public class AddWalletComandHandlerTests
                 "Операция завершилась успешно, когда ожидалась неудача");
             Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");
-            Assert.That(result, Is.TypeOf<Result<Guid>>(),
+            Assert.That(result, Is.TypeOf<Result<WalletModel>>(),
                 "Неверный тип результата");
-            Assert.That(result, Is.Not.EqualTo(Result<Guid>.Empty()),
-                "Результат пуст");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
                 "Статус результата не 'Invalid'");
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Wallet already exists"),
@@ -112,7 +111,7 @@ public class AddWalletComandHandlerTests
 
         walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
 
-        walletRepository.Setup(x => x.Add(It.IsAny<Wallet>())).ReturnsAsync(id);
+        walletRepository.Setup(x => x.Add(It.IsAny<Wallet>()));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
@@ -122,8 +121,8 @@ public class AddWalletComandHandlerTests
         var mapper = new Mock<IMapper>();
 
         var handler = new AddWalletCommandHandler(walletRepository.Object,
-                                                cryptocurrencyRepository.Object,
-                                                mapper.Object);
+                                                  cryptocurrencyRepository.Object,
+                                                  mapper.Object);
 
         // Act
         var result = await handler.Handle(GetCommand(), default);
@@ -134,10 +133,8 @@ public class AddWalletComandHandlerTests
                 "Операция завершилась успешно, когда ожидалась неудача");
             Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");
-            Assert.That(result, Is.TypeOf<Result<Guid>>(),
+            Assert.That(result, Is.TypeOf<Result<WalletModel>>(),
                 "Неверный тип результата");
-            Assert.That(result, Is.Not.EqualTo(Result<Guid>.Empty()),
-                "Результат пуст");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
                 "Статус результата не 'Invalid'");
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Cryptocurrency wasn't found"),
@@ -150,5 +147,34 @@ public class AddWalletComandHandlerTests
     private static AddWalletCommand GetCommand()
     {
         return new AddWalletCommand(new WalletInputModel("Nikita", "Tomsk", Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")));
+    }
+
+    private static Wallet GetWallet()
+    {
+        return new Wallet()
+        {
+            Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
+            Name = "Wallet",
+            Address = "Address",
+            CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
+            Cryptocurrency = new Cryptocurrency()
+            {
+                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
+                FullName = "Bitcoin",
+                ShortName = "BTC",
+                Algorithm = "Algorithm"
+            }
+        };
+    }
+
+    private static WalletModel GetWalletModel()
+    {
+        return new WalletModel()
+        {
+            Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
+            Name = "Wallet",
+            Address = "Address",
+            Cryptocurrency = "Bitcoin"
+        };
     }
 }

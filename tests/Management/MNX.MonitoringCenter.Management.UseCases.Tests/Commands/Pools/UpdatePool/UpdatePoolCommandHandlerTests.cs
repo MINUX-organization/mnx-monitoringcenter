@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
@@ -13,7 +14,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools.UpdatePo
 public class UpdatePoolCommandHandlerTests
 {
     [Test]
-    public async Task UpdatePool_ReturnsEmptyResult()
+    public async Task UpdatePool_ReturnsPoolModel()
     {
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
@@ -30,7 +31,8 @@ public class UpdatePoolCommandHandlerTests
                         .ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(new Pool());
+        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(GetPool());
+        mapper.Setup(x => x.Map<PoolModel>(It.IsAny<Pool>())).Returns(GetPoolModel());
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
                                                     cryptoRepository.Object,
@@ -46,12 +48,10 @@ public class UpdatePoolCommandHandlerTests
                 "Операция завершилась неудачно");
             Assert.That(result.Errors, Is.Null,
                 "Список ошибок не пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
                 "Неверный тип результата");
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
-                "Результат не пуст");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
-                "Статус результата не 'NoContent'");
+            Assert.That(result.GetValue().Id, Is.EqualTo(GetPoolModel().Id),
+                "Результат не соответствует ожиданию");
         });
 
         poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -84,10 +84,8 @@ public class UpdatePoolCommandHandlerTests
                 "Операция завершилась успешно, когда ожидалась неудача");
             Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
                 "Неверный тип результата");
-            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()),
-                "Результат пуст");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
                 "Статус результата не 'Invalid'");
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"),
@@ -99,27 +97,13 @@ public class UpdatePoolCommandHandlerTests
     }
 
     [Test]
-    public async Task UpdatePool_WhenPoolsAreEquals_ReturnsEmptyResult()
+    public async Task UpdatePool_WhenPoolsAreEquals_ReturnsModel()
     {
         // Arrange
-        var pool = new Pool()
-        {
-            Id = It.IsAny<Guid>(),
-            Domain = "domain",
-            Port = 8000,
-            CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
-            Cryptocurrency = new()
-            {
-                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
-                FullName = "Bitcoin",
-                ShortName = "BCT",
-                Algorithm = "Algorithm"
-            }
-        };
 
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(pool);
+        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(GetPool());
 
         poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
                     .ReturnsAsync(false);
@@ -129,7 +113,8 @@ public class UpdatePoolCommandHandlerTests
                         .ReturnsAsync(new Cryptocurrency());
 
         var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(new Pool());
+        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(GetPool());
+        mapper.Setup(x => x.Map<PoolModel>(It.IsAny<Pool>())).Returns(GetPoolModel());
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
                                                     cryptoRepository.Object,
@@ -145,12 +130,12 @@ public class UpdatePoolCommandHandlerTests
                  "Операция завершилась неудачно");
             Assert.That(result.Errors, Is.Null,
                 "Список не ошибок пуст");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
-                "Статус результата не 'NoContent'");
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
-                "Результат не пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Ok),
+                "Статус результата не 'Ok'");
+            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
                  "Неверный тип результата");
+            Assert.That(result.GetValue().Id, Is.EqualTo(GetPoolModel().Id),
+                "Результат не соответствует ожиданию");
         });
 
         poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -190,7 +175,7 @@ public class UpdatePoolCommandHandlerTests
                  "Сообщение об ошибке отличается от ожидаемого");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
                 "Статус результата не 'Invalid'");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
                  "Неверный тип результата");
         });
 
@@ -233,7 +218,7 @@ public class UpdatePoolCommandHandlerTests
                  "Сообщение об ошибке отличается от ожидаемого");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
                 "Статус результата не 'Invalid'");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
+            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
                  "Неверный тип результата");
         });
 
@@ -247,5 +232,34 @@ public class UpdatePoolCommandHandlerTests
                                     new PoolInputModel("domain",
                                                        8000,
                                                        Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")));
+    }
+
+    private static Pool GetPool()
+    {
+        return new Pool()
+        {
+            Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
+            Domain = "domain",
+            Port = 8000,
+            CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
+            Cryptocurrency = new Cryptocurrency()
+            {
+                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
+                FullName = "Bitcoin",
+                ShortName = "BTC",
+                Algorithm = "Algorithm"
+            }
+        };
+    }
+
+    private static PoolModel GetPoolModel()
+    {
+        return new PoolModel()
+        {
+            Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
+            Domain = "domain",
+            Port = 8000,
+            Cryptocurrency = "Bitcoin"
+        };
     }
 }
