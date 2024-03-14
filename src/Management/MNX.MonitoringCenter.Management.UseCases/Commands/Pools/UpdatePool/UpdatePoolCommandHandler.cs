@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 
@@ -9,7 +10,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
 /// <summary>
 /// Обработчик команды обновления пула
 /// </summary>
-public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Result<Unit>>
+public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Result<PoolModel>>
 {
     private readonly IPoolRepository _poolRepository;
 
@@ -26,34 +27,38 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<Unit>> Handle(UpdatePoolCommand request, CancellationToken cancellationToken)
+    public async Task<Result<PoolModel>> Handle(UpdatePoolCommand request, CancellationToken cancellationToken)
     {
         var pool = await _poolRepository.GetById(request.Id);
 
         if (pool == null)
         {
-            return Result<Unit>.Invalid("Pool with this id wasn`t found");
+            return Result<PoolModel>.Invalid("Pool with this id wasn`t found");
         }
 
         if (PoolsIsEquals(pool, request.Model))
         {
-            return Result<Unit>.Empty();
+            return Result<PoolModel>.Success(_mapper.Map<PoolModel>(pool));
         }
 
         if (await _poolRepository.Exists(request.Model.Domain, request.Model.Port))
         {
-            return Result<Unit>.Invalid("Pool already exists");
+            return Result<PoolModel>.Invalid("Pool already exists");
         }
 
-        if ((await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId)) is null)
+        var cryptocurrency = await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId);
+
+        if (cryptocurrency is null)
         {
-            return Result<Unit>.Invalid("Cryptocurrency wasn't found");
+            return Result<PoolModel>.Invalid("Cryptocurrency wasn't found");
         }
 
         var newPool = _mapper.Map<Pool>(request.Model);
         newPool.Id = request.Id;
-        await _poolRepository.Update(newPool);
-        return Result<Unit>.Empty();
+        await _poolRepository.Update(newPool).ConfigureAwait(false);
+        newPool.Cryptocurrency = cryptocurrency;
+
+        return Result<PoolModel>.Success(_mapper.Map<PoolModel>(newPool));
     }
 
     private static bool PoolsIsEquals(Pool pool, PoolInputModel newPool)

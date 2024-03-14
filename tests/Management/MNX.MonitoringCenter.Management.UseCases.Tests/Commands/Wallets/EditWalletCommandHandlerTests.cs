@@ -5,53 +5,62 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.Core;
 using Kernel.UseCases;
-using MediatR;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets;
 
 [TestFixture]
 public class EditWalletCommandHandlerTests
 {
+    private IMapper _mapper;
+
+    private static readonly Guid _walletId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b");
+
+    [SetUp]
+    public void Setup()
+    {
+        _mapper = TestHelper.GetMapper();
+    }
+
     [Test]
-    public async Task EditWallet_ReturnsEmptyResult()
+    public async Task EditWallet_ReturnsModel()
     {
         // Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Wallet());
+        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(GetWallet());
 
-        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
+        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
+                        .ReturnsAsync(false);
 
         walletRepository.Setup(x => x.Update(It.IsAny<Wallet>()));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Cryptocurrency());
-
-        var mapper = new Mock<IMapper>();
-
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                                .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
                                                    cryptocurrencyRepository.Object,
-                                                   mapper.Object);
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("new_wallet", "new_address", TestHelper.Cryptocurrency.Id), default);
 
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.True,
-                "Операция завершилась неудачно");
-            Assert.That(result.Errors, Is.Null,
-                "Список ошибок не пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                "Неверный тип результата");
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
-                "Результат не пуст");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
-                "Статус результата не 'NoContent'");
+            Assert.That(result.IsSuccess, Is.True, "Операция завершилась неудачно");
+
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Ok), "Статус результата не 'Ok'");
+
+            Assert.That(result.Errors, Is.Null, "Список ошибок не пуст");
+
+            Assert.That(result.GetValue().Id == _walletId &&
+                        result.GetValue().Name == "new_wallet" &&
+                        result.GetValue().Address == "new_address" &&
+                        result.GetValue().Cryptocurrency == TestHelper.Cryptocurrency.FullName,
+                "Результат не совпадает с ожиданием");
+            
         });
 
         walletRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -72,18 +81,15 @@ public class EditWalletCommandHandlerTests
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Cryptocurrency());
-
-        var mapper = new Mock<IMapper>();
-
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                                .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
-                                                cryptocurrencyRepository.Object,
-                                                mapper.Object);
+                                                   cryptocurrencyRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("new_wallet", "new_address", TestHelper.Cryptocurrency.Id), default);
 
         // Assert
         Assert.Multiple(() =>
@@ -92,12 +98,8 @@ public class EditWalletCommandHandlerTests
                 "Операция завершилась успешно, когда ожидалась неудача");
             Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                "Неверный тип результата");
-            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()),
-                "Результат пуст");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 'Invalid'");
+                "Статус результата не 400");
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Wallet with this Id wasn't found"),
                  "Сообщение об ошибке отличается от ожидаемого");
         });
@@ -107,27 +109,13 @@ public class EditWalletCommandHandlerTests
     }
 
     [Test]
-    public async Task EditWallet_WhenWalletsAreEquals_ReturnsEmptyResult()
+    public async Task EditWallet_WhenWalletAreEquals_ReturnsModel()
     {
         // Arrange
-        var wallet = new Wallet()
-        {
-            Id = Guid.NewGuid(),
-            Name = "Nikita",
-            Address = "Tomsk",
-            CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
-            Cryptocurrency = new()
-            {
-                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
-                FullName = "Bitcoin",
-                ShortName = "BTC",
-                Algorithm = "Algorithm"
-            }
-        };
 
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(wallet);
+        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(GetWallet());
 
         walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()));
 
@@ -136,15 +124,12 @@ public class EditWalletCommandHandlerTests
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
         cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()));
 
-        var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>()));
-
         var handler = new EditWalletCommandHandler(walletRepository.Object,
-                                                cryptocurrencyRepository.Object,
-                                                mapper.Object);
+                                                   cryptocurrencyRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("wallet", "address", TestHelper.Cryptocurrency.Id), default);
 
         // Assert
         Assert.Multiple(() =>
@@ -153,12 +138,14 @@ public class EditWalletCommandHandlerTests
                  "Операция завершилась неудачно");
             Assert.That(result.Errors, Is.Null,
                 "Список не ошибок пуст");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
-                "Статус результата не 'NoContent'");
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
-                "Результат не пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                 "Неверный тип результата");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Ok),
+                "Статус результата не 'Ok'");
+
+            Assert.That(result.GetValue().Id == _walletId &&
+                        result.GetValue().Name == "wallet" &&
+                        result.GetValue().Address == "address" &&
+                        result.GetValue().Cryptocurrency == TestHelper.Cryptocurrency.FullName,
+                "Результат не совпадает с ожиданием");
         });
 
         walletRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -173,24 +160,22 @@ public class EditWalletCommandHandlerTests
 
         walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Wallet());
 
-        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>(), default)).ReturnsAsync(true);
+        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>(), _walletId))
+                        .ReturnsAsync(true);
 
         walletRepository.Setup(x => x.Update(It.IsAny<Wallet>()));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Cryptocurrency);
-
-        var mapper = new Mock<IMapper>();
-
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                                .ReturnsAsync(null as Cryptocurrency);
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
-                                                cryptocurrencyRepository.Object,
-                                                mapper.Object);
+                                                   cryptocurrencyRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("wallet", "address", TestHelper.Cryptocurrency.Id), default);
 
         //Assert
         Assert.Multiple(() =>
@@ -202,9 +187,7 @@ public class EditWalletCommandHandlerTests
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Wallet with this name or address already exists"),
                  "Сообщение об ошибке отличается от ожидаемого");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 'Invalid'");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                 "Неверный тип результата");
+                "Статус результата не 400");
         });
 
         walletRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -217,26 +200,25 @@ public class EditWalletCommandHandlerTests
         // Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Wallet());
+        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                        .ReturnsAsync(GetWallet());
 
-        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
+        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
+                        .ReturnsAsync(false);
 
         walletRepository.Setup(x => x.Update(It.IsAny<Wallet>()));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Cryptocurrency);
-
-        var mapper = new Mock<IMapper>();
-
-        mapper.Setup(x => x.Map<Wallet>(It.IsAny<WalletInputModel>())).Returns(new Wallet());
+        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                                .ReturnsAsync(null as Cryptocurrency);
 
         var handler = new EditWalletCommandHandler(walletRepository.Object,
-                                                cryptocurrencyRepository.Object,
-                                                mapper.Object);
+                                                   cryptocurrencyRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("new_wallet", "new_address", TestHelper.Cryptocurrency.Id), default);
 
         //Assert
         Assert.Multiple(() =>
@@ -248,17 +230,27 @@ public class EditWalletCommandHandlerTests
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Cryptocurrency wasn't found"),
                  "Сообщение об ошибке отличается от ожидаемого");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 'Invalid'");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                 "Неверный тип результата");
+                "Статус результата не 400");
         });
 
         walletRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
         walletRepository.Verify(x => x.Update(It.IsAny<Wallet>()), Times.Never);
     }
 
-    private static EditWalletCommand GetCommand()
+    private static EditWalletCommand GetCommand(string name, string address, Guid cryptoId)
     {
-        return new EditWalletCommand(It.IsAny<Guid>(), new WalletInputModel("Nikita", "Tomsk", Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")));
+        return new EditWalletCommand(_walletId, new WalletInputModel(name, address, cryptoId));
+    }
+
+    private static Wallet GetWallet()
+    {
+        return new Wallet()
+        {
+            Id = _walletId,
+            Name = "wallet",
+            Address = "address",
+            CryptocurrencyId = TestHelper.Cryptocurrency.Id,
+            Cryptocurrency = TestHelper.Cryptocurrency
+        };
     }
 }

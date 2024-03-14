@@ -47,7 +47,7 @@ public class WalletController : ControllerBase
     /// Переданные параметры не прошли валидацию или не была найдена монета с указанным названием
     /// </response>
     [HttpPost]
-    [ProducesResponseType(typeof(Guid), 201)]
+    [ProducesResponseType(typeof(WalletModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(WalletInputModel model)
     {
@@ -61,12 +61,12 @@ public class WalletController : ControllerBase
     /// <param name="id"> Уникальный идентификатор </param>
     /// <param name="model"> Модель кошелька </param>
     /// <returns> Результат выполенениия операции </returns>
-    /// <response code="204"> Успешно </response>
+    /// <response code="200"> Успешно </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден кошелёк с переданным id
     /// </response>
     [HttpPut("{id:Guid}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(WalletModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Edit(Guid id, WalletInputModel model)
     {

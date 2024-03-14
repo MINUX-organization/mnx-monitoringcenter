@@ -32,7 +32,7 @@ public interface IPoolRepository
     /// Добавить пул
     /// </summary>
     /// <param name="pool"> Пул </param>
-    /// <returns> Уникальный идентификатор </returns>
+    /// <returns> Идентификатор </returns>
     Task<Guid> Add(Pool pool);
 
     /// <summary>

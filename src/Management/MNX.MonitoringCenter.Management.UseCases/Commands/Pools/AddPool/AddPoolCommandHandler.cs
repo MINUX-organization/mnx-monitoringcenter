@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 
@@ -9,7 +10,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 /// <summary>
 /// Обработчик команды добавления пула
 /// </summary>
-public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Guid>>
+public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<PoolModel>>
 {
     private readonly IPoolRepository _poolRepository;
 
@@ -26,20 +27,24 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Guid
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<Guid>> Handle(AddPoolCommand request, CancellationToken cancellationToken)
+    public async Task<Result<PoolModel>> Handle(AddPoolCommand request, CancellationToken cancellationToken)
     {
         if (await _poolRepository.Exists(request.Model.Domain, request.Model.Port))
         {
-            return Result<Guid>.Invalid("Pool already exists");
+            return Result<PoolModel>.Invalid("Pool already exists");
         }
 
-        if ((await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId)) is null)
+        var cryptocurrency = await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId);
+
+        if (cryptocurrency is null)
         {
-            return Result<Guid>.Invalid("Cryptocurrency wasn't found");
+            return Result<PoolModel>.Invalid("Cryptocurrency wasn't found");
         }
 
-        var id = await _poolRepository.Add(_mapper.Map<Pool>(request.Model));
+        var pool = _mapper.Map<Pool>(request.Model);
+        pool.Id = await _poolRepository.Add(pool).ConfigureAwait(false);
+        pool.Cryptocurrency = cryptocurrency;
 
-        return Result<Guid>.SuccessfullyCreated(id);
+        return Result<PoolModel>.SuccessfullyCreated(_mapper.Map<PoolModel>(pool));
     }
 }

@@ -1,12 +1,13 @@
 ﻿using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
 
 /// <summary>
 /// Команда редактирования данных кошелька
 /// </summary>
-public class EditWalletCommand : IRequest<Result<Unit>>
+public class EditWalletCommand : IRequest<Result<WalletModel>>
 {
     /// <summary>
     /// Уникальный идентификатор
