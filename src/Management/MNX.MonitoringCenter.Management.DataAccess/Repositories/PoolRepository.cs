@@ -44,10 +44,12 @@ public class PoolRepository : IPoolRepository
     }
 
     /// <inheritdoc/>
-    public async Task Add(Pool pool)
+    public async Task<Guid> Add(Pool pool)
     {
         await _context.Pools.AddAsync(pool).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
+
+        return pool.Id;
     }
 
     /// <inheritdoc/>

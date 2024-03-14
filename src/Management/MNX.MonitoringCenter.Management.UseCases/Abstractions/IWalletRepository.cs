@@ -45,7 +45,8 @@ public interface IWalletRepository
     /// Добавить кошелёк
     /// </summary>
     /// <param name="wallet"> Кошелёк </param>
-    Task Add(Wallet wallet);
+    /// <returns> Идентификатор </returns>
+    Task<Guid> Add(Wallet wallet);
 
     /// <summary>
     /// Обновить данные о кошельке

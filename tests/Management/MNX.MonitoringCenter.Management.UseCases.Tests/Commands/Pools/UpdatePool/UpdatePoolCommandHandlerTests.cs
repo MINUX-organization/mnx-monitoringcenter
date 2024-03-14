@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 using Kernel.UseCases;
-using MediatR;
-using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
@@ -13,45 +11,51 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools.UpdatePo
 [TestFixture]
 public class UpdatePoolCommandHandlerTests
 {
+    private IMapper _mapper;
+
+    private static readonly Guid _poolId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b");
+
+    [SetUp]
+    public void Setup()
+    {
+        _mapper = TestHelper.GetMapper();
+    }
+
     [Test]
     public async Task UpdatePool_ReturnsPoolModel()
     {
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Pool());
+        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                      .ReturnsAsync(GetPool());
 
         poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
-                    .ReturnsAsync(false);
+                      .ReturnsAsync(false);
 
         poolRepository.Setup(x => x.Update(It.IsAny<Pool>()));
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
         cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
-                        .ReturnsAsync(new Cryptocurrency());
-
-        var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(GetPool());
-        mapper.Setup(x => x.Map<PoolModel>(It.IsAny<Pool>())).Returns(GetPoolModel());
+                        .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
-                                                    cryptoRepository.Object,
-                                                    mapper.Object);
+                                                   cryptoRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("new_domain", 8001, TestHelper.Cryptocurrency.Id), default);
 
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.True,
-                "Операция завершилась неудачно");
-            Assert.That(result.Errors, Is.Null,
-                "Список ошибок не пуст");
-            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
-                "Неверный тип результата");
-            Assert.That(result.GetValue().Id, Is.EqualTo(GetPoolModel().Id),
-                "Результат не соответствует ожиданию");
+            Assert.That(result.IsSuccess, Is.True, "Операция завершилась неудачно");
+
+            Assert.IsTrue(result.GetValue().Id == _poolId &&
+                          result.GetValue().Domain == "new_domain" &&
+                          result.GetValue().Port == 8001 &&
+                          result.GetValue().Cryptocurrency == TestHelper.Cryptocurrency.FullName,
+                   "Результат не соответствует ожиданию");
         });
 
         poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -68,14 +72,12 @@ public class UpdatePoolCommandHandlerTests
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
 
-        var mapper = new Mock<IMapper>();
-
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
-                                                    cryptoRepository.Object,
-                                                    mapper.Object);
+                                                   cryptoRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("new_domain", 8001, TestHelper.Cryptocurrency.Id), default);
 
         // Assert
         Assert.Multiple(() =>
@@ -84,10 +86,8 @@ public class UpdatePoolCommandHandlerTests
                 "Операция завершилась успешно, когда ожидалась неудача");
             Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");
-            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
-                "Неверный тип результата");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 'Invalid'");
+                "Статус результата не 400");
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"),
                  "Сообщение об ошибке отличается от ожидаемого");
         });
@@ -106,36 +106,33 @@ public class UpdatePoolCommandHandlerTests
         poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(GetPool());
 
         poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
-                    .ReturnsAsync(false);
+                      .ReturnsAsync(false);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
         cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
-                        .ReturnsAsync(new Cryptocurrency());
-
-        var mapper = new Mock<IMapper>();
-        mapper.Setup(x => x.Map<Pool>(It.IsAny<PoolInputModel>())).Returns(GetPool());
-        mapper.Setup(x => x.Map<PoolModel>(It.IsAny<Pool>())).Returns(GetPoolModel());
+                        .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
-                                                    cryptoRepository.Object,
-                                                    mapper.Object);
+                                                   cryptoRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("domain", 8000, TestHelper.Cryptocurrency.Id), default);
 
         //Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.True,
-                 "Операция завершилась неудачно");
-            Assert.That(result.Errors, Is.Null,
-                "Список не ошибок пуст");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Ok),
-                "Статус результата не 'Ok'");
-            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
-                 "Неверный тип результата");
-            Assert.That(result.GetValue().Id, Is.EqualTo(GetPoolModel().Id),
-                "Результат не соответствует ожиданию");
+            Assert.That(result.IsSuccess, Is.True, "Операция завершилась неудачно");
+
+            Assert.That(result.Errors, Is.Null, "Список не ошибок пуст");
+
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.Ok), "Статус результата не 200");
+
+            Assert.IsTrue(result.GetValue().Id == _poolId &&
+                          result.GetValue().Domain == "domain" &&
+                          result.GetValue().Port == 8000 &&
+                          result.GetValue().Cryptocurrency == TestHelper.Cryptocurrency.FullName,
+                   "Результат не соответствует ожиданию");
         });
 
         poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -148,21 +145,20 @@ public class UpdatePoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Pool());
+        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                      .ReturnsAsync(GetPool());
 
         poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
-                    .ReturnsAsync(true);
+                      .ReturnsAsync(true);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
 
-        var mapper = new Mock<IMapper>();
-
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
-                                                    cryptoRepository.Object,
-                                                    mapper.Object);
+                                                   cryptoRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("new_domain", 8001, TestHelper.Cryptocurrency.Id), default);
 
         //Assert
         Assert.Multiple(() =>
@@ -174,9 +170,7 @@ public class UpdatePoolCommandHandlerTests
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool already exists"),
                  "Сообщение об ошибке отличается от ожидаемого");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 'Invalid'");
-            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
-                 "Неверный тип результата");
+                "Статус результата не 400");
         });
 
         poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
@@ -189,7 +183,8 @@ public class UpdatePoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Pool());
+        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+                      .ReturnsAsync(GetPool());
 
         poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
                     .ReturnsAsync(false);
@@ -198,14 +193,12 @@ public class UpdatePoolCommandHandlerTests
         cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
                         .ReturnsAsync(null as Cryptocurrency);
 
-        var mapper = new Mock<IMapper>();
-
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
-                                                    cryptoRepository.Object,
-                                                    mapper.Object);
+                                                   cryptoRepository.Object,
+                                                   _mapper);
 
         // Act
-        var result = await handler.Handle(GetCommand(), default);
+        var result = await handler.Handle(GetCommand("new_domain", 8001, TestHelper.Cryptocurrency.Id), default);
 
         //Assert
         Assert.Multiple(() =>
@@ -217,49 +210,27 @@ public class UpdatePoolCommandHandlerTests
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Cryptocurrency wasn't found"),
                  "Сообщение об ошибке отличается от ожидаемого");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 'Invalid'");
-            Assert.That(result, Is.TypeOf<Result<PoolModel>>(),
-                 "Неверный тип результата");
+                "Статус результата не 400");
         });
 
         poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
         poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
-    private static UpdatePoolCommand GetCommand()
+    private static UpdatePoolCommand GetCommand(string domain, int port, Guid cryptoId)
     {
-        return new UpdatePoolCommand(It.IsAny<Guid>(),
-                                    new PoolInputModel("domain",
-                                                       8000,
-                                                       Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")));
+        return new UpdatePoolCommand(_poolId, new PoolInputModel(domain, port, cryptoId));
     }
 
     private static Pool GetPool()
     {
         return new Pool()
         {
-            Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
+            Id = _poolId,
             Domain = "domain",
             Port = 8000,
-            CryptocurrencyId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
-            Cryptocurrency = new Cryptocurrency()
-            {
-                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
-                FullName = "Bitcoin",
-                ShortName = "BTC",
-                Algorithm = "Algorithm"
-            }
-        };
-    }
-
-    private static PoolModel GetPoolModel()
-    {
-        return new PoolModel()
-        {
-            Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"),
-            Domain = "domain",
-            Port = 8000,
-            Cryptocurrency = "Bitcoin"
+            CryptocurrencyId = TestHelper.Cryptocurrency.Id,
+            Cryptocurrency = TestHelper.Cryptocurrency
         };
     }
 }

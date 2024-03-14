@@ -32,7 +32,8 @@ public interface IPoolRepository
     /// Добавить пул
     /// </summary>
     /// <param name="pool"> Пул </param>
-    Task Add(Pool pool);
+    /// <returns> Идентификатор </returns>
+    Task<Guid> Add(Pool pool);
 
     /// <summary>
     /// Обновить пул

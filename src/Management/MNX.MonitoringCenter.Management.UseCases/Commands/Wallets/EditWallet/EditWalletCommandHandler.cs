@@ -48,13 +48,16 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
             return Result<WalletModel>.Invalid("Wallet with this name or address already exists");
         }
 
-        if ((await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId)) is null)
+        var cryptocurency = await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId);
+
+        if (cryptocurency is null)
         {
             return Result<WalletModel>.Invalid("Cryptocurrency wasn't found");
         }
 
         var newWallet = _mapper.Map<Wallet>(request.Model);
         newWallet.Id = request.Id;
+        newWallet.Cryptocurrency = cryptocurency;
         await _walletRepository.Update(newWallet);
         return Result<WalletModel>.Success(_mapper.Map<WalletModel>(newWallet));
     }

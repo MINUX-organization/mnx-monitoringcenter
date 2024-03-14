@@ -34,13 +34,16 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
             return Result<WalletModel>.Invalid("Wallet already exists");
         }
 
-        if ((await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId)) is null)
+        var cryptocurrency = await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId);
+
+        if (cryptocurrency is null)
         {
             return Result<WalletModel>.Invalid("Cryptocurrency wasn't found");
         }
 
         var wallet = _mapper.Map<Wallet>(request.Model);
-        await _walletRepository.Add(wallet);
+        wallet.Cryptocurrency = cryptocurrency;
+        wallet.Id = await _walletRepository.Add(wallet);
 
         return Result<WalletModel>.SuccessfullyCreated(_mapper.Map<WalletModel>(wallet));
     }

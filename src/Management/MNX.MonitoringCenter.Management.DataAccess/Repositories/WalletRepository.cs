@@ -53,10 +53,12 @@ public class WalletRepository : IWalletRepository
     }
 
     /// <inheritdoc/>
-    public async Task Add(Wallet wallet)
+    public async Task<Guid> Add(Wallet wallet)
     {
         await _context.Wallets.AddAsync(wallet).ConfigureAwait(false);
         await _context.SaveChangesAsync().ConfigureAwait(false);
+
+        return wallet.Id;
     }
 
     /// <inheritdoc/>
