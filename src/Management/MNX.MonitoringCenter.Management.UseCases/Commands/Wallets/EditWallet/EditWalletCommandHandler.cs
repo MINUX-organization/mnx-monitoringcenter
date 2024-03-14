@@ -57,8 +57,9 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
 
         var newWallet = _mapper.Map<Wallet>(request.Model);
         newWallet.Id = request.Id;
+        await _walletRepository.Update(newWallet).ConfigureAwait(false);
         newWallet.Cryptocurrency = cryptocurency;
-        await _walletRepository.Update(newWallet);
+
         return Result<WalletModel>.Success(_mapper.Map<WalletModel>(newWallet));
     }
 

@@ -42,8 +42,8 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
         }
 
         var wallet = _mapper.Map<Wallet>(request.Model);
+        wallet.Id = await _walletRepository.Add(wallet).ConfigureAwait(false);
         wallet.Cryptocurrency = cryptocurrency;
-        wallet.Id = await _walletRepository.Add(wallet);
 
         return Result<WalletModel>.SuccessfullyCreated(_mapper.Map<WalletModel>(wallet));
     }

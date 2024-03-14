@@ -55,8 +55,8 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
 
         var newPool = _mapper.Map<Pool>(request.Model);
         newPool.Id = request.Id;
+        await _poolRepository.Update(newPool).ConfigureAwait(false);
         newPool.Cryptocurrency = cryptocurrency;
-        await _poolRepository.Update(newPool);
 
         return Result<PoolModel>.Success(_mapper.Map<PoolModel>(newPool));
     }
