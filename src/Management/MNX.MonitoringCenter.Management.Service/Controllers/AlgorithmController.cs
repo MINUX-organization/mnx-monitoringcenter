@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.Service.Controllers;
 /// <summary>
 /// Содержит эндпоинты, связанные с алгоритмами
 /// </summary>
-[Route("api/algorithm")]
+[Route("api/algorithms")]
 [ApiController]
 public class AlgorithmController : ControllerBase
 {

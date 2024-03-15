@@ -13,7 +13,7 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// <summary>
 /// Предоставляет REST API для работы с пресетами
 /// </summary>
-[Route("api/preset")]
+[Route("api/presets")]
 [ApiController]
 public class PresetController : ControllerBase
 {

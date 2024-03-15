@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
@@ -14,7 +13,7 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// <summary>
 /// Контроллер, предоставляющий Rest API для доступа к криптокошелькам
 /// </summary>
-[Route("api/wallet")]
+[Route("api/wallets")]
 [ApiController]
 public class WalletController : ControllerBase
 {

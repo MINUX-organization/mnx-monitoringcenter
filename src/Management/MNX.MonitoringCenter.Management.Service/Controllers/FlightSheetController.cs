@@ -5,7 +5,7 @@ using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
-[Route("api/flightSheet")]
+[Route("api/flightSheets")]
 [ApiController]
 public class FlightSheetController : ControllerBase
 {

@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.Service.Controllers;
 /// <summary>
 /// Предоставлет API для работы с майнерами
 /// </summary>
-[Route("api/miner")]
+[Route("api/miners")]
 [ApiController]
 public class MinerController : ControllerBase
 {

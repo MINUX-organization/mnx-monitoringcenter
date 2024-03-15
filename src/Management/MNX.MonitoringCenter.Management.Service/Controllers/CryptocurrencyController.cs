@@ -11,7 +11,7 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// <summary>
 /// Контроллер, предоставляющий Rest API для работы с криптовалютой
 /// </summary>
-[Route("api/cryptocurrency")]
+[Route("api/cryptocurrencies")]
 [ApiController]
 public class CryptocurrencyController : ControllerBase
 {

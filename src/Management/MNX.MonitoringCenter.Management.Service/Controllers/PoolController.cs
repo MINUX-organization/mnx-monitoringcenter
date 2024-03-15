@@ -13,7 +13,7 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// <summary>
 /// Контроллер предоставляющий Rest API для работы с пулами
 /// </summary>
-[Route("api/pool")]
+[Route("api/pools")]
 [ApiController]
 public class PoolController : ControllerBase
 {
