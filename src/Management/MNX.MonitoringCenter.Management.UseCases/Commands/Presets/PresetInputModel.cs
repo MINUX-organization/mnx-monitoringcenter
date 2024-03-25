@@ -3,7 +3,7 @@
 /// <summary>
 /// Модель пресета
 /// </summary>
-public class PresetModel
+public class PresetInputModel
 {
     /// <summary>
     /// Тактовая чатсота памяти в мегагерцах
@@ -30,7 +30,7 @@ public class PresetModel
     /// </summary>
     public int FanSpeed { get; }
 
-    public PresetModel(int memoryClock, int coreClock, int powerLimit, int criticalTemperature, int fanSpeed)
+    public PresetInputModel(int memoryClock, int coreClock, int powerLimit, int criticalTemperature, int fanSpeed)
     {
         MemoryClock = memoryClock;
         CoreClock = coreClock;

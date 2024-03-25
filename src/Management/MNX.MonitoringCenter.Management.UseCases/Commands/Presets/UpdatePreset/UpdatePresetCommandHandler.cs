@@ -23,16 +23,14 @@ public class UpdatePresetCommandHandler : IRequestHandler<UpdatePresetCommand, R
 
     public async Task<Result<Unit>> Handle(UpdatePresetCommand request, CancellationToken cancellationToken)
     {
-        var preset = await _repository.GetById(request.Id).ConfigureAwait(false);
+        var preset = await _repository.GetAvailableById(request.Id, request.UserId).ConfigureAwait(false);
 
         if (preset == null)
         {
             return Result<Unit>.Invalid("Preset with this Id wasn`t found");
         }
 
-        var newPreset = _mapper.Map<Preset>(request.Model);
-        newPreset.Id = preset.Id;
-        newPreset.GpuName = preset.GpuName;
+        var newPreset = _mapper.Map<Preset>(request);
         await _repository.Update(newPreset).ConfigureAwait(false);
 
         return Result<Unit>.Empty();

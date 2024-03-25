@@ -8,7 +8,7 @@ public interface IFlightSheetRepository
     /// Получить список всех полётных листов
     /// </summary>
     /// <returns> Асинхронный список полётных листов </returns>
-    public IAsyncEnumerable<FlightSheet> GetAll();
+    public IAsyncEnumerable<FlightSheet> GetAllAvailable(long userId);
 
     /// <summary>
     /// Добавить полётный лист

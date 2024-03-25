@@ -16,8 +16,19 @@ internal static class TestHelper
         Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
         FullName = "Bitcoin",
         ShortName = "BTC",
-        Algorithm = "Algorithm"
+        Algorithm = "Algorithm",
+        UserId = 1
     };
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    internal static long UserId { get; } = 1;
+
+    /// <summary>
+    /// Видеокарта.
+    /// </summary>
+    internal static string GpuName { get; } = "GeForce Gtx 1060";
 
     /// <summary>
     /// Получить экземпляр маппера.

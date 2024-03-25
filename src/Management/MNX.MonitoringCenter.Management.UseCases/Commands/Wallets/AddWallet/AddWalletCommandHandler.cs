@@ -29,12 +29,13 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
 
     public async Task<Result<WalletModel>> Handle(AddWalletCommand request, CancellationToken cancellationToken)
     {
-        if (await _walletRepository.Exists(request.Model.Name, request.Model.Address))
+        if (await _walletRepository.Exists(request.UserId, request.Model.Name, request.Model.Address))
         {
             return Result<WalletModel>.Invalid("Wallet already exists");
         }
 
-        var cryptocurrency = await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId);
+        var cryptocurrency = await _cryptocurrencyRepository
+            .GetAvailableById(request.Model.CryptocurrencyId, request.UserId);
 
         if (cryptocurrency is null)
         {
@@ -42,9 +43,10 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
         }
 
         var wallet = _mapper.Map<Wallet>(request.Model);
+        wallet.UserId = request.UserId;
         wallet.Id = await _walletRepository.Add(wallet).ConfigureAwait(false);
         wallet.Cryptocurrency = cryptocurrency;
-
+        
         return Result<WalletModel>.SuccessfullyCreated(_mapper.Map<WalletModel>(wallet));
     }
 }

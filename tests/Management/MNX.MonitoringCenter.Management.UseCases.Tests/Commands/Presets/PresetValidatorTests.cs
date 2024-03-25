@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets;
 
@@ -8,7 +9,7 @@ public static class PresetValidatorTests
     private static PresetModelValidator? _validator = 
         new PresetModelValidator();
 
-    public static void ValidatePresetModel_WhenPresetModelAreValid(PresetModel model)
+    public static void ValidatePresetModel_WhenPresetModelAreValid(PresetInputModel model)
     {
         var result = _validator.TestValidate(model);
 
@@ -19,7 +20,7 @@ public static class PresetValidatorTests
         result.ShouldNotHaveValidationErrorFor(x => x.FanSpeed);
     }
 
-    public static void ValidatePresetModel_WhenPresetModelAreNotValid(PresetModel model)
+    public static void ValidatePresetModel_WhenPresetModelAreNotValid(PresetInputModel model)
     {
         var result = _validator.TestValidate(model);
 

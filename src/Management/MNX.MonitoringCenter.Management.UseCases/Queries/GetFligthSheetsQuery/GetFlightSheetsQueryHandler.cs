@@ -15,6 +15,6 @@ public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheets
 
     public IAsyncEnumerable<FlightSheet> Handle(GetFlightSheetsQuery request, CancellationToken cancellationToken)
     {
-        return _repository.GetAll();
+        return _repository.GetAllAvailable(request.UserId);
     }
 }

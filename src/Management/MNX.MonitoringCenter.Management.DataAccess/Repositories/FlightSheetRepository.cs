@@ -22,7 +22,7 @@ public class FlightSheetRepository : IFlightSheetRepository
         throw new NotImplementedException();
     }
 
-    public IAsyncEnumerable<FlightSheet> GetAll()
+    public IAsyncEnumerable<FlightSheet> GetAllAvailable(long userId)
     {
         throw new NotImplementedException();
     }

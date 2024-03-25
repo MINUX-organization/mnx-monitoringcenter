@@ -18,4 +18,6 @@ public class FlightSheet
     public string WalletAddress { get; set; }
 
     public Pool Pool { get; set; }
+
+    public long UserId {  get; set; }
 }

@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MNX.MonitoringCenter.Management.Core;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
@@ -31,13 +32,14 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<Cryptocurrency>), 200)]
     public IAsyncEnumerable<Cryptocurrency> GetAll()
     {
-        return _mediator.CreateStream(new GetCryptocurrenciesQuery());
+        var userId = 1;
+        return _mediator.CreateStream(new GetCryptocurrenciesQuery(userId));
     }
 
     /// <summary>
     /// Добавить криптовалюту
     /// </summary>
-    /// <param name="request"> Команда добавления криптовалюты </param>
+    /// <param name="model"> Входная модель криптовалюты </param>
     /// <response code="201"> Успешно </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден алгоритм с указанным названием
@@ -45,9 +47,10 @@ public class CryptocurrencyController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Cryptocurrency), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Add(AddCryptocurrencyCommand request)
+    public async Task<IActionResult> Add(CryptocurrencyInputModel model)
     {
-        var result = await _mediator.Send(request);
+        var userId = 1;
+        var result = await _mediator.Send(new AddCryptocurrencyCommand(model, userId));
         return result.ToActionResult();
     }
 
@@ -62,7 +65,8 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await _mediator.Send(new RemoveCryptocurrencyCommand(id));
+        var userId = 1;
+        var result = await _mediator.Send(new RemoveCryptocurrencyCommand(id, userId));
         return result.ToActionResult();
     }
 }

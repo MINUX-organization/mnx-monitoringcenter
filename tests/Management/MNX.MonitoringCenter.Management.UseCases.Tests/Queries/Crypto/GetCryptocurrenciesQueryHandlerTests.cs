@@ -1,6 +1,7 @@
 ﻿using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
+using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Crypto;
@@ -29,12 +30,12 @@ public class GetCryptocurrenciesQueryHandlerTests
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
 
         cryptoRepository
-            .Setup(x => x.GetAll())
+            .Setup(x => x.GetAllAvailable(TestHelper.Cryptocurrency.UserId))
             .Returns(cryptocurrencies.ToAsyncEnumerable());
 
         var handler = new GetCryptocurrenciesQueryHandler(cryptoRepository.Object);
 
-        var query = new GetCryptocurrenciesQuery();
+        var query = new GetCryptocurrenciesQuery(TestHelper.Cryptocurrency.UserId);
 
         var result = await handler.Handle(query, default).ToListAsync();
 

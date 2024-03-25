@@ -19,9 +19,15 @@ public class EditWalletCommand : IRequest<Result<WalletModel>>
     /// </summary>
     public WalletInputModel Model { get; }
 
-    public EditWalletCommand(Guid id, WalletInputModel model)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
+
+    public EditWalletCommand(Guid id, WalletInputModel model, long userId)
     {
         Id = id;
         Model = model;
+        UserId = userId;
     }
 }

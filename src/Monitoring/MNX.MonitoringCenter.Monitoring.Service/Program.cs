@@ -27,7 +27,6 @@ namespace MNX.MonitoringCenter.Monitoring.Service
 
             app.UseAuthorization();
 
-
             app.MapControllers();
 
             app.Run();

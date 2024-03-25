@@ -3,6 +3,7 @@ using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetWalletsQuery;
+using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets
@@ -48,7 +49,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets
             };
 
             var walletRepository = new Mock<IWalletRepository>();
-            walletRepository.Setup(x => x.GetAll()).Returns(walletsList.ToAsyncEnumerable);
+            walletRepository.Setup(x => x.GetAllAvailable(TestHelper.Cryptocurrency.UserId))
+                .Returns(walletsList.ToAsyncEnumerable);
 
             var mapper = new Mock<IMapper>();
             mapper.Setup(x => x.Map<WalletModel>(It.IsAny<Wallet>()))
@@ -63,7 +65,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets
             var handler = new GetWalletsQueryHandler(walletRepository.Object, mapper.Object);
 
             // Act
-            var result = await handler.Handle(new GetWalletsQuery(), default).ToListAsync();
+            var result = await handler.Handle
+                (new GetWalletsQuery(TestHelper.Cryptocurrency.UserId), default).ToListAsync();
 
             // Assert
             Assert.Multiple(() =>

@@ -5,4 +5,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQu
 
 public class GetCryptocurrenciesQuery : IStreamRequest<Cryptocurrency>
 {
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
+
+    public GetCryptocurrenciesQuery(long userId)
+    {
+        UserId = userId;
+    }
 }

@@ -28,13 +28,12 @@ public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Resul
 
     public async Task<Result<Guid>> Handle(SavePresetCommand request, CancellationToken cancellationToken)
     {
-        if (! await _monitoringClient.GpuExists(request.GpuName))
+        if (! await _monitoringClient.GpuExists(request.UserId, request.SavePresetModel.GpuName))
         {
             return Result<Guid>.Invalid("GPU with this name wasn`t found");
         }
 
-        var preset = _mapper.Map<Preset>(request.Model);
-        preset.GpuName = request.GpuName;
+        var preset = _mapper.Map<Preset>(request);
         var id = await _presetRepository.Save(preset);
         return Result<Guid>.SuccessfullyCreated(id);
     }

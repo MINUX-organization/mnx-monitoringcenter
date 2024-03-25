@@ -39,4 +39,9 @@ public class Preset
     /// Название GPU
     /// </summary>
     public string GpuName { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
 }

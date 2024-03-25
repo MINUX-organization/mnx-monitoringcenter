@@ -16,6 +16,7 @@ public class AddPoolCommandHandlerTests
 
     private static readonly Guid _poolId = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b");
 
+
     [SetUp]
     public void Setup()
     {
@@ -28,14 +29,14 @@ public class AddPoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
+        poolRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<int>()))
                       .ReturnsAsync(false);
 
         poolRepository.Setup(x => x.Add(It.IsAny<Pool>()))
                       .ReturnsAsync(_poolId);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-        cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        cryptoRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                         .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new AddPoolCommandHandler(poolRepository.Object,
@@ -67,7 +68,7 @@ public class AddPoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
+        poolRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<int>()))
                       .ReturnsAsync(true);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
@@ -101,11 +102,11 @@ public class AddPoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
+        poolRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<int>()))
                       .ReturnsAsync(false);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-        cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        cryptoRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                         .ReturnsAsync(null as Cryptocurrency);
 
         var handler = new AddPoolCommandHandler(poolRepository.Object,
@@ -133,7 +134,9 @@ public class AddPoolCommandHandlerTests
 
     private static AddPoolCommand GetCommand()
     {
-        return new AddPoolCommand(new PoolInputModel("domain", 8000, TestHelper.Cryptocurrency.Id));
+        return new AddPoolCommand
+            (new PoolInputModel("domain", 8000, TestHelper.Cryptocurrency.Id, TestHelper.UserId), 
+            TestHelper.Cryptocurrency.UserId);
     }
 
     private static PoolModel GetPoolModel()

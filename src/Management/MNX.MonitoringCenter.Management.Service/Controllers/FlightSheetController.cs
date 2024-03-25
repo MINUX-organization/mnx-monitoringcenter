@@ -19,7 +19,8 @@ public class FlightSheetController : ControllerBase
     [HttpGet]
     public IAsyncEnumerable<FlightSheet> GetAll()
     {
-        return _mediator.CreateStream(new GetFlightSheetsQuery());
+        var userId = 1;
+        return _mediator.CreateStream(new GetFlightSheetsQuery(userId));
     }
 
     [HttpPost]

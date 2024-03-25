@@ -1,7 +1,7 @@
 ﻿using Kernel.UseCases;
 using MediatR;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Commands.CreateCryptocurrencyCommand;
+namespace MNX.MonitoringCenter.Management.UseCases.Commands.FlightSheets.AddFlightSheetCommand;
 
 /// <summary>
 /// Команда добавления полётного листа
@@ -32,4 +32,9 @@ public class AddFlightSheetCommand : IRequest<Result<Unit>>
     /// Адрес пула в формате: host:port
     /// </summary>
     public string PoolAddress { get; }
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; }
 }

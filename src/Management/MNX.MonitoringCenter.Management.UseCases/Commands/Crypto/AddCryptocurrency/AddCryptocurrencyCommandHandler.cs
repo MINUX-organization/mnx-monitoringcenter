@@ -28,17 +28,18 @@ public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrency
 
     public async Task<Result<Cryptocurrency>> Handle(AddCryptocurrencyCommand request, CancellationToken cancellationToken)
     {
-        if (await _cryptocurrencyRepository.Exists(request.FullName, request.ShortName))
+        if (await _cryptocurrencyRepository.Exists(request.UserId, request.Model.FullName, request.Model.ShortName))
         {
             return Result<Cryptocurrency>.Conflict("Cryptocurrency already exists");
         }
 
-        if (!await _algorithmRepository.Exists(request.Algorithm))
+        if (!await _algorithmRepository.Exists(request.Model.Algorithm))
         {
             return Result<Cryptocurrency>.Invalid("Algorithm wasn't found");
         }
 
-        var cryptocurrency = _mapper.Map<Cryptocurrency>(request);
+        var cryptocurrency = _mapper.Map<Cryptocurrency>(request.Model);
+        cryptocurrency.UserId = request.UserId;
         await _cryptocurrencyRepository.Add(cryptocurrency);
 
         return Result<Cryptocurrency>.SuccessfullyCreated(cryptocurrency);

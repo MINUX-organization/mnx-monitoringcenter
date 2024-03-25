@@ -15,7 +15,7 @@ public class RemovePoolCommandHandlerTests
         //Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Pool());
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId)).ReturnsAsync(new Pool());
 
         poolRepository.Setup(x => x.Remove(It.IsAny<Pool>()));
 
@@ -33,7 +33,7 @@ public class RemovePoolCommandHandlerTests
                 "Статус результата не 204");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Remove(It.IsAny<Pool>()), Times.Once);
     }
 
@@ -42,7 +42,7 @@ public class RemovePoolCommandHandlerTests
     {
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Pool);
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId)).ReturnsAsync(null as Pool);
 
         var handler = new RemovePoolCommandHandler(poolRepository.Object);
 
@@ -60,12 +60,12 @@ public class RemovePoolCommandHandlerTests
                 "Сообщение об ошибке отличается от ожидаемого");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Remove(It.IsAny<Pool>()), Times.Never);
     }
 
     private static RemovePoolCommand GetCommand()
     {
-        return new RemovePoolCommand(It.IsAny<Guid>());
+        return new RemovePoolCommand(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId);
     }
 }
