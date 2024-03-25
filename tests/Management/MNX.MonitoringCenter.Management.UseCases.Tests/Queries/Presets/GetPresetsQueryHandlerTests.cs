@@ -1,6 +1,7 @@
 ﻿using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
+using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Presets;
@@ -49,13 +50,14 @@ public class GetPresetsQueryHandlerTests
 
         var presetRepository = new Mock<IPresetRepository>();
         presetRepository
-            .Setup(x => x.GetPresets("GeForce GTX 1660 Super"))
+            .Setup(x => x.GetAllAvailable("GeForce GTX 1660 Super", TestHelper.Cryptocurrency.UserId))
             .Returns(presets.ToAsyncEnumerable());
 
         var handler = new GetPresetsQueryHandler(
             presetRepository.Object);
 
-        var query = new GetPresetsQuery("GeForce GTX 1660 Super");
+        var query = new GetPresetsQuery("GeForce GTX 1660 Super", 
+                                        TestHelper.Cryptocurrency.UserId);
 
         var result = await handler.Handle(query, default).ToListAsync();
 

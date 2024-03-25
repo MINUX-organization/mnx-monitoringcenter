@@ -39,7 +39,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.SavePr
             Guid id = Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000");
 
             _monitoringClient
-                .Setup(x => x.GpuExists(It.IsAny<string>()))
+                .Setup(x => x.GpuExists(TestHelper.UserId, It.IsAny<string>()))
                 .ReturnsAsync(true);
 
             _presetRepository
@@ -47,7 +47,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.SavePr
                 .ReturnsAsync(id);
 
             _mapper
-                .Setup(x => x.Map<Preset>(It.IsAny<PresetModel>()))
+                .Setup(x => x.Map<Preset>(It.IsAny<PresetInputModel>()))
                 .Returns(new Preset());
 
             var result = await _handler.Handle(GetCommand(), default);
@@ -64,7 +64,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.SavePr
         public async Task SavePreset_WhenGpuDoesNotExist()
         {
             _monitoringClient
-                .Setup(x => x.GpuExists(It.IsAny<string>()))
+                .Setup(x => x.GpuExists(TestHelper.UserId, It.IsAny<string>()))
                 .ReturnsAsync(false);
 
             var result = await _handler.Handle(GetCommand(), default);
@@ -82,18 +82,20 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.SavePr
 
         private static SavePresetCommand GetCommand()
         {
-            var name = "GeForce RTX 4090";
+            var gpuName = "GeForce RTX 4090";
             var memoryClock = 1313;
             var coreClock = 2235;
             var powerLimit = 450;
             var criticalTemperature = 105;
             var fanSpeed = 99;
-
-            var presetModel = new PresetModel(
+            
+            var presetModel = new PresetInputModel(
                 memoryClock, coreClock, powerLimit,
                 criticalTemperature, fanSpeed);
 
-            return new SavePresetCommand(name, presetModel);
+            var savePresetInputModel = new SavePresetInputModel(gpuName, presetModel);
+
+            return new SavePresetCommand(TestHelper.UserId, savePresetInputModel);
         }
     }
 }

@@ -14,8 +14,14 @@ public class AddWalletCommand : IRequest<Result<WalletModel>>
     /// </summary>
     public WalletInputModel Model { get; }
 
-    public AddWalletCommand(WalletInputModel model)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
+
+    public AddWalletCommand(WalletInputModel model, long userId)
     {
         Model = model;
+        UserId = userId;
     }
 }

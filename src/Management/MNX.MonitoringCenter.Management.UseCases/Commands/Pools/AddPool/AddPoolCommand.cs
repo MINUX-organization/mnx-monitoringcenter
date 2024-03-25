@@ -14,8 +14,14 @@ public class AddPoolCommand : IRequest<Result<PoolModel>>
     /// </summary>
     public PoolInputModel Model { get; }
 
-    public AddPoolCommand(PoolInputModel model)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; }
+
+    public AddPoolCommand(PoolInputModel model, long userId)
     {
         Model = model;
+        UserId = userId;
     }
 }

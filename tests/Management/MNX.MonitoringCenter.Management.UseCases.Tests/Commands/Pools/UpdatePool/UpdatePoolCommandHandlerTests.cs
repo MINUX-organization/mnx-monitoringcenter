@@ -27,16 +27,16 @@ public class UpdatePoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId))
                       .ReturnsAsync(GetPool());
 
-        poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
+        poolRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<int>()))
                       .ReturnsAsync(false);
 
         poolRepository.Setup(x => x.Update(It.IsAny<Pool>()));
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-        cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        cryptoRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                         .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
@@ -58,7 +58,7 @@ public class UpdatePoolCommandHandlerTests
                    "Результат не соответствует ожиданию");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Once);
     }
 
@@ -68,7 +68,8 @@ public class UpdatePoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Pool);
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId))
+            .ReturnsAsync(null as Pool);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
 
@@ -92,7 +93,7 @@ public class UpdatePoolCommandHandlerTests
                  "Сообщение об ошибке отличается от ожидаемого");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
@@ -103,13 +104,13 @@ public class UpdatePoolCommandHandlerTests
 
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(GetPool());
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId)).ReturnsAsync(GetPool());
 
-        poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
+        poolRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<int>()))
                       .ReturnsAsync(false);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-        cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        cryptoRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                         .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
@@ -135,7 +136,7 @@ public class UpdatePoolCommandHandlerTests
                    "Результат не соответствует ожиданию");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
@@ -145,10 +146,10 @@ public class UpdatePoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId))
                       .ReturnsAsync(GetPool());
 
-        poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
+        poolRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<int>()))
                       .ReturnsAsync(true);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
@@ -173,7 +174,7 @@ public class UpdatePoolCommandHandlerTests
                 "Статус результата не 400");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
@@ -183,14 +184,14 @@ public class UpdatePoolCommandHandlerTests
         // Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId))
                       .ReturnsAsync(GetPool());
 
-        poolRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<int>()))
+        poolRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<int>()))
                     .ReturnsAsync(false);
 
         var cryptoRepository = new Mock<ICryptocurrencyRepository>();
-        cryptoRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        cryptoRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                         .ReturnsAsync(null as Cryptocurrency);
 
         var handler = new UpdatePoolCommandHandler(poolRepository.Object,
@@ -213,13 +214,14 @@ public class UpdatePoolCommandHandlerTests
                 "Статус результата не 400");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Update(It.IsAny<Pool>()), Times.Never);
     }
 
     private static UpdatePoolCommand GetCommand(string domain, int port, Guid cryptoId)
     {
-        return new UpdatePoolCommand(_poolId, new PoolInputModel(domain, port, cryptoId));
+        return new UpdatePoolCommand(_poolId, new PoolInputModel(domain, port, cryptoId,TestHelper.UserId), 
+            TestHelper.Cryptocurrency.UserId);
     }
 
     private static Pool GetPool()

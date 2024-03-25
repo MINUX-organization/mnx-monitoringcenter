@@ -17,37 +17,41 @@ public class WalletRepository : IWalletRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Wallet> GetAll()
+    public IAsyncEnumerable<Wallet> GetAllAvailable(long userId)
     {
         return _context.Wallets.Include(x => x.Cryptocurrency)
+                               .Where(x => x.UserId == userId)
                                .AsNoTracking()
                                .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public async Task<Wallet?> GetById(Guid Id)
+    public async Task<Wallet?> GetAvailableById(Guid Id, long userId)
     {
         return await _context.Wallets
                              .Include(x => x.Cryptocurrency)
                              .AsNoTracking()
+                             .Where(x => x.UserId == userId)
                              .FirstOrDefaultAsync(x => x.Id == Id)
                              .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task<bool> Exists(string name, string address)
+    public async Task<bool> Exists(long userId, string name, string address)
     {
         return await _context.Wallets
                              .AsNoTracking()
+                             .Where(x => x.UserId == userId)
                              .AnyAsync(x => x.Name == name || x.Address == address)
                              .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task<bool> Exists(string name, string address, Guid exceptId)
+    public async Task<bool> Exists(long userId, string name, string address, Guid exceptId)
     {
         return await _context.Wallets
                              .AsNoTracking()
+                             .Where(x => x.UserId == userId)
                              .AnyAsync(x => (x.Name == name || x.Address == address) && x.Id != exceptId)
                              .ConfigureAwait(false);
     }

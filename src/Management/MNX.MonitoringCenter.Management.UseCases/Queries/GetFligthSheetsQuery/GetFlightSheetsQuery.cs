@@ -5,4 +5,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQu
 
 public class GetFlightSheetsQuery : IStreamRequest<FlightSheet>
 {
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
+
+    public GetFlightSheetsQuery(long userId)
+    {
+        UserId = userId;
+    }
 }

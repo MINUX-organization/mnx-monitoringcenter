@@ -15,7 +15,7 @@ public class RemoveWalletCommandHandlerTests
         //Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        walletRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                         .ReturnsAsync(new Wallet());
 
         walletRepository.Setup(x => x.Remove(It.IsAny<Wallet>()));
@@ -35,7 +35,7 @@ public class RemoveWalletCommandHandlerTests
                 "Статус результата не 204");
         });
 
-        walletRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        walletRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once);
         walletRepository.Verify(x => x.Remove(It.IsAny<Wallet>()), Times.Once);
     }
 
@@ -45,7 +45,8 @@ public class RemoveWalletCommandHandlerTests
         // Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Wallet);
+        walletRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
+            .ReturnsAsync(null as Wallet);
 
         var handler = new RemoveWalletCommandHandler(walletRepository.Object);
 
@@ -65,12 +66,13 @@ public class RemoveWalletCommandHandlerTests
                 "Сообщение об ошибке отличается от ожидаемого");
         });
 
-        walletRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        walletRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once);
         walletRepository.Verify(x => x.Remove(It.IsAny<Wallet>()), Times.Never);
     }
 
     private static RemoveWalletCommand GetCommand()
     {
-        return new RemoveWalletCommand(It.IsAny<Guid>());
+        return new RemoveWalletCommand(It.IsAny<Guid>(), 
+            TestHelper.Cryptocurrency.UserId);
     }
 }

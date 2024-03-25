@@ -29,7 +29,7 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
 
     public async Task<Result<PoolModel>> Handle(UpdatePoolCommand request, CancellationToken cancellationToken)
     {
-        var pool = await _poolRepository.GetById(request.Id);
+        var pool = await _poolRepository.GetAvailableById(request.Id, request.UserId);
 
         if (pool == null)
         {
@@ -41,20 +41,20 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
             return Result<PoolModel>.Success(_mapper.Map<PoolModel>(pool));
         }
 
-        if (await _poolRepository.Exists(request.Model.Domain, request.Model.Port))
+        if (await _poolRepository.Exists(request.UserId, request.Model.Domain, request.Model.Port))
         {
             return Result<PoolModel>.Invalid("Pool already exists");
         }
 
-        var cryptocurrency = await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId);
+        var cryptocurrency = await _cryptocurrencyRepository
+            .GetAvailableById(request.Model.CryptocurrencyId, request.UserId);
 
         if (cryptocurrency is null)
         {
             return Result<PoolModel>.Invalid("Cryptocurrency wasn't found");
         }
 
-        var newPool = _mapper.Map<Pool>(request.Model);
-        newPool.Id = request.Id;
+        var newPool = _mapper.Map<Pool>(request);
         await _poolRepository.Update(newPool).ConfigureAwait(false);
         newPool.Cryptocurrency = cryptocurrency;
 

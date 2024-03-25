@@ -4,6 +4,7 @@ using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
 using Moq;
 using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Pools;
 
@@ -48,7 +49,8 @@ public class GetPoolsQueryHandlerTests
     };
 
         var poolRepository = new Mock<IPoolRepository>();
-        poolRepository.Setup(x => x.GetAll()).Returns(poolsList.ToAsyncEnumerable);
+        poolRepository.Setup(x => x.GetAllAvailable(TestHelper.Cryptocurrency.UserId))
+            .Returns(poolsList.ToAsyncEnumerable);
 
         var mapper = new Mock<IMapper>();
         mapper.Setup(x => x.Map<PoolModel>(It.IsAny<Pool>()))
@@ -63,7 +65,8 @@ public class GetPoolsQueryHandlerTests
         var handler = new GetPoolsQueryHandler(poolRepository.Object, mapper.Object);
 
         // Act
-        var result = await handler.Handle(new GetPoolsQuery(), default).ToListAsync();
+        var result = await handler.Handle
+            (new GetPoolsQuery(TestHelper.Cryptocurrency.UserId), default).ToListAsync();
 
         // Assert
         Assert.Multiple(() =>

@@ -33,13 +33,14 @@ public class WalletController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<WalletModel>), 200)]
     public IAsyncEnumerable<WalletModel> GetAll()
     {
-        return _mediator.CreateStream(new GetWalletsQuery());
+        var userId = 1;
+        return _mediator.CreateStream(new GetWalletsQuery(userId));
     }
 
     /// <summary>
     /// Добавить кошелёк
     /// </summary>
-    /// <param name="model"> Модель кошелька </param>
+    /// <param name="model"> Входная модель кошелька </param>
     /// <returns> Результат выполнения операции </returns>
     /// <response code="201"> Успешно </response>
     /// <response code="400">
@@ -50,7 +51,8 @@ public class WalletController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(WalletInputModel model)
     {
-        var result = await _mediator.Send(new AddWalletCommand(model));
+        var userId = 1;
+        var result = await _mediator.Send(new AddWalletCommand(model, userId));
         return result.ToActionResult();
     }
 
@@ -58,7 +60,7 @@ public class WalletController : ControllerBase
     /// Редактировать кошелёк
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
-    /// <param name="model"> Модель кошелька </param>
+    /// <param name="model"> Входная модель кошелька </param>
     /// <returns> Результат выполенениия операции </returns>
     /// <response code="200"> Успешно </response>
     /// <response code="400">
@@ -69,7 +71,8 @@ public class WalletController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Edit(Guid id, WalletInputModel model)
     {
-        var result = await _mediator.Send(new EditWalletCommand(id, model));
+        var userId = 1;
+        var result = await _mediator.Send(new EditWalletCommand(id, model, userId));
         return result.ToActionResult();
     }
 
@@ -85,7 +88,8 @@ public class WalletController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await _mediator.Send(new RemoveWalletCommand(id));
+        var userId = 1;
+        var result = await _mediator.Send(new RemoveWalletCommand(id, userId));
         return result.ToActionResult();
     }
 }

@@ -16,11 +16,17 @@ public class UpdatePresetCommand : IValidateableCommand<Unit>
     /// <summary>
     /// Модель пресета
     /// </summary>
-    public PresetModel Model { get; }
+    public PresetInputModel Model { get; }
 
-    public UpdatePresetCommand(Guid id, PresetModel model)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; }
+
+    public UpdatePresetCommand(Guid id, PresetInputModel model, long userId)
     {
         Id = id;
         Model = model;
+        UserId = userId;
     }
 }

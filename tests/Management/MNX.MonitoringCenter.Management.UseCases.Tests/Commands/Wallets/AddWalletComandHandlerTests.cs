@@ -26,14 +26,14 @@ public class AddWalletComandHandlerTests
         // Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
+        walletRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
 
         walletRepository.Setup(x => x.Add(It.IsAny<Wallet>()))
                         .ReturnsAsync(Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429b"));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        cryptocurrencyRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId))
                                 .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new AddWalletCommandHandler(walletRepository.Object,
@@ -66,11 +66,11 @@ public class AddWalletComandHandlerTests
         // Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
+        walletRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(true);
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        cryptocurrencyRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                                 .ReturnsAsync(TestHelper.Cryptocurrency);
 
         var handler = new AddWalletCommandHandler(walletRepository.Object,
@@ -101,13 +101,13 @@ public class AddWalletComandHandlerTests
         // Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
+        walletRepository.Setup(x => x.Exists(TestHelper.UserId, It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(false);
 
         walletRepository.Setup(x => x.Add(It.IsAny<Wallet>()));
 
         var cryptocurrencyRepository = new Mock<ICryptocurrencyRepository>();
 
-        cryptocurrencyRepository.Setup(x => x.GetById(It.IsAny<Guid>()))
+        cryptocurrencyRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                                 .ReturnsAsync(null as Cryptocurrency);
 
         var handler = new AddWalletCommandHandler(walletRepository.Object,
@@ -134,7 +134,10 @@ public class AddWalletComandHandlerTests
 
     private static AddWalletCommand GetCommand()
     {
-        return new AddWalletCommand(new WalletInputModel("Wallet", "Address", Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")));
+        return new AddWalletCommand
+            (new WalletInputModel("Wallet", "Address", 
+            Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")), 
+            TestHelper.Cryptocurrency.UserId);
     }
 
     private static WalletModel GetWalletModel()

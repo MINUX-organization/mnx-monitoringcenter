@@ -18,7 +18,7 @@ public class RemovePoolCommandHandler : IRequestHandler<RemovePoolCommand, Resul
 
     public async Task<Result<Unit>> Handle(RemovePoolCommand request, CancellationToken cancellationToken)
     {
-        var pool = await _repository.GetById(request.Id);
+        var pool = await _repository.GetAvailableById(request.Id, request.UserId);
 
         if (pool == null)
         {

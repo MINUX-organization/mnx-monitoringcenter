@@ -24,4 +24,9 @@ public class Cryptocurrency
     /// Алгоритм
     /// </summary>
     public string Algorithm { get; set; }
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
 }

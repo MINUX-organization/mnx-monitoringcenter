@@ -15,6 +15,6 @@ public class GetCryptocurrenciesQueryHandler : IStreamRequestHandler<GetCryptocu
 
     public IAsyncEnumerable<Cryptocurrency> Handle(GetCryptocurrenciesQuery request, CancellationToken cancellationToken)
     {
-        return _repository.GetAll();
+        return _repository.GetAllAvailable(request.UserId);
     }
 }

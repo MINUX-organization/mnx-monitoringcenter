@@ -17,28 +17,31 @@ public class PoolRepository : IPoolRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Pool> GetAll()
+    public IAsyncEnumerable<Pool> GetAllAvailable(long userId)
     {
         return _context.Pools.Include(x => x.Cryptocurrency)
+                             .Where(x => x.UserId == userId)
                              .AsNoTracking()
                              .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public async Task<Pool?> GetById(Guid id)
+    public async Task<Pool?> GetAvailableById(Guid id, long userId)
     {
         return await _context.Pools
                              .Include(x => x.Cryptocurrency)
                              .AsNoTracking()
+                             .Where(x => x.UserId == userId)
                              .FirstOrDefaultAsync(x => x.Id == id)
                              .ConfigureAwait(false);
     }
 
     /// <inheritdoc/>
-    public async Task<bool> Exists(string domain, int port)
+    public async Task<bool> Exists(long userId, string domain, int port)
     {
         return await _context.Pools
                              .AsNoTracking()
+                             .Where(x => x.UserId == userId)
                              .AnyAsync(x => x.Domain == domain && x.Port == port)
                              .ConfigureAwait(false);
     }

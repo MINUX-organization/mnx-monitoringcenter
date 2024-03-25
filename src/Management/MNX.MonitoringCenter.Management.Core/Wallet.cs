@@ -29,4 +29,9 @@ public class Wallet
     /// Криптовалюта
     /// </summary>
     public Cryptocurrency? Cryptocurrency { get; set; }
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
 }

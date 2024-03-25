@@ -5,7 +5,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 /// <summary>
 /// Валидатор модели пресета
 /// </summary>
-public class PresetModelValidator : AbstractValidator<PresetModel>
+public class PresetModelValidator : AbstractValidator<PresetInputModel>
 {
     public PresetModelValidator()
     {

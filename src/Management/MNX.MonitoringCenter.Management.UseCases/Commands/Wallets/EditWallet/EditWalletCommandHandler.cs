@@ -29,9 +29,9 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
 
     public async Task<Result<WalletModel>> Handle(EditWalletCommand request, CancellationToken cancellationToken)
     {
-        var wallet = await _walletRepository.GetById(request.Id);
+        var wallet = await _walletRepository.GetAvailableById(request.Id, request.UserId);
 
-        // TODO: утвердить валидацию исходя из бизнес тербований
+        // TODO: утвердить валидацию исходя из бизнес требований
 
         if (wallet == null)
         {
@@ -43,20 +43,20 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
             return Result<WalletModel>.Success(_mapper.Map<WalletModel>(wallet));
         }
 
-        if (await _walletRepository.Exists(request.Model.Name, request.Model.Address, request.Id))
+        if (await _walletRepository.Exists(request.UserId, request.Model.Name, request.Model.Address, request.Id))
         {
             return Result<WalletModel>.Invalid("Wallet with this name or address already exists");
         }
 
-        var cryptocurency = await _cryptocurrencyRepository.GetById(request.Model.CryptocurrencyId);
+        var cryptocurency = await _cryptocurrencyRepository
+            .GetAvailableById(request.Model.CryptocurrencyId, request.UserId);
 
         if (cryptocurency is null)
         {
             return Result<WalletModel>.Invalid("Cryptocurrency wasn't found");
         }
 
-        var newWallet = _mapper.Map<Wallet>(request.Model);
-        newWallet.Id = request.Id;
+        var newWallet = _mapper.Map<Wallet>(request);
         await _walletRepository.Update(newWallet).ConfigureAwait(false);
         newWallet.Cryptocurrency = cryptocurency;
 

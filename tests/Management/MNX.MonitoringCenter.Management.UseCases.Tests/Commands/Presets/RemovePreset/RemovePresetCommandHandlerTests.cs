@@ -37,13 +37,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Remove
             };
 
             _presetRepository
-                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                 .ReturnsAsync(preset);
 
             var result = await _handler.Handle(GetCommand(), default);
 
             _presetRepository
-                .Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once());
+                .Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once());
             _presetRepository
                 .Verify(x => x.Remove(preset), Times.Once());
 
@@ -56,13 +56,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Remove
         public async Task RemovePreset_WhenPresetDoesNotExist_ReturnsError()
         {
             _presetRepository
-                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
                 .ReturnsAsync(null as Preset);
 
             var result = await _handler.Handle(GetCommand(), default);
 
             _presetRepository
-                .Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once());
+                .Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once());
 
             Assert.NotNull(result);
             Assert.IsFalse(result.IsSuccess);
@@ -75,7 +75,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Remove
         private static RemovePresetCommand GetCommand()
         {
             return new RemovePresetCommand(
-                Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000"));
+                Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000"), 
+                TestHelper.Cryptocurrency.UserId);
         }
     }
 }

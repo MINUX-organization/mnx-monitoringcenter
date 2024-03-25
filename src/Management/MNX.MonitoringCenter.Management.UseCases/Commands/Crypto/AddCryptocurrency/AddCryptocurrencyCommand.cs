@@ -10,24 +10,18 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurr
 public class AddCryptocurrencyCommand : IRequest<Result<Cryptocurrency>>
 {
     /// <summary>
-    /// Короткое название
+    /// Входная модель крипты.
     /// </summary>
-    public string ShortName { get; }
+    public CryptocurrencyInputModel Model { get; }
 
     /// <summary>
-    /// Полное название
+    /// Идентификатор пользователя.
     /// </summary>
-    public string FullName { get; }
+    public long UserId { get; }
 
-    /// <summary>
-    /// Используемый алгоритм
-    /// </summary>
-    public string Algorithm { get; }
-
-    public AddCryptocurrencyCommand(string shortName, string fullName, string algorithm)
+    public AddCryptocurrencyCommand(CryptocurrencyInputModel model, long userId)
     {
-        ShortName = shortName;
-        FullName = fullName;
-        Algorithm = algorithm;
+        Model = model;
+        UserId = userId;
     }
 }

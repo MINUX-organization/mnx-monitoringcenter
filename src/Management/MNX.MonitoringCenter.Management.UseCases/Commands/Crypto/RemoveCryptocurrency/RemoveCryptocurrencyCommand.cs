@@ -13,8 +13,14 @@ public class RemoveCryptocurrencyCommand : IRequest<Result<Unit>>
     /// </summary>
     public Guid Id { get; }
 
-    public RemoveCryptocurrencyCommand(Guid id)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
+
+    public RemoveCryptocurrencyCommand(Guid id, long userId)
     {
         Id = id;
+        UserId = userId;
     }
 }

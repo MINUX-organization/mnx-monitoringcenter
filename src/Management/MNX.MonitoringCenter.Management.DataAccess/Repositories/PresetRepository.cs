@@ -13,12 +13,13 @@ public class PresetRepository : IPresetRepository
         _context = context;
     }
 
-    public IAsyncEnumerable<Preset> GetPresets(string? gpuName)
+    public IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, long userId)
     {
         if (!string.IsNullOrWhiteSpace(gpuName))
         {
             return _context.Presets
                            .Where(x => x.GpuName == gpuName)
+                           .Where(x => x.UserId == userId)
                            .AsNoTracking()
                            .AsAsyncEnumerable();
         }
@@ -26,10 +27,11 @@ public class PresetRepository : IPresetRepository
         return _context.Presets.AsNoTracking().AsAsyncEnumerable();
     }
 
-    public async Task<Preset?> GetById(Guid id)
+    public async Task<Preset?> GetAvailableById(Guid id, long userId)
     {
         return await _context.Presets
                              .AsNoTracking()
+                             .Where(x => x.UserId == userId)
                              .FirstOrDefaultAsync(x => x.Id == id)
                              .ConfigureAwait(false);
     }

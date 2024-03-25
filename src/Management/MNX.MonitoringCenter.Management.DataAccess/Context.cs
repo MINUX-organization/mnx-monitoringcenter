@@ -28,7 +28,11 @@ public class Context : DbContext
     {
         modelBuilder.ApplyConfiguration(new AlgorithmCfg());
         modelBuilder.ApplyConfiguration(new CryptocurrencyCfg());
-        modelBuilder.ApplyConfiguration(new MinerCfg());
+        modelBuilder.ApplyConfiguration(new FlightSheetCfg());
+        modelBuilder.ApplyConfiguration(new MinerCfg());       
+        modelBuilder.ApplyConfiguration(new PoolCfg());
+        modelBuilder.ApplyConfiguration(new PresetCfg());
+        modelBuilder.ApplyConfiguration(new WalletCfg());
 
         modelBuilder.Entity<Algorithm>().HasData(new Algorithm() { Name = "Algorithm" });
         modelBuilder.Entity<Miner>().HasData(new Miner() { Name = "Miner" });

@@ -1,12 +1,12 @@
-﻿using MediatR;
+﻿using Kernel.UseCases;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
-using Kernel.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
-using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -33,13 +33,14 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<PoolModel>), 200)]
     public IAsyncEnumerable<PoolModel> GetAll()
     {
-        return _mediator.CreateStream(new GetPoolsQuery());
+        var userId = 1;
+        return _mediator.CreateStream(new GetPoolsQuery(userId));
     }
 
     /// <summary>
     /// Добавить пул
     /// </summary>
-    /// <param name="request"> Модкль пула </param>
+    /// <param name="model"> Входная модель пула </param>
     /// <returns> Результат выполнения операции </returns>
     /// <response code="201"> Успешно </response>
     /// <response code="400">
@@ -48,9 +49,10 @@ public class PoolController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(PoolModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Add(PoolInputModel request)
+    public async Task<IActionResult> Add(PoolInputModel model)
     {
-        var result = await _mediator.Send(new AddPoolCommand(request));
+        var userId = 1;
+        var result = await _mediator.Send(new AddPoolCommand(model, userId));
         return result.ToActionResult();
     }
 
@@ -58,7 +60,7 @@ public class PoolController : ControllerBase
     /// Обновить пул
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
-    /// <param name="request"> Модель пула </param>
+    /// <param name="model"> Входная модель пула </param>
     /// <returns> Результат выполнения операции </returns>
     /// <response code="200"> Успешно </response>
     /// <response code="400">
@@ -67,9 +69,10 @@ public class PoolController : ControllerBase
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(typeof(PoolModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Update(Guid id, PoolInputModel request)
+    public async Task<IActionResult> Update(Guid id, PoolInputModel model)
     {
-        var result = await _mediator.Send(new UpdatePoolCommand(id, request));
+        var userId = 1;
+        var result = await _mediator.Send(new UpdatePoolCommand(id, model, userId));
         return result.ToActionResult();
     }
 
@@ -85,7 +88,8 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await _mediator.Send(new RemovePoolCommand(id));
+        var userId = 1;
+        var result = await _mediator.Send(new RemovePoolCommand(id, userId));
         return result.ToActionResult();
     }
 }
