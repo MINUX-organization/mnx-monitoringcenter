@@ -11,11 +11,11 @@ public class SavePresetValidator : AbstractValidator<SavePresetCommand>
     {
         RuleFor(x => x.SavePresetModel.GpuName)
             .NotEmpty()
-            .WithMessage("Название GPU не должно быть пустым");
+            .WithMessage("The GPU name must not be empty");
 
         RuleFor(x => x.SavePresetModel.PresetModel)
             .NotNull()
-            .WithMessage("Данные для пресета обязательны")
+            .WithMessage("Preset data is required")
             .SetValidator(x => new PresetModelValidator());
     }
 }

@@ -11,7 +11,7 @@ public class UpdatePresetValidator : AbstractValidator<UpdatePresetCommand>
     {
         RuleFor(x => x.Model)
             .NotNull()
-            .WithMessage("Данные для пресета обязательны")
+            .WithMessage("Preset data is required")
             .SetValidator(x => new PresetModelValidator());
     }
 }
