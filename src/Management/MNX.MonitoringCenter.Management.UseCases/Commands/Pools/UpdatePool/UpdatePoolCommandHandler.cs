@@ -38,7 +38,9 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
 
         if (PoolsIsEquals(pool, request.Model))
         {
-            return Result<PoolModel>.Success(_mapper.Map<PoolModel>(pool));
+            return pool.CryptocurrencyId == request.Model.CryptocurrencyId
+                ? Result<PoolModel>.Success(_mapper.Map<PoolModel>(pool))
+                : Result<PoolModel>.Invalid("You can't change only the cryptocurrency");
         }
 
         if (await _poolRepository.Exists(request.UserId, request.Model.Domain, request.Model.Port))
@@ -63,6 +65,7 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
 
     private static bool PoolsIsEquals(Pool pool, PoolInputModel newPool)
     {
-        return pool.Domain == newPool.Domain && pool.Port == newPool.Port;
+        return pool.Domain == newPool.Domain &&
+               pool.Port == newPool.Port;
     }
 }

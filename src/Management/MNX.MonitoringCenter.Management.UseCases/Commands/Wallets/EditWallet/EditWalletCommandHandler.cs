@@ -31,8 +31,6 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
     {
         var wallet = await _walletRepository.GetAvailableById(request.Id, request.UserId);
 
-        // TODO: утвердить валидацию исходя из бизнес требований
-
         if (wallet == null)
         {
             return Result<WalletModel>.Invalid("Wallet with this Id wasn't found");
@@ -40,7 +38,9 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
 
         if (WalletsIsEquals(wallet, request.Model))
         {
-            return Result<WalletModel>.Success(_mapper.Map<WalletModel>(wallet));
+            return wallet.CryptocurrencyId == request.Model.CryptocurrencyId
+                ? Result<WalletModel>.Success(_mapper.Map<WalletModel>(wallet))
+                : Result<WalletModel>.Invalid("You can't change only the cryptocurrency");
         }
 
         if (await _walletRepository.Exists(request.UserId, request.Model.Name, request.Model.Address, request.Id))
@@ -72,7 +72,6 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
     private static bool WalletsIsEquals(Wallet currentWallet, WalletInputModel newWallet)
     {
         return currentWallet.Name == newWallet.Name &&
-               currentWallet.Address == newWallet.Address &&
-               currentWallet.Cryptocurrency?.Id == newWallet.CryptocurrencyId;
+               currentWallet.Address == newWallet.Address;
     }
 }
