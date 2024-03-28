@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
 /// <summary>
 /// Команда редактирования данных кошелька
 /// </summary>
-public class EditWalletCommand : IRequest<Result<WalletModel>>
+public class EditWalletCommand : IValidateableCommand<WalletModel>
 {
     /// <summary>
     /// Уникальный идентификатор

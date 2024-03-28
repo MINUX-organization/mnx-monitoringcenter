@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 /// <summary>
 /// Команда добавления пула
 /// </summary>
-public class AddPoolCommand : IRequest<Result<PoolModel>>
+public class AddPoolCommand : IValidateableCommand<PoolModel>
 {
     /// <summary>
     /// Модель пула

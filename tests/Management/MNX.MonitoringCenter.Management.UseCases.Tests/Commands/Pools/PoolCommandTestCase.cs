@@ -11,7 +11,7 @@ public static class PoolCommandTestCase
 
     public static IEnumerable<PoolInputModel> CreateIncorrectPoolModel()
     {
-        yield return new PoolInputModel("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
-                                        -1, Guid.NewGuid());
+        yield return new PoolInputModel("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", 
+                                        900000, Guid.NewGuid());
     }
 }

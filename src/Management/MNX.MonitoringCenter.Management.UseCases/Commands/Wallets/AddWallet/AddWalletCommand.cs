@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
 /// <summary>
 /// Команда добавления кошелька
 /// </summary>
-public class AddWalletCommand : IRequest<Result<WalletModel>>
+public class AddWalletCommand : IValidateableCommand<WalletModel>
 {
     /// <summary>
     /// Модель кошелька

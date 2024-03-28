@@ -69,9 +69,6 @@ public class Program
         });
 
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
-        services.AddValidationPipelines(typeof(AddCryptocurrencyValidator).Assembly);
-        services.AddValidationPipelines(typeof(AddPoolValidator).Assembly);
-        services.AddValidationPipelines(typeof(AddWalletValidator).Assembly);
         services.AddHealthChecks();
 
         ConfigureDI(services, builder.Configuration);

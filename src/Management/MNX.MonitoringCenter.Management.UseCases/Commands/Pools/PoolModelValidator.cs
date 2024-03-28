@@ -2,6 +2,9 @@
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 
+/// <summary>
+/// Валидатор модели пула
+/// </summary>
 public class PoolModelValidator : AbstractValidator<PoolInputModel>
 {
     public PoolModelValidator()
@@ -11,7 +14,7 @@ public class PoolModelValidator : AbstractValidator<PoolInputModel>
             .WithMessage("The port must be in the range [0; 65535]");
                     
         RuleFor(x => x.Domain.Length)
-            .NotEmpty()
+            
             .Must(domain => domain <= 40)
             .WithMessage("The length of the domain should be in range of [1; 40] characters");
     }

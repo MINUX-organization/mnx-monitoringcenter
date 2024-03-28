@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
 /// <summary>
 /// Команда обновления пула
 /// </summary>
-public class UpdatePoolCommand : IRequest<Result<PoolModel>>
+public class UpdatePoolCommand : IValidateableCommand<PoolModel>
 {
     /// <summary>
     /// Уникальный идентификатор
