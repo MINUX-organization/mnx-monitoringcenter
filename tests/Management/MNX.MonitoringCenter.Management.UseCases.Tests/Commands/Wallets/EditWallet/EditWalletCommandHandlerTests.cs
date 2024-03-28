@@ -6,7 +6,7 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.Core;
 using Kernel.UseCases;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets;
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.EditWallet;
 
 [TestFixture]
 public class EditWalletCommandHandlerTests
@@ -60,7 +60,7 @@ public class EditWalletCommandHandlerTests
                         result.GetValue().Address == "new_address" &&
                         result.GetValue().Cryptocurrency == TestHelper.Cryptocurrency.FullName,
                 "Результат не совпадает с ожиданием");
-            
+
         });
 
         walletRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
@@ -242,7 +242,7 @@ public class EditWalletCommandHandlerTests
 
     private static EditWalletCommand GetCommand(string name, string address, Guid cryptoId)
     {
-        return new EditWalletCommand(_walletId, new WalletInputModel(name, address, cryptoId), 
+        return new EditWalletCommand(_walletId, new WalletInputModel(name, address, cryptoId),
             TestHelper.Cryptocurrency.UserId);
     }
 

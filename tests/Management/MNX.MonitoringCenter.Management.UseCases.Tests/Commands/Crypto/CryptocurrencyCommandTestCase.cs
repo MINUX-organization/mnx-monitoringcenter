@@ -6,11 +6,11 @@ public static class CryptocurrencyCommandTestCase
 {
     public static IEnumerable<CryptocurrencyInputModel> CreateCorrectInputModel()
     {
-        yield return new CryptocurrencyInputModel("SOL", "Solana", "HrenZnaet");
+        yield return new CryptocurrencyInputModel("SOL", "Solana", "algorithm");
     }
     
     public static IEnumerable<CryptocurrencyInputModel> CreateIncorrectInputModel()
     {
-        yield return new CryptocurrencyInputModel("N", "N", "N");
+        yield return new CryptocurrencyInputModel("N", "N", "algorithm");
     }
 }

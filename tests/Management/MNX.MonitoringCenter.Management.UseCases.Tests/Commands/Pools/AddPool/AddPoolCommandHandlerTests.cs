@@ -135,7 +135,7 @@ public class AddPoolCommandHandlerTests
     private static AddPoolCommand GetCommand()
     {
         return new AddPoolCommand
-            (new PoolInputModel("domain", 8000, TestHelper.Cryptocurrency.Id, TestHelper.UserId), 
+            (new PoolInputModel("domain", 8000, TestHelper.Cryptocurrency.Id), 
             TestHelper.Cryptocurrency.UserId);
     }
 

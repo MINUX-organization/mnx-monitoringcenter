@@ -23,7 +23,7 @@ public class PresetModelValidator : AbstractValidator<PresetInputModel>
 
         RuleFor(x => x.CriticalTemperature)
             .Must(criticalTemperature => 0 <= criticalTemperature && criticalTemperature <= 110)
-            .WithMessage("The value of the critical temperature must not exceed the range [0; 110] gadus Celsius");
+            .WithMessage("The value of the critical temperature must not exceed the range [0; 110] gradus Celsius");
 
         RuleFor(x => x.FanSpeed)
             .Must(fanSpeed => 0 <= fanSpeed && fanSpeed <= 100)

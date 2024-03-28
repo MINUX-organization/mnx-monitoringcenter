@@ -31,7 +31,7 @@ public class AddCryptocurrencyValidatorTests
         var result = _validator.TestValidate(command);
 
         result.ShouldHaveValidationErrorFor(x => x.Model)
-            .WithErrorMessage("Данные для криптовалюты обязательны");
+            .WithErrorMessage("Cryptocurrency data is required");
     }
 
     [TestCaseSource(typeof(CryptocurrencyCommandTestCase),
@@ -63,6 +63,6 @@ public class AddCryptocurrencyValidatorTests
 
     private static CryptocurrencyInputModel CreateCryptocurrencyInputModel()
     {
-        return new CryptocurrencyInputModel("SOL", "Solana", "HrenZnaet");
+        return new CryptocurrencyInputModel("SOL", "Solana", "algorithm");
     }
 }

@@ -31,7 +31,7 @@ public class UpdatePresetValidatorTests
         var result = _validator.TestValidate(command);
 
         result.ShouldHaveValidationErrorFor(x => x.Model)
-              .WithErrorMessage("Данные для пресета обязательны");
+              .WithErrorMessage("Preset data is required");
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
