@@ -220,8 +220,7 @@ public class UpdatePoolCommandHandlerTests
 
     private static UpdatePoolCommand GetCommand(string domain, int port, Guid cryptoId)
     {
-        return new UpdatePoolCommand(_poolId, new PoolInputModel(domain, port, cryptoId,TestHelper.UserId), 
-            TestHelper.Cryptocurrency.UserId);
+        return new UpdatePoolCommand(_poolId, new PoolInputModel(domain, port, cryptoId), TestHelper.UserId);
     }
 
     private static Pool GetPool()

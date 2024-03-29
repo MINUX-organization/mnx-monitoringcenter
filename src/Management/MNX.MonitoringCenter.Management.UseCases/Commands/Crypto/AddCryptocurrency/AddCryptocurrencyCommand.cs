@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurr
 /// <summary>
 /// Команда добавления криптовалюты
 /// </summary>
-public class AddCryptocurrencyCommand : IRequest<Result<Cryptocurrency>>
+public class AddCryptocurrencyCommand : IValidateableCommand<Cryptocurrency>
 {
     /// <summary>
     /// Входная модель крипты.

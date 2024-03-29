@@ -4,7 +4,7 @@ using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.RemoveWallet;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets;
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.RemoveWallet;
 
 [TestFixture]
 public class RemoveWalletCommandHandlerTests
@@ -19,7 +19,7 @@ public class RemoveWalletCommandHandlerTests
                         .ReturnsAsync(new Wallet());
 
         walletRepository.Setup(x => x.Remove(It.IsAny<Wallet>()));
-                            
+
         var handler = new RemoveWalletCommandHandler(walletRepository.Object);
 
         // Act
@@ -72,7 +72,7 @@ public class RemoveWalletCommandHandlerTests
 
     private static RemoveWalletCommand GetCommand()
     {
-        return new RemoveWalletCommand(It.IsAny<Guid>(), 
+        return new RemoveWalletCommand(It.IsAny<Guid>(),
             TestHelper.Cryptocurrency.UserId);
     }
 }

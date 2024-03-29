@@ -20,7 +20,7 @@ public class PoolInputModel
     /// </summary>
     public Guid CryptocurrencyId { get; }
 
-    public PoolInputModel(string domain, int port, Guid cryptocurrencyId, long userId)
+    public PoolInputModel(string domain, int port, Guid cryptocurrencyId)
     {
         Domain = domain;
         Port = port;

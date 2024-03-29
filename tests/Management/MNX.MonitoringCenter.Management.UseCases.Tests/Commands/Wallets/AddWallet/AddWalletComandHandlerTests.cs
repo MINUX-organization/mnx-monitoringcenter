@@ -7,7 +7,7 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets;
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.AddWallet;
 
 [TestFixture]
 public class AddWalletComandHandlerTests
@@ -135,8 +135,8 @@ public class AddWalletComandHandlerTests
     private static AddWalletCommand GetCommand()
     {
         return new AddWalletCommand
-            (new WalletInputModel("Wallet", "Address", 
-            Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")), 
+            (new WalletInputModel("Wallet", "Address",
+            Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a")),
             TestHelper.Cryptocurrency.UserId);
     }
 
