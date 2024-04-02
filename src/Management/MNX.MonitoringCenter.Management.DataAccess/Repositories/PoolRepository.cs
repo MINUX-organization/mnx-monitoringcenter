@@ -4,6 +4,9 @@ using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
+/// <summary>
+/// Реализует <see cref="IPoolRepository"/>
+/// </summary>
 public class PoolRepository : IPoolRepository
 {
     private readonly Context _context;
@@ -13,27 +16,37 @@ public class PoolRepository : IPoolRepository
         _context = context;
     }
 
-    public IAsyncEnumerable<Pool> GetAll()
+    /// <inheritdoc/>
+    public IAsyncEnumerable<Pool> GetAllAvailable(long userId)
     {
-        return _context.Pools.AsNoTracking().AsAsyncEnumerable();
+        return _context.Pools.Include(x => x.Cryptocurrency)
+                             .Where(x => x.UserId == userId)
+                             .AsNoTracking()
+                             .AsAsyncEnumerable();
     }
 
-    public async Task<Pool?> GetById(Guid id)
+    /// <inheritdoc/>
+    public async Task<Pool?> GetAvailableById(Guid id, long userId)
     {
         return await _context.Pools
+                             .Include(x => x.Cryptocurrency)
                              .AsNoTracking()
+                             .Where(x => x.UserId == userId)
                              .FirstOrDefaultAsync(x => x.Id == id)
                              .ConfigureAwait(false);
     }
 
-    public async Task<bool> Exists(string domain, int port)
+    /// <inheritdoc/>
+    public async Task<bool> Exists(long userId, string domain, int port)
     {
         return await _context.Pools
                              .AsNoTracking()
+                             .Where(x => x.UserId == userId)
                              .AnyAsync(x => x.Domain == domain && x.Port == port)
                              .ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public async Task<Guid> Add(Pool pool)
     {
         await _context.Pools.AddAsync(pool).ConfigureAwait(false);
@@ -42,12 +55,14 @@ public class PoolRepository : IPoolRepository
         return pool.Id;
     }
 
+    /// <inheritdoc/>
     public async Task Update(Pool pool)
     {
         _context.Update(pool);
         await _context.SaveChangesAsync().ConfigureAwait(false);
     }
 
+    /// <inheritdoc/>
     public async Task Remove(Pool pool)
     {
         _context.Pools.Remove(pool);

@@ -12,14 +12,14 @@ public interface IPresetRepository
     /// </summary>
     /// <param name="id">  Уникальный идентификатор</param>
     /// <returns> Пресет </returns>
-    public Task<Preset?> GetById(Guid id);
+    public Task<Preset?> GetAvailableById(Guid id, long userId);
 
     /// <summary>
     /// Получить список пресетов
     /// </summary>
     /// <param name="gpuName"> Название GPU </param>
     /// <returns> Пресеты </returns>
-    public IAsyncEnumerable<Preset> GetPresets(string? gpuName);
+    public IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, long userId);
 
     /// <summary>
     /// Сохранить пресет для выбранной 

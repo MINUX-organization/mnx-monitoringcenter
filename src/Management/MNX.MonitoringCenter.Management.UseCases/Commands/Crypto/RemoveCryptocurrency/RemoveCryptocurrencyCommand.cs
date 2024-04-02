@@ -9,12 +9,18 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptoc
 public class RemoveCryptocurrencyCommand : IRequest<Result<Unit>>
 {
     /// <summary>
-    /// Полное название криптовалюты
+    /// Идентификатор криптовалюты
     /// </summary>
-    public string FullName { get; }
+    public Guid Id { get; }
 
-    public RemoveCryptocurrencyCommand(string fullName)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
+
+    public RemoveCryptocurrencyCommand(Guid id, long userId)
     {
-        FullName = fullName;
+        Id = id;
+        UserId = userId;
     }
 }

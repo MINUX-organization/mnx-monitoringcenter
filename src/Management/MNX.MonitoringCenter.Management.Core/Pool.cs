@@ -8,7 +8,7 @@ public class Pool
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; set; }   
 
     /// <summary>
     /// Домен
@@ -21,7 +21,17 @@ public class Pool
     public int Port { get; set; }
 
     /// <summary>
-    /// Полное название криптовалюты
+    /// Идентификатор криптовалюты
     /// </summary>
-    public string Cryptocurrency { get; set; }
+    public Guid CryptocurrencyId { get; set; }
+
+    /// <summary>
+    /// Криптовалюта
+    /// </summary>
+    public Cryptocurrency? Cryptocurrency { get; set; }
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
 }

@@ -13,8 +13,14 @@ public class GetPresetsQuery : IStreamRequest<Preset>
     /// </summary>
     public string? GpuName { get; }
 
-    public GetPresetsQuery(string? gpuName)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
+
+    public GetPresetsQuery(string? gpuName, long userId)
     {
         GpuName = gpuName;
+        UserId = userId;
     }
 }

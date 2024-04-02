@@ -13,8 +13,14 @@ public class RemovePresetCommand : IRequest<Result<Unit>>
     /// </summary>
     public Guid Id { get; }
 
-    public RemovePresetCommand(Guid id)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; }
+
+    public RemovePresetCommand(Guid id, long userId)
     {
         Id = id;
+        UserId = userId;
     }
 }

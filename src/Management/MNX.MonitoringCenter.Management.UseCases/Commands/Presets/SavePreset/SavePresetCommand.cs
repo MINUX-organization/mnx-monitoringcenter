@@ -8,18 +8,18 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 public class SavePresetCommand : IValidateableCommand<Guid>
 {
     /// <summary>
-    /// Название GPU
+    /// Входная модель SavePreset.
     /// </summary>
-    public string GpuName { get; }
-
+    public SavePresetInputModel SavePresetModel { get; }
+    
     /// <summary>
-    /// Модель пресета
+    /// Идентификатор пользователя.
     /// </summary>
-    public PresetModel Model { get; }
+    public long UserId { get; set; }
 
-    public SavePresetCommand(string gpuName, PresetModel model)
+    public SavePresetCommand(long userId, SavePresetInputModel model)
     {
-        GpuName = gpuName;
-        Model = model;
+        UserId = userId;
+        SavePresetModel = model;
     }
 }

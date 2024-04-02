@@ -18,7 +18,7 @@ public class RemoveWalletCommandHandler : IRequestHandler<RemoveWalletCommand, R
 
     public async Task<Result<Unit>> Handle(RemoveWalletCommand request, CancellationToken cancellationToken)
     {
-        var wallet = await _repository.GetById(request.Id);
+        var wallet = await _repository.GetAvailableById(request.Id, request.UserId);
 
         if (wallet == null)
         {

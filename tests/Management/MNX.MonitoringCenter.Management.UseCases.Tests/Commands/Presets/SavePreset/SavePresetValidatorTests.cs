@@ -21,7 +21,7 @@ public class SavePresetValidatorTests
         var command = GetCommand("GeForce RTX 4090");
         var result = _validator.TestValidate(command);
 
-        result.ShouldNotHaveValidationErrorFor(x => x.GpuName);
+        result.ShouldNotHaveValidationErrorFor(x => x.SavePresetModel.GpuName);
     }
 
     [Test]
@@ -30,8 +30,8 @@ public class SavePresetValidatorTests
         var command = GetCommand(string.Empty);
         var result = _validator.TestValidate(command);
 
-        result.ShouldHaveValidationErrorFor(x => x.GpuName)
-            .WithErrorMessage("Название GPU не должно быть пустым");
+        result.ShouldHaveValidationErrorFor(x => x.SavePresetModel.GpuName)
+            .WithErrorMessage("The GPU name must not be empty");
     }
 
     [Test]
@@ -40,52 +40,55 @@ public class SavePresetValidatorTests
         var command = GetCommand("GeForce RTX 4090");
         var result = _validator.TestValidate(command);
 
-        result.ShouldNotHaveValidationErrorFor(x => x.Model);
+        result.ShouldNotHaveValidationErrorFor(x => x.SavePresetModel);
     }
 
     [Test]
     public void SavePresetCommand_WhenModelNull_ShouldErrors()
     {
-        var command = new SavePresetCommand("GeForce RTX 4090", null!);
+        var savePresetInputModel = new SavePresetInputModel(string.Empty, null!);
+        var command = new SavePresetCommand(TestHelper.UserId, savePresetInputModel);
         var result = _validator.TestValidate(command);
 
-        result.ShouldHaveValidationErrorFor(x => x.Model)
-              .WithErrorMessage("Данные для пресета обязательны");
+        result.ShouldHaveValidationErrorFor(x => x.SavePresetModel.PresetModel)
+              .WithErrorMessage("Preset data is required");
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
-                    nameof(PresetCommandTestCase.CreateCorrectPresetModel))]
-    public void SavePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(PresetModel model)
+                    nameof(PresetCommandTestCase.CreateCorrectSavePresetModel))]
+    public void SavePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(SavePresetInputModel model)
     {
-        var command = new SavePresetCommand("GeForce RTX 4090", model);
+        var command = new SavePresetCommand(TestHelper.UserId, model);
 
         PresetValidatorTests.
-            ValidatePresetModel_WhenPresetModelAreValid(command.Model);
+            ValidatePresetModel_WhenPresetModelAreValid(command.SavePresetModel.PresetModel);
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
-                    nameof(PresetCommandTestCase.CreateIncorrectPresetModel))]
-    public void SavePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(PresetModel model)
+                    nameof(PresetCommandTestCase.CreateIncorrectSavePresetModel))]
+    public void SavePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(SavePresetInputModel model)
     {
-        var command = new SavePresetCommand("GeForce RTX 4090", model);
+        var command = new SavePresetCommand(TestHelper.UserId, model);
 
         PresetValidatorTests.
-            ValidatePresetModel_WhenPresetModelAreNotValid(command.Model);
+            ValidatePresetModel_WhenPresetModelAreNotValid(command.SavePresetModel.PresetModel);
     }
 
     private static SavePresetCommand GetCommand(string name)
     {
-        var presetModel = CreatePresetModel();
+        var presetModel = CreateSavePresetInputModel(name);
 
-        return new SavePresetCommand(name, presetModel);
+        return new SavePresetCommand(TestHelper.UserId, presetModel);
     }
 
-    private static PresetModel CreatePresetModel()
+    private static SavePresetInputModel CreateSavePresetInputModel(string name)
     {
-        return new PresetModel(memoryClock: 1313,
+        var presetInputModel = new PresetInputModel(memoryClock: 1313,
                                coreClock: 2235,
                                powerLimit: 150,
                                criticalTemperature: 105,
                                fanSpeed: 99);
+
+        return new SavePresetInputModel(name, presetInputModel);
     }
 }

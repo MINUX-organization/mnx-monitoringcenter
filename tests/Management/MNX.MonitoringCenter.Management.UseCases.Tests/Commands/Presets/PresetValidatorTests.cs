@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets;
 
@@ -8,7 +9,7 @@ public static class PresetValidatorTests
     private static PresetModelValidator? _validator = 
         new PresetModelValidator();
 
-    public static void ValidatePresetModel_WhenPresetModelAreValid(PresetModel model)
+    public static void ValidatePresetModel_WhenPresetModelAreValid(PresetInputModel model)
     {
         var result = _validator.TestValidate(model);
 
@@ -19,31 +20,25 @@ public static class PresetValidatorTests
         result.ShouldNotHaveValidationErrorFor(x => x.FanSpeed);
     }
 
-    public static void ValidatePresetModel_WhenPresetModelAreNotValid(PresetModel model)
+    public static void ValidatePresetModel_WhenPresetModelAreNotValid(PresetInputModel model)
     {
         var result = _validator.TestValidate(model);
 
         result.ShouldNotHaveValidationErrorFor(x => x);
 
         result.ShouldHaveValidationErrorFor(x => x.CoreClock)
-              .WithErrorMessage("Значение тактовой частоты ядра" +
-                    " не должно выходить за диапазон [1000; 5000] Мгц");
+              .WithErrorMessage("The value of the core clock frequency must not exceed the range [1000; 5000] MHz");
 
         result.ShouldHaveValidationErrorFor(x => x.MemoryClock)
-              .WithErrorMessage("Значение тактовой частоты памяти" +
-                    " не должно выходить за диапазон [1000; 5000] Мгц");
+              .WithErrorMessage("The memory clock frequency value must not exceed the range [1000; 5000] MHz");
 
         result.ShouldHaveValidationErrorFor(x => x.PowerLimit)
-              .WithErrorMessage("Значение ограничения мощности не" +
-                    " должно выходить за диапазон [100; 150] Ватт");
+              .WithErrorMessage("The power limitation value must not exceed the range [100; 150] Watts");
 
         result.ShouldHaveValidationErrorFor(x => x.CriticalTemperature)
-              .WithErrorMessage("Значение критической температуры" +
-                    " не должно выходить за диапазон [0; 110] гадусов" +
-                    " Цельсия");
+              .WithErrorMessage("The value of the critical temperature must not exceed the range [0; 110] gradus Celsius");
 
         result.ShouldHaveValidationErrorFor(x => x.FanSpeed)
-              .WithErrorMessage("Значение скорости вентилятора не" +
-                    " должно выходить за диапазон [0; 100] %");
+              .WithErrorMessage("The fan speed value must not exceed the range [0; 100] %");
     }
 }

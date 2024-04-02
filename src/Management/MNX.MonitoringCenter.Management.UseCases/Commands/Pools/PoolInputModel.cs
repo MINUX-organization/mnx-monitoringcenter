@@ -1,9 +1,9 @@
 ﻿namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 
 /// <summary>
-/// Модель пула
+/// Входная модель пула
 /// </summary>
-public class PoolModel
+public class PoolInputModel
 {
     /// <summary>
     /// Домен
@@ -16,14 +16,14 @@ public class PoolModel
     public int Port { get; }
 
     /// <summary>
-    /// Полное название криптовалюты
+    /// Идентификатор криптовалюты
     /// </summary>
-    public string CryptocurrencyFullName { get; }
+    public Guid CryptocurrencyId { get; }
 
-    public PoolModel(string domain, int port, string cryptocurrencyFullName)
+    public PoolInputModel(string domain, int port, Guid cryptocurrencyId)
     {
         Domain = domain;
         Port = port;
-        CryptocurrencyFullName = cryptocurrencyFullName;
+        CryptocurrencyId = cryptocurrencyId;
     }
 }

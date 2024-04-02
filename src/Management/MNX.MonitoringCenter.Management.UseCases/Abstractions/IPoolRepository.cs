@@ -11,14 +11,14 @@ public interface IPoolRepository
     /// Получить список всех пулов
     /// </summary>
     /// <returns> Список пулов </returns>
-    IAsyncEnumerable<Pool> GetAll();
+    IAsyncEnumerable<Pool> GetAllAvailable(long userId);
 
     /// <summary>
     /// Получить пул
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
     /// <returns> Пул </returns>
-    Task<Pool?> GetById(Guid id);
+    Task<Pool?> GetAvailableById(Guid id, long userId);
 
     /// <summary>
     /// Получить признак существование пула
@@ -26,13 +26,13 @@ public interface IPoolRepository
     /// <param name="domain"> Домен </param>
     /// <param name="port"> Порт </param>
     /// <returns> <see langword="true"/>, если пул существует (оба параметра совпали), иначе <see langword="false"/> </returns>
-    Task<bool> Exists(string domain, int port);
+    Task<bool> Exists(long userId, string domain, int port);
 
     /// <summary>
     /// Добавить пул
     /// </summary>
     /// <param name="pool"> Пул </param>
-    /// <returns> Уникальный идентификатор </returns>
+    /// <returns> Идентификатор </returns>
     Task<Guid> Add(Pool pool);
 
     /// <summary>

@@ -1,32 +1,27 @@
 ﻿using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Core;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 
 /// <summary>
 /// Команда добавления криптовалюты
 /// </summary>
-public class AddCryptocurrencyCommand : IRequest<Result<Unit>>
+public class AddCryptocurrencyCommand : IValidateableCommand<Cryptocurrency>
 {
     /// <summary>
-    /// Короткое название
+    /// Входная модель крипты.
     /// </summary>
-    public string ShortName { get; }
+    public CryptocurrencyInputModel Model { get; }
 
     /// <summary>
-    /// Полное название
+    /// Идентификатор пользователя.
     /// </summary>
-    public string FullName { get; }
+    public long UserId { get; }
 
-    /// <summary>
-    /// Используемый алгоритм
-    /// </summary>
-    public string Algorithm { get; }
-
-    public AddCryptocurrencyCommand(string shortName, string fullName, string algorithm)
+    public AddCryptocurrencyCommand(CryptocurrencyInputModel model, long userId)
     {
-        ShortName = shortName;
-        FullName = fullName;
-        Algorithm = algorithm;
+        Model = model;
+        UserId = userId;
     }
 }

@@ -35,14 +35,14 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
         public async Task UpdatePreset_ReturnsEmpty()
         {
             _presetRepository
-                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId))
                 .ReturnsAsync(new Preset());
 
             _presetRepository
                 .Setup(x => x.Update(It.IsAny<Preset>()));
 
             _mapper
-                .Setup(x => x.Map<Preset>(It.IsAny<PresetModel>()))
+                .Setup(x => x.Map<Preset>(It.IsAny<PresetInputModel>()))
                 .Returns(new Preset());
 
             var result = await _handler.Handle(GetCommand(), default);
@@ -59,13 +59,13 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
         public async Task UpdatePreset_WhenPresetDoesNotExist_ReturnsError()
         {
             _presetRepository
-                .Setup(x => x.GetById(It.IsAny<Guid>()))
+                .Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId))
                 .ReturnsAsync(null as Preset);
 
             var result = await _handler.Handle(GetCommand(), default);
 
             _presetRepository
-                .Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once());
+                .Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once());
 
             Assert.NotNull(result);
             Assert.IsFalse(result.IsSuccess);
@@ -83,13 +83,14 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
             var criticalTemperature = 105;
             var fanSpeed = 99;
 
-            var presetModel = new PresetModel(
+            var presetModel = new PresetInputModel(
                 memoryClock, coreClock, powerLimit,
                 criticalTemperature, fanSpeed);
 
             return new UpdatePresetCommand(
                 Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000"),
-                presetModel);
+                presetModel, 
+                TestHelper.UserId);
         }
     }
 }

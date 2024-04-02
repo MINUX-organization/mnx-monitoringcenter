@@ -1,20 +1,27 @@
 ﻿using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 
 /// <summary>
 /// Команда добавления пула
 /// </summary>
-public class AddPoolCommand : IRequest<Result<Guid>>
+public class AddPoolCommand : IValidateableCommand<PoolModel>
 {
     /// <summary>
     /// Модель пула
     /// </summary>
-    public PoolModel Model { get; }
+    public PoolInputModel Model { get; }
 
-    public AddPoolCommand(PoolModel model)
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; }
+
+    public AddPoolCommand(PoolInputModel model, long userId)
     {
         Model = model;
+        UserId = userId;
     }
 }

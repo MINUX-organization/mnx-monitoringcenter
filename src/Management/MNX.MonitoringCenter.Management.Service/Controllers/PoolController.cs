@@ -1,19 +1,19 @@
-﻿using MediatR;
+﻿using Kernel.UseCases;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
-using Kernel.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
+using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
 /// <summary>
 /// Контроллер предоставляющий Rest API для работы с пулами
 /// </summary>
-[Route("api/pool")]
+[Route("api/pools")]
 [ApiController]
 public class PoolController : ControllerBase
 {
@@ -30,27 +30,29 @@ public class PoolController : ControllerBase
     /// <returns> Список пулов </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Pool>), 200)]
-    public IAsyncEnumerable<Pool> GetAll()
+    [ProducesResponseType(typeof(IAsyncEnumerable<PoolModel>), 200)]
+    public IAsyncEnumerable<PoolModel> GetAll()
     {
-        return _mediator.CreateStream(new GetPoolsQuery());
+        var userId = 1;
+        return _mediator.CreateStream(new GetPoolsQuery(userId));
     }
 
     /// <summary>
     /// Добавить пул
     /// </summary>
-    /// <param name="request"> Модкль пула </param>
+    /// <param name="model"> Входная модель пула </param>
     /// <returns> Результат выполнения операции </returns>
     /// <response code="201"> Успешно </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не была найдена монета с указанным названием
     /// </response>
     [HttpPost]
-    [ProducesResponseType(typeof(Guid), 201)]
+    [ProducesResponseType(typeof(PoolModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Add(PoolModel request)
+    public async Task<IActionResult> Add(PoolInputModel model)
     {
-        var result = await _mediator.Send(new AddPoolCommand(request));
+        var userId = 1;
+        var result = await _mediator.Send(new AddPoolCommand(model, userId));
         return result.ToActionResult();
     }
 
@@ -58,18 +60,19 @@ public class PoolController : ControllerBase
     /// Обновить пул
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
-    /// <param name="request"> Модель пула </param>
+    /// <param name="model"> Входная модель пула </param>
     /// <returns> Результат выполнения операции </returns>
-    /// <response code="204"> Успешно </response>
+    /// <response code="200"> Успешно </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден пул с переданным id
     /// </response>
     [HttpPut("{id:Guid}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(PoolModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Update(Guid id, PoolModel request)
+    public async Task<IActionResult> Update(Guid id, PoolInputModel model)
     {
-        var result = await _mediator.Send(new UpdatePoolCommand(id, request));
+        var userId = 1;
+        var result = await _mediator.Send(new UpdatePoolCommand(id, model, userId));
         return result.ToActionResult();
     }
 
@@ -85,7 +88,8 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var result = await _mediator.Send(new RemovePoolCommand(id));
+        var userId = 1;
+        var result = await _mediator.Send(new RemovePoolCommand(id, userId));
         return result.ToActionResult();
     }
 }

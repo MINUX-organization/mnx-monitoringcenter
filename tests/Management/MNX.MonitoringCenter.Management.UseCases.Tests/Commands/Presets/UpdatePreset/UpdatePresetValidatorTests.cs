@@ -31,14 +31,15 @@ public class UpdatePresetValidatorTests
         var result = _validator.TestValidate(command);
 
         result.ShouldHaveValidationErrorFor(x => x.Model)
-              .WithErrorMessage("Данные для пресета обязательны");
+              .WithErrorMessage("Preset data is required");
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
                     nameof(PresetCommandTestCase.CreateCorrectPresetModel))]
-    public void UpdatePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(PresetModel model)
+    public void UpdatePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(PresetInputModel model)
     {
-        var command = new UpdatePresetCommand(Guid.NewGuid(), model);
+        var command = new UpdatePresetCommand(Guid.NewGuid(), model, 
+                                              TestHelper.UserId);
 
         PresetValidatorTests.
             ValidatePresetModel_WhenPresetModelAreValid(command.Model);
@@ -46,24 +47,26 @@ public class UpdatePresetValidatorTests
 
     [TestCaseSource(typeof(PresetCommandTestCase),
                     nameof(PresetCommandTestCase.CreateIncorrectPresetModel))]
-    public void UpdatePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(PresetModel model)
+    public void UpdatePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(PresetInputModel model)
     {
-        var command = new UpdatePresetCommand(Guid.NewGuid(), model);
+        var command = new UpdatePresetCommand(Guid.NewGuid(), model, 
+                                              TestHelper.UserId);
 
         PresetValidatorTests.
             ValidatePresetModel_WhenPresetModelAreNotValid(command.Model);
     }
 
-    private static UpdatePresetCommand GetCommand(PresetModel presetModel)
+    private static UpdatePresetCommand GetCommand(PresetInputModel presetModel)
     {
         Guid id = Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000");
 
-        return new UpdatePresetCommand(id, presetModel);
+        return new UpdatePresetCommand(id, presetModel, 
+                                      TestHelper.UserId);
     }
 
-    private static PresetModel CreatePresetModel()
+    private static PresetInputModel CreatePresetModel()
     {
-        return new PresetModel(memoryClock: 1313,
+        return new PresetInputModel(memoryClock: 1313,
                                coreClock: 2235,
                                powerLimit: 150,
                                criticalTemperature: 105,

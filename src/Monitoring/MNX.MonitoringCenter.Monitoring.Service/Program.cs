@@ -25,7 +25,7 @@ internal class Program
         }
         catch (Exception ex)
         {
-            logger.Error(ex, "Произошла ошибка при запуске хоста");
+            logger.Error(ex, "��������� ������ ��� ������� �����");
             throw;
         }
         finally
@@ -47,7 +47,7 @@ internal class Program
 
     private static void ConfigureDI(IServiceCollection services, ConfigurationManager configuration)
     {
-        // TODO: Использовать аутентификацию из nuget-пакета. Сейчас параметры установлены ради тестирования.
+        // TODO: ������������ �������������� �� nuget-������. ������ ��������� ����������� ���� ������������.
         services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
                 {
@@ -55,13 +55,13 @@ internal class Program
                     {
                         IssuerSigningKey = new SymmetricSecurityKey
                             (Encoding.UTF8.GetBytes("LDktKdoQak3Pk0cnXxCltA-LDktKdoQak3Pk0cnXxCltA")),
-                        // указывает, будет ли валидироваться издатель при валидации токена
+                        // ���������, ����� �� �������������� �������� ��� ��������� ������
                         ValidateIssuer = false,
-                        // будет ли валидироваться потребитель токена
+                        // ����� �� �������������� ����������� ������
                         ValidateAudience = false,
-                        // будет ли валидироваться время существования
+                        // ����� �� �������������� ����� �������������
                         ValidateLifetime = false,
-                        // валидация ключа безопасности
+                        // ��������� ����� ������������
                         ValidateIssuerSigningKey = false,
                     };
 
@@ -98,7 +98,7 @@ internal class Program
     {
         var app = builder.Build();
         var appName = builder.Configuration["ServiceName"]
-            ?? throw new ArgumentNullException("ServiceName", "Не указано название сервиса");
+            ?? throw new ArgumentNullException("ServiceName", "�� ������� �������� �������");
 
         if (app.Environment.IsDevelopment())
         {

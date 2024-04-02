@@ -1,9 +1,9 @@
 ﻿namespace MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 
 /// <summary>
-/// Модель кошелька
+/// Входная модель кошелька
 /// </summary>
-public class WalletModel
+public class WalletInputModel
 {
     /// <summary>
     /// Название кошелька
@@ -16,14 +16,14 @@ public class WalletModel
     public string Address { get; set; }
 
     /// <summary>
-    /// Полное название криптовалюты
+    /// Идентификатор криптовалюты
     /// </summary>
-    public string CryptocurrencyFullName { get; set; }
+    public Guid CryptocurrencyId { get; set; }
 
-    public WalletModel(string name, string address, string cryptocurrencyFullName)
+    public WalletInputModel(string name, string address, Guid cryptocurrencyId)
     {
         Name = name;
         Address = address;
-        CryptocurrencyFullName = cryptocurrencyFullName;
+        CryptocurrencyId = cryptocurrencyId;
     }
 }

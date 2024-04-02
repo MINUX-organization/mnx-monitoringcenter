@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 
@@ -9,7 +10,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
 /// <summary>
 /// Обработчик команды добавления кошелька
 /// </summary>
-public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<Guid>>
+public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<WalletModel>>
 {
     private readonly IWalletRepository _walletRepository;
 
@@ -26,20 +27,26 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<Guid>> Handle(AddWalletCommand request, CancellationToken cancellationToken)
+    public async Task<Result<WalletModel>> Handle(AddWalletCommand request, CancellationToken cancellationToken)
     {
-        if (await _walletRepository.Exists(request.Model.Name, request.Model.Address))
+        if (await _walletRepository.Exists(request.UserId, request.Model.Name, request.Model.Address))
         {
-            return Result<Guid>.Invalid("Wallet already exists");
+            return Result<WalletModel>.Invalid("Wallet already exists");
         }
 
-        if (! await _cryptocurrencyRepository.Exists(request.Model.CryptocurrencyFullName))
+        var cryptocurrency = await _cryptocurrencyRepository
+            .GetAvailableById(request.Model.CryptocurrencyId, request.UserId);
+
+        if (cryptocurrency is null)
         {
-            return Result<Guid>.Invalid("Cryptocurrency wasn't found");
+            return Result<WalletModel>.Invalid("Cryptocurrency wasn't found");
         }
 
-        var id = await _walletRepository.Add(_mapper.Map<Wallet>(request.Model));
-
-        return Result<Guid>.SuccessfullyCreated(id);
+        var wallet = _mapper.Map<Wallet>(request.Model);
+        wallet.UserId = request.UserId;
+        wallet.Id = await _walletRepository.Add(wallet).ConfigureAwait(false);
+        wallet.Cryptocurrency = cryptocurrency;
+        
+        return Result<WalletModel>.SuccessfullyCreated(_mapper.Map<WalletModel>(wallet));
     }
 }

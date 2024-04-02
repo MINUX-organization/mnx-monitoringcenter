@@ -21,7 +21,17 @@ public class Wallet
     public string Address { get; set; }
 
     /// <summary>
-    /// Полное название криптовалюты
+    /// Идентификатор криптовалюты
     /// </summary>
-    public string Cryptocurrency { get; set; }
+    public Guid CryptocurrencyId { get; set; }
+
+    /// <summary>
+    /// Криптовалюта
+    /// </summary>
+    public Cryptocurrency? Cryptocurrency { get; set; }
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public long UserId { get; set; }
 }

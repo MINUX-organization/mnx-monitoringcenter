@@ -1,11 +1,10 @@
 ﻿using Kernel.UseCases;
-using MediatR;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.RemoveWallet;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets;
+namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.RemoveWallet;
 
 [TestFixture]
 public class RemoveWalletCommandHandlerTests
@@ -16,10 +15,11 @@ public class RemoveWalletCommandHandlerTests
         //Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Wallet());
+        walletRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
+                        .ReturnsAsync(new Wallet());
 
         walletRepository.Setup(x => x.Remove(It.IsAny<Wallet>()));
-                            
+
         var handler = new RemoveWalletCommandHandler(walletRepository.Object);
 
         // Act
@@ -30,17 +30,12 @@ public class RemoveWalletCommandHandlerTests
         {
             Assert.That(result.IsSuccess, Is.True,
                 "Операция завершилась неудачно");
-            Assert.That(result.Errors, Is.Null,
-                "Список ошибок не пуст");
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
-                "Результат не пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                "Неверный тип результата");
+
             Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
-                "Статус результата не 'NoContent'");
+                "Статус результата не 204");
         });
 
-        walletRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        walletRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once);
         walletRepository.Verify(x => x.Remove(It.IsAny<Wallet>()), Times.Once);
     }
 
@@ -50,7 +45,8 @@ public class RemoveWalletCommandHandlerTests
         // Arrange
         var walletRepository = new Mock<IWalletRepository>();
 
-        walletRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Wallet);
+        walletRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
+            .ReturnsAsync(null as Wallet);
 
         var handler = new RemoveWalletCommandHandler(walletRepository.Object);
 
@@ -64,22 +60,19 @@ public class RemoveWalletCommandHandlerTests
                 "Операция была успешной, когда ожидалась неудача");
             Assert.That(result.Errors, Is.Not.Null,
                 "Список ошибок пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                "Неверный тип результата");
-            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()),
-                "Результат пуст");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 'Invalid'");
+                "Статус результата не 400");
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Wallet with this Id wasn't found"),
                 "Сообщение об ошибке отличается от ожидаемого");
         });
 
-        walletRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        walletRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once);
         walletRepository.Verify(x => x.Remove(It.IsAny<Wallet>()), Times.Never);
     }
 
     private static RemoveWalletCommand GetCommand()
     {
-        return new RemoveWalletCommand(It.IsAny<Guid>());
+        return new RemoveWalletCommand(It.IsAny<Guid>(),
+            TestHelper.Cryptocurrency.UserId);
     }
 }

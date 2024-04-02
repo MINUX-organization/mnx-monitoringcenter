@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.DataAccess.Cfg;
-using MNX.MonitoringCenter.Management.DataAccess.Dto;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
@@ -15,9 +14,7 @@ public class Context : DbContext
 
     public DbSet<Algorithm> Algorithms { get; set; }
 
-    public DbSet<MinerDto> Miners { get; set; }
-
-    public DbSet<MinerAlgorithm> MinerAlgorithms { get; set; }
+    public DbSet<Miner> Miners { get; set; }
 
     public DbSet<Preset> Presets { get; set; }
 
@@ -31,13 +28,13 @@ public class Context : DbContext
     {
         modelBuilder.ApplyConfiguration(new AlgorithmCfg());
         modelBuilder.ApplyConfiguration(new CryptocurrencyCfg());
-        modelBuilder.ApplyConfiguration(new MinerDtoCfg());
-        modelBuilder.ApplyConfiguration(new MinerAlgorithmCfg());
-        modelBuilder.ApplyConfiguration(new WalletCfg());
+        modelBuilder.ApplyConfiguration(new FlightSheetCfg());
+        modelBuilder.ApplyConfiguration(new MinerCfg());       
         modelBuilder.ApplyConfiguration(new PoolCfg());
+        modelBuilder.ApplyConfiguration(new PresetCfg());
+        modelBuilder.ApplyConfiguration(new WalletCfg());
 
         modelBuilder.Entity<Algorithm>().HasData(new Algorithm() { Name = "Algorithm" });
-        modelBuilder.Entity<MinerDto>().HasData(new MinerDto() { Name = "Miner" });
-        modelBuilder.Entity<MinerAlgorithm>().HasData(new MinerAlgorithm() { MinerName = "Miner", AlgorithmName = "Algorithm" });
+        modelBuilder.Entity<Miner>().HasData(new Miner() { Name = "Miner" });
     }
 }

@@ -3,8 +3,8 @@ using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 using Moq;
 using Kernel.UseCases;
-using MediatR;
 using MNX.MonitoringCenter.Management.Core;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryptocurrency
 {
@@ -35,8 +35,16 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
         [Test]
         public async Task AddCrypto_ReturnsUnitValue()
         {
+            var cryptocurrency = new Cryptocurrency()
+            {
+                Id = Guid.Parse("f8b51c3b-d4eb-40b1-8465-4d16a79e429a"),
+                FullName = "Test",
+                ShortName = "Test",
+                Algorithm = "Test"
+            };
+
             _cryptoRepository
-                .Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.Exists(TestHelper.Cryptocurrency.UserId, It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(false);
 
             _algorithmRepository
@@ -45,8 +53,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
 
             _mapper
                 .Setup(x => x.Map<Cryptocurrency>(
-                    It.IsAny<AddCryptocurrencyCommand>()))
-                .Returns(new Cryptocurrency());
+                    It.IsAny<CryptocurrencyInputModel>()))
+                .Returns(cryptocurrency);
 
             var result = await _handler.Handle(GetCommand(), default);
 
@@ -55,14 +63,14 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
 
             Assert.NotNull(result);
             Assert.IsTrue(result.IsSuccess);
-            Assert.That(result.GetValue(), Is.EqualTo(Unit.Value));
+            Assert.That(result.GetValue(), Is.EqualTo(cryptocurrency));
         }
 
         [Test]
         public async Task AddCrypto_WhenCryptoAlreadyExists_ReturnsError()
         {
             _cryptoRepository
-                .Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.Exists(TestHelper.Cryptocurrency.UserId, It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(true);
 
             var result = await _handler.Handle(GetCommand(), default);
@@ -82,7 +90,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
         public async Task AddCrypto_WhenAlgorithmDoesNotExist_ReturnsError()
         {
             _cryptoRepository
-                .Setup(x => x.Exists(It.IsAny<string>(), It.IsAny<string>()))
+                .Setup(x => x.Exists(TestHelper.Cryptocurrency.UserId, It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync(false);
 
             _algorithmRepository
@@ -104,7 +112,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
 
         private static AddCryptocurrencyCommand GetCommand()
         {
-            return new AddCryptocurrencyCommand("BTC", "Bitcoin", "SHA-256");
+            return new AddCryptocurrencyCommand
+                (new CryptocurrencyInputModel("BTC", "Bitcoin", "SHA-256"), TestHelper.Cryptocurrency.UserId);
         }
     }
 }

@@ -18,6 +18,6 @@ public class GetPresetsQueryHandler : IStreamRequestHandler<GetPresetsQuery, Pre
 
     public IAsyncEnumerable<Preset> Handle(GetPresetsQuery request, CancellationToken cancellationToken)
     {
-        return _repository.GetPresets(request.GpuName);
+        return _repository.GetAllAvailable(request.GpuName, request.UserId);
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Kernel.UseCases;
 using MediatR;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 
@@ -9,7 +10,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
 /// <summary>
 /// Обработчик команды редактирования кошелька
 /// </summary>
-public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Result<Unit>>
+public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Result<WalletModel>>
 {
     private readonly IWalletRepository _walletRepository;
 
@@ -26,36 +27,40 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<Unit>> Handle(EditWalletCommand request, CancellationToken cancellationToken)
+    public async Task<Result<WalletModel>> Handle(EditWalletCommand request, CancellationToken cancellationToken)
     {
-        var wallet = await _walletRepository.GetById(request.Id);
-
-        // TODO: утвердить валидацию исходя из бизнес тербований
+        var wallet = await _walletRepository.GetAvailableById(request.Id, request.UserId);
 
         if (wallet == null)
         {
-            return Result<Unit>.Invalid("Wallet with this Id wasn't found");
+            return Result<WalletModel>.Invalid("Wallet with this Id wasn't found");
         }
 
         if (WalletsIsEquals(wallet, request.Model))
         {
-            return Result<Unit>.Empty();
+            return wallet.CryptocurrencyId == request.Model.CryptocurrencyId
+                ? Result<WalletModel>.Success(_mapper.Map<WalletModel>(wallet))
+                : Result<WalletModel>.Invalid("You can't change only the cryptocurrency");
         }
 
-        if (await _walletRepository.Exists(request.Model.Name, request.Model.Address, request.Id))
+        if (await _walletRepository.Exists(request.UserId, request.Model.Name, request.Model.Address, request.Id))
         {
-            return Result<Unit>.Invalid("Wallet with this name or address already exists");
+            return Result<WalletModel>.Invalid("Wallet with this name or address already exists");
         }
 
-        if (! await _cryptocurrencyRepository.Exists(request.Model.CryptocurrencyFullName))
+        var cryptocurency = await _cryptocurrencyRepository
+            .GetAvailableById(request.Model.CryptocurrencyId, request.UserId);
+
+        if (cryptocurency is null)
         {
-            return Result<Unit>.Invalid("Cryptocurrency wasn't found");
+            return Result<WalletModel>.Invalid("Cryptocurrency wasn't found");
         }
 
-        var newWallet = _mapper.Map<Wallet>(request.Model);
-        newWallet.Id = request.Id;
-        await _walletRepository.Update(newWallet);
-        return Result<Unit>.Empty();
+        var newWallet = _mapper.Map<Wallet>(request);
+        await _walletRepository.Update(newWallet).ConfigureAwait(false);
+        newWallet.Cryptocurrency = cryptocurency;
+
+        return Result<WalletModel>.Success(_mapper.Map<WalletModel>(newWallet));
     }
 
     /// <summary>
@@ -64,10 +69,9 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
     /// <param name="currentWallet"> Текущий кошелёк </param>
     /// <param name="newWallet"> Новый кошелёк </param>
     /// <returns> <see langword="true"/>, если данные моделей равны, иначе <see langword="false"/> </returns>
-    private static bool WalletsIsEquals(Wallet currentWallet, WalletModel newWallet)
+    private static bool WalletsIsEquals(Wallet currentWallet, WalletInputModel newWallet)
     {
         return currentWallet.Name == newWallet.Name &&
-               currentWallet.Address == newWallet.Address &&
-               currentWallet.Cryptocurrency == newWallet.CryptocurrencyFullName;
+               currentWallet.Address == newWallet.Address;
     }
 }

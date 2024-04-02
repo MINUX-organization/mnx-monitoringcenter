@@ -13,5 +13,5 @@ public interface IMonitoringClient
     /// <param name="gpuName"> Имя видеокарты </param>
     /// <returns> <see langword="true"/>, если GPU существует, иначе <see langword="false"/> </returns>
     [Get("/")]
-    public Task<bool> GpuExists([Query] string gpuName);
+    public Task<bool> GpuExists(long userId, [Query] string gpuName);
 }

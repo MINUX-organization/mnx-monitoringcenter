@@ -5,7 +5,7 @@ using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
-[Route("api/flightSheet")]
+[Route("api/flightSheets")]
 [ApiController]
 public class FlightSheetController : ControllerBase
 {
@@ -19,7 +19,8 @@ public class FlightSheetController : ControllerBase
     [HttpGet]
     public IAsyncEnumerable<FlightSheet> GetAll()
     {
-        return _mediator.CreateStream(new GetFlightSheetsQuery());
+        var userId = 1;
+        return _mediator.CreateStream(new GetFlightSheetsQuery(userId));
     }
 
     [HttpPost]

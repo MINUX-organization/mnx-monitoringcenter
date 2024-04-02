@@ -1,13 +1,16 @@
+using Kernel.UseCases.DI;
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.DataAccess;
 using MNX.MonitoringCenter.Management.DataAccess.Repositories;
 using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetAlgorithmsQuery;
-using Kernel.UseCases.DI;
 using NLog;
 using NLog.Web;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using Refit;
 using System.Reflection;
 

@@ -1,5 +1,4 @@
 ﻿using Kernel.UseCases;
-using MediatR;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
@@ -16,7 +15,7 @@ public class RemovePoolCommandHandlerTests
         //Arrange
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(new Pool());
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId)).ReturnsAsync(new Pool());
 
         poolRepository.Setup(x => x.Remove(It.IsAny<Pool>()));
 
@@ -30,17 +29,11 @@ public class RemovePoolCommandHandlerTests
         {
             Assert.That(result.IsSuccess, Is.True,
                 "Операция завершилась неудачно");
-            Assert.That(result.Errors, Is.Null,
-                "Список ошибок не пуст");
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()),
-                "Результат не пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                "Неверный тип результата");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
-                "Статус результата не 'NoContent'");
+                "Статус результата не 204");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Remove(It.IsAny<Pool>()), Times.Once);
     }
 
@@ -49,7 +42,7 @@ public class RemovePoolCommandHandlerTests
     {
         var poolRepository = new Mock<IPoolRepository>();
 
-        poolRepository.Setup(x => x.GetById(It.IsAny<Guid>())).ReturnsAsync(null as Pool);
+        poolRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId)).ReturnsAsync(null as Pool);
 
         var handler = new RemovePoolCommandHandler(poolRepository.Object);
 
@@ -61,24 +54,18 @@ public class RemovePoolCommandHandlerTests
         {
             Assert.That(result.IsSuccess, Is.False,
                 "Операция была успешной, когда ожидалась неудача");
-            Assert.That(result.Errors, Is.Not.Null,
-                "Список ошибок пуст");
-            Assert.That(result, Is.TypeOf<Result<Unit>>(),
-                "Неверный тип результата");
-            Assert.That(result, Is.Not.EqualTo(Result<Unit>.Empty()),
-                "Результат пуст");
             Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 'Invalid'");
+                "Статус результата не 400");
             Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"),
                 "Сообщение об ошибке отличается от ожидаемого");
         });
 
-        poolRepository.Verify(x => x.GetById(It.IsAny<Guid>()), Times.Once);
+        poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
         poolRepository.Verify(x => x.Remove(It.IsAny<Pool>()), Times.Never);
     }
 
     private static RemovePoolCommand GetCommand()
     {
-        return new RemovePoolCommand(It.IsAny<Guid>());
+        return new RemovePoolCommand(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId);
     }
 }

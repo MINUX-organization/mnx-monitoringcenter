@@ -2,18 +2,18 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
+using MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
 /// <summary>
 /// Предоставляет REST API для работы с пресетами
 /// </summary>
-[Route("api/preset")]
+[Route("api/presets")]
 [ApiController]
 public class PresetController : ControllerBase
 {
@@ -38,13 +38,14 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<Preset>), 200)]
     public IAsyncEnumerable<Preset> GetPresets(string? gpuName)
     {
-        return _mediator.CreateStream(new GetPresetsQuery(gpuName));
+        var userId = 1;
+        return _mediator.CreateStream(new GetPresetsQuery(gpuName, userId));
     }
 
     /// <summary>
     /// Сохранить пресет к указанной серии видеокарт
     /// </summary>
-    /// <param name="command"> Команда с параметрами пресета </param>
+    /// <param name="model"> Входная модель пресета </param>
     /// <returns> Результат выполнения команды </returns>
     /// <response code="201"> Успешно </response>
     /// <response code="400">
@@ -53,9 +54,10 @@ public class PresetController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(Guid), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Save(SavePresetCommand command)
+    public async Task<IActionResult> Save(SavePresetInputModel model)
     {
-        var result = await _mediator.Send(command);
+        var userId = 1;
+        var result = await _mediator.Send(new SavePresetCommand(userId, model));
         return result.ToActionResult();
     }
 
@@ -63,7 +65,7 @@ public class PresetController : ControllerBase
     /// Обновить пресет
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
-    /// <param name="model"> Модель пресета </param>
+    /// <param name="model"> Входная модель пресета </param>
     /// <returns> Результат выполнения команды </returns>
     /// <response code="204"> Успешно </response>
     /// <response code="400">
@@ -72,9 +74,10 @@ public class PresetController : ControllerBase
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Update(Guid id, PresetModel model)
+    public async Task<IActionResult> Update(Guid id, PresetInputModel model)
     {
-        var result = await _mediator.Send(new UpdatePresetCommand(id, model));
+        var userId = 1;
+        var result = await _mediator.Send(new UpdatePresetCommand(id, model, userId));
         return result.ToActionResult();
     }
 
@@ -90,7 +93,8 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Remove(Guid id)
     {
-        var result = await _mediator.Send(new RemovePresetCommand(id));
+        var userId = 1;
+        var result = await _mediator.Send(new RemovePresetCommand(id, userId));
         return result.ToActionResult();
     }
 }
