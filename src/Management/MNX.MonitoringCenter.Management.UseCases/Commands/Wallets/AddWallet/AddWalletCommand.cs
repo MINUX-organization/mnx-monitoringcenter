@@ -1,5 +1,5 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MediatR;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
 /// <summary>
 /// Команда добавления кошелька
 /// </summary>
-public class AddWalletCommand : IValidateableCommand<WalletModel>
+public class AddWalletCommand : IValidatableCommand<WalletModel>
 {
     /// <summary>
     /// Модель кошелька

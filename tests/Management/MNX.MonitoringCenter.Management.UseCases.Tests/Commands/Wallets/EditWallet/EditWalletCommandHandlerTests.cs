@@ -4,7 +4,7 @@ using Moq;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.Core;
-using Kernel.UseCases;
+using MNX.Application.UseCases;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.EditWallet;
 

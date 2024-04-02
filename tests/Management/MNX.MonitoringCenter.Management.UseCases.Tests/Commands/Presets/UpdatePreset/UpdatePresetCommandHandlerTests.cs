@@ -1,13 +1,11 @@
 ﻿using AutoMapper;
-using Kernel.UseCases;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using Moq;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 using MediatR;
+using MNX.Application.UseCases;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.UpdatePreset
 {

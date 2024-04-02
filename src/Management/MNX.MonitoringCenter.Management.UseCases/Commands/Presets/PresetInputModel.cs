@@ -6,7 +6,7 @@
 public class PresetInputModel
 {
     /// <summary>
-    /// Тактовая чатсота памяти в мегагерцах
+    /// Тактовая частота памяти в мегагерцах
     /// </summary>
     public int MemoryClock { get; }
 

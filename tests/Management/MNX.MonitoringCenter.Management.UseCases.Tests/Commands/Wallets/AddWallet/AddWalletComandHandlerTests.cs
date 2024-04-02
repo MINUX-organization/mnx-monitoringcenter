@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Kernel.UseCases;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;

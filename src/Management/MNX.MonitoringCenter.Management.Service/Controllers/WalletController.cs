@@ -1,6 +1,6 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
@@ -61,7 +61,7 @@ public class WalletController : ControllerBase
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
     /// <param name="model"> Входная модель кошелька </param>
-    /// <returns> Результат выполенениия операции </returns>
+    /// <returns> Результат выполнения операции </returns>
     /// <response code="200"> Успешно </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден кошелёк с переданным id

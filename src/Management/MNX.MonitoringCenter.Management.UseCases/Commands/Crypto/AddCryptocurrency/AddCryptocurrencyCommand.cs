@@ -1,5 +1,4 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
@@ -7,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurr
 /// <summary>
 /// Команда добавления криптовалюты
 /// </summary>
-public class AddCryptocurrencyCommand : IValidateableCommand<Cryptocurrency>
+public class AddCryptocurrencyCommand : IValidatableCommand<Cryptocurrency>
 {
     /// <summary>
     /// Входная модель крипты.

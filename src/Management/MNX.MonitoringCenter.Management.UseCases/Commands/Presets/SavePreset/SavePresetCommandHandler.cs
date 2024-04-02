@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using Kernel.UseCases;
 using MediatR;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 

@@ -1,15 +1,15 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MediatR;
+using MNX.Application.UseCases;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 
 /// <summary>
-/// Команда редактировния пресета
+/// Команда редактирования пресета
 /// </summary>
-public class UpdatePresetCommand : IValidateableCommand<Unit>
+public class UpdatePresetCommand : IValidatableCommand<Unit>
 {
     /// <summary>
-    /// Уникальный идентиификатор
+    /// Уникальный идентификатор
     /// </summary>
     public Guid Id { get; }
 

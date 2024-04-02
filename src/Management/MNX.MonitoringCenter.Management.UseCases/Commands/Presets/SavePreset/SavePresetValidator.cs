@@ -3,7 +3,7 @@
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 /// <summary>
-/// Валидатор каманды сохранения пресета
+/// Валидатор команды сохранения пресета
 /// </summary>
 public class SavePresetValidator : AbstractValidator<SavePresetCommand>
 {

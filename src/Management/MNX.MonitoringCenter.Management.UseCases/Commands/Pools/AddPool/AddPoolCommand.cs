@@ -1,5 +1,4 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
@@ -7,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 /// <summary>
 /// Команда добавления пула
 /// </summary>
-public class AddPoolCommand : IValidateableCommand<PoolModel>
+public class AddPoolCommand : IValidatableCommand<PoolModel>
 {
     /// <summary>
     /// Модель пула

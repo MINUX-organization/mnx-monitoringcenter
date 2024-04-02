@@ -1,5 +1,5 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MediatR;
+using MNX.Application.UseCases;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 
@@ -9,7 +9,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset
 public class RemovePresetCommand : IRequest<Result<Unit>>
 {
     /// <summary>
-    /// УНикальный идентификатор пресета
+    /// Уникальный идентификатор пресета
     /// </summary>
     public Guid Id { get; }
 
