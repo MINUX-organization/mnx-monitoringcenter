@@ -1,7 +1,6 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
-using MNX.Infrastructure.RabbitMQ;
+﻿using MNX.Application.Consul;
+using MNX.Application.Data.DI;
+using MNX.Application.RabbitMQ;
 using MNX.MonitoringCenter.Monitoring.DataAccess;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
 using MNX.MonitoringCenter.Monitoring.Hubs;
@@ -10,7 +9,6 @@ using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using NLog;
 using NLog.Web;
 using System.Reflection;
-using System.Text;
 
 internal class Program
 {
@@ -25,7 +23,7 @@ internal class Program
         }
         catch (Exception ex)
         {
-            logger.Error(ex, "��������� ������ ��� ������� �����");
+            logger.Error(ex, "Произошла ошибка при запуске хоста");
             throw;
         }
         finally
@@ -47,50 +45,17 @@ internal class Program
 
     private static void ConfigureDI(IServiceCollection services, ConfigurationManager configuration)
     {
-        // TODO: ������������ �������������� �� nuget-������. ������ ��������� ����������� ���� ������������.
-        services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new TokenValidationParameters()
-                    {
-                        IssuerSigningKey = new SymmetricSecurityKey
-                            (Encoding.UTF8.GetBytes("LDktKdoQak3Pk0cnXxCltA-LDktKdoQak3Pk0cnXxCltA")),
-                        // ���������, ����� �� �������������� �������� ��� ��������� ������
-                        ValidateIssuer = false,
-                        // ����� �� �������������� ����������� ������
-                        ValidateAudience = false,
-                        // ����� �� �������������� ����� �������������
-                        ValidateLifetime = false,
-                        // ��������� ����� ������������
-                        ValidateIssuerSigningKey = false,
-                    };
+        services.AddConsulIntegration(configuration);
 
-                    options.Events = new JwtBearerEvents()
-                    {
-                        OnMessageReceived = context =>
-                        {
-                            var accessToken = context.Request.Query["access_token"];
-
-                            var path = context.HttpContext.Request.Path;
-
-                            if (!string.IsNullOrEmpty(accessToken)
-                            && path.StartsWithSegments("hubs"))
-                            {
-                                context.Token = accessToken;
-                            }
-
-                            return Task.CompletedTask;
-                        }
-                    };
-                });
-
-        services.AddDbContext<Context>(options => options.UseSqlite("Data Source = Minux.db"));
+        services.AddDataContext<Context>(configuration);
         services.AddSignalR();
-        services.AddEasyNetQ(configuration, new[] { Assembly.GetExecutingAssembly() });
-        services.AddScoped<IRigRepository, RigRepository>();
+        services.AddEasyNetQ(configuration, [Assembly.GetExecutingAssembly()]);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
         services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
+
+        services.AddScoped<IRigRepository, RigRepository>();
         services.AddSingleton<ConnectionCounter>();
+
         services.AddHealthChecks();
     }
 
@@ -98,14 +63,13 @@ internal class Program
     {
         var app = builder.Build();
         var appName = builder.Configuration["ServiceName"]
-            ?? throw new ArgumentNullException("ServiceName", "�� ������� �������� �������");
+            ?? throw new ArgumentNullException(null, "Не указано название сервиса");
 
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
         }
 
-        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapHealthChecks("/health");

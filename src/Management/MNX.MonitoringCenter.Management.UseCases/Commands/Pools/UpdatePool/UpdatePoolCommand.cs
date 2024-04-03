@@ -1,5 +1,4 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
@@ -7,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
 /// <summary>
 /// Команда обновления пула
 /// </summary>
-public class UpdatePoolCommand : IValidateableCommand<PoolModel>
+public class UpdatePoolCommand : IValidatableCommand<PoolModel>
 {
     /// <summary>
     /// Уникальный идентификатор

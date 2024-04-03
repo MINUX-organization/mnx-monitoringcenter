@@ -1,5 +1,5 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MediatR;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;

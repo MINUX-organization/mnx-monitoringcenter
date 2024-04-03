@@ -401,3 +401,5 @@ FodyWeavers.xsd
 *.db-shm
 *.db-wal
 *.db
+/src/Management/MNX.MonitoringCenter.Management.Service/Properties/launchSettings.json
+/src/Monitoring/MNX.MonitoringCenter.Monitoring.Service/Properties/launchSettings.json

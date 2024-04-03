@@ -1,4 +1,4 @@
-﻿using Kernel.UseCases;
+﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;

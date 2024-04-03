@@ -1,4 +1,4 @@
-﻿using Kernel.UseCases;
+﻿using MNX.Application.UseCases;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using MNX.MonitoringCenter.Management.Contracts;

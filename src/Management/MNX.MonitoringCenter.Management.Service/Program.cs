@@ -1,13 +1,11 @@
-using Kernel.UseCases.DI;
-using Microsoft.EntityFrameworkCore;
+using MNX.Application.Consul;
+using MNX.Application.Data.DI;
+using MNX.Application.UseCases.DI;
 using MNX.MonitoringCenter.Management.DataAccess;
 using MNX.MonitoringCenter.Management.DataAccess.Repositories;
 using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetAlgorithmsQuery;
 using NLog;
 using NLog.Web;
@@ -78,13 +76,15 @@ public class Program
 
     private static void ConfigureDI(IServiceCollection services, ConfigurationManager configuration)
     {
+        services.AddConsulIntegration(configuration);
+
         services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAvailableAlgorithmsQuery).Assembly));
-        services.AddDbContext<Context>(options => options.UseSqlite("Data Source = Minux.db"));
+        services.AddDataContext<Context>(configuration);
         services.AddMemoryCache();
 
         var monitoringUri = configuration["MonitoringUri"]
-            ?? throw new ArgumentNullException("MonitoringUri", "Uri адрес сервиса мониторинга не указан");
+            ?? throw new ArgumentNullException(null, "Uri адрес сервиса мониторинга не указан");
         services.AddRefitClient<IMonitoringClient>()
                 .ConfigureHttpClient(client => client.BaseAddress = new Uri(monitoringUri));
 
@@ -101,7 +101,7 @@ public class Program
     {
         var app = builder.Build();
         var appName = builder.Configuration["ServiceName"]
-            ?? throw new ArgumentNullException("ServiceName", "Не указано название сервиса");
+            ?? throw new ArgumentNullException(null, "Не указано название сервиса");
 
         if (app.Environment.IsDevelopment())
         {

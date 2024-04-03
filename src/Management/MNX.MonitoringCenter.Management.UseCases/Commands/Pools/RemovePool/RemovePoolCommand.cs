@@ -1,5 +1,5 @@
-﻿using Kernel.UseCases;
-using MediatR;
+﻿using MediatR;
+using MNX.Application.UseCases;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
 
