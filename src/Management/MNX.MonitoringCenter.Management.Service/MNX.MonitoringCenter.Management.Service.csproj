@@ -8,10 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Properties\launchSettings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="MNX.Application.Consul" Version="1.0.0" />
     <PackageReference Include="MNX.Application.Data.DI" Version="1.0.0" />
     <PackageReference Include="MNX.Application.UseCases.DI" Version="1.0.0" />
+    <PackageReference Include="MNX.SecurityManagement.Authentication.Integration" Version="1.0.0" />
     <PackageReference Include="NLog" Version="5.2.6" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.5" />
     <PackageReference Include="Refit.HttpClientFactory" Version="7.0.0" />
@@ -19,6 +24,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MNX.MonitoringCenter.Infrastructure\MNX.MonitoringCenter.Infrastructure.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.DataAccess\MNX.MonitoringCenter.Management.DataAccess.csproj" />
   </ItemGroup>
 

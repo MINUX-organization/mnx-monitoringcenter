@@ -1,11 +1,13 @@
-﻿using MNX.Application.UseCases;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
+using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -14,13 +16,23 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/cryptocurrencies")]
 [ApiController]
+[Authorize]
 public class CryptocurrencyController : ControllerBase
 {
+    /// <summary>
+    /// Медиатор.
+    /// </summary>
     private readonly IMediator _mediator;
 
-    public CryptocurrencyController(IMediator mediator)
+    /// <summary>
+    /// Сервис для доступа к данным пользователя.
+    /// </summary>
+    private readonly UserAccessor _userAccessor;
+
+    public CryptocurrencyController(IMediator mediator, UserAccessor userAccessor)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
     }
 
     /// <summary>
@@ -32,7 +44,7 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<Cryptocurrency>), 200)]
     public IAsyncEnumerable<Cryptocurrency> GetAll()
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetCryptocurrenciesQuery(userId));
     }
 
@@ -49,7 +61,7 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(CryptocurrencyInputModel model)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new AddCryptocurrencyCommand(model, userId));
         return result.ToActionResult();
     }
@@ -65,7 +77,7 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new RemoveCryptocurrencyCommand(id, userId));
         return result.ToActionResult();
     }

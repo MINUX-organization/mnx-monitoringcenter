@@ -1,12 +1,14 @@
-﻿using MNX.Application.UseCases;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -15,13 +17,23 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/pools")]
 [ApiController]
+[Authorize]
 public class PoolController : ControllerBase
 {
+    /// <summary>
+    /// Медиатор.
+    /// </summary>
     private readonly IMediator _mediator;
 
-    public PoolController(IMediator mediator)
+    /// <summary>
+    /// Сервис для доступа к данным пользователя.
+    /// </summary>
+    private readonly UserAccessor _userAccessor;
+
+    public PoolController(IMediator mediator, UserAccessor userAccessor)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
     }
 
     /// <summary>
@@ -33,7 +45,7 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<PoolModel>), 200)]
     public IAsyncEnumerable<PoolModel> GetAll()
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetPoolsQuery(userId));
     }
 
@@ -51,7 +63,7 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(PoolInputModel model)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new AddPoolCommand(model, userId));
         return result.ToActionResult();
     }
@@ -88,7 +100,7 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new RemovePoolCommand(id, userId));
         return result.ToActionResult();
     }

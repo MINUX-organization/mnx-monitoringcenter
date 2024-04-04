@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetAlgorithmsQuery;
 
@@ -9,8 +10,12 @@ namespace MNX.MonitoringCenter.Management.Service.Controllers;
 /// </summary>
 [Route("api/algorithms")]
 [ApiController]
+[Authorize]
 public class AlgorithmController : ControllerBase
 {
+    /// <summary>
+    /// Медиатор.
+    /// </summary>
     private readonly IMediator _mediator;
 
     public AlgorithmController(IMediator mediator)
