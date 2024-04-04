@@ -83,7 +83,7 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Update(Guid id, PoolInputModel model)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new UpdatePoolCommand(id, model, userId));
         return result.ToActionResult();
     }
