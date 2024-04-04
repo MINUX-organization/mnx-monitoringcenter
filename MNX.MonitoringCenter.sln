@@ -37,6 +37,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Monito
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monitoring", "Monitoring", "{805D2321-19BC-4D53-A3CE-3E1487E916F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Infrastructure", "src\MNX.MonitoringCenter.Infrastructure\MNX.MonitoringCenter.Infrastructure.csproj", "{00F4B69B-D25B-4D39-8BE0-1DE340640946}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +89,10 @@ Global
 		{D003C366-93D4-48C6-AAB5-8F6C7D75872E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D003C366-93D4-48C6-AAB5-8F6C7D75872E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D003C366-93D4-48C6-AAB5-8F6C7D75872E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00F4B69B-D25B-4D39-8BE0-1DE340640946}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00F4B69B-D25B-4D39-8BE0-1DE340640946}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00F4B69B-D25B-4D39-8BE0-1DE340640946}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00F4B69B-D25B-4D39-8BE0-1DE340640946}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -107,6 +113,7 @@ Global
 		{13425A34-C3EE-4AB3-91FF-5E9BF88C2792} = {7BEC6D83-F850-4C4C-82C8-012F67D2507C}
 		{D003C366-93D4-48C6-AAB5-8F6C7D75872E} = {7BEC6D83-F850-4C4C-82C8-012F67D2507C}
 		{805D2321-19BC-4D53-A3CE-3E1487E916F7} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
+		{00F4B69B-D25B-4D39-8BE0-1DE340640946} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}

@@ -1,12 +1,14 @@
 using MNX.Application.Consul;
 using MNX.Application.Data.DI;
 using MNX.Application.UseCases.DI;
+using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Management.DataAccess;
 using MNX.MonitoringCenter.Management.DataAccess.Repositories;
 using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetAlgorithmsQuery;
+using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
 using Refit;
@@ -44,17 +46,15 @@ public class Program
 
         var services = builder.Services;
 
+        services.AddConsulIntegration(builder.Configuration);
+
         services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
 
-        services.AddSwaggerGen(options =>
-        {
-            var basePath = AppContext.BaseDirectory;
-            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-            var xmlPath = Path.Combine(basePath, xmlFile);
-            options.IncludeXmlComments(xmlPath);
-        });
+        var basePath = AppContext.BaseDirectory;
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        services.AddSwagger(Path.Combine(basePath, xmlFile));
 
         services.AddCors(options =>
         {
@@ -66,8 +66,9 @@ public class Program
             });
         });
 
-        services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddHealthChecks();
+
+        services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!);
 
         ConfigureDI(services, builder.Configuration);
 
@@ -76,12 +77,10 @@ public class Program
 
     private static void ConfigureDI(IServiceCollection services, ConfigurationManager configuration)
     {
-        services.AddConsulIntegration(configuration);
-
         services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAvailableAlgorithmsQuery).Assembly));
+        services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddDataContext<Context>(configuration);
-        services.AddMemoryCache();
 
         var monitoringUri = configuration["MonitoringUri"]
             ?? throw new ArgumentNullException(null, "Uri адрес сервиса мониторинга не указан");
@@ -95,6 +94,8 @@ public class Program
         services.AddScoped<IPoolRepository, PoolRepository>();
         services.AddScoped<IPresetRepository, PresetRepository>();
         services.AddScoped<IWalletRepository, WalletRepository>();
+        services.AddScoped<UserAccessor>();
+        services.AddHttpContextAccessor();
     }
 
     private static async Task RunApp(WebApplicationBuilder builder)
@@ -113,11 +114,13 @@ public class Program
         app.UseRouting();
         app.UseCors();
 
+        app.MapHealthChecks("/health").AllowAnonymous();
+        app.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName)).AllowAnonymous();
+
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();
-        app.MapHealthChecks("/health");
-        app.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName));
 
         await app.RunAsync();
     }

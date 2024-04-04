@@ -1,16 +1,21 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetMinersQuery;
 
 namespace MNX.MonitoringCenter.Management.Service.Controllers;
 
 /// <summary>
-/// Предоставлет API для работы с майнерами
+/// Предоставляет API для работы с майнерами
 /// </summary>
 [Route("api/miners")]
 [ApiController]
+[Authorize]
 public class MinerController : ControllerBase
 {
+    /// <summary>
+    /// Медиатор.
+    /// </summary>
     private readonly IMediator _mediator;
 
     public MinerController(IMediator mediator)

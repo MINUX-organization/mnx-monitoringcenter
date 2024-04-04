@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\MINUX.packages\MNX.Kernel.UseCases\MNX.Kernel.UseCases.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Contracts\MNX.MonitoringCenter.Monitoring.Contracts.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Core\MNX.MonitoringCenter.Monitoring.Core.csproj" />
   </ItemGroup>

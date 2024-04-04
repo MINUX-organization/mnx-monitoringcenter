@@ -1,12 +1,14 @@
-﻿using MNX.Application.UseCases;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
+using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -15,13 +17,23 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/presets")]
 [ApiController]
+[Authorize]
 public class PresetController : ControllerBase
 {
+    /// <summary>
+    /// Медиатор.
+    /// </summary>
     private readonly IMediator _mediator;
 
-    public PresetController(IMediator mediator)
+    /// <summary>
+    /// Сервис для доступа к данным пользователя.
+    /// </summary>
+    private readonly UserAccessor _userAccessor;
+
+    public PresetController(IMediator mediator, UserAccessor userAccessor)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
     }
 
     /// <summary>
@@ -38,7 +50,7 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<Preset>), 200)]
     public IAsyncEnumerable<Preset> GetPresets(string? gpuName)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetPresetsQuery(gpuName, userId));
     }
 
@@ -56,7 +68,7 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Save(SavePresetInputModel model)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new SavePresetCommand(userId, model));
         return result.ToActionResult();
     }
@@ -76,7 +88,7 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Update(Guid id, PresetInputModel model)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new UpdatePresetCommand(id, model, userId));
         return result.ToActionResult();
     }
@@ -93,7 +105,7 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Remove(Guid id)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new RemovePresetCommand(id, userId));
         return result.ToActionResult();
     }

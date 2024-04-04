@@ -14,12 +14,14 @@
     <PackageReference Include="MNX.Application.Consul" Version="1.0.0" />
     <PackageReference Include="MNX.Application.Data.DI" Version="1.0.0" />
     <PackageReference Include="MNX.Application.RabbitMQ" Version="1.0.0" />
+    <PackageReference Include="MNX.SecurityManagement.Authentication.Integration" Version="1.0.0" />
     <PackageReference Include="NLog" Version="5.2.8" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.3.8" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
 	
   <ItemGroup>
+    <ProjectReference Include="..\..\MNX.MonitoringCenter.Infrastructure\MNX.MonitoringCenter.Infrastructure.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Monitoring.DataAccess\MNX.MonitoringCenter.Monitoring.DataAccess.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Monitoring.UseCases\MNX.MonitoringCenter.Monitoring.UseCases.csproj" />
   </ItemGroup>

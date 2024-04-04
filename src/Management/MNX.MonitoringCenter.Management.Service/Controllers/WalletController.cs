@@ -2,11 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.RemoveWallet;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetWalletsQuery;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -15,13 +17,23 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/wallets")]
 [ApiController]
+[Authorize]
 public class WalletController : ControllerBase
 {
+    /// <summary>
+    /// Медиатор.
+    /// </summary>
     private readonly IMediator _mediator;
 
-    public WalletController(IMediator mediator)
+    /// <summary>
+    /// Профиль аутентифицированного пользователя.
+    /// </summary>
+    private readonly UserAccessor _userAccessor;
+
+    public WalletController(IMediator mediator, UserAccessor userAccessor)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
     }
 
     /// <summary>
@@ -33,7 +45,7 @@ public class WalletController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<WalletModel>), 200)]
     public IAsyncEnumerable<WalletModel> GetAll()
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetWalletsQuery(userId));
     }
 
@@ -51,7 +63,7 @@ public class WalletController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(WalletInputModel model)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new AddWalletCommand(model, userId));
         return result.ToActionResult();
     }
@@ -71,7 +83,7 @@ public class WalletController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Edit(Guid id, WalletInputModel model)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new EditWalletCommand(id, model, userId));
         return result.ToActionResult();
     }
@@ -88,7 +100,7 @@ public class WalletController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
-        var userId = 1;
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new RemoveWalletCommand(id, userId));
         return result.ToActionResult();
     }
