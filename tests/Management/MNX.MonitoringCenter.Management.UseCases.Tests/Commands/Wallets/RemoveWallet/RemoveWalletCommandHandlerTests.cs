@@ -39,6 +39,32 @@ public class RemoveWalletCommandHandlerTests
         walletRepository.Verify(x => x.Remove(It.IsAny<Wallet>()), Times.Once);
     }
 
+    [Test]
+    public async Task RemoveWallet_WhenWalletNull_ReturnsError()
+    {
+        // Arrange
+        var walletRepository = new Mock<IWalletRepository>();
+
+        walletRepository.Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
+            .ReturnsAsync(null as Wallet);
+
+        var handler = new RemoveWalletCommandHandler(walletRepository.Object);
+
+        // Act
+        var result = await handler.Handle(GetCommand(), default);
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.IsSuccess, Is.True,
+                "Операция была неудачной, когда ожидался успех");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
+                "Статус результата не 204");
+        });
+
+        walletRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once);
+        walletRepository.Verify(x => x.Remove(It.IsAny<Wallet>()), Times.Never);
+    }
 
     private static RemoveWalletCommand GetCommand()
     {

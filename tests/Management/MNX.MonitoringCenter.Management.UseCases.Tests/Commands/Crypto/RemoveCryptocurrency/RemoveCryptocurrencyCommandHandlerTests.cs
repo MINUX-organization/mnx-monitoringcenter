@@ -41,6 +41,23 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.RemoveC
             Assert.That(result, Is.EqualTo(Result<Unit>.Empty()));
         }
 
+        [Test]
+        public async Task RemoveCrypto_WhenCryptoDoesNotExist_ReturnsEmpty()
+        {
+            _cryptoRepository
+                .Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
+                .ReturnsAsync(null as Cryptocurrency);
+
+            var result = await _handler.Handle(GetCommand(), default);
+
+            _cryptoRepository
+                .Verify(x => x.Remove(It.IsAny<Cryptocurrency>()), Times.Never());
+
+            Assert.NotNull(result);
+            Assert.IsTrue(result.IsSuccess);
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent));
+        }
+
         private static RemoveCryptocurrencyCommand GetCommand()
         {
             return new RemoveCryptocurrencyCommand
