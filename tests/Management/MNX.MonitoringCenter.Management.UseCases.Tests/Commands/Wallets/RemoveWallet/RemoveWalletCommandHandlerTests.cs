@@ -56,14 +56,10 @@ public class RemoveWalletCommandHandlerTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.False,
-                "Операция была успешной, когда ожидалась неудача");
-            Assert.That(result.Errors, Is.Not.Null,
-                "Список ошибок пуст");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 400");
-            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Wallet with this Id wasn't found"),
-                "Сообщение об ошибке отличается от ожидаемого");
+            Assert.That(result.IsSuccess, Is.True,
+                "Операция была неудачной, когда ожидался успех");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
+                "Статус результата не 204");
         });
 
         walletRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once);

@@ -36,7 +36,7 @@ public static class PresetValidatorTests
               .WithErrorMessage("The power limitation value must not exceed the range [100; 150] Watts");
 
         result.ShouldHaveValidationErrorFor(x => x.CriticalTemperature)
-              .WithErrorMessage("The value of the critical temperature must not exceed the range [0; 110] gradus Celsius");
+              .WithErrorMessage("The value of the critical temperature must not exceed the range [0; 110] degrees Celsius");
 
         result.ShouldHaveValidationErrorFor(x => x.FanSpeed)
               .WithErrorMessage("The fan speed value must not exceed the range [0; 100] %");

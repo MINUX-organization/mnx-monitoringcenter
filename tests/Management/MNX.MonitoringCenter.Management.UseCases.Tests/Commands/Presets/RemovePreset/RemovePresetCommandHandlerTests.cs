@@ -53,7 +53,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Remove
         }
 
         [Test]
-        public async Task RemovePreset_WhenPresetDoesNotExist_ReturnsError()
+        public async Task RemovePreset_WhenPresetDoesNotExist_ReturnsEmpty()
         {
             _presetRepository
                 .Setup(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId))
@@ -63,13 +63,12 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Remove
 
             _presetRepository
                 .Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.Cryptocurrency.UserId), Times.Once());
+            _presetRepository
+                .Verify(x => x.Remove(It.IsAny<Preset>()), Times.Never());
 
             Assert.NotNull(result);
-            Assert.IsFalse(result.IsSuccess);
-            Assert.NotNull(result.Errors);
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid));
-            Assert.That(result.Errors?.ElementAt(0),
-                Is.EqualTo("Preset with this id wasn`t found"));
+            Assert.IsTrue(result.IsSuccess);
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent));
         }
 
         private static RemovePresetCommand GetCommand()

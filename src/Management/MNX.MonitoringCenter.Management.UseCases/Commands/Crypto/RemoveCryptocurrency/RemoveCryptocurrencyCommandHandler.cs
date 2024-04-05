@@ -20,12 +20,11 @@ public class RemoveCryptocurrencyCommandHandler : IRequestHandler<RemoveCryptocu
     {
         var cryptocurrency = await _repository.GetAvailableById(request.Id, request.UserId);
 
-        if (cryptocurrency is null)
+        if (cryptocurrency != null)
         {
-            return Result<Unit>.Invalid("Cryptocurrency wasn't found");
+            await _repository.Remove(cryptocurrency);
         }
 
-        await _repository.Remove(cryptocurrency);
         return Result<Unit>.Empty();
     }
 }

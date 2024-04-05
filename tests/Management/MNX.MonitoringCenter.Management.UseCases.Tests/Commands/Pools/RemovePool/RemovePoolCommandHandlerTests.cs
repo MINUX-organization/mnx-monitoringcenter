@@ -38,7 +38,7 @@ public class RemovePoolCommandHandlerTests
     }
 
     [Test]
-    public async Task RemovePool_WhenPoolIsNull_ReturnsError()
+    public async Task RemovePool_WhenPoolIsNull_ReturnsEmpty()
     {
         var poolRepository = new Mock<IPoolRepository>();
 
@@ -52,12 +52,10 @@ public class RemovePoolCommandHandlerTests
         // Assert
         Assert.Multiple(() =>
         {
-            Assert.That(result.IsSuccess, Is.False,
-                "Операция была успешной, когда ожидалась неудача");
-            Assert.That(result.Status, Is.EqualTo(ResultStatus.Invalid),
-                "Статус результата не 400");
-            Assert.That(result.Errors?.ElementAt(0), Is.EqualTo("Pool with this id wasn`t found"),
-                "Сообщение об ошибке отличается от ожидаемого");
+            Assert.That(result.IsSuccess, Is.True,
+                "Операция была неудачной, когда ожидался успех");
+            Assert.That(result.Status, Is.EqualTo(ResultStatus.NoContent),
+                "Статус результата не 204");
         });
 
         poolRepository.Verify(x => x.GetAvailableById(It.IsAny<Guid>(), TestHelper.UserId), Times.Once);
