@@ -20,12 +20,11 @@ public class RemovePoolCommandHandler : IRequestHandler<RemovePoolCommand, Resul
     {
         var pool = await _repository.GetAvailableById(request.Id, request.UserId);
 
-        if (pool == null)
+        if (pool != null)
         {
-            return Result<Unit>.Invalid("Pool with this id wasn`t found");
+            await _repository.Remove(pool);
         }
 
-        await _repository.Remove(pool);
         return Result<Unit>.Empty();
     }
 }

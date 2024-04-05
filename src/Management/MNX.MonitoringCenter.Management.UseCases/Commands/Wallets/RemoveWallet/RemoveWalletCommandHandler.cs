@@ -20,12 +20,11 @@ public class RemoveWalletCommandHandler : IRequestHandler<RemoveWalletCommand, R
     {
         var wallet = await _repository.GetAvailableById(request.Id, request.UserId);
 
-        if (wallet == null)
+        if (wallet != null)
         {
-            return Result<Unit>.Invalid("Wallet with this Id wasn't found");
+            await _repository.Remove(wallet);
         }
 
-        await _repository.Remove(wallet);
         return Result<Unit>.Empty();
     }
 }

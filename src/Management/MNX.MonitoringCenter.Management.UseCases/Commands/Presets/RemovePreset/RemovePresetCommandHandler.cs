@@ -20,12 +20,11 @@ public class RemovePresetCommandHandler : IRequestHandler<RemovePresetCommand, R
     {
         var preset = await _repository.GetAvailableById(request.Id, request.UserId);
 
-        if (preset == null)
+        if (preset != null)
         {
-            return Result<Unit>.Invalid("Preset with this id wasn`t found");
+            await _repository.Remove(preset);
         }
 
-        await _repository.Remove(preset);
         return Result<Unit>.Empty();
     }
 }
