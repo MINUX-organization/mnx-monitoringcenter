@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core;
+﻿using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
 using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
@@ -54,14 +55,21 @@ public class GetPresetsQueryHandlerTests
             .Returns(presets.ToAsyncEnumerable());
 
         var handler = new GetPresetsQueryHandler(
-            presetRepository.Object);
+            presetRepository.Object, TestHelper.GetMapper());
 
         var query = new GetPresetsQuery("GeForce GTX 1660 Super", 
                                         TestHelper.Cryptocurrency.UserId);
 
         var result = await handler.Handle(query, default).ToListAsync();
 
-        Assert.NotNull(result);
-        Assert.That(result, Is.EqualTo(presets));
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.ToAsyncEnumerable(), Is.InstanceOf<IAsyncEnumerable<PresetModel>>(),
+                "Не совпадают типы");
+            Assert.That(result, Is.Not.Empty, "Список пресетов пуст");
+
+            Assert.That(result[0].Id, Is.EqualTo(presets[0].Id), "Коллекции не равны");
+            Assert.That(result[1].Id, Is.EqualTo(presets[1].Id), "Коллекции не равны");
+        });
     }
 }

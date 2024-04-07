@@ -8,6 +8,7 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
 using Microsoft.AspNetCore.Authorization;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -41,8 +42,8 @@ public class CryptocurrencyController : ControllerBase
     /// <returns> Список криптовалют </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Cryptocurrency>), 200)]
-    public IAsyncEnumerable<Cryptocurrency> GetAll()
+    [ProducesResponseType(typeof(IAsyncEnumerable<CryptocurrencyModel>), 200)]
+    public IAsyncEnumerable<CryptocurrencyModel> GetAll()
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetCryptocurrenciesQuery(userId));
