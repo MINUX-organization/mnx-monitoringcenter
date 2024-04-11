@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Monitoring.Contracts.Models;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
 
 /// <summary>
 /// Получены динамические данные с ригов от агрегатора
@@ -15,5 +15,5 @@ public class GotRigsDynamicData
     /// <summary>
     /// Список динамических данных.
     /// </summary>
-    public List<RigDynamicData?> Data { get; set; } = new();
+    public List<RigDynamicData> Data { get; set; } = new();
 }

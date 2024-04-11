@@ -1,4 +1,5 @@
 ﻿using MNX.MonitoringCenter.Monitoring.Core;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 
@@ -18,7 +19,14 @@ public interface IRigRepository
     /// Получить список всех ригов клиента.
     /// </summary>
     /// <returns> Список ригов. </returns>
-    IAsyncEnumerable<Rig> GetAvailable(long userId);
+    Task<IEnumerable<Rig>> GetAvailable(long userId);
+
+    /// <summary>
+    /// Получить список идентификаторов ригов.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Список идентификаторов ригов. </returns>
+    Task<IEnumerable<Guid>> GetIds(Specification specification);
 
     /// <summary>
     /// Добавить риг.

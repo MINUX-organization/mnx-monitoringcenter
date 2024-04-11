@@ -1,6 +1,6 @@
 ﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Models;
 
-// <summary>
+/// <summary>
 /// Статистика полётного листа.
 /// </summary>
 public class FlightSheetStatistics
@@ -16,6 +16,11 @@ public class FlightSheetStatistics
     public string Coin { get; set; }
 
     /// <summary>
+    /// Алгоритм.
+    /// </summary>
+    public string Algorithm { get; set; }
+
+    /// <summary>
     /// Майнер.
     /// </summary>
     public string Miner { get; set; }
@@ -23,7 +28,7 @@ public class FlightSheetStatistics
     /// <summary>
     /// Скорость хеширования.
     /// </summary>
-    public ParameterModelWithMeasureUnit HashRate { get; set; }
+    public int HashRate { get; set; }
 
     /// <summary>
     /// Шеры.

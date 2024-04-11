@@ -6,7 +6,7 @@ using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.DataAccess;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
 using MNX.MonitoringCenter.Monitoring.Hubs;
-using MNX.MonitoringCenter.Monitoring.UseCases;
+using MNX.MonitoringCenter.Monitoring.Service.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
@@ -74,11 +74,15 @@ internal class Program
         services.AddSignalR();
         services.AddEasyNetQ(configuration, [Assembly.GetExecutingAssembly()]);
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-        services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
+        services.AddAutoMapper(new Assembly[]
+        {
+            typeof(MappingProfile).Assembly,
+            typeof(MNX.MonitoringCenter.Monitoring.UseCases.MappingProfile).Assembly
+        });
 
         services.AddScoped<IRigRepository, RigRepository>();
-        services.AddSingleton<ConnectionCounter>();
         services.AddScoped<UserAccessor>();
+        services.AddSingleton<IUserRigsObserverWrapper, UserRigsObserverWrapper>();
         services.AddHttpContextAccessor();
     }
 

@@ -1,11 +1,8 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
-using MNX.MonitoringCenter.Monitoring.UseCases.Commands;
-using MNX.MonitoringCenter.Monitoring.UseCases.Commands.DisconnectClient;
-using MNX.MonitoringCenter.Monitoring.UseCases.Commands.SubscribeClient;
+using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 
 namespace MNX.MonitoringCenter.Monitoring.Hubs;
 
@@ -16,18 +13,19 @@ namespace MNX.MonitoringCenter.Monitoring.Hubs;
 public class MonitoringHub : Hub<IMonitoringClient>
 {
     /// <summary>
-    /// Медиатор.
+    /// Наблюдатель за ригами.
     /// </summary>
-    private readonly IMediator _mediator;
+    private readonly IUserRigsObserverWrapper _observer;
 
     /// <summary>
     /// Сервис для доступа к данным пользователя.
     /// </summary>
     private readonly UserAccessor _userAccessor;
 
-    public MonitoringHub(IMediator mediator, UserAccessor userProfile)
+    public MonitoringHub(IUserRigsObserverWrapper observer,
+                         UserAccessor userProfile)
     {
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _observer = observer ?? throw new ArgumentNullException(nameof(observer));
         _userAccessor = userProfile ?? throw new ArgumentNullException(nameof(userProfile));
     }
 
@@ -36,13 +34,7 @@ public class MonitoringHub : Hub<IMonitoringClient>
     /// </summary>
     public override async Task OnConnectedAsync()
     {
-        var rigs = _mediator.CreateStream(new SubscribeClientCommand(new ConnectionModel()
-        {
-            UserId = _userAccessor.GetUserId(),
-            ConnectionId = Context.ConnectionId
-        }));  
-
-        await Clients.Client(Context.ConnectionId).ReceivedRigsInformation(rigs);
+        await _observer.AddNewSubscriber(_userAccessor.GetUserId(), Context.ConnectionId);
     }
 
     /// <summary>
@@ -51,10 +43,15 @@ public class MonitoringHub : Hub<IMonitoringClient>
     /// <param name="exception"> Возникшее исключение. </param>
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
-        await _mediator.Send(new DisconnectClientCommand(new ConnectionModel()
-        {
-            UserId = _userAccessor.GetUserId(),
-            ConnectionId = Context.ConnectionId
-        }));
+        await _observer.RemoveSubscriber(_userAccessor.GetUserId(), Context.ConnectionId);
+    }
+
+    /// <summary>
+    /// Выбрать монету, по которой будет идти мониторинг скорости хеширования.
+    /// </summary>
+    /// <param name="coin"> Монета. </param>
+    public void SendCoin(string coin)
+    {
+        _observer.SetObservableCoin(coin, _userAccessor.GetUserId(), Context.ConnectionId);
     }
 }

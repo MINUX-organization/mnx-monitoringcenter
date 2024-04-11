@@ -1,9 +1,9 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands;
+﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands.Subscription;
 
 /// <summary>
 /// Модель подключения.
 /// </summary>
-public class ConnectionModel
+public class SubscriptionModel
 {
     /// <summary>
     /// Идентификатор пользователя.

@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages;
+﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
 
 /// <summary>
 /// Сообщение об ожидании состояния ригов.
@@ -13,5 +13,5 @@ public class RigsStateWaitingMessage
     /// <summary>
     /// Идентификатор соединения веб-клиента.
     /// </summary>
-    public string ConnectionId { get; set; }   
+    public string ConnectionId { get; set; }
 }

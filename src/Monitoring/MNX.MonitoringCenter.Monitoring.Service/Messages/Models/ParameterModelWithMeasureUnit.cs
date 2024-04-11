@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Models;
+﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
 
 /// <summary>
 /// Модель параметра с единицей измерения.

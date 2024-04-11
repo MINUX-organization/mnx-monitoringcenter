@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 
 namespace MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
 
@@ -25,13 +26,25 @@ public class RigRepository : IRigRepository
                              .ConfigureAwait(false);
     }
 
-    public IAsyncEnumerable<Rig> GetAvailable(long userId)
+    public async Task<IEnumerable<Rig>> GetAvailable(long userId)
     {
-        return _context.Rigs
-                       .Where(x => x.UserId == userId)
-                       .Include(x => x.FlightSheetInfo)
-                       .AsNoTracking()
-                       .AsAsyncEnumerable();
+        return await _context.Rigs
+                             .AsNoTracking()
+                             .Where(x => x.UserId == userId)
+                             .Include(x => x.FlightSheetInfo)
+                             .ToListAsync()
+                             .ConfigureAwait(false);
+    }
+
+    public async Task<IEnumerable<Guid>> GetIds(Specification specification)
+    {
+        return await _context.Rigs
+                             .AsNoTracking()
+                             .Available(specification)
+                             .Filter(specification)
+                             .Select(x => x.Id)
+                             .ToListAsync()
+                             .ConfigureAwait(false);
     }
 
     public async Task<Guid> Add(Rig rig)

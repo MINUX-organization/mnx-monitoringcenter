@@ -6,8 +6,13 @@ namespace MNX.MonitoringCenter.Monitoring.Contracts.Models;
 /// <summary>
 /// Состояние рига.
 /// </summary>
-public class RigState : SystemData
+public class RigState : IRig
 {
+    /// <summary>
+    /// Уникальный идентификатор рига.
+    /// </summary>
+    public Guid Id { get; set; }
+
     /// <summary>
     /// Состояния видеокарт.
     /// </summary>

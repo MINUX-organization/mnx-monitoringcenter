@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Monitoring.Contracts.Models;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
 
 /// <summary>
 /// Получено сообщение о получении состоянии ригов от агрегатора.
@@ -20,5 +20,5 @@ public class GotRigsStateMessage
     /// <summary>
     /// Список состояний ригов.
     /// </summary>
-    public List<RigState?> RigsState { get; set; } = new();
+    public List<RigState> RigsState { get; set; } = new();
 }
