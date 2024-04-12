@@ -31,8 +31,9 @@ public class AggregatorConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAs
     /// </summary>
     /// <param name="message"> Сообщение динамических данных ригов. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public async Task ConsumeAsync(GotRigsDynamicData message, CancellationToken cancellationToken = default)
+    public Task ConsumeAsync(GotRigsDynamicData message, CancellationToken cancellationToken = default)
     {
-        await _observer.GotDynamicData(message.UserId, message.Data);
+        _observer.GotDynamicData(message.UserId, message.Data);
+        return Task.CompletedTask;
     }
 }

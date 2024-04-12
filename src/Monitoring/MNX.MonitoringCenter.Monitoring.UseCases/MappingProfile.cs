@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Monitoring.Core;
-using MNX.MonitoringCenter.Monitoring.UseCases.Commands.Subscription.SubscribeClient.Models;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases;
 

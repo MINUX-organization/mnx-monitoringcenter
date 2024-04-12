@@ -27,14 +27,14 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// <param name="coin"> Монета. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
-    void SetObservableCoin(string coin, long userId, string subscriberId);
+    Task SetObservableCoin(string coin, long userId, string subscriberId);
 
     /// <summary>
     /// Получены динамические данные с ригов.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="data"> Данные. </param>
-    Task GotDynamicData(long userId, List<RigDynamicData> data);
+    void GotDynamicData(long userId, List<RigDynamicData> data);
 
     /// <summary>
     /// Получено состояние ригов.

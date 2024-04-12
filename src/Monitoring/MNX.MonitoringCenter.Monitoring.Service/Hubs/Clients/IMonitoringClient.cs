@@ -1,7 +1,7 @@
 ﻿using MNX.MonitoringCenter.Monitoring.Contracts.Models;
 using MNX.MonitoringCenter.Monitoring.Service.Messages;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
-using MNX.MonitoringCenter.Monitoring.UseCases.Commands.Subscription.SubscribeClient.Models;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
 

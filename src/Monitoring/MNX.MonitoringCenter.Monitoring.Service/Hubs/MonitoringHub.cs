@@ -50,8 +50,8 @@ public class MonitoringHub : Hub<IMonitoringClient>
     /// Выбрать монету, по которой будет идти мониторинг скорости хеширования.
     /// </summary>
     /// <param name="coin"> Монета. </param>
-    public void SendCoin(string coin)
+    public async Task SendCoin(string coin)
     {
-        _observer.SetObservableCoin(coin, _userAccessor.GetUserId(), Context.ConnectionId);
+        await _observer.SetObservableCoin(coin, _userAccessor.GetUserId(), Context.ConnectionId);
     }
 }

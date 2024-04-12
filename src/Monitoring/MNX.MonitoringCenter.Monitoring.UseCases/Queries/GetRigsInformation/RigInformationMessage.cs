@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Monitoring.Core;
 
-namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands.Subscription.SubscribeClient.Models;
+namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
 /// Модель рига.

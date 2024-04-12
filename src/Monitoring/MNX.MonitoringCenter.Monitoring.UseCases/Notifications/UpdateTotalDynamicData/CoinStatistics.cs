@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Monitoring.Contracts.Models;
 
-namespace MNX.MonitoringCenter.Monitoring.Service.Messages.Models;
+namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications.UpdateTotalDynamicData;
 
 /// <summary>
 /// Статистика майнинга по монете.
@@ -27,7 +27,7 @@ public class CoinStatistics
     /// </summary>
     public SharesModel Shares { get; set; }
 
-    public static CoinStatistics operator + (CoinStatistics first, CoinStatistics second)
+    public static CoinStatistics operator +(CoinStatistics first, CoinStatistics second)
     {
         if (first.Coin != second.Coin || first.Algorithm != second.Algorithm)
         {
@@ -35,7 +35,7 @@ public class CoinStatistics
         }
 
         return new CoinStatistics
-        { 
+        {
             Coin = first.Coin,
             Algorithm = first.Algorithm,
             HashRate = first.HashRate + second.HashRate,

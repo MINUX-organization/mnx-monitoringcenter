@@ -1,11 +1,9 @@
-﻿using MNX.MonitoringCenter.Monitoring.UseCases.Commands.Subscription.SubscribeClient.Models;
-
-namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands.Subscription.SubscribeClient;
+﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
-/// Результат подписки клиента.
+/// Результат получения информации о ригах
 /// </summary>
-public class SubscribeClientResult
+public class GetRigsInformationResult
 {
     /// <summary>
     /// Риги.

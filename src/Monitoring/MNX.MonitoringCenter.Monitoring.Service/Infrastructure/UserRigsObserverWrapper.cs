@@ -1,4 +1,4 @@
-﻿using EasyNetQ;
+﻿using Microsoft.Extensions.Options;
 using MNX.MonitoringCenter.Monitoring.Contracts.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using System.Collections.Concurrent;
@@ -21,11 +21,6 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     private readonly IServiceScopeFactory _serviceScopeFactory;
 
     /// <summary>
-    /// Отправитель сообщений в шину.
-    /// </summary>
-    private readonly IPubSub _pubSub;
-
-    /// <summary>
     /// Наблюдатели за динамическими данными ригов.
     /// </summary>
     /// <remarks>
@@ -34,12 +29,18 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     /// </remarks>
     private ConcurrentDictionary<long, IUserRigsObserver> _observers = new();
 
-    public UserRigsObserverWrapper(IServiceScopeFactory serviceScopeFactory, IPubSub pubSub)
+    /// <summary>
+    /// Период обновления динамических данных.
+    /// </summary>
+    private readonly UpdateDynamicDataPeriod _updateDynamicDataPeriod;
+
+    public UserRigsObserverWrapper(IServiceScopeFactory serviceScopeFactory,
+                                   IOptions<UpdateDynamicDataPeriod> options)
     {
         _serviceScopeFactory = serviceScopeFactory
-            ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
+            ?? throw new ArgumentNullException(nameof(serviceScopeFactory)); 
 
-        _pubSub = pubSub ?? throw new ArgumentNullException(nameof(pubSub));
+        _updateDynamicDataPeriod = options.Value ?? throw new ArgumentNullException(nameof(options));
     }
 
     /// <inheritdoc/>
@@ -74,20 +75,20 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
-    public void SetObservableCoin(string coin, long userId, string subscriberId)
+    public async Task SetObservableCoin(string coin, long userId, string subscriberId)
     {
         if (_observers.TryGetValue(userId, out var observer))
         {
-            observer.SetObservableCoin(subscriberId, coin);
+            await observer.SetObservableCoin(subscriberId, coin);
         }
     }
 
     /// <inheritdoc/>
-    public async Task GotDynamicData(long userId, List<RigDynamicData> data)
+    public void GotDynamicData(long userId, List<RigDynamicData> data)
     {
         if (_observers.TryGetValue(userId, out var observer))
         {
-            await observer.GotDynamicData(data);
+            observer.GotDynamicData(data);
         }
     }
 
@@ -106,7 +107,9 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     /// <param name="userId"> Идентификатор пользователя. </param>
     private IUserRigsObserver GetOrCreateObserver(long userId)
     {
-        return _observers.GetOrAdd(userId, x => new UserRigsObserver(_serviceScopeFactory, _pubSub, userId));
+        return _observers.GetOrAdd(userId, x => new UserRigsObserver(_serviceScopeFactory,
+                                                                     userId,
+                                                                     _updateDynamicDataPeriod));
     }
 
     /// <summary>

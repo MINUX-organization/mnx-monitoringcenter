@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands.Subscription.SubscribeClient.Models;
+﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
 /// Общее кол-во видеокарт по признакам.

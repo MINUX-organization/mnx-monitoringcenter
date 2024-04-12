@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Monitoring.Contracts.Models;
-using MNX.MonitoringCenter.Monitoring.Service.Messages.Models;
+using MNX.MonitoringCenter.Monitoring.UseCases.Notifications.UpdateTotalDynamicData;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsIds;
 using System.Collections.Concurrent;
@@ -40,9 +40,15 @@ public class UserRigsDynamicDataCounter : IDisposable
     /// </remarks>
     private ConcurrentDictionary<Guid, List<(DateTimeOffset, RigDynamicData)>> _rigsDynamicDataHistory = new();
 
+    /// <summary>
+    /// Количество точек динамических данных в истории.
+    /// </summary>
+    private readonly int _dynamicDataPointCount;
+
     public UserRigsDynamicDataCounter(long userId)
     {
         _userId = userId;
+        _dynamicDataPointCount = 300;
     }
 
     /// <summary>
@@ -122,6 +128,48 @@ public class UserRigsDynamicDataCounter : IDisposable
     }
 
     /// <summary>
+    /// Получить историю по общей скорости хеширования.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> История скорости хеширования. </returns>
+    public List<(DateTimeOffset, int)> GetTotalHashRateHistory(RigsDynamicDataSpecification specification)
+    {
+        List<(DateTimeOffset, int)> history = new(_dynamicDataPointCount);
+
+        // получаем историю по ригу
+        foreach (var rigHistory in _rigsDynamicDataHistory.Select(x => x.Value.OrderBy(x => x.Item2)))
+        {
+            // берём список полётных листов в конкретный момент времени
+            foreach (var flightSheets in rigHistory.Select(x => x.Item2.FlightSheetsInfo))
+            {
+                int counter = 0;
+                int coinHashRate = 0;
+
+                // полётный лист в конкретный момент времени на конкретном риге
+                foreach (var flightSheet in flightSheets.Where(x => x.Coin == specification.ObservableCoin))
+                {
+                    coinHashRate += flightSheet.HashRate;
+                }
+
+                if (history.Count <= counter)
+                {
+                    history.Add((rigHistory.ElementAt(counter).Item1, coinHashRate));
+                }
+                else
+                {
+                    var pair = history[counter];
+                    pair.Item2 += coinHashRate;
+                    history[counter] = pair;
+                }
+
+                counter++;
+            }
+        }
+
+        return history;
+    }
+
+    /// <summary>
     /// Получить динамические данные с ригов.
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
@@ -151,7 +199,7 @@ public class UserRigsDynamicDataCounter : IDisposable
                                                 new List<(DateTimeOffset, RigDynamicData)>() { (DateTimeOffset.Now, rig) },
                                                 (_, value) =>
                                                 {
-                                                    if (value.Count >= 300)
+                                                    if (value.Count >= _dynamicDataPointCount)
                                                     {
                                                         value.RemoveAt(0);
                                                     }

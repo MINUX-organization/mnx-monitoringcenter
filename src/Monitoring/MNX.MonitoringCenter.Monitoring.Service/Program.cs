@@ -84,6 +84,8 @@ internal class Program
         services.AddScoped<UserAccessor>();
         services.AddSingleton<IUserRigsObserverWrapper, UserRigsObserverWrapper>();
         services.AddHttpContextAccessor();
+
+        services.ConfigureOptions<UpdateDynamicDataPeriod>();
     }
 
     private static async Task RunApp(WebApplicationBuilder builder)
