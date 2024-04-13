@@ -1,7 +1,7 @@
 ﻿using EasyNetQ;
 using MediatR;
-using MNX.MonitoringCenter.Monitoring.Contracts.Enums;
-using MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Enums;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.NotificationHandlers;

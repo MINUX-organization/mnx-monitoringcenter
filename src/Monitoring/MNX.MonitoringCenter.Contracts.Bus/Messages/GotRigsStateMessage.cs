@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 
 /// <summary>
 /// Получено сообщение о получении состоянии ригов от агрегатора.

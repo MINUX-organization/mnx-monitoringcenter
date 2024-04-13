@@ -5,30 +5,51 @@ using System.Linq.Dynamic;
 
 namespace MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
 
+/// <summary>
+/// Набор методов для фильтрации ригов, исходя из спецификации.
+/// </summary>
 internal static class RigSpecification
 {
-    internal static IQueryable<Rig> Available(this IQueryable<Rig> items, Specification specification)
+    /// <summary>
+    /// Получить доступные пользователю риги.
+    /// </summary>
+    /// <param name="rigs"> Риги. </param>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Доступные риги. </returns>
+    internal static IQueryable<Rig> Available(this IQueryable<Rig> rigs, Specification specification)
     {
-        return items.Where(rig => rig.UserId == specification.UserId);
+        return rigs.Where(rig => rig.UserId == specification.UserId);
     }
 
-    internal static IQueryable<Rig> Filter(this IQueryable<Rig> items, Specification specification)
+    /// <summary>
+    /// Отфильтровать коллекцию ригов.
+    /// </summary>
+    /// <param name="rigs"> Риги. </param>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Отфильтрованные риги. </returns>
+    internal static IQueryable<Rig> Filter(this IQueryable<Rig> rigs, Specification specification)
     {
         if (!string.IsNullOrEmpty(specification.SearchString))
         {
-            items = items.Search(specification.SearchString);
+            rigs = rigs.Search(specification.SearchString);
         }
 
-        if (!string.IsNullOrEmpty(specification.FilterString))
+        if (!string.IsNullOrEmpty(specification.FilterString) && specification.FilterArguments is not null)
         {
-            items = items.Where(specification.FilterString, specification.FilterArguments);
+            rigs = rigs.Where(specification.FilterString, specification.FilterArguments);
         }
         
-        return items;
+        return rigs;
     }
 
-    private static IQueryable<Rig> Search(this IQueryable<Rig> items, string searchString)
+    /// <summary>
+    /// Найти риги, исходя из строки поиска.
+    /// </summary>
+    /// <param name="rigs"> Риги. </param>
+    /// <param name="searchString"> Строка поиска. </param>
+    /// <returns> Найденные риги. </returns>
+    private static IQueryable<Rig> Search(this IQueryable<Rig> rigs, string searchString)
     {
-        return items.Where(item => EF.Functions.Like(item.Name, $"%{searchString}%"));
+        return rigs.Where(item => EF.Functions.Like(item.Name, $"%{searchString}%"));
     }
 }

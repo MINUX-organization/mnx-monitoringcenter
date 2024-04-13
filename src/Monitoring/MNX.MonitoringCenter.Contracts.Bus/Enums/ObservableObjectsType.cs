@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json.Converters;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Enums;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Enums;
 
 /// <summary>
 /// Тип наблюдаемых объектов.
 /// </summary>
-[JsonConverter(typeof(StringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum ObservableObjectsType
 {
     /// <summary>

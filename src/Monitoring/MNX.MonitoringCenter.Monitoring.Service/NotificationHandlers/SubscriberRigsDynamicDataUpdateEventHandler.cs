@@ -1,9 +1,10 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using MNX.MonitoringCenter.Monitoring.Contracts.Abstractions;
-using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Abstractions;
 using MNX.MonitoringCenter.Monitoring.Hubs;
 using MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
+using MNX.MonitoringCenter.Monitoring.Service.Messages.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications.UpdateDynamicData;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsIds;
@@ -22,15 +23,22 @@ public class SubscriberRigsDynamicDataUpdateEventHandler
     private readonly IMediator _mediator;
 
     /// <summary>
+    /// Маппер.
+    /// </summary>
+    private readonly IMapper _mapper;
+
+    /// <summary>
     /// Контекст хаба мониторинга.
     /// </summary>
-    private readonly IHubContext<MonitoringHub, IMonitoringClient> _hubContext;
+    private readonly IHubContext<MonitoringHub, IMonitoringClient> _monitoringHubContext;
 
     public SubscriberRigsDynamicDataUpdateEventHandler(IMediator mediator,
-                                                       IHubContext<MonitoringHub, IMonitoringClient> hubContext)
+                                                       IMapper mapper,
+                                                       IHubContext<MonitoringHub, IMonitoringClient> monitoringHubContext)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _hubContext = hubContext ?? throw new ArgumentNullException(nameof(hubContext));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _monitoringHubContext = monitoringHubContext ?? throw new ArgumentNullException(nameof(monitoringHubContext));
     }
 
     public async Task Handle(SubscriberRigsDynamicDataUpdateEvent notification, CancellationToken cancellationToken)
@@ -42,13 +50,13 @@ public class SubscriberRigsDynamicDataUpdateEventHandler
                                                   notification.Specification.FilterArguments)),
             cancellationToken);
 
-        var response = (IEnumerable<RigDynamicData?>)MapToResponse(rigsIds.ToList(), notification.RigsDynamicData);
+        var response = MapToResponse(rigsIds.ToList(), notification.RigsDynamicData);
 
-        await _hubContext.Clients.Client(notification.SubscriberId).ReceivedRigsDynamicData(response);
+        await _monitoringHubContext.Clients.Client(notification.SubscriberId).ReceivedRigsDynamicData(response);
 
         if (notification.HashRateByObservableCoin is not null)
         {
-            await _hubContext.Clients.Client(notification.SubscriberId)
+            await _monitoringHubContext.Clients.Client(notification.SubscriberId)
                     .ReceivedCurrentHashRate(notification.HashRateByObservableCoin);
         }
     }
@@ -59,7 +67,7 @@ public class SubscriberRigsDynamicDataUpdateEventHandler
     /// <param name="rigsIds"> Идентификаторы отфильтрованных ригов. </param>
     /// <param name="rigs"> Данные ригов. </param>
     /// <returns> Подготовленные к отправке клиенту данные ригов. </returns>
-    private static List<IRig?> MapToResponse(List<Guid> rigsIds, IEnumerable<IRig> rigs)
+    private List<RigDynamicDataModel?> MapToResponse(List<Guid> rigsIds, IEnumerable<IRig> rigs) // todo: вынести
     {
         List<IRig?> response = new();
 
@@ -76,6 +84,6 @@ public class SubscriberRigsDynamicDataUpdateEventHandler
             response.Add(null);
         }
 
-        return response;
+        return _mapper.Map<List<RigDynamicDataModel?>>(response);
     }
 }

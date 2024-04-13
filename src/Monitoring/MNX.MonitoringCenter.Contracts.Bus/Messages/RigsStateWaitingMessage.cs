@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
+﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 
 /// <summary>
 /// Сообщение об ожидании состояния ригов.

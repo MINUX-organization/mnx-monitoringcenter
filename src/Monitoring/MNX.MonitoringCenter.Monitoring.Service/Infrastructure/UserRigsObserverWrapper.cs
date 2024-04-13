@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using System.Collections.Concurrent;
 
@@ -32,10 +32,10 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     /// <summary>
     /// Период обновления динамических данных.
     /// </summary>
-    private readonly UpdateDynamicDataPeriod _updateDynamicDataPeriod;
+    private readonly DynamicDataOptions _updateDynamicDataPeriod;
 
     public UserRigsObserverWrapper(IServiceScopeFactory serviceScopeFactory,
-                                   IOptions<UpdateDynamicDataPeriod> options)
+                                   IOptions<DynamicDataOptions> options)
     {
         _serviceScopeFactory = serviceScopeFactory
             ?? throw new ArgumentNullException(nameof(serviceScopeFactory)); 

@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications.UpdateTotalDynamicData;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsIds;
@@ -45,10 +45,10 @@ public class UserRigsDynamicDataCounter : IDisposable
     /// </summary>
     private readonly int _dynamicDataPointCount;
 
-    public UserRigsDynamicDataCounter(long userId)
+    public UserRigsDynamicDataCounter(long userId, DynamicDataOptions dynamicDataOptions)
     {
         _userId = userId;
-        _dynamicDataPointCount = 300;
+        _dynamicDataPointCount = dynamicDataOptions.PointCount;
     }
 
     /// <summary>

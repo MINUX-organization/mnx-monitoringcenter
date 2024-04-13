@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 

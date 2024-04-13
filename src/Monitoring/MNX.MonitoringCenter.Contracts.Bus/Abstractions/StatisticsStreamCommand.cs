@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Enums;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Enums;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Abstractions;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Abstractions;
 
 /// <summary>
 /// Команда потока статистики.

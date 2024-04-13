@@ -13,31 +13,34 @@ namespace MNX.MonitoringCenter.Monitoring.Service.NotificationHandlers;
 /// </summary>
 public class GotRigsInformationEventHandler : INotificationHandler<GotRigsInformationEvent>
 {
-    private readonly IHubContext<MonitoringHub, IMonitoringClient> _hubContext;
+    /// <summary>
+    /// Контекст хаба мониторинга.
+    /// </summary>
+    private readonly IHubContext<MonitoringHub, IMonitoringClient> _monitoringHubContext;
 
-    public GotRigsInformationEventHandler(IHubContext<MonitoringHub, IMonitoringClient> hubContext)
+    public GotRigsInformationEventHandler(IHubContext<MonitoringHub, IMonitoringClient> monitoringHubContext)
     {
-        _hubContext = hubContext ?? throw new ArgumentNullException(nameof(hubContext));
+        _monitoringHubContext = monitoringHubContext ?? throw new ArgumentNullException(nameof(monitoringHubContext));
     }
 
     public async Task Handle(GotRigsInformationEvent notification, CancellationToken cancellationToken)
     {
-        await _hubContext.Clients.Client(notification.SubscriberId)
+        await _monitoringHubContext.Clients.Client(notification.SubscriberId)
             .ReceivedRigsInformation(notification.Information.Rigs);
 
-        await _hubContext.Clients.Client(notification.SubscriberId).ReceivedTotalData(new TotalDataChangeMessage()
+        await _monitoringHubContext.Clients.Client(notification.SubscriberId).ReceivedTotalData(new TotalDataChangeMessage()
         {
             Type = TotalDataType.TotalRigsCount,
             NewData = notification.Information.Rigs
         });
 
-        await _hubContext.Clients.Client(notification.SubscriberId).ReceivedTotalData(new TotalDataChangeMessage()
+        await _monitoringHubContext.Clients.Client(notification.SubscriberId).ReceivedTotalData(new TotalDataChangeMessage()
         {
             Type = TotalDataType.TotalGpusCount,
             NewData = notification.Information.Rigs
         });
 
-        await _hubContext.Clients.Client(notification.SubscriberId).ReceivedTotalData(new TotalDataChangeMessage()
+        await _monitoringHubContext.Clients.Client(notification.SubscriberId).ReceivedTotalData(new TotalDataChangeMessage()
         {
             Type = TotalDataType.TotalCpusCount,
             NewData = notification.Information.Rigs

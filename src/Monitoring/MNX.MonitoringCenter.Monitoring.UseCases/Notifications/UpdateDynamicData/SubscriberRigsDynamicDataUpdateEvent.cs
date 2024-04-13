@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 

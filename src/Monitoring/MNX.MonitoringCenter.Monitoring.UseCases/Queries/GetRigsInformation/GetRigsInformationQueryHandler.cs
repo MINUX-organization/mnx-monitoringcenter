@@ -22,7 +22,7 @@ public class GetRigsInformationQueryHandler : IRequestHandler<GetRigsInformation
 
     public async Task<GetRigsInformationResult> Handle(GetRigsInformationQuery request, CancellationToken cancellationToken)
     {
-        var rigs = await _rigRepository.GetAvailable(request.UserId);
+        var rigs = await _rigRepository.GetAvailable(request.specification);
         return ToResult(rigs);
     }
 

@@ -13,30 +13,33 @@ namespace MNX.MonitoringCenter.Monitoring.Service.NotificationHandlers;
 /// </summary>
 public class UpdateTotalDynamicDataEventHandler : INotificationHandler<UpdateTotalDynamicDataEvent>
 {
-    private readonly IHubContext<MonitoringHub, IMonitoringClient> _hubContext;
+    /// <summary>
+    /// Контекст хаба мониторинга.
+    /// </summary>
+    private readonly IHubContext<MonitoringHub, IMonitoringClient> _monitoringHubContext;
 
-    public UpdateTotalDynamicDataEventHandler(IHubContext<MonitoringHub, IMonitoringClient> hubContext)
+    public UpdateTotalDynamicDataEventHandler(IHubContext<MonitoringHub, IMonitoringClient> monitoringHubContext)
     {
-        _hubContext = hubContext;
+        _monitoringHubContext = monitoringHubContext;
     }
 
     public async Task Handle(UpdateTotalDynamicDataEvent notification, CancellationToken cancellationToken)
     {
-        await _hubContext.Clients.User(notification.UserId.ToString())
+        await _monitoringHubContext.Clients.User(notification.UserId.ToString())
             .ReceivedTotalData(new TotalDataChangeMessage()
             {
                 Type = TotalDataType.TotalPower,
                 NewData = notification.Total.Power
             });
 
-        await _hubContext.Clients.User(notification.UserId.ToString())
+        await _monitoringHubContext.Clients.User(notification.UserId.ToString())
             .ReceivedTotalData(new TotalDataChangeMessage()
             {
                 Type = TotalDataType.TotalShares,
                 NewData = notification.Total.Shares
             });
 
-        await _hubContext.Clients.User(notification.UserId.ToString())
+        await _monitoringHubContext.Clients.User(notification.UserId.ToString())
             .ReceivedTotalData(new TotalDataChangeMessage()
             {
                 Type = TotalDataType.TotalCoinsList,

@@ -12,14 +12,15 @@ public interface IRigRepository
     /// Получить риг по идентификатору.
     /// </summary>
     /// <param name="id">  Уникальный идентификатор. </param>
-    /// <returns> Риг </returns>
+    /// <returns> Риг. </returns>
     Task<Rig?> GetById(Guid id, long userId);
 
     /// <summary>
     /// Получить список всех ригов клиента.
     /// </summary>
+    /// <param name="specification"> Спецификация. </param>
     /// <returns> Список ригов. </returns>
-    Task<IEnumerable<Rig>> GetAvailable(long userId);
+    Task<IEnumerable<Rig>> GetAvailable(Specification specification);
 
     /// <summary>
     /// Получить список идентификаторов ригов.
@@ -31,19 +32,19 @@ public interface IRigRepository
     /// <summary>
     /// Добавить риг.
     /// </summary>
-    /// <param name="rig"> Риг </param>
+    /// <param name="rig"> Риг. </param>
     /// <returns> Уникальный идентификатор рига. </returns>
     Task<Guid> Add(Rig rig);
 
     /// <summary>
     /// Обновить данные о риге.
     /// </summary>
-    /// <param name="rig"> Риг с новыми данными </param>
+    /// <param name="rig"> Риг с новыми данными. </param>
     Task Update(Rig rig);
 
     /// <summary>
     /// Удалить риг.
     /// </summary>
-    /// <param name="rig"> Риг </param>
+    /// <param name="rig"> Риг. </param>
     Task Remove(Rig rig);
 }

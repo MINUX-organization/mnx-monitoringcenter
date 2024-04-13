@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using EasyNetQ;
 using MediatR;
-using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
@@ -66,9 +65,9 @@ public class UserRigsObserver : IUserRigsObserver
 
     public UserRigsObserver(IServiceScopeFactory serviceScopeFactory,
                             long userId,
-                            UpdateDynamicDataPeriod updateDynamicDataPeriod)
+                            DynamicDataOptions dynamicDataOptions)
     {
-        _rigsDynamicDataCounter = new UserRigsDynamicDataCounter(userId);
+        _rigsDynamicDataCounter = new UserRigsDynamicDataCounter(userId, dynamicDataOptions);
 
         _serviceScopeFactory = serviceScopeFactory
             ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
@@ -77,21 +76,20 @@ public class UserRigsObserver : IUserRigsObserver
 
         _rigsDynamicDataStream = new Subject<List<RigDynamicData>>();
         _rigsDynamicDataStreamSubscription = _rigsDynamicDataStream
-                    .Sample(TimeSpan.FromSeconds(updateDynamicDataPeriod.ValueInSeconds))
+                    .Sample(TimeSpan.FromSeconds(dynamicDataOptions.UpdatePeriodInSeconds))
                     .Subscribe(async x => await NotifyRigsDynamicDataUpdated());
     }
 
     /// <inheritdoc/>
     public async Task<long> Subscribe(string subscriberId)
     {
-        var scope = _serviceScopeFactory.CreateScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var mediator = GetMediator();
 
         var subscribersCount = Interlocked.Increment(ref _subscribersCount);
 
         await mediator.Publish(new ClientSubscriptionEvent(_userId, subscriberId, subscribersCount));
 
-        var result = await mediator.Send(new GetRigsInformationQuery(_userId));
+        var result = await mediator.Send(new GetRigsInformationQuery(new Specification(_userId)));
         await mediator.Publish(new GotRigsInformationEvent(subscriberId, result));
 
         return subscribersCount;
@@ -106,8 +104,7 @@ public class UserRigsObserver : IUserRigsObserver
 
         if (subscribersCount <= 0)
         {
-            var scope = _serviceScopeFactory.CreateScope();
-            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            var mediator = GetMediator();
 
             await mediator.Publish(new LastClientUnsubscribedEvent(_userId));
         }
@@ -137,6 +134,7 @@ public class UserRigsObserver : IUserRigsObserver
                                     Time = x.Item1,
                                     Value = mapper.Map<ParameterModelWithMeasureUnit>(x.Item2, options =>
                                     {
+                                        // todo : вынести в конфиги
                                         options.Items.Add("DefaultMeasureUnit", "H/s");
                                         options.Items.Add("MeasureUnits", new string[] { "H/s", "KH/s", "MH/s", "TH/s" });
                                     })
@@ -158,8 +156,7 @@ public class UserRigsObserver : IUserRigsObserver
     {
         if (_subscriberSpecifications.TryGetValue(subscriberId, out var subscriber))
         {
-            var scope = _serviceScopeFactory.CreateScope();
-            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+            var mediator = GetMediator();
 
             await mediator.Publish(new RigsStateReceivedEvent(subscriberId,
                                                               new Specification(_userId,
@@ -210,6 +207,16 @@ public class UserRigsObserver : IUserRigsObserver
                                         rigsDynamicData,
                                         hashRate));
         }
+    }
+
+    /// <summary>
+    /// Получить экземпляр посредника.
+    /// </summary>
+    /// <returns> Посредник. </returns>
+    private IMediator GetMediator()
+    {
+        var scope = _serviceScopeFactory.CreateScope();
+        return scope.ServiceProvider.GetRequiredService<IMediator>();
     }
 
     /// <summary>

@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json.Converters;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Messages.Models;
 
 /// <summary>
 /// Тип объектов, для которых высчитываются обобщённые данные.
 /// </summary>
-[JsonConverter(typeof(StringEnumConverter))]
+[JsonConverter(typeof(JsonStringEnumConverter))]
 public enum TotalDataType
 {
     /// <summary>

@@ -1,5 +1,5 @@
 ﻿using EasyNetQ.AutoSubscribe;
-using MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Consumers;

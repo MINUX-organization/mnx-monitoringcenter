@@ -1,9 +1,9 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 
 /// <summary>
-/// Получены динамические данные с ригов от агрегатора
+/// Получены динамические данные с ригов от агрегатора.
 /// </summary>
 public class GotRigsDynamicData
 {

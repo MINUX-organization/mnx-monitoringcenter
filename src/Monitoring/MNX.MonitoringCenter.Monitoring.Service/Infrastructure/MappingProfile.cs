@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+using MNX.MonitoringCenter.Monitoring.Service.Messages.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Infrastructure;
@@ -15,13 +17,21 @@ public class MappingProfile : Profile
             => ConvertToModelWithMeasureUnit(value,
                                              context.Items["DefaultMeasureUnit"].ToString()!,
                                              (string[])context.Items["MeasureUnits"]));
+
+        CreateMap<RigDynamicData, RigDynamicDataModel>();
+
+        CreateMap<FlightSheetStatistics, FlightSheetModel>()
+            .ForMember(x => x.HashRate,
+                       y => y.MapFrom(opt => ConvertToModelWithMeasureUnit(opt.HashRate,
+                                                                           "H/s", // todo: вынести
+                                                                           new string[] { "H/s", "KH/s", "MH/s", "TH/s" })));
     }
 
     private static ParameterModelWithMeasureUnit ConvertToModelWithMeasureUnit(int defaultValue,
                                                                                string defaultMeasureUnit,
                                                                                string[] measureUnits)
     {
-        float newValue = defaultValue;
+        double newValue = defaultValue;
         string newUnit = defaultMeasureUnit;
 
         for (int i = 1; i < measureUnits.Length; i++)
@@ -37,7 +47,7 @@ public class MappingProfile : Profile
 
         return new ParameterModelWithMeasureUnit()
         {
-            Value = newValue,
+            Value = Math.Round(newValue, 2),
             MeasureUnit = newUnit
         };
     }

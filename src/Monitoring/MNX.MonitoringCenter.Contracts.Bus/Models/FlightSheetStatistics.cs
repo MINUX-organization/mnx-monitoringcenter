@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Models;
+﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
 /// <summary>
 /// Статистика полётного листа.

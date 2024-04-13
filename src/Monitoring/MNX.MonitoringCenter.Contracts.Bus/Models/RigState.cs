@@ -1,7 +1,7 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Abstractions;
-using MNX.MonitoringCenter.Monitoring.Contracts.Enums;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Abstractions;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Enums;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Models;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
 /// <summary>
 /// Состояние рига.

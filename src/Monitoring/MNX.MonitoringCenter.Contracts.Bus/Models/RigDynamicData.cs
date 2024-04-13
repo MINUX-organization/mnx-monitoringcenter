@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Abstractions;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Abstractions;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Models;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
 /// <summary>
 /// Динамические данные ригов.
@@ -28,6 +28,11 @@ public class RigDynamicData : IRig
     public int Power { get; set; }
 
     /// <summary>
+    /// Скорость интернета.
+    /// </summary>
+    public int InternetSpeed { get; set; }
+
+    /// <summary>
     /// Время майнинга.
     /// </summary>
     public DateTime MiningUpTime { get; set; }
@@ -41,9 +46,4 @@ public class RigDynamicData : IRig
     /// Информация о полётных листах.
     /// </summary>
     public List<FlightSheetStatistics> FlightSheetsInfo { get; set; } = new();
-
-    /// <summary>
-    /// Скорость интернета.
-    /// </summary>
-    public int InternetSpeed { get; set; }
 }

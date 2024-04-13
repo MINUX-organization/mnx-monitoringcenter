@@ -18,11 +18,6 @@ public class RigInformationMessage
     public int Index { get; set; }
 
     /// <summary>
-    /// Идентификатор пользователя.
-    /// </summary>
-    public long UserId { get; set; }
-
-    /// <summary>
     /// Название.
     /// </summary>
     public string Name { get; set; }

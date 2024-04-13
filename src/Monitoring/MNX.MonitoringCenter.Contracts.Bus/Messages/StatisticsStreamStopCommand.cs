@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Abstractions;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Abstractions;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Messages.Bus;
+namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 
 /// <summary>
 /// Команда остановки потока статистики.
