@@ -24,9 +24,9 @@ public interface IMonitoringClient
     Task ReceivedRigsDynamicData(IEnumerable<RigDynamicDataModel?> DynamicData);
 
     /// <summary>
-    /// Получено сообщение об информации ригов.
+    /// Получено сообщение с информацией о ригах.
     /// </summary>
-    /// <param name="message"> Сообщение об информации ригов. </param>
+    /// <param name="message"> Сообщение с информацией о ригах. </param>
     Task ReceivedRigsInformation(IEnumerable<RigInformationMessage> message);
 
     /// <summary>

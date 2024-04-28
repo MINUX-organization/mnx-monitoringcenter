@@ -3,16 +3,16 @@
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 /// <summary>
-/// Событие об отписке последнего пользователя от наблюдателя.
+/// Событие об ожидании динамических данных с ригов.
 /// </summary>
-public class LastClientUnsubscribedEvent : INotification
+public class DynamicDataWaitingEvent : INotification
 {
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public long UserId { get; set; }
 
-    public LastClientUnsubscribedEvent(long userId)
+    public DynamicDataWaitingEvent(long userId)
     {
         UserId = userId;
     }

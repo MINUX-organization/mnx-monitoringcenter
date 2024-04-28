@@ -34,7 +34,19 @@ public class MonitoringHub : Hub<IMonitoringClient>
     /// </summary>
     public override async Task OnConnectedAsync()
     {
-        await _observer.AddNewSubscriber(_userAccessor.GetUserId(), Context.ConnectionId);
+        bool subscribeToDynamicDataStream = false;
+
+        if (Context.GetHttpContext()!.Request.Query.TryGetValue("SubscribeToDynamicDataStream", out var argument))
+        {
+            if (bool.TryParse(argument, out var _))
+            {
+                subscribeToDynamicDataStream = true;
+            }
+        }
+
+        await _observer.AddNewSubscriber(_userAccessor.GetUserId(),
+                                         Context.ConnectionId,
+                                         subscribeToDynamicDataStream);
     }
 
     /// <summary>

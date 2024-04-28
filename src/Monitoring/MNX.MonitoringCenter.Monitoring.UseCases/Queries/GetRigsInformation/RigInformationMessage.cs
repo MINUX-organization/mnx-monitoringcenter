@@ -1,6 +1,4 @@
-﻿using MNX.MonitoringCenter.Monitoring.Core;
-
-namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
+﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
 /// Модель рига.
@@ -23,14 +21,49 @@ public class RigInformationMessage
     public string Name { get; set; }
 
     /// <summary>
+    /// Глобальный IP-адрес.
+    /// </summary>
+    public string GlobalIP { get; set; }
+
+    /// <summary>
     /// Локальный IP-адрес.
     /// </summary>
     public string LocalIP { get; set; }
 
     /// <summary>
+    /// MAC адрес.
+    /// </summary>
+    public string Mac { get; set; }
+
+    /// <summary>
     /// Версия Minux.
     /// </summary>
     public string MinuxVersion { get; set; }
+
+    /// <summary>
+    /// Версия Linux.
+    /// </summary>
+    public string LisnuxVersion { get; set; }
+
+    /// <summary>
+    /// Версия AMD драйвера.
+    /// </summary>
+    public string AmdDriverVersion { get; set; }
+
+    /// <summary>
+    /// Версия драйвера Nvidia.
+    /// </summary>
+    public string NvidiaDriverVersion { get; set; }
+
+    /// <summary>
+    /// Версия OpenCL.
+    /// </summary>
+    public string OpenCLVersion { get; set; }
+
+    /// <summary>
+    /// Версия CUDA.
+    /// </summary>
+    public string CudaVersion { get; set; }
 
     /// <summary>
     /// Количество карт Nvidia.
@@ -48,7 +81,32 @@ public class RigInformationMessage
     public int IntelGpusCount { get; set; }
 
     /// <summary>
+    /// Общее количество видеокарт.
+    /// </summary>
+    public int TotalGpusCount { get; set; }
+
+    /// <summary>
+    /// Количество процессоров AMD.
+    /// </summary>
+    public int AmdCpusCount { get; set; }
+
+    /// <summary>
+    /// Количество процессоров Intel.
+    /// </summary>
+    public int IntelCpusCount { get; set; }
+
+    /// <summary>
+    /// Общее количество процессоров.
+    /// </summary>
+    public int TotalCpusCount { get; set; }
+
+    /// <summary>
+    /// Количество жёстких дисков.
+    /// </summary>
+    public int HddsCount { get; set; }
+
+    /// <summary>
     /// Информация о полётных листах.
     /// </summary>
-    public List<FlightSheet> FlightSheetInfo { get; set; } = new();
+    public List<FlightSheetModel> FlightSheetInfo { get; set; } = new();
 }

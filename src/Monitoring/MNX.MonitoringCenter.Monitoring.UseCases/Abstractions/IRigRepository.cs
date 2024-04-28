@@ -16,11 +16,18 @@ public interface IRigRepository
     Task<Rig?> GetById(Guid id, long userId);
 
     /// <summary>
-    /// Получить список всех ригов клиента.
+    /// Получить список ригов.
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Список ригов. </returns>
-    Task<IEnumerable<Rig>> GetAvailable(Specification specification);
+    IAsyncEnumerable<Rig> GetList(Specification specification);
+
+    /// <summary>
+    /// Получить обобщённые количественные данные ригов.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Обобщённые количественные данные ригов. </returns>
+    Task<RigsSummarizedQuantitativeData> GetRigsSummarizedQuantitativeData(Specification specification);
 
     /// <summary>
     /// Получить список идентификаторов ригов.

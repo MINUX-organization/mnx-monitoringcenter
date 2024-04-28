@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Monitoring.Core;
+using MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
+using System.Reflection;
 
 namespace MNX.MonitoringCenter.Monitoring.DataAccess;
 
@@ -11,7 +12,12 @@ public class Context : DbContext
     /// <summary>
     /// Риги.
     /// </summary>
-    public DbSet<Rig> Rigs { get; set; }
+    public DbSet<RigDto> Rigs { get; set; }
 
     public Context(DbContextOptions<Context> option) : base(option) { }
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    }
 }

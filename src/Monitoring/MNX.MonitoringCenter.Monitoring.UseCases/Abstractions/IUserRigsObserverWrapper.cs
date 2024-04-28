@@ -12,7 +12,8 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
-    Task AddNewSubscriber(long userId, string subscriberId);
+    /// <param name="subscribeToDynamicDataStream"> Признак подписки на поток динамических данных. </param>
+    Task AddNewSubscriber(long userId, string subscriberId, bool subscribeToDynamicDataStream);
 
     /// <summary>
     /// Удалить подписчика.

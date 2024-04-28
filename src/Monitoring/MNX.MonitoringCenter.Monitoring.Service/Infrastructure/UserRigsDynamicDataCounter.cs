@@ -112,7 +112,7 @@ public class UserRigsDynamicDataCounter : IDisposable
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Общая скорость хеширования. </returns>
-    public int GetTotalHashRate(RigsDynamicDataSpecification specification)
+    public int GetTotalHashRate(RigsDataSpecification specification)
     {
         int coinHashRate = 0;
 
@@ -132,7 +132,7 @@ public class UserRigsDynamicDataCounter : IDisposable
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> История скорости хеширования. </returns>
-    public List<(DateTimeOffset, int)> GetTotalHashRateHistory(RigsDynamicDataSpecification specification)
+    public List<(DateTimeOffset, int)> GetTotalHashRateHistory(RigsDataSpecification specification)
     {
         List<(DateTimeOffset, int)> history = new(_dynamicDataPointCount);
 
@@ -175,7 +175,7 @@ public class UserRigsDynamicDataCounter : IDisposable
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Динамические данные ригов. </returns>
     public async Task<List<RigDynamicData>> GetRigsDynamicData(IMediator mediator,
-                                                               RigsDynamicDataSpecification specification)
+                                                               RigsDataSpecification specification)
     {
         var ids = await mediator.Send(new GetRigsIdsQuery(new Specification(_userId,
                                                                             specification.RigsSearchString,

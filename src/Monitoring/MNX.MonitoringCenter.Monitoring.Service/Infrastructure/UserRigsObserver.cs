@@ -7,10 +7,11 @@ using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications.UpdateDynamicData;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications.UpdateTotalDynamicData;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsIds;
 using System.Collections.Concurrent;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Infrastructure;
 
@@ -45,9 +46,13 @@ public class UserRigsObserver : IUserRigsObserver
     private ISubject<List<RigDynamicData>> _rigsDynamicDataStream;
 
     /// <summary>
-    /// Подписка на поток динамических данных с ригов.
+    /// Подписки на поток динамических данных с ригов.
     /// </summary>
-    private IDisposable _rigsDynamicDataStreamSubscription;
+    /// <remarks>
+    /// Ключ - идентификатор подписчика.
+    /// Значение - Подписка на поток динамических данных с ригов.
+    /// </remarks>
+    private ConcurrentDictionary<string, IDisposable> _rigsDynamicDataStreamSubscriptions = new();
 
     /// <summary>
     /// Спецификации фильтрации данных для каждого подписчика.
@@ -56,18 +61,31 @@ public class UserRigsObserver : IUserRigsObserver
     /// Ключ - идентификатор подписчика.
     /// Значение - спецификация.
     /// </remarks>
-    private ConcurrentDictionary<string, RigsDynamicDataSpecification> _subscriberSpecifications = new();
+    private ConcurrentDictionary<string, RigsDataSpecification> _subscriberSpecifications = new();
 
     /// <summary>
     /// Счётчик динамических данных ригов.
     /// </summary>
     private UserRigsDynamicDataCounter _rigsDynamicDataCounter;
 
+    /// <summary>
+    /// Кеш состояния ригов.
+    /// </summary>
+    private readonly IFusionCache _rigsStateCache;
+
+    /// <summary>
+    /// Параметры динамических данных.
+    /// </summary>
+    private DynamicDataOptions _dynamicDataOptions;
+
     public UserRigsObserver(IServiceScopeFactory serviceScopeFactory,
                             long userId,
-                            DynamicDataOptions dynamicDataOptions)
+                            DynamicDataOptions dynamicDataOptions,
+                            IFusionCache cache)
     {
         _rigsDynamicDataCounter = new UserRigsDynamicDataCounter(userId, dynamicDataOptions);
+        _rigsStateCache = cache ?? throw new ArgumentNullException(nameof(cache));
+        _dynamicDataOptions = dynamicDataOptions ?? throw new ArgumentNullException(nameof(dynamicDataOptions));
 
         _serviceScopeFactory = serviceScopeFactory
             ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
@@ -75,41 +93,48 @@ public class UserRigsObserver : IUserRigsObserver
         _userId = userId;
 
         _rigsDynamicDataStream = new Subject<List<RigDynamicData>>();
-        _rigsDynamicDataStreamSubscription = _rigsDynamicDataStream
-                    .Sample(TimeSpan.FromSeconds(dynamicDataOptions.UpdatePeriodInSeconds))
-                    .Subscribe(async x => await NotifyRigsDynamicDataUpdated());
     }
 
     /// <inheritdoc/>
-    public async Task<long> Subscribe(string subscriberId)
+    public async Task<long> Subscribe(string subscriberId, bool subscribeToDynamicDataStream)
     {
+        if (!_subscriberSpecifications.TryAdd(subscriberId, new RigsDataSpecification()))
+        {
+            return _subscribersCount;
+        }
+
         var mediator = GetMediator();
 
-        var subscribersCount = Interlocked.Increment(ref _subscribersCount);
+        await SendRigsState(mediator, subscriberId);
 
-        await mediator.Publish(new ClientSubscriptionEvent(_userId, subscriberId, subscribersCount));
+        if (subscribeToDynamicDataStream)
+        {
+            await SubscribeToDynamicDataStream(mediator, subscriberId);
+        }
 
-        var result = await mediator.Send(new GetRigsInformationQuery(new Specification(_userId)));
-        await mediator.Publish(new GotRigsInformationEvent(subscriberId, result));
-
-        return subscribersCount;
+        return Interlocked.Increment(ref _subscribersCount);
     }
 
     /// <inheritdoc/>
     public async Task<long> Unsubscribe(string subscriberId)
     {
-        _subscriberSpecifications.TryRemove(subscriberId, out var _);
-
-        var subscribersCount = Interlocked.Decrement(ref _subscribersCount);
-
-        if (subscribersCount <= 0)
+        if (!_subscriberSpecifications.TryRemove(subscriberId, out var _))
         {
-            var mediator = GetMediator();
-
-            await mediator.Publish(new LastClientUnsubscribedEvent(_userId));
+            return _subscribersCount;
         }
 
-        return subscribersCount;
+        if (_rigsDynamicDataStreamSubscriptions.TryRemove(subscriberId, out var subscription))
+        {
+            subscription.Dispose();
+
+            if (_rigsDynamicDataStreamSubscriptions.IsEmpty)
+            {
+                var mediator = GetMediator();
+                await mediator.Publish(new DynamicDataStreamStoppingEvent(_userId));
+            }
+        }
+
+        return Interlocked.Decrement(ref _subscribersCount);
     }
 
     /// <inheritdoc/>
@@ -120,7 +145,7 @@ public class UserRigsObserver : IUserRigsObserver
         var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
 
         _subscriberSpecifications.AddOrUpdate(subscriberId,
-                                    new RigsDynamicDataSpecification() { ObservableCoin = coin },
+                                    new RigsDataSpecification() { ObservableCoin = coin },
                                     (_, value) =>
                                     {
                                         value.ObservableCoin = coin;
@@ -145,25 +170,40 @@ public class UserRigsObserver : IUserRigsObserver
     }
 
     /// <inheritdoc/>
-    public void GotDynamicData(List<RigDynamicData> rigDynamicData)
+    public void GotDynamicData(List<RigDynamicData> rigsDynamicData)
     {
-        _rigsDynamicDataCounter.UpdateData(rigDynamicData);
-        _rigsDynamicDataStream.OnNext(rigDynamicData);
+        _rigsDynamicDataCounter.UpdateData(rigsDynamicData);
+        _rigsDynamicDataStream.OnNext(rigsDynamicData);
     }
 
     /// <inheritdoc/>
     public async Task GotRigsState(string subscriberId, List<RigState> rigs)
     {
-        if (_subscriberSpecifications.TryGetValue(subscriberId, out var subscriber))
-        {
-            var mediator = GetMediator();
+        var mediator = GetMediator();
 
+        await NotifyAboutGettingRigsState(mediator, subscriberId, rigs);
+
+        foreach (var rigState in rigs)
+        {
+            await _rigsStateCache.SetAsync(rigState.Id.ToString(), rigState);
+        }
+    }
+
+    /// <summary>
+    /// Уведомить подписчика о получении состояния ригов.
+    /// </summary>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    /// <param name="rigsStates"> Состояние ригов. </param>
+    private async Task NotifyAboutGettingRigsState(IMediator mediator, string subscriberId, List<RigState> rigsStates)
+    {
+        if (_subscriberSpecifications.TryGetValue(subscriberId, out var subscriberSpecification))
+        {
             await mediator.Publish(new RigsStateReceivedEvent(subscriberId,
                                                               new Specification(_userId,
-                                                                                subscriber.RigsSearchString,
-                                                                                subscriber.FilterString,
-                                                                                subscriber.FilterArguments),
-                                                              rigs));
+                                                                                subscriberSpecification.RigsSearchString,
+                                                                                subscriberSpecification.FilterString,
+                                                                                subscriberSpecification.FilterArguments),
+                                                              rigsStates));
         }
     }
 
@@ -176,36 +216,106 @@ public class UserRigsObserver : IUserRigsObserver
         var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
         var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
+        // отправить событие об изменении обобщённых данных.
         await mediator.Publish(
             new UpdateTotalDynamicDataEvent(_userId,
                                             new TotalDynamicData(_rigsDynamicDataCounter.GetTotalPower(),
                                                                  _rigsDynamicDataCounter.GetTotalShares(),
                                                                  _rigsDynamicDataCounter.GetTotalCoinStatistics())));
 
-        foreach (var subscriberSpecification in _subscriberSpecifications)
+        // отправить события об изменении динамических данных в соответствии со спецификацией каждого подписчика.
+        foreach (var subscriber in _rigsDynamicDataStreamSubscriptions.Keys)
         {
-            var rigsDynamicData = await _rigsDynamicDataCounter.GetRigsDynamicData(mediator, subscriberSpecification.Value);
+            var specification = _subscriberSpecifications.GetValueOrDefault(subscriber);
+            var rigsDynamicData = await _rigsDynamicDataCounter.GetRigsDynamicData(mediator, specification);
 
             HashRateModel? hashRate = null;
 
-            if (!string.IsNullOrEmpty(subscriberSpecification.Value.ObservableCoin))
+            if (!string.IsNullOrEmpty(specification.ObservableCoin))
             {
                 hashRate = new HashRateModel()
                 {
                     Time = DateTimeOffset.Now,
                     Value = mapper.Map<ParameterModelWithMeasureUnit>(
-                                _rigsDynamicDataCounter.GetTotalHashRate(subscriberSpecification.Value))
+                                _rigsDynamicDataCounter.GetTotalHashRate(specification))
                 };
             }
 
             await mediator.Publish(new SubscriberRigsDynamicDataUpdateEvent(
-                                        subscriberSpecification.Key,
+                                        subscriber,
                                         new Specification(_userId,
-                                                          subscriberSpecification.Value.RigsSearchString,
-                                                          subscriberSpecification.Value.FilterString,
-                                                          subscriberSpecification.Value.FilterArguments),
+                                                          specification.RigsSearchString,
+                                                          specification.FilterString,
+                                                          specification.FilterArguments),
                                         rigsDynamicData,
                                         hashRate));
+        }
+    }
+
+    /// <summary>
+    /// Отправить подписчику состояние ригов.
+    /// </summary>
+    /// <param name="mediator"> Медиатор. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    private async Task SendRigsState(IMediator mediator, string subscriberId)
+    {
+        var rigsState = await GetOrRequestRigsState(mediator, subscriberId);
+
+        if (rigsState.Count != 0)
+        {
+            await NotifyAboutGettingRigsState(mediator, subscriberId, rigsState);
+        }
+    }
+
+    /// <summary>
+    /// Получить или запросить состояние ригов.
+    /// </summary>
+    /// <param name="mediator"> Медиатор. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    /// <returns> Состояние ригов, которое удалось достать из кэша. </returns>
+    private async Task<List<RigState>> GetOrRequestRigsState(IMediator mediator, string subscriberId)
+    {
+        var rigsIds = await mediator.Send(new GetRigsIdsQuery(new Specification(_userId)));
+
+        var states = new List<RigState>();
+
+        foreach (var rigId in rigsIds)
+        {
+            var state = await _rigsStateCache.GetOrDefaultAsync<RigState>(rigId.ToString());
+
+            if (state is not null)
+            {
+                states.Add(state);
+            }
+            else
+            {
+                // если хотя бы одного рига нет в кэше, то запрашиваем состояние всех.
+                // todo: надо проработать момент, когда один подписчик запросил данные, но они ещё не успели прийти, и запрашивает второй подписчик.
+                await mediator.Publish(new RigsStateWaitingEvent(_userId, subscriberId));
+                break;
+            }
+        }
+
+        return states;
+    }
+
+    /// <summary>
+    /// Подписаться на поток динамических данных с ригов.
+    /// </summary>
+    /// <param name="mediator"> Медиатор. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    private async Task SubscribeToDynamicDataStream(IMediator mediator, string subscriberId)
+    {
+        var subscription = _rigsDynamicDataStream
+                .Sample(TimeSpan.FromSeconds(_dynamicDataOptions.UpdatePeriodInSeconds))
+                .Subscribe(async data => await NotifyRigsDynamicDataUpdated());
+
+        if (_rigsDynamicDataStreamSubscriptions.TryAdd(subscriberId, subscription))
+        {
+            if (_rigsDynamicDataStreamSubscriptions.Count == 1)
+            {
+                await mediator.Publish(new DynamicDataWaitingEvent(_userId));
+            }
         }
     }
 
@@ -242,15 +352,23 @@ public class UserRigsObserver : IUserRigsObserver
                     _subscriberSpecifications.TryRemove(subscriber.Key, out var _);
                 }
 
+                foreach (var subscriberSubscription in _rigsDynamicDataStreamSubscriptions)
+                {
+                    if (_rigsDynamicDataStreamSubscriptions.TryRemove(subscriberSubscription.Key, out var subscription))
+                    {
+                        subscription.Dispose();
+                    }
+                }
+
                 _rigsDynamicDataCounter.Dispose();
-                _rigsDynamicDataStreamSubscription.Dispose();
             }
 
             _subscriberSpecifications = null!;
             _rigsDynamicDataCounter = null!;
+            _dynamicDataOptions = null!;
             _disposedValue = true;
             _rigsDynamicDataStream = null!;
-            _rigsDynamicDataStreamSubscription = null!;
+            _rigsDynamicDataStreamSubscriptions = null!;
         }
     }
 }

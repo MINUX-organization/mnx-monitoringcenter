@@ -14,7 +14,7 @@ internal class Program
             var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjEiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoidXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkRlZmF1bHRSb2xlIiwiZXhwIjoxNzEzMDEwNTIyfQ.kB5bbqG3TWTGEv2ez5Dpw4iSI7dM6i1PEIqtoL3uLak";
 
             var connection = new HubConnectionBuilder()
-                .WithUrl($"http://localhost:8002/hubs/monitoring", options =>
+                .WithUrl($"http://192.168.0.100:8002/hubs/monitoring?SubscribeToDynamicDataStream=true", options =>
                 {
                     options.Transports = HttpTransportType.WebSockets;
                     options.AccessTokenProvider = () => Task.FromResult(token)!;

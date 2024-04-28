@@ -2,11 +2,12 @@
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using System.Collections.Concurrent;
+using ZiggyCreatures.Caching.Fusion;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Infrastructure;
 
 /// <summary>
-/// Потокобезопасная реализация <see cref="IUserRigsObserverWrapper"/>
+/// Потокобезопасная реализация <see cref="IUserRigsObserverWrapper"/>.
 /// </summary>
 public class UserRigsObserverWrapper : IUserRigsObserverWrapper
 {
@@ -34,29 +35,36 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     /// </summary>
     private readonly DynamicDataOptions _updateDynamicDataPeriod;
 
+    /// <summary>
+    /// Кеш ригов.
+    /// </summary>
+    private readonly IFusionCache _rigsCache;
+
     public UserRigsObserverWrapper(IServiceScopeFactory serviceScopeFactory,
-                                   IOptions<DynamicDataOptions> options)
+                                   IOptions<DynamicDataOptions> options,
+                                   IFusionCache cache)
     {
         _serviceScopeFactory = serviceScopeFactory
             ?? throw new ArgumentNullException(nameof(serviceScopeFactory)); 
 
         _updateDynamicDataPeriod = options.Value ?? throw new ArgumentNullException(nameof(options));
+        _rigsCache = cache ?? throw new ArgumentNullException(nameof(cache));
     }
 
     /// <inheritdoc/>
-    public async Task AddNewSubscriber(long userId, string subscriberId)
+    public async Task AddNewSubscriber(long userId, string subscriberId, bool subscribeToDynamicDataStream)
     {
         IUserRigsObserver observer;
 
         try
         {
             observer = GetOrCreateObserver(userId);
-            await observer.Subscribe(subscriberId);
+            await observer.Subscribe(subscriberId, subscribeToDynamicDataStream);
         }
         catch(ObjectDisposedException)
         {
             observer = GetOrCreateObserver(userId);
-            await observer.Subscribe(subscriberId);
+            await observer.Subscribe(subscriberId, subscribeToDynamicDataStream);
         }
     }
 
@@ -109,7 +117,8 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     {
         return _observers.GetOrAdd(userId, x => new UserRigsObserver(_serviceScopeFactory,
                                                                      userId,
-                                                                     _updateDynamicDataPeriod));
+                                                                     _updateDynamicDataPeriod,
+                                                                     _rigsCache));
     }
 
     /// <summary>

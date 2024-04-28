@@ -1,9 +1,11 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Core;
+﻿using MNX.MonitoringCenter.Monitoring.Core;
+
+namespace MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
 
 /// <summary>
 /// Риг.
 /// </summary>
-public class Rig
+public class RigDto
 {
     /// <summary>
     /// Идентификатор рига.
@@ -66,14 +68,29 @@ public class Rig
     public string CudaVersion { get; set; }
 
     /// <summary>
-    /// Общее кол-во видеокарт.
+    /// Кол-во карт Amd.
     /// </summary>
-    public TotalGpusCount TotalGpusCount { get; set; }
+    public int AmdGpusCount { get; set; }
 
     /// <summary>
-    /// Общее кол-во процессоров.
+    /// Кол-во карт Nvidia.
     /// </summary>
-    public TotalCpusCount TotalCpusCount { get; set; }
+    public int NvidiaGpusCount { get; set; }
+
+    /// <summary>
+    /// Кол-во карт Intel.
+    /// </summary>
+    public int IntelGpusCount { get; set; }
+
+    /// <summary>
+    /// Кол-во процессоров Amd.
+    /// </summary>
+    public int AmdCpusCount { get; set; }
+
+    /// <summary>
+    /// Кол-во процессоров Intel.
+    /// </summary>
+    public int IntelCpusCount { get; set; }
 
     /// <summary>
     /// Кол-во жёстких дисков.

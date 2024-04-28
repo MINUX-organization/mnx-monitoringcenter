@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.Options;
 using MNX.Application.Consul;
 using MNX.Application.Data.DI;
 using MNX.Application.RabbitMQ;
@@ -14,6 +13,7 @@ using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
 using System.Reflection;
+using ZiggyCreatures.Caching.Fusion;
 
 internal class Program
 {
@@ -44,8 +44,13 @@ internal class Program
         builder.Host.UseNLog();
         var services = builder.Services;
 
+        services.AddControllers();
         services.AddConsulIntegration(builder.Configuration);
         services.AddHealthChecks();
+
+        var basePath = AppContext.BaseDirectory;
+        var xmlFilePath = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        services.AddSwagger(Path.Combine(basePath, xmlFilePath));
 
         services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!, new JwtBearerEvents()
         {
@@ -75,6 +80,9 @@ internal class Program
         services.AddDataContext<Context>(configuration);
         services.AddSignalR();
         services.AddEasyNetQ(configuration, [Assembly.GetExecutingAssembly()]);
+        services.AddMemoryCache()
+                .AddFusionCache()
+                .WithDefaultEntryOptions(options => options.Duration = TimeSpan.FromMinutes(15)); // todo: вынести настройку в конфиг
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(new Assembly[]
         {
@@ -85,7 +93,8 @@ internal class Program
         services.AddAutoMapper(new Assembly[]
         {
             typeof(MappingProfile).Assembly,
-            typeof(MNX.MonitoringCenter.Monitoring.UseCases.MappingProfile).Assembly
+            typeof(MNX.MonitoringCenter.Monitoring.UseCases.MappingProfile).Assembly,
+            typeof(DbMappingProfile).Assembly
         });
 
         services.AddScoped<IRigRepository, RigRepository>();
@@ -105,9 +114,12 @@ internal class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI();
 
             var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<Context>();
+            await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
         }
 
@@ -118,6 +130,7 @@ internal class Program
         app.UseAuthorization();
 
         app.MapHub<MonitoringHub>("hubs/monitoring");
+        app.MapControllers();
 
         await app.RunAsync();
     }

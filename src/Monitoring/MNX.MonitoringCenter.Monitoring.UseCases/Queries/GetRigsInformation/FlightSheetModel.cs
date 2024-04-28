@@ -1,15 +1,10 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Core;
+﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
-/// Полетный лист.
+/// Модель полётного листа.
 /// </summary>
-public class FlightSheet
+public class FlightSheetModel
 {
-    /// <summary>
-    /// Идентификатор.
-    /// </summary>
-    public Guid Id { get; set; }
-
     /// <summary>
     /// Название.
     /// </summary>
@@ -18,7 +13,7 @@ public class FlightSheet
     /// <summary>
     /// Список монет.
     /// </summary>
-    public List<Coin> Coins { get; set; }
+    public List<CoinModel> Coins { get; set; }
 
     /// <summary>
     /// Майнер.
