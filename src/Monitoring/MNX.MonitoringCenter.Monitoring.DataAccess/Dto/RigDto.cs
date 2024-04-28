@@ -1,6 +1,4 @@
-﻿using MNX.MonitoringCenter.Monitoring.Core;
-
-namespace MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
+﻿namespace MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
 
 /// <summary>
 /// Риг.
@@ -45,7 +43,7 @@ public class RigDto
     /// <summary>
     /// Версия Linux.
     /// </summary>
-    public string LisnuxVersion { get; set; }
+    public string LinuxVersion { get; set; }
 
     /// <summary>
     /// Версия AMD драйвера.
@@ -100,5 +98,5 @@ public class RigDto
     /// <summary>
     /// Информация о полётных листах.
     /// </summary>
-    public List<FlightSheet> FlightSheetInfo { get; set; } = new();
+    public List<FlightSheetDto> FlightSheetInfo { get; set; } = new();
 }

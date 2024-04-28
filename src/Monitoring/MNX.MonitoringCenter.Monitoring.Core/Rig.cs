@@ -43,7 +43,7 @@ public class Rig
     /// <summary>
     /// Версия Linux.
     /// </summary>
-    public string LisnuxVersion { get; set; }
+    public string LinuxVersion { get; set; }
 
     /// <summary>
     /// Версия AMD драйвера.

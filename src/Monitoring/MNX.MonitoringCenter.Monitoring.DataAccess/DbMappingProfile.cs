@@ -24,5 +24,9 @@ public class DbMappingProfile : Profile
                 Intel = dto.IntelCpusCount,
             }))
             .ReverseMap();
+
+        CreateMap<FlightSheetDto, FlightSheet>().ReverseMap();
+
+        CreateMap<FlightSheetCoinDto, FlightSheetCoin>().ReverseMap();
     }
 }

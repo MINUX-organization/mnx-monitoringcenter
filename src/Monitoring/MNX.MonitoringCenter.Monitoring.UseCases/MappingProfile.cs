@@ -23,6 +23,8 @@ public class MappingProfile : Profile
 
         CreateMap<FlightSheet, FlightSheetModel>();
 
-        CreateMap<Coin, CoinModel>();
+        CreateMap<FlightSheetCoin, CoinModel>()
+            .ForMember(model => model.FullName, member => member.MapFrom(coin => coin.Coin.FullName))
+            .ForMember(model => model.ShortName, member => member.MapFrom(coin => coin.Coin.ShortName));
     }
 }

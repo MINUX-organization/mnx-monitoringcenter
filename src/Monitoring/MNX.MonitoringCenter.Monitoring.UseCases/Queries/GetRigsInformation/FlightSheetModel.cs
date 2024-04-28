@@ -14,9 +14,4 @@ public class FlightSheetModel
     /// Список монет.
     /// </summary>
     public List<CoinModel> Coins { get; set; }
-
-    /// <summary>
-    /// Майнер.
-    /// </summary>
-    public string Miner { get; set; }
 }

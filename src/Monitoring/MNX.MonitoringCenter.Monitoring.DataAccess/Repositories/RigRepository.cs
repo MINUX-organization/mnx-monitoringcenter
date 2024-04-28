@@ -49,6 +49,7 @@ public class RigRepository : IRigRepository
                             .Filter(specification)
                             .Include(rig => rig.FlightSheetInfo)
                                 .ThenInclude(flightSheet => flightSheet.Coins)
+                                    .ThenInclude(coin => coin.Coin)
                             .ProjectTo<Rig>(_mapper.ConfigurationProvider)
                             .AsAsyncEnumerable();
     }

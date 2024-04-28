@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
-using MNX.MonitoringCenter.Monitoring.UseCases.Notifications.UpdateTotalDynamicData;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsIds;
 using System.Collections.Concurrent;
@@ -68,8 +67,8 @@ public class UserRigsDynamicDataCounter : IDisposable
     {
         return new SharesModel()
         {
-            Accepted = _rigsDynamicData.Sum(rig => rig.Value.FlightSheetsInfo.Sum(x => x.Shares.Accepted)),
-            Rejected = _rigsDynamicData.Sum(rig => rig.Value.FlightSheetsInfo.Sum(x => x.Shares.Rejected))
+            Accepted = _rigsDynamicData.Sum(rig => rig.Value.FlightSheetsInfo.Sum(x => x.Coins.Sum(coin => coin.Shares.Accepted))),
+            Rejected = _rigsDynamicData.Sum(rig => rig.Value.FlightSheetsInfo.Sum(x => x.Coins.Sum(coin => coin.Shares.Rejected)))
         };
     }
 
@@ -85,21 +84,24 @@ public class UserRigsDynamicDataCounter : IDisposable
         {
             foreach(var flightSheet in flightSheets)
             {
-                var newCoinStatistics = new CoinStatistics()
+                foreach(var coin in flightSheet.Coins)
                 {
-                    Coin = flightSheet.Coin,
-                    Algorithm = flightSheet.Algorithm,
-                    HashRate = flightSheet.HashRate,
-                    Shares = flightSheet.Shares
-                };
+                    var newCoinStatistics = new CoinStatistics()
+                    {
+                        Name = coin.Name,
+                        Algorithm = coin.Algorithm,
+                        HashRate = coin.HashRate,
+                        Shares = coin.Shares
+                    };
 
-                if (coinsStatistics.TryGetValue(flightSheet.Coin, out CoinStatistics? coinStatistics))
-                {
-                    coinStatistics += newCoinStatistics;
-                }
-                else
-                {
-                    coinsStatistics.Add(flightSheet.Coin, newCoinStatistics);
+                    if (coinsStatistics.TryGetValue(coin.Name, out CoinStatistics? coinStatistics))
+                    {
+                        coinStatistics += newCoinStatistics;
+                    }
+                    else
+                    {
+                        coinsStatistics.Add(coin.Name, newCoinStatistics);
+                    }
                 }
             }
         }
@@ -118,9 +120,11 @@ public class UserRigsDynamicDataCounter : IDisposable
 
         foreach (var flightSheets in _rigsDynamicData.Select(x => x.Value.FlightSheetsInfo))
         {
-            foreach (var flightSheet in flightSheets.Where(x => x.Coin == specification.ObservableCoin))
+            foreach (var flightSheet in flightSheets)
             {
-                coinHashRate += flightSheet.HashRate;
+                coinHashRate += flightSheet.Coins
+                                           .Where(coin => coin.Name == specification.ObservableCoin)
+                                           .Sum(coin => coin.HashRate);
             }
         }
 
@@ -146,9 +150,11 @@ public class UserRigsDynamicDataCounter : IDisposable
                 int coinHashRate = 0;
 
                 // полётный лист в конкретный момент времени на конкретном риге
-                foreach (var flightSheet in flightSheets.Where(x => x.Coin == specification.ObservableCoin))
+                foreach (var flightSheet in flightSheets)
                 {
-                    coinHashRate += flightSheet.HashRate;
+                    coinHashRate += flightSheet.Coins
+                                               .Where(coin => coin.Name == specification.ObservableCoin)
+                                               .Sum(coin => coin.HashRate);
                 }
 
                 if (history.Count <= counter)

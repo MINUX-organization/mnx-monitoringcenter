@@ -1,24 +1,22 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
+
+namespace MNX.MonitoringCenter.Monitoring.Service.Messages.Models;
 
 /// <summary>
-/// Статистика полётного листа.
+/// Монета полётного листа.
 /// </summary>
-public class FlightSheetStatistics
+public class FlightSheetCoin
 {
-    /// <summary>
-    /// Название.
-    /// </summary>
-    public string Name { get; set; }
-
     /// <summary>
     /// Монета.
     /// </summary>
     public string Coin { get; set; }
 
     /// <summary>
-    /// Алгоритм.
+    /// Полётный лист.
     /// </summary>
-    public string Algorithm { get; set; }
+    public string FlightSheet { get; set; }
 
     /// <summary>
     /// Майнер.
@@ -28,11 +26,10 @@ public class FlightSheetStatistics
     /// <summary>
     /// Скорость хеширования.
     /// </summary>
-    public int HashRate { get; set; }
+    public ParameterModelWithMeasureUnit HashRate { get; set; }
 
     /// <summary>
     /// Шеры.
     /// </summary>
     public SharesModel Shares { get; set; }
 }
-

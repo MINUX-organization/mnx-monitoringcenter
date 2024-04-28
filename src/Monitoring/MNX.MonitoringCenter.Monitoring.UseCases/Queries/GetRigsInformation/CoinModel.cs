@@ -14,4 +14,9 @@ public class CoinModel
     /// Короткое название.
     /// </summary>
     public string ShortName { get; set; }
+
+    /// <summary>
+    /// Майнер.
+    /// </summary>
+    public string Miner { get; set; }
 }

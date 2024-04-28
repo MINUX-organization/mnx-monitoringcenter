@@ -119,7 +119,6 @@ internal class Program
 
             var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<Context>();
-            await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
         }
 

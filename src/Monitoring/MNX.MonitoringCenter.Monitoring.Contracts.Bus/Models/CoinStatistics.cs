@@ -1,21 +1,24 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
-
-namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications.UpdateTotalDynamicData;
+﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
 /// <summary>
-/// Статистика майнинга по монете.
+/// Статистика майнинга монеты.
 /// </summary>
 public class CoinStatistics
 {
     /// <summary>
-    /// Монета.
+    /// Название.
     /// </summary>
-    public string Coin { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Алгоритм.
     /// </summary>
     public string Algorithm { get; set; }
+
+    /// <summary>
+    /// Майнер.
+    /// </summary>
+    public string Miner { get; set; }
 
     /// <summary>
     /// Скорость хеширования.
@@ -29,15 +32,16 @@ public class CoinStatistics
 
     public static CoinStatistics operator +(CoinStatistics first, CoinStatistics second)
     {
-        if (first.Coin != second.Coin || first.Algorithm != second.Algorithm)
+        if (first.Name != second.Name || first.Algorithm != second.Algorithm)
         {
             throw new ArgumentException("Нельзя складывать статистику разных монет");
         }
 
         return new CoinStatistics
         {
-            Coin = first.Coin,
+            Name = first.Name,
             Algorithm = first.Algorithm,
+            Miner = first.Miner,
             HashRate = first.HashRate + second.HashRate,
             Shares = first.Shares + second.Shares
         };
