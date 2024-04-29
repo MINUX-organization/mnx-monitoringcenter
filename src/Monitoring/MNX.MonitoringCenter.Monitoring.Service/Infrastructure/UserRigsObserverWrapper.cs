@@ -92,6 +92,15 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
+    public void SetSearchString(string searchString, long userId, string subscriberId)
+    {
+        if (_observers.TryGetValue(userId, out var observer))
+        {
+            observer.SetSearchString(subscriberId, searchString);
+        }
+    }
+
+    /// <inheritdoc/>
     public void GotDynamicData(long userId, List<RigDynamicData> data)
     {
         if (_observers.TryGetValue(userId, out var observer))

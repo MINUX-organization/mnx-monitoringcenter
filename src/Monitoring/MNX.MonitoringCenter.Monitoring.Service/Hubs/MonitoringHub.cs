@@ -66,4 +66,14 @@ public class MonitoringHub : Hub<IMonitoringClient>
     {
         await _observer.SetObservableCoin(coin, _userAccessor.GetUserId(), Context.ConnectionId);
     }
+
+    /// <summary>
+    /// Задать строку поиска.
+    /// </summary>
+    /// <param name="searchString"> Строка поиска. </param>
+    public Task SendSearchString(string searchString)
+    {
+        _observer.SetSearchString(searchString, _userAccessor.GetUserId(), Context.ConnectionId);
+        return Task.CompletedTask;
+    }
 }

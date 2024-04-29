@@ -38,6 +38,13 @@ public interface IUserRigsObserver : IDisposable
     Task SetObservableCoin(string subscriberId, string coin);
 
     /// <summary>
+    /// Задать строку поиска.
+    /// </summary>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    /// <param name="searchString">  Строка поиска. </param>
+    void SetSearchString(string subscriberId, string searchString);
+
+    /// <summary>
     /// Получены динамические данные с ригов.
     /// </summary>
     /// <param name="rigDynamicData"> Динамические данные с ригов. </param>

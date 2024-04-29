@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.Core;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetSummarizedQuantitativeData;
 
@@ -40,10 +39,13 @@ public class RigController : ControllerBase
     /// <returns> Информация о ригах. </returns>
     [HttpGet("info")]
     [ProducesResponseType(typeof(IAsyncEnumerable<RigInformationMessage>), 200)]
-    public IAsyncEnumerable<RigInformationMessage> GetRigsInfo()
+    public IAsyncEnumerable<RigInformationMessage> GetRigsInfo(string? searchString = null,
+                                                               string? filter = null,
+                                                               string[]? filterParameters = null)
     {
         var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetRigsInformationQuery(new Specification(userId)));
+        return _mediator.CreateStream(
+            new GetRigsInformationQuery(userId, searchString, filter, filterParameters));
     }
 
     /// <summary>
@@ -55,7 +57,7 @@ public class RigController : ControllerBase
     public async Task<IActionResult> GetSummarizedQuantitativeData()
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new GetRigsSummarizedQuantitativeDataQuery(new Specification(userId)));
+        var result = await _mediator.Send(new GetRigsSummarizedQuantitativeDataQuery(userId));
         return result.ToActionResult();
     }
 }

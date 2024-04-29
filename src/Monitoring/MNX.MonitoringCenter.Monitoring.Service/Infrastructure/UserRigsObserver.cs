@@ -170,6 +170,22 @@ public class UserRigsObserver : IUserRigsObserver
     }
 
     /// <inheritdoc/>
+    public void SetSearchString(string subscriberId, string searchString)
+    {
+        var scope = _serviceScopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+        var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+
+        _subscriberSpecifications.AddOrUpdate(subscriberId,
+                                    new RigsDataSpecification() { RigsSearchString = searchString },
+                                    (_, value) =>
+                                    {
+                                        value.RigsSearchString = searchString;
+                                        return value;
+                                    });
+    }
+
+    /// <inheritdoc/>
     public void GotDynamicData(List<RigDynamicData> rigsDynamicData)
     {
         _rigsDynamicDataCounter.UpdateData(rigsDynamicData);
