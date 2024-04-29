@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Options;
 using MNX.Application.Consul;
 using MNX.Application.Data.DI;
 using MNX.Application.RabbitMQ;
@@ -6,8 +7,9 @@ using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.DataAccess;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
 using MNX.MonitoringCenter.Monitoring.Hubs;
-using MNX.MonitoringCenter.Monitoring.UseCases;
+using MNX.MonitoringCenter.Monitoring.Service.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
@@ -73,13 +75,25 @@ internal class Program
         services.AddDataContext<Context>(configuration);
         services.AddSignalR();
         services.AddEasyNetQ(configuration, [Assembly.GetExecutingAssembly()]);
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-        services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(new Assembly[]
+        {
+            Assembly.GetExecutingAssembly(),
+            typeof(GetRigsInformationQuery).Assembly
+        }));
+
+        services.AddAutoMapper(new Assembly[]
+        {
+            typeof(MappingProfile).Assembly,
+            typeof(MNX.MonitoringCenter.Monitoring.UseCases.MappingProfile).Assembly
+        });
 
         services.AddScoped<IRigRepository, RigRepository>();
-        services.AddSingleton<ConnectionCounter>();
         services.AddScoped<UserAccessor>();
+        services.AddSingleton<IUserRigsObserverWrapper, UserRigsObserverWrapper>();
         services.AddHttpContextAccessor();
+
+        services.Configure<DynamicDataOptions>(configuration);
     }
 
     private static async Task RunApp(WebApplicationBuilder builder)
@@ -91,6 +105,10 @@ internal class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+
+            var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<Context>();
+            await context.Database.EnsureCreatedAsync();
         }
 
         app.MapHealthChecks("/health").AllowAnonymous();

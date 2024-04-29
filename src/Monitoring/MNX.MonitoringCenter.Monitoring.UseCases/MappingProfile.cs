@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using MNX.MonitoringCenter.Monitoring.Contracts.Models;
 using MNX.MonitoringCenter.Monitoring.Core;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases;
 
@@ -11,6 +11,6 @@ public class MappingProfile : Profile
 {
     public MappingProfile()
     {
-        CreateMap<Rig, RigInformation>();
+        CreateMap<Rig, RigInformationMessage>();
     }
 }

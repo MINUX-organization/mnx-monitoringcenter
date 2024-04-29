@@ -1,9 +1,11 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Core;
+﻿using MNX.MonitoringCenter.Monitoring.Core;
+
+namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
-/// Риг.
+/// Модель рига.
 /// </summary>
-public class Rig
+public class RigInformationMessage
 {
     /// <summary>
     /// Идентификатор рига.
@@ -11,9 +13,9 @@ public class Rig
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Идентификатор пользователя.
+    /// Индекс рига.
     /// </summary>
-    public long UserId { get; set; }
+    public int Index { get; set; }
 
     /// <summary>
     /// Название.
@@ -44,32 +46,6 @@ public class Rig
     /// Количество карт Intel.
     /// </summary>
     public int IntelGpusCount { get; set; }
-
-    /// <summary>
-    /// Общее кол-во видеокарт.
-    /// </summary>
-    public int TotalGpusCount
-    {
-        get => NvidiaGpusCount + AmdGpusCount + IntelGpusCount;
-    }
-
-    /// <summary>
-    /// Количество процессоров Amd.
-    /// </summary>
-    public int AmdCpusCount { get; set; }
-
-    /// <summary>
-    /// Количество процессоров Intel.
-    /// </summary>
-    public int IntelCpusCount { get; set; }
-
-    /// <summary>
-    /// Общее кол-во процессоров.
-    /// </summary>
-    public int TotalCpusCount
-    {
-        get => AmdCpusCount + IntelCpusCount;
-    }
 
     /// <summary>
     /// Информация о полётных листах.
