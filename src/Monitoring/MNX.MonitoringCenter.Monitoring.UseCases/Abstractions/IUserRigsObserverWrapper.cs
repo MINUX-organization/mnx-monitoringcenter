@@ -12,7 +12,8 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
-    Task AddNewSubscriber(long userId, string subscriberId);
+    /// <param name="subscribeToDynamicDataStream"> Признак подписки на поток динамических данных. </param>
+    Task AddNewSubscriber(long userId, string subscriberId, bool subscribeToDynamicDataStream);
 
     /// <summary>
     /// Удалить подписчика.
@@ -28,6 +29,14 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
     Task SetObservableCoin(string coin, long userId, string subscriberId);
+
+    /// <summary>
+    /// Задать строку поиска.
+    /// </summary>
+    /// <param name="searchString"> Строка поиска. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    void SetSearchString(string searchString, long userId, string subscriberId);
 
     /// <summary>
     /// Получены динамические данные с ригов.

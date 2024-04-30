@@ -1,17 +1,23 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
 /// Обработчик запроса на получение информации о ригах
 /// </summary>
-public class GetRigsInformationQueryHandler : IRequestHandler<GetRigsInformationQuery, GetRigsInformationResult>
+public class GetRigsInformationQueryHandler : IStreamRequestHandler<GetRigsInformationQuery, RigInformationMessage>
 {
+    /// <summary>
+    /// Маппер.
+    /// </summary>
     private readonly IMapper _mapper;
 
+    /// <summary>
+    /// Репозиторий для доступа к ригам.
+    /// </summary>
     private readonly IRigRepository _rigRepository;
 
     public GetRigsInformationQueryHandler(IMapper mapper, IRigRepository rigRepository)
@@ -20,44 +26,18 @@ public class GetRigsInformationQueryHandler : IRequestHandler<GetRigsInformation
         _rigRepository = rigRepository ?? throw new ArgumentNullException(nameof(rigRepository));
     }
 
-    public async Task<GetRigsInformationResult> Handle(GetRigsInformationQuery request, CancellationToken cancellationToken)
+    public async IAsyncEnumerable<RigInformationMessage> Handle(GetRigsInformationQuery request,
+                                                                [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var rigs = await _rigRepository.GetAvailable(request.specification);
-        return ToResult(rigs);
-    }
+        var counter = 0;
 
-    /// <summary>
-    /// Собрать результат подписки клиента.
-    /// </summary>
-    /// <param name="rigs"> Коллекция ригов. </param>
-    /// <returns> Результат подписки клиента. </returns>
-    private GetRigsInformationResult ToResult(IEnumerable<Rig> rigs)
-    {
-        var rigsInformation = _mapper.Map<IEnumerable<RigInformationMessage>>(rigs);
-
-        for (int i = 0; i < rigsInformation.Count(); i++)
+        await foreach (var rig in _rigRepository.GetList(request.Specification))
         {
-            rigsInformation.ElementAt(i).Index = i + 1;
+            counter++;
+            var rigInformation = _mapper.Map<RigInformationMessage>(rig);
+            rigInformation.Index = counter;
+
+            yield return rigInformation;
         }
-
-        return new GetRigsInformationResult()
-        {
-            Rigs = rigsInformation,
-
-            TotalCpusCount = new TotalCpusCount()
-            {
-                Total = rigs.Sum(x => x.TotalCpusCount),
-                Amd = rigs.Sum(x => x.AmdCpusCount),
-                Intel = rigs.Sum(x => x.IntelCpusCount)
-            },
-
-            TotalGpusCount = new TotalGpusCount()
-            {
-                Total = rigs.Sum(x => x.TotalGpusCount),
-                Nvidia = rigs.Sum(x => x.NvidiaGpusCount),
-                Amd = rigs.Sum(x => x.AmdGpusCount),
-                Intel = rigs.Sum(x => x.IntelGpusCount)
-            }
-        };
     }
 }

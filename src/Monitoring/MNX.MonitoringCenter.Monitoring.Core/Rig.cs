@@ -21,9 +21,19 @@ public class Rig
     public string Name { get; set; }
 
     /// <summary>
+    /// Глобальный IP-адрес.
+    /// </summary>
+    public string GlobalIP { get; set; }
+
+    /// <summary>
     /// Локальный IP-адрес.
     /// </summary>
     public string LocalIP { get; set; }
+
+    /// <summary>
+    /// MAC адрес.
+    /// </summary>
+    public string Mac { get; set; }
 
     /// <summary>
     /// Версия Minux.
@@ -31,45 +41,44 @@ public class Rig
     public string MinuxVersion { get; set; }
 
     /// <summary>
-    /// Количество карт Nvidia.
+    /// Версия Linux.
     /// </summary>
-    public int NvidiaGpusCount { get; set; }
+    public string LinuxVersion { get; set; }
 
     /// <summary>
-    /// Количество карт Amd.
+    /// Версия AMD драйвера.
     /// </summary>
-    public int AmdGpusCount { get; set; }
+    public string AmdDriverVersion { get; set; }
 
     /// <summary>
-    /// Количество карт Intel.
+    /// Версия драйвера Nvidia.
     /// </summary>
-    public int IntelGpusCount { get; set; }
+    public string NvidiaDriverVersion { get; set; }
+
+    /// <summary>
+    /// Версия OpenCL.
+    /// </summary>
+    public string OpenCLVersion { get; set; }
+
+    /// <summary>
+    /// Версия CUDA.
+    /// </summary>
+    public string CudaVersion { get; set; }
 
     /// <summary>
     /// Общее кол-во видеокарт.
     /// </summary>
-    public int TotalGpusCount
-    {
-        get => NvidiaGpusCount + AmdGpusCount + IntelGpusCount;
-    }
-
-    /// <summary>
-    /// Количество процессоров Amd.
-    /// </summary>
-    public int AmdCpusCount { get; set; }
-
-    /// <summary>
-    /// Количество процессоров Intel.
-    /// </summary>
-    public int IntelCpusCount { get; set; }
+    public TotalGpusCount TotalGpusCount { get; set; }
 
     /// <summary>
     /// Общее кол-во процессоров.
     /// </summary>
-    public int TotalCpusCount
-    {
-        get => AmdCpusCount + IntelCpusCount;
-    }
+    public TotalCpusCount TotalCpusCount { get; set; }
+
+    /// <summary>
+    /// Кол-во жёстких дисков.
+    /// </summary>
+    public int HddsCount { get; set; }
 
     /// <summary>
     /// Информация о полётных листах.

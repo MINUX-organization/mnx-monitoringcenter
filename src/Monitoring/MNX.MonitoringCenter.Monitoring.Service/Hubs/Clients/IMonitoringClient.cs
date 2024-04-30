@@ -2,7 +2,6 @@
 using MNX.MonitoringCenter.Monitoring.Service.Messages;
 using MNX.MonitoringCenter.Monitoring.Service.Messages.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
 
@@ -22,12 +21,6 @@ public interface IMonitoringClient
     /// </summary>
     /// <param name="DynamicData"> Список динамических данных ригов. </param>
     Task ReceivedRigsDynamicData(IEnumerable<RigDynamicDataModel?> DynamicData);
-
-    /// <summary>
-    /// Получено сообщение об информации ригов.
-    /// </summary>
-    /// <param name="message"> Сообщение об информации ригов. </param>
-    Task ReceivedRigsInformation(IEnumerable<RigInformationMessage> message);
 
     /// <summary>
     /// Получено сообщение об изменении обобщённых данных.

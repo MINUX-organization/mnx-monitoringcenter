@@ -1,9 +1,9 @@
 ﻿namespace MNX.MonitoringCenter.Monitoring.Service.Infrastructure;
 
 /// <summary>
-/// Спецификация для динамических данных ригов.
+/// Спецификация для данных ригов.
 /// </summary>
-public struct RigsDynamicDataSpecification
+public struct RigsDataSpecification
 {
     /// <summary>
     /// Отслеживаемая монета.

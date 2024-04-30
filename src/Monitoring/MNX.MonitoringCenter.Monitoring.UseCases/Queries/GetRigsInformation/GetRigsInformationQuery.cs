@@ -5,5 +5,18 @@ namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 /// <summary>
 /// Запрос на получение информации о ригах.
 /// </summary>
-/// <param name="specification"> Спецификация. </param>
-public record GetRigsInformationQuery(Specification specification) : IRequest<GetRigsInformationResult>;
+public class GetRigsInformationQuery : IStreamRequest<RigInformationMessage>
+{
+    /// <summary>
+    /// Спецификация.
+    /// </summary>
+    public Specification Specification { get; }
+
+    public GetRigsInformationQuery(long userId,
+                                   string? searchString = null,
+                                   string? filterString = null,
+                                   string[]? filterArguments = null)
+    {
+        Specification = new Specification(userId, searchString, filterString, filterArguments);
+    }
+}

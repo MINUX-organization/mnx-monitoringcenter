@@ -34,7 +34,19 @@ public class MonitoringHub : Hub<IMonitoringClient>
     /// </summary>
     public override async Task OnConnectedAsync()
     {
-        await _observer.AddNewSubscriber(_userAccessor.GetUserId(), Context.ConnectionId);
+        bool subscribeToDynamicDataStream = false;
+
+        if (Context.GetHttpContext()!.Request.Query.TryGetValue("SubscribeToDynamicDataStream", out var argument))
+        {
+            if (bool.TryParse(argument, out var _))
+            {
+                subscribeToDynamicDataStream = true;
+            }
+        }
+
+        await _observer.AddNewSubscriber(_userAccessor.GetUserId(),
+                                         Context.ConnectionId,
+                                         subscribeToDynamicDataStream);
     }
 
     /// <summary>
@@ -53,5 +65,15 @@ public class MonitoringHub : Hub<IMonitoringClient>
     public async Task SendCoin(string coin)
     {
         await _observer.SetObservableCoin(coin, _userAccessor.GetUserId(), Context.ConnectionId);
+    }
+
+    /// <summary>
+    /// Задать строку поиска.
+    /// </summary>
+    /// <param name="searchString"> Строка поиска. </param>
+    public Task SendSearchString(string searchString)
+    {
+        _observer.SetSearchString(searchString, _userAccessor.GetUserId(), Context.ConnectionId);
+        return Task.CompletedTask;
     }
 }

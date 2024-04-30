@@ -1,9 +1,9 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
+﻿namespace MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
 
 /// <summary>
-/// Модель рига.
+/// Риг.
 /// </summary>
-public class RigInformationMessage
+public class RigDto
 {
     /// <summary>
     /// Идентификатор рига.
@@ -11,9 +11,9 @@ public class RigInformationMessage
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Индекс рига.
+    /// Идентификатор пользователя.
     /// </summary>
-    public int Index { get; set; }
+    public long UserId { get; set; }
 
     /// <summary>
     /// Название.
@@ -66,47 +66,37 @@ public class RigInformationMessage
     public string CudaVersion { get; set; }
 
     /// <summary>
-    /// Количество карт Nvidia.
-    /// </summary>
-    public int NvidiaGpusCount { get; set; }
-
-    /// <summary>
-    /// Количество карт Amd.
+    /// Кол-во карт Amd.
     /// </summary>
     public int AmdGpusCount { get; set; }
 
     /// <summary>
-    /// Количество карт Intel.
+    /// Кол-во карт Nvidia.
+    /// </summary>
+    public int NvidiaGpusCount { get; set; }
+
+    /// <summary>
+    /// Кол-во карт Intel.
     /// </summary>
     public int IntelGpusCount { get; set; }
 
     /// <summary>
-    /// Общее количество видеокарт.
-    /// </summary>
-    public int TotalGpusCount { get; set; }
-
-    /// <summary>
-    /// Количество процессоров AMD.
+    /// Кол-во процессоров Amd.
     /// </summary>
     public int AmdCpusCount { get; set; }
 
     /// <summary>
-    /// Количество процессоров Intel.
+    /// Кол-во процессоров Intel.
     /// </summary>
     public int IntelCpusCount { get; set; }
 
     /// <summary>
-    /// Общее количество процессоров.
-    /// </summary>
-    public int TotalCpusCount { get; set; }
-
-    /// <summary>
-    /// Количество жёстких дисков.
+    /// Кол-во жёстких дисков.
     /// </summary>
     public int HddsCount { get; set; }
 
     /// <summary>
     /// Информация о полётных листах.
     /// </summary>
-    public List<FlightSheetModel> FlightSheetInfo { get; set; } = new();
+    public List<FlightSheetDto> FlightSheetInfo { get; set; } = new();
 }

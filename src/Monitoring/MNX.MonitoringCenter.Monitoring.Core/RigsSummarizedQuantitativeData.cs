@@ -1,22 +1,14 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
+﻿namespace MNX.MonitoringCenter.Monitoring.Core;
 
 /// <summary>
-/// Результат получения информации о ригах
+/// Обобщённые количественные данные ригов.
 /// </summary>
-public class GetRigsInformationResult
+public class RigsSummarizedQuantitativeData
 {
-    /// <summary>
-    /// Риги.
-    /// </summary>
-    public IEnumerable<RigInformationMessage> Rigs { get; set; } = Enumerable.Empty<RigInformationMessage>();
-
     /// <summary>
     /// Общее кол-во ригов.
     /// </summary>
-    public int TotalRigsCount
-    {
-        get => Rigs.Count();
-    }
+    public int TotalRigsCount { get; set; }
 
     /// <summary>
     /// Общее кол-во видеокарт в ригах по признакам.
@@ -27,4 +19,9 @@ public class GetRigsInformationResult
     /// Общее кол-во процессоров в ригах по признакам.
     /// </summary>
     public TotalCpusCount TotalCpusCount { get; set; } = new();
+
+    /// <summary>
+    /// Общее кол-во жёстких дисков.
+    /// </summary>
+    public int TotalHddsCount { get; set; }
 }

@@ -3,9 +3,9 @@
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 /// <summary>
-/// Событие о подписки клиента.
+/// Событие об ожидании состояния ригов.
 /// </summary>
-public class ClientSubscriptionEvent : INotification
+public class RigsStateWaitingEvent : INotification
 {
     /// <summary>
     /// Идентификатор пользователя.
@@ -17,15 +17,9 @@ public class ClientSubscriptionEvent : INotification
     /// </summary>
     public string SubscriberId { get; }
 
-    /// <summary>
-    /// Кол-во подписчиков, включая текущего.
-    /// </summary>
-    public long SubscribersCount { get; }
-
-    public ClientSubscriptionEvent(long userId, string subscriberId, long subscribersCount)
+    public RigsStateWaitingEvent(long userId, string subscriberId)
     {
         UserId = userId;
         SubscriberId = subscriberId;
-        SubscribersCount = subscribersCount;
     }
 }

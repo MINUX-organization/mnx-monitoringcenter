@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Monitoring.Core;
+using MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries;
 using System.Linq.Dynamic;
 
@@ -16,7 +16,7 @@ internal static class RigSpecification
     /// <param name="rigs"> Риги. </param>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Доступные риги. </returns>
-    internal static IQueryable<Rig> Available(this IQueryable<Rig> rigs, Specification specification)
+    internal static IQueryable<RigDto> Available(this IQueryable<RigDto> rigs, Specification specification)
     {
         return rigs.Where(rig => rig.UserId == specification.UserId);
     }
@@ -27,7 +27,7 @@ internal static class RigSpecification
     /// <param name="rigs"> Риги. </param>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Отфильтрованные риги. </returns>
-    internal static IQueryable<Rig> Filter(this IQueryable<Rig> rigs, Specification specification)
+    internal static IQueryable<RigDto> Filter(this IQueryable<RigDto> rigs, Specification specification)
     {
         if (!string.IsNullOrEmpty(specification.SearchString))
         {
@@ -48,7 +48,7 @@ internal static class RigSpecification
     /// <param name="rigs"> Риги. </param>
     /// <param name="searchString"> Строка поиска. </param>
     /// <returns> Найденные риги. </returns>
-    private static IQueryable<Rig> Search(this IQueryable<Rig> rigs, string searchString)
+    private static IQueryable<RigDto> Search(this IQueryable<RigDto> rigs, string searchString)
     {
         return rigs.Where(item => EF.Functions.Like(item.Name, $"%{searchString}%"));
     }

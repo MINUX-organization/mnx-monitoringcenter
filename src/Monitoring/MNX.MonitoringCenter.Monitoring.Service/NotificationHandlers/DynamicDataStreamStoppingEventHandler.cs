@@ -7,18 +7,18 @@ using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 namespace MNX.MonitoringCenter.Monitoring.Service.NotificationHandlers;
 
 /// <summary>
-/// Обработчик события об отписке последнего пользователя от наблюдателя.
+/// Обработчик события об остановки потока динамических данных.
 /// </summary>
-public class LastClientUnsubscribedEventHandler : INotificationHandler<LastClientUnsubscribedEvent>
+public class DynamicDataStreamStoppingEventHandler : INotificationHandler<DynamicDataStreamStoppingEvent>
 {
     private readonly IPubSub _pubSub;
 
-    public LastClientUnsubscribedEventHandler(IPubSub pubSub)
+    public DynamicDataStreamStoppingEventHandler(IPubSub pubSub)
     {
         _pubSub = pubSub ?? throw new ArgumentNullException(nameof(pubSub));
     }
 
-    public async Task Handle(LastClientUnsubscribedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(DynamicDataStreamStoppingEvent notification, CancellationToken cancellationToken)
     {
         await _pubSub.PublishAsync(new StatisticsStreamStopCommand
         {

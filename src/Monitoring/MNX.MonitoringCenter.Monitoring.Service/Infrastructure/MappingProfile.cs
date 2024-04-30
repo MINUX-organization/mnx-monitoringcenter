@@ -20,7 +20,7 @@ public class MappingProfile : Profile
 
         CreateMap<RigDynamicData, RigDynamicDataModel>();
 
-        CreateMap<FlightSheetStatistics, FlightSheetModel>()
+        CreateMap<CoinStatistics, FlightSheetCoin>()
             .ForMember(x => x.HashRate,
                        y => y.MapFrom(opt => ConvertToModelWithMeasureUnit(opt.HashRate,
                                                                            "H/s", // todo: вынести

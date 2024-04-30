@@ -16,12 +16,7 @@ public class FlightSheet
     public string Name { get; set; }
 
     /// <summary>
-    /// Монета.
+    /// Список монет.
     /// </summary>
-    public string Coin { get; set; }
-
-    /// <summary>
-    /// Майнер.
-    /// </summary>
-    public string Miner { get; set; }
+    public List<FlightSheetCoin> Coins { get; set; }
 }

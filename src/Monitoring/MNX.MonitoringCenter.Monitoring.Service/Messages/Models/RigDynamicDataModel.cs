@@ -41,7 +41,7 @@ public class RigDynamicDataModel
     public DateTime BootedUpTime { get; set; }
 
     /// <summary>
-    /// Информация о полётных листах.
+    /// Информация о монетах полётных листов.
     /// </summary>
-    public List<FlightSheetModel> FlightSheetsInfo { get; set; } = new();
+    public List<FlightSheetCoin> FlightSheetsInfo { get; set; } = new();
 }

@@ -10,8 +10,15 @@ public interface IUserRigsObserver : IDisposable
     /// <summary>
     /// Подписаться.
     /// </summary>
-    /// <remarks> Количество подписчиков. </remarks>
-    Task<long> Subscribe(string subscriberId);
+    /// <remarks>
+    /// Сразу после подписки подписчик получит информацию о состоянии ригов.
+    /// В случае изменения состояния подписчик будет уведомлён об этом.
+    /// Допускается отдельная возможность подписки на поток динамических данных.
+    /// </remarks>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    /// <param name="subscribeToDynamicDataStream"> Признак подписки на поток динамических данных. </param>
+    /// <returns> Количество подписчиков. </returns>
+    Task<long> Subscribe(string subscriberId, bool subscribeToDynamicDataStream);
 
     /// <summary>
     /// Отписаться.
@@ -23,9 +30,19 @@ public interface IUserRigsObserver : IDisposable
     /// <summary>
     /// Задать отслеживаемую монету.
     /// </summary>
+    /// <remarks>
+    /// Этот метод позволяет подписаться на изменения скорости хеширования конкретной монеты.
+    /// </remarks>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
     /// <param name="coin"> Монета. </param>
     Task SetObservableCoin(string subscriberId, string coin);
+
+    /// <summary>
+    /// Задать строку поиска.
+    /// </summary>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    /// <param name="searchString">  Строка поиска. </param>
+    void SetSearchString(string subscriberId, string searchString);
 
     /// <summary>
     /// Получены динамические данные с ригов.
@@ -36,7 +53,7 @@ public interface IUserRigsObserver : IDisposable
     /// <summary>
     /// Получено состояние ригов.
     /// </summary>
-    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика, который запросил состояние. </param>
     /// <param name="rigs"> Состояния ригов. </param>
     Task GotRigsState(string subscriberId, List<RigState> rigs);
 }
