@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
+﻿using MNX.MonitoringCenter.Monitoring.DataAccess.Dto.Devices;
+
+namespace MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
 
 /// <summary>
 /// Риг.
@@ -56,6 +58,11 @@ public class RigDto
     public string NvidiaDriverVersion { get; set; }
 
     /// <summary>
+    /// Версия драйвера Intel.
+    /// </summary>
+    public string IntelDriverVersion { get; set; }
+
+    /// <summary>
     /// Версия OpenCL.
     /// </summary>
     public string OpenCLVersion { get; set; }
@@ -68,35 +75,58 @@ public class RigDto
     /// <summary>
     /// Кол-во карт Amd.
     /// </summary>
-    public int AmdGpusCount { get; set; }
+    public int AmdGpusCount
+    {
+        get => Devices.Count(device => device.Type == Core.Devices.Enums.MiningDeviceType.GPU
+                                    && device.Manufacturer == Core.Devices.Enums.GpuManufacturerEnum.Amd.ToString());
+    }
 
     /// <summary>
     /// Кол-во карт Nvidia.
     /// </summary>
-    public int NvidiaGpusCount { get; set; }
+    public int NvidiaGpusCount
+    {
+        get => Devices.Count(device => device.Type == Core.Devices.Enums.MiningDeviceType.GPU
+                                    && device.Manufacturer == Core.Devices.Enums.GpuManufacturerEnum.Nvidia.ToString());
+    }
 
     /// <summary>
     /// Кол-во карт Intel.
     /// </summary>
-    public int IntelGpusCount { get; set; }
+    public int IntelGpusCount
+    {
+        get => Devices.Count(device => device.Type == Core.Devices.Enums.MiningDeviceType.GPU
+                                    && device.Manufacturer == Core.Devices.Enums.GpuManufacturerEnum.Intel.ToString());
+    }
 
     /// <summary>
     /// Кол-во процессоров Amd.
     /// </summary>
-    public int AmdCpusCount { get; set; }
+    public int AmdCpusCount
+    {
+        get => Devices.Count(device => device.Type == Core.Devices.Enums.MiningDeviceType.CPU
+                                    && device.Manufacturer == Core.Devices.Enums.CpuManufacturerEnum.Amd.ToString());
+    }
 
     /// <summary>
     /// Кол-во процессоров Intel.
     /// </summary>
-    public int IntelCpusCount { get; set; }
+    public int IntelCpusCount
+    {
+        get => Devices.Count(device => device.Type == Core.Devices.Enums.MiningDeviceType.CPU
+                                    && device.Manufacturer == Core.Devices.Enums.CpuManufacturerEnum.Intel.ToString());
+    }
 
     /// <summary>
     /// Кол-во жёстких дисков.
     /// </summary>
-    public int HddsCount { get; set; }
+    public int HddsCount
+    {
+        get => Devices.Count(device => device.Type == Core.Devices.Enums.MiningDeviceType.HDD);
+    }
 
     /// <summary>
-    /// Информация о полётных листах.
+    /// Майнинг устройства.
     /// </summary>
-    public List<FlightSheetDto> FlightSheetInfo { get; set; } = new();
+    public List<MiningDeviceDto> Devices { get; set; } = new();
 }

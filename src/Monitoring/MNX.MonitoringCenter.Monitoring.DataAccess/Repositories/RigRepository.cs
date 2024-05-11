@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
@@ -42,16 +41,21 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Rig> GetList(Specification specification)
+    public async IAsyncEnumerable<Rig> GetList(Specification specification)
     {
-        return _context.Rigs.AsNoTracking()
+        var rigs = _context.Rigs.AsNoTracking()
                             .Available(specification)
                             .Filter(specification)
-                            .Include(rig => rig.FlightSheetInfo)
-                                .ThenInclude(flightSheet => flightSheet.Coins)
-                                    .ThenInclude(coin => coin.Coin)
-                            .ProjectTo<Rig>(_mapper.ConfigurationProvider)
+                            .Include(rig => rig.Devices)
+                                .ThenInclude(device => device.FlightSheet)
+                                    .ThenInclude(flightSheet => flightSheet!.Coins)
+                                        .ThenInclude(coin => coin.Coin)
                             .AsAsyncEnumerable();
+        
+        await foreach (var rig in rigs)
+        {
+            yield return _mapper.Map<Rig>(rig);
+        }
     }
 
     /// <inheritdoc/>
@@ -60,7 +64,8 @@ public class RigRepository : IRigRepository
         var totalData = new RigsSummarizedQuantitativeData();
 
         await foreach (var rig in _context.Rigs.AsNoTracking().Available(specification)
-                                                              .Filter(specification).AsAsyncEnumerable())
+                                                              .Filter(specification)
+                                                              .Include(rig => rig.Devices).AsAsyncEnumerable())
         {
             totalData.TotalRigsCount++;
 

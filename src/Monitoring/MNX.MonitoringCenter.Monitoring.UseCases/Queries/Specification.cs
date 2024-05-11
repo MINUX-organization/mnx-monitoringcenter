@@ -3,7 +3,7 @@
 /// <summary>
 /// Спецификация.
 /// </summary>
-public readonly struct Specification
+public class Specification
 {
     /// <summary>
     /// Идентификатор пользователя.

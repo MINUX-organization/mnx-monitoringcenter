@@ -98,6 +98,7 @@ internal class Program
         });
 
         services.AddScoped<IRigRepository, RigRepository>();
+        services.AddScoped<IMiningDeviceRepository, MiningDeviceRepository>();
         services.AddScoped<UserAccessor>();
         services.AddSingleton<IUserRigsObserverWrapper, UserRigsObserverWrapper>();
         services.AddHttpContextAccessor();
@@ -119,6 +120,7 @@ internal class Program
 
             var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<Context>();
+            await context.Database.EnsureDeletedAsync();
             await context.Database.EnsureCreatedAsync();
         }
 
