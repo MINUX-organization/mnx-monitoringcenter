@@ -7,11 +7,11 @@ namespace MNX.MonitoringCenter.Monitoring.Service.Consumers;
 /// <summary>
 /// Потребитель сообщений от фермы.
 /// </summary>
-public class AggregatorConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<GotRigsDynamicData>
+public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<GotRigsDynamicData>
 {
     private readonly IUserRigsObserverWrapper _observer;
 
-    public AggregatorConsumer(IUserRigsObserverWrapper observer)
+    public RigConsumer(IUserRigsObserverWrapper observer)
     {
         _observer = observer ?? throw new ArgumentNullException(nameof(observer));
     }
