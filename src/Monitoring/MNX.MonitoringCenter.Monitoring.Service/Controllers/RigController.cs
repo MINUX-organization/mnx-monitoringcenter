@@ -14,7 +14,7 @@ namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/rigs")]
-//[Authorize]
+[Authorize]
 public class RigController : ControllerBase
 {
     /// <summary>
@@ -43,7 +43,7 @@ public class RigController : ControllerBase
                                                                string? filter = null,
                                                                [FromQuery] string[]? filterParameters = null)
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(
             new GetRigsInformationQuery(userId, searchString, filter, filterParameters));
     }
@@ -56,7 +56,7 @@ public class RigController : ControllerBase
     [ProducesResponseType(typeof(RigsSummarizedQuantitativeData), 200)]
     public async Task<IActionResult> GetSummarizedQuantitativeData()
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new GetRigsSummarizedQuantitativeDataQuery(userId));
         return result.ToActionResult();
     }

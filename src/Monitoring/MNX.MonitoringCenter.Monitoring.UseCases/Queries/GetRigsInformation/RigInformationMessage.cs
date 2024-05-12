@@ -56,6 +56,11 @@ public class RigInformationMessage
     public string NvidiaDriverVersion { get; set; }
 
     /// <summary>
+    /// Версия драйвера Intel.
+    /// </summary>
+    public string IntelDriverVersion { get; set; }
+
+    /// <summary>
     /// Версия OpenCL.
     /// </summary>
     public string OpenCLVersion { get; set; }

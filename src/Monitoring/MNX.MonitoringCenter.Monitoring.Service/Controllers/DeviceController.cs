@@ -12,7 +12,7 @@ namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
 /// </summary>
 [ApiController]
 [Route("api/devices")]
-//[Authorize]
+[Authorize]
 public class DeviceController : ControllerBase
 {
     /// <summary>
@@ -37,7 +37,7 @@ public class DeviceController : ControllerBase
     [HttpGet("gpus")]
     public IAsyncEnumerable<GpuInfo> GetGpusInfo()
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetGpusInfoQuery(userId));
     }
 
@@ -47,7 +47,7 @@ public class DeviceController : ControllerBase
     [HttpGet("cpus")]
     public IAsyncEnumerable<CpuInfo> GetCpusInfo()
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetCpusInfoQuery(userId));
     }
 }
