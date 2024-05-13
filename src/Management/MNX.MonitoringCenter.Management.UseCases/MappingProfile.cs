@@ -23,9 +23,7 @@ public class MappingProfile : Profile
 
         CreateMap<Cryptocurrency, CryptocurrencyModel>();
 
-        CreateMap<Preset, PresetModel>();
-
-        CreateMap<PresetModel, Preset>();
+        CreateMap<Preset, PresetModel>().ReverseMap();
 
         CreateMap<WalletInputModel, Wallet>();
 
