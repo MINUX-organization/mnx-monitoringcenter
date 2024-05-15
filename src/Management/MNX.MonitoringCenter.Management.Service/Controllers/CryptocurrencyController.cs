@@ -16,7 +16,6 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/cryptocurrencies")]
 [ApiController]
-[Authorize]
 public class CryptocurrencyController : ControllerBase
 {
     /// <summary>
