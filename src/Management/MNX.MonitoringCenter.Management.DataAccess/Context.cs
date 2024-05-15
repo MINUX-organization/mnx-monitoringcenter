@@ -21,7 +21,7 @@ public class Context : DbContext
     public Context(DbContextOptions<Context> option) : base(option)
     {
         //Database.EnsureDeleted();
-        Database.EnsureCreated();
+          Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
