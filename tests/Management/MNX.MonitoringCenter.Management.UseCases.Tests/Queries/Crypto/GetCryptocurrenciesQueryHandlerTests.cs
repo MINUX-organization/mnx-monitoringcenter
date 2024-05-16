@@ -33,7 +33,7 @@ public class GetCryptocurrenciesQueryHandlerTests
             .Setup(x => x.GetAllAvailable(TestHelper.Cryptocurrency.UserId))
             .Returns(cryptocurrencies.ToAsyncEnumerable());
 
-        var handler = new GetCryptocurrenciesQueryHandler(cryptoRepository.Object);
+        var handler = new GetCryptocurrenciesQueryHandler(cryptoRepository.Object, TestHelper.GetMapper());
 
         var query = new GetCryptocurrenciesQuery(TestHelper.Cryptocurrency.UserId);
 

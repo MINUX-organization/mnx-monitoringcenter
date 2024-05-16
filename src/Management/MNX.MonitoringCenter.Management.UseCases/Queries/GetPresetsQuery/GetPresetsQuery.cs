@@ -1,12 +1,12 @@
 ﻿using MediatR;
-using MNX.MonitoringCenter.Management.Core;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
 
 /// <summary>
 /// Запрос на получение сохранённых пресетов для выбранной серии GPU
 /// </summary>
-public class GetPresetsQuery : IStreamRequest<Preset>
+public class GetPresetsQuery : IStreamRequest<PresetModel>
 {
     /// <summary>
     /// Название GPU
