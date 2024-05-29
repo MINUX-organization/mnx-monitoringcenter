@@ -21,6 +21,11 @@ public class Context : DbContext
     /// </summary>
     public DbSet<MiningDeviceDto> MiningDevices { get; set; }
 
+    /// <summary>
+    /// Разгон майнинг устройств.
+    /// </summary>
+    public DbSet<OverclockingDto> Overclocking { get; set; }
+
     public Context(DbContextOptions<Context> option) : base(option) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -39,6 +44,23 @@ public class Context : DbContext
                 Id = Guid.Parse("74e7b0c4-9a96-4359-b5dc-66e20988f26b"),
                 FullName = "Ethereum",
                 ShortName = "ETH"
+            });
+
+        modelBuilder.Entity<OverclockingDto>().HasData(
+            new OverclockingDto()
+            {
+                Id = Guid.Parse("4f0aab97-2c80-4a47-9c1b-11aabdb6da01"),
+                CoreClockLock = 0,
+                CoreClockOffset = 0,
+                MemoryClockLock = 0,
+                MemoryClockOffset = 0,
+                CoreVoltage = 0,
+                CoreVoltageOffset = 0,
+                MemoryVoltage = 0,
+                MemoryVoltageOffset = 0,
+                PowerLimit = 0,
+                CriticalTemperature = 0,
+                FanSpeed = 0
             });
 
         modelBuilder.Entity<FlightSheetCoinDto>().HasData(
@@ -80,7 +102,7 @@ public class Context : DbContext
 
         modelBuilder.Entity<GpuDto>().HasBaseType<MiningDeviceDto>().HasData(new GpuDto()
         {
-            Id = Guid.NewGuid(),
+            Id = Guid.Parse("0599c30c-dcb5-4b5b-b6d0-17e321ab42b8"),
             RigId = Guid.Parse("6a0a78d9-dcb5-4b5b-b6d0-17e321ab42b8"),
             UserId = 1,
             Name = "gpu_1",
@@ -98,7 +120,8 @@ public class Context : DbContext
             MemorySize = 100,
             MemoryType = "memory_type",
             MemoryVendor = "memory_vendor",
-            BiosVersion = "1.0.0"
+            BiosVersion = "1.0.0",
+            OverclockingId = Guid.Parse("4f0aab97-2c80-4a47-9c1b-11aabdb6da01")
         });
 
         modelBuilder.Entity<RigDto>().HasData(new RigDto()

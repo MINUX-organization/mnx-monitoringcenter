@@ -53,6 +53,16 @@ public abstract class MiningDeviceDto
     public FlightSheetDto? FlightSheet { get; set; }
 
     /// <summary>
+    /// Идентификатор разгона.
+    /// </summary>
+    public Guid? OverclockingId { get; set; }
+
+    /// <summary>
+    /// Разгон.
+    /// </summary>
+    public OverclockingDto? Overclocking { get; set; }
+
+    /// <summary>
     /// Майнер.
     /// </summary>
     public string? Miner { get; set; }

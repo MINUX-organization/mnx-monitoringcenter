@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using System.Collections.Concurrent;
 using ZiggyCreatures.Caching.Fusion;
@@ -97,6 +98,15 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
         if (_observers.TryGetValue(userId, out var observer))
         {
             observer.SetSearchString(subscriberId, searchString);
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task SetOverclocking(Guid cardId, Overclocking overclocking, long userId, string subscriberId)
+    {
+        if (_observers.TryGetValue(userId, out var observer))
+        {
+            await observer.SetOverclocking(subscriberId, cardId, overclocking);
         }
     }
 

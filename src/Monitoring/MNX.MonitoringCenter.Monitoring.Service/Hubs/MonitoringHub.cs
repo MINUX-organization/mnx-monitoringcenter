@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using MNX.MonitoringCenter.Infrastructure;
+using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 
@@ -75,5 +76,15 @@ public class MonitoringHub : Hub<IMonitoringClient>
     {
         _observer.SetSearchString(searchString, _userAccessor.GetUserId(), Context.ConnectionId);
         return Task.CompletedTask;
+    }
+
+    /// <summary>
+    /// Задать разгон видеокарте.
+    /// </summary>
+    /// <param name="cardId"> Идентификатор видекарты. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    public async Task SetOverclocking(Guid cardId, Overclocking overclocking)
+    {
+        await _observer.SetOverclocking(cardId, overclocking, _userAccessor.GetUserId(), Context.ConnectionId);
     }
 }

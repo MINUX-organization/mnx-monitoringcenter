@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using MediatR;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
@@ -183,6 +184,15 @@ public class UserRigsObserver : IUserRigsObserver
                                         value.RigsSearchString = searchString;
                                         return value;
                                     });
+    }
+
+    /// <inheritdoc/>
+    public async Task SetOverclocking(string subscriberId, Guid cardId, Overclocking overclocking)
+    {
+        var scope = _serviceScopeFactory.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+        await mediator.Publish(new SetOverclockingEvent(_userId, subscriberId, cardId, overclocking));
     }
 
     /// <inheritdoc/>

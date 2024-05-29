@@ -38,6 +38,27 @@ public class DbMappingProfile : Profile
 
         CreateMap<FlightSheetCoinDto, FlightSheetCoin>().ReverseMap();
 
+        // overclocking
+
+        CreateMap<OverclockingDto, Overclocking>();
+
+        CreateMap<Overclocking, OverclockingDto>()
+            .ConstructUsing(dto => new OverclockingDto
+            {
+                Id = Guid.NewGuid(),
+                CoreClockLock = dto.CoreClockLock,
+                CoreClockOffset = dto.CoreClockOffset,
+                MemoryClockLock = dto.MemoryClockLock,
+                MemoryClockOffset = dto.MemoryClockOffset,
+                CoreVoltage = dto.CoreVoltage,
+                CoreVoltageOffset = dto.CoreVoltageOffset,
+                MemoryVoltage = dto.MemoryVoltage,
+                MemoryVoltageOffset = dto.MemoryVoltageOffset,
+                PowerLimit = dto.PowerLimit,
+                CriticalTemperature = dto.CriticalTemperature,
+                FanSpeed = dto.FanSpeed
+            });
+
         // devices
 
         CreateMap<MiningDeviceDto, MiningDevice>().ConvertUsing(new MiningDeviceConverter());

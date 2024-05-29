@@ -39,4 +39,11 @@ public interface IMonitoringClient
     /// </summary>
     /// <param name="message"> Текущая скорость хеширования. </param>
     Task ReceivedCurrentHashRate(HashRateModel message);
+
+    /// <summary>
+    /// Получена ошибка установки разгона.
+    /// </summary>
+    /// <param name="cardId"> Идентификатор видеокарты. </param>
+    /// <param name="message"> Сообщение ошибки. </param>
+    Task ReceivedOverclockingSettingFailEvent(Guid cardId, string message);
 }

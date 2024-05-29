@@ -1,4 +1,5 @@
 ﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+using MNX.MonitoringCenter.Monitoring.Core;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 
@@ -37,6 +38,15 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
     void SetSearchString(string searchString, long userId, string subscriberId);
+
+    /// <summary>
+    /// Задать разгон видеокарте.
+    /// </summary>
+    /// <param name="cardId"> Идентификатор видеокарты. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    Task SetOverclocking(Guid cardId, Overclocking overclocking, long userId, string subscriberId);
 
     /// <summary>
     /// Получены динамические данные с ригов.

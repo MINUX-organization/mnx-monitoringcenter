@@ -43,6 +43,11 @@ public abstract class MiningDevice
     public FlightSheet? FlightSheet { get; set; }
 
     /// <summary>
+    /// Разгон.
+    /// </summary>
+    public Overclocking? Overclocking { get; set; }
+
+    /// <summary>
     /// Майнер.
     /// </summary>
     public string? Miner { get; set; }
