@@ -19,33 +19,63 @@ public class GetPresetsQueryHandlerTests
             {
                 Id = Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000"),
                 GpuName = "GeForce RTX 4090",
-                MemoryClock = 1313,
-                CoreClock = 2235,
-                PowerLimit = 450,
-                CriticalTemperature = 105,
-                FanSpeed = 99,
+                Overclocking = new Overclocking
+                {
+                    CoreClockLock = 1000,
+                    CoreClockOffset = 100,
+                    CoreVoltage = 1000,
+                    CoreVoltageOffset = 100,
+                    MemoryClockLock = 1000,
+                    MemoryClockOffset = 100,
+                    MemoryVoltage = 1000,
+                    MemoryVoltageOffset = 100,
+                    CriticalTemperature = 120,
+                    FanSpeed = 600,
+                    PowerLimit = 800,
+                    Id = new Guid()
+                }
             },
 
             new Preset
             {
                 Id = Guid.Parse("eba6b890-2b31-4e73-8908-00170558ea32"),
                 GpuName = "GeForce GTX 1660 Super",
-                MemoryClock = 1313,
-                CoreClock = 1530,
-                PowerLimit = 100,
-                CriticalTemperature = 90,
-                FanSpeed = 80,
+                Overclocking = new Overclocking
+                {
+                    CoreClockLock = 900,
+                    CoreClockOffset = 100,
+                    CoreVoltage = 900,
+                    CoreVoltageOffset = 100,
+                    MemoryClockLock = 1000,
+                    MemoryClockOffset = 100,
+                    MemoryVoltage = 900,
+                    MemoryVoltageOffset = 100,
+                    CriticalTemperature = 120,
+                    FanSpeed = 600,
+                    PowerLimit = 800,
+                    Id = new Guid()
+                }
             },
 
             new Preset
             {
                 Id = Guid.Parse("33fef879-06ff-420d-989a-a3b362129d77"),
                 GpuName = "GeForce GTX 1660 Super",
-                MemoryClock = 1750,
-                CoreClock = 1785,
-                PowerLimit = 125,
-                CriticalTemperature = 105,
-                FanSpeed = 99,
+                Overclocking = new Overclocking
+                {
+                    CoreClockLock = 700,
+                    CoreClockOffset = 100,
+                    CoreVoltage = 900,
+                    CoreVoltageOffset = 100,
+                    MemoryClockLock = 1000,
+                    MemoryClockOffset = 100,
+                    MemoryVoltage = 400,
+                    MemoryVoltageOffset = 100,
+                    CriticalTemperature = 120,
+                    FanSpeed = 600,
+                    PowerLimit = 800,
+                    Id = new Guid()
+                }
             }
         };
 

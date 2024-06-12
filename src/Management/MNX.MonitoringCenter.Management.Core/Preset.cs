@@ -11,34 +11,24 @@ public class Preset
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Тактовая чатсота памяти в мегагерцах
+    /// Название пресета
     /// </summary>
-    public int MemoryClock { get; set; }
-
-    /// <summary>
-    /// Тактовая частота ядра в мегагерцах
-    /// </summary>
-    public int CoreClock { get; set; }
-
-    /// <summary>
-    /// Ограничение мощности в ваттах
-    /// </summary>
-    public int PowerLimit { get; set; }
-
-    /// <summary>
-    /// Критическая температура в градусах Цельсия
-    /// </summary>
-    public int CriticalTemperature { get; set; }
-
-    /// <summary>
-    /// Скорость вентилятора в процентах
-    /// </summary>
-    public int FanSpeed { get; set; }
+    public string Name { get; set; }
 
     /// <summary>
     /// Название GPU
     /// </summary>
-    public string GpuName { get; set; } = string.Empty;
+    public string GpuName { get; set; }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public Guid OverclockingId { get; set; }
+
+    /// <summary>
+    /// Модель с разгоном
+    /// </summary>
+    public Overclocking? Overclocking { get; set; }
 
     /// <summary>
     /// Идентификатор пользователя.

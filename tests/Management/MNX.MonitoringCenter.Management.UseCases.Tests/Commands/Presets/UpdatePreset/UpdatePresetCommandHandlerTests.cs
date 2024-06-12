@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
+using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
-using Moq;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
-using MediatR;
-using MNX.Application.UseCases;
+using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.UpdatePreset
 {
@@ -14,7 +15,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
     {
         private Mock<IPresetRepository> _presetRepository;
 
-        private Mock<IMapper> _mapper;
+        private IMapper _mapper = TestHelper.GetMapper(); 
 
         private UpdatePresetCommandHandler _handler;
 
@@ -22,11 +23,10 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
         public void Setup()
         {
             _presetRepository = new Mock<IPresetRepository>();
-            _mapper = new Mock<IMapper>();
 
             _handler = new UpdatePresetCommandHandler(
                 _presetRepository.Object,
-                _mapper.Object);
+                _mapper);
         }
 
         [Test]
@@ -39,10 +39,6 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
             _presetRepository
                 .Setup(x => x.Update(It.IsAny<Preset>()));
 
-            _mapper
-                .Setup(x => x.Map<Preset>(It.IsAny<PresetInputModel>()))
-                .Returns(new Preset());
-
             var result = await _handler.Handle(GetCommand(), default);
 
             _presetRepository
@@ -50,7 +46,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
 
             Assert.NotNull(result);
             Assert.IsTrue(result.IsSuccess);
-            Assert.That(result, Is.EqualTo(Result<Unit>.Empty()));
+            Assert.That(result, Is.EqualTo(Result<PresetModel>.Empty()));
         }
 
         [Test]
@@ -75,15 +71,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Update
 
         private static UpdatePresetCommand GetCommand()
         {
-            var memoryClock = 1313;
-            var coreClock = 2235;
-            var powerLimit = 450;
-            var criticalTemperature = 105;
-            var fanSpeed = 99;
-
-            var presetModel = new PresetInputModel(
-                memoryClock, coreClock, powerLimit,
-                criticalTemperature, fanSpeed);
+            var presetModel = new SavePresetInputModel("Test", "Test",
+                new OverclockingInputModel(2000, 200, 1500, 0, 2000, 100, 1000, 0, 90, 250, 2000));
 
             return new UpdatePresetCommand(
                 Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000"),

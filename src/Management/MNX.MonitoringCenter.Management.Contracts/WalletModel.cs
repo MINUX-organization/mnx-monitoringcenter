@@ -1,5 +1,8 @@
 ﻿namespace MNX.MonitoringCenter.Management.Contracts;
 
+/// <summary>
+/// Модель для кошелька
+/// </summary>
 public class WalletModel
 {
     /// <summary>

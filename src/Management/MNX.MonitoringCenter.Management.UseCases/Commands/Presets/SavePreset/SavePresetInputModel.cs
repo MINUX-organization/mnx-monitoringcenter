@@ -3,18 +3,24 @@
 public class SavePresetInputModel
 {
     /// <summary>
+    /// Название пресета
+    /// </summary>
+    public string Name { get; }
+    
+    /// <summary>
     /// Название GPU
     /// </summary>
     public string GpuName { get; }
 
     /// <summary>
-    /// Модель пресета
+    /// Модель разгона
     /// </summary>
-    public PresetInputModel PresetModel { get; }
+    public OverclockingInputModel Overclocking { get; }
 
-    public SavePresetInputModel(string gpuName, PresetInputModel model)
+    public SavePresetInputModel(string name, string gpuName, OverclockingInputModel overclocking)
     {
+        Name = name;
         GpuName = gpuName;
-        PresetModel = model;
+        Overclocking = overclocking;
     }
 }

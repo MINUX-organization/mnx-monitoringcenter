@@ -1,11 +1,12 @@
 ﻿using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 /// <summary>
 /// Команда сохранение пресета для выбранной серии GPU
 /// </summary>
-public class SavePresetCommand : IValidatableCommand<Guid>
+public class SavePresetCommand : IValidatableCommand<PresetModel>
 {
     /// <summary>
     /// Входная модель SavePreset.
@@ -15,7 +16,7 @@ public class SavePresetCommand : IValidatableCommand<Guid>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public long UserId { get; }
 
     public SavePresetCommand(long userId, SavePresetInputModel model)
     {

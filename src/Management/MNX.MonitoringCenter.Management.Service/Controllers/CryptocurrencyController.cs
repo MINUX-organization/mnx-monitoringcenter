@@ -17,7 +17,7 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/cryptocurrencies")]
 [ApiController]
-[Authorize]
+//[Authorize]
 public class CryptocurrencyController : ControllerBase
 {
     /// <summary>
@@ -45,7 +45,7 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<CryptocurrencyModel>), 200)]
     public IAsyncEnumerable<CryptocurrencyModel> GetAll()
     {
-        var userId = _userAccessor.GetUserId();
+        var userId = 1;// _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetCryptocurrenciesQuery(userId));
     }
 
@@ -62,7 +62,7 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(CryptocurrencyInputModel model)
     {
-        var userId = _userAccessor.GetUserId();
+        var userId = 1;// _userAccessor.GetUserId();
         var result = await _mediator.Send(new AddCryptocurrencyCommand(model, userId));
         return result.ToActionResult();
     }

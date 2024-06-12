@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.DataAccess.Cfg;
+using System.Reflection;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
@@ -18,22 +19,17 @@ public class Context : DbContext
 
     public DbSet<Preset> Presets { get; set; }
 
+    public DbSet<Overclocking> Overclocking { get; set; }
+
     public Context(DbContextOptions<Context> option) : base(option)
     {
-        //Database.EnsureDeleted();
+          //Database.EnsureDeleted();
           Database.EnsureCreated();
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.ApplyConfiguration(new AlgorithmCfg());
-        modelBuilder.ApplyConfiguration(new CryptocurrencyCfg());
-        modelBuilder.ApplyConfiguration(new FlightSheetCfg());
-        modelBuilder.ApplyConfiguration(new MinerCfg());       
-        modelBuilder.ApplyConfiguration(new PoolCfg());
-        modelBuilder.ApplyConfiguration(new PresetCfg());
-        modelBuilder.ApplyConfiguration(new WalletCfg());
-
+        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         modelBuilder.Entity<Algorithm>().HasData(new Algorithm() { Name = "Algorithm" });
         modelBuilder.Entity<Miner>().HasData(new Miner() { Name = "Miner" });
     }

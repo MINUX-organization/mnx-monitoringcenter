@@ -5,7 +5,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto;
 
 public static class CryptocurrencyValidatorTests
 {
-    private static CryptocurrencyModelValidator? _validator =
+    private static CryptocurrencyModelValidator _validator =
         new CryptocurrencyModelValidator();
 
     public static void ValidateCryptocurrencyModel_WhenCryptocurrencyModelAreValid(CryptocurrencyInputModel model)

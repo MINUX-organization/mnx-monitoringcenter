@@ -1,47 +1,16 @@
 ﻿using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets;
 
 public static class PresetCommandTestCase
 {
-    public static IEnumerable<SavePresetInputModel> CreateCorrectSavePresetModel()
+    public static IEnumerable<OverclockingInputModel> CreateCorrectOverclockingModel()
     {
-        var presetInputModel = new PresetInputModel(memoryClock: 1313,
-                                     coreClock: 2235,
-                                     powerLimit: 150,
-                                     criticalTemperature: 105,
-                                     fanSpeed: 99);
-
-        yield return new SavePresetInputModel("GeForce RTX 4090", presetInputModel);
+        yield return new OverclockingInputModel(2000, 200, 1500, 50, 2000, 50, 1000, 0, 250, 90, 2000);
     }
 
-    public static IEnumerable<SavePresetInputModel> CreateIncorrectSavePresetModel()
+    public static IEnumerable<OverclockingInputModel> CreateIncorrectOverclockingModel()
     {
-        var presetInputModel = new PresetInputModel(memoryClock: -1,
-                                     coreClock: -1,
-                                     powerLimit: -1,
-                                     criticalTemperature: -1,
-                                     fanSpeed: -1);
-
-        yield return new SavePresetInputModel("GeForce GTX 4090", presetInputModel);
-    }
-
-    public static IEnumerable<PresetInputModel> CreateCorrectPresetModel()
-    {
-        yield return new PresetInputModel(memoryClock: 1313,
-                                     coreClock: 2235,
-                                     powerLimit: 150,
-                                     criticalTemperature: 105,
-                                     fanSpeed: 99);
-    }
-
-    public static IEnumerable<PresetInputModel> CreateIncorrectPresetModel()
-    {
-        yield return new PresetInputModel(memoryClock: -1,
-                                     coreClock: -1,
-                                     powerLimit: -1,
-                                     criticalTemperature: -1,
-                                     fanSpeed: -1);
+        yield return new OverclockingInputModel(500, 50, 500, -100, 500, -75, 800, -100, 60, 50, 100);
     }
 }

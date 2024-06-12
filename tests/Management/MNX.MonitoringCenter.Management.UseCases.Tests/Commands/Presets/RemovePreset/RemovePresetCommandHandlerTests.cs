@@ -25,15 +25,25 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.Remove
         [Test]
         public async Task RemovePreset_ReturnsEmpty()
         {
-            var preset = new Preset
+            var preset = new Preset()
             {
-                Id = Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000"),
-                GpuName = "GeForce RTX 4090",
-                MemoryClock = 1313,
-                CoreClock = 2235,
-                PowerLimit = 450,
-                CriticalTemperature = 105,
-                FanSpeed = 99,
+                Id = Guid.NewGuid(),
+                GpuName = "TestGpu",
+                Name = "TestPreset",
+                Overclocking = new Overclocking()
+                {
+                    CoreClockLock = 2000,
+                    CoreClockOffset = 200,
+                    MemoryClockLock = 1500,
+                    MemoryClockOffset = 0,
+                    CoreVoltage = 2000,
+                    CoreVoltageOffset = 100,
+                    MemoryVoltage = 1000,
+                    MemoryVoltageOffset = 0,
+                    PowerLimit = 90,
+                    CriticalTemperature = 250,
+                    FanSpeed = 2000
+                }
             };
 
             _presetRepository

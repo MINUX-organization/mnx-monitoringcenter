@@ -1,5 +1,8 @@
 ﻿namespace MNX.MonitoringCenter.Management.Contracts;
 
+/// <summary>
+/// Модель для пула
+/// </summary>
 public class PoolModel
 {
     /// <summary>

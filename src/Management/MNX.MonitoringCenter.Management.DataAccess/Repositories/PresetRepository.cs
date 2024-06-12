@@ -1,12 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 
 public class PresetRepository : IPresetRepository
 {
     private readonly Context _context;
+
+    private readonly IMapper _mapper;
 
     public PresetRepository(Context context)
     {
@@ -18,13 +22,18 @@ public class PresetRepository : IPresetRepository
         if (!string.IsNullOrWhiteSpace(gpuName))
         {
             return _context.Presets
+                           .Include(x => x.Overclocking)
                            .Where(x => x.GpuName == gpuName)
                            .Where(x => x.UserId == userId)
                            .AsNoTracking()
                            .AsAsyncEnumerable();
         }
 
-        return _context.Presets.AsNoTracking().AsAsyncEnumerable();
+        return _context.Presets
+                       .Include(x => x.Overclocking)
+                       .Where(x => x.UserId == userId)
+                       .AsNoTracking()
+                       .AsAsyncEnumerable();
     }
 
     public async Task<Preset?> GetAvailableById(Guid id, long userId)
@@ -54,5 +63,24 @@ public class PresetRepository : IPresetRepository
     {
         _context.Remove(preset);
         await _context.SaveChangesAsync().ConfigureAwait(false);
+    }
+
+    public async Task<bool> Exists(long userId, string name)
+    {
+        return await _context.Presets
+                             .AsNoTracking()
+                             .Where(x => x.UserId == userId)
+                             .AnyAsync(x => x.Name.Equals(name))
+                             .ConfigureAwait(false);
+    }
+
+    public async Task<bool> Exists(long userId, string name, string gpuName, Guid Id)
+    {
+        return await _context.Presets
+                             .AsNoTracking()
+                             .Where(x => x.UserId == userId)
+                             .AnyAsync(x => (x.Name.Equals(name) || x.GpuName.Equals(gpuName)) 
+                                       && x.Id != Id)                                       
+                             .ConfigureAwait(false);
     }
 }

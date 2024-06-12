@@ -31,7 +31,7 @@ public class Pool
     public Cryptocurrency? Cryptocurrency { get; set; }
 
     /// <summary>
-    /// Идентификатор пользователя.
+    /// Идентификатор пользователя
     /// </summary>
     public long UserId { get; set; }
 }

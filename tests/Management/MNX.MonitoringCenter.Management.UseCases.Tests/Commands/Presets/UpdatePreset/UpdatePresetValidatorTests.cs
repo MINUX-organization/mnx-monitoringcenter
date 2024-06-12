@@ -1,6 +1,7 @@
 ﻿using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 using FluentValidation.TestHelper;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.UpdatePreset;
 
@@ -18,58 +19,62 @@ public class UpdatePresetValidatorTests
     [Test]
     public void SavePresetCommand_WhenModelNotNull_ShouldNotErrors()
     {
-        var command = GetCommand(CreatePresetModel());
+        var command = GetCommand(CreatePresetModel(false));
         var result = _validator.TestValidate(command);
 
-        result.ShouldNotHaveValidationErrorFor(x => x.Model);
+        result.ShouldNotHaveValidationErrorFor(x => x.SavePresetModel);
     }
 
     [Test]
     public void SavePresetCommand_WhenModelNull_ShouldErrors()
     {
-        var command = GetCommand(null!);
+        var command = GetCommand(CreatePresetModel(true));
         var result = _validator.TestValidate(command);
 
-        result.ShouldHaveValidationErrorFor(x => x.Model)
+        result.ShouldHaveValidationErrorFor(x => x.SavePresetModel.Overclocking)
               .WithErrorMessage("Preset data is required");
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
-                    nameof(PresetCommandTestCase.CreateCorrectPresetModel))]
-    public void UpdatePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(PresetInputModel model)
+                    nameof(PresetCommandTestCase.CreateCorrectOverclockingModel))]
+    public void UpdatePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(OverclockingInputModel model)
     {
-        var command = new UpdatePresetCommand(Guid.NewGuid(), model, 
+        var command = new UpdatePresetCommand(Guid.NewGuid(), new SavePresetInputModel("Test", "Test", model), 
                                               TestHelper.UserId);
 
         PresetValidatorTests.
-            ValidatePresetModel_WhenPresetModelAreValid(command.Model);
+            ValidateOverclockongModel_WhenOverclockingModelAreValid(command.SavePresetModel.Overclocking);
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
-                    nameof(PresetCommandTestCase.CreateIncorrectPresetModel))]
-    public void UpdatePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(PresetInputModel model)
+                    nameof(PresetCommandTestCase.CreateIncorrectOverclockingModel))]
+    public void UpdatePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(OverclockingInputModel model)
     {
-        var command = new UpdatePresetCommand(Guid.NewGuid(), model, 
+        var command = new UpdatePresetCommand(Guid.NewGuid(), new SavePresetInputModel("Test", "Test", model), 
                                               TestHelper.UserId);
 
         PresetValidatorTests.
-            ValidatePresetModel_WhenPresetModelAreNotValid(command.Model);
+            ValidateOverclockingModel_WhenOverclockingModelAreNotValid(command.SavePresetModel.Overclocking);
     }
 
-    private static UpdatePresetCommand GetCommand(PresetInputModel presetModel)
+    private static UpdatePresetCommand GetCommand(SavePresetInputModel presetModel)
     {
         Guid id = Guid.Parse("4d0b4812-6d2e-4d38-85c5-ac2c7871e000");
-
+        
         return new UpdatePresetCommand(id, presetModel, 
                                       TestHelper.UserId);
     }
 
-    private static PresetInputModel CreatePresetModel()
+    private static SavePresetInputModel CreatePresetModel(bool overclockingIsNull)
     {
-        return new PresetInputModel(memoryClock: 1313,
-                               coreClock: 2235,
-                               powerLimit: 150,
-                               criticalTemperature: 105,
-                               fanSpeed: 99);
+        if (overclockingIsNull)
+        {
+            return new SavePresetInputModel("Test", "Test", null!);
+        }
+        else
+        {
+            return new SavePresetInputModel("Test", "Test",
+                   new OverclockingInputModel(2000, 200, 1500, 0, 2000, 100, 1000, 0, 90, 250, 2000));
+        }       
     }
 }

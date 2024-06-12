@@ -9,9 +9,9 @@ public class UpdatePresetValidator : AbstractValidator<UpdatePresetCommand>
 {
     public UpdatePresetValidator()
     {
-        RuleFor(x => x.Model)
+        RuleFor(x => x.SavePresetModel.Overclocking)
             .NotNull()
             .WithMessage("Preset data is required")
-            .SetValidator(x => new PresetModelValidator());
+            .SetValidator(x => new OverclockingModelValidator());
     }
 }

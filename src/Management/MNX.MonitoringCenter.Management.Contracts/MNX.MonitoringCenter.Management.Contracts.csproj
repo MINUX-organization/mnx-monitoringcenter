@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MNX.MonitoringCenter.Management.Core\MNX.MonitoringCenter.Management.Core.csproj" />
+  </ItemGroup>
+
 </Project>
