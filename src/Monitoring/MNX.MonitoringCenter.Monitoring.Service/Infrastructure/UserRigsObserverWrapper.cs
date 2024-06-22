@@ -102,11 +102,29 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
-    public async Task SetOverclocking(Guid cardId, Overclocking overclocking, long userId, string subscriberId)
+    public async Task SetOverclocking(Guid cardId, OverclockingModel overclocking, long userId, string subscriberId)
     {
         if (_observers.TryGetValue(userId, out var observer))
         {
             await observer.SetOverclocking(subscriberId, cardId, overclocking);
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task GotOverclockingSettingSuccess(Guid cardId, OverclockingModel overclocking, long userId, string subscriberId)
+    {
+        if (_observers.TryGetValue(userId, out var observer))
+        {
+            await observer.GotOverclockingSettingSuccess(subscriberId, cardId, overclocking);
+        }
+    }
+
+    /// <inheritdoc/>
+    public async Task GotOverclockingSettingFail(Guid cardId, string message, long userId, string subscriberId)
+    {
+        if (_observers.TryGetValue(userId, out var observer))
+        {
+            await observer.GotOverclockingSettingFail(subscriberId, cardId, message);
         }
     }
 

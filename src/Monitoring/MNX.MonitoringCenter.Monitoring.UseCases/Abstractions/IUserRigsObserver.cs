@@ -46,12 +46,28 @@ public interface IUserRigsObserver : IDisposable
     void SetSearchString(string subscriberId, string searchString);
 
     /// <summary>
-    /// Задать разгон видекарте.
+    /// Задать разгон для видеокарты.
     /// </summary>
-    /// <param name="subscriberId"> Идентификатор подписчика. </param>
     /// <param name="cardId"> Идентификатор видеокарты. </param>
     /// <param name="overclocking"> Разгон. </param>
-    Task SetOverclocking(string subscriberId, Guid cardId, Overclocking overclocking);
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    Task SetOverclocking(string subscriberId, Guid cardId, OverclockingModel overclocking);
+
+    /// <summary>
+    /// Получен разгон для видеокарты.
+    /// </summary>
+    /// <param name="cardId"> Идентификатор видеокарты. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    Task GotOverclockingSettingSuccess(string subscriberId, Guid cardId, OverclockingModel overclocking);
+
+    /// <summary>
+    /// Получено сообщение о неудачной установке разгона.
+    /// </summary>
+    /// <param name="cardId"> Идентификатор видеокарты. </param>
+    /// <param name="message"> Сообщение об ошибке. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    Task GotOverclockingSettingFail(string subscriberId, Guid cardId, string message);
 
     /// <summary>
     /// Получены динамические данные с ригов.

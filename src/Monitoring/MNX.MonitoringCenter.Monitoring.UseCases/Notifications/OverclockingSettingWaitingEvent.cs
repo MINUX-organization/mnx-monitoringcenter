@@ -1,11 +1,12 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+﻿using MediatR;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
+namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 /// <summary>
-/// Сообщение об установке разгона видеокарты.
+/// Событие об ожидании установки разгона для видеокарты.
 /// </summary>
-public class SetOverclockingMessage
+public class OverclockingSettingWaitingEvent : INotification
 {
     /// <summary>
     /// Идентификатор пользователя.
@@ -26,4 +27,12 @@ public class SetOverclockingMessage
     /// Разгон видеокарты.
     /// </summary>
     public OverclockingModel Overclocking { get; set; }
+
+    public OverclockingSettingWaitingEvent(long userId, string connectionid, Guid cardId, OverclockingModel overclocking)
+    {
+        UserId = userId;
+        ConnectionId = connectionid;
+        CardId = cardId;
+        Overclocking = overclocking;
+    }
 }

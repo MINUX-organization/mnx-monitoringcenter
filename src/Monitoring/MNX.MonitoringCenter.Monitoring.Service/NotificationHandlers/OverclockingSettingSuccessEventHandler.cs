@@ -1,23 +1,28 @@
 ﻿using MediatR;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.NotificationHandlers;
 
-public class OverclockingSettingSuccessEventHandler : INotificationHandler<OverclockingSettingSuccessEvent>
+/// <summary>
+/// Обработчик события об удачном применении разгона видеокарте.
+/// </summary>
+public class OverclockingSettingSuccessEventHandler : IRequestHandler<OverclockingSettingSuccessEvent, Result<Unit>>
 {
     /// <summary>
-    /// Репозиторий девайсов для майнинг
+    /// Репозиторий для разгонов видеокарт.
     /// </summary>
-    private readonly IMiningDeviceRepository _deviceRepository;
+    private readonly IOverclockingRepository _overclockingRepository;
 
-    public OverclockingSettingSuccessEventHandler(IMiningDeviceRepository deviceRepository)
+    public OverclockingSettingSuccessEventHandler(IOverclockingRepository overclockingRepository)
     {
-        _deviceRepository = deviceRepository ?? throw new ArgumentNullException(nameof(deviceRepository));
+        _overclockingRepository = overclockingRepository ?? throw new ArgumentNullException(nameof(overclockingRepository));
     }
 
-    public async Task Handle(OverclockingSettingSuccessEvent notification, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(OverclockingSettingSuccessEvent request, CancellationToken cancellationToken)
     {
-        await _deviceRepository.SetOverclockingById(notification.CardId, notification.Overclocking);
+        await _overclockingRepository.SetOverclockingById(request.CardId, request.Overclocking);
+        return Result<Unit>.Success(Unit.Value);
     }
 }

@@ -6,29 +6,26 @@ using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.GetGpuOverclocking;
 
 /// <summary>
-/// Обработчик запроса на получение разгона устройства по идентификатору.
+/// Обработчик запроса на получение разгона видеокарты по идентификатору.
 /// </summary>
 public class GetOverclockingQueryHandler : IRequestHandler<GetOverclockingQuery, Result<Overclocking?>>
 {
     /// <summary>
-    /// Репозиторий для майнинг устройств.
+    /// Репозиторий для разгонов видеокарт.
     /// </summary>
-    private readonly IMiningDeviceRepository _deviceRepository;
+    private readonly IOverclockingRepository _overclockingRepository;
 
-    public GetOverclockingQueryHandler(IMiningDeviceRepository deviceRepository)
+    public GetOverclockingQueryHandler(IOverclockingRepository overclockingRepository)
     {
-        _deviceRepository = deviceRepository ?? throw new ArgumentNullException(nameof(deviceRepository));
+        _overclockingRepository = overclockingRepository ?? throw new ArgumentNullException(nameof(overclockingRepository));
     }
 
     public async Task<Result<Overclocking?>> Handle(GetOverclockingQuery request, CancellationToken cancellationToken)
     {
-        var overclocking = await _deviceRepository.GetOverclockingById(request.DeviceId);
+        var overclocking = await _overclockingRepository.GetOverclockingById(request.DeviceId);
 
-        if (overclocking == null)
-        {
-            return Result<Overclocking?>.Invalid("Invalid device Id");
-        }
-
-        return Result<Overclocking?>.Success(overclocking);
+        return overclocking != null
+            ? Result<Overclocking?>.Success(overclocking)
+            : Result<Overclocking?>.Invalid("Invalid device Type or Id.");
     }
 }

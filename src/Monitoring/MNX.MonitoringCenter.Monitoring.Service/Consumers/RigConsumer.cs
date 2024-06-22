@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Monitoring.Service.Consumers;
 /// <summary>
 /// Потребитель сообщений от фермы.
 /// </summary>
-public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<GotRigsDynamicData>
+public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<GotRigsDynamicData>, IConsumeAsync<OverclockingSettingSuccessMessage>, IConsumeAsync<OverclockingSettingFailMessage>
 {
     private readonly IUserRigsObserverWrapper _observer;
 
@@ -36,4 +36,24 @@ public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<Got
         _observer.GotDynamicData(message.UserId, message.Data);
         return Task.CompletedTask;
     }
+
+    /// <summary>
+    /// Получить сообщение об удачной установке разгона.
+    /// </summary>
+    /// <param name="message"> Сообщение об удачной установке разгона. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public async Task ConsumeAsync(OverclockingSettingSuccessMessage message, CancellationToken cancellationToken = default)
+    {
+        await _observer.GotOverclockingSettingSuccess(message.CardId, message.Overclocking, message.UserId, message.ConnectionId);
+    }
+
+    /// <summary>
+    /// Получить сообщение о неудачной установке разгона.
+    /// </summary>
+    /// <param name="message"> Сообщение о неудачной установке разгона. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public async Task ConsumeAsync(OverclockingSettingFailMessage message, CancellationToken cancellationToken = default)
+    {
+        await _observer.GotOverclockingSettingFail(message.CardId, message.Message, message.UserId, message.ConnectionId);
+    }   
 }

@@ -1,13 +1,9 @@
-﻿using MediatR;
-using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Monitoring.Core;
-
-namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
+﻿namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 
 /// <summary>
-/// Событие об ошибке применения разгона видеокарте.
+/// Получено сообщение об неудачной установке разгона для видеокарты.
 /// </summary>
-public class OverclockingSettingFailEvent : IValidatableCommand<Unit>
+public class OverclockingSettingFailMessage
 {
     /// <summary>
     /// Идентификатор пользователя.
@@ -28,12 +24,4 @@ public class OverclockingSettingFailEvent : IValidatableCommand<Unit>
     /// Сообщение об ошибке.
     /// </summary>
     public string Message { get; set; }
-
-    public OverclockingSettingFailEvent(long userId, string connectionid, Guid cardId, string message)
-    {
-        UserId = userId;
-        ConnectionId = connectionid;
-        CardId = cardId;
-        Message = message;
-    }
 }

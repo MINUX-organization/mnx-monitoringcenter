@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.GetCpusInfo;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.GetGpuOverclocking;
@@ -59,10 +60,6 @@ public class DeviceController : ControllerBase
     public async Task<IActionResult> GetGpuOverclocking(Guid id)
     {
         var result = await _mediator.Send(new GetOverclockingQuery(id));
-
-        if (result.IsSuccess)
-            return Ok(result.GetValue());
-        else
-            return BadRequest();
+        return result.ToActionResult();
     }
 }

@@ -1,5 +1,4 @@
 ﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
-using MNX.MonitoringCenter.Monitoring.Core;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 
@@ -24,6 +23,24 @@ public interface IUserRigsObserverWrapper : IDisposable
     Task RemoveSubscriber(long userId, string subscriberId);
 
     /// <summary>
+    /// Получен разгон для видеокарты.
+    /// </summary>
+    /// <param name="cardId"> Идентификатор видеокарты. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    Task GotOverclockingSettingSuccess(Guid cardId, OverclockingModel overclocking, long userId, string subscriberId);
+
+    /// <summary>
+    /// Получено сообщение о неудачной установке разгона.
+    /// </summary>
+    /// <param name="cardId"> Идентификатор видеокарты. </param>
+    /// <param name="message"> Сообщение об ошибке. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="subscriberId"> Идентификатор подписчика. </param>
+    Task GotOverclockingSettingFail(Guid cardId, string message, long userId, string subscriberId);
+
+    /// <summary>
     /// Задать отслеживаемую монету.
     /// </summary>
     /// <param name="coin"> Монета. </param>
@@ -46,7 +63,7 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// <param name="overclocking"> Разгон. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
-    Task SetOverclocking(Guid cardId, Overclocking overclocking, long userId, string subscriberId);
+    Task SetOverclocking(Guid cardId, OverclockingModel overclocking, long userId, string subscriberId);
 
     /// <summary>
     /// Получены динамические данные с ригов.
