@@ -99,6 +99,7 @@ internal class Program
 
         services.AddScoped<IRigRepository, RigRepository>();
         services.AddScoped<IMiningDeviceRepository, MiningDeviceRepository>();
+        services.AddScoped<IOverclockingRepository, OverclockingRepository>();
         services.AddScoped<UserAccessor>();
         services.AddSingleton<IUserRigsObserverWrapper, UserRigsObserverWrapper>();
         services.AddHttpContextAccessor();
