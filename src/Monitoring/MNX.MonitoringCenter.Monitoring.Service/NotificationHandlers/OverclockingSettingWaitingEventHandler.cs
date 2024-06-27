@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using EasyNetQ;
+﻿using EasyNetQ;
 using MediatR;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
@@ -13,14 +12,14 @@ public class OverclockingSettingWaitingEventHandler : INotificationHandler<Overc
 {
     private readonly IPubSub _pubSub;
 
-    public OverclockingSettingWaitingEventHandler(IPubSub pubSub, IMapper mapper)
+    public OverclockingSettingWaitingEventHandler(IPubSub pubSub)
     {
         _pubSub = pubSub ?? throw new ArgumentNullException(nameof(pubSub));
     }
 
     public async Task Handle(OverclockingSettingWaitingEvent notification, CancellationToken cancellationToken)
     {
-        await _pubSub.PublishAsync(new SetOverclockingWaitingMessage()
+        await _pubSub.PublishAsync(new OverclockingSettingWaitingMessage()
         {
             UserId = notification.UserId,
             ConnectionId = notification.ConnectionId,

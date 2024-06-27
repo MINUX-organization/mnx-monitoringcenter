@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 using MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
+using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 namespace MNX.MonitoringCenter.Monitoring.Hubs;
 
@@ -23,11 +25,18 @@ public class MonitoringHub : Hub<IMonitoringClient>
     /// </summary>
     private readonly UserAccessor _userAccessor;
 
+    /// <summary>
+    /// Посредник.
+    /// </summary>
+    private readonly IMediator _mediator;
+
     public MonitoringHub(IUserRigsObserverWrapper observer,
-                         UserAccessor userProfile)
+                         UserAccessor userProfile,
+                         IMediator mediator)
     {
         _observer = observer ?? throw new ArgumentNullException(nameof(observer));
         _userAccessor = userProfile ?? throw new ArgumentNullException(nameof(userProfile));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
     /// <summary>
@@ -81,10 +90,11 @@ public class MonitoringHub : Hub<IMonitoringClient>
     /// <summary>
     /// Задать разгон видеокарте.
     /// </summary>
-    /// <param name="cardId"> Идентификатор видекарты. </param>
+    /// <param name="cardId"> Идентификатор видеокарты. </param>
     /// <param name="overclocking"> Разгон. </param>
     public async Task SetOverclocking(Guid cardId, OverclockingModel overclocking)
     {
-        await _observer.SetOverclocking(cardId, overclocking, _userAccessor.GetUserId(), Context.ConnectionId);
+        await _mediator.Publish(new OverclockingSettingWaitingEvent(
+            _userAccessor.GetUserId(), Context.ConnectionId, cardId, overclocking));
     }
 }

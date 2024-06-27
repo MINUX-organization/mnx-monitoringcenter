@@ -5,7 +5,7 @@ namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 /// <summary>
 /// Сообщение об ожидании разгона видеокарты.
 /// </summary>
-public class SetOverclockingWaitingMessage
+public class OverclockingSettingWaitingMessage
 {
     /// <summary>
     /// Идентификатор пользователя.

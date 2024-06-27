@@ -1,13 +1,11 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Monitoring.Core;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 /// <summary>
 /// Событие об ошибке применения разгона видеокарте.
 /// </summary>
-public class OverclockingSettingFailEvent : IValidatableCommand<Unit>
+public class OverclockingSettingFailEvent : INotification
 {
     /// <summary>
     /// Идентификатор пользователя.

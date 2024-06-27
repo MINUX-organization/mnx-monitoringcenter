@@ -1,6 +1,10 @@
-﻿using EasyNetQ.AutoSubscribe;
+﻿using AutoMapper;
+using EasyNetQ.AutoSubscribe;
+using MediatR;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
+using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
+using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Consumers;
 
@@ -11,9 +15,15 @@ public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<Got
 {
     private readonly IUserRigsObserverWrapper _observer;
 
-    public RigConsumer(IUserRigsObserverWrapper observer)
+    private readonly IMediator _mediator;
+
+    private readonly IMapper _mapper;
+
+    public RigConsumer(IUserRigsObserverWrapper observer, IMediator mediator, IMapper mapper)
     {
         _observer = observer ?? throw new ArgumentNullException(nameof(observer));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <summary>
@@ -44,7 +54,8 @@ public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<Got
     /// <param name="cancellationToken"> Токен отмены. </param>
     public async Task ConsumeAsync(OverclockingSettingSuccessMessage message, CancellationToken cancellationToken = default)
     {
-        await _observer.GotOverclockingSettingSuccess(message.CardId, message.Overclocking, message.UserId, message.ConnectionId);
+        await _mediator.Publish(new OverclockingSettingSuccessEvent(
+            message.UserId, message.ConnectionId, message.CardId, _mapper.Map<Overclocking>(message.Overclocking)));
     }
 
     /// <summary>
@@ -54,6 +65,7 @@ public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<Got
     /// <param name="cancellationToken"> Токен отмены. </param>
     public async Task ConsumeAsync(OverclockingSettingFailMessage message, CancellationToken cancellationToken = default)
     {
-        await _observer.GotOverclockingSettingFail(message.CardId, message.Message, message.UserId, message.ConnectionId);
+        await _mediator.Publish(new OverclockingSettingFailEvent(
+            message.UserId, message.ConnectionId, message.CardId, message.Message));
     }   
 }

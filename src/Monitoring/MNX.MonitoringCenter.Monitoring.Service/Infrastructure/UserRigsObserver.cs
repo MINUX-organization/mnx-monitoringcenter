@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
-using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
@@ -184,34 +183,6 @@ public class UserRigsObserver : IUserRigsObserver
                                         value.RigsSearchString = searchString;
                                         return value;
                                     });
-    }
-
-    /// <inheritdoc/>
-    public async Task SetOverclocking(string subscriberId, Guid cardId, OverclockingModel overclocking)
-    {
-        var scope = _serviceScopeFactory.CreateScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
-        await mediator.Publish(new OverclockingSettingWaitingEvent(_userId, subscriberId, cardId, overclocking)); 
-    }
-
-    /// <inheritdoc/>
-    public async Task GotOverclockingSettingSuccess(string subscriberId, Guid cardId, OverclockingModel overclocking)
-    {
-        var scope = _serviceScopeFactory.CreateScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-        var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
-
-        await mediator.Publish(new OverclockingSettingSuccessEvent(_userId, subscriberId, cardId, mapper.Map<Overclocking>(overclocking)));
-    }
-
-    /// <inheritdoc/>
-    public async Task GotOverclockingSettingFail(string subscriberId, Guid cardId, string message)
-    {
-        var scope = _serviceScopeFactory.CreateScope();
-        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
-
-        await mediator.Publish(new OverclockingSettingFailEvent(_userId, subscriberId, cardId, message));
     }
 
     /// <inheritdoc/>

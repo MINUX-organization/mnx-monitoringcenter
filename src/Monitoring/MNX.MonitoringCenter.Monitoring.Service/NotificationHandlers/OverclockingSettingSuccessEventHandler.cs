@@ -8,7 +8,7 @@ namespace MNX.MonitoringCenter.Monitoring.Service.NotificationHandlers;
 /// <summary>
 /// Обработчик события об удачном применении разгона видеокарте.
 /// </summary>
-public class OverclockingSettingSuccessEventHandler : IRequestHandler<OverclockingSettingSuccessEvent, Result<Unit>>
+public class OverclockingSettingSuccessEventHandler : INotificationHandler<OverclockingSettingSuccessEvent>
 {
     /// <summary>
     /// Репозиторий для разгонов видеокарт.
@@ -20,9 +20,8 @@ public class OverclockingSettingSuccessEventHandler : IRequestHandler<Overclocki
         _overclockingRepository = overclockingRepository ?? throw new ArgumentNullException(nameof(overclockingRepository));
     }
 
-    public async Task<Result<Unit>> Handle(OverclockingSettingSuccessEvent request, CancellationToken cancellationToken)
+    public async Task Handle(OverclockingSettingSuccessEvent request, CancellationToken cancellationToken)
     {
         await _overclockingRepository.SetOverclockingById(request.CardId, request.Overclocking);
-        return Result<Unit>.Success(Unit.Value);
     }
 }

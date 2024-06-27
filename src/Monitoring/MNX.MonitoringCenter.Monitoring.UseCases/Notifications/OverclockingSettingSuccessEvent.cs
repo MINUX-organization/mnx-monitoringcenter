@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Monitoring.Core;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
@@ -7,7 +6,7 @@ namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 /// <summary>
 /// Событие об удачном применении разгона видеокарте.
 /// </summary>
-public class OverclockingSettingSuccessEvent : IValidatableCommand<Unit>
+public class OverclockingSettingSuccessEvent : INotification
 {
     /// <summary>
     /// Идентификатор пользователя.
