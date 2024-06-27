@@ -29,7 +29,7 @@ public class OverclockingRepository : IOverclockingRepository
 
     public async Task<Overclocking?> GetOverclockingById(Guid id)
     {
-        var device = await _context.MiningDevices
+        var device = await _context.Gpus
             .Where(d => d.Id == id)
             .Include(d => d.Overclocking)
             .SingleOrDefaultAsync();
@@ -45,11 +45,11 @@ public class OverclockingRepository : IOverclockingRepository
         await _context.Overclocking.AddAsync(overclockingDto);
         await _context.SaveChangesAsync();
 
-        var device = await _context.MiningDevices.Where(d => d.Id == id).SingleOrDefaultAsync();
-        if (device == null)
+        var gpu = await _context.Gpus.Where(d => d.Id == id).SingleOrDefaultAsync();
+        if (gpu == null)
             return;
 
-        device.OverclockingId = overclockingDto.Id;
+        gpu.OverclockingId = overclockingDto.Id;
         await _context.SaveChangesAsync();
     }
 }

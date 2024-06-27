@@ -56,4 +56,14 @@ public class GpuDto : MiningDeviceDto
     /// Версия биоса.
     /// </summary>
     public string BiosVersion { get; set; }
+
+    /// <summary>
+    /// Идентификатор разгона.
+    /// </summary>
+    public Guid? OverclockingId { get; set; }
+
+    /// <summary>
+    /// Разгон.
+    /// </summary>
+    public OverclockingDto? Overclocking { get; set; }
 }

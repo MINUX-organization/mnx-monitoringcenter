@@ -22,7 +22,12 @@ public class Context : DbContext
     public DbSet<MiningDeviceDto> MiningDevices { get; set; }
 
     /// <summary>
-    /// Разгон майнинг устройств.
+    /// Видеокарты.
+    /// </summary>
+    public DbSet<GpuDto> Gpus { get; set; }
+
+    /// <summary>
+    /// Разгоны видеокарт.
     /// </summary>
     public DbSet<OverclockingDto> Overclocking { get; set; }
 
