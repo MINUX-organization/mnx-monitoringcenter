@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Monitoring.Hubs;
 using MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
@@ -7,7 +8,7 @@ using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 namespace MNX.MonitoringCenter.Monitoring.Service.NotificationHandlers;
 
 /// <summary>
-/// Обработчик события об ошибке применения разгона видеокарте.
+/// Обработчик уведомления об ошибке применения разгона видеокарте.
 /// </summary>
 public class OverclockingSettingFailEventHandler : INotificationHandler<OverclockingSettingFailEvent>
 {
@@ -21,9 +22,14 @@ public class OverclockingSettingFailEventHandler : INotificationHandler<Overcloc
         _monitoringHubContext = monitoringHubContext;
     }
 
-    public async Task Handle(OverclockingSettingFailEvent request, CancellationToken cancellationToken)
+    /// <summary>
+    /// Отправить уведомление клиенту.
+    /// </summary>
+    /// <param name="notification"> Уведомление. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public async Task Handle(OverclockingSettingFailEvent notification, CancellationToken cancellationToken)
     {
-        await _monitoringHubContext.Clients.Client(request.ConnectionId)
-            .ReceivedOverclockingSettingFailEvent(request.CardId, request.Message);
+        await _monitoringHubContext.Clients.Client(notification.ConnectionId)
+            .ReceivedOverclockingSettingError(notification.CardId, notification.Messages);
     }
 }

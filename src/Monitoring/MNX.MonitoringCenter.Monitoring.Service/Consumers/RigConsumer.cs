@@ -1,9 +1,8 @@
-﻿using AutoMapper;
-using EasyNetQ.AutoSubscribe;
+﻿using EasyNetQ.AutoSubscribe;
 using MediatR;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
-using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
+using MNX.MonitoringCenter.Monitoring.UseCases.Commands.Devices.Gpu.ConfirmOverclocking;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Consumers;
@@ -11,19 +10,20 @@ namespace MNX.MonitoringCenter.Monitoring.Service.Consumers;
 /// <summary>
 /// Потребитель сообщений от фермы.
 /// </summary>
-public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<GotRigsDynamicData>, IConsumeAsync<OverclockingSettingSuccessMessage>, IConsumeAsync<OverclockingSettingFailMessage>
+public class RigConsumer :
+    IConsumeAsync<GotRigsStateMessage>,
+    IConsumeAsync<GotRigsDynamicData>,
+    IConsumeAsync<OverclockingSettingSuccessMessage>,
+    IConsumeAsync<OverclockingSettingFailMessage>
 {
     private readonly IUserRigsObserverWrapper _observer;
 
     private readonly IMediator _mediator;
 
-    private readonly IMapper _mapper;
-
-    public RigConsumer(IUserRigsObserverWrapper observer, IMediator mediator, IMapper mapper)
+    public RigConsumer(IUserRigsObserverWrapper observer, IMediator mediator)
     {
         _observer = observer ?? throw new ArgumentNullException(nameof(observer));
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <summary>
@@ -52,10 +52,12 @@ public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<Got
     /// </summary>
     /// <param name="message"> Сообщение об удачной установке разгона. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public async Task ConsumeAsync(OverclockingSettingSuccessMessage message, CancellationToken cancellationToken = default)
+    public async Task ConsumeAsync(OverclockingSettingSuccessMessage message,
+                                   CancellationToken cancellationToken = default)
     {
-        await _mediator.Publish(new OverclockingSettingSuccessEvent(
-            message.UserId, message.ConnectionId, message.CardId, _mapper.Map<Overclocking>(message.Overclocking)));
+        await _mediator.Send(
+            new GpuOverclockingConfirmationCommand(message.CardId, message.Overclocking),
+                                                   cancellationToken);
     }
 
     /// <summary>
@@ -63,9 +65,10 @@ public class RigConsumer : IConsumeAsync<GotRigsStateMessage>, IConsumeAsync<Got
     /// </summary>
     /// <param name="message"> Сообщение о неудачной установке разгона. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public async Task ConsumeAsync(OverclockingSettingFailMessage message, CancellationToken cancellationToken = default)
+    public async Task ConsumeAsync(OverclockingSettingFailMessage message,
+                                   CancellationToken cancellationToken = default)
     {
         await _mediator.Publish(new OverclockingSettingFailEvent(
-            message.UserId, message.ConnectionId, message.CardId, message.Message));
+            message.ConnectionId, message.CardId, new string[] { message.Message }), cancellationToken);
     }   
 }

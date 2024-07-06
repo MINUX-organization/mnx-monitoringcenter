@@ -44,6 +44,6 @@ public interface IMonitoringClient
     /// Получена ошибка установки разгона.
     /// </summary>
     /// <param name="cardId"> Идентификатор видеокарты. </param>
-    /// <param name="message"> Сообщение ошибки. </param>
-    Task ReceivedOverclockingSettingFailEvent(Guid cardId, string message);
+    /// <param name="message"> Сообщения с ошибками. </param>
+    Task ReceivedOverclockingSettingError(Guid cardId, string[] message);
 }

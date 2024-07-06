@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MNX.MonitoringCenter.Monitoring.Core.Devices.Enums;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Dto.Devices;
+using MNX.MonitoringCenter.Monitoring.DataAccess.Dto.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Monitoring.DataAccess.Cfg;
 

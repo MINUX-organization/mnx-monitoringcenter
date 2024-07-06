@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.GetCpusInfo;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.GetGpuOverclocking;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.GetGpusInfo;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Cpu.GetCpusInfo;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Gpu.GetGpusInfo;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Gpu.GetOverclocking;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
 
@@ -59,7 +59,7 @@ public class DeviceController : ControllerBase
     [HttpGet("gpus/{id:Guid}/overclocking")]
     public async Task<IActionResult> GetGpuOverclocking(Guid id)
     {
-        var result = await _mediator.Send(new GetOverclockingQuery(id));
+        var result = await _mediator.Send(new GetGpuOverclockingQuery(id));
         return result.ToActionResult();
     }
 }

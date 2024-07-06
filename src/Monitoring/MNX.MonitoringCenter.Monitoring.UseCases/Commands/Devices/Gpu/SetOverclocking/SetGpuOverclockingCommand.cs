@@ -1,11 +1,13 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+﻿using MediatR;
+using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
-namespace MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
+namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands.Devices.Gpu.SetOverclocking;
 
 /// <summary>
-/// Сообщение об ожидании разгона видеокарты.
+/// Команда установки разгона видеокарте.
 /// </summary>
-public class OverclockingSettingWaitingMessage
+public class SetGpuOverclockingCommand : IValidatableCommand<Unit>
 {
     /// <summary>
     /// Идентификатор пользователя.
@@ -26,4 +28,12 @@ public class OverclockingSettingWaitingMessage
     /// Разгон видеокарты.
     /// </summary>
     public GpuOverclockingModel Overclocking { get; set; }
+
+    public SetGpuOverclockingCommand(long userId, string connectionId, Guid cardId, GpuOverclockingModel overclocking)
+    {
+        UserId = userId;
+        ConnectionId = connectionId;
+        CardId = cardId;
+        Overclocking = overclocking;
+    }
 }

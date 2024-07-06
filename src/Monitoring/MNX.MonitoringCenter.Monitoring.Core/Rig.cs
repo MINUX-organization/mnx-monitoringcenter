@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.Monitoring.Core.Devices;
+﻿using MNX.MonitoringCenter.Monitoring.Core.Devices.Abstractions;
 using MNX.MonitoringCenter.Monitoring.Core.Devices.Enums;
 
 namespace MNX.MonitoringCenter.Monitoring.Core;

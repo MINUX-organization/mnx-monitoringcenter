@@ -5,6 +5,7 @@ using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 using MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
+using MNX.MonitoringCenter.Monitoring.UseCases.Commands.Devices.Gpu.SetOverclocking;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 namespace MNX.MonitoringCenter.Monitoring.Hubs;
@@ -92,9 +93,17 @@ public class MonitoringHub : Hub<IMonitoringClient>
     /// </summary>
     /// <param name="cardId"> Идентификатор видеокарты. </param>
     /// <param name="overclocking"> Разгон. </param>
-    public async Task SetOverclocking(Guid cardId, OverclockingModel overclocking)
+    public async Task SetOverclocking(Guid cardId, GpuOverclockingModel overclocking)
     {
-        await _mediator.Publish(new OverclockingSettingWaitingEvent(
-            _userAccessor.GetUserId(), Context.ConnectionId, cardId, overclocking));
+        var command = new SetGpuOverclockingCommand(
+            _userAccessor.GetUserId(), Context.ConnectionId, cardId, overclocking);
+
+        var result = await _mediator.Send(command);
+
+        if (! result.IsSuccess)
+        {
+            await _mediator.Publish(
+                new OverclockingSettingFailEvent(Context.ConnectionId, cardId, result.Errors?.ToArray()));
+        }
     }
 }

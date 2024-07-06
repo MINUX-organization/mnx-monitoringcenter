@@ -1,10 +1,14 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.Core.Devices;
+using MNX.MonitoringCenter.Monitoring.Core.Devices.Abstractions;
+using MNX.MonitoringCenter.Monitoring.Core.Devices.Cpu;
 using MNX.MonitoringCenter.Monitoring.Core.Devices.Enums;
+using MNX.MonitoringCenter.Monitoring.Core.Devices.Gpu;
 using MNX.MonitoringCenter.Monitoring.Core.Extensions;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Dto.Devices;
+using MNX.MonitoringCenter.Monitoring.DataAccess.Dto.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Monitoring.DataAccess;
 
@@ -40,10 +44,10 @@ public class DbMappingProfile : Profile
 
         // overclocking
 
-        CreateMap<OverclockingDto, Overclocking>();
+        CreateMap<GpuOverclockingDto, GpuOverclocking>();
 
-        CreateMap<Overclocking, OverclockingDto>()
-            .ConstructUsing(dto => new OverclockingDto
+        CreateMap<GpuOverclocking, GpuOverclockingDto>()
+            .ConstructUsing(dto => new GpuOverclockingDto
             {
                 Id = Guid.NewGuid(),
                 CoreClockLock = dto.CoreClockLock,

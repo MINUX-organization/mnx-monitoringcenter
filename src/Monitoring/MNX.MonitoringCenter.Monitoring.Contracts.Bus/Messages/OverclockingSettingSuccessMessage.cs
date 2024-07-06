@@ -25,5 +25,5 @@ public class OverclockingSettingSuccessMessage
     /// <summary>
     /// Разгон.
     /// </summary>
-    public OverclockingModel Overclocking { get; set; }
+    public GpuOverclockingModel Overclocking { get; set; }
 }

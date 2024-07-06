@@ -8,30 +8,24 @@ namespace MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 public class OverclockingSettingFailEvent : INotification
 {
     /// <summary>
-    /// Идентификатор пользователя.
-    /// </summary>
-    public long UserId { get; set; }
-
-    /// <summary>
     /// Идентификатор соединения веб-клиента.
     /// </summary>
-    public string ConnectionId { get; set; }
+    public string ConnectionId { get; }
 
     /// <summary>
     /// Идентификатор видеокарты.
     /// </summary>
-    public Guid CardId { get; set; }
+    public Guid CardId { get; }
 
     /// <summary>
-    /// Сообщение об ошибке.
+    /// Сообщения об ошибке.
     /// </summary>
-    public string Message { get; set; }
+    public string[] Messages { get; }
 
-    public OverclockingSettingFailEvent(long userId, string connectionid, Guid cardId, string message)
+    public OverclockingSettingFailEvent(string connectionId, Guid cardId, string[]? messages)
     {
-        UserId = userId;
-        ConnectionId = connectionid;
+        ConnectionId = connectionId;
         CardId = cardId;
-        Message = message;
+        Messages = messages ?? Array.Empty<string>();
     }
 }

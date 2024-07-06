@@ -2,6 +2,7 @@
 using MNX.MonitoringCenter.Monitoring.Core;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Dto.Devices;
+using MNX.MonitoringCenter.Monitoring.DataAccess.Dto.Devices.Gpu;
 using System.Reflection;
 
 namespace MNX.MonitoringCenter.Monitoring.DataAccess;
@@ -22,14 +23,9 @@ public class Context : DbContext
     public DbSet<MiningDeviceDto> MiningDevices { get; set; }
 
     /// <summary>
-    /// Видеокарты.
+    /// Разгон видеокарты.
     /// </summary>
-    public DbSet<GpuDto> Gpus { get; set; }
-
-    /// <summary>
-    /// Разгоны видеокарт.
-    /// </summary>
-    public DbSet<OverclockingDto> Overclocking { get; set; }
+    public DbSet<GpuOverclockingDto> Overclocking { get; set; }
 
     public Context(DbContextOptions<Context> option) : base(option) { }
 
@@ -51,8 +47,8 @@ public class Context : DbContext
                 ShortName = "ETH"
             });
 
-        modelBuilder.Entity<OverclockingDto>().HasData(
-            new OverclockingDto()
+        modelBuilder.Entity<GpuOverclockingDto>().HasData(
+            new GpuOverclockingDto()
             {
                 Id = Guid.Parse("4f0aab97-2c80-4a47-9c1b-11aabdb6da01"),
                 CoreClockLock = 0,

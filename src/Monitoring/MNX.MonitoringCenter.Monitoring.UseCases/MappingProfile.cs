@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 using MNX.MonitoringCenter.Monitoring.Core;
-using MNX.MonitoringCenter.Monitoring.Core.Devices;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.GetCpusInfo;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.GetGpusInfo;
+using MNX.MonitoringCenter.Monitoring.Core.Devices.Abstractions;
+using MNX.MonitoringCenter.Monitoring.Core.Devices.Cpu;
+using MNX.MonitoringCenter.Monitoring.Core.Devices.Gpu;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Cpu.GetCpusInfo;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Gpu.GetGpusInfo;
 using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases;
@@ -35,7 +37,7 @@ public class MappingProfile : Profile
             .ForMember(model => model.FullName, member => member.MapFrom(coin => coin.Coin.FullName))
             .ForMember(model => model.ShortName, member => member.MapFrom(coin => coin.Coin.ShortName));
 
-        CreateMap<Overclocking, OverclockingModel>().ReverseMap();
+        CreateMap<GpuOverclocking, GpuOverclockingModel>().ReverseMap();
 
         CreateMap<Gpu, GpuInfo>()
             .ConstructUsing(gpu => new GpuInfo()
