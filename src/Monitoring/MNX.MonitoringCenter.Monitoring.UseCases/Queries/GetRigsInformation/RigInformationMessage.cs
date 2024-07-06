@@ -56,6 +56,11 @@ public class RigInformationMessage
     public string NvidiaDriverVersion { get; set; }
 
     /// <summary>
+    /// Версия драйвера Intel.
+    /// </summary>
+    public string IntelDriverVersion { get; set; }
+
+    /// <summary>
     /// Версия OpenCL.
     /// </summary>
     public string OpenCLVersion { get; set; }
@@ -101,12 +106,12 @@ public class RigInformationMessage
     public int TotalCpusCount { get; set; }
 
     /// <summary>
-    /// Количество жёстких дисков.
+    /// Общее количество жёстких дисков.
     /// </summary>
-    public int HddsCount { get; set; }
+    public int TotalHddsCount { get; set; }
 
     /// <summary>
-    /// Информация о полётных листах.
+    /// Майнинг устройства.
     /// </summary>
-    public List<FlightSheetModel> FlightSheetInfo { get; set; } = new();
+    public List<MiningDeviceModel> Devices { get; set; } = new();
 }

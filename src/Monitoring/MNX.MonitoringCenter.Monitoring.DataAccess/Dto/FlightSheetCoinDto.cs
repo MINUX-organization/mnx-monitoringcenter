@@ -3,15 +3,10 @@
 namespace MNX.MonitoringCenter.Monitoring.DataAccess.Dto;
 
 /// <summary>
-/// Dto полётного листа.
+/// Dto монеты полётного листа.
 /// </summary>
 public class FlightSheetCoinDto
 {
-    /// <summary>
-    /// Уникальный идентификатор.
-    /// </summary>
-    public long Id { get; set; }
-
     /// <summary>
     /// Идентификатор монеты.
     /// </summary>
@@ -31,9 +26,4 @@ public class FlightSheetCoinDto
     /// Полётный лист.
     /// </summary>
     public FlightSheetDto? FlightSheet { get; set; }
-
-    /// <summary>
-    /// Майнер.
-    /// </summary>
-    public string Miner { get; set; }
 }

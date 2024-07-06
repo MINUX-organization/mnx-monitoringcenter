@@ -14,9 +14,4 @@ public class FlightSheetCoin
     /// Монета.
     /// </summary>
     public Coin Coin { get; set; }
-
-    /// <summary>
-    /// Майнер.
-    /// </summary>
-    public string Miner { get; set; }
 }

@@ -18,5 +18,5 @@ public class FlightSheetDto
     /// <summary>
     /// Список монет.
     /// </summary>
-    public List<FlightSheetCoinDto> Coins { get; set; }
+    public List<FlightSheetCoinDto> Coins { get; set; } = new();
 }

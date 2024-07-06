@@ -1,4 +1,7 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.Core;
+﻿using MNX.MonitoringCenter.Monitoring.Core.Devices.Abstractions;
+using MNX.MonitoringCenter.Monitoring.Core.Devices.Enums;
+
+namespace MNX.MonitoringCenter.Monitoring.Core;
 
 /// <summary>
 /// Риг.
@@ -56,6 +59,11 @@ public class Rig
     public string NvidiaDriverVersion { get; set; }
 
     /// <summary>
+    /// Версия драйвера Intel.
+    /// </summary>
+    public string IntelDriverVersion { get; set; }
+
+    /// <summary>
     /// Версия OpenCL.
     /// </summary>
     public string OpenCLVersion { get; set; }
@@ -68,20 +76,65 @@ public class Rig
     /// <summary>
     /// Общее кол-во видеокарт.
     /// </summary>
-    public TotalGpusCount TotalGpusCount { get; set; }
+    private TotalGpusCount? _totalGpusCount;
+    public TotalGpusCount TotalGpusCount
+    {
+        get
+        {
+            if (_totalGpusCount is null)
+            {
+                var gpus = Devices.Where(device => device.Type == MiningDeviceType.GPU);
+
+                _totalGpusCount = new TotalGpusCount()
+                {
+                    Amd = gpus.Count(gpu => gpu.Manufacturer == GpuManufacturerEnum.Amd.ToString()),
+                    Nvidia = gpus.Count(gpu => gpu.Manufacturer == GpuManufacturerEnum.Nvidia.ToString()),
+                    Intel = gpus.Count(gpu => gpu.Manufacturer == GpuManufacturerEnum.Intel.ToString())
+                };
+            }
+            
+            return _totalGpusCount;
+        }
+    }
 
     /// <summary>
     /// Общее кол-во процессоров.
     /// </summary>
-    public TotalCpusCount TotalCpusCount { get; set; }
+    private TotalCpusCount? _totalCpusCount;
+    public TotalCpusCount TotalCpusCount
+    {
+        get
+        {
+            if (_totalCpusCount is null)
+            {
+                var cpus = Devices.Where(device => device.Type == MiningDeviceType.CPU);
+
+                _totalCpusCount = new TotalCpusCount()
+                {
+                    Amd = cpus.Count(cpu => cpu.Manufacturer == CpuManufacturerEnum.Amd.ToString()),
+                    Intel = cpus.Count(cpu => cpu.Manufacturer == CpuManufacturerEnum.Intel.ToString())
+                };
+            }
+
+            return _totalCpusCount;
+        }
+    }
 
     /// <summary>
-    /// Кол-во жёстких дисков.
+    /// Общее кол-во жёстких дисков.
     /// </summary>
-    public int HddsCount { get; set; }
+    private int? _totalHddsCount;
+    public int TotalHddsCount
+    {
+        get
+        {
+            _totalHddsCount ??= Devices.Count(device => device.Type == MiningDeviceType.HDD);
+            return _totalHddsCount.Value;
+        }
+    }
 
     /// <summary>
-    /// Информация о полётных листах.
+    /// Майнинг устройства.
     /// </summary>
-    public List<FlightSheet> FlightSheetInfo { get; set; } = new();
+    public List<MiningDevice> Devices { get; set; } = new();
 }

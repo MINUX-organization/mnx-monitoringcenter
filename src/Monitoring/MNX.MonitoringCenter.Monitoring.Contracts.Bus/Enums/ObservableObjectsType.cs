@@ -16,10 +16,5 @@ public enum ObservableObjectsType
     /// <summary>
     /// Устройства.
     /// </summary>
-    Devices,
-
-    /// <summary>
-    /// Полётные листы.
-    /// </summary>
-    FlightSheets
+    Devices
 }

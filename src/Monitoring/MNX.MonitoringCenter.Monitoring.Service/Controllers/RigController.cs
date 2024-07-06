@@ -41,7 +41,7 @@ public class RigController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<RigInformationMessage>), 200)]
     public IAsyncEnumerable<RigInformationMessage> GetRigsInfo(string? searchString = null,
                                                                string? filter = null,
-                                                               string[]? filterParameters = null)
+                                                               [FromQuery] string[]? filterParameters = null)
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(
