@@ -1,12 +1,13 @@
-﻿using MediatR;
-using MNX.Application.UseCases;
+﻿using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 
 /// <summary>
 /// Команда редактирования пресета
 /// </summary>
-public class UpdatePresetCommand : IValidatableCommand<Unit>
+public class UpdatePresetCommand : IValidatableCommand<PresetModel>
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -16,17 +17,17 @@ public class UpdatePresetCommand : IValidatableCommand<Unit>
     /// <summary>
     /// Модель пресета
     /// </summary>
-    public PresetInputModel Model { get; }
+    public SavePresetInputModel SavePresetModel { get; }
 
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
     public long UserId { get; }
 
-    public UpdatePresetCommand(Guid id, PresetInputModel model, long userId)
+    public UpdatePresetCommand(Guid id, SavePresetInputModel model, long userId)
     {
         Id = id;
-        Model = model;
+        SavePresetModel = model;
         UserId = userId;
     }
 }

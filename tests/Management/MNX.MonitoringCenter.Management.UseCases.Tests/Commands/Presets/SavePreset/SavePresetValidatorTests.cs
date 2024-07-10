@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Presets.SavePreset;
 
@@ -46,49 +46,34 @@ public class SavePresetValidatorTests
     [Test]
     public void SavePresetCommand_WhenModelNull_ShouldErrors()
     {
-        var savePresetInputModel = new SavePresetInputModel(string.Empty, null!);
+        var savePresetInputModel = new SavePresetInputModel(string.Empty, null!, null!);
         var command = new SavePresetCommand(TestHelper.UserId, savePresetInputModel);
         var result = _validator.TestValidate(command);
 
-        result.ShouldHaveValidationErrorFor(x => x.SavePresetModel.PresetModel)
+        result.ShouldHaveValidationErrorFor(x => x.SavePresetModel.Overclocking)
               .WithErrorMessage("Preset data is required");
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
-                    nameof(PresetCommandTestCase.CreateCorrectSavePresetModel))]
-    public void SavePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(SavePresetInputModel model)
-    {
-        var command = new SavePresetCommand(TestHelper.UserId, model);
-
+                    nameof(PresetCommandTestCase.CreateCorrectOverclockingModel))]
+    public void SavePresetCommand_WhenPresetModelAreValid_ShouldNotErrors(OverclockingInputModel model)
+    {      
         PresetValidatorTests.
-            ValidatePresetModel_WhenPresetModelAreValid(command.SavePresetModel.PresetModel);
+            ValidateOverclockongModel_WhenOverclockingModelAreValid(model);
     }
 
     [TestCaseSource(typeof(PresetCommandTestCase),
-                    nameof(PresetCommandTestCase.CreateIncorrectSavePresetModel))]
-    public void SavePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(SavePresetInputModel model)
+                    nameof(PresetCommandTestCase.CreateIncorrectOverclockingModel))]
+    public void SavePresetCommand_WhenPresetModelAreNotValid_ShouldErrors(OverclockingInputModel model)
     {
-        var command = new SavePresetCommand(TestHelper.UserId, model);
-
         PresetValidatorTests.
-            ValidatePresetModel_WhenPresetModelAreNotValid(command.SavePresetModel.PresetModel);
+            ValidateOverclockingModel_WhenOverclockingModelAreNotValid(model);
     }
 
-    private static SavePresetCommand GetCommand(string name)
+    private static SavePresetCommand GetCommand(string gpuName)
     {
-        var presetModel = CreateSavePresetInputModel(name);
+        var presetModel = new SavePresetInputModel("example", gpuName , null!);
 
         return new SavePresetCommand(TestHelper.UserId, presetModel);
-    }
-
-    private static SavePresetInputModel CreateSavePresetInputModel(string name)
-    {
-        var presetInputModel = new PresetInputModel(memoryClock: 1313,
-                               coreClock: 2235,
-                               powerLimit: 150,
-                               criticalTemperature: 105,
-                               fanSpeed: 99);
-
-        return new SavePresetInputModel(name, presetInputModel);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Core;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Abstractions;
 
@@ -20,6 +21,23 @@ public interface IPresetRepository
     /// <param name="gpuName"> Название GPU </param>
     /// <returns> Пресеты </returns>
     public IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, long userId);
+
+    /// <summary>
+    /// Проверить наличие пресета по названию
+    /// </summary>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="name">Название пресета</param>
+    /// <returns></returns>
+    public Task<bool> Exists(long userId, string name);
+
+    /// <summary>
+    /// Проверить наличие пресета по названию, не учитывая текущий пресет
+    /// </summary>
+    /// <param name="userId">Идентификатор пользователя</param>
+    /// <param name="name">Название пресета</param>
+    /// <param name="gpuName">Название видеокарты</param>
+    /// <returns></returns>
+    public Task<bool> Exists(long userId, string name, string gpuName, Guid Id);
 
     /// <summary>
     /// Сохранить пресет для выбранной 

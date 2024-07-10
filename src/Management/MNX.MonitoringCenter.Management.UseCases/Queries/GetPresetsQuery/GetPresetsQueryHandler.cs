@@ -3,6 +3,7 @@ using MediatR;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
 
@@ -21,10 +22,11 @@ public class GetPresetsQueryHandler : IStreamRequestHandler<GetPresetsQuery, Pre
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async IAsyncEnumerable<PresetModel> Handle(GetPresetsQuery request, CancellationToken cancellationToken)
+    public async IAsyncEnumerable<PresetModel> Handle(GetPresetsQuery request,
+                                                     [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var preset in _repository.GetAllAvailable(request.GpuName, request.UserId))
-        {
+        await foreach (Preset preset in _repository.GetAllAvailable(request.GpuName, request.UserId))
+        {            
             yield return _mapper.Map<PresetModel>(preset);
         }
     }
