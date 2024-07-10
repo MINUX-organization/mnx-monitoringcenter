@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\MNX.MonitoringCenter.Contracts\MNX.MonitoringCenter.Monitoring.Contracts.csproj" />
-    <ProjectReference Include="..\MNX.MonitoringCenter.Core\MNX.MonitoringCenter.Monitoring.Core.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.Monitoring.Contracts.Bus\MNX.MonitoringCenter.Monitoring.Contracts.Bus.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.Monitoring.Core\MNX.MonitoringCenter.Monitoring.Core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,4 +1,7 @@
-﻿using MNX.MonitoringCenter.Monitoring.Contracts.Models;
+﻿using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
+using MNX.MonitoringCenter.Monitoring.Service.Messages;
+using MNX.MonitoringCenter.Monitoring.Service.Messages.Models;
+using MNX.MonitoringCenter.Monitoring.UseCases.Commands.ComputeTotalRigsDynamicData.Models;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
 
@@ -11,20 +14,36 @@ public interface IMonitoringClient
     /// Получено сообщение состояния ригов.
     /// </summary>
     /// <param name="RigStates"> Список состояния ригов. </param>
-    /// <returns></returns>
-    Task ReceivedRigsState(List<RigState?> RigStates);
+    Task ReceivedRigsState(IEnumerable<RigState?> RigStates);
 
     /// <summary>
     /// Получено сообщение динамических данных ригов.
     /// </summary>
     /// <param name="DynamicData"> Список динамических данных ригов. </param>
-    /// <returns></returns>
-    Task ReceivedRigsDynamicData(List<RigDynamicData?> DynamicData);
+    Task ReceivedRigsDynamicData(IEnumerable<RigDynamicDataModel?> DynamicData);
 
     /// <summary>
-    /// Получено сообщение об информации ригов.
+    /// Получено сообщение об изменении обобщённых данных.
     /// </summary>
-    /// <param name="message"> Сообщение об информации ригов. </param>
-    /// <returns></returns>
-    Task ReceivedRigsInformation(IAsyncEnumerable<RigInformation> message);
+    /// <param name="message"> Сообщение об изменении обобщённых данных. </param>
+    Task ReceivedTotalData(TotalDataChangeMessage message);
+
+    /// <summary>
+    /// Получена скорость хеширования за период.
+    /// </summary>
+    /// <param name="message"> Скорость хеширования за период. </param>
+    Task ReceivedHashRateForAPeriod(IEnumerable<HashRateModel> message);
+
+    /// <summary>
+    /// Получена текущая скорость хеширования.
+    /// </summary>
+    /// <param name="message"> Текущая скорость хеширования. </param>
+    Task ReceivedCurrentHashRate(HashRateModel message);
+
+    /// <summary>
+    /// Получена ошибка установки разгона.
+    /// </summary>
+    /// <param name="cardId"> Идентификатор видеокарты. </param>
+    /// <param name="message"> Сообщения с ошибками. </param>
+    Task ReceivedOverclockingSettingError(Guid cardId, string[] message);
 }

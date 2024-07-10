@@ -5,13 +5,16 @@ using MNX.Application.RabbitMQ;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.DataAccess;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
+using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories.MiningDevices;
 using MNX.MonitoringCenter.Monitoring.Hubs;
-using MNX.MonitoringCenter.Monitoring.UseCases;
+using MNX.MonitoringCenter.Monitoring.Service.Infrastructure;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
+using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
 using System.Reflection;
+using ZiggyCreatures.Caching.Fusion;
 
 internal class Program
 {
@@ -42,8 +45,13 @@ internal class Program
         builder.Host.UseNLog();
         var services = builder.Services;
 
+        services.AddControllers();
         services.AddConsulIntegration(builder.Configuration);
         services.AddHealthChecks();
+
+        var basePath = AppContext.BaseDirectory;
+        var xmlFilePath = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        services.AddSwagger(Path.Combine(basePath, xmlFilePath));
 
         services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!, new JwtBearerEvents()
         {
@@ -73,13 +81,31 @@ internal class Program
         services.AddDataContext<Context>(configuration);
         services.AddSignalR();
         services.AddEasyNetQ(configuration, [Assembly.GetExecutingAssembly()]);
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
-        services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
+        services.AddMemoryCache()
+                .AddFusionCache()
+                .WithDefaultEntryOptions(options => options.Duration = TimeSpan.FromMinutes(15)); // todo: вынести настройку в конфиг
+
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(new Assembly[]
+        {
+            Assembly.GetExecutingAssembly(),
+            typeof(GetRigsInformationQuery).Assembly
+        }));
+
+        services.AddAutoMapper(new Assembly[]
+        {
+            typeof(MappingProfile).Assembly,
+            typeof(MNX.MonitoringCenter.Monitoring.UseCases.MappingProfile).Assembly,
+            typeof(DbMappingProfile).Assembly
+        });
 
         services.AddScoped<IRigRepository, RigRepository>();
-        services.AddSingleton<ConnectionCounter>();
+        services.AddScoped<IMiningDeviceRepository, MiningDeviceRepository>();
+        services.AddScoped<IGpuRepository, GpuRepository>();
         services.AddScoped<UserAccessor>();
+        services.AddSingleton<IUserRigsObserverWrapper, UserRigsObserverWrapper>();
         services.AddHttpContextAccessor();
+
+        services.Configure<DynamicDataOptions>(configuration);
     }
 
     private static async Task RunApp(WebApplicationBuilder builder)
@@ -91,6 +117,13 @@ internal class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
+            var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<Context>();
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureCreatedAsync();
         }
 
         app.MapHealthChecks("/health").AllowAnonymous();
@@ -100,6 +133,7 @@ internal class Program
         app.UseAuthorization();
 
         app.MapHub<MonitoringHub>("hubs/monitoring");
+        app.MapControllers();
 
         await app.RunAsync();
     }
