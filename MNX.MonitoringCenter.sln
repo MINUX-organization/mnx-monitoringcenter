@@ -35,6 +35,20 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monitoring", "Monitoring", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Infrastructure", "src\MNX.MonitoringCenter.Infrastructure\MNX.MonitoringCenter.Infrastructure.csproj", "{00F4B69B-D25B-4D39-8BE0-1DE340640946}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "db", "db", "{D62873BC-7CCF-421F-9F46-492600C41E6F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tables", "tables", "{7C3270F7-9589-4AAD-A418-14D7C8F9E31E}"
+	ProjectSection(SolutionItems) = preProject
+		db\tables\algorithms.sql = db\tables\algorithms.sql
+		db\tables\cryptocurrencies.sql = db\tables\cryptocurrencies.sql
+		db\tables\flight_sheets.sql = db\tables\flight_sheets.sql
+		db\tables\miners.sql = db\tables\miners.sql
+		db\tables\pools.sql = db\tables\pools.sql
+		db\tables\presets.sql = db\tables\presets.sql
+		db\tables\wallets.sql = db\tables\wallets.sql
+	EndProjectSection
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Infrastructure", "src\MNX.MonitoringCenter.Infrastructure\MNX.MonitoringCenter.Infrastructure.csproj", "{00F4B69B-D25B-4D39-8BE0-1DE340640946}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MonitoringClient", "tests\Monitoring\MonitoringClient\MonitoringClient.csproj", "{56FED1E8-8978-4D0E-8F75-62B5FC654626}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Monitoring.Core", "src\Monitoring\MNX.MonitoringCenter.Monitoring.Core\MNX.MonitoringCenter.Monitoring.Core.csproj", "{34B38F59-D27C-4F0D-B322-16531FE5F363}"
@@ -118,6 +132,7 @@ Global
 		{D003C366-93D4-48C6-AAB5-8F6C7D75872E} = {7BEC6D83-F850-4C4C-82C8-012F67D2507C}
 		{805D2321-19BC-4D53-A3CE-3E1487E916F7} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
 		{00F4B69B-D25B-4D39-8BE0-1DE340640946} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{7C3270F7-9589-4AAD-A418-14D7C8F9E31E} = {D62873BC-7CCF-421F-9F46-492600C41E6F}
 		{56FED1E8-8978-4D0E-8F75-62B5FC654626} = {805D2321-19BC-4D53-A3CE-3E1487E916F7}
 		{34B38F59-D27C-4F0D-B322-16531FE5F363} = {7BEC6D83-F850-4C4C-82C8-012F67D2507C}
 		{B50645BE-693F-43D1-BE68-F1207E3B4453} = {7BEC6D83-F850-4C4C-82C8-012F67D2507C}

@@ -9,6 +9,7 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
 using Microsoft.AspNetCore.Authorization;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -47,8 +48,8 @@ public class PresetController : ControllerBase
     /// <returns> Список пресетов </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Preset>), 200)]
-    public IAsyncEnumerable<Preset> GetPresets(string? gpuName)
+    [ProducesResponseType(typeof(IAsyncEnumerable<PresetModel>), 200)]
+    public IAsyncEnumerable<PresetModel> GetPresets(string? gpuName)
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetPresetsQuery(gpuName, userId));

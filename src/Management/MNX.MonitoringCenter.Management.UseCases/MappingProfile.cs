@@ -21,6 +21,10 @@ public class MappingProfile : Profile
     {
         CreateMap<CryptocurrencyInputModel, Cryptocurrency>();
 
+        CreateMap<Cryptocurrency, CryptocurrencyModel>();
+
+        CreateMap<Preset, PresetModel>().ReverseMap();
+
         CreateMap<WalletInputModel, Wallet>();
 
         CreateMap<UpdatePoolCommand, Pool>()
@@ -56,8 +60,6 @@ public class MappingProfile : Profile
             .ForMember(destination => destination.Port, options => options.MapFrom(source => source.Model.Port))
             .ForMember(destination => destination.Domain, options => options.MapFrom(source => source.Model.Domain))
             .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId));
-
-        CreateMap<PresetInputModel, Preset>();
 
         CreateMap<Wallet, WalletModel>()
             .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.Cryptocurrency!.FullName));

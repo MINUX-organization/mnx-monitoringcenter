@@ -73,7 +73,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets
             {
                 Assert.That(result.ToAsyncEnumerable(), Is.InstanceOf<IAsyncEnumerable<WalletModel>>(),
                     "Не совпадают типы");
-                Assert.That(result, Is.Not.Empty, "Список пулов пуст");
+                Assert.That(result, Is.Not.Empty, "Список кошельков пуст");
                 Assert.That(result[0].Id, Is.EqualTo(walletsList[0].Id), "Коллекции не равны");
                 Assert.That(result[1].Id, Is.EqualTo(walletsList[1].Id), "Коллекции не равны");
             });

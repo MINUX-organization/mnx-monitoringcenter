@@ -5,6 +5,7 @@ using Moq;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
 using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryptocurrency
 {
@@ -15,7 +16,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
 
         private Mock<IAlgorithmRepository> _algorithmRepository;
 
-        private Mock<IMapper> _mapper;
+        private IMapper _mapper = TestHelper.GetMapper();
 
         private AddCryptocurrencyCommandHandler _handler;
 
@@ -24,16 +25,15 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
         {
             _cryptoRepository = new Mock<ICryptocurrencyRepository>();
             _algorithmRepository = new Mock<IAlgorithmRepository>();
-            _mapper = new Mock<IMapper>();
 
             _handler = new AddCryptocurrencyCommandHandler(
                 _cryptoRepository.Object,
                 _algorithmRepository.Object,
-                _mapper.Object);
+                _mapper);
         }
 
         [Test]
-        public async Task AddCrypto_ReturnsUnitValue()
+        public async Task AddCrypto_ReturnsCryptoModel()
         {
             var cryptocurrency = new Cryptocurrency()
             {
@@ -51,11 +51,6 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
                 .Setup(x => x.Exists(It.IsAny<string>()))
                 .ReturnsAsync(true);
 
-            _mapper
-                .Setup(x => x.Map<Cryptocurrency>(
-                    It.IsAny<CryptocurrencyInputModel>()))
-                .Returns(cryptocurrency);
-
             var result = await _handler.Handle(GetCommand(), default);
 
             _cryptoRepository
@@ -63,7 +58,10 @@ namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryp
 
             Assert.NotNull(result);
             Assert.IsTrue(result.IsSuccess);
-            Assert.That(result.GetValue(), Is.EqualTo(cryptocurrency));
+            Assert.IsTrue(result.GetValue().ShortName == GetCommand().Model.ShortName &&
+                          result.GetValue().FullName == GetCommand().Model.FullName &&
+                          result.GetValue().Algorithm == GetCommand().Model.Algorithm,
+                          "Возвращаемое значение не совпадает с ожидаемым");
         }
 
         [Test]
