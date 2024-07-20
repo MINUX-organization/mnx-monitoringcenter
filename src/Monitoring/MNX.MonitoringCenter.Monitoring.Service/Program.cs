@@ -119,11 +119,6 @@ internal class Program
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
             app.UseSwaggerUI();
-
-            var scope = app.Services.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<Context>();
-            await context.Database.EnsureDeletedAsync();
-            await context.Database.EnsureCreatedAsync();
         }
 
         app.MapHealthChecks("/health").AllowAnonymous();
