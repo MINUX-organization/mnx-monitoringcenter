@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
 using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 

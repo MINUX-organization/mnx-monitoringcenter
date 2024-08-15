@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
 using Microsoft.AspNetCore.Authorization;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 

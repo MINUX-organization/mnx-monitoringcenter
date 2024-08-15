@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.UpdatePool;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.EditWallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases;
 

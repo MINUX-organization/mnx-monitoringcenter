@@ -3,30 +3,65 @@
 /// <summary>
 /// Криптовалюта
 /// </summary>
-public class Cryptocurrency
+public class Cryptocurrency : IEquatable<Cryptocurrency>
 {
     /// <summary>
-    /// Идентификатор
+    /// Идентификатор.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
-    /// Короткое название
+    /// Короткое название.
     /// </summary>
-    public string ShortName { get; set; }
+    public required string ShortName { get; set; }
 
     /// <summary>
-    /// Полное название
+    /// Полное название.
     /// </summary>
-    public string FullName { get; set; }
+    public required string FullName { get; set; }
 
     /// <summary>
-    /// Алгоритм
+    /// Алгоритм.
     /// </summary>
-    public string Algorithm { get; set; }
+    public required string Algorithm { get; set; }
 
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
     public long UserId { get; set; }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        if (obj is Cryptocurrency cryptocurrency)
+        {
+            return Equals(cryptocurrency);
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(Cryptocurrency? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return ShortName == other.ShortName &&
+               FullName == other.FullName &&
+               Algorithm == other.Algorithm;
+    }
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(ShortName, FullName, Algorithm);
+    }
 }

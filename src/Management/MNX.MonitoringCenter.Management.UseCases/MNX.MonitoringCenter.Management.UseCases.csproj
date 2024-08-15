@@ -17,4 +17,9 @@
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.Core\MNX.MonitoringCenter.Management.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Algorithm\Queries\" />
+    <Folder Include="Commands\Wallets\" />
+  </ItemGroup>
+
 </Project>

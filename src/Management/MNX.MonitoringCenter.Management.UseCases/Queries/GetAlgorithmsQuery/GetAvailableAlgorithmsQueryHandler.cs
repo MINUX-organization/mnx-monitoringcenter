@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using MNX.MonitoringCenter.Management.UseCases.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Queries.GetAlgorithmsQuery;
 

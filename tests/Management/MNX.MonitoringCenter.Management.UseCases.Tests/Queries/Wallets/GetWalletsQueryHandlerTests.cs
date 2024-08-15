@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetWalletsQuery;
 using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Wallet;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Wallets

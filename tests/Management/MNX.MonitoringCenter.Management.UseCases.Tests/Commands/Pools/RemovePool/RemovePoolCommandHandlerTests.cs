@@ -1,7 +1,9 @@
 ﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
+using MNX.MonitoringCenter.Management.UseCases.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.RemovePool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.RemovePool;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools.RemovePool;

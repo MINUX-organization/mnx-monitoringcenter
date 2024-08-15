@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.UpdatePool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.UpdatePool;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools.UpdatePool;

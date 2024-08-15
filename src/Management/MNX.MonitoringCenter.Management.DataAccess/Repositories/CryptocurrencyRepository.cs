@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
 using System.Collections.Immutable;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;

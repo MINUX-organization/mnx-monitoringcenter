@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.RemoveCryptocurrency;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.RemoveCryptocurrency

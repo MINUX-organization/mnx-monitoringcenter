@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using MNX.MonitoringCenter.Management.UseCases.Pool;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Repositories;
 

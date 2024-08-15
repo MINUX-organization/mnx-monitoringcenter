@@ -13,15 +13,15 @@ public class CryptocurrencyModel
     /// <summary>
     /// Короткое название
     /// </summary>
-    public string ShortName { get; set; }
+    public required string ShortName { get; set; }
 
     /// <summary>
     /// Полное название
     /// </summary>
-    public string FullName { get; set; }
+    public required string FullName { get; set; }
 
     /// <summary>
     /// Алгоритм
     /// </summary>
-    public string Algorithm { get; set; }
+    public required string Algorithm { get; set; }
 }

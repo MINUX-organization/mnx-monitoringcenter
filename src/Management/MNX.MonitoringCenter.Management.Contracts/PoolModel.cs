@@ -13,7 +13,7 @@ public class PoolModel
     /// <summary>
     /// Домен
     /// </summary>
-    public string Domain { get; set; }
+    public required string Domain { get; set; }
 
     /// <summary>
     /// Порт
@@ -23,5 +23,5 @@ public class PoolModel
     /// <summary>
     /// Полное название криптовалюты
     /// </summary>
-    public string Cryptocurrency { get; set; }
+    public required string Cryptocurrency { get; set; }
 }
