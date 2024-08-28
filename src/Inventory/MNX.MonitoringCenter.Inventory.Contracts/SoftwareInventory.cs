@@ -3,45 +3,45 @@
 /// <summary>
 /// Инвентаризация программного обеспечения.
 /// </summary>
-public class SoftwareInventory
+public record SoftwareInventory
 {
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Версия Minux.
     /// </summary>
-    public string MinuxVersion { get; set; }
+    public required string MinuxVersion { get; init; }
 
     /// <summary>
     /// Версия Linux.
     /// </summary>
-    public string LinuxVersion { get; set; }
+    public required string LinuxVersion { get; init; }
 
     /// <summary>
     /// Версия AMD драйвера.
     /// </summary>
-    public string AmdDriverVersion { get; set; }
+    public required string AmdDriverVersion { get; init; }
 
     /// <summary>
     /// Версия драйвера Nvidia.
     /// </summary>
-    public string NvidiaDriverVersion { get; set; }
+    public required string NvidiaDriverVersion { get; init; }
 
     /// <summary>
     /// Версия драйвера Intel.
     /// </summary>
-    public string IntelDriverVersion { get; set; }
+    public required string IntelDriverVersion { get; init; }
 
     /// <summary>
     /// Версия OpenCL.
     /// </summary>
-    public string OpenCLVersion { get; set; }
+    public required string OpenCLVersion { get; init; }
 
     /// <summary>
     /// Версия CUDA.
     /// </summary>
-    public string CudaVersion { get; set; }
+    public required string CudaVersion { get; init; }
 }

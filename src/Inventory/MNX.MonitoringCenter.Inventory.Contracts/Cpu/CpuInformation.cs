@@ -3,38 +3,38 @@
 namespace MNX.MonitoringCenter.Inventory.Contracts.Cpu;
 
 /// <summary>
-/// Информация.
+/// Информация о процессоре.
 /// </summary>
 [ComplexType]
-public sealed record CpuInformation
+public record CpuInformation
 {
     /// <summary>
     /// Производитель.
     /// </summary>
-    public CpuManufacturerEnum Manufacturer { get; set; }
+    public required string Manufacturer { get; init; }
 
     /// <summary>
     /// Модель.
     /// </summary>
-    public string Model { get; set; }
+    public required string Model { get; init; }
 
     /// <summary>
     /// Количество ядер.
     /// </summary>
-    public int CoresCount { get; set; }
+    public int CoresCount { get; init; }
 
     /// <summary>
     /// Количество потоков.
     /// </summary>
-    public int ThreadsCount { get; set; }
+    public int ThreadsCount { get; init; }
 
     /// <summary>
     /// Архитектура.
     /// </summary>
-    public string Architecture { get; set; }
+    public required string Architecture { get; init; }
 
     /// <summary>
     /// Кэш.
     /// </summary>
-    public CpuCache Cache { get; set; }
+    public required CpuCache Cache { get; init; }
 }

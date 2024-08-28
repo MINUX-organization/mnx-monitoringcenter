@@ -8,6 +8,9 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 /// </summary>
 public class Context : DbContext
 {
+    /// <summary>
+    /// Записи инвентаризаций.
+    /// </summary>
     internal DbSet<Inventory> Inventory { get; set; }
 
     public Context(DbContextOptions<Context> options) : base(options) { }

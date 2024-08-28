@@ -6,30 +6,30 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 /// Ограничения видеокарты.
 /// </summary>
 [ComplexType]
-public class GpuRestrictions
+public record GpuRestrictions
 {
     /// <summary>
     /// Мощность.
     /// </summary>
-    public RangeValue Power { get; set; }
+    public required RangeValue Power { get; init; }
 
     /// <summary>
     /// Скорость вентилятора.
     /// </summary>
-    public RangeValue FanSpeed { get; set; }
+    public required RangeValue FanSpeed { get; init; }
 
     /// <summary>
     /// Температура.
     /// </summary>
-    public GpuTemperature Temperature { get; set; }
+    public required GpuTemperature Temperature { get; init; }
 
     /// <summary>
     /// Напряжение.
     /// </summary>
-    public GpuVoltage Voltage { get; set; }
+    public required GpuVoltage Voltage { get; init; }
 
     /// <summary>
     /// Разгон.
     /// </summary>
-    public GpuClock Clock { get; set; }
+    public required GpuClock Clock { get; init; }
 }

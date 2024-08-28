@@ -12,7 +12,7 @@ using Motherboard = Contracts.Motherboard.Motherboard;
 public sealed record GetMotherboardInfoQuery(Guid RigId) : IRequest<Result<Motherboard>>;
 
 /// <summary>
-/// Реализация <see cref="GetMotherboardInfoQuery"/>.
+/// Обработчик <see cref="GetMotherboardInfoQuery"/>.
 /// </summary>
 public class GetMotherboardInfoQueryHandler : IRequestHandler<GetMotherboardInfoQuery, Result<Motherboard>>
 {
@@ -24,13 +24,15 @@ public class GetMotherboardInfoQueryHandler : IRequestHandler<GetMotherboardInfo
             ?? throw new ArgumentNullException(nameof(motherboardRepository));
     }
 
-    public async Task<Result<Motherboard>> Handle(GetMotherboardInfoQuery request, CancellationToken cancellationToken)
+    public async Task<Result<Motherboard>> Handle(GetMotherboardInfoQuery request,
+                                                  CancellationToken cancellationToken)
     {
         var motherboard = await _motherboardRepository.GetByRigId(request.RigId, cancellationToken);
 
         if (motherboard == null)
         {
-            return Result<Motherboard>.Invalid($"Rig with id equaled {request.RigId} was not found");
+            return Result<Motherboard>
+                .Invalid($"Inventory for rig with id equaled {request.RigId} was not found");
         }
 
         return Result<Motherboard>.Success(motherboard);

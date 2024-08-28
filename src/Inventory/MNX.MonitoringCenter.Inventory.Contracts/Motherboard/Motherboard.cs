@@ -3,20 +3,20 @@
 /// <summary>
 /// Материнская плата.
 /// </summary>
-public class Motherboard
+public record Motherboard
 {
     /// <summary>
     /// Уникальный идентификатор.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Информация о материнской плате.
     /// </summary>
-    public MotherboardInformation Information { get; set; }
+    public required MotherboardInformation Information { get; init; }
 
     /// <summary>
     /// Список PCI.     
     /// </summary>
-    public List<MotherboardPci> Pcies { get; set; }
+    public List<MotherboardPci> Pcies { get; init; } = new();
 }

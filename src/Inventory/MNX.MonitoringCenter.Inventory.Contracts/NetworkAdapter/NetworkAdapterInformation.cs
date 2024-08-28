@@ -1,45 +1,45 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MNX.MonitoringCenter.Inventory.Contracts.InternetAdapter;
+namespace MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
 
 /// <summary>
-/// Информация об интернет адаптере.
+/// Информация о сетевом адаптере.
 /// </summary>
 [ComplexType]
-public class InternetAdapterInformation
+public record NetworkAdapterInformation
 {
     /// <summary>
     /// Производитель.
     /// </summary>
-    public string Manufacturer { get; set; }
+    public required string Manufacturer { get; init; }
 
     /// <summary>
     /// Модель.
     /// </summary>
-    public string Model { get; set; }
+    public required string Model { get; init; }
 
     /// <summary>
     /// Серийный номер.
     /// </summary>
-    public string SerialNumber { get; set; }
+    public required string SerialNumber { get; init; }
 
     /// <summary>
     /// Код продавца.
     /// </summary>
-    public string VendorCode { get; set; }
+    public required string VendorCode { get; init; }
 
     /// <summary>
     /// Информация о BUS.
     /// </summary>
-    public string BusInfo { get; set; }
+    public required string BusInfo { get; init; }
 
     /// <summary>
     /// Логическое имя.
     /// </summary>
-    public string LogicalName { get; set; }
+    public required string LogicalName { get; init; }
 
     /// <summary>
     /// MAC адрес.
     /// </summary>
-    public string Mac { get; set; }
+    public required string Mac { get; init; }
 }

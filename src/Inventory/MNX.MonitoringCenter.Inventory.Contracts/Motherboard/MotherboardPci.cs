@@ -3,20 +3,20 @@
 /// <summary>
 /// Информация о поддерживаемой оперативной памяти.
 /// </summary>
-public sealed record MotherboardPci
+public record MotherboardPci
 {
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     /// <summary>
     /// Bus.
     /// </summary>
-    public int Bus { get; set; }
+    public int Bus { get; init; }
 
     /// <summary>
     /// Подключено ли устройство.
     /// </summary>
-    public bool IsInstalled { get; set; }
+    public bool IsInstalled { get; init; }
 }

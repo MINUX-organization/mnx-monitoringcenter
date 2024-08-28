@@ -3,15 +3,15 @@
 /// <summary>
 /// Жёсткий диск.
 /// </summary>
-public class Drive
+public record Drive
 {
     /// <summary>
     /// Уникальный идентификатор.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Информация.
     /// </summary>
-    public DriveInformation Information { get; set; }
+    public required DriveInformation Information { get; init; }
 }

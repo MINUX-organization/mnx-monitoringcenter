@@ -6,25 +6,25 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Cpu;
 /// Ограничения процессора.
 /// </summary>
 [ComplexType]
-public class CpuRestrictions
+public record CpuRestrictions
 {
     /// <summary>
     /// Мощность.
     /// </summary>
-    public RangeValue Power { get; set; }
+    public required RangeValue Power { get; init; }
 
     /// <summary>
     /// Скорость вентилятора.
     /// </summary>
-    public RangeValue FanSpeed { get; set; }
+    public required RangeValue FanSpeed { get; init; }
 
     /// <summary>
     /// Температура.
     /// </summary>
-    public RangeValue Temperature { get; set; }
+    public required RangeValue Temperature { get; init; }
 
     /// <summary>
     /// Разгон.
     /// </summary>
-    public RangeValue Clock { get; set; }
+    public required RangeValue Clock { get; init; }
 }

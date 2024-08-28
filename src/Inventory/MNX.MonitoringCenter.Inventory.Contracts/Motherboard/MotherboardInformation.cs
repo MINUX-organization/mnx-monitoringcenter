@@ -6,41 +6,41 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
 /// Информация о материнской плате.
 /// </summary>
 [ComplexType]
-public sealed record MotherboardInformation
+public record MotherboardInformation
 {
     /// <summary>
     /// Производитель.
     /// </summary>
-    public string Manufacturer { get; set; }
+    public required string Manufacturer { get; init; }
 
     /// <summary>
     /// Модель.
     /// </summary>
-    public string Model { get; set; }
+    public required string Model { get; init; }
 
     /// <summary>
     /// Серийный номер.
     /// </summary>
-    public string SerialNumber { get; set; }
+    public required string SerialNumber { get; init; }
 
     /// <summary>
     /// Кол-во Sata портов.
     /// </summary>
-    public int SataPortsCount { get; set; }
+    public int SataPortsCount { get; init; }
 
     /// <summary>
-    /// Кол-во портов для плашек операивной памяти.
+    /// Кол-во портов для плашек оперативной памяти.
     /// </summary>
-    public int RamPortsCount { get; set; }
+    public int RamPortsCount { get; init; }
 
     /// <summary>
     /// Кол-во PciX4 портов.
     /// </summary>
-    public int PciX4PosrtsCount { get; set; }
+    public int PciX4PosrtsCount { get; init; }
 
     /// <summary>
     /// Кол-во PciX16 портов.
     /// </summary>
-    public int PciX16PosrtsCount { get; set; }
+    public int PciX16PosrtsCount { get; init; }
 
 }

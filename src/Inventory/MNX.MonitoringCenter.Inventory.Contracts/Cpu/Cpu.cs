@@ -3,25 +3,25 @@
 /// <summary>
 /// Процессор.
 /// </summary>
-public class Cpu
+public record Cpu
 {
     /// <summary>
     /// Уникальный идентификатор.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// PCI.
     /// </summary>
-    public Pci Pci { get; set; }
+    public required Pci Pci { get; init; }
 
     /// <summary>
     /// Информация.
     /// </summary>
-    public CpuInformation Information { get; set; }
+    public required CpuInformation Information { get; init; }
 
     /// <summary>
     /// Ограничения.
     /// </summary>
-    public CpuRestrictions Restrictions { get; set; }
+    public required CpuRestrictions Restrictions { get; init; }
 }

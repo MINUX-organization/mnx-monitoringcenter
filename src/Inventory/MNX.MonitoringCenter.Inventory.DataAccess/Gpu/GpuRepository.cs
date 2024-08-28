@@ -1,40 +1,40 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.UseCases;
-using MNX.MonitoringCenter.Inventory.UseCases.Cpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.Cpu;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Gpu;
 
 /// <summary>
-/// Реализация <see cref="ICpuRepository"/>.
+/// Реализация <see cref="IGpuRepository"/>.
 /// </summary>
-public class CpuRepository : ICpuRepository
+public class GpuRepository : IGpuRepository
 {
     private readonly Context _context;
 
-    public CpuRepository(Context context)
+    public GpuRepository(Context context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Contracts.Cpu.Cpu> GetList(DeviceSpecification specification)
+    public IAsyncEnumerable<Contracts.Gpu.Gpu> GetList(DeviceSpecification specification)
     {
-        return GetCpus(specification).AsAsyncEnumerable();
+        return GetGpus(specification).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
     public Task<int> GetCount(DeviceSpecification specification)
     {
-        return GetCpus(specification).CountAsync();
+        return GetGpus(specification).CountAsync();
     }
 
-    private IQueryable<Contracts.Cpu.Cpu> GetCpus(DeviceSpecification specification)
+    private IQueryable<Contracts.Gpu.Gpu> GetGpus(DeviceSpecification specification)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
                                  .GetCurrentInventory()
                                  .InventoryFilter(specification.InventorySpecification)
-                                 .Include(x => x.Cpus)
-                                 .SelectMany(x => x.Cpus)
+                                 .Include(x => x.Gpus)
+                                 .SelectMany(x => x.Gpus)
                                  .Filter(specification);
     }
 }

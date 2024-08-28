@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases.SaveInventory;
+namespace MNX.MonitoringCenter.Inventory.UseCases;
 
 /// <summary>
 /// Репозиторий для доступа к инвентаризации.

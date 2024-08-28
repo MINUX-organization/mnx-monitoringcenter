@@ -1,10 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.UseCases.SaveInventory;
+using MNX.MonitoringCenter.Inventory.UseCases;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
-internal class InventoryRepository : IInventoryRepository
+/// <summary>
+/// Реализация <see cref="IInventoryRepository"/>.
+/// </summary>
+public class InventoryRepository : IInventoryRepository
 {
     private readonly Context _context;
 
@@ -13,29 +16,38 @@ internal class InventoryRepository : IInventoryRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
+    /// <inheritdoc/>
     public async Task Save(Guid rigId, DateTimeOffset createdDate,
                            InventoryModel inventory, CancellationToken cancellationToken)
     {
-        var oldInventory = await _context.Inventory.Where(x => x.RigId == rigId)
-                                                   .FirstOrDefaultAsync(cancellationToken);
+        var oldInventory = await _context.Inventory
+            .GetCurrentInventory()
+            .InventoryFilter(new InventorySpecification(rigId))
+            .FirstOrDefaultAsync(cancellationToken);
 
-        if (oldInventory != null)
-        {
-            oldInventory.EndDate = createdDate;
-        }
-
-        await _context.Inventory.AddAsync(new Inventory()
+        var newInventory = new Inventory()
         {
             RigId = rigId,
-            CreatedDate = createdDate,
+            CreatedDateTime = createdDate,
             Cpus = inventory.Cpus,
             Drives = inventory.Drives,
             Gpus = inventory.Gpus,
-            InternetAdapters = inventory.InternetAdapters,
+            NetworkAdapters = inventory.NetworkAdapters,
             Motherboard = inventory.Motherboard,
             Software = inventory.Software
-        },
-        cancellationToken);
+        };
+
+        if (newInventory.Equals(oldInventory))
+        {
+            return;
+        }
+
+        if (oldInventory != null)
+        {
+            oldInventory.EndDateTime = createdDate;
+        }
+
+        await _context.Inventory.AddAsync(newInventory, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
     }

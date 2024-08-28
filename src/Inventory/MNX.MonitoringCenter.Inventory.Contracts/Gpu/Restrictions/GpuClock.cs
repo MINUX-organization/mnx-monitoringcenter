@@ -6,15 +6,15 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 /// Разгон видеокарты.
 /// </summary>
 [ComplexType]
-public sealed record GpuClock
+public record GpuClock
 {
     /// <summary>
     /// Ядро.
     /// </summary>
-    public GpuChangingValue Core { get; set; }
+    public required GpuChangingValue Core { get; init; }
 
     /// <summary>
     /// Память.
     /// </summary>
-    public GpuChangingValue Memory { get; set; }
+    public required GpuChangingValue Memory { get; init; }
 }

@@ -6,15 +6,15 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 /// Изменяемые значения видеокарты.
 /// </summary>
 [ComplexType]
-public sealed record GpuChangingValue
+public record GpuChangingValue
 {
     /// <summary>
     /// Закрытие ядра.
     /// </summary>
-    public RangeValue Lock { get; set; }
+    public required RangeValue Lock { get; init; }
 
     /// <summary>
     /// Сдвиг ядра.
     /// </summary>
-    public RangeValue Offset { get; set; }
+    public required RangeValue Offset { get; init; }
 }

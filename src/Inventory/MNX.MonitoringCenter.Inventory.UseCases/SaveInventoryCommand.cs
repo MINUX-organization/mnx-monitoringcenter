@@ -2,7 +2,7 @@
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases.SaveInventory;
+namespace MNX.MonitoringCenter.Inventory.UseCases;
 
 /// <summary>
 /// Команда сохранения инвентаризации.
@@ -24,7 +24,7 @@ public class SaveInventoryCommandHandler : IRequestHandler<SaveInventoryCommand,
 
     public async Task<Result<Unit>> Handle(SaveInventoryCommand request, CancellationToken cancellationToken)
     {
-        await _repository.Save(request.Message.RigId, request.Message.CreatedDate,
+        await _repository.Save(request.Message.RigId, request.Message.CreatedDateTime,
                                request.Message.Inventory, cancellationToken);
 
         return Result<Unit>.Empty();

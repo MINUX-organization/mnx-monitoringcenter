@@ -6,25 +6,25 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Drive;
 /// Информация о жёстком диске.
 /// </summary>
 [ComplexType]
-public sealed record DriveInformation
+public record DriveInformation
 {
     /// <summary>
     /// Производитель.
     /// </summary>
-    public string Manufacturer { get; set; }
+    public required string Manufacturer { get; init; }
 
     /// <summary>
     /// Модель.
     /// </summary>
-    public string Model { get; set; }
+    public required string Model { get; init; }
 
     /// <summary>
     /// Серийный номер.
     /// </summary>
-    public string SerialNumber { get; set; }
+    public required string SerialNumber { get; init; }
 
     /// <summary>
     /// Вместимость.
     /// </summary>
-    public int Capacity { get; set; }
+    public int Capacity { get; init; }
 }

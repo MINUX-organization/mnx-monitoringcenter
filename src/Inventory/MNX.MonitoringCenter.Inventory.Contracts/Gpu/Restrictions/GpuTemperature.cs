@@ -6,15 +6,15 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 /// Температура видеокарты.
 /// </summary>
 [ComplexType]
-public sealed record GpuTemperature
+public record GpuTemperature
 {
     /// <summary>
     /// Ядро.
     /// </summary>
-    public RangeValue Core { get; set; }
+    public required RangeValue Core { get; init; }
 
     /// <summary>
     /// Память.
     /// </summary>
-    public RangeValue Memory { get; set; }
+    public required RangeValue Memory { get; init; }
 }

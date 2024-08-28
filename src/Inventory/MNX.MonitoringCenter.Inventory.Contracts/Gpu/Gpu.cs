@@ -6,25 +6,25 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Gpu;
 /// <summary>
 /// Видеокарта.
 /// </summary>
-public class Gpu
+public record Gpu
 {
     /// <summary>
     /// Уникальный идентификатор.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// PCI.
     /// </summary>
-    public Pci Pci { get; set; }
+    public required Pci Pci { get; init; }
 
     /// <summary>
     /// Информация.
     /// </summary>
-    public GpuInformation Information { get; set; }
+    public required GpuInformation Information { get; init; }
 
     /// <summary>
     /// Ограничения.
     /// </summary>
-    public GpuRestrictions Restrictions { get; set; }
+    public required GpuRestrictions Restrictions { get; init; }
 }

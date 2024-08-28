@@ -6,11 +6,11 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Cpu;
 /// Кеш процессора.
 /// </summary>
 [ComplexType]
-public sealed record CpuCache
+public record CpuCache
 {
-    public int L1 { get; set; }
+    public int L1 { get; init; }
 
-    public int L2 { get; set; }
+    public int L2 { get; init; }
 
-    public int L3 { get; set; }
+    public int L3 { get; init; }
 }

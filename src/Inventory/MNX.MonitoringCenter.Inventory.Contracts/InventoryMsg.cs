@@ -1,10 +1,22 @@
 ﻿namespace MNX.MonitoringCenter.Inventory.Contracts;
 
+/// <summary>
+/// Сообщение с инвентаризацией.
+/// </summary>
 public class InventoryMsg
 {
-    public Guid RigId { get; set; }
+    /// <summary>
+    /// Идентификатор рига.
+    /// </summary>
+    public Guid RigId { get; init; }
 
-    public DateTimeOffset CreatedDate { get; set; }
+    /// <summary>
+    /// Дата и время проведения инвентаризации.
+    /// </summary>
+    public DateTimeOffset CreatedDateTime { get; init; }
 
-    public InventoryModel Inventory { get; set; }
+    /// <summary>
+    /// Инвентаризация.
+    /// </summary>
+    public required InventoryModel Inventory { get; init; }
 }

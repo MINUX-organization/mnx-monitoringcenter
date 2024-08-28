@@ -1,18 +1,37 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace MNX.MonitoringCenter.Inventory.Contracts;
 
-namespace MNX.MonitoringCenter.Inventory.Contracts;
-
-public class InventoryModel
+/// <summary>
+/// Модель инвентаризации.
+/// </summary>
+public sealed record InventoryModel
 {
-    public List<Cpu.Cpu> Cpus { get; set; } = new();
+    /// <summary>
+    /// Процессоры.
+    /// </summary>
+    public List<Cpu.Cpu> Cpus { get; init; } = new();
 
-    public List<Gpu.Gpu> Gpus { get; set; } = new();
+    /// <summary>
+    /// Видеокарты.
+    /// </summary>
+    public List<Gpu.Gpu> Gpus { get; init; } = new();
 
-    public List<Drive.Drive> Drives { get; set; } = new();
+    /// <summary>
+    /// Диски.
+    /// </summary>
+    public List<Drive.Drive> Drives { get; init; } = new();
 
-    public List<InternetAdapter.InternetAdapter> InternetAdapters { get; set; } = new();
+    /// <summary>
+    /// Сетевые адаптеры.
+    /// </summary>
+    public List<NetworkAdapter.NetworkAdapter> NetworkAdapters { get; init; } = new();
 
-    public Motherboard.Motherboard Motherboard { get; set; } = new();
+    /// <summary>
+    /// Материнская плата.
+    /// </summary>
+    public required Motherboard.Motherboard Motherboard { get; init; }
 
-    public SoftwareInventory Software { get; set; }
+    /// <summary>
+    /// Программное обеспечение.
+    /// </summary>
+    public required SoftwareInventory Software { get; init; }
 }

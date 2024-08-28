@@ -19,6 +19,6 @@ internal class InventoryCfg : IEntityTypeConfiguration<Inventory>
                .WithOne()
                .HasForeignKey<SoftwareInventory>("InventoryId");
 
-        builder.HasIndex(x => new { x.RigId, x.CreatedDate }).IsDescending(false, true);
+        builder.HasIndex(x => new { x.RigId, x.CreatedDateTime }).IsDescending(false, true);
     }
 }

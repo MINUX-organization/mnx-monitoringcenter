@@ -6,15 +6,15 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Gpu;
 /// Технология параллельных вычислений.
 /// </summary>
 [ComplexType]
-public class ParallelComputingTechnology
+public record ParallelComputingTechnology
 {
     /// <summary>
     /// Тип.
     /// </summary>
-    public ParallelComputingTechnologyEnum Type { get; set; }
+    public ParallelComputingTechnologyEnum Type { get; init; }
 
     /// <summary>
     /// Версия.
     /// </summary>
-    public string Version { get; set; }
+    public required string Version { get; init; }
 }

@@ -6,25 +6,25 @@ namespace MNX.MonitoringCenter.Inventory.Contracts;
 /// Минимальные и максимальные значения.
 /// </summary>
 [ComplexType]
-public sealed record RangeValue
+public record RangeValue
 {
     /// <summary>
     /// Минимальное значение.
     /// </summary>
-    public int Minimal { get; set; }
+    public int Minimal { get; init; }
 
     /// <summary>
     /// Максимальное значение.
     /// </summary>
-    public int Maximal { get; set; }
+    public int Maximal { get; init; }
 
     /// <summary>
     /// Можно ли изменять.
     /// </summary>
-    public bool IsWritable { get; set; }
+    public bool IsWritable { get; init; }
 
     /// <summary>
     /// Значение по умолчанию.
     /// </summary>
-    public int Default { get; set; }
+    public int Default { get; init; }
 }

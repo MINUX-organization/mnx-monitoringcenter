@@ -1,30 +1,30 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.UseCases;
-using MNX.MonitoringCenter.Inventory.UseCases.Motherboard;
+using MNX.MonitoringCenter.Inventory.UseCases.Software;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.Motherboard;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Software;
 
 /// <summary>
-/// Реализация <see cref="IMotherboardRepository"/>.
+/// Реализация <see cref="ISoftwareRepository"/>.
 /// </summary>
-public class MotherboardRepository : IMotherboardRepository
+public class SoftwareRepository : ISoftwareRepository
 {
     private readonly Context _context;
 
-    public MotherboardRepository(Context context)
+    public SoftwareRepository(Context context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     /// <inheritdoc/>
-    public Task<Contracts.Motherboard.Motherboard?> GetByRigId(Guid rigId, CancellationToken cancellationToken)
+    public Task<SoftwareInventory?> GetByRigId(Guid rigId, CancellationToken cancellationToken)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
                                  .GetCurrentInventory()
                                  .InventoryFilter(new InventorySpecification(rigId))
-                                 .Include(x => x.Motherboard)
-                                 .Select(x => x.Motherboard)
+                                 .Include(x => x.Software)
+                                 .Select(x => x.Software)
                                  .FirstOrDefaultAsync(cancellationToken);
-
     }
 }

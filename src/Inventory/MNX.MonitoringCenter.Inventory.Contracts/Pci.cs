@@ -6,15 +6,15 @@ namespace MNX.MonitoringCenter.Inventory.Contracts;
 /// PCI.
 /// </summary>
 [ComplexType]
-public sealed record Pci
+public record Pci
 {
     /// <summary>
     /// Уникальный идентификатор.
     /// </summary>
-    public int Id { get; set; }
+    public int Id { get; init; }
 
     /// <summary>
     /// BUS.
     /// </summary>
-    public int Bus { get; set; }
+    public int Bus { get; init; }
 }

@@ -1,30 +1,29 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.UseCases;
-using MNX.MonitoringCenter.Inventory.UseCases.Motherboard;
+using MNX.MonitoringCenter.Inventory.UseCases.Drive;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.Motherboard;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Drive;
 
 /// <summary>
-/// Реализация <see cref="IMotherboardRepository"/>.
+/// Реализация <see cref="IDriveRepository"/>.
 /// </summary>
-public class MotherboardRepository : IMotherboardRepository
+public class DriveRepository : IDriveRepository
 {
     private readonly Context _context;
 
-    public MotherboardRepository(Context context)
+    public DriveRepository(Context context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
     /// <inheritdoc/>
-    public Task<Contracts.Motherboard.Motherboard?> GetByRigId(Guid rigId, CancellationToken cancellationToken)
+    public Task<List<Contracts.Drive.Drive>?> GetList(Guid rigId, CancellationToken cancellationToken)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
                                  .GetCurrentInventory()
                                  .InventoryFilter(new InventorySpecification(rigId))
-                                 .Include(x => x.Motherboard)
-                                 .Select(x => x.Motherboard)
+                                 .Include(x => x.Drives)
+                                 .Select(x => x.Drives)
                                  .FirstOrDefaultAsync(cancellationToken);
-
     }
 }

@@ -6,15 +6,15 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 /// Напряжение видеокарты.
 /// </summary>
 [ComplexType]
-public sealed record GpuVoltage
+public record GpuVoltage
 {
     /// <summary>
     /// Ядро.
     /// </summary>
-    public GpuChangingValue Core { get; set; }
+    public required GpuChangingValue Core { get; init; }
 
     /// <summary>
     /// Память.
     /// </summary>
-    public GpuChangingValue Memory { get; set; }
+    public required GpuChangingValue Memory { get; init; }
 }
