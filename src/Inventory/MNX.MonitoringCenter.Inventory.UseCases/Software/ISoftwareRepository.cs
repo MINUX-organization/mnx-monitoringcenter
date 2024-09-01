@@ -10,8 +10,8 @@ public interface ISoftwareRepository
     /// <summary>
     /// Получить текущую инвентаризацию программного обеспечения.
     /// </summary>
-    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="specification"> Спецификация инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Текущая инвентаризация программного обеспечения </returns>
-    Task<SoftwareInventory?> GetByRigId(Guid rigId, CancellationToken cancellationToken);
+    Task<SoftwareInventory?> GetByRigId(InventorySpecification specification, CancellationToken cancellationToken);
 }

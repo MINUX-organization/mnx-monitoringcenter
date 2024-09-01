@@ -17,16 +17,17 @@ public class InventoryRepository : IInventoryRepository
     }
 
     /// <inheritdoc/>
-    public async Task Save(Guid rigId, DateTimeOffset createdDate,
+    public async Task Save(Guid ownerId, Guid rigId, DateTimeOffset createdDate,
                            InventoryModel inventory, CancellationToken cancellationToken)
     {
         var oldInventory = await _context.Inventory
             .GetCurrentInventory()
-            .InventoryFilter(new InventorySpecification(rigId))
+            .InventoryFilter(new InventorySpecification(ownerId, rigId))
             .FirstOrDefaultAsync(cancellationToken);
 
         var newInventory = new Inventory()
         {
+            RigOwnerId = ownerId,
             RigId = rigId,
             CreatedDateTime = createdDate,
             Cpus = inventory.Cpus,

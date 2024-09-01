@@ -8,8 +8,18 @@ using NetworkAdapter = Contracts.NetworkAdapter.NetworkAdapter;
 /// <summary>
 /// Запрос на получение сетевых адаптеров, подключенных к ригу.
 /// </summary>
-/// <param name="RigId"> Идентификатор рига. </param>
-public sealed record GetNetworkAdaptersInfoQuery(Guid RigId) : IRequest<Result<List<NetworkAdapter>>>;
+public sealed record GetNetworkAdaptersInfoQuery : IRequest<Result<List<NetworkAdapter>>>
+{
+    /// <summary>
+    /// Спецификация инвентаризации.
+    /// </summary>
+    public InventorySpecification Specification { get; }
+
+    public GetNetworkAdaptersInfoQuery(Guid userId, Guid rigId)
+    {
+        Specification = new InventorySpecification(userId, rigId);
+    }
+}
 
 /// <summary>
 /// Обработчик <see cref="GetNetworkAdaptersInfoQuery"/>.
@@ -27,12 +37,11 @@ public class GetNetworkAdaptersInfoQueryHandler :
     public async Task<Result<List<NetworkAdapter>>> Handle(GetNetworkAdaptersInfoQuery request,
                                                             CancellationToken cancellationToken)
     {
-        var adapters = await _repository.GetList(request.RigId, cancellationToken);
+        var adapters = await _repository.GetList(request.Specification, cancellationToken);
 
         if (adapters == null)
         {
-            return Result<List<NetworkAdapter>>
-                .Invalid($"Inventory for rig with id equaled {request.RigId} was not found");
+            return Result<List<NetworkAdapter>>.Invalid($"Inventory was not found");
         }
 
         return Result<List<NetworkAdapter>>.Success(adapters);

@@ -13,6 +13,11 @@ internal class Inventory : IEquatable<Inventory>
     public long Id { get; set; }
 
     /// <summary>
+    /// Идентификатор владельца рига.
+    /// </summary>
+    public Guid RigOwnerId { get; set; }
+
+    /// <summary>
     /// Идентификатор рига.
     /// </summary>
     public Guid RigId { get; set; }

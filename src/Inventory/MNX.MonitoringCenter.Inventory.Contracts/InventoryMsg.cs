@@ -6,6 +6,11 @@
 public class InventoryMsg
 {
     /// <summary>
+    /// Идентификатор владельца рига.
+    /// </summary>
+    public Guid RigOwnerId { get; init; }
+
+    /// <summary>
     /// Идентификатор рига.
     /// </summary>
     public Guid RigId { get; init; }

@@ -17,12 +17,13 @@ public class NetworkAdapterRepository : INetworkAdapterRepository
     }
 
     /// <inheritdoc/>
-    public Task<List<Contracts.NetworkAdapter.NetworkAdapter>?> GetList(Guid rigId,
+    public Task<List<Contracts.NetworkAdapter.NetworkAdapter>?> GetList(InventorySpecification specification,
                                                                         CancellationToken cancellationToken)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
+                                 .Available(specification)
                                  .GetCurrentInventory()
-                                 .InventoryFilter(new InventorySpecification(rigId))
+                                 .InventoryFilter(specification)
                                  .Include(x => x.NetworkAdapters)
                                  .Select(x => x.NetworkAdapters)
                                  .FirstOrDefaultAsync(cancellationToken);

@@ -15,6 +15,17 @@ public interface IGpuRepository
     IAsyncEnumerable<Gpu> GetList(DeviceSpecification specification);
 
     /// <summary>
+    /// Получить срез инвентаризации видеокарт за указанный период.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <param name="startPeriod"> Начало периода. </param>
+    /// <param name="endPeriod"> Конец периода. </param>
+    /// <returns> Срез инвентаризации видеокарт. </returns>
+    IAsyncEnumerable<List<Gpu>> GetSliceForAPeriod(InventorySpecification specification,
+                                                   DateTimeOffset startPeriod,
+                                                   DateTimeOffset endPeriod);
+
+    /// <summary>
     /// Получить кол-во видеокарт по спецификации.
     /// </summary>
     /// <param name="specification">Спецификация.</param>

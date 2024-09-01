@@ -8,8 +8,18 @@ using Drive = Contracts.Drive.Drive;
 /// <summary>
 /// Запрос на получение списка дисков, работающих на риге.
 /// </summary>
-/// <param name="RigId"> Идентификатор рига. </param>
-public sealed record GetDrivesInfoQuery(Guid RigId) : IRequest<Result<List<Drive>>>;
+public class GetDrivesInfoQuery : IRequest<Result<List<Drive>>>
+{
+    /// <summary>
+    /// Спецификация инвентаризации.
+    /// </summary>
+    public InventorySpecification Specification { get; }
+
+    public GetDrivesInfoQuery(Guid userId, Guid rigId)
+    {
+        Specification = new InventorySpecification(userId, rigId);
+    }
+}
 
 /// <summary>
 /// Обработчик <see cref="GetDrivesInfoQuery"/>.
@@ -26,12 +36,11 @@ public class GetDrivesInfoQueryHandler : IRequestHandler<GetDrivesInfoQuery, Res
     public async Task<Result<List<Drive>>> Handle(GetDrivesInfoQuery request,
                                                   CancellationToken cancellationToken)
     {
-        var drives = await _driveRepository.GetList(request.RigId, cancellationToken);
+        var drives = await _driveRepository.GetList(request.Specification, cancellationToken);
 
         if (drives == null)
         {
-            return Result<List<Drive>>
-                .Invalid($"Inventory for rig with id equaled {request.RigId} was not found");
+            return Result<List<Drive>>.Invalid($"Inventory was not found");
         }
 
         return Result<List<Drive>>.Success(drives);

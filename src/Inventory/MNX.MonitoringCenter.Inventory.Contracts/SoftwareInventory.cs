@@ -44,4 +44,12 @@ public record SoftwareInventory
     /// Версия CUDA.
     /// </summary>
     public required string CudaVersion { get; init; }
+
+    /// <summary>
+    /// Майнеры.
+    /// </summary>
+    /// <remarks>
+    /// Ключ - название майнера. Значение - версия майнера.
+    /// </remarks>
+    public Dictionary<string, string> Miners { get; init; } = new();
 }

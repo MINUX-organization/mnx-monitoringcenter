@@ -18,11 +18,12 @@ public class SoftwareRepository : ISoftwareRepository
     }
 
     /// <inheritdoc/>
-    public Task<SoftwareInventory?> GetByRigId(Guid rigId, CancellationToken cancellationToken)
+    public Task<SoftwareInventory?> GetByRigId(InventorySpecification specification, CancellationToken cancellationToken)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
+                                 .Available(specification)
                                  .GetCurrentInventory()
-                                 .InventoryFilter(new InventorySpecification(rigId))
+                                 .InventoryFilter(specification)
                                  .Include(x => x.Software)
                                  .Select(x => x.Software)
                                  .FirstOrDefaultAsync(cancellationToken);

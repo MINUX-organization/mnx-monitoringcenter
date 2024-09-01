@@ -8,6 +8,18 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 internal static class InventoryQueryableExtensions
 {
     /// <summary>
+    /// Получить список доступных инвентаризаций.
+    /// </summary>
+    /// <param name="inventory"> Запрашиваемый список инвентаризаций. </param>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Запрашиваемый список инвентаризаций. </returns>
+    internal static IQueryable<Inventory> Available(this IQueryable<Inventory> inventory,
+                                                    InventorySpecification specification)
+    {
+        return inventory.Where(x => x.RigOwnerId == specification.UserId);
+    }
+
+    /// <summary>
     /// Получить текущую инвентаризацию.
     /// </summary>
     /// <param name="inventory"> Запрашиваемый список записей инвентаризации. </param>
@@ -32,5 +44,19 @@ internal static class InventoryQueryableExtensions
         }
 
         return inventory;
+    }
+
+    /// <summary>
+    /// Получить инвентаризацию за период.
+    /// </summary>
+    /// <param name="inventory"> Инвентаризация. </param>
+    /// <param name="start"> Начало периода. </param>
+    /// <param name="end"> Конец периода. </param>
+    /// <returns> Инвентаризация. </returns>
+    internal static IQueryable<Inventory> GetForAPeriod(this IQueryable<Inventory> inventory,
+                                                        DateTimeOffset start,
+                                                        DateTimeOffset end)
+    {
+        return inventory.Where(x => x.CreatedDateTime <= end && x.EndDateTime >= start);
     }
 }

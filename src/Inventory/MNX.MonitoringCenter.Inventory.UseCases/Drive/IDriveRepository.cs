@@ -8,8 +8,9 @@ public interface IDriveRepository
     /// <summary>
     /// Получить список дисков, подключенных к ригу.
     /// </summary>
-    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="specification"> Спецификация инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Список дисков. </returns>
-    Task<List<Contracts.Drive.Drive>?> GetList(Guid rigId, CancellationToken cancellationToken);
+    Task<List<Contracts.Drive.Drive>?> GetList(InventorySpecification specification,
+                                               CancellationToken cancellationToken);
 }

@@ -23,14 +23,29 @@ public class CpuRepository : ICpuRepository
     }
 
     /// <inheritdoc/>
-    public Task<int> GetCount(DeviceSpecification specification)
+    public IAsyncEnumerable<List<Contracts.Cpu.Cpu>> GetSliceForAPeriod(InventorySpecification specification,
+                                                                        DateTimeOffset startPeriod,
+                                                                        DateTimeOffset endPeriod)
     {
-        return GetCpus(specification).CountAsync();
+        return _context.Inventory.AsNoTrackingWithIdentityResolution()
+                                 .Available(specification)
+                                 .InventoryFilter(specification)
+                                 .GetForAPeriod(startPeriod, endPeriod)
+                                 .Include(x => x.Cpus)
+                                 .Select(x => x.Cpus)
+                                 .AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
+    public Task<int> GetCount(DeviceSpecification specification, CancellationToken cancellationToken)
+    {
+        return GetCpus(specification).CountAsync(cancellationToken);
     }
 
     private IQueryable<Contracts.Cpu.Cpu> GetCpus(DeviceSpecification specification)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
+                                 .Available(specification.InventorySpecification)
                                  .GetCurrentInventory()
                                  .InventoryFilter(specification.InventorySpecification)
                                  .Include(x => x.Cpus)

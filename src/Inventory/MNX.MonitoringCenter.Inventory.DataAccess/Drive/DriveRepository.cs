@@ -17,11 +17,13 @@ public class DriveRepository : IDriveRepository
     }
 
     /// <inheritdoc/>
-    public Task<List<Contracts.Drive.Drive>?> GetList(Guid rigId, CancellationToken cancellationToken)
+    public Task<List<Contracts.Drive.Drive>?> GetList(InventorySpecification specification,
+                                                      CancellationToken cancellationToken)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
+                                 .Available(specification)
                                  .GetCurrentInventory()
-                                 .InventoryFilter(new InventorySpecification(rigId))
+                                 .InventoryFilter(specification)
                                  .Include(x => x.Drives)
                                  .Select(x => x.Drives)
                                  .FirstOrDefaultAsync(cancellationToken);

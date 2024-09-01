@@ -24,7 +24,7 @@ public class SaveInventoryCommandHandler : IRequestHandler<SaveInventoryCommand,
 
     public async Task<Result<Unit>> Handle(SaveInventoryCommand request, CancellationToken cancellationToken)
     {
-        await _repository.Save(request.Message.RigId, request.Message.CreatedDateTime,
+        await _repository.Save(request.Message.RigOwnerId, request.Message.RigId, request.Message.CreatedDateTime,
                                request.Message.Inventory, cancellationToken);
 
         return Result<Unit>.Empty();

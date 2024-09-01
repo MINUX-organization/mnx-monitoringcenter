@@ -23,6 +23,20 @@ public class GpuRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
+    public IAsyncEnumerable<List<Contracts.Gpu.Gpu>> GetSliceForAPeriod(InventorySpecification specification,
+                                                                        DateTimeOffset startPeriod,
+                                                                        DateTimeOffset endPeriod)
+    {
+        return _context.Inventory.AsNoTrackingWithIdentityResolution()
+                                 .Available(specification)
+                                 .InventoryFilter(specification)
+                                 .GetForAPeriod(startPeriod, endPeriod)
+                                 .Include(x => x.Gpus)
+                                 .Select(x => x.Gpus)
+                                 .AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
     public Task<int> GetCount(DeviceSpecification specification)
     {
         return GetGpus(specification).CountAsync();
@@ -31,6 +45,7 @@ public class GpuRepository : IGpuRepository
     private IQueryable<Contracts.Gpu.Gpu> GetGpus(DeviceSpecification specification)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
+                                 .Available(specification.InventorySpecification)
                                  .GetCurrentInventory()
                                  .InventoryFilter(specification.InventorySpecification)
                                  .Include(x => x.Gpus)

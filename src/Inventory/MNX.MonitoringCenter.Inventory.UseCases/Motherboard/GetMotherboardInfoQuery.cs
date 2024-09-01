@@ -8,8 +8,18 @@ using Motherboard = Contracts.Motherboard.Motherboard;
 /// <summary>
 /// Запрос на получение материнской платы.
 /// </summary>
-/// <param name="RigId"> Идентификатор рига. </param>
-public sealed record GetMotherboardInfoQuery(Guid RigId) : IRequest<Result<Motherboard>>;
+public sealed record GetMotherboardInfoQuery : IRequest<Result<Motherboard>>
+{
+    /// <summary>
+    /// Спецификация инвентаризации.
+    /// </summary>
+    public InventorySpecification Specification { get; }
+
+    public GetMotherboardInfoQuery(Guid userId, Guid rigId)
+    {
+        Specification = new InventorySpecification(userId, rigId);
+    }
+}
 
 /// <summary>
 /// Обработчик <see cref="GetMotherboardInfoQuery"/>.
@@ -27,12 +37,11 @@ public class GetMotherboardInfoQueryHandler : IRequestHandler<GetMotherboardInfo
     public async Task<Result<Motherboard>> Handle(GetMotherboardInfoQuery request,
                                                   CancellationToken cancellationToken)
     {
-        var motherboard = await _motherboardRepository.GetByRigId(request.RigId, cancellationToken);
+        var motherboard = await _motherboardRepository.GetByRigId(request.Specification, cancellationToken);
 
         if (motherboard == null)
         {
-            return Result<Motherboard>
-                .Invalid($"Inventory for rig with id equaled {request.RigId} was not found");
+            return Result<Motherboard>.Invalid($"Inventory was not found");
         }
 
         return Result<Motherboard>.Success(motherboard);

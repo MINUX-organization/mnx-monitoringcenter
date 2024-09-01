@@ -8,8 +8,8 @@ public interface INetworkAdapterRepository
     /// <summary>
     /// Получить список сетевых адаптеров, подключенных к ригу.
     /// </summary>
-    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="specification"> Спецификация инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Список сетевых адаптеров. </returns>
-    Task<List<Contracts.NetworkAdapter.NetworkAdapter>?> GetList(Guid rigId, CancellationToken cancellationToken);
+    Task<List<Contracts.NetworkAdapter.NetworkAdapter>?> GetList(InventorySpecification specification, CancellationToken cancellationToken);
 }
