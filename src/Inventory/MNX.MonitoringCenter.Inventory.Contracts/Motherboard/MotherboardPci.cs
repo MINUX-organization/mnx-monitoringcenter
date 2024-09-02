@@ -3,18 +3,8 @@
 /// <summary>
 /// Информация о поддерживаемой оперативной памяти.
 /// </summary>
-public record MotherboardPci
+public record MotherboardPci : Pci
 {
-    /// <summary>
-    /// Идентификатор.
-    /// </summary>
-    public int Id { get; init; }
-
-    /// <summary>
-    /// Bus.
-    /// </summary>
-    public int Bus { get; init; }
-
     /// <summary>
     /// Подключено ли устройство.
     /// </summary>

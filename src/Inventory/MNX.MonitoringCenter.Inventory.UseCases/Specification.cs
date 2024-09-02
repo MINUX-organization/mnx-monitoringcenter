@@ -21,7 +21,7 @@ public readonly struct InventorySpecification
         RigsIds = new[] { rigId };
     }
 
-    public InventorySpecification(Guid userId, Guid[]? rigsIds)
+    public InventorySpecification(Guid userId, Guid[]? rigsIds = null)
     {
         UserId = userId;
         RigsIds = rigsIds;

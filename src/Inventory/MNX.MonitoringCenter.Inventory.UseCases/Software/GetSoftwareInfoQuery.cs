@@ -7,18 +7,9 @@ namespace MNX.MonitoringCenter.Inventory.UseCases.Software;
 /// <summary>
 /// Запрос на получение информации о программном обеспечении.
 /// </summary>
-public sealed record GetSoftwareInfoQuery : IRequest<Result<SoftwareInventory>>
-{
-    /// <summary>
-    /// Спецификация инвентаризации.
-    /// </summary>
-    public InventorySpecification Specification { get; }
-
-    public GetSoftwareInfoQuery(Guid userId, Guid rigId)
-    {
-        Specification = new InventorySpecification(userId, rigId);
-    }
-}
+/// <param name="UserId"> Идентификатор пользователя. </param>
+/// <param name="RigId"> Идентификатор рига. </param>
+public sealed record GetSoftwareInfoQuery(Guid UserId, Guid RigId) : IRequest<Result<SoftwareInventory>>;
 
 /// <summary>
 /// Обработчик <see cref="GetSoftwareInfoQuery"/>.
@@ -35,7 +26,7 @@ public class GetSoftwareInfoQueryHandler : IRequestHandler<GetSoftwareInfoQuery,
     public async Task<Result<SoftwareInventory>> Handle(GetSoftwareInfoQuery request,
                                                         CancellationToken cancellationToken)
     {
-        var software = await _repository.GetByRigId(request.Specification, cancellationToken);
+        var software = await _repository.GetByRigId(request.RigId, request.UserId, cancellationToken);
 
         if (software == null)
         {

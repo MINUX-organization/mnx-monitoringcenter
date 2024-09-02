@@ -17,15 +17,18 @@ public class MotherboardRepository : IMotherboardRepository
     }
 
     /// <inheritdoc/>
-    public Task<Contracts.Motherboard.Motherboard?> GetByRigId(InventorySpecification specification,
+    public Task<Contracts.Motherboard.Motherboard?> GetByRigId(Guid rigId, Guid userId,
                                                                CancellationToken cancellationToken)
     {
+        var specification = new InventorySpecification(userId, rigId);
+
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
                                  .Available(specification)
                                  .GetCurrentInventory()
                                  .InventoryFilter(specification)
-                                 .Include(x => x.Motherboard)
-                                 .Select(x => x.Motherboard)
+                                 .Include(inventory => inventory.Motherboard)
+                                    .ThenInclude(motherboard => motherboard.Pcies)
+                                 .Select(inventory => inventory.Motherboard)
                                  .FirstOrDefaultAsync(cancellationToken);
 
     }

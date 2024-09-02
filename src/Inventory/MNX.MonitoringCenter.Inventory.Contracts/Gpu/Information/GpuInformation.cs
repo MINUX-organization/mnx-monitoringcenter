@@ -34,11 +34,6 @@ public record GpuInformation
     public required string BiosVersion { get; init; }
 
     /// <summary>
-    /// Драйвер.
-    /// </summary>
-    public required string DriverVersion { get; init; }
-
-    /// <summary>
     /// Технология параллельных вычислений.
     /// </summary>
     public required ParallelComputingTechnology Technology { get; init; }

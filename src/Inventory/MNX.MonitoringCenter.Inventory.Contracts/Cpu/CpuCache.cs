@@ -13,4 +13,6 @@ public record CpuCache
     public int L2 { get; init; }
 
     public int L3 { get; init; }
+
+    public int? L4 { get; init; }
 }

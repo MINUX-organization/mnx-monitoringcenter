@@ -18,8 +18,10 @@ public class SoftwareRepository : ISoftwareRepository
     }
 
     /// <inheritdoc/>
-    public Task<SoftwareInventory?> GetByRigId(InventorySpecification specification, CancellationToken cancellationToken)
+    public Task<SoftwareInventory?> GetByRigId(Guid rigId, Guid userId, CancellationToken cancellationToken)
     {
+        var specification = new InventorySpecification(userId, rigId);
+
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
                                  .Available(specification)
                                  .GetCurrentInventory()

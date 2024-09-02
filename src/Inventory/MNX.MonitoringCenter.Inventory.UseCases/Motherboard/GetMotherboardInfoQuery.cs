@@ -8,18 +8,9 @@ using Motherboard = Contracts.Motherboard.Motherboard;
 /// <summary>
 /// Запрос на получение материнской платы.
 /// </summary>
-public sealed record GetMotherboardInfoQuery : IRequest<Result<Motherboard>>
-{
-    /// <summary>
-    /// Спецификация инвентаризации.
-    /// </summary>
-    public InventorySpecification Specification { get; }
-
-    public GetMotherboardInfoQuery(Guid userId, Guid rigId)
-    {
-        Specification = new InventorySpecification(userId, rigId);
-    }
-}
+/// <param name="UserId"> Идентификатор пользователя. </param>
+/// <param name="RigId"> Идентификатор рига. </param>
+public sealed record GetMotherboardInfoQuery(Guid UserId, Guid RigId) : IRequest<Result<Motherboard>>;
 
 /// <summary>
 /// Обработчик <see cref="GetMotherboardInfoQuery"/>.
@@ -37,7 +28,7 @@ public class GetMotherboardInfoQueryHandler : IRequestHandler<GetMotherboardInfo
     public async Task<Result<Motherboard>> Handle(GetMotherboardInfoQuery request,
                                                   CancellationToken cancellationToken)
     {
-        var motherboard = await _motherboardRepository.GetByRigId(request.Specification, cancellationToken);
+        var motherboard = await _motherboardRepository.GetByRigId(request.RigId, request.UserId, cancellationToken);
 
         if (motherboard == null)
         {
