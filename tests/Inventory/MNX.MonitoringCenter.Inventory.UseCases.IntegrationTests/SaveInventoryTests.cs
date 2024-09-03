@@ -245,6 +245,8 @@ public class SaveInventoryTests : BaseTest
                             IntelDriverVersion = "1.0.0",
                             OpenCLVersion = "1.0.0",
                             CudaVersion = "1.0.0",
+                            AgentVersion = "1.0.0",
+                            HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
                                 { "miner_1", "1.0.0" },

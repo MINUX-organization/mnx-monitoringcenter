@@ -46,6 +46,16 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     public required string CudaVersion { get; init; }
 
     /// <summary>
+    /// Версия Агента.
+    /// </summary>
+    public required string AgentVersion { get; init; }
+
+    /// <summary>
+    /// Версия менеджера аппаратного обеспечения.
+    /// </summary>
+    public required string HardwareManagerVersion { get; init; }
+
+    /// <summary>
     /// Майнеры.
     /// </summary>
     /// <remarks>
