@@ -3,22 +3,27 @@
 /// <summary>
 /// Пул
 /// </summary>
-public class Pool
+public sealed class Pool : IEquatable<Pool>
 {
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid Id { get; set; }   
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// Домен
     /// </summary>
-    public string Domain {  get; set; }
+    public required string Domain {  get; set; }
 
     /// <summary>
     /// Порт
     /// </summary>
     public int Port { get; set; }
+
+    /// <summary>
+    /// Пароль
+    /// </summary>
+    public required string Password { get; set; }
 
     /// <summary>
     /// Идентификатор криптовалюты
@@ -33,5 +38,38 @@ public class Pool
     /// <summary>
     /// Идентификатор пользователя
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        if (obj is Pool pool)
+        {
+            return Equals(pool);
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(Pool? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return Domain == other.Domain && Port == other.Port;
+    }
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Domain, Port);
+    }
 }

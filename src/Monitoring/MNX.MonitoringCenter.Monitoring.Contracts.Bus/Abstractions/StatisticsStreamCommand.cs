@@ -10,7 +10,7 @@ public abstract class StatisticsStreamCommand
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// Тип наблюдаемых объектов.

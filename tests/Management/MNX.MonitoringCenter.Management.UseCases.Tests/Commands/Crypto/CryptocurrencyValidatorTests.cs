@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto;
 

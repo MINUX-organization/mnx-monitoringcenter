@@ -1,15 +1,13 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
-using Microsoft.AspNetCore.Authorization;
-using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -18,7 +16,7 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/presets")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class PresetController : ControllerBase
 {
     /// <summary>
@@ -51,7 +49,7 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<PresetModel>), 200)]
     public IAsyncEnumerable<PresetModel> GetPresets(string? gpuName)
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetPresetsQuery(gpuName, userId));
     }
 
@@ -69,7 +67,7 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Save(SavePresetInputModel model)
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new SavePresetCommand(userId, model));
         return result.ToActionResult();
     }
@@ -82,14 +80,16 @@ public class PresetController : ControllerBase
     /// <returns> Результат выполнения команды </returns>
     /// <response code="204"> Успешно </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id
+    /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id.
     /// </response>
+    /// <response code="409"> Пресет с переданным именем уже существует. </response>
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(204)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [ProducesResponseType(typeof(List<string>), 409)]
     public async Task<IActionResult> Update(Guid id, SavePresetInputModel model)
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new UpdatePresetCommand(id, model, userId));
         return result.ToActionResult();
     }
@@ -106,7 +106,7 @@ public class PresetController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Remove(Guid id)
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new RemovePresetCommand(id, userId));
         return result.ToActionResult();
     }

@@ -1,11 +1,9 @@
-﻿using System;
-
-namespace MNX.MonitoringCenter.Management.Core;
+﻿namespace MNX.MonitoringCenter.Management.Core;
 
 /// <summary>
 /// Модель с разгоном
 /// </summary>
-public class Overclocking
+public sealed class Overclocking : IEquatable<Overclocking>
 {
     /// <summary>
     /// Идентификатор
@@ -66,4 +64,61 @@ public class Overclocking
     /// Скорость вентилятора
     /// </summary>
     public int FanSpeed { get; set; }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        if (obj is Overclocking overclocking)
+        {
+            return Equals(overclocking);
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(Overclocking? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return CoreClockLock == other.CoreClockLock &&
+               CoreClockOffset == other.CoreClockOffset &&
+               MemoryClockLock == other.MemoryClockLock &&
+               MemoryClockOffset == other.MemoryClockOffset &&
+               CoreVoltage == other.CoreVoltage &&
+               CoreVoltageOffset == other.CoreVoltageOffset &&
+               MemoryVoltage == other.MemoryVoltage &&
+               MemoryVoltageOffset == other.MemoryVoltageOffset &&
+               PowerLimit == other.PowerLimit &&
+               CriticalTemperature == other.CriticalTemperature &&
+               FanSpeed == other.FanSpeed;
+    }
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        HashCode hash = new();
+
+        hash.Add(CoreClockLock);
+        hash.Add(CoreClockOffset);
+        hash.Add(MemoryClockLock);
+        hash.Add(MemoryClockOffset);
+        hash.Add(CoreVoltage);
+        hash.Add(CoreVoltageOffset);
+        hash.Add(MemoryVoltage);
+        hash.Add(MemoryVoltageOffset);
+        hash.Add(PowerLimit);
+        hash.Add(CriticalTemperature);
+        hash.Add(FanSpeed);
+
+        return hash.ToHashCode();
+    }
 }

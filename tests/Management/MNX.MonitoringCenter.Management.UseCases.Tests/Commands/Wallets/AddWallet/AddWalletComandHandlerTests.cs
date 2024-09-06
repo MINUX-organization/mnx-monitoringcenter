@@ -2,9 +2,11 @@
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Wallet;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.AddWallet;

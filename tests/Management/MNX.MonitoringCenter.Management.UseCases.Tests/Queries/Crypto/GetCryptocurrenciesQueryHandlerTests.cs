@@ -1,5 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
 using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
 using Moq;

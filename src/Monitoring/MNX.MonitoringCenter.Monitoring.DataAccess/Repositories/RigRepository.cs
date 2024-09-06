@@ -29,7 +29,7 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public async Task<Rig?> GetById(Guid id, long userId)
+    public async Task<Rig?> GetById(Guid id, Guid userId)
     {
         var rig = await _context.Rigs
                                 .AsNoTracking()

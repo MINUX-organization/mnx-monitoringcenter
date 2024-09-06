@@ -16,7 +16,7 @@ public record GetRigsSummarizedQuantitativeDataQuery
     /// </summary>
     public Specification Specification { get; }
 
-    public GetRigsSummarizedQuantitativeDataQuery(long userId)
+    public GetRigsSummarizedQuantitativeDataQuery(Guid userId)
     {
         Specification = new Specification(userId);
     }

@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using Moq;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Wallet;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.EditWallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.EditWallet;
 

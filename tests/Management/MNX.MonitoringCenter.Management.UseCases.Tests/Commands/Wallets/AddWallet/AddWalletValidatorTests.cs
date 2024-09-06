@@ -1,6 +1,6 @@
 ﻿using FluentValidation.TestHelper;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.AddWallet;
 

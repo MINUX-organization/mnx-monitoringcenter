@@ -12,7 +12,7 @@ public class SetGpuOverclockingCommand : IValidatableCommand<Unit>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// Идентификатор соединения веб-клиента.
@@ -29,7 +29,7 @@ public class SetGpuOverclockingCommand : IValidatableCommand<Unit>
     /// </summary>
     public GpuOverclockingModel Overclocking { get; set; }
 
-    public SetGpuOverclockingCommand(long userId, string connectionId, Guid cardId, GpuOverclockingModel overclocking)
+    public SetGpuOverclockingCommand(Guid userId, string connectionId, Guid cardId, GpuOverclockingModel overclocking)
     {
         UserId = userId;
         ConnectionId = connectionId;

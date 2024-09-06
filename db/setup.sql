@@ -5,6 +5,13 @@
 \ir 'schemas/monitoring_center.sql'
 
 -- CREATING TABLES
+\ir 'tables/algorithms.sql'
+\ir 'tables/cryptocurrencies.sql'
+\ir 'tables/miners.sql'
+\ir 'tables/overclocking.sql'
+\ir 'tables/pools.sql'
+\ir 'tables/presets.sql'
+\ir 'tables/wallets.sql'
 \ir 'tables/inventory.sql'
 \ir 'tables/cpu.sql'
 \ir 'tables/drive.sql'

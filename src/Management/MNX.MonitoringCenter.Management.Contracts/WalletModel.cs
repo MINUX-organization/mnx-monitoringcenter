@@ -13,15 +13,15 @@ public class WalletModel
     /// <summary>
     /// Имя
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Адрес
     /// </summary>
-    public string Address { get; set; }
+    public required string Address { get; set; }
 
     /// <summary>
     /// Полное название криптовалюты
     /// </summary>
-    public string Cryptocurrency { get; set; }
+    public required string Cryptocurrency { get; set; }
 }

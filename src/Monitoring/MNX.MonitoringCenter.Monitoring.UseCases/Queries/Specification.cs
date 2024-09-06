@@ -8,7 +8,7 @@ public class Specification
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public Guid UserId { get; }
 
     /// <summary>
     /// Строка поиска для ригов.
@@ -25,7 +25,7 @@ public class Specification
     /// </summary>
     public string[]? FilterArguments { get; }
 
-    public Specification(long userId,
+    public Specification(Guid userId,
                          string? searchString = null,
                          string? filterString = null,
                          string[]? filterArguments = null)

@@ -1,11 +1,12 @@
 ﻿using AutoMapper;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
 using Moq;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.AddCryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Crypto.AddCryptocurrency
 {

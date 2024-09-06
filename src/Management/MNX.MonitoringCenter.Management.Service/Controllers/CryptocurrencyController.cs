@@ -1,14 +1,13 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.AddCryptocurrency;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Crypto.RemoveCryptocurrency;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetCryptocurrenciesQuery;
-using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.AddCryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.RemoveCryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Queries;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -17,7 +16,7 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/cryptocurrencies")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class CryptocurrencyController : ControllerBase
 {
     /// <summary>
@@ -45,7 +44,7 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<CryptocurrencyModel>), 200)]
     public IAsyncEnumerable<CryptocurrencyModel> GetAll()
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetCryptocurrenciesQuery(userId));
     }
 
@@ -62,7 +61,7 @@ public class CryptocurrencyController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(CryptocurrencyInputModel model)
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new AddCryptocurrencyCommand(model, userId));
         return result.ToActionResult();
     }

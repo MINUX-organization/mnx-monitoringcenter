@@ -12,7 +12,7 @@ public class DeviceSpecification : Specification
     /// </summary>
     public List<MiningDeviceType> Types { get; } = new();
 
-    public DeviceSpecification(long userId,
+    public DeviceSpecification(Guid userId,
                                      List<MiningDeviceType> types,
                                      string? searchString = null,
                                      string? filterString = null,

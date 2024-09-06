@@ -28,7 +28,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     /// Ключ - идентификатор пользователя.
     /// Значение - наблюдатель.
     /// </remarks>
-    private ConcurrentDictionary<long, IUserRigsObserver> _observers = new();
+    private ConcurrentDictionary<Guid, IUserRigsObserver> _observers = new();
 
     /// <summary>
     /// Период обновления динамических данных.
@@ -52,7 +52,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
-    public async Task AddNewSubscriber(long userId, string subscriberId, bool subscribeToDynamicDataStream)
+    public async Task AddNewSubscriber(Guid userId, string subscriberId, bool subscribeToDynamicDataStream)
     {
         IUserRigsObserver observer;
 
@@ -69,7 +69,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
-    public async Task RemoveSubscriber(long userId, string subscriberId)
+    public async Task RemoveSubscriber(Guid userId, string subscriberId)
     {
         if (_observers.TryGetValue(userId, out var observer))
         {
@@ -83,7 +83,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
-    public async Task SetObservableCoin(string coin, long userId, string subscriberId)
+    public async Task SetObservableCoin(string coin, Guid userId, string subscriberId)
     {
         if (_observers.TryGetValue(userId, out var observer))
         {
@@ -92,7 +92,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
-    public void SetSearchString(string searchString, long userId, string subscriberId)
+    public void SetSearchString(string searchString, Guid userId, string subscriberId)
     {
         if (_observers.TryGetValue(userId, out var observer))
         {
@@ -101,7 +101,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
-    public void GotDynamicData(long userId, List<RigDynamicData> data)
+    public void GotDynamicData(Guid userId, List<RigDynamicData> data)
     {
         if (_observers.TryGetValue(userId, out var observer))
         {
@@ -110,7 +110,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     }
 
     /// <inheritdoc/>
-    public async Task GotRigsState(long userId, string subscriberId, List<RigState> states)
+    public async Task GotRigsState(Guid userId, string subscriberId, List<RigState> states)
     {
         if (_observers.TryGetValue(userId, out var observer))
         {
@@ -122,7 +122,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     /// Получить или создать наблюдателя.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
-    private IUserRigsObserver GetOrCreateObserver(long userId)
+    private IUserRigsObserver GetOrCreateObserver(Guid userId)
     {
         return _observers.GetOrAdd(userId, x => new UserRigsObserver(_serviceScopeFactory,
                                                                      userId,
@@ -162,7 +162,7 @@ public class UserRigsObserverWrapper : IUserRigsObserverWrapper
     /// <summary>
     /// Освободить ресурсы наблюдателя.
     /// </summary>
-    private void DisposeObserver(long userId)
+    private void DisposeObserver(Guid userId)
     {
         if (_observers.TryRemove(userId, out var observer))
         {

@@ -1,10 +1,10 @@
-﻿using MNX.MonitoringCenter.Management.UseCases.Abstractions;
-using MNX.MonitoringCenter.Management.Core;
+﻿using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
 using Moq;
 using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Pool;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Queries.Pools;
 

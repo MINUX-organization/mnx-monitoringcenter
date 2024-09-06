@@ -10,9 +10,9 @@ public class DynamicDataStreamStoppingEvent : INotification
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public Guid UserId { get; }
 
-    public DynamicDataStreamStoppingEvent(long userId)
+    public DynamicDataStreamStoppingEvent(Guid userId)
     {
         UserId = userId;
     }

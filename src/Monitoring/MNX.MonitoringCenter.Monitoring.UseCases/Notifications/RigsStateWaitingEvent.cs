@@ -10,14 +10,14 @@ public class RigsStateWaitingEvent : INotification
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public Guid UserId { get; }
 
     /// <summary>
     /// Идентификатор подписчика.
     /// </summary>
     public string SubscriberId { get; }
 
-    public RigsStateWaitingEvent(long userId, string subscriberId)
+    public RigsStateWaitingEvent(Guid userId, string subscriberId)
     {
         UserId = userId;
         SubscriberId = subscriberId;

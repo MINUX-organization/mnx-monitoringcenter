@@ -1,7 +1,8 @@
 ﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.RemoveWallet;
+using MNX.MonitoringCenter.Management.UseCases.Wallet;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.RemoveWallet;
 using Moq;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Wallets.RemoveWallet;

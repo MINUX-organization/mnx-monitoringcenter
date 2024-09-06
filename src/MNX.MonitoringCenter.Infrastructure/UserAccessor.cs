@@ -22,13 +22,13 @@ public class UserAccessor
     /// Получить идентификатор пользователя.
     /// </summary>
     /// <returns> Идентификатор пользователя. </returns>
-    public long GetUserId()
+    public Guid GetUserId()
     {
-        if (long.TryParse(_user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value, out long id))
+        if (Guid.TryParse(_user.Claims.First(x => x.Type == ClaimTypes.NameIdentifier).Value, out Guid id))
         {
             return id;
         }
 
-        return -1;
+        return Guid.Empty;
     }
 }
