@@ -10,15 +10,17 @@ public interface IWalletRepository
     /// <summary>
     /// Получить список кошельков
     /// </summary>
+    /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Список кошельков </returns>
-    IAsyncEnumerable<Wallet> GetAllAvailable(long userId);
+    IAsyncEnumerable<Wallet> GetAllAvailable(Guid userId);
 
     /// <summary>
     /// Получить кошелёк по уникальному идентификатору
     /// </summary>
     /// <param name="Id"> Уникальный идентификатор </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Кошелёк </returns>
-    Task<Wallet?> GetAvailableById(Guid Id, long userId);
+    Task<Wallet?> GetAvailableById(Guid Id, Guid userId);
 
     /// <summary>
     /// Получить признак существования кошелька c переданным названием.
@@ -28,7 +30,7 @@ public interface IWalletRepository
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    Task<bool> ExistsWithName(int userId, string name);
+    Task<bool> ExistsWithName(Guid userId, string name);
 
     /// <summary>
     /// Получить признак существования кошелька с переданным адресом.
@@ -38,7 +40,7 @@ public interface IWalletRepository
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    Task<bool> ExistsWithAddress(int userId, string address);
+    Task<bool> ExistsWithAddress(Guid userId, string address);
 
     /// <summary>
     /// Добавить кошелёк

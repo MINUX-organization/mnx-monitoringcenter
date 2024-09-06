@@ -38,7 +38,7 @@ public class UserRigsObserver : IUserRigsObserver
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    private readonly long _userId;
+    private readonly Guid _userId;
 
     /// <summary>
     /// Поток динамических данных с ригов.
@@ -79,7 +79,7 @@ public class UserRigsObserver : IUserRigsObserver
     private DynamicDataOptions _dynamicDataOptions;
 
     public UserRigsObserver(IServiceScopeFactory serviceScopeFactory,
-                            long userId,
+                            Guid userId,
                             DynamicDataOptions dynamicDataOptions,
                             IFusionCache cache)
     {

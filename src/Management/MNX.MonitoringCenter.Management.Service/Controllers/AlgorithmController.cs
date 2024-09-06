@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetAlgorithmsQuery;
+using MNX.MonitoringCenter.Management.UseCases.Algorithm.Queries;
 
 namespace MNX.MonitoringCenter.Management.Service.Controllers;
 

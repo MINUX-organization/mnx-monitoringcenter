@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using MNX.MonitoringCenter.Management.UseCases.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Queries.GetPresetsQuery;
 using MNX.MonitoringCenter.Management.UseCases.Tests.Commands;
 using Moq;

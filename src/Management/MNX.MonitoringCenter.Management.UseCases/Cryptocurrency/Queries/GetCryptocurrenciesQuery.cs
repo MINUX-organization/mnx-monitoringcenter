@@ -9,7 +9,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Queries;
 /// Запрос на получение списка криптовалют.
 /// </summary>
 /// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetCryptocurrenciesQuery(int UserId) : IStreamRequest<CryptocurrencyModel>;
+public sealed record GetCryptocurrenciesQuery(Guid UserId) : IStreamRequest<CryptocurrencyModel>;
 
 /// <summary>
 /// Обработчик <see cref="GetCryptocurrenciesQuery"/>.

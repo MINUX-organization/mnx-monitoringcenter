@@ -10,9 +10,9 @@ public class DynamicDataWaitingEvent : INotification
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
-    public DynamicDataWaitingEvent(long userId)
+    public DynamicDataWaitingEvent(Guid userId)
     {
         UserId = userId;
     }

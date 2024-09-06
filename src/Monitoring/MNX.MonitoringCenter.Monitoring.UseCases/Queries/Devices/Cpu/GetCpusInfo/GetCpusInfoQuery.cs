@@ -13,7 +13,7 @@ public class GetCpusInfoQuery : IStreamRequest<CpuInfo>
     /// </summary>
     public DeviceSpecification Specification { get; }
 
-    public GetCpusInfoQuery(long userId)
+    public GetCpusInfoQuery(Guid userId)
     {
         Specification = new DeviceSpecification(userId, new List<MiningDeviceType>()
         {

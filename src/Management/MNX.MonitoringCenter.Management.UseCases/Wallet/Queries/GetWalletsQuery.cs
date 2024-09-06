@@ -9,7 +9,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Wallet.Queries;
 /// Модель запроса списка кошельков
 /// </summary>
 /// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetWalletsQuery(int UserId) : IStreamRequest<WalletModel>;
+public sealed record GetWalletsQuery(Guid UserId) : IStreamRequest<WalletModel>;
 
 /// <summary>
 /// Реализация <see cref="GetWalletsQuery"/>.

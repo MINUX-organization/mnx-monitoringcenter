@@ -9,7 +9,7 @@ public interface IAlgorithmRepository
     /// Получить названия доступных алгоритмов.
     /// </summary>
     /// <returns> Список названий алгоритмов. </returns>
-    IAsyncEnumerable<string> GetNamesOfAvailableAlgorithms(int userId);
+    IAsyncEnumerable<string> GetNamesOfAvailableAlgorithms();
 
     /// <summary>
     /// Получить список существования алгоритма.

@@ -12,7 +12,7 @@ public class GetRigsInformationQuery : IStreamRequest<RigInformationMessage>
     /// </summary>
     public Specification Specification { get; }
 
-    public GetRigsInformationQuery(long userId,
+    public GetRigsInformationQuery(Guid userId,
                                    string? searchString = null,
                                    string? filterString = null,
                                    string[]? filterArguments = null)

@@ -44,6 +44,7 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Pool
         }
 
         var pool = _mapper.Map<Pool>(request);
+        pool.UserId = request.UserId;
         await _poolRepository.Add(pool).ConfigureAwait(false);
         pool.Cryptocurrency = cryptocurrency;
 

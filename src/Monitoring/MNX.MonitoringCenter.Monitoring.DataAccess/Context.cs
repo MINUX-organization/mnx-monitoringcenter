@@ -86,7 +86,7 @@ public class Context : DbContext
         {
             Id = Guid.NewGuid(),
             RigId = Guid.Parse("6a0a78d9-dcb5-4b5b-b6d0-17e321ab42b8"),
-            UserId = 1,
+            UserId = Guid.NewGuid(),
             Name = "cpu_1",
             Type = Core.Devices.Enums.MiningDeviceType.CPU,
             Manufacturer = Core.Devices.Enums.CpuManufacturerEnum.Intel.ToString(),
@@ -105,7 +105,7 @@ public class Context : DbContext
         {
             Id = Guid.Parse("0599c30c-dcb5-4b5b-b6d0-17e321ab42b8"),
             RigId = Guid.Parse("6a0a78d9-dcb5-4b5b-b6d0-17e321ab42b8"),
-            UserId = 1,
+            UserId = Guid.NewGuid(),
             Name = "gpu_1",
             Type = Core.Devices.Enums.MiningDeviceType.GPU,
             Manufacturer = Core.Devices.Enums.GpuManufacturerEnum.Amd.ToString(),
@@ -128,7 +128,7 @@ public class Context : DbContext
         modelBuilder.Entity<RigDto>().HasData(new RigDto()
         {
             Id = Guid.Parse("6a0a78d9-dcb5-4b5b-b6d0-17e321ab42b8"),
-            UserId = 1,
+            UserId = Guid.NewGuid(),
             Name = "rig_1",
             GlobalIP = "127.0.0.1",
             LocalIP = "127.0.0.1",

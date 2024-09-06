@@ -16,9 +16,9 @@ public class AddWalletCommand : IValidatableCommand<WalletModel>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public int UserId { get; set; }
+    public Guid UserId { get; }
 
-    public AddWalletCommand(WalletInputModel model, int userId)
+    public AddWalletCommand(WalletInputModel model, Guid userId)
     {
         Model = model;
         UserId = userId;

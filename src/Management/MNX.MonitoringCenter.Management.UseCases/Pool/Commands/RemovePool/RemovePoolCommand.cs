@@ -16,9 +16,9 @@ public class RemovePoolCommand : IRequest<Result<Unit>>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public Guid UserId { get; }
 
-    public RemovePoolCommand(Guid id, long userId)
+    public RemovePoolCommand(Guid id, Guid userId)
     {
         Id = id;
         UserId = userId;

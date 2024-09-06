@@ -19,7 +19,7 @@ public class UserRigsDynamicDataCounter : IDisposable
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    private readonly long _userId;
+    private readonly Guid _userId;
 
     /// <summary>
     /// Динамические данные ригов.
@@ -44,7 +44,7 @@ public class UserRigsDynamicDataCounter : IDisposable
     /// </summary>
     private readonly int _dynamicDataPointCount;
 
-    public UserRigsDynamicDataCounter(long userId, DynamicDataOptions dynamicDataOptions)
+    public UserRigsDynamicDataCounter(Guid userId, DynamicDataOptions dynamicDataOptions)
     {
         _userId = userId;
         _dynamicDataPointCount = dynamicDataOptions.PointCount;

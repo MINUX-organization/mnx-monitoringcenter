@@ -1,14 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.AddPool;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.RemovePool;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools.UpdatePool;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetPoolsQuery;
-using Microsoft.AspNetCore.Authorization;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.RemovePool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.UpdatePool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Queries;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -17,7 +17,7 @@ namespace MNX.MonitoringCenter.Management.Controllers;
 /// </summary>
 [Route("api/pools")]
 [ApiController]
-//[Authorize]
+[Authorize]
 public class PoolController : ControllerBase
 {
     /// <summary>
@@ -45,7 +45,7 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<PoolModel>), 200)]
     public IAsyncEnumerable<PoolModel> GetAll()
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetPoolsQuery(userId));
     }
 
@@ -63,7 +63,7 @@ public class PoolController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Add(PoolInputModel model)
     {
-        var userId = 1;// _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new AddPoolCommand(model, userId));
         return result.ToActionResult();
     }

@@ -27,7 +27,7 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
     {
         var pool = await _poolRepository.GetAvailableById(request.Id, request.UserId);
 
-        if (pool == null)
+        if (pool is null)
         {
             return Result<PoolModel>.Invalid("Pool with this id wasn`t found");
         }
@@ -49,7 +49,7 @@ public class UpdatePoolCommandHandler : IRequestHandler<UpdatePoolCommand, Resul
             return Result<PoolModel>.Invalid("Pool already exists");
         }
         
-        await _poolRepository.Update(newPool).ConfigureAwait(false);
+        await _poolRepository.Update(newPool);
         newPool.Cryptocurrency = pool.Cryptocurrency;
 
         return Result<PoolModel>.Success(_mapper.Map<PoolModel>(newPool));

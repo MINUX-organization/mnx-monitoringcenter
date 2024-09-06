@@ -9,10 +9,10 @@ namespace MNX.MonitoringCenter.Management.UseCases.Pool.Queries;
 /// Запрос на получение списка пулов.
 /// </summary>
 /// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetPoolsQuery(int UserId) : IStreamRequest<PoolModel>;
+public sealed record GetPoolsQuery(Guid UserId) : IStreamRequest<PoolModel>;
 
 /// <summary>
-/// Обработчик <see cref="GetPoolsQuery"/>.
+/// Обработчик запроса на получение списка пулов. <see cref="GetPoolsQuery"/>.
 /// </summary>
 public class GetPoolsQueryHandler : IStreamRequestHandler<GetPoolsQuery, PoolModel>
 {

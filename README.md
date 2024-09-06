@@ -12,9 +12,7 @@ Management
 
     "ConnectionStrings": {
         "Npgsql": "host=localhost;database=monitoring_center;username=postgres;password=admin"
-    },
-
-    "MonitoringUri": "localhost:9999/monitoring_center_monitoring"
+    }
 }
 ```
 

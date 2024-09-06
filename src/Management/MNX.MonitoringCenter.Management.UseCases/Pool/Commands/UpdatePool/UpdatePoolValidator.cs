@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Pool.Commands.UpdatePool;
 

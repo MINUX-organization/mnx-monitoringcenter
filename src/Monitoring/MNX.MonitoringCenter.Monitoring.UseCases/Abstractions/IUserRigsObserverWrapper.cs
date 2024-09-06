@@ -13,14 +13,14 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
     /// <param name="subscribeToDynamicDataStream"> Признак подписки на поток динамических данных. </param>
-    Task AddNewSubscriber(long userId, string subscriberId, bool subscribeToDynamicDataStream);
+    Task AddNewSubscriber(Guid userId, string subscriberId, bool subscribeToDynamicDataStream);
 
     /// <summary>
     /// Удалить подписчика.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
-    Task RemoveSubscriber(long userId, string subscriberId);
+    Task RemoveSubscriber(Guid userId, string subscriberId);
 
     /// <summary>
     /// Задать отслеживаемую монету.
@@ -28,7 +28,7 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// <param name="coin"> Монета. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
-    Task SetObservableCoin(string coin, long userId, string subscriberId);
+    Task SetObservableCoin(string coin, Guid userId, string subscriberId);
 
     /// <summary>
     /// Задать строку поиска.
@@ -36,14 +36,14 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// <param name="searchString"> Строка поиска. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
-    void SetSearchString(string searchString, long userId, string subscriberId);
+    void SetSearchString(string searchString, Guid userId, string subscriberId);
 
     /// <summary>
     /// Получены динамические данные с ригов.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="data"> Данные. </param>
-    void GotDynamicData(long userId, List<RigDynamicData> data);
+    void GotDynamicData(Guid userId, List<RigDynamicData> data);
 
     /// <summary>
     /// Получено состояние ригов.
@@ -51,5 +51,5 @@ public interface IUserRigsObserverWrapper : IDisposable
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
     /// <param name="rigs"> Состояние ригов. </param>
-    Task GotRigsState(long userId, string subscriberId, List<RigState> rigs);
+    Task GotRigsState(Guid userId, string subscriberId, List<RigState> rigs);
 }

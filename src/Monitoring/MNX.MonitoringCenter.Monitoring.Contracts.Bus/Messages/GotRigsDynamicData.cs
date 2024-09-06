@@ -10,7 +10,7 @@ public class GotRigsDynamicData
     /// <summary>
     /// Уникальный идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// Список динамических данных.

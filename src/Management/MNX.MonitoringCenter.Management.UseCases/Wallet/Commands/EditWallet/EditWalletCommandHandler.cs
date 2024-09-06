@@ -26,7 +26,7 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
     {
         var wallet = await _walletRepository.GetAvailableById(request.Id, request.UserId);
 
-        if (wallet == null)
+        if (wallet is null)
         {
             return Result<WalletModel>.Invalid("Wallet with this Id wasn't found");
         }

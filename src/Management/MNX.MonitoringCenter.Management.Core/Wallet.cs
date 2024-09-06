@@ -3,7 +3,7 @@
 /// <summary>
 /// Кошелёк
 /// </summary>
-public class Wallet : IEquatable<Wallet>
+public sealed class Wallet : IEquatable<Wallet>
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -33,7 +33,7 @@ public class Wallet : IEquatable<Wallet>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

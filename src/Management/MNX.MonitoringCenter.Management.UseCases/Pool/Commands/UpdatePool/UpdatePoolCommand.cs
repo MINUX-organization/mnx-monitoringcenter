@@ -21,9 +21,9 @@ public class UpdatePoolCommand : IValidatableCommand<PoolModel>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public Guid UserId { get; }
 
-    public UpdatePoolCommand(Guid id, PoolInputModel model, long userId)
+    public UpdatePoolCommand(Guid id, PoolInputModel model, Guid userId)
     {
         Id = id;
         Model = model;

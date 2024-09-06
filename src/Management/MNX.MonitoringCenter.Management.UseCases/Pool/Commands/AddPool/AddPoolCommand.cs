@@ -16,9 +16,9 @@ public class AddPoolCommand : IValidatableCommand<PoolModel>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public Guid UserId { get; }
 
-    public AddPoolCommand(PoolInputModel model, long userId)
+    public AddPoolCommand(PoolInputModel model, Guid userId)
     {
         Model = model;
         UserId = userId;

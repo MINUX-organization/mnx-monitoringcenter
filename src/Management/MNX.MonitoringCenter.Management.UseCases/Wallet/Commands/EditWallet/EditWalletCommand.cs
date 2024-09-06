@@ -21,9 +21,9 @@ public class EditWalletCommand : IValidatableCommand<WalletModel>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public int UserId { get; set; }
+    public Guid UserId { get; }
 
-    public EditWalletCommand(Guid id, WalletInputModel model, int userId)
+    public EditWalletCommand(Guid id, WalletInputModel model, Guid userId)
     {
         Id = id;
         Model = model;

@@ -16,9 +16,9 @@ public class RemoveWalletCommand : IRequest<Result<Unit>>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; }
 
-    public RemoveWalletCommand(Guid id, long userId)
+    public RemoveWalletCommand(Guid id, Guid userId)
     {
         Id = id;
         UserId = userId;

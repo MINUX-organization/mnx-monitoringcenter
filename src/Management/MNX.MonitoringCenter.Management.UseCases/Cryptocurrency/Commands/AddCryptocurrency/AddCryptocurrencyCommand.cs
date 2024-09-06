@@ -16,9 +16,9 @@ public class AddCryptocurrencyCommand : IValidatableCommand<CryptocurrencyModel>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public Guid UserId { get; }
 
-    public AddCryptocurrencyCommand(CryptocurrencyInputModel model, long userId)
+    public AddCryptocurrencyCommand(CryptocurrencyInputModel model, Guid userId)
     {
         Model = model;
         UserId = userId;

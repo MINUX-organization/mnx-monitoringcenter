@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
 

@@ -3,7 +3,7 @@
 /// <summary>
 /// Пул
 /// </summary>
-public class Pool : IEquatable<Pool>
+public sealed class Pool : IEquatable<Pool>
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -21,6 +21,11 @@ public class Pool : IEquatable<Pool>
     public int Port { get; set; }
 
     /// <summary>
+    /// Пароль
+    /// </summary>
+    public required string Password { get; set; }
+
+    /// <summary>
     /// Идентификатор криптовалюты
     /// </summary>
     public Guid CryptocurrencyId { get; set; }
@@ -33,7 +38,7 @@ public class Pool : IEquatable<Pool>
     /// <summary>
     /// Идентификатор пользователя
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

@@ -3,7 +3,7 @@
 /// <summary>
 /// Криптовалюта
 /// </summary>
-public class Cryptocurrency : IEquatable<Cryptocurrency>
+public sealed class Cryptocurrency : IEquatable<Cryptocurrency>
 {
     /// <summary>
     /// Идентификатор.
@@ -28,7 +28,7 @@ public class Cryptocurrency : IEquatable<Cryptocurrency>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)
