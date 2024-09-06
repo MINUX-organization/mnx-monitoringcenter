@@ -1,0 +1,58 @@
+﻿using MediatR;
+
+namespace MNX.MonitoringCenter.Inventory.UseCases.Cpu;
+
+using Cpu = Contracts.Cpu.Cpu;
+
+/// <summary>
+/// Запрос на получение списка процессоров.
+/// </summary>
+public class GetCpusInfoQuery : IStreamRequest<Cpu>
+{
+    /// <summary>
+    /// Спецификация устройств.
+    /// </summary>
+    public DeviceSpecification Specification { get; }
+
+    /// <summary>
+    /// Создаёт экземпляр класса <see cref="GetCpusInfoQuery"/>.
+    /// </summary>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="rigsIds"> Идентификаторы запрашиваемых ригов. Если нет, то все доступные риги. </param>
+    /// <param name="models"> Запрашиваемые модели процессоров. Если нет, то все доступные модели. </param>
+    /// <param name="manufacturers"> Запрашиваемый производители процессоров. Если нет, то все доступные производители. </param>
+    public GetCpusInfoQuery(Guid userId, Guid[]? rigsIds, string[]? models, string[]? manufacturers)
+    {
+        Specification = new(userId, rigsIds, models, manufacturers);
+    }
+
+    /// <summary>
+    /// Создаёт экземпляр класса <see cref="GetCpusInfoQuery"/>.
+    /// </summary>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="models"> Запрашиваемые модели процессоров. Если нет, то все доступные модели. </param>
+    /// <param name="manufacturers"> Запрашиваемый производители процессоров. Если нет, то все доступные производители. </param>
+    public GetCpusInfoQuery(Guid userId, Guid rigId, string[]? models, string[]? manufacturers)
+    {
+        Specification = new(userId, new Guid[] { rigId }, models, manufacturers);
+    }
+}
+
+/// <summary>
+/// Обработчик <see cref="GetCpusInfoQuery"/>.
+/// </summary>
+public class GetCpusInfoQueryHandler : IStreamRequestHandler<GetCpusInfoQuery, Cpu>
+{
+    private readonly ICpuRepository _cpuRepository;
+
+    public GetCpusInfoQueryHandler(ICpuRepository cpuRepository)
+    {
+        _cpuRepository = cpuRepository ?? throw new ArgumentNullException(nameof(cpuRepository));
+    }
+
+    public IAsyncEnumerable<Cpu> Handle(GetCpusInfoQuery request, CancellationToken cancellationToken)
+    {
+        return _cpuRepository.GetList(request.Specification);
+    }
+}
