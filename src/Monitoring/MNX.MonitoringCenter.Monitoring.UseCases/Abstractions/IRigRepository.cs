@@ -13,7 +13,7 @@ public interface IRigRepository
     /// </summary>
     /// <param name="id">  Уникальный идентификатор. </param>
     /// <returns> Риг. </returns>
-    Task<Rig?> GetById(Guid id, long userId);
+    Task<Rig?> GetById(Guid id, Guid userId);
 
     /// <summary>
     /// Получить список ригов.

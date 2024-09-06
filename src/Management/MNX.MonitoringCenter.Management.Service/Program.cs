@@ -3,15 +3,26 @@ using MNX.Application.Data.DI;
 using MNX.Application.UseCases.DI;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Management.DataAccess;
-using MNX.MonitoringCenter.Management.DataAccess.Repositories;
+using MNX.MonitoringCenter.Management.DataAccess.Algorithm;
+using MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
+using MNX.MonitoringCenter.Management.DataAccess.FlightSheet;
+using MNX.MonitoringCenter.Management.DataAccess.Miner;
+using MNX.MonitoringCenter.Management.DataAccess.Pool;
+using MNX.MonitoringCenter.Management.DataAccess.Preset;
+using MNX.MonitoringCenter.Management.DataAccess.Wallet;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.Abstractions;
+using MNX.MonitoringCenter.Management.UseCases.Algorithm;
+using MNX.MonitoringCenter.Management.UseCases.Algorithm.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetAlgorithmsQuery;
+using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Wallet;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
-using Refit;
 using System.Reflection;
 
 namespace MNX.MonitoringCenter.Management;
@@ -82,11 +93,6 @@ public class Program
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddDataContext<Context>(configuration);
 
-        var monitoringUri = configuration["MonitoringUri"]
-            ?? throw new ArgumentNullException(null, "Uri адрес сервиса мониторинга не указан");
-        services.AddRefitClient<IMonitoringClient>()
-                .ConfigureHttpClient(client => client.BaseAddress = new Uri(monitoringUri));
-
         services.AddScoped<IAlgorithmRepository, AlgorithmRepository>();
         services.AddScoped<ICryptocurrencyRepository, CryptocurrencyRepository>();
         services.AddScoped<IFlightSheetRepository, FlightSheetRepository>();
@@ -98,7 +104,7 @@ public class Program
         services.AddHttpContextAccessor();
     }
 
-    private static async Task RunApp(WebApplicationBuilder builder)
+    private static Task RunApp(WebApplicationBuilder builder)
     {
         var app = builder.Build();
         var appName = builder.Configuration["ServiceName"]
@@ -122,6 +128,6 @@ public class Program
 
         app.MapControllers();
 
-        await app.RunAsync();
+        return app.RunAsync();
     }
 }

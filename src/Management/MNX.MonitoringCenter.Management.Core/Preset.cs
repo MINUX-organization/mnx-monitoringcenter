@@ -3,22 +3,22 @@
 /// <summary>
 /// Пресет
 /// </summary>
-public class Preset
+public sealed class Preset : IEquatable<Preset>
 {
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// Название пресета
     /// </summary>
-    public string Name { get; set; }
+    public required string Name { get; set; }
 
     /// <summary>
     /// Название GPU
     /// </summary>
-    public string GpuName { get; set; }
+    public required string GpuName { get; set; }
 
     /// <summary>
     /// 
@@ -33,5 +33,39 @@ public class Preset
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        if (obj is Preset preset)
+        {
+            return Equals(preset);
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(Preset? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return GpuName == other.GpuName &&
+               (Overclocking?.Equals(other.Overclocking) ?? other.Overclocking is null);
+    }
+
+    /// <inheritdoc/>
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(GpuName, Overclocking);
+    }
 }

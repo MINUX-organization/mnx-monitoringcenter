@@ -25,7 +25,7 @@ public abstract class MiningDeviceDto
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; set; }
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// Название.

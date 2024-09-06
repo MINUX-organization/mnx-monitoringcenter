@@ -10,14 +10,14 @@ public class UpdateTotalDynamicDataEvent : INotification
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public long UserId { get; }
+    public Guid UserId { get; }
 
     /// <summary>
     /// Новые обобщённые данные.
     /// </summary>
     public TotalDynamicData Total { get; }
 
-    public UpdateTotalDynamicDataEvent(long userId, TotalDynamicData total)
+    public UpdateTotalDynamicDataEvent(Guid userId, TotalDynamicData total)
     {
         UserId = userId;
         Total = total;

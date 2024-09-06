@@ -1,14 +1,14 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.AddWallet;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.EditWallet;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Wallets.RemoveWallet;
-using MNX.MonitoringCenter.Management.UseCases.Queries.GetWalletsQuery;
-using Microsoft.AspNetCore.Authorization;
+using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.EditWallet;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.RemoveWallet;
+using MNX.MonitoringCenter.Management.UseCases.Wallet.Queries;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 

@@ -1,12 +1,9 @@
-﻿using MNX.MonitoringCenter.Management.Core.HardwareParameters;
-
-namespace MNX.MonitoringCenter.Management.Core;
+﻿namespace MNX.MonitoringCenter.Management.Core;
 
 /// <summary>
 /// Полётный лист ( конфигурация для воркера )
 /// </summary>
-public class FlightSheet
-{
+public class FlightSheet : IEquatable<FlightSheet> { 
     public Guid Id { get; set; }
 
     public string Name { get; set; }
@@ -19,5 +16,40 @@ public class FlightSheet
 
     public Pool Pool { get; set; }
 
-    public long UserId {  get; set; }
+    public Guid UserId {  get; set; }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        if (obj is FlightSheet flightSheet)
+        {
+            return Equals(flightSheet);
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(FlightSheet? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return Miner.Equals(other.Miner) &&
+               Cryptocurrency == other.Cryptocurrency &&
+               WalletAddress == other.WalletAddress &&
+               Pool.Equals(other.Pool);
+    }
+
+    public override int GetHashCode()
+    {
+        return HashCode.Combine(Miner, Cryptocurrency,  WalletAddress, Pool);
+    }
 }

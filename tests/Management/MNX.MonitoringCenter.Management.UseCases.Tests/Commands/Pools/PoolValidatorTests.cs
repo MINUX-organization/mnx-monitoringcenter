@@ -1,5 +1,5 @@
 ﻿using FluentValidation.TestHelper;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Pools;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Tests.Commands.Pools;
 

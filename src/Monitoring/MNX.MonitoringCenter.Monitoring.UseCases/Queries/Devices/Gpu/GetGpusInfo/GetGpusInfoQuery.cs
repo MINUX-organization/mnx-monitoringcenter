@@ -13,7 +13,7 @@ public class GetGpusInfoQuery : IStreamRequest<GpuInfo>
     /// </summary>
     public DeviceSpecification Specification { get; }
 
-    public GetGpusInfoQuery(long userId)
+    public GetGpusInfoQuery(Guid userId)
     {
         Specification = new DeviceSpecification(userId, new List<MiningDeviceType>()
         {
