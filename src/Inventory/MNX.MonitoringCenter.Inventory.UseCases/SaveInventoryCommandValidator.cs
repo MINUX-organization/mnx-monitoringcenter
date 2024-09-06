@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases.Software;
+namespace MNX.MonitoringCenter.Inventory.UseCases;
 
 /// <summary>
 /// Валидатор команды сохранения инвентаризации.
