@@ -1,0 +1,36 @@
+name: monitoring_center
+services:
+
+    management:
+        container_name: management
+        image: management-service
+        build:
+            context: .
+            dockerfile: ./src/Management/MNX.MonitoringCenter.Management.Service/Dockerfile
+            args:
+                - version=0.0.1-dev
+                - nuget_server=http://77.37.200.167:5554/v3/index.json
+        restart: unless-stopped
+        ports:
+             - "8001:8080"
+        environment:
+             - applicationUrl=http://77.37.200.167:8001
+             - ServiceName=monitoring_center_management
+             - ConsulUri=http://77.37.200.167:8500
+    
+    monitoring:
+        container_name: monitoring
+        image: monitoring-service
+        build:
+            context: .
+            dockerfile: ./src/Monitoring/MNX.MonitoringCenter.Monitoring.Service/Dockerfile
+            args:
+                - version=0.0.1-dev
+                - nuget_server=http://77.37.200.167:5554/v3/index.json
+        restart: unless-stopped
+        ports:
+             - "8002:8080"
+        environment:
+             - applicationUrl=http://77.37.200.167:8001
+             - ServiceName=monitoring_center_monitoring
+             - ConsulUri=http://77.37.200.167:8500

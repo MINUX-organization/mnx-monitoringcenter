@@ -114,7 +114,7 @@ internal class Program
         var appName = builder.Configuration["ServiceName"]
             ?? throw new ArgumentNullException(null, "Не указано название сервиса");
 
-        if (app.Environment.IsDevelopment())
+        //if (app.Environment.IsDevelopment())
         {
             app.UseDeveloperExceptionPage();
             app.UseSwagger();
