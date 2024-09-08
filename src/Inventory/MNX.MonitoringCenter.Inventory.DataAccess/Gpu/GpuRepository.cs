@@ -37,9 +37,17 @@ public class GpuRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
-    public Task<int> GetCount(DeviceSpecification specification)
+    public Task<int> GetCount(DeviceSpecification specification, CancellationToken cancellationToken)
     {
-        return GetGpus(specification).CountAsync();
+        return GetGpus(specification).CountAsync(cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<Dictionary<string, int>> GetCountOFGpusGroupedByManufacturer(DeviceSpecification specification,
+                                                                             CancellationToken cancellationToken)
+    {
+        return GetGpus(specification).GroupBy(x => x.Information.Manufacturer)
+                                     .ToDictionaryAsync(x => x.Key, y => y.Count(), cancellationToken);
     }
 
     private IQueryable<Contracts.Gpu.Gpu> GetGpus(DeviceSpecification specification)

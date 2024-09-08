@@ -108,7 +108,7 @@ public class SaveInventoryTests : BaseTest
                                 Pci = new() { Id = 1, Bus = 2 },
                                 Information = new CpuInformation()
                                 {
-                                    Manufacturer = "Manufacturer",
+                                    Manufacturer = "Amd",
                                     Model = "Model",
                                     CoresCount = 10,
                                     ThreadsCount = 12,

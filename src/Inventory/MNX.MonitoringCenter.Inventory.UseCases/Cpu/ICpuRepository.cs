@@ -32,4 +32,13 @@ public interface ICpuRepository
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Кол-во процессоров, соответствующих спецификации. </returns>
     Task<int> GetCount(DeviceSpecification specification, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получить кол-во процессоров по спецификации, сгруппированных по производителю.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Словарь, в котором key - производитель, value - кол-во. </returns>
+    Task<Dictionary<string, int>> GetCountOFCpusGroupedByManufacturer(DeviceSpecification specification,
+                                                                      CancellationToken cancellationToken);
 }

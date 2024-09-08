@@ -1,5 +1,7 @@
 ﻿namespace MNX.MonitoringCenter.Inventory.UseCases.NetworkAdapter;
 
+using NetworkAdapter = Contracts.NetworkAdapter.NetworkAdapter;
+
 /// <summary>
 /// Репозиторий для доступа к сетевым адаптерам.
 /// </summary>
@@ -11,5 +13,6 @@ public interface INetworkAdapterRepository
     /// <param name="specification"> Спецификация инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Список сетевых адаптеров. </returns>
-    Task<List<Contracts.NetworkAdapter.NetworkAdapter>?> GetList(InventorySpecification specification, CancellationToken cancellationToken);
+    Task<List<NetworkAdapter>?> GetList(InventorySpecification specification,
+                                        CancellationToken cancellationToken);
 }

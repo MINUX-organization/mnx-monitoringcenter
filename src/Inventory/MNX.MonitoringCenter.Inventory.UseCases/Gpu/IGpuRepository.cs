@@ -28,7 +28,17 @@ public interface IGpuRepository
     /// <summary>
     /// Получить кол-во видеокарт по спецификации.
     /// </summary>
-    /// <param name="specification">Спецификация.</param>
+    /// <param name="specification"> Спецификация. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Кол-во видеокарт, соответствующих спецификации. </returns>
-    Task<int> GetCount(DeviceSpecification specification);
+    Task<int> GetCount(DeviceSpecification specification, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получить кол-во видеокарт по спецификации, сгруппированных по производителю.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Словарь, в котором key - производитель, value - кол-во. </returns>
+    Task<Dictionary<string, int>> GetCountOFGpusGroupedByManufacturer(DeviceSpecification specification,
+                                                                      CancellationToken cancellationToken);
 }

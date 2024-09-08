@@ -42,6 +42,14 @@ public class CpuRepository : ICpuRepository
         return GetCpus(specification).CountAsync(cancellationToken);
     }
 
+    /// <inheritdoc/>
+    public Task<Dictionary<string, int>> GetCountOFCpusGroupedByManufacturer(DeviceSpecification specification,
+                                                                             CancellationToken cancellationToken)
+    {
+        return GetCpus(specification).GroupBy(x => x.Information.Manufacturer)
+                                     .ToDictionaryAsync(x => x.Key, y => y.Count(), cancellationToken);
+    }
+
     private IQueryable<Contracts.Cpu.Cpu> GetCpus(DeviceSpecification specification)
     {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()

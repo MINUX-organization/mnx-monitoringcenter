@@ -15,9 +15,6 @@ using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Motherboard;
 using MNX.MonitoringCenter.Inventory.UseCases.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.UseCases.Software;
-using MNX.MonitoringCenter.Monitoring.Core;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetSummarizedQuantitativeData;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
 

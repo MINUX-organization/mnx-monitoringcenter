@@ -15,9 +15,15 @@ public sealed record GetNetworkAdaptersInfoQuery : IRequest<Result<List<NetworkA
     /// </summary>
     public InventorySpecification Specification { get; }
 
-    public GetNetworkAdaptersInfoQuery(Guid userId, Guid rigId)
+    /// <summary>
+    /// Признак активности адаптеров ( они подключены к сети Интернет ).
+    /// </summary>
+    public bool? IsActive { get; }
+
+    public GetNetworkAdaptersInfoQuery(Guid userId, Guid rigId, bool? isActive = null)
     {
         Specification = new InventorySpecification(userId, rigId);
+        IsActive = isActive;
     }
 }
 
@@ -35,13 +41,18 @@ public class GetNetworkAdaptersInfoQueryHandler :
     }
 
     public async Task<Result<List<NetworkAdapter>>> Handle(GetNetworkAdaptersInfoQuery request,
-                                                            CancellationToken cancellationToken)
+                                                           CancellationToken cancellationToken)
     {
         var adapters = await _repository.GetList(request.Specification, cancellationToken);
 
         if (adapters == null)
         {
             return Result<List<NetworkAdapter>>.Invalid($"Inventory was not found");
+        }
+
+        if (request.IsActive != null)
+        {
+            adapters = adapters.Where(x => x.IsActive() == request.IsActive).ToList();
         }
 
         return Result<List<NetworkAdapter>>.Success(adapters);

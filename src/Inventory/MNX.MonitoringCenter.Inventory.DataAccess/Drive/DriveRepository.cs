@@ -20,12 +20,24 @@ public class DriveRepository : IDriveRepository
     public Task<List<Contracts.Drive.Drive>?> GetList(InventorySpecification specification,
                                                       CancellationToken cancellationToken)
     {
+        return GetInventory(specification).Include(x => x.Drives)
+                                          .Select(x => x.Drives)
+                                          .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<int> GetCount(DeviceSpecification specification, CancellationToken cancellationToken)
+    {
+        return GetInventory(specification.InventorySpecification).Include(x => x.Drives)
+                                                                 .SelectMany(x => x.Drives)
+                                                                 .CountAsync(cancellationToken);
+    }
+
+    private IQueryable<Inventory> GetInventory(InventorySpecification specification)
+    {
         return _context.Inventory.AsNoTrackingWithIdentityResolution()
                                  .Available(specification)
                                  .GetCurrentInventory()
-                                 .InventoryFilter(specification)
-                                 .Include(x => x.Drives)
-                                 .Select(x => x.Drives)
-                                 .FirstOrDefaultAsync(cancellationToken);
+                                 .InventoryFilter(specification);
     }
 }

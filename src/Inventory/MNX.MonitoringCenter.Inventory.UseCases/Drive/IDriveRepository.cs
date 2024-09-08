@@ -13,4 +13,12 @@ public interface IDriveRepository
     /// <returns> Список дисков. </returns>
     Task<List<Contracts.Drive.Drive>?> GetList(InventorySpecification specification,
                                                CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получить кол-во дисков по спецификации.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Кол-во дисков, соответствующих спецификации. </returns>
+    Task<int> GetCount(DeviceSpecification specification, CancellationToken cancellationToken);
 }

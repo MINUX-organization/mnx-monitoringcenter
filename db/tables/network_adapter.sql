@@ -1,8 +1,8 @@
 CREATE TABLE monitoring_center.network_adapter
 (
     id uuid NOT NULL,
-    global_ip text NOT NULL,
-    local_ip text NOT NULL,
+    global_ip text DEFAULT NULL,
+    local_ip text DEFAULT NULL,
     inventory_id bigint,
     information_bus_info text NOT NULL,
     information_logical_name text NOT NULL,
