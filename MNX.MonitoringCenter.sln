@@ -51,6 +51,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests", "tests\Inventory\MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests\MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests.csproj", "{5B2A9BF1-DFBA-462A-A0BA-31B5858B0E86}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Inventory.Integration", "src\Inventory\MNX.MonitoringCenter.Inventory.Integration\MNX.MonitoringCenter.Inventory.Integration.csproj", "{C82B2514-573B-4752-BC20-B4338A244526}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -121,6 +123,10 @@ Global
 		{5B2A9BF1-DFBA-462A-A0BA-31B5858B0E86}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B2A9BF1-DFBA-462A-A0BA-31B5858B0E86}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B2A9BF1-DFBA-462A-A0BA-31B5858B0E86}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C82B2514-573B-4752-BC20-B4338A244526}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C82B2514-573B-4752-BC20-B4338A244526}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C82B2514-573B-4752-BC20-B4338A244526}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C82B2514-573B-4752-BC20-B4338A244526}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -148,6 +154,7 @@ Global
 		{F7E132B5-14DE-45DD-A624-D3A726C9308A} = {87F9E337-4D37-415A-9BC2-43FB5AC423A9}
 		{3EBF4D07-7C56-44BE-AD0B-40B6BB7EE327} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
 		{5B2A9BF1-DFBA-462A-A0BA-31B5858B0E86} = {3EBF4D07-7C56-44BE-AD0B-40B6BB7EE327}
+		{C82B2514-573B-4752-BC20-B4338A244526} = {87F9E337-4D37-415A-9BC2-43FB5AC423A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}

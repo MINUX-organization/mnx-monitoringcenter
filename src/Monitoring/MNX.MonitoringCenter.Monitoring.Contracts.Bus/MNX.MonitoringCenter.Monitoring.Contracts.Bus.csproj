@@ -7,7 +7,7 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Company>Minux</Company>
     <Authors>Minux</Authors>
-    <Description>Содержит конктракты для шины сообщений</Description>
+    <Description>Содержит конктракты центра мониторинга для шины сообщений</Description>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>

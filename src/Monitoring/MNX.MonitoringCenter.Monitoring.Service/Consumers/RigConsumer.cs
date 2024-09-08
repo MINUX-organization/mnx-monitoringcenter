@@ -1,5 +1,7 @@
 ﻿using EasyNetQ.AutoSubscribe;
 using MediatR;
+using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.Devices.Gpu.ConfirmOverclocking;
@@ -14,7 +16,8 @@ public class RigConsumer :
     IConsumeAsync<GotRigsStateMessage>,
     IConsumeAsync<GotRigsDynamicData>,
     IConsumeAsync<OverclockingSettingSuccessMessage>,
-    IConsumeAsync<OverclockingSettingFailMessage>
+    IConsumeAsync<OverclockingSettingFailMessage>,
+    IConsumeAsync<InventoryMsg>
 {
     private readonly IUserRigsObserverWrapper _observer;
 
@@ -31,9 +34,9 @@ public class RigConsumer :
     /// </summary>
     /// <param name="message"> Сообщение состояния ригов. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public async Task ConsumeAsync(GotRigsStateMessage message, CancellationToken cancellationToken = default)
+    public Task ConsumeAsync(GotRigsStateMessage message, CancellationToken cancellationToken = default)
     {
-        await _observer.GotRigsState(message.UserId, message.ConnectionId, message.RigsState);
+        return _observer.GotRigsState(message.UserId, message.ConnectionId, message.RigsState);
     }
 
     /// <summary>
@@ -52,10 +55,10 @@ public class RigConsumer :
     /// </summary>
     /// <param name="message"> Сообщение об удачной установке разгона. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public async Task ConsumeAsync(OverclockingSettingSuccessMessage message,
+    public Task ConsumeAsync(OverclockingSettingSuccessMessage message,
                                    CancellationToken cancellationToken = default)
     {
-        await _mediator.Send(
+        return _mediator.Send(
             new GpuOverclockingConfirmationCommand(message.CardId, message.Overclocking),
                                                    cancellationToken);
     }
@@ -65,10 +68,21 @@ public class RigConsumer :
     /// </summary>
     /// <param name="message"> Сообщение о неудачной установке разгона. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public async Task ConsumeAsync(OverclockingSettingFailMessage message,
+    public Task ConsumeAsync(OverclockingSettingFailMessage message,
                                    CancellationToken cancellationToken = default)
     {
-        await _mediator.Publish(new OverclockingSettingFailEvent(
+        return _mediator.Publish(new OverclockingSettingFailEvent(
             message.ConnectionId, message.CardId, new string[] { message.Message }), cancellationToken);
-    }   
+    }
+
+    /// <summary>
+    /// Получить сообщение с инвентаризацией.
+    /// </summary>
+    /// <param name="message"> Сообщение с инвентаризацией. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns></returns>
+    public Task ConsumeAsync(InventoryMsg message, CancellationToken cancellationToken = default)
+    {
+        return _mediator.Send(new SaveInventoryCommand(message), cancellationToken);
+    }
 }

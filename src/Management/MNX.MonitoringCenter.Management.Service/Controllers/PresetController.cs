@@ -103,10 +103,8 @@ public class PresetController : ControllerBase
     /// <param name="id"> Уникальный идентификатор </param>
     /// <returns> Результат выполнения команды </returns>
     /// <response code="204"> Успешно </response>
-    /// <response code="400"> Не был найден пресет с переданным идентификатором </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Remove(Guid id)
     {
         var userId = _userAccessor.GetUserId();

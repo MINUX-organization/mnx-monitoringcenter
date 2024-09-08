@@ -21,7 +21,7 @@ public class GetGpusInfoQuery : IStreamRequest<Gpu>
     /// <param name="rigsIds"> Идентификаторы запрашиваемых ригов. Если нет, то все доступные риги. </param>
     /// <param name="models"> Запрашиваемые модели видеокарт. Если нет, то все доступные модели. </param>
     /// <param name="manufacturers"> Запрашиваемый производители видеокарт. Если нет, то все доступные производители. </param>
-    public GetGpusInfoQuery(Guid userId, Guid[]? rigsIds, string[]? models, string[]? manufacturers)
+    public GetGpusInfoQuery(Guid userId, Guid[]? rigsIds = null, string[]? models = null, string[]? manufacturers = null)
     {
         Specification = new(userId, rigsIds, models, manufacturers);
     }
@@ -33,7 +33,7 @@ public class GetGpusInfoQuery : IStreamRequest<Gpu>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <param name="models"> Запрашиваемые модели процессоров. Если нет, то все доступные модели. </param>
     /// <param name="manufacturers"> Запрашиваемый производители процессоров. Если нет, то все доступные производители. </param>
-    public GetGpusInfoQuery(Guid userId, Guid rigId, string[]? models, string[]? manufacturers)
+    public GetGpusInfoQuery(Guid userId, Guid rigId, string[]? models = null, string[]? manufacturers = null)
     {
         Specification = new(userId, new Guid[] { rigId }, models, manufacturers);
     }

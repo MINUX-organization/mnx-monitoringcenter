@@ -95,7 +95,7 @@ public class SaveInventoryTests : BaseTest
             {
                 yield return new InventoryMsg()
                 {
-                    RigOwnerId = Guid.Parse("d37606cd-ccce-43bd-bbcd-a4eb3d451e47"),
+                    RigOwnerId = Guid.Parse("0b8e36f9-bf02-4c88-97f8-cb5a81715000"),
                     RigId = Guid.NewGuid(),
                     CreatedDateTime = DateTime.UtcNow,
                     Inventory = new InventoryModel()

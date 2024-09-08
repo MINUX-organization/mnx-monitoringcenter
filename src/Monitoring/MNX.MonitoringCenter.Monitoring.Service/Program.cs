@@ -3,6 +3,7 @@ using MNX.Application.Consul;
 using MNX.Application.Data.DI;
 using MNX.Application.RabbitMQ;
 using MNX.MonitoringCenter.Infrastructure;
+using MNX.MonitoringCenter.Inventory.Integration;
 using MNX.MonitoringCenter.Monitoring.DataAccess;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
 using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories.MiningDevices;
@@ -78,6 +79,8 @@ internal class Program
 
     private static void ConfigureDI(IServiceCollection services, ConfigurationManager configuration)
     {
+        services.AddInventoryModule(configuration);
+
         services.AddDataContext<Context>(configuration);
         services.AddSignalR();
         services.AddEasyNetQ(configuration, [Assembly.GetExecutingAssembly()]);

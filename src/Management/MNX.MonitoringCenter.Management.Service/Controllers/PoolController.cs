@@ -98,10 +98,8 @@ public class PoolController : ControllerBase
     /// <param name="id"> Уникальный идентификатор </param>
     /// <returns> Результат выполнения операции </returns>
     /// <response code="204"> Успешно </response>
-    /// <response code="400"> Не был найден пул с переданным идентификатором </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
-    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = _userAccessor.GetUserId();

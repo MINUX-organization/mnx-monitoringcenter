@@ -4,6 +4,14 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>Minux</Company>
+    <Authors>Minux</Authors>
+    <Description>Содержит контракты инвентаризации.</Description>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RepositoryUrl>https://github.com/MINUX-organization/MNX.MonitoringCenter.git</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

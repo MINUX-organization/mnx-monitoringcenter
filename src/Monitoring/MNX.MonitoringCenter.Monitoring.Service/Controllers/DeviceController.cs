@@ -9,6 +9,7 @@ using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Gpu.GetOverclocki
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
 
+/*
 /// <summary>
 /// Предоставляет API для работы с майнинг устройствами.
 /// </summary>
@@ -63,3 +64,4 @@ public class DeviceController : ControllerBase
         return result.ToActionResult();
     }
 }
+*/
