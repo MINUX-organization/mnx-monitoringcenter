@@ -3,7 +3,7 @@
 /// <summary>
 /// Пул
 /// </summary>
-public sealed class Pool : IEquatable<Pool>
+public class Pool : IEquatable<Pool>
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -23,7 +23,7 @@ public sealed class Pool : IEquatable<Pool>
     /// <summary>
     /// Пароль
     /// </summary>
-    public required string Password { get; set; }
+    public string? Password { get; set; }
 
     /// <summary>
     /// Идентификатор криптовалюты
@@ -64,12 +64,12 @@ public sealed class Pool : IEquatable<Pool>
             return true;
         }
 
-        return Domain == other.Domain && Port == other.Port;
+        return Domain == other.Domain && Port == other.Port && Password == other.Password;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Domain, Port);
+        return HashCode.Combine(Domain, Port, Password);
     }
 }

@@ -3,7 +3,7 @@
 /// <summary>
 /// Кошелёк
 /// </summary>
-public sealed class Wallet : IEquatable<Wallet>
+public class Wallet : IEquatable<Wallet>
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -59,12 +59,12 @@ public sealed class Wallet : IEquatable<Wallet>
             return true;
         }
 
-        return Address == other.Address;
+        return Name == other.Name && Address == other.Address;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Address);
+        return HashCode.Combine(Name, Address);
     }
 }

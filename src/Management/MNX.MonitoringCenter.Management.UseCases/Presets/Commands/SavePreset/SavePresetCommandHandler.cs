@@ -25,14 +25,14 @@ public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Resul
 
     public async Task<Result<PresetModel>> Handle(SavePresetCommand request, CancellationToken cancellationToken)
     {
-        if (await _presetRepository.Exists(request.UserId, request.SavePresetModel.Name))
+        if (await _presetRepository.Exists(request.UserId, request.Model.Name))
         {
             return Result<PresetModel>.Conflict("Preset already exists");
         }
 
         // todo: gpu exists?
 
-        var preset = _mapper.Map<Preset>(request.SavePresetModel);
+        var preset = _mapper.Map<Preset>(request.Model);
         preset.UserId = request.UserId;
         await _presetRepository.Save(preset);
 

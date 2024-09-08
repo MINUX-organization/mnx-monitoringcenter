@@ -3,7 +3,7 @@
 /// <summary>
 /// Модель с разгоном
 /// </summary>
-public sealed class Overclocking : IEquatable<Overclocking>
+public class Overclocking : IEquatable<Overclocking>
 {
     /// <summary>
     /// Идентификатор

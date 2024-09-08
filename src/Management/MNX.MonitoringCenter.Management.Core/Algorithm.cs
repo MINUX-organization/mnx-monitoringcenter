@@ -3,7 +3,7 @@
 /// <summary>
 /// Алгоритм.
 /// </summary>
-public sealed class Algorithm : IEquatable<Algorithm>
+public class Algorithm : IEquatable<Algorithm>
 {
     /// <summary>
     /// Название.

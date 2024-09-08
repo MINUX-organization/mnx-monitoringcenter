@@ -6,8 +6,9 @@ using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -62,10 +63,12 @@ public class PresetController : ControllerBase
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не была найдена GPU с указанным названием
     /// </response>
+    /// <response code="409"> Пресет с переданным именем уже существует. </response>
     [HttpPost]
     [ProducesResponseType(typeof(PresetModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Save(SavePresetInputModel model)
+    [ProducesResponseType(typeof(List<string>), 409)]
+    public async Task<IActionResult> Save(PresetInputModel model)
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new SavePresetCommand(userId, model));
@@ -73,24 +76,24 @@ public class PresetController : ControllerBase
     }
 
     /// <summary>
-    /// Обновить пресет
+    /// Редактировать пресет
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
     /// <param name="model"> Входная модель пресета </param>
     /// <returns> Результат выполнения команды </returns>
-    /// <response code="204"> Успешно </response>
+    /// <response code="200"> Успешно </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id.
     /// </response>
     /// <response code="409"> Пресет с переданным именем уже существует. </response>
     [HttpPut("{id:Guid}")]
-    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(PresetModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     [ProducesResponseType(typeof(List<string>), 409)]
-    public async Task<IActionResult> Update(Guid id, SavePresetInputModel model)
+    public async Task<IActionResult> Edit(Guid id, PresetInputModel model)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new UpdatePresetCommand(id, model, userId));
+        var result = await _mediator.Send(new EditPresetCommand(id, model, userId));
         return result.ToActionResult();
     }
 

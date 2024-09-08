@@ -3,7 +3,7 @@
 /// <summary>
 /// Майнер.
 /// </summary>
-public sealed class Miner : IEquatable<Miner>
+public class Miner : IEquatable<Miner>
 {
     public required string Name { get; set; }
 

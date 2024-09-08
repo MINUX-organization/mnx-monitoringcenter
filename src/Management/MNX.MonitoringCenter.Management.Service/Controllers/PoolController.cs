@@ -7,7 +7,7 @@ using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.RemovePool;
-using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.UpdatePool;
+using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Queries;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
@@ -58,9 +58,11 @@ public class PoolController : ControllerBase
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не была найдена монета с указанным названием
     /// </response>
+    /// <response code="409"> Пул уже существует </response>
     [HttpPost]
     [ProducesResponseType(typeof(PoolModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [ProducesResponseType(typeof(List<string>), 409)]
     public async Task<IActionResult> Add(PoolInputModel model)
     {
         var userId = _userAccessor.GetUserId();
@@ -69,7 +71,7 @@ public class PoolController : ControllerBase
     }
 
     /// <summary>
-    /// Обновить пул
+    /// Редактировать пул
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
     /// <param name="model"> Входная модель пула </param>
@@ -78,13 +80,15 @@ public class PoolController : ControllerBase
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден пул с переданным id
     /// </response>
+    /// <response code="409"> Пул уже существует </response>
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(typeof(PoolModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> Update(Guid id, PoolInputModel model)
+    [ProducesResponseType(typeof(List<string>), 409)]
+    public async Task<IActionResult> Edit(Guid id, PoolInputModel model)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new UpdatePoolCommand(id, model, userId));
+        var result = await _mediator.Send(new EditPoolCommand(id, model, userId));
         return result.ToActionResult();
     }
 

@@ -3,7 +3,7 @@ CREATE TABLE monitoring_center.pools
     id uuid NOT NULL,
     domain text NOT NULL,
     port integer NOT NULL,
-    password text NOT NULL,
+    password text DEFAULT NULL,
     cryptocurrency_id uuid NOT NULL,
     user_id uuid NOT NULL,
 
@@ -15,7 +15,7 @@ CREATE TABLE monitoring_center.pools
         ON DELETE CASCADE
 );
 
-CREATE Index ix_pools_cryptocurrency_id
+CREATE INDEX ix_pools_cryptocurrency_id
     ON monitoring_center.pools USING btree
     (cryptocurrency_id ASC NULLS LAST);
 

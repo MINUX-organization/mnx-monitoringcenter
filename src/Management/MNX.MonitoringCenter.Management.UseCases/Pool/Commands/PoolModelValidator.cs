@@ -14,7 +14,7 @@ public class PoolModelValidator : AbstractValidator<PoolInputModel>
             .WithMessage("The port must be in the range [0; 65535]");
 
         RuleFor(x => x.Domain.Length)
-            .Must(domain => domain <= 40)
+            .Must(length => 1 <= length && length <= 40)
             .WithMessage("The length of the domain should be in range of [1; 40] characters");
     }
 }

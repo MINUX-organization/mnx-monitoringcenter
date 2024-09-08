@@ -58,9 +58,11 @@ public class WalletController : ControllerBase
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не была найдена монета с указанным названием
     /// </response>
+    /// <response code="409"> Кошелёк уже существует </response>
     [HttpPost]
     [ProducesResponseType(typeof(WalletModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [ProducesResponseType(typeof(List<string>), 409)]
     public async Task<IActionResult> Add(WalletInputModel model)
     {
         var userId = _userAccessor.GetUserId();
@@ -78,9 +80,11 @@ public class WalletController : ControllerBase
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден кошелёк с переданным id
     /// </response>
+    /// <response code="409"> Кошелёк уже существует </response>
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(typeof(WalletModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [ProducesResponseType(typeof(List<string>), 409)]
     public async Task<IActionResult> Edit(Guid id, WalletInputModel model)
     {
         var userId = _userAccessor.GetUserId();

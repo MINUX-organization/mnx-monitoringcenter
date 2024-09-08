@@ -1,12 +1,12 @@
 ﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Pool.Commands.UpdatePool;
+namespace MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
 
 /// <summary>
 /// Команда обновления пула
 /// </summary>
-public class UpdatePoolCommand : IValidatableCommand<PoolModel>
+public class EditPoolCommand : IValidatableCommand<PoolModel>
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -23,7 +23,7 @@ public class UpdatePoolCommand : IValidatableCommand<PoolModel>
     /// </summary>
     public Guid UserId { get; }
 
-    public UpdatePoolCommand(Guid id, PoolInputModel model, Guid userId)
+    public EditPoolCommand(Guid id, PoolInputModel model, Guid userId)
     {
         Id = id;
         Model = model;

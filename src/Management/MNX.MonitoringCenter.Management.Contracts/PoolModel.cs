@@ -23,7 +23,7 @@ public class PoolModel
     /// <summary>
     /// Пароль
     /// </summary>
-    public required string Password { get; set; }
+    public string? Password { get; set; }
 
     /// <summary>
     /// Полное название криптовалюты

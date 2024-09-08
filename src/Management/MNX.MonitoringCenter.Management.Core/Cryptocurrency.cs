@@ -3,7 +3,7 @@
 /// <summary>
 /// Криптовалюта
 /// </summary>
-public sealed class Cryptocurrency : IEquatable<Cryptocurrency>
+public class Cryptocurrency : IEquatable<Cryptocurrency>
 {
     /// <summary>
     /// Идентификатор.

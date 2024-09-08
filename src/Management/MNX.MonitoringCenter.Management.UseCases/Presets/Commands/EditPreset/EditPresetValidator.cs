@@ -1,14 +1,14 @@
 ﻿using FluentValidation;
 using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
+namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 
 /// <summary>
-/// Валидатор команды сохранения пресета.
+/// Валидатор команды редактирования пресета.
 /// </summary>
-public class SavePresetValidator : AbstractValidator<SavePresetCommand>
+public class EditPresetValidator : AbstractValidator<EditPresetCommand>
 {
-    public SavePresetValidator()
+    public EditPresetValidator()
     {
         RuleFor(x => x.Model)
             .NotNull()

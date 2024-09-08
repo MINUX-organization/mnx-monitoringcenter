@@ -46,13 +46,13 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
         if (wallet.Name != newWallet.Name &&
             await _walletRepository.ExistsWithName(request.UserId, newWallet.Name))
         {
-            return Result<WalletModel>.Invalid($"Wallet with name is equaled {newWallet.Name} already exists");
+            return Result<WalletModel>.Conflict($"Wallet with name is equaled {newWallet.Name} already exists");
         }
 
         if (wallet.Address != newWallet.Address &&
             await _walletRepository.ExistsWithAddress(request.UserId, newWallet.Address))
         {
-            return Result<WalletModel>.Invalid($"Wallet with address is equaled {newWallet.Address} already exists");
+            return Result<WalletModel>.Conflict($"Wallet with address is equaled {newWallet.Address} already exists");
         }
 
         await _walletRepository.Update(newWallet);

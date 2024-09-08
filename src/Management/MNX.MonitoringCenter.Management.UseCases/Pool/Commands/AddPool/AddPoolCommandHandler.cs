@@ -32,7 +32,7 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Pool
     {
         if (await _poolRepository.Exists(request.UserId, request.Model.Domain, request.Model.Port))
         {
-            return Result<PoolModel>.Invalid("Pool already exists");
+            return Result<PoolModel>.Conflict("Pool already exists");
         }
 
         var cryptocurrency = await _cryptocurrencyRepository

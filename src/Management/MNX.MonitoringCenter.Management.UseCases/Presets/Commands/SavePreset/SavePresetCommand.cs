@@ -1,5 +1,6 @@
 ﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 
@@ -9,18 +10,18 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 public class SavePresetCommand : IValidatableCommand<PresetModel>
 {
     /// <summary>
-    /// Входная модель SavePreset.
+    /// Модель пресета.
     /// </summary>
-    public SavePresetInputModel SavePresetModel { get; }
+    public PresetInputModel Model { get; }
     
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
     public Guid UserId { get; }
 
-    public SavePresetCommand(Guid userId, SavePresetInputModel model)
+    public SavePresetCommand(Guid userId, PresetInputModel model)
     {
         UserId = userId;
-        SavePresetModel = model;
+        Model = model;
     }
 }

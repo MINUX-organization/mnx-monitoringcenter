@@ -1,12 +1,17 @@
-﻿namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
+﻿using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 
-public class SavePresetInputModel
+namespace MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
+
+/// <summary>
+/// Входная модель пресета.
+/// </summary>
+public class PresetInputModel
 {
     /// <summary>
     /// Название пресета
     /// </summary>
     public string Name { get; }
-    
+
     /// <summary>
     /// Название GPU
     /// </summary>
@@ -17,7 +22,7 @@ public class SavePresetInputModel
     /// </summary>
     public OverclockingInputModel Overclocking { get; }
 
-    public SavePresetInputModel(string name, string gpuName, OverclockingInputModel overclocking)
+    public PresetInputModel(string name, string gpuName, OverclockingInputModel overclocking)
     {
         Name = name;
         GpuName = gpuName;

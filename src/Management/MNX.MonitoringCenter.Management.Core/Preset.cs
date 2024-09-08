@@ -3,7 +3,7 @@
 /// <summary>
 /// Пресет
 /// </summary>
-public sealed class Preset : IEquatable<Preset>
+public class Preset : IEquatable<Preset>
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -59,13 +59,14 @@ public sealed class Preset : IEquatable<Preset>
             return true;
         }
 
-        return GpuName == other.GpuName &&
-               (Overclocking?.Equals(other.Overclocking) ?? other.Overclocking is null);
+        return Name == other.Name &&
+               GpuName == other.GpuName &&
+              (Overclocking?.Equals(other.Overclocking) ?? other.Overclocking is null);
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(GpuName, Overclocking);
+        return HashCode.Combine(Name, GpuName, Overclocking);
     }
 }

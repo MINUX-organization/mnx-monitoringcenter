@@ -1,13 +1,13 @@
 ﻿using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
+using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.UpdatePreset;
+namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 
 /// <summary>
 /// Команда редактирования пресета
 /// </summary>
-public class UpdatePresetCommand : IValidatableCommand<PresetModel>
+public class EditPresetCommand : IValidatableCommand<PresetModel>
 {
     /// <summary>
     /// Уникальный идентификатор
@@ -17,17 +17,17 @@ public class UpdatePresetCommand : IValidatableCommand<PresetModel>
     /// <summary>
     /// Модель пресета
     /// </summary>
-    public SavePresetInputModel SavePresetModel { get; }
+    public PresetInputModel Model { get; }
 
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
     public Guid UserId { get; }
 
-    public UpdatePresetCommand(Guid id, SavePresetInputModel model, Guid userId)
+    public EditPresetCommand(Guid id, PresetInputModel model, Guid userId)
     {
         Id = id;
-        SavePresetModel = model;
+        Model = model;
         UserId = userId;
     }
 }
