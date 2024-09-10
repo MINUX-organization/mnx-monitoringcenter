@@ -32,8 +32,7 @@ public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Resul
 
         // todo: gpu exists?
 
-        var preset = _mapper.Map<Preset>(request.Model);
-        preset.UserId = request.UserId;
+        var preset = _mapper.Map<Preset>(request);
         await _presetRepository.Save(preset);
 
         return Result<PresetModel>.SuccessfullyCreated(_mapper.Map<PresetModel>(preset));

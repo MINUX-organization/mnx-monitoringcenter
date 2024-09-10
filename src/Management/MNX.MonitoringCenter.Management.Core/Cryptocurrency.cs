@@ -8,7 +8,7 @@ public class Cryptocurrency : IEquatable<Cryptocurrency>
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Короткое название.
@@ -28,7 +28,7 @@ public class Cryptocurrency : IEquatable<Cryptocurrency>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; set; }
+    public Guid UserId { get; init; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

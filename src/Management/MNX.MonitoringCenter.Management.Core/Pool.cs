@@ -8,7 +8,7 @@ public class Pool : IEquatable<Pool>
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Домен
@@ -38,7 +38,7 @@ public class Pool : IEquatable<Pool>
     /// <summary>
     /// Идентификатор пользователя
     /// </summary>
-    public Guid UserId { get; set; }
+    public Guid UserId { get; init; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

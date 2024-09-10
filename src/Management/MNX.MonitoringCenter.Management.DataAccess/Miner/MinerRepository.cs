@@ -22,4 +22,10 @@ public class MinerRepository : IMinerRepository
                        .AsNoTracking()
                        .AsAsyncEnumerable();
     }
+
+    /// <inheritdoc/>
+    public Task<bool> Exists(string name, CancellationToken cancellationToken = default)
+    {
+        return _context.Miners.AsNoTracking().AnyAsync(x => x.Name == name, cancellationToken);
+    }
 }

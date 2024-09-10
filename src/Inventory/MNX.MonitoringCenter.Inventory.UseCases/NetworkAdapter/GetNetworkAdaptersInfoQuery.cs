@@ -16,14 +16,14 @@ public sealed record GetNetworkAdaptersInfoQuery : IRequest<Result<List<NetworkA
     public InventorySpecification Specification { get; }
 
     /// <summary>
-    /// Признак активности адаптеров ( они подключены к сети Интернет ).
+    /// Признак того, что адаптер подключен к сети Интернет.
     /// </summary>
-    public bool? IsActive { get; }
+    public bool? IsOnline { get; }
 
-    public GetNetworkAdaptersInfoQuery(Guid userId, Guid rigId, bool? isActive = null)
+    public GetNetworkAdaptersInfoQuery(Guid userId, Guid rigId, bool? isOnline = null)
     {
         Specification = new InventorySpecification(userId, rigId);
-        IsActive = isActive;
+        IsOnline = isOnline;
     }
 }
 
@@ -50,9 +50,9 @@ public class GetNetworkAdaptersInfoQueryHandler :
             return Result<List<NetworkAdapter>>.Invalid($"Inventory was not found");
         }
 
-        if (request.IsActive != null)
+        if (request.IsOnline != null)
         {
-            adapters = adapters.Where(x => x.IsActive() == request.IsActive).ToList();
+            adapters = adapters.Where(x => x.IsOnline == request.IsOnline).ToList();
         }
 
         return Result<List<NetworkAdapter>>.Success(adapters);

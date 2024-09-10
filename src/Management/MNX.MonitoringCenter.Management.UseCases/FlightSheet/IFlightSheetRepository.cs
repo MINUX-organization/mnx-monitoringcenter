@@ -1,36 +1,55 @@
-﻿using MNX.MonitoringCenter.Management.Core;
+﻿using MNX.MonitoringCenter.Management.Core.FlightSheet;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet;
-
+/// <summary>
+/// Репозиторий для доступа к полётным листам.
+/// </summary>
 public interface IFlightSheetRepository
 {
     /// <summary>
-    /// Получить список всех полётных листов
+    /// Получить список всех доступных полётных листов.
     /// </summary>
-    /// <returns> Асинхронный список полётных листов </returns>
-    public IAsyncEnumerable<Core.FlightSheet> GetAllAvailable(Guid userId);
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Асинхронный список полётных листов. </returns>
+    IAsyncEnumerable<FlightSheetBase> GetAllAvailable(Guid userId);
 
     /// <summary>
-    /// Добавить полётный лист
+    /// Получить полётный лист по идентификатору.
     /// </summary>
-    /// <param name="flightSheet"> Полётный лист </param>
-    public Task Add(Core.FlightSheet flightSheet);
+    /// <param name="flightSheetId"> Идентификатор полётного листа. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Полётный лист. </returns>
+    Task<FlightSheetBase?> GetAvailableById(Guid flightSheetId, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Применить полётный лист ко всем видеокартам в ферме
+    /// Получить признак существования полётного листа с переданным названием.
     /// </summary>
-    /// <param name="flightSheetId"> Идентификатор полётного листа </param>
-    public Task Apply(Guid flightSheetId);
+    /// <param name="name"> Название. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns>
+    /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
+    /// </returns>
+    Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Обновить данные полётного листа
+    /// Добавить полётный лист.
     /// </summary>
-    /// <param name="flightSheet"> Новый полётный лист </param>
-    public Task Update(Core.FlightSheet flightSheet);
+    /// <param name="flightSheet"> Полётный лист. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task Add(FlightSheetBase flightSheet, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Удалить полётный лист
+    /// Редактировать полётный лист.
     /// </summary>
-    /// <param name="flightSheetId"> Идентификатор </param>
-    public Task Remove(Guid flightSheetId);
+    /// <param name="flightSheet"> Новый полётный лист. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task Edit(FlightSheetBase flightSheet, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Удалить полётный лист.
+    /// </summary>
+    /// <param name="flightSheetId"> Идентификатор полётного листа. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task Remove(Guid flightSheetId, Guid userId, CancellationToken cancellationToken);
 }

@@ -11,7 +11,7 @@ CREATE TABLE monitoring_center.cpu
     information_cache_l2 integer NOT NULL,
     information_cache_l3 integer NOT NULL,
     information_cache_l4 integer,
-    pci_bus integer NOT NULL,
+    pci_bus text NOT NULL,
     pci_id integer NOT NULL,
     restrictions_clock_default integer NOT NULL,
     restrictions_clock_is_writable boolean NOT NULL,

@@ -105,7 +105,7 @@ public class SaveInventoryTests : BaseTest
                             new Contracts.Cpu.Cpu()
                             {
                                 Id = Guid.NewGuid(),
-                                Pci = new() { Id = 1, Bus = 2 },
+                                Pci = new() { Id = 1, Bus = "00:1f.4" },
                                 Information = new CpuInformation()
                                 {
                                     Manufacturer = "Amd",
@@ -143,7 +143,7 @@ public class SaveInventoryTests : BaseTest
                             new Contracts.Gpu.Gpu()
                             {
                                 Id = Guid.NewGuid(),
-                                Pci = new Pci() { Id = 1, Bus = 2 },
+                                Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
                                 Information = new GpuInformation()
                                 {
                                     Manufacturer = "Amd",
@@ -231,8 +231,8 @@ public class SaveInventoryTests : BaseTest
                             },
                             Pcies = new()
                             {
-                                new MotherboardPci() { Id = 1, Bus = 1, IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = 2, IsInstalled = false }
+                                new MotherboardPci() { Id = 1, Bus = "00:1f.4", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "00:1f.5", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()

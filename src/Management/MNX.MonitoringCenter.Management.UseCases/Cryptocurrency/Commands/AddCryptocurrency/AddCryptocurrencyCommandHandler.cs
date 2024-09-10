@@ -40,8 +40,7 @@ public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrency
             return Result<CryptocurrencyModel>.Invalid("Algorithm wasn't found");
         }
 
-        var cryptocurrency = _mapper.Map<Cryptocurrency>(request.Model);
-        cryptocurrency.UserId = request.UserId;
+        var cryptocurrency = _mapper.Map<Cryptocurrency>(request);
         await _cryptocurrencyRepository.Add(cryptocurrency);
 
         return Result<CryptocurrencyModel>.SuccessfullyCreated(_mapper.Map<CryptocurrencyModel>(cryptocurrency));

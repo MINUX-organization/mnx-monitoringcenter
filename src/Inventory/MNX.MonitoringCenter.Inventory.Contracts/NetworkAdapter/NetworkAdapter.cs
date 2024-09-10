@@ -26,10 +26,10 @@ public record NetworkAdapter
     public required NetworkAdapterInformation Information { get; init; }
 
     /// <summary>
-    /// Получить признак активности адаптера ( подключен к сети Интернет ).
+    /// Получить признак того, что адаптер подключен к сети Интернет.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/>, если активен, иначе <see langword="false"/>.
+    /// <see langword="true"/>, если подключен, иначе <see langword="false"/>.
     /// </returns>
-    public bool IsActive() => GlobalIP != null;
+    public bool IsOnline { get => GlobalIP != null; }
 }

@@ -8,7 +8,7 @@ public class Wallet : IEquatable<Wallet>
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Имя
@@ -33,7 +33,7 @@ public class Wallet : IEquatable<Wallet>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; set; }
+    public Guid UserId { get; init; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

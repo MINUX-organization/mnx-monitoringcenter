@@ -1,0 +1,45 @@
+﻿using AutoMapper;
+using MediatR;
+using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+using MNX.MonitoringCenter.Management.Core.FlightSheet;
+
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.CreateFlightSheet;
+
+/// <summary>
+/// Обработчик команды добавления полётного листа.
+/// </summary>
+public class CreateFlightSheetCommandHandler :
+    IRequestHandler<CreateFlightSheetCommand, Result<FlightSheetModelBase>>
+{
+    private readonly IMapper _mapper;
+
+    private readonly IFlightSheetRepository _flightSheetRepository;
+
+    public CreateFlightSheetCommandHandler(IMapper mapper,
+                                        IFlightSheetRepository flightSheetRepository)
+    {
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+
+        _flightSheetRepository = flightSheetRepository
+            ?? throw new ArgumentNullException(nameof(flightSheetRepository));
+    }
+
+    public async Task<Result<FlightSheetModelBase>> Handle(CreateFlightSheetCommand request,
+                                                           CancellationToken cancellationToken)
+    {
+        var flightSheet = _mapper.Map<FlightSheetBase>(request.Model);
+        flightSheet.UserId = request.UserId;
+
+        if (await _flightSheetRepository.Exists(flightSheet.Name, request.UserId, cancellationToken))
+        {
+            return Result<FlightSheetModelBase>
+                .Invalid($"Flight sheet with name {flightSheet.Name} already exist!");
+        }
+
+        await _flightSheetRepository.Add(flightSheet, cancellationToken);
+
+        return Result<FlightSheetModelBase>
+            .SuccessfullyCreated(_mapper.Map<FlightSheetModelBase>(flightSheet));
+    }
+}

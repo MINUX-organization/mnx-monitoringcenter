@@ -8,7 +8,7 @@ public class Preset : IEquatable<Preset>
     /// <summary>
     /// Уникальный идентификатор
     /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Название пресета
@@ -21,7 +21,7 @@ public class Preset : IEquatable<Preset>
     public required string GpuName { get; set; }
 
     /// <summary>
-    /// 
+    /// Идентификатор разгона.
     /// </summary>
     public Guid OverclockingId { get; set; }
 
@@ -33,7 +33,7 @@ public class Preset : IEquatable<Preset>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; set; }
+    public Guid UserId { get; init; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

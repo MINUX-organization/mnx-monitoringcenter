@@ -48,8 +48,7 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
             return Result<WalletModel>.Invalid("Cryptocurrency wasn't found");
         }
 
-        var wallet = _mapper.Map<Wallet>(request.Model);
-        wallet.UserId = request.UserId;
+        var wallet = _mapper.Map<Wallet>(request);
         await _walletRepository.Add(wallet);
         wallet.Cryptocurrency = cryptocurrency;
 

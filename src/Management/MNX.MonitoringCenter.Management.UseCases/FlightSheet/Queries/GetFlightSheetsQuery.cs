@@ -1,41 +1,38 @@
-﻿using MediatR;
-using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
+﻿using AutoMapper;
+using MediatR;
+using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
 
 /// <summary>
 /// Запрос на получение полётных листов.
 /// </summary>
-public class GetFlightSheetsQuery : IStreamRequest<Core.FlightSheet>
-{
-    /// <summary>
-    /// Идентификатор пользователя.
-    /// </summary>
-    public Guid UserId { get; set; }
-
-    public GetFlightSheetsQuery(Guid userId)
-    {
-        UserId = userId;
-    }
-}
+/// <param name="UserId"> Идентификатор пользователя. </param>
+public sealed record GetFlightSheetsQuery(Guid UserId) : IStreamRequest<FlightSheetModelBase>;
 
 /// <summary>
-/// Обработчик запроса на получения полётных листов.
+/// Обработчик <see cref="GetFlightSheetsQuery"/>.
 /// </summary>
-public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheetsQuery, Core.FlightSheet>
+public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheetsQuery, FlightSheetModelBase>
 {
+    private readonly IMapper _mapper;
+
     private readonly IFlightSheetRepository _repository;
 
-    public GetFlightSheetsQueryHandler(IFlightSheetRepository repository)
+    public GetFlightSheetsQueryHandler(IMapper mapper, IFlightSheetRepository repository)
     {
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public IAsyncEnumerable<Core.FlightSheet> Handle(GetFlightSheetsQuery request, CancellationToken cancellationToken)
+    public async IAsyncEnumerable<FlightSheetModelBase> Handle(GetFlightSheetsQuery request,
+                                                               [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        return _repository.GetAllAvailable(request.UserId);
+        await foreach (var flightSheet in _repository.GetAllAvailable(request.UserId))
+        {
+            yield return _mapper.Map<FlightSheetModelBase>(flightSheet);
+        }
     }
 }
 

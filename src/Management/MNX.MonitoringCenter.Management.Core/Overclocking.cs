@@ -8,7 +8,7 @@ public class Overclocking : IEquatable<Overclocking>
     /// <summary>
     /// Идентификатор
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Фиксированная частота ядра
