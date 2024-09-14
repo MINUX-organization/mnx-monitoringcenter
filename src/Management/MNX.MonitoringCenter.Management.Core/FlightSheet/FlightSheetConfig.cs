@@ -21,6 +21,11 @@ public class FlightSheetConfig : IEquatable<FlightSheetConfig>
     public Pool? Pool { get; set; }
 
     /// <summary>
+    /// Пароль подключения к пулу.
+    /// </summary>
+    public string? PoolPassword { get; set; }
+
+    /// <summary>
     /// Идентификатор кошелька.
     /// </summary>
     public Guid WalletId { get; set; }
@@ -54,12 +59,14 @@ public class FlightSheetConfig : IEquatable<FlightSheetConfig>
             return true;
         }
 
-        return PoolId == other.PoolId && WalletId == other.WalletId;
+        return PoolId == other.PoolId &&
+               PoolPassword == other.PoolPassword &&
+               WalletId == other.WalletId;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Pool, Wallet);
+        return HashCode.Combine(Pool, Wallet, PoolPassword);
     }
 }

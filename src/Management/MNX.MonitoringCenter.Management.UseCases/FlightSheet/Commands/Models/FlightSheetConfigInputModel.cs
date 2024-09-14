@@ -11,6 +11,11 @@ public class FlightSheetConfigInputModel
     public Guid PoolId { get; set; }
 
     /// <summary>
+    /// Пароль подключения к пулу.
+    /// </summary>
+    public string? PoolPassword { get; set; }
+
+    /// <summary>
     /// Идентификатор кошелька.
     /// </summary>
     public Guid WalletId { get; set; }

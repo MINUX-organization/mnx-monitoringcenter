@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MNX.MonitoringCenter.Management.Core.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Pool;
@@ -12,23 +13,27 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.FlightS
 internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputModel>
 {
     internal FlightSheetModelValidator(Guid userId,
+                                       FlightSheetType type,
+                                       IMinerRepository minerRepository,
                                        IWalletRepository walletRepository,
-                                       IPoolRepository poolRepository,
-                                       IMinerRepository minerRepository)
+                                       IPoolRepository poolRepository)
     {
         RuleFor(model => model.Name)
             .Must(name =>! string.IsNullOrWhiteSpace(name))
             .WithMessage("Name is required!");
 
-        RuleFor(model => model.Miner)
-            .Must(miner => ! string.IsNullOrWhiteSpace(miner))
-            .WithMessage("Miner wasn`t found!")
+        RuleFor(model => model.MinerId)
+            .NotEmpty()
+            .WithMessage("Miner is required!")
             .MustAsync(async (model, miner, cancellationToken) => await minerRepository.Exists(miner, cancellationToken))
-            .WithMessage(model => $"Miner with name {model.Miner} wasn`t found!");
+            .WithMessage(model => $"Miner with id {model.MinerId} wasn`t found!");
 
         RuleFor(model => model.Configs)
             .NotEmpty()
-            .WithMessage("Configs is required!");
+            .WithMessage("Configs is required!")
+            .Must(configs => (type == FlightSheetType.GPU && configs.Count <= 3) ||
+                             (type == FlightSheetType.CPU && configs.Count <= 1))
+            .WithMessage("The number of configs for a flight sheet should not exceed 3 for a GPU and not exceed 1 for a CPU!");
 
         RuleForEach(model => model.Configs)
             .NotEmpty()
@@ -59,7 +64,12 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
                     var wallet = await walletRepository.GetAvailableById(ids.WalletId, userId);
                     var pool = await poolRepository.GetAvailableById(config.PoolId, userId);
 
-                    return wallet!.CryptocurrencyId == pool!.CryptocurrencyId;
+                    if (wallet is not null && pool is not null)
+                    {
+                        return wallet!.CryptocurrencyId == pool!.CryptocurrencyId;
+                    }
+
+                    return false;
                 })
                 .WithMessage("Pool don`t correlates with wallet by cryptocurrency!");
 

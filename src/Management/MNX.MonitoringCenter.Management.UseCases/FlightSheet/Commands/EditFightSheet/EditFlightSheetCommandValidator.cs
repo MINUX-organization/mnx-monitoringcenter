@@ -11,16 +11,17 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.EditFig
 /// </summary>
 public class EditFlightSheetCommandValidator : AbstractValidator<EditFlightSheetCommand>
 {
-    public EditFlightSheetCommandValidator(IWalletRepository walletRepository,
-                                           IPoolRepository poolRepository,
-                                           IMinerRepository minerRepository)
+    public EditFlightSheetCommandValidator(IMinerRepository minerRepository,
+                                           IWalletRepository walletRepository,
+                                           IPoolRepository poolRepository)
     {
         RuleFor(x => x.Model)
             .NotNull()
             .WithMessage("Flight sheet data is required!")
             .SetValidator(x => new FlightSheetModelValidator(x.UserId,
+                                                             x.Model.Type,
+                                                             minerRepository,
                                                              walletRepository,
-                                                             poolRepository,
-                                                             minerRepository));
+                                                             poolRepository));
     }
 }

@@ -16,16 +16,16 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<string> GetNamesOfAvailableAlgorithms()
+    public IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms()
     {
-        return _context.Algorithms.AsNoTracking()
-                                  .Select(x => x.Name)
-                                  .AsAsyncEnumerable();
+        return _context.Algorithms.AsNoTracking().AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(string name)
+    public Task<Core.Algorithm?> GetById(Guid id, CancellationToken cancellationToken = default)
     {
-        return _context.Algorithms.AnyAsync(x => x.Name.Equals(name));
+        return _context.Algorithms
+                       .AsNoTracking()
+                       .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 }

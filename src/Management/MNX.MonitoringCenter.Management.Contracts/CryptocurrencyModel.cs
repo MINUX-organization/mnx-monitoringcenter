@@ -19,9 +19,14 @@ public class CryptocurrencyModel
     /// Полное название
     /// </summary>
     public required string FullName { get; set; }
+    
+    /// <summary>
+    /// Идентификатор алгоритма.
+    /// </summary>
+    public Guid AlgorithmId { get; set; }
 
     /// <summary>
-    /// Алгоритм
+    /// Название алгоритма.
     /// </summary>
-    public required string Algorithm { get; set; }
+    public required string AlgorithmName { get; set; }
 }

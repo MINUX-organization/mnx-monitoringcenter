@@ -35,13 +35,16 @@ public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrency
             return Result<CryptocurrencyModel>.Conflict("Cryptocurrency already exists");
         }
 
-        if (!await _algorithmRepository.Exists(request.Model.Algorithm))
+        var algorithm = await _algorithmRepository.GetById(request.Model.AlgorithmId, cancellationToken);
+
+        if (algorithm is null)
         {
             return Result<CryptocurrencyModel>.Invalid("Algorithm wasn't found");
         }
 
         var cryptocurrency = _mapper.Map<Cryptocurrency>(request);
         await _cryptocurrencyRepository.Add(cryptocurrency);
+        cryptocurrency.Algorithm = algorithm;
 
         return Result<CryptocurrencyModel>.SuccessfullyCreated(_mapper.Map<CryptocurrencyModel>(cryptocurrency));
     }

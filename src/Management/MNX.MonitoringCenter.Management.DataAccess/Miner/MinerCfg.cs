@@ -10,6 +10,6 @@ internal class MinerCfg : IEntityTypeConfiguration<Core.Miner>
 {
     public void Configure(EntityTypeBuilder<Core.Miner> builder)
     {
-        builder.HasKey(x => x.Name);
+        builder.HasIndex(x => x.Name).IsUnique();
     }
 }

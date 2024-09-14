@@ -38,7 +38,12 @@ public abstract class FlightSheetBase : IEquatable<FlightSheetBase>
     /// <summary>
     /// Название майнера.
     /// </summary>
-    public string Miner { get; set; } = string.Empty;
+    public Guid MinerId { get; set; }
+
+    /// <summary>
+    /// Майнер.
+    /// </summary>
+    public Miner? Miner { get; set; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)
@@ -64,7 +69,7 @@ public abstract class FlightSheetBase : IEquatable<FlightSheetBase>
             return true;
         }
 
-        return Type == other.Type && Miner == other.Miner &&
+        return Type == other.Type && MinerId == other.MinerId &&
                AdditionalArguments == other.AdditionalArguments &&
                Configs.SequenceEqual(other.Configs);
     }
@@ -79,6 +84,6 @@ public abstract class FlightSheetBase : IEquatable<FlightSheetBase>
             hashCode += config.GetHashCode();
         }
 
-        return HashCode.Combine(hashCode, Type, AdditionalArguments, Miner);
+        return HashCode.Combine(hashCode, Type, AdditionalArguments, MinerId);
     }
 }

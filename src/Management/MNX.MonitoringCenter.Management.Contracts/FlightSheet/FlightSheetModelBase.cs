@@ -34,7 +34,12 @@ public abstract class FlightSheetModelBase
     public string? AdditionalArguments { get; set; }
 
     /// <summary>
+    /// Идентификатор майнера.
+    /// </summary>
+    public Guid MinerId { get; set; }
+
+    /// <summary>
     /// Название майнера.
     /// </summary>
-    public required string Miner { get; set; }
+    public required string MinerName { get; set; }
 }

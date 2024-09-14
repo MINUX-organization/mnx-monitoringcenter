@@ -2,6 +2,7 @@ CREATE TABLE monitoring_center.flight_sheet_configs
 (
     id uuid NOT NULL,
     pool_id uuid NOT NULL,
+    pool_password text,
     wallet_id uuid NOT NULL,
     flight_sheet_base_id uuid,
 
@@ -34,3 +35,5 @@ CREATE INDEX ix_flight_sheet_configs_pool_id
 CREATE INDEX ix_flight_sheet_configs_wallet_id
     ON monitoring_center.flight_sheet_configs USING btree
     (wallet_id ASC NULLS LAST);
+
+COMMENT ON TABLE monitoring_center.flight_sheet_configs IS 'Конфиги для полётных листов';

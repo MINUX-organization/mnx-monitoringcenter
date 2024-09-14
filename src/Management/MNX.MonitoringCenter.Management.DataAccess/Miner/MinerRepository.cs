@@ -24,8 +24,10 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(string name, CancellationToken cancellationToken = default)
+    public Task<bool> Exists(Guid id, CancellationToken cancellationToken = default)
     {
-        return _context.Miners.AsNoTracking().AnyAsync(x => x.Name == name, cancellationToken);
+        return _context.Miners
+                       .AsNoTracking()
+                       .AnyAsync(x => x.Id == id, cancellationToken);
     }
 }

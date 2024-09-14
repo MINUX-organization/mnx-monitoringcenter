@@ -21,9 +21,14 @@ public class Cryptocurrency : IEquatable<Cryptocurrency>
     public required string FullName { get; set; }
 
     /// <summary>
+    /// Идентификатор алгоритма.
+    /// </summary>
+    public Guid AlgorithmId { get; set; }
+
+    /// <summary>
     /// Алгоритм.
     /// </summary>
-    public required string Algorithm { get; set; }
+    public Algorithm? Algorithm { get; set; }
 
     /// <summary>
     /// Идентификатор пользователя.
@@ -56,12 +61,12 @@ public class Cryptocurrency : IEquatable<Cryptocurrency>
 
         return ShortName == other.ShortName &&
                FullName == other.FullName &&
-               Algorithm == other.Algorithm;
+               AlgorithmId == other.AlgorithmId;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(ShortName, FullName, Algorithm);
+        return HashCode.Combine(ShortName, FullName, AlgorithmId);
     }
 }

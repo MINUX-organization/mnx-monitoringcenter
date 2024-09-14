@@ -13,12 +13,10 @@ public interface IMinerRepository
     IAsyncEnumerable<Core.Miner> GetAvailableMiners();
 
     /// <summary>
-    /// Получить признак существования майнера.
+    /// Получить майнер по идентификатору.
     /// </summary>
-    /// <param name="name"> Название майнера. </param>
+    /// <param name="id"> Идентификатор. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns>
-    /// <see langword="true"/>, если майнер существует, иначе <see langword="false"/>.
-    /// </returns>
-    Task<bool> Exists(string name, CancellationToken cancellationToken = default);
+    /// <returns> Признак существования майнера. </returns>
+    Task<bool> Exists(Guid id, CancellationToken cancellationToken = default);
 }

@@ -6,17 +6,16 @@
 public interface IAlgorithmRepository
 {
     /// <summary>
-    /// Получить названия доступных алгоритмов.
+    /// Получить доступные алгоритмы.
     /// </summary>
-    /// <returns> Список названий алгоритмов. </returns>
-    IAsyncEnumerable<string> GetNamesOfAvailableAlgorithms();
+    /// <returns> Список алгоритмов. </returns>
+    IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms();
 
     /// <summary>
-    /// Получить список существования алгоритма.
+    /// Получить алгоритм по идентификатору.
     /// </summary>
-    /// <param name="name"> Название алгоритма. </param>
-    /// <returns>
-    /// <see langword="true"/>, если алгоритм существует, иначе <see langword="false"/>.
-    /// </returns>
-    Task<bool> Exists(string name);
+    /// <param name="id"> Идентификатор. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Алгоритм. </returns>
+    Task<Core.Algorithm?> GetById(Guid id, CancellationToken cancellationToken = default);
 }

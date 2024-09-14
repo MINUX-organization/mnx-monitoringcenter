@@ -29,8 +29,8 @@ public class AlgorithmController : ControllerBase
     /// <returns> Список доступных алгоритмов </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("available")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<string>), 200)]
-    public IAsyncEnumerable<string> GetAvailable()
+    [ProducesResponseType(typeof(IAsyncEnumerable<Core.Algorithm>), 200)]
+    public IAsyncEnumerable<Core.Algorithm> GetAvailable()
     {
         return _mediator.CreateStream(new GetAvailableAlgorithmsQuery());
     }

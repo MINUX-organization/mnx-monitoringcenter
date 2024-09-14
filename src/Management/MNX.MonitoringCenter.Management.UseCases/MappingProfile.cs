@@ -8,7 +8,6 @@ using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.Converters;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.CreateFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
@@ -29,15 +28,18 @@ public class MappingProfile : Profile
         CreateMap<AddCryptocurrencyCommand, Core.Cryptocurrency>()
             .ForMember(destination => destination.ShortName, options => options.MapFrom(source => source.Model.ShortName))
             .ForMember(destination => destination.FullName, options => options.MapFrom(source => source.Model.FullName))
-            .ForMember(destination => destination.Algorithm, options => options.MapFrom(source => source.Model.Algorithm));
+            .ForMember(destination => destination.AlgorithmId, options => options.MapFrom(source => source.Model.AlgorithmId));
 
-        CreateMap<Core.Cryptocurrency, CryptocurrencyModel>();
+        CreateMap<Core.Cryptocurrency, CryptocurrencyModel>()
+            .ForMember(destination => destination.AlgorithmName, options => options.MapFrom(source => source.Algorithm!.Name));
 
         // flight sheets
 
         CreateMap<FlightSheetBase, FlightSheetModelBase>().ConvertUsing(new FlightSheetConverter());
-        CreateMap<CpuFlightSheet, CpuFlightSheetModel>();
-        CreateMap<GpuFlightSheet, GpuFlightSheetModel>();
+        CreateMap<CpuFlightSheet, CpuFlightSheetModel>()
+            .ForMember(destination => destination.MinerName, options => options.MapFrom(source => source.Miner!.Name));
+        CreateMap<GpuFlightSheet, GpuFlightSheetModel>()
+            .ForMember(destination => destination.MinerName, options => options.MapFrom(source => source.Miner!.Name));
 
         CreateMap<FlightSheetInputModel, FlightSheetBase>().ConvertUsing(new FlightSheetInputModelConverter());
         CreateMap<CpuFlightSheetInputModel, CpuFlightSheet>();
@@ -59,7 +61,6 @@ public class MappingProfile : Profile
         CreateMap<EditPoolCommand, Core.Pool>()
             .ForMember(destination => destination.Domain, options => options.MapFrom(source => source.Model.Domain))
             .ForMember(destination => destination.Port, options => options.MapFrom(source => source.Model.Port))
-            .ForMember(destination => destination.Password, options => options.MapFrom(source => source.Model.Password))
             .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId));
 
         // presets

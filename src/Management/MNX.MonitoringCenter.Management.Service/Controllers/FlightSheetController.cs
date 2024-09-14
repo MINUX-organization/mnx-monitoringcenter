@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
@@ -16,6 +17,7 @@ namespace MNX.MonitoringCenter.Management.Service.Controllers.Configurations;
 /// </summary>
 [Route("api/flight_sheets")]
 [ApiController]
+[Authorize]
 public class FlightSheetController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -42,6 +44,23 @@ public class FlightSheetController : ControllerBase
     }
 
     /// <summary>
+    /// Получить полётный лист по идентификатору.
+    /// </summary>
+    /// <param name="id"> Идентификатор. </param>
+    /// <returns> Полётный лист. </returns>
+    /// <response code="200"> Успешно. </response>
+    /// <response code="400"> Полётный лист не найден. </response>
+    [HttpGet("{id:Guid}")]
+    [ProducesResponseType(typeof(FlightSheetModelBase), 200)]
+    [ProducesResponseType(typeof(IEnumerable<string>), 400)]
+    public async Task<IActionResult> GetById(Guid id)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new GetFlightSheetByIdQuery(id, userId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
     /// Создать полётный лист.
     /// </summary>
     /// <param name="model"> Модель полётного листа. </param>
@@ -49,7 +68,7 @@ public class FlightSheetController : ControllerBase
     /// <response code="201"> Успешно. </response>
     /// <response code="400"> Введены некорректные данные. </response>
     [HttpPost]
-    [ProducesResponseType(typeof(IEnumerable<FlightSheetModelBase>), 201)]
+    [ProducesResponseType(typeof(IEnumerable<Guid>), 201)]
     [ProducesResponseType(typeof(IEnumerable<string>), 400)]
     public async Task<IActionResult> Create(FlightSheetInputModel model)
     {

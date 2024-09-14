@@ -3,7 +3,6 @@ CREATE TABLE monitoring_center.pools
     id uuid NOT NULL,
     domain text NOT NULL,
     port integer NOT NULL,
-    password text DEFAULT NULL,
     cryptocurrency_id uuid NOT NULL,
     user_id uuid NOT NULL,
 

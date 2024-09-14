@@ -25,6 +25,7 @@ public interface IFlightSheetRepository
     /// Получить признак существования полётного листа с переданным названием.
     /// </summary>
     /// <param name="name"> Название. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
@@ -48,8 +49,7 @@ public interface IFlightSheetRepository
     /// <summary>
     /// Удалить полётный лист.
     /// </summary>
-    /// <param name="flightSheetId"> Идентификатор полётного листа. </param>
-    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="flightSheet"> Полётного лист. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Remove(Guid flightSheetId, Guid userId, CancellationToken cancellationToken);
+    Task Remove(FlightSheetBase flightSheet, CancellationToken cancellationToken);
 }

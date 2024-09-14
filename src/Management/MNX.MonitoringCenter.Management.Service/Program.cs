@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using MNX.Application.Consul;
 using MNX.Application.Data.DI;
 using MNX.Application.UseCases.DI;
@@ -15,7 +16,6 @@ using MNX.MonitoringCenter.Management.UseCases.Algorithm;
 using MNX.MonitoringCenter.Management.UseCases.Algorithm.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Presets;
@@ -24,6 +24,7 @@ using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace MNX.MonitoringCenter.Management;
 
@@ -65,7 +66,44 @@ public class Program
 
         var basePath = AppContext.BaseDirectory;
         var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        services.AddSwagger(Path.Combine(basePath, xmlFile));
+        services.AddSwaggerGen(opts =>
+        {
+            opts.IncludeXmlComments(Path.Combine(basePath, xmlFile), includeControllerXmlComments: true);
+
+            opts.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "Enter access token",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+            opts.AddSecurityRequirement(new OpenApiSecurityRequirement {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Id = "Bearer",
+                        Type = ReferenceType.SecurityScheme
+                    }
+                },
+                Array.Empty<string>()
+            } });
+
+            opts.EnableAnnotations();
+            opts.UseAllOfToExtendReferenceSchemas();
+            opts.UseAllOfForInheritance();
+            opts.UseOneOfForPolymorphism();
+            opts.UseInlineDefinitionsForEnums();
+
+            opts.SelectDiscriminatorNameUsing(_ => "$type");
+            opts.SelectDiscriminatorValueUsing(subType => subType.BaseType!
+                    .GetCustomAttributes<JsonDerivedTypeAttribute>()
+                    .FirstOrDefault(x => x.DerivedType == subType)?
+                    .TypeDiscriminator!.ToString());
+        });
 
         services.AddCors(options =>
         {

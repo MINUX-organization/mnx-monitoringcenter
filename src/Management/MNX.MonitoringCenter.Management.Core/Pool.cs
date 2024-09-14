@@ -21,11 +21,6 @@ public class Pool : IEquatable<Pool>
     public int Port { get; set; }
 
     /// <summary>
-    /// Пароль
-    /// </summary>
-    public string? Password { get; set; }
-
-    /// <summary>
     /// Идентификатор криптовалюты
     /// </summary>
     public Guid CryptocurrencyId { get; set; }
@@ -64,12 +59,12 @@ public class Pool : IEquatable<Pool>
             return true;
         }
 
-        return Domain == other.Domain && Port == other.Port && Password == other.Password;
+        return Domain == other.Domain && Port == other.Port;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Domain, Port, Password);
+        return HashCode.Combine(Domain, Port);
     }
 }

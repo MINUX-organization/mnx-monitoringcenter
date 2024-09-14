@@ -2,6 +2,7 @@
 using MediatR;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Core.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.Miner;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.EditFightSheet;
 
@@ -15,7 +16,9 @@ public class EditFlightSheetCommandHandler :
 
     private readonly IFlightSheetRepository _flightSheetRepository;
 
-    public EditFlightSheetCommandHandler(IMapper mapper, IFlightSheetRepository flightSheetRepository)
+    public EditFlightSheetCommandHandler(IMapper mapper,
+                                         IMinerRepository minerRepository,
+                                         IFlightSheetRepository flightSheetRepository)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
 
@@ -30,6 +33,11 @@ public class EditFlightSheetCommandHandler :
         if (flightSheet is null)
         {
             return Result<Unit>.Invalid($"Flight sheet with id is equaled {request.Id} was not found!");
+        }
+
+        if (flightSheet.Type != request.Model.Type)
+        {
+            return Result<Unit>.Invalid("You cannot change flight sheet type!");
         }
 
         var newFlightSheet = _mapper.Map<FlightSheetBase>(request.Model);

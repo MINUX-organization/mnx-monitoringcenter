@@ -11,6 +11,11 @@ public class FlightSheetConfigModel
     public PoolModel Pool { get; set; }
 
     /// <summary>
+    /// Пароль подключения к пулу.
+    /// </summary>
+    public string? PoolPassword { get; set; }
+
+    /// <summary>
     /// Модель кошелька.
     /// </summary>
     public WalletModel Wallet { get; set; }

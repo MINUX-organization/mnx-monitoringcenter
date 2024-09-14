@@ -18,12 +18,12 @@ public class CryptocurrencyInputModel
     /// <summary>
     /// Алгоритм
     /// </summary>
-    public string Algorithm { get; }
+    public Guid AlgorithmId { get; }
 
-    public CryptocurrencyInputModel(string shortName, string fullName, string algorithm)
+    public CryptocurrencyInputModel(string shortName, string fullName, Guid algorithmId)
     {
         ShortName = shortName;
         FullName = fullName;
-        Algorithm = algorithm;
+        AlgorithmId = algorithmId;
     }
 }

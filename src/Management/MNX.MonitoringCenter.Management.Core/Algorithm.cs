@@ -6,6 +6,11 @@
 public class Algorithm : IEquatable<Algorithm>
 {
     /// <summary>
+    /// Идентификатор.
+    /// </summary>
+    public Guid Id { get; init; } = Guid.NewGuid();
+
+    /// <summary>
     /// Название.
     /// </summary>
     public required string Name { get; set; }

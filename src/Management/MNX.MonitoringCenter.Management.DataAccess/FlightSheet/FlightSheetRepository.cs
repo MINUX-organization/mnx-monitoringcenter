@@ -45,9 +45,7 @@ public class FlightSheetRepository : IFlightSheetRepository
     /// <inheritdoc/>
     public async Task Edit(FlightSheetBase flightSheet, CancellationToken cancellationToken)
     {
-        var oldFlightSheet = await _context.FlightSheets.AsNoTrackingWithIdentityResolution()
-                                                        .Include(x => x.Configs)
-                                                        .FirstAsync(x => x.Id == flightSheet.Id, cancellationToken);
+        var oldFlightSheet = await GetFlightSheets(flightSheet.UserId).FirstAsync(x => x.Id == flightSheet.Id, cancellationToken);
 
         _context.FlightSheetConfigs.RemoveRange(oldFlightSheet.Configs);
 
@@ -56,15 +54,11 @@ public class FlightSheetRepository : IFlightSheetRepository
     }
 
     /// <inheritdoc/>
-    public async Task Remove(Guid flightSheetId, Guid userId, CancellationToken cancellationToken)
+    public Task Remove(FlightSheetBase flightSheet, CancellationToken cancellationToken)
     {
-        var flightSheet = await _context.FlightSheets.FindAsync(new object?[] { flightSheetId }, cancellationToken);
-
-        if (flightSheet != null)
-        {
-            _context.FlightSheets.Remove(flightSheet);
-            await _context.SaveChangesAsync(cancellationToken);
-        }
+        _context.FlightSheetConfigs.RemoveRange(flightSheet.Configs);
+        _context.FlightSheets.Remove(flightSheet);
+        return _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <summary>
@@ -76,6 +70,7 @@ public class FlightSheetRepository : IFlightSheetRepository
     {
         return _context.FlightSheets.AsNoTrackingWithIdentityResolution()
                                     .Where(x => x.UserId == userId)
+                                    .Include(x => x.Miner)
                                     .Include(x => x.Configs)
                                         .ThenInclude(config => config.Pool)
                                             .ThenInclude(pool => pool!.Cryptocurrency)

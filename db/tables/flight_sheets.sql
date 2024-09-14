@@ -5,22 +5,24 @@ CREATE TABLE monitoring_center.flight_sheets
     type integer NOT NULL,
     name text NOT NULL,
     additional_arguments text,
-    miner text NOT NULL,
+    miner_id uuid NOT NULL,
     huge_page integer,
     config_file text,
 
     CONSTRAINT pk_flight_sheets PRIMARY KEY (id),
 
-    CONSTRAINT fk_flight_sheets_miners_miner FOREIGN KEY (miner)
-        REFERENCES monitoring_center.miners (name) MATCH SIMPLE
+    CONSTRAINT fk_flight_sheets_miners_miner_id FOREIGN KEY (miner_id)
+        REFERENCES monitoring_center.miners (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE
 );
 
-CREATE INDEX ix_flight_sheets_miner
+CREATE INDEX ix_flight_sheets_miner_id
     ON monitoring_center.flight_sheets USING btree
-    (miner ASC NULLS LAST);
+    (miner_id ASC NULLS LAST);
 
 CREATE INDEX ix_flight_sheets_user_id
-    ON public.flight_sheets USING btree
+    ON monitoring_center.flight_sheets USING btree
     (user_id ASC NULLS LAST);
+
+COMMENT ON TABLE monitoring_center.flight_sheets IS 'Полётные листы';

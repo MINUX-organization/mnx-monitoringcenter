@@ -19,7 +19,13 @@ public class RemoveFlightSheetCommandHandler : IRequestHandler<RemoveFlightSheet
 
     public async Task<Result<Unit>> Handle(RemoveFlightSheetCommand request, CancellationToken cancellationToken)
     {
-        await _flightSheetRepository.Remove(request.Id, request.UserId, cancellationToken);
+        var flightSheet = await _flightSheetRepository.GetAvailableById(request.Id, request.UserId, cancellationToken);
+
+        if (flightSheet is not null)
+        {
+            await _flightSheetRepository.Remove(flightSheet, cancellationToken);
+        }
+        
         return Result<Unit>.Empty();
     }
 }

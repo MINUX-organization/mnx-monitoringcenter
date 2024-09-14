@@ -11,16 +11,17 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.CreateF
 /// </summary>
 public class CreateFlightSheetCommandValidator : AbstractValidator<CreateFlightSheetCommand>
 {
-    public CreateFlightSheetCommandValidator(IWalletRepository walletRepository,
-                                             IPoolRepository poolRepository,
-                                             IMinerRepository minerRepository)
+    public CreateFlightSheetCommandValidator(IMinerRepository minerRepository,
+                                             IWalletRepository walletRepository,
+                                             IPoolRepository poolRepository)
     {
         RuleFor(x => x.Model)
             .NotNull()
             .WithMessage("Flight sheet data is required!")
             .SetValidator(x => new FlightSheetModelValidator(x.UserId,
+                                                             x.Model.Type,
+                                                             minerRepository,
                                                              walletRepository,
-                                                             poolRepository,
-                                                             minerRepository));
+                                                             poolRepository));
     }
 }

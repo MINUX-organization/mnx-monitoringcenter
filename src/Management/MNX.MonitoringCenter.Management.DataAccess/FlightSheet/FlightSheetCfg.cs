@@ -16,9 +16,5 @@ internal class FlightSheetCfg : IEntityTypeConfiguration<FlightSheetBase>
         builder.HasDiscriminator(x => x.Type)
                .HasValue<CpuFlightSheet>(FlightSheetType.CPU)
                .HasValue<GpuFlightSheet>(FlightSheetType.GPU);
-
-        builder.HasOne<Core.Miner>()
-               .WithMany()
-               .HasForeignKey(x => x.Miner);
     }
 }

@@ -35,7 +35,7 @@ public abstract class FlightSheetInputModel
     public string? AdditionalArguments { get; set; }
 
     /// <summary>
-    /// Название майнера.
+    /// Идентификатор майнера.
     /// </summary>
-    public string Miner { get; set; } = string.Empty;
+    public Guid MinerId { get; set; }
 }

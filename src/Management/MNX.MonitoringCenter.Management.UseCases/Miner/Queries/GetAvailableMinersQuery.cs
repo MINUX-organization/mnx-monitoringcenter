@@ -1,17 +1,16 @@
 ﻿using MediatR;
-using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Miner.Queries;
 
 /// <summary>
 /// Запрос на получение списка доступных майнеров.
 /// </summary>
-public sealed record GetAvailableMinersQuery() : IStreamRequest<string>;
+public sealed record GetAvailableMinersQuery() : IStreamRequest<Core.Miner>;
 
 /// <summary>
 /// Обработчик запроса на получения списка доступных майнеров.
 /// </summary>
-public class GetAvailableMinersQueryHandler : IStreamRequestHandler<GetAvailableMinersQuery, string>
+public class GetAvailableMinersQueryHandler : IStreamRequestHandler<GetAvailableMinersQuery, Core.Miner>
 {
     private readonly IMinerRepository _repository;
 
@@ -20,12 +19,8 @@ public class GetAvailableMinersQueryHandler : IStreamRequestHandler<GetAvailable
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async IAsyncEnumerable<string> Handle(GetAvailableMinersQuery request,
-                                                [EnumeratorCancellation] CancellationToken cancellationToken)
+    public IAsyncEnumerable<Core.Miner> Handle(GetAvailableMinersQuery request, CancellationToken cancellationToken)
     {
-        await foreach (var miner in _repository.GetAvailableMiners())
-        {
-            yield return miner.Name;
-        }
+        return _repository.GetAvailableMiners();
     }
 }

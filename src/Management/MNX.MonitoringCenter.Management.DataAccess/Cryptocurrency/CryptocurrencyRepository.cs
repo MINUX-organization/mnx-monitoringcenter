@@ -20,17 +20,18 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<Cryptocurrency> GetAllAvailable(Guid userId)
     {
-        return _context.Cryptocurrencies
-                       .Where(x => x.UserId == userId)
-                       .AsNoTracking()
-                       .AsAsyncEnumerable();
+        return _context.Cryptocurrencies.AsNoTrackingWithIdentityResolution()
+                                        .Where(x => x.UserId == userId)
+                                        .Include(x => x.Algorithm)
+                                        .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
     public Task<Cryptocurrency?> GetAvailableById(Guid id, Guid userId)
     {
-        return _context.Cryptocurrencies.AsNoTracking()
+        return _context.Cryptocurrencies.AsNoTrackingWithIdentityResolution()
                                         .Where(x => x.UserId == userId)
+                                        .Include(x => x.Algorithm)
                                         .FirstOrDefaultAsync(x => x.Id == id);
     }
 
