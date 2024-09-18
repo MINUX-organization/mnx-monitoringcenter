@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.RemoveFlightSheet;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.RemoveFlightSheet;
 
 /// <summary>
 /// Команда удаления полётного листа.

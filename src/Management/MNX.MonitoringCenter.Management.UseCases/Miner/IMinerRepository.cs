@@ -1,5 +1,4 @@
-﻿
-namespace MNX.MonitoringCenter.Management.UseCases.Miner;
+﻿namespace MNX.MonitoringCenter.Management.UseCases.Miner;
 
 /// <summary>
 /// Репозиторий для доступа к майнерам

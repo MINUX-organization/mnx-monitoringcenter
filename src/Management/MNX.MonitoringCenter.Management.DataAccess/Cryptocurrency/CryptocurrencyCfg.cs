@@ -11,5 +11,7 @@ internal class CryptocurrencyCfg : IEntityTypeConfiguration<Core.Cryptocurrency>
     public void Configure(EntityTypeBuilder<Core.Cryptocurrency> builder)
     {
         builder.HasIndex(x => x.UserId);
+        builder.HasIndex(x => x.ShortName);
+        builder.HasIndex(x => x.FullName);
     }
 }

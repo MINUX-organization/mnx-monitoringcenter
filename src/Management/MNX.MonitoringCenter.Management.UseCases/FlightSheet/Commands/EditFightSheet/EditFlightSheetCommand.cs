@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.Models;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.EditFightSheet;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.EditFightSheet;
 
 /// <summary>
 /// Команды обновления полётного листа.

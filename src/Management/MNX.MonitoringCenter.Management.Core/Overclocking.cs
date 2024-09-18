@@ -56,11 +56,6 @@ public class Overclocking : IEquatable<Overclocking>
     public int PowerLimit { get; set; }
 
     /// <summary>
-    /// Критическая температура
-    /// </summary>
-    public int CriticalTemperature { get; set; }
-
-    /// <summary>
     /// Скорость вентилятора
     /// </summary>
     public int FanSpeed { get; set; }
@@ -98,7 +93,6 @@ public class Overclocking : IEquatable<Overclocking>
                MemoryVoltage == other.MemoryVoltage &&
                MemoryVoltageOffset == other.MemoryVoltageOffset &&
                PowerLimit == other.PowerLimit &&
-               CriticalTemperature == other.CriticalTemperature &&
                FanSpeed == other.FanSpeed;
     }
 
@@ -116,7 +110,6 @@ public class Overclocking : IEquatable<Overclocking>
         hash.Add(MemoryVoltage);
         hash.Add(MemoryVoltageOffset);
         hash.Add(PowerLimit);
-        hash.Add(CriticalTemperature);
         hash.Add(FanSpeed);
 
         return hash.ToHashCode();

@@ -1,12 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MNX.MonitoringCenter.Management.Core.FlightSheet;
+namespace MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 
 /// <summary>
-/// Тип полётного листа.
+/// Тип таргета полётного листа.
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum FlightSheetType
+public enum FlightSheetTargetType
 {
     /// <summary>
     /// Для процессора.

@@ -1,4 +1,6 @@
-﻿using MNX.MonitoringCenter.Management.Core.FlightSheet;
+﻿namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet;
+
+using FlightSheet = Core.FlightSheet.FlightSheet;
 
 /// <summary>
 /// Репозиторий для доступа к полётным листам.
@@ -10,7 +12,7 @@ public interface IFlightSheetRepository
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Асинхронный список полётных листов. </returns>
-    IAsyncEnumerable<FlightSheetBase> GetAllAvailable(Guid userId);
+    IAsyncEnumerable<FlightSheet> GetAllAvailable(Guid userId);
 
     /// <summary>
     /// Получить полётный лист по идентификатору.
@@ -19,7 +21,7 @@ public interface IFlightSheetRepository
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Полётный лист. </returns>
-    Task<FlightSheetBase?> GetAvailableById(Guid flightSheetId, Guid userId, CancellationToken cancellationToken);
+    Task<FlightSheet?> GetAvailableById(Guid flightSheetId, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существования полётного листа с переданным названием.
@@ -37,19 +39,19 @@ public interface IFlightSheetRepository
     /// </summary>
     /// <param name="flightSheet"> Полётный лист. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Add(FlightSheetBase flightSheet, CancellationToken cancellationToken);
+    Task Add(FlightSheet flightSheet, CancellationToken cancellationToken);
 
     /// <summary>
     /// Редактировать полётный лист.
     /// </summary>
     /// <param name="flightSheet"> Новый полётный лист. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Edit(FlightSheetBase flightSheet, CancellationToken cancellationToken);
+    Task Edit(FlightSheet flightSheet, CancellationToken cancellationToken);
 
     /// <summary>
     /// Удалить полётный лист.
     /// </summary>
     /// <param name="flightSheet"> Полётного лист. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Remove(FlightSheetBase flightSheet, CancellationToken cancellationToken);
+    Task Remove(FlightSheet flightSheet, CancellationToken cancellationToken);
 }

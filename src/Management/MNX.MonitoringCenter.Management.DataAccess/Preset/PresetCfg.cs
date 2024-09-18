@@ -11,5 +11,7 @@ internal class PresetCfg : IEntityTypeConfiguration<Core.Preset>
     public void Configure(EntityTypeBuilder<Core.Preset> builder)
     {
         builder.HasIndex(x => x.UserId);
+        builder.HasIndex(x => x.Name);
+        builder.HasIndex(x => x.GpuName);
     }
 }

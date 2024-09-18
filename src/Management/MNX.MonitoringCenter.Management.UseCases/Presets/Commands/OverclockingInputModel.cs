@@ -51,16 +51,20 @@ public class OverclockingInputModel
     public int PowerLimit { get; }
 
     /// <summary>
-    /// Критическая температура
-    /// </summary>
-    public int CriticalTemperature { get; }
-
-    /// <summary>
     /// Скорость вентилятора
     /// </summary>
     public int FanSpeed { get; }
 
-    public OverclockingInputModel(int coreClockLock, int coreClockOffset, int memoryClockLock, int memoryClockOffset, int coreVoltage, int coreVoltageOffset, int memoryVoltage, int memoryVoltageOffset, int powerLimit, int criticalTemperature, int fanSpeed)
+    public OverclockingInputModel(int coreClockLock,
+                                  int coreClockOffset,
+                                  int memoryClockLock,
+                                  int memoryClockOffset,
+                                  int coreVoltage,
+                                  int coreVoltageOffset,
+                                  int memoryVoltage,
+                                  int memoryVoltageOffset,
+                                  int powerLimit,
+                                  int fanSpeed)
     {
         CoreClockLock = coreClockLock;
         CoreClockOffset = coreClockOffset;
@@ -71,7 +75,6 @@ public class OverclockingInputModel
         MemoryVoltage = memoryVoltage;
         MemoryVoltageOffset = memoryVoltageOffset;
         PowerLimit = powerLimit;
-        CriticalTemperature = criticalTemperature;
         FanSpeed = fanSpeed;
     }
 }

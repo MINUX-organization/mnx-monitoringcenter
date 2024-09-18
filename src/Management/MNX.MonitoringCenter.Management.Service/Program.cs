@@ -16,6 +16,7 @@ using MNX.MonitoringCenter.Management.UseCases.Algorithm;
 using MNX.MonitoringCenter.Management.UseCases.Algorithm.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Presets;

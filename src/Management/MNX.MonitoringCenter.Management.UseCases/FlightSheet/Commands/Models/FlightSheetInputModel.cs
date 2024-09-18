@@ -1,41 +1,19 @@
-﻿using MNX.MonitoringCenter.Management.Core.FlightSheet;
-using Swashbuckle.AspNetCore.Annotations;
-using System.Text.Json.Serialization;
+﻿using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.Models;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 
 /// <summary>
-/// Базовая входная модель полётного листа.
+/// Входная модель полётного листа.
 /// </summary>
-[JsonDerivedType(typeof(CpuFlightSheetInputModel), typeDiscriminator: "CPU")]
-[JsonDerivedType(typeof(GpuFlightSheetInputModel), typeDiscriminator: "GPU")]
-
-[SwaggerSubType(typeof(CpuFlightSheetInputModel), DiscriminatorValue = "CPU")]
-[SwaggerSubType(typeof(GpuFlightSheetInputModel), DiscriminatorValue = "GPU")]
-public abstract class FlightSheetInputModel
+public class FlightSheetInputModel
 {
-    /// <summary>
-    /// Тип.
-    /// </summary>
-    public abstract FlightSheetType Type { get; }
-
     /// <summary>
     /// Название.
     /// </summary>
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
     /// <summary>
-    /// Список конфигов для майнинга.
+    /// Таргеты.
     /// </summary>
-    public List<FlightSheetConfigInputModel> Configs { get; set; } = new();
-
-    /// <summary>
-    /// Строка аргументов для майнера.
-    /// </summary>
-    public string? AdditionalArguments { get; set; }
-
-    /// <summary>
-    /// Идентификатор майнера.
-    /// </summary>
-    public Guid MinerId { get; set; }
+    public List<FlightSheetTargetInputModel> Targets { get; init; } = new(2);
 }

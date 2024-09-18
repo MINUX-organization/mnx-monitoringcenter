@@ -1,9 +1,9 @@
-﻿namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+﻿namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
 
 /// <summary>
-/// Полётный лист для процессора.
+/// Таргет полётного листа для процессора.
 /// </summary>
-public class CpuFlightSheetModel : FlightSheetModelBase
+public class CpuFlightSheetTargetModel : FlightSheetTargetModelBase
 {
     /// <summary>
     /// Страницы.

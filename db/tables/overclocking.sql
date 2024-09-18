@@ -10,7 +10,6 @@ CREATE TABLE monitoring_center.overclocking
     memory_voltage integer NOT NULL,
     memory_voltage_offset integer NOT NULL,
     power_limit integer NOT NULL,
-    critical_temperature integer NOT NULL,
     fan_speed integer NOT NULL,
 
     CONSTRAINT pk_overclocking PRIMARY KEY (id)

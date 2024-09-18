@@ -1,14 +1,14 @@
-﻿namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+﻿namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
 
 /// <summary>
-/// Модель конфига для полётного листа.
+/// Модель конфига таргета полётного листа.
 /// </summary>
-public class FlightSheetConfigModel
+public class FlightSheetTargetConfigModel
 {
     /// <summary>
     /// Модель пула.
     /// </summary>
-    public PoolModel Pool { get; set; }
+    public required PoolModel Pool { get; set; }
 
     /// <summary>
     /// Пароль подключения к пулу.
@@ -18,5 +18,5 @@ public class FlightSheetConfigModel
     /// <summary>
     /// Модель кошелька.
     /// </summary>
-    public WalletModel Wallet { get; set; }
+    public required WalletModel Wallet { get; set; }
 }

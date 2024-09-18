@@ -1,34 +1,29 @@
-﻿namespace MNX.MonitoringCenter.Management.Core.FlightSheet;
+﻿namespace MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 
 /// <summary>
-/// Полётный лист.
+/// Таргет полётного листа.
 /// </summary>
-public abstract class FlightSheetBase : IEquatable<FlightSheetBase>
+public abstract class FlightSheetTargetBase : IEquatable<FlightSheetTargetBase>
 {
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
-
-    /// <summary>
-    /// Идентификатор пользователя
-    /// </summary>
-    public Guid UserId { get; set; }
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Тип.
     /// </summary>
-    public abstract FlightSheetType Type { get; init; }
+    public abstract FlightSheetTargetType Type { get; init; }
 
     /// <summary>
-    /// Название.
+    /// Идентификатор полётного листа.
     /// </summary>
-    public string Name { get; set; } = string.Empty;
+    public Guid FlightSheetId { get; set; }
 
     /// <summary>
     /// Список конфигов для майнинга.
     /// </summary>
-    public List<FlightSheetConfig> Configs { get; set; } = new();
+    public List<FlightSheetTargetConfig> Configs { get; set; } = new(3);
 
     /// <summary>
     /// Строка аргументов для майнера.
@@ -48,7 +43,7 @@ public abstract class FlightSheetBase : IEquatable<FlightSheetBase>
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is FlightSheetBase flightSheet)
+        if (obj is FlightSheetTargetBase flightSheet)
         {
             return Equals(flightSheet);
         }
@@ -57,7 +52,7 @@ public abstract class FlightSheetBase : IEquatable<FlightSheetBase>
     }
 
     /// <inheritdoc/>
-    public virtual bool Equals(FlightSheetBase? other)
+    public virtual bool Equals(FlightSheetTargetBase? other)
     {
         if (other is null)
         {

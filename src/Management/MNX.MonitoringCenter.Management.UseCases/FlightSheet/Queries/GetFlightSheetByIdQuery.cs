@@ -10,12 +10,12 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
 /// </summary>
 /// <param name="Id"> Идентификатор. </param>
 /// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetFlightSheetByIdQuery(Guid Id, Guid UserId) : IRequest<Result<FlightSheetModelBase>>;
+public sealed record GetFlightSheetByIdQuery(Guid Id, Guid UserId) : IRequest<Result<FlightSheetModel>>;
 
 /// <summary>
 /// Обработчик <see cref="GetFlightSheetByIdQuery"/>.
 /// </summary>
-public class GetFLightSheetByIdQueryHandler : IRequestHandler<GetFlightSheetByIdQuery, Result<FlightSheetModelBase>>
+public class GetFLightSheetByIdQueryHandler : IRequestHandler<GetFlightSheetByIdQuery, Result<FlightSheetModel>>
 {
     private readonly IMapper _mapper;
 
@@ -27,15 +27,15 @@ public class GetFLightSheetByIdQueryHandler : IRequestHandler<GetFlightSheetById
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<Result<FlightSheetModelBase>> Handle(GetFlightSheetByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result<FlightSheetModel>> Handle(GetFlightSheetByIdQuery request, CancellationToken cancellationToken)
     {
         var flightSheet = await _repository.GetAvailableById(request.Id, request.UserId, cancellationToken);
 
         if (flightSheet is null)
         {
-            return Result<FlightSheetModelBase>.Invalid("Flight sheet wasn`t found!");
+            return Result<FlightSheetModel>.Invalid("Flight sheet wasn`t found!");
         }
 
-        return Result<FlightSheetModelBase>.Success(_mapper.Map<FlightSheetModelBase>(flightSheet));
+        return Result<FlightSheetModel>.Success(_mapper.Map<FlightSheetModel>(flightSheet));
     }
 }

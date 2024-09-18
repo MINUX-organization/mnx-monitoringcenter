@@ -1,20 +1,20 @@
-﻿namespace MNX.MonitoringCenter.Management.Core.FlightSheet;
+﻿namespace MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 
 /// <summary>
-/// Полётный лист процессора.
+/// Таргет полётный листа для процессора.
 /// </summary>
-public class CpuFlightSheet : FlightSheetBase, IEquatable<CpuFlightSheet>
+public class CpuFlightSheetTarget : FlightSheetTargetBase, IEquatable<CpuFlightSheetTarget>
 {
     /// <summary>
     /// Тип.
     /// </summary>
-    private FlightSheetType _type;
+    private FlightSheetTargetType _type;
 
     /// <inheritdoc/>
-    public override FlightSheetType Type 
-    { 
-        get => _type; 
-        init => _type = FlightSheetType.CPU; 
+    public override FlightSheetTargetType Type
+    {
+        get => _type;
+        init => _type = FlightSheetTargetType.CPU;
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ public class CpuFlightSheet : FlightSheetBase, IEquatable<CpuFlightSheet>
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is CpuFlightSheet flightSheet)
+        if (obj is CpuFlightSheetTarget flightSheet)
         {
             return Equals(flightSheet);
         }
@@ -39,7 +39,7 @@ public class CpuFlightSheet : FlightSheetBase, IEquatable<CpuFlightSheet>
     }
 
     /// <inheritdoc/>
-    public bool Equals(CpuFlightSheet? other)
+    public bool Equals(CpuFlightSheetTarget? other)
     {
         return base.Equals(other) && HugePage == other.HugePage && ConfigFile == other.ConfigFile;
     }

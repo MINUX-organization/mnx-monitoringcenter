@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using MediatR;
 using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Management.Core.FlightSheet;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheets.Commands.CreateFlightSheet;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFlightSheet;
 
 /// <summary>
 /// Обработчик команды добавления полётного листа.
@@ -25,9 +24,9 @@ public class CreateFlightSheetCommandHandler :
     }
 
     public async Task<Result<Guid>> Handle(CreateFlightSheetCommand request,
-                                                           CancellationToken cancellationToken)
+                                           CancellationToken cancellationToken)
     {
-        var flightSheet = _mapper.Map<FlightSheetBase>(request.Model);
+        var flightSheet = _mapper.Map<Core.FlightSheet.FlightSheet>(request.Model);
         flightSheet.UserId = request.UserId;
 
         if (await _flightSheetRepository.Exists(flightSheet.Name, request.UserId, cancellationToken))

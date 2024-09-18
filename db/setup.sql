@@ -12,6 +12,10 @@
 \ir 'tables/pools.sql'
 \ir 'tables/presets.sql'
 \ir 'tables/wallets.sql'
+\ir 'tables/flight_sheets.sql'
+\ir 'tables/flight_sheet_targets.sql'
+\ir 'tables/flight_sheet_target_configs.sql'
+
 \ir 'tables/inventory.sql'
 \ir 'tables/cpu.sql'
 \ir 'tables/drive.sql'
@@ -20,6 +24,7 @@
 \ir 'tables/motherboard_pci.sql'
 \ir 'tables/network_adapter.sql'
 \ir 'tables/software_inventory.sql'
+
 \ir 'tables/version_info.sql'
 
 -- DATA INSERT

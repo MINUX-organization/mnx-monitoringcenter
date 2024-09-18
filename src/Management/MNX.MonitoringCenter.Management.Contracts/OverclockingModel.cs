@@ -51,11 +51,6 @@ public class OverclockingModel
     public int PowerLimit { get; set; }
 
     /// <summary>
-    /// Критическая температура
-    /// </summary>
-    public int CriticalTemperature { get; set; }
-
-    /// <summary>
     /// Скорость вентилятора
     /// </summary>
     public int FanSpeed { get; set; }

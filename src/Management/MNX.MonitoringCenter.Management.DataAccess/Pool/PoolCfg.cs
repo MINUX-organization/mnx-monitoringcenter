@@ -11,5 +11,6 @@ internal class PoolCfg : IEntityTypeConfiguration<Core.Pool>
     public void Configure(EntityTypeBuilder<Core.Pool> builder)
     {
         builder.HasIndex(x => x.UserId);
+        builder.HasIndex(x => new { x.Domain, x.Port });
     }
 }

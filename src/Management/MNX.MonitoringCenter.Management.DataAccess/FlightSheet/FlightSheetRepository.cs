@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.Core.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.FlightSheet;
+
+using FlightSheet = Core.FlightSheet.FlightSheet;
 
 /// <summary>
 /// Реализация <see cref="IFlightSheetRepository"/>.
@@ -16,15 +18,17 @@ public class FlightSheetRepository : IFlightSheetRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<FlightSheetBase> GetAllAvailable(Guid userId)
+    public IAsyncEnumerable<FlightSheet> GetAllAvailable(Guid userId)
     {
         return GetFlightSheets(userId).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<FlightSheetBase?> GetAvailableById(Guid flightSheetId, Guid userId, CancellationToken cancellationToken)
+    public Task<FlightSheet?> GetAvailableById(Guid flightSheetId, Guid userId,
+                                               CancellationToken cancellationToken)
     {
-        return GetFlightSheets(userId).FirstOrDefaultAsync(x => x.Id == flightSheetId, cancellationToken);
+        return GetFlightSheets(userId)
+            .FirstOrDefaultAsync(x => x.Id == flightSheetId, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -36,27 +40,29 @@ public class FlightSheetRepository : IFlightSheetRepository
     }
 
     /// <inheritdoc/>
-    public async Task Add(FlightSheetBase flightSheet, CancellationToken cancellationToken)
+    public async Task Add(FlightSheet flightSheet, CancellationToken cancellationToken)
     {
         await _context.FlightSheets.AddAsync(flightSheet, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
-    public async Task Edit(FlightSheetBase flightSheet, CancellationToken cancellationToken)
+    public async Task Edit(FlightSheet flightSheet, CancellationToken cancellationToken)
     {
-        var oldFlightSheet = await GetFlightSheets(flightSheet.UserId).FirstAsync(x => x.Id == flightSheet.Id, cancellationToken);
+        var oldFlightSheet = await _context.FlightSheets
+                                        .Where(x => x.UserId == flightSheet.UserId)
+                                        .Include(x => x.Targets)
+                                        .FirstAsync(x => x.Id == flightSheet.Id, cancellationToken);
 
-        _context.FlightSheetConfigs.RemoveRange(oldFlightSheet.Configs);
-
-        _context.FlightSheets.Update(flightSheet);
+        _context.FlightSheetTargets.RemoveRange(oldFlightSheet.Targets);
+        oldFlightSheet.Name = flightSheet.Name;
+        await _context.FlightSheetTargets.AddRangeAsync(flightSheet.Targets, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task Remove(FlightSheetBase flightSheet, CancellationToken cancellationToken)
+    public Task Remove(FlightSheet flightSheet, CancellationToken cancellationToken)
     {
-        _context.FlightSheetConfigs.RemoveRange(flightSheet.Configs);
         _context.FlightSheets.Remove(flightSheet);
         return _context.SaveChangesAsync(cancellationToken);
     }
@@ -66,16 +72,19 @@ public class FlightSheetRepository : IFlightSheetRepository
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Запрашиваемый список полётных листов. </returns>
-    private IQueryable<FlightSheetBase> GetFlightSheets(Guid userId)
+    private IQueryable<FlightSheet> GetFlightSheets(Guid userId)
     {
         return _context.FlightSheets.AsNoTrackingWithIdentityResolution()
                                     .Where(x => x.UserId == userId)
-                                    .Include(x => x.Miner)
-                                    .Include(x => x.Configs)
-                                        .ThenInclude(config => config.Pool)
-                                            .ThenInclude(pool => pool!.Cryptocurrency)
-                                    .Include(x => x.Configs)
-                                        .ThenInclude(config => config.Wallet)
-                                            .ThenInclude(wallet => wallet!.Cryptocurrency);
+                                    .Include(x => x.Targets)
+                                        .ThenInclude(target => target.Miner)
+                                    .Include(x => x.Targets)
+                                        .ThenInclude(target => target.Configs)
+                                            .ThenInclude(config => config.Pool)
+                                                .ThenInclude(pool => pool!.Cryptocurrency)
+                                    .Include(x => x.Targets)
+                                        .ThenInclude(target => target.Configs)
+                                            .ThenInclude(config => config.Wallet)
+                                                .ThenInclude(wallet => wallet!.Cryptocurrency);
     }
 }

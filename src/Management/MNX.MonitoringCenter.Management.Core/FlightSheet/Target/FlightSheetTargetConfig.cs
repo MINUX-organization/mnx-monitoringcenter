@@ -1,14 +1,14 @@
-﻿namespace MNX.MonitoringCenter.Management.Core.FlightSheet;
+﻿namespace MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 
 /// <summary>
-/// Конфиг для полётного листа.
+/// Конфиг для таргета полётного листа.
 /// </summary>
-public class FlightSheetConfig : IEquatable<FlightSheetConfig>
+public class FlightSheetTargetConfig : IEquatable<FlightSheetTargetConfig>
 {
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Идентификатор пула.
@@ -38,7 +38,7 @@ public class FlightSheetConfig : IEquatable<FlightSheetConfig>
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
-        if (obj is FlightSheetConfig config)
+        if (obj is FlightSheetTargetConfig config)
         {
             return Equals(config);
         }
@@ -47,7 +47,7 @@ public class FlightSheetConfig : IEquatable<FlightSheetConfig>
     }
 
     /// <inheritdoc/>
-    public bool Equals(FlightSheetConfig? other)
+    public bool Equals(FlightSheetTargetConfig? other)
     {
         if (other is null)
         {
