@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Management.Contracts;
+﻿namespace MNX.MonitoringCenter.Management.Contracts.Presets;
 
 /// <summary>
 /// Модель для пресета
@@ -13,7 +13,7 @@ public class PresetModel
     /// <summary>
     /// Название пресета
     /// </summary>
-    public required string Name { get; set; }    
+    public required string Name { get; set; }
 
     /// <summary>
     /// Название GPU
@@ -23,5 +23,5 @@ public class PresetModel
     /// <summary>
     /// Модель с разгоном
     /// </summary>
-    public required OverclockingModel Overclocking { get; set; } 
+    public required OverclockingModel Overclocking { get; set; }
 }

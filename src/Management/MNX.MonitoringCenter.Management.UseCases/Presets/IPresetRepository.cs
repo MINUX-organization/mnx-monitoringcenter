@@ -1,4 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Core;
+using System.Linq.Expressions;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Presets;
 
@@ -22,6 +23,15 @@ public interface IPresetRepository
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Пресеты </returns>
     IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, Guid userId);
+
+    /// <summary>
+    /// Получить список пресетов сгруппированных по названию видеокарты.
+    /// </summary>
+    /// <param name="expression"> Выражение, указывающее правила группировки. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Словарь, в котором ключ - название видеокарты, значение - список пресетов. </returns>
+    Task<Dictionary<string, List<Preset>>> GetGroupedList(
+        Expression<Func<Preset, string>> expression, Guid userId);
 
     /// <summary>
     /// Проверить наличие пресета по названию

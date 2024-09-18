@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core;
 using System.Runtime.CompilerServices;
 

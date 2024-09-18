@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.Contracts.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
-using MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
 
 namespace MNX.MonitoringCenter.Management.Controllers;
 
@@ -52,6 +52,20 @@ public class PresetController : ControllerBase
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetPresetsQuery(gpuName, userId));
+    }
+
+    /// <summary>
+    /// Получить список пресетов, сгруппированных по названию видеокарт.
+    /// </summary>
+    /// <returns> Список сгруппированных пресетов. </returns>
+    /// <response code="200"> Успешно </response>
+    [HttpGet("gpu_groups")]
+    [ProducesResponseType(typeof(List<PresetGroup>), 200)]
+    public async Task<IActionResult> GetPresetsGroupedByGpuName()
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new GetPresetsGroupedByGpuNameQuery(userId));
+        return result.ToActionResult();
     }
 
     /// <summary>

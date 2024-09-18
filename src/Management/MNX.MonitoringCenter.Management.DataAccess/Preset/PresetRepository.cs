@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases.Presets;
+using System.Linq.Expressions;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Preset;
 
@@ -20,21 +21,27 @@ public class PresetRepository : IPresetRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, Guid userId)
     {
+        IQueryable<Preset> presets = _context.Presets.AsNoTrackingWithIdentityResolution()
+                                                     .Include(x => x.Overclocking)
+                                                     .Where(x => x.UserId == userId);
+
         if (!string.IsNullOrWhiteSpace(gpuName))
         {
-            return _context.Presets
-                           .Include(x => x.Overclocking)
-                           .Where(x => x.GpuName == gpuName)
-                           .Where(x => x.UserId == userId)
-                           .AsNoTracking()
-                           .AsAsyncEnumerable();
+            return presets.Where(x => x.GpuName == gpuName).AsAsyncEnumerable();
         }
 
-        return _context.Presets
-                       .Include(x => x.Overclocking)
-                       .Where(x => x.UserId == userId)
-                       .AsNoTracking()
-                       .AsAsyncEnumerable();
+        return presets.AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
+    public Task<Dictionary<string, List<Preset>>> GetGroupedList(
+            Expression<Func<Preset, string>> expression, Guid userId)
+    {
+        return _context.Presets.AsNoTrackingWithIdentityResolution()
+                               .Where(x => x.UserId == userId)
+                               .Include(x => x.Overclocking)
+                               .GroupBy(expression)
+                               .ToDictionaryAsync(g => g.Key, g => g.ToList());
     }
 
     /// <inheritdoc/>

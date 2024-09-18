@@ -1,5 +1,5 @@
 ﻿using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
