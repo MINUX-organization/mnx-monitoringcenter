@@ -23,13 +23,6 @@ public interface IRigRepository
     IAsyncEnumerable<Rig> GetList(Specification specification);
 
     /// <summary>
-    /// Получить обобщённые количественные данные ригов.
-    /// </summary>
-    /// <param name="specification"> Спецификация. </param>
-    /// <returns> Обобщённые количественные данные ригов. </returns>
-    Task<RigsSummarizedQuantitativeData> GetRigsSummarizedQuantitativeData(Specification specification);
-
-    /// <summary>
     /// Получить список идентификаторов ригов.
     /// </summary>
     /// <param name="specification"> Спецификация. </param>

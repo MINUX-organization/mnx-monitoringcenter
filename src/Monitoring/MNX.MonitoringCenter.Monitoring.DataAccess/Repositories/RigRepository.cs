@@ -59,30 +59,6 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public async Task<RigsSummarizedQuantitativeData> GetRigsSummarizedQuantitativeData(Specification specification)
-    {
-        var totalData = new RigsSummarizedQuantitativeData();
-
-        await foreach (var rig in _context.Rigs.AsNoTracking().Available(specification)
-                                                              .Filter(specification)
-                                                              .Include(rig => rig.Devices).AsAsyncEnumerable())
-        {
-            totalData.TotalRigsCount++;
-
-            totalData.TotalGpusCount.Amd += rig.AmdGpusCount;
-            totalData.TotalGpusCount.Nvidia += rig.NvidiaGpusCount;
-            totalData.TotalGpusCount.Intel += rig.IntelGpusCount;
-
-            totalData.TotalCpusCount.Intel += rig.IntelCpusCount;
-            totalData.TotalCpusCount.Amd += rig.AmdCpusCount;
-
-            totalData.TotalHddsCount += rig.HddsCount;
-        }
-
-        return totalData;
-    }
-
-    /// <inheritdoc/>
     public async Task<IEnumerable<Guid>> GetIds(Specification specification)
     {
         return await _context.Rigs

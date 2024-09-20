@@ -9,12 +9,14 @@ using MNX.MonitoringCenter.Inventory.Contracts.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.UseCases.CountDevices;
 using MNX.MonitoringCenter.Inventory.UseCases.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Drive;
 using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Motherboard;
 using MNX.MonitoringCenter.Inventory.UseCases.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.UseCases.Software;
+using MNX.MonitoringCenter.Monitoring.Core;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
 
@@ -57,7 +59,7 @@ public class RigController : ControllerBase
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(
             new GetRigsInformationQuery(userId, searchString, filter, filterParameters));
-    }
+    }*/
 
     /// <summary>
     /// Получить обобщённые количественные данные.
@@ -65,14 +67,28 @@ public class RigController : ControllerBase
     /// <returns> Результат получения обобщённых количественных данных. </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("total_data")]
-    [ProducesResponseType(typeof(RigsSummarizedQuantitativeData), 200)]
+    [ProducesResponseType(typeof(GetCountDevicesQueryResponse), 200)]
     public async Task<IActionResult> GetSummarizedQuantitativeData()
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new GetRigsSummarizedQuantitativeDataQuery(userId));
+        var result = await _mediator.Send(new GetCountDevicesQuery(userId));
         return result.ToActionResult();
     }
-    */
+
+    /// <summary>
+    /// Получить кол-во устройств ( видеокарты, процессоры, диски )
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <returns> Кол-во устройств на риге. </returns>
+    /// <response code="200"> Успешно </response>
+    [HttpGet("{rigId:Guid}/devices/count")]
+    [ProducesResponseType(typeof(GetCountDevicesQueryResponse), 200)]
+    public async Task<IActionResult> GetDevicesCount(Guid rigId)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new GetCountDevicesQuery(userId, rigId));
+        return result.ToActionResult();
+    }
 
     /// <summary>
     /// Получить информацию о процессорах рига.
@@ -80,7 +96,7 @@ public class RigController : ControllerBase
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
-    [HttpGet("{rigId}/cpus")]
+    [HttpGet("{rigId:Guid}/cpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<Cpu>), 200)]
     public IAsyncEnumerable<Cpu> GetCpus(Guid rigId)
     {
@@ -95,7 +111,7 @@ public class RigController : ControllerBase
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
     /// <response code="400"> Запрашиваемые данные не были найдены. </response>
-    [HttpGet("{rigId}/drives")]
+    [HttpGet("{rigId:Guid}/drives")]
     [ProducesResponseType(typeof(List<Drive>), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> GetDrives(Guid rigId)
@@ -111,7 +127,7 @@ public class RigController : ControllerBase
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
-    [HttpGet("{rigId}/gpus")]
+    [HttpGet("{rigId:Guid}/gpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<Gpu>), 200)]
     public IAsyncEnumerable<Gpu> GetGpus(Guid rigId)
     {
@@ -126,7 +142,7 @@ public class RigController : ControllerBase
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
     /// <response code="400"> Запрашиваемые данные не были найдены. </response>
-    [HttpGet("{rigId}/motherboard")]
+    [HttpGet("{rigId:Guid}/motherboard")]
     [ProducesResponseType(typeof(Motherboard), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> GetMotherboard(Guid rigId)
@@ -143,7 +159,7 @@ public class RigController : ControllerBase
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
     /// <response code="400"> Запрашиваемые данные не были найдены. </response>
-    [HttpGet("{rigId}/network_adapters")]
+    [HttpGet("{rigId:Guid}/network_adapters")]
     [ProducesResponseType(typeof(List<NetworkAdapter>), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> GetNetworkAdapters(Guid rigId)
@@ -160,7 +176,7 @@ public class RigController : ControllerBase
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
     /// <response code="400"> Запрашиваемые данные не были найдены. </response>
-    [HttpGet("{rigId}/software")]
+    [HttpGet("{rigId:Guid}/software")]
     [ProducesResponseType(typeof(SoftwareInventory), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> GetSoftware(Guid rigId)

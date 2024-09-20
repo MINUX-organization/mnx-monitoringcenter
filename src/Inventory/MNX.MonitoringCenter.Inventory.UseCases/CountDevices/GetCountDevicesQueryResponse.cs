@@ -8,7 +8,7 @@ public class GetCountDevicesQueryResponse
     /// <summary>
     /// Общее кол-во процессоров, сгруппированных по производителю.
     /// </summary>
-    public Dictionary<string, int> TotalCpusCountGroupedByManufacturer { get; init; } = new();
+    public Dictionary<string, int> TotalCpusCountGroupedByManufacturer { get; init; } = new(0);
 
     /// <summary>
     /// Общее кол-во процессоров.
@@ -18,7 +18,7 @@ public class GetCountDevicesQueryResponse
     /// <summary>
     /// Общее кол-во видеокарт, сгруппированных по производителю.
     /// </summary>
-    public Dictionary<string, int> TotalGpusCountGroupedByManufacturer { get; init; } = new();
+    public Dictionary<string, int> TotalGpusCountGroupedByManufacturer { get; init; } = new(0);
 
     /// <summary>
     /// Общее кол-во видеокарт.
