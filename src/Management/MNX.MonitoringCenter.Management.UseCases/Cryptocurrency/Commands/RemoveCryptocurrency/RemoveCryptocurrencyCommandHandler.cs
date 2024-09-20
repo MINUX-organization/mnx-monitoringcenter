@@ -17,13 +17,7 @@ public class RemoveCryptocurrencyCommandHandler : IRequestHandler<RemoveCryptocu
 
     public async Task<Result<Unit>> Handle(RemoveCryptocurrencyCommand request, CancellationToken cancellationToken)
     {
-        var cryptocurrency = await _repository.GetAvailableById(request.Id, request.UserId);
-
-        if (cryptocurrency is not null)
-        {
-            await _repository.Remove(cryptocurrency);
-        }
-
+        await _repository.Remove(request.Id, request.UserId);
         return Result<Unit>.Empty();
     }
 }

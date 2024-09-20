@@ -42,6 +42,7 @@ public interface ICryptocurrencyRepository
     /// <summary>
     /// Удалить криптовалюту
     /// </summary>
-    /// <param name="cryptocurrency"> Криптовалюта </param>
-    Task Remove(Cryptocurrency cryptocurrency);
+    /// <param name="id"> Идентификатор криптовалюты. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    Task Remove(Guid id, Guid userId);
 }
