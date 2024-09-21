@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Contracts;
+﻿using MNX.MonitoringCenter.Management.Core;
+
+namespace MNX.MonitoringCenter.Management.Contracts;
 
 /// <summary>
 /// Модель для криптовалюты.
@@ -21,12 +23,7 @@ public class CryptocurrencyModel
     public required string FullName { get; set; }
     
     /// <summary>
-    /// Идентификатор алгоритма.
+    /// Алгоритм.
     /// </summary>
-    public Guid AlgorithmId { get; set; }
-
-    /// <summary>
-    /// Название алгоритма.
-    /// </summary>
-    public required string AlgorithmName { get; set; }
+    public required Algorithm Algorithm { get; set; }
 }

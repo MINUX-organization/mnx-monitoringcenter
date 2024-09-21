@@ -33,8 +33,7 @@ public class MappingProfile : Profile
             .ForMember(destination => destination.FullName, options => options.MapFrom(source => source.Model.FullName))
             .ForMember(destination => destination.AlgorithmId, options => options.MapFrom(source => source.Model.AlgorithmId));
 
-        CreateMap<Core.Cryptocurrency, CryptocurrencyModel>()
-            .ForMember(destination => destination.AlgorithmName, options => options.MapFrom(source => source.Algorithm!.Name));
+        CreateMap<Core.Cryptocurrency, CryptocurrencyModel>();
 
         // flight sheets
 
