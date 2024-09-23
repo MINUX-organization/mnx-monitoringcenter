@@ -1,15 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Cpu.GetCpusInfo;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Gpu.GetGpusInfo;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices.Gpu.GetOverclocking;
+using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
 
-/*
+
 /// <summary>
 /// Предоставляет API для работы с майнинг устройствами.
 /// </summary>
@@ -35,6 +32,17 @@ public class DeviceController : ControllerBase
     }
 
     /// <summary>
+    /// Получить уникальный названия зарегистрированных видеокарт.
+    /// </summary>
+    /// <returns> Уникальный названия видеокарт. </returns>
+    [HttpGet("gpus/unique_names")]
+    public IAsyncEnumerable<string> GetGpuUniqueNames()
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetGpuUniqueNamesQuery(userId));
+    }
+
+    /*/// <summary>
     /// Получить информацию о видеокартах.
     /// </summary>
     [HttpGet("gpus")]
@@ -62,6 +70,5 @@ public class DeviceController : ControllerBase
     {
         var result = await _mediator.Send(new GetGpuOverclockingQuery(id));
         return result.ToActionResult();
-    }
+    }*/
 }
-*/

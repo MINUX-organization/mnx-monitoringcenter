@@ -54,7 +54,7 @@ public class GetCountDevicesQueryHandler : IRequestHandler<GetCountDevicesQuery,
             .GetCountOFCpusGroupedByManufacturer(request.Specification, cancellationToken);
 
         var gpusCount = await _gpuRepository
-            .GetCountOFGpusGroupedByManufacturer(request.Specification, cancellationToken);
+            .GetCountOfGpusGroupedByManufacturer(request.Specification, cancellationToken);
 
         var drivesCount = await _driveRepository.GetCount(request.Specification, cancellationToken);
 

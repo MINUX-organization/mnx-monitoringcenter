@@ -26,6 +26,13 @@ public interface IGpuRepository
                                                    DateTimeOffset endPeriod);
 
     /// <summary>
+    /// Получить уникальные полные названия видеокарт.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Уникальные названия видеокарт. </returns>
+    IAsyncEnumerable<string> GetGpuUniqueNames(InventorySpecification specification);
+
+    /// <summary>
     /// Получить кол-во видеокарт по спецификации.
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
@@ -39,6 +46,6 @@ public interface IGpuRepository
     /// <param name="specification"> Спецификация. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Словарь, в котором key - производитель, value - кол-во. </returns>
-    Task<Dictionary<string, int>> GetCountOFGpusGroupedByManufacturer(DeviceSpecification specification,
+    Task<Dictionary<string, int>> GetCountOfGpusGroupedByManufacturer(DeviceSpecification specification,
                                                                       CancellationToken cancellationToken);
 }

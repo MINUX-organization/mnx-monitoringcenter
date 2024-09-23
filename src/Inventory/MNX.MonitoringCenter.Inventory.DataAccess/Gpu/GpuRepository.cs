@@ -37,13 +37,25 @@ public class GpuRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
+    public IAsyncEnumerable<string> GetGpuUniqueNames(InventorySpecification specification)
+    {
+        return _context.Inventory.AsNoTrackingWithIdentityResolution()
+                                 .Available(specification)
+                                 .InventoryFilter(specification)
+                                 .Include(x => x.Gpus)
+                                 .SelectMany(x => x.Gpus)
+                                 .Select(gpu => gpu.Information.Name)
+                                 .AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
     public Task<int> GetCount(DeviceSpecification specification, CancellationToken cancellationToken)
     {
         return GetGpus(specification).CountAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<Dictionary<string, int>> GetCountOFGpusGroupedByManufacturer(DeviceSpecification specification,
+    public Task<Dictionary<string, int>> GetCountOfGpusGroupedByManufacturer(DeviceSpecification specification,
                                                                              CancellationToken cancellationToken)
     {
         return GetGpus(specification).GroupBy(x => x.Information.Manufacturer)
