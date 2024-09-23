@@ -13,6 +13,11 @@ public class Context : DbContext
     /// </summary>
     internal DbSet<Inventory> Inventory { get; set; }
 
+    /// <summary>
+    /// Видеокарты.
+    /// </summary>
+    internal DbSet<Contracts.Gpu.Gpu> Gpu { get; set; }
+
     public Context(DbContextOptions<Context> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

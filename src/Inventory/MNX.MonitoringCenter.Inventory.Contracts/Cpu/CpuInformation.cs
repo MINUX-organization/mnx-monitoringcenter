@@ -19,6 +19,11 @@ public record CpuInformation
     public required string Model { get; init; }
 
     /// <summary>
+    /// Полное название.
+    /// </summary>
+    public string Name { get => $"{Manufacturer} {Model}"; }
+
+    /// <summary>
     /// Количество ядер.
     /// </summary>
     public int CoresCount { get; init; }

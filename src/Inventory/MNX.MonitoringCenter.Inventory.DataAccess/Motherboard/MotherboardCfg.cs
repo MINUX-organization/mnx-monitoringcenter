@@ -11,5 +11,9 @@ internal class MotherboardCfg : IEntityTypeConfiguration<Contracts.Motherboard.M
     public void Configure(EntityTypeBuilder<Contracts.Motherboard.Motherboard> builder)
     {
         builder.ComplexProperty(e => e.Information);
+
+        builder.HasMany(x => x.Pcies)
+               .WithOne()
+               .HasForeignKey("MotherboardId");
     }
 }

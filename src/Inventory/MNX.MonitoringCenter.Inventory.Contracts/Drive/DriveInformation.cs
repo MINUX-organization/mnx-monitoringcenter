@@ -19,6 +19,11 @@ public record DriveInformation
     public required string Model { get; init; }
 
     /// <summary>
+    /// Полное название.
+    /// </summary>
+    public string Name { get => $"{Manufacturer} {Model}"; }
+
+    /// <summary>
     /// Серийный номер.
     /// </summary>
     public required string SerialNumber { get; init; }

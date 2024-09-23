@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 
@@ -46,6 +47,18 @@ public class GpuRepository : IGpuRepository
                                  .SelectMany(x => x.Gpus)
                                  .Select(gpu => gpu.Information.Name)
                                  .AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
+    public Task<GpuRestrictions?> GetRestrictionsByGpuName(string gpuName)
+    {
+        var manufacturer = gpuName.ToLower().Split().First();
+        var model = string.Join(" ", gpuName.ToLower().Split().Skip(1));
+
+        return _context.Gpu.Where(x => x.Information.Manufacturer.ToLower() == manufacturer &&
+                                       x.Information.Model.ToLower() == model)
+                           .Select(x => x.Restrictions)
+                           .FirstOrDefaultAsync();
     }
 
     /// <inheritdoc/>

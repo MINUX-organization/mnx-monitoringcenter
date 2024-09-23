@@ -1,5 +1,6 @@
 ﻿namespace MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 
+using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 using Gpu = Contracts.Gpu.Gpu;
 
 /// <summary>
@@ -31,6 +32,13 @@ public interface IGpuRepository
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Уникальные названия видеокарт. </returns>
     IAsyncEnumerable<string> GetGpuUniqueNames(InventorySpecification specification);
+
+    /// <summary>
+    /// Получение ограничений по названию видеокарты.
+    /// </summary>
+    /// <param name="gpuName"> Полное название видеокарты. </param>
+    /// <returns> Ограничения. </returns>
+    Task<GpuRestrictions?> GetRestrictionsByGpuName(string gpuName);
 
     /// <summary>
     /// Получить кол-во видеокарт по спецификации.

@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
+using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
@@ -35,11 +37,27 @@ public class DeviceController : ControllerBase
     /// Получить уникальный названия зарегистрированных видеокарт.
     /// </summary>
     /// <returns> Уникальный названия видеокарт. </returns>
+    /// <response code="200"> Успешно </response>
     [HttpGet("gpus/unique_names")]
+    [ProducesResponseType(typeof(IAsyncEnumerable<string>), 200)]
     public IAsyncEnumerable<string> GetGpuUniqueNames()
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetGpuUniqueNamesQuery(userId));
+    }
+
+    /// <summary>
+    /// Получить ограничения видеокарты по её полному названию.
+    /// </summary>
+    /// <param name="gpuName"> Название видеокарты. </param>
+    /// <returns> Ограничения. </returns>
+    /// <response code="200"> Успешно </response>
+    [HttpGet("gpus/{gpuName}/restrictions")]
+    [ProducesResponseType(typeof(GpuRestrictions), 200)]
+    public async Task<IActionResult> GetGpuRestrictions(string gpuName)
+    {
+        var result = await _mediator.Send(new GetGpuRestrictionsQuery(gpuName));
+        return result.ToActionResult();
     }
 
     /*/// <summary>
