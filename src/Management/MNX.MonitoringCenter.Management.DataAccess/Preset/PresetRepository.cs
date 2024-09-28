@@ -75,9 +75,10 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public Task Remove(Preset preset)
+    public Task Remove(Guid id, Guid userId)
     {
-        _context.Presets.Remove(preset);
-        return _context.SaveChangesAsync();
+        return _context.Presets
+            .Where(x => x.Id == id && x.UserId == userId)
+            .ExecuteDeleteAsync();
     }
 }

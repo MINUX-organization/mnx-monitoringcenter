@@ -48,6 +48,7 @@ public interface IPoolRepository
     /// <summary>
     /// Удалить пул
     /// </summary>
-    /// <param name="pool"> Пул </param>
-    Task Remove(Pool pool);
+    /// <param name="id"> Идентификатор пула. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    Task Remove(Guid id, Guid userId);
 }

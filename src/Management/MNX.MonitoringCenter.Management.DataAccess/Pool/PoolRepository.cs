@@ -58,9 +58,10 @@ public class PoolRepository : IPoolRepository
     }
 
     /// <inheritdoc/>
-    public Task Remove(Pool pool)
+    public Task Remove(Guid id, Guid userId)
     {
-        _context.Pools.Remove(pool);
-        return _context.SaveChangesAsync();
+        return _context.Pools
+            .Where(x => x.Id == id && x.UserId == userId)
+            .ExecuteDeleteAsync();
     }
 }

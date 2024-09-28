@@ -51,7 +51,8 @@ public interface IFlightSheetRepository
     /// <summary>
     /// Удалить полётный лист.
     /// </summary>
-    /// <param name="flightSheet"> Полётного лист. </param>
+    /// <param name="id"> Идентификатор полетного листа. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Remove(FlightSheet flightSheet, CancellationToken cancellationToken);
+    Task Remove(Guid id, Guid userId, CancellationToken cancellationToken);
 }
