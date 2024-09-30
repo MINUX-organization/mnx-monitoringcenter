@@ -54,6 +54,8 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     /// <inheritdoc/>
     public Task Remove(Guid id, Guid userId)
     {
-        return _context.Cryptocurrencies.Where(x => x.Id == id && x.UserId == userId).ExecuteDeleteAsync();
+        return _context.Cryptocurrencies
+            .Where(x => x.Id == id && x.UserId == userId)
+            .ExecuteDeleteAsync();
     }
 }

@@ -18,13 +18,7 @@ public class RemovePresetCommandHandler : IRequestHandler<RemovePresetCommand, R
 
     public async Task<Result<Unit>> Handle(RemovePresetCommand request, CancellationToken cancellationToken)
     {
-        var preset = await _repository.GetAvailableById(request.Id, request.UserId);
-
-        if (preset != null)
-        {
-            await _repository.Remove(preset);
-        }
-
+        await _repository.Remove(request.Id, request.UserId);
         return Result<Unit>.Empty();
     }
 }

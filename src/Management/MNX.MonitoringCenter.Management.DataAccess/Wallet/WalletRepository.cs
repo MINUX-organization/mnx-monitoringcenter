@@ -63,10 +63,11 @@ public class WalletRepository : IWalletRepository
     }
 
     /// <inheritdoc/>
-    public Task Remove(Wallet wallet)
+    public Task Remove(Guid id, Guid userId)
     {
-        _context.Wallets.Remove(wallet);
-        return _context.SaveChangesAsync();
+        return _context.Wallets
+            .Where(x => x.Id == id && x.UserId == userId)
+            .ExecuteDeleteAsync();
     }
 
     /// <summary>

@@ -61,10 +61,11 @@ public class FlightSheetRepository : IFlightSheetRepository
     }
 
     /// <inheritdoc/>
-    public Task Remove(FlightSheet flightSheet, CancellationToken cancellationToken)
+    public Task Remove(Guid id, Guid userId, CancellationToken cancellationToken)
     {
-        _context.FlightSheets.Remove(flightSheet);
-        return _context.SaveChangesAsync(cancellationToken);
+        return _context.FlightSheets
+            .Where(x => x.Id == id && x.UserId == userId)
+            .ExecuteDeleteAsync(cancellationToken);
     }
 
     /// <summary>

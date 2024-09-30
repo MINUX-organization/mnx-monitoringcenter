@@ -58,6 +58,7 @@ public interface IWalletRepository
     /// <summary>
     /// Удалить кошелёк
     /// </summary>
-    /// <param name="wallet"> Кошелёк </param>
-    Task Remove(Wallet wallet);
+    /// <param name="id"> Идентификатор кошелька. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    Task Remove(Guid id, Guid userId);
 }

@@ -56,6 +56,7 @@ public interface IPresetRepository
     /// <summary>
     /// Удалить пресет
     /// </summary>
-    /// <param name="preset"> Пресет </param>
-    Task Remove(Preset preset);
+    /// <param name="id"> Идентификатор пресета. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    Task Remove(Guid id, Guid userId);
 }
