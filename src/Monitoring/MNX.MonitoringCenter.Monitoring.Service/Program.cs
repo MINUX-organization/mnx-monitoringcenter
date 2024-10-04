@@ -134,6 +134,9 @@ internal class Program
             app.UseSwaggerUI();
         }
 
+        app.UseRouting();
+        app.UseCors();
+
         app.MapHealthChecks("/health").AllowAnonymous();
         app.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName)).AllowAnonymous();
 
