@@ -8,22 +8,22 @@ public sealed record InventoryModel
     /// <summary>
     /// Процессоры.
     /// </summary>
-    public List<Cpu.Cpu> Cpus { get; init; } = new();
+    public List<Cpu.Cpu> Cpus { get; init; } = new(0);
 
     /// <summary>
     /// Видеокарты.
     /// </summary>
-    public List<Gpu.Gpu> Gpus { get; init; } = new();
+    public List<Gpu.Gpu> Gpus { get; init; } = new(0);
 
     /// <summary>
     /// Диски.
     /// </summary>
-    public List<Drive.Drive> Drives { get; init; } = new();
+    public List<Drive.Drive> Drives { get; init; } = new(0);
 
     /// <summary>
     /// Сетевые адаптеры.
     /// </summary>
-    public List<NetworkAdapter.NetworkAdapter> NetworkAdapters { get; init; } = new();
+    public List<NetworkAdapter.NetworkAdapter> NetworkAdapters { get; init; } = new(0);
 
     /// <summary>
     /// Материнская плата.
