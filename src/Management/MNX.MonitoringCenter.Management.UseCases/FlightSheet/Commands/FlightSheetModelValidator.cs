@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MNX.MonitoringCenter.Management.Core.Enums;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
@@ -12,7 +13,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands;
 /// Валидатор модели полётного листа.
 /// </summary>
 internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputModel>
-{
+{ 
     public FlightSheetModelValidator(Guid userId,
                                      IMinerRepository minerRepository,
                                      IWalletRepository walletRepository,
@@ -20,23 +21,23 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
     {
         RuleFor(model => model.Name)
             .Must(name => !string.IsNullOrWhiteSpace(name))
-            .WithMessage("Name is required!");
+                .WithMessage("Name is required!");
 
         RuleFor(model => model.Targets)
             .NotEmpty()
                 .WithMessage("Flight sheet targets is required!")
-            .Must(targets => targets.Where(x => x.Type == FlightSheetTargetType.CPU).Count() <= 1)
+            .Must(targets => targets.Count(x => x.Type == FlightSheetTargetType.CPU) <= 1)
                 .WithMessage("The number of CPU targets should not exceed 1")
-            .Must(targets => targets.Where(x => x.Type == FlightSheetTargetType.GPU).Count() <= 1)
+            .Must(targets => targets.Count(x => x.Type == FlightSheetTargetType.GPU) <= 1)
                 .WithMessage("The number of GPU targets should not exceed 1");
 
         RuleForEach(model => model.Targets)
             .NotNull()
-            .WithMessage("Target is cannot nullable!")
-            .SetValidator(model => new FlightSheetTargetModelValidator(userId,
-                                                                       minerRepository,
-                                                                       walletRepository,
-                                                                       poolRepository));
+                .WithMessage("Target is cannot nullable!")
+            .SetValidator(_ => new FlightSheetTargetModelValidator(userId,
+                                                                   minerRepository,
+                                                                   walletRepository,
+                                                                   poolRepository));
     }
 
     /// <summary>
@@ -49,61 +50,72 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
                                                  IWalletRepository walletRepository,
                                                  IPoolRepository poolRepository)
         {
-            RuleFor(model => model.MinerId)
-                .NotEmpty()
-                    .WithMessage("Miner is required!")
-                .MustAsync(async (model, miner, cancellationToken) => await minerRepository.Exists(miner, cancellationToken))
-                    .WithMessage(model => $"Miner with id {model.MinerId} wasn`t found!");
+            RuleFor(model => model)
+                .CustomAsync(async (model, context, _) =>
+                {
+                    var miner = await minerRepository.GetMinerById(model.MinerId);
+                    if (miner == null)
+                    {
+                        context.AddFailure($"Miner with id equaled {model.MinerId} was not found!");
+                        return;
+                    }
+
+                    if (DeviceTargetTypeConvertor.Convert(miner.DeviceType) != model.Type)
+                    {
+                        context.AddFailure("Target type is not supported by the miner.");
+                    }
+
+                    if (model.Type == FlightSheetTargetType.GPU && model.Configs.Count != (int)miner.MiningMode!)
+                    {
+                        context.AddFailure($"Invalid number of coins was passed for mining mode " +
+                                           $"{miner.MiningMode}: {model.Configs.Count}.");
+                    }
+                });
 
             RuleFor(model => model.Configs)
                 .NotEmpty()
-                .WithMessage("Configs is required!")
+                    .WithMessage("Configs are required!")
                 .Must((target, configs) => (target.Type == FlightSheetTargetType.GPU && configs.Count <= 3) ||
                                            (target.Type == FlightSheetTargetType.CPU && configs.Count <= 1))
-                .WithMessage("The number of configs for a flight sheet should not exceed 3 for a GPU and not exceed 1 for a CPU!");
+                .WithMessage(
+                    "The number of configs for a flight sheet should not exceed 3 for a GPU and not exceed 1 for a CPU!");
 
-            RuleForEach(model => model.Configs)
+            RuleFor(model => model.Configs)
                 .NotNull()
-                .WithMessage("Config is cannot nullable!")
-                .SetValidator(x => new MiningConfigValidator(userId, walletRepository, poolRepository));
-        }
-
-        /// <summary>
-        /// Валидатор конфига.
-        /// </summary>
-        private class MiningConfigValidator : AbstractValidator<FlightSheetTargetConfigInputModel>
-        {
-            internal MiningConfigValidator(Guid userId,
-                                           IWalletRepository walletRepository,
-                                           IPoolRepository poolRepository)
-            {
-                RuleFor(config => config.WalletId)
-                    .MustAsync(async (config, walletId, cancellationToken)
-                                => await walletRepository.GetAvailableById(walletId, userId) is not null)
-                    .WithMessage(config => $"Wallet with id is equaled {config.WalletId} was not found!");
-
-                RuleFor(config => config.PoolId)
-                    .MustAsync(async (config, poolId, cancellationToken)
-                                => await poolRepository.GetAvailableById(poolId, userId) is not null)
-                    .WithMessage(config => $"Pool with id is equaled {config.PoolId} was not found!");
-
-                RuleFor(config => new { config.PoolId, config.WalletId })
-                    .MustAsync(async (config, ids, cancellationToken) =>
+                    .WithMessage("Config cannot be nullable!")
+                .CustomAsync(async (configs, context, _) =>
+                {
+                    List<Guid> coinIds = [];
+                    foreach (var config in configs)
                     {
-                        var wallet = await walletRepository.GetAvailableById(ids.WalletId, userId);
-                        var pool = await poolRepository.GetAvailableById(config.PoolId, userId);
-
-                        if (wallet is not null && pool is not null)
+                        var wallet = await walletRepository.GetAvailableById(config.WalletId, userId);
+                        if (wallet == null)
                         {
-                            return wallet!.CryptocurrencyId == pool!.CryptocurrencyId;
+                            context.AddFailure($"Wallet with id equaled {config.WalletId} was not found!");
                         }
 
-                        return false;
-                    })
-                    .WithMessage("Pool don`t correlates with wallet by cryptocurrency!");
+                        var pool = await poolRepository.GetAvailableById(config.PoolId, userId);
+                        if (pool == null)
+                        {
+                            context.AddFailure($"Pool with id equaled {config.PoolId} was not found!");
+                        }
 
-                // todo: проверка соответствия комбинации монет.
-            }
+                        if (pool == null || wallet == null) return;
+
+                        if (wallet.CryptocurrencyId != pool.CryptocurrencyId)
+                        {
+                            context.AddFailure(
+                                $"Pool ({config.PoolId}) do not correlates with wallet ({config.WalletId}) by cryptocurrency!");
+                        }
+
+                        if (coinIds.Contains(pool.CryptocurrencyId))
+                        {
+                            context.AddFailure(
+                                $"Cannot use the same cryptocurrency ({pool.CryptocurrencyId}) in different target configs.");
+                        }
+                        coinIds.Add(pool.CryptocurrencyId);
+                    }
+                });
         }
     }
 }

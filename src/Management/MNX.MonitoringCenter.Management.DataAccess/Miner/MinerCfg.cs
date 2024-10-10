@@ -11,5 +11,11 @@ internal class MinerCfg : IEntityTypeConfiguration<Core.Miner>
     public void Configure(EntityTypeBuilder<Core.Miner> builder)
     {
         builder.HasIndex(x => x.Name);
+
+        builder.Property(x => x.DeviceType)
+            .HasConversion<string>();
+
+        builder.Property(x => x.MiningMode)
+            .HasConversion<string>();
     }
 }

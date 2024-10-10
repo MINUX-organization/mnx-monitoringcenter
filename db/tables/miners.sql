@@ -2,6 +2,9 @@ CREATE TABLE monitoring_center.miners
 (
     id uuid NOT NULL,
     name text NOT NULL,
+    version text NOT NULL,
+    device_type monitoring_center.supported_device NOT NULL,
+    mining_mode monitoring_center.mining_mode,
 
     CONSTRAINT pk_miners PRIMARY KEY (id)
 );

@@ -29,7 +29,7 @@ public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheets
     public async IAsyncEnumerable<FlightSheetModel> Handle(GetFlightSheetsQuery request,
                                                           [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var flightSheet in _repository.GetAllAvailable(request.UserId))
+        await foreach (var flightSheet in _repository.GetAllAvailable(request.UserId).WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<FlightSheetModel>(flightSheet);
         }

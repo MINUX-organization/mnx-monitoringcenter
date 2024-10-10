@@ -14,6 +14,13 @@ public interface IMinerRepository
     /// <summary>
     /// Получить майнер по идентификатору.
     /// </summary>
+    /// <param name="id"> Идентификатор майнера. </param>
+    /// <returns> Майнер. </returns>
+    Task<Core.Miner?> GetMinerById(Guid id);
+
+    /// <summary>
+    /// Получить майнер по идентификатору.
+    /// </summary>
     /// <param name="id"> Идентификатор. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Признак существования майнера. </returns>

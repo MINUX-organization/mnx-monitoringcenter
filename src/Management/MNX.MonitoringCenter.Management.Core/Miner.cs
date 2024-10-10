@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Core;
+﻿using MNX.MonitoringCenter.Management.Core.Enums;
+
+namespace MNX.MonitoringCenter.Management.Core;
 
 /// <summary>
 /// Майнер.
@@ -14,6 +16,21 @@ public class Miner : IEquatable<Miner>
     /// Название.
     /// </summary>
     public required string Name { get; set; }
+
+    /// <summary>
+    /// Версия.
+    /// </summary>
+    public required string Version { get; set; }
+
+    /// <summary>
+    /// Тип дивайса.
+    /// </summary>
+    public SupportedDeviceEnum DeviceType { get; set; }
+
+    /// <summary>
+    /// Режим майнинга монет (для GPU).
+    /// </summary>
+    public GpuMiningModeEnum? MiningMode { get; set; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

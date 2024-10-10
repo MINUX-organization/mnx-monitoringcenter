@@ -27,7 +27,7 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         // cryptocurrency
-
+        
         CreateMap<AddCryptocurrencyCommand, Core.Cryptocurrency>()
             .ForMember(destination => destination.ShortName, options => options.MapFrom(source => source.Model.ShortName))
             .ForMember(destination => destination.FullName, options => options.MapFrom(source => source.Model.FullName))
@@ -36,15 +36,13 @@ public class MappingProfile : Profile
         CreateMap<Core.Cryptocurrency, CryptocurrencyModel>();
 
         // flight sheets
-
+        
         CreateMap<FlightSheetInputModel, Core.FlightSheet.FlightSheet>();
         CreateMap<Core.FlightSheet.FlightSheet, FlightSheetModel>();
 
         CreateMap<FlightSheetTargetBase, FlightSheetTargetModelBase>().ConvertUsing(new FlightSheetTargetConverter());
-        CreateMap<CpuFlightSheetTarget, CpuFlightSheetTargetModel>()
-            .ForMember(destination => destination.MinerName, options => options.MapFrom(source => source.Miner!.Name));
-        CreateMap<GpuFlightSheetTarget, GpuFlightSheetTargetModel>()
-            .ForMember(destination => destination.MinerName, options => options.MapFrom(source => source.Miner!.Name));
+        CreateMap<CpuFlightSheetTarget, CpuFlightSheetTargetModel>();
+        CreateMap<GpuFlightSheetTarget, GpuFlightSheetTargetModel>();
 
         CreateMap<FlightSheetTargetInputModel, FlightSheetTargetBase>().ConvertUsing(new FlightSheetTargetInputModelConverter());
         CreateMap<CpuFlightSheetTargetInputModel, CpuFlightSheetTarget>();

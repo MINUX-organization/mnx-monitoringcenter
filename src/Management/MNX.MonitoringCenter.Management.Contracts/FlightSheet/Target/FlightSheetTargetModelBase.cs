@@ -1,5 +1,6 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.Text.Json.Serialization;
+using MNX.MonitoringCenter.Management.Core;
 
 namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
 
@@ -29,12 +30,7 @@ public abstract class FlightSheetTargetModelBase
     public string? AdditionalArguments { get; set; }
 
     /// <summary>
-    /// Идентификатор майнера.
+    /// Майнер.
     /// </summary>
-    public Guid MinerId { get; set; }
-
-    /// <summary>
-    /// Название майнера.
-    /// </summary>
-    public required string MinerName { get; set; }
+    public Miner Miner { get; set; }
 }

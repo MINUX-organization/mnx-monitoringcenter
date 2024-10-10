@@ -12,7 +12,7 @@ CREATE TABLE monitoring_center.gpu
     information_memory_vendor text NOT NULL,
     information_technology_type integer NOT NULL,
     information_technology_version text NOT NULL,
-    pci_bus integer NOT NULL,
+    pci_bus text NOT NULL,
     pci_id integer NOT NULL,
     restrictions_clock_core_lock_default integer NOT NULL,
     restrictions_clock_core_lock_is_writable boolean NOT NULL,

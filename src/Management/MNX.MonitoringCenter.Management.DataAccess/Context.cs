@@ -2,6 +2,7 @@
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using System.Reflection;
+using MNX.MonitoringCenter.Management.Core.Enums;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
@@ -35,7 +36,7 @@ public class Context : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        modelBuilder.Entity<Core.Algorithm>().HasData(new Core.Algorithm() { Name = "Algorithm" });
-        modelBuilder.Entity<Core.Miner>().HasData(new Core.Miner() { Name = "Miner" });
+        modelBuilder.Entity<Core.Algorithm>().HasData(new Core.Algorithm { Name = "Algorithm" });
+        modelBuilder.Entity<Core.Miner>().HasData(new Core.Miner { Name = "Miner", Version = "1.0", DeviceType = SupportedDeviceEnum.NVidiaGpu, MiningMode = GpuMiningModeEnum.Dual});
     }
 }
