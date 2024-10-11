@@ -1,8 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Monitoring.Hubs;
-using MNX.MonitoringCenter.Monitoring.Service.Hubs.Clients;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
 
 namespace MNX.MonitoringCenter.Monitoring.Service.NotificationHandlers;
@@ -15,12 +12,12 @@ public class OverclockingSettingFailEventHandler : INotificationHandler<Overcloc
     /// <summary>
     /// Контекст хаба мониторинга.
     /// </summary>
-    private readonly IHubContext<MonitoringHub, IMonitoringClient> _monitoringHubContext;
+    //private readonly IHubContext<MonitoringHub, IMonitoringClient> _monitoringHubContext;
 
-    public OverclockingSettingFailEventHandler(IHubContext<MonitoringHub, IMonitoringClient> monitoringHubContext)
+    /*public OverclockingSettingFailEventHandler(IHubContext<MonitoringHub, IMonitoringClient> monitoringHubContext)
     {
         _monitoringHubContext = monitoringHubContext;
-    }
+    }*/
 
     /// <summary>
     /// Отправить уведомление клиенту.
@@ -29,7 +26,7 @@ public class OverclockingSettingFailEventHandler : INotificationHandler<Overcloc
     /// <param name="cancellationToken"> Токен отмены. </param>
     public async Task Handle(OverclockingSettingFailEvent notification, CancellationToken cancellationToken)
     {
-        await _monitoringHubContext.Clients.Client(notification.ConnectionId)
-            .ReceivedOverclockingSettingError(notification.CardId, notification.Messages);
+        //await _monitoringHubContext.Clients.Client(notification.ConnectionId)
+        //    .ReceivedOverclockingSettingError(notification.CardId, notification.Messages);
     }
 }
