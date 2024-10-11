@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.EditFightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
