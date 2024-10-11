@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using MNX.MonitoringCenter.Management.UseCases.Miner.Models;
 using MNX.MonitoringCenter.Management.UseCases.Miner.Queries;
 
 namespace MNX.MonitoringCenter.Management.Service.Controllers;
@@ -29,8 +30,8 @@ public class MinerController : ControllerBase
     /// <returns> Список доступных майнеров </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("available")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Core.Miner>), 200)]
-    public IAsyncEnumerable<Core.Miner> GetAvailable()
+    [ProducesResponseType(typeof(IAsyncEnumerable<MinerOutputModel>), 200)]
+    public IAsyncEnumerable<MinerOutputModel> GetAvailable()
     {
         return _mediator.CreateStream(new GetAvailableMinersQuery());
     }

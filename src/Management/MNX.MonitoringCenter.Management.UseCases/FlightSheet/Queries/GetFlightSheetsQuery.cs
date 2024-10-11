@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries.Models;
 using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
@@ -9,12 +9,12 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
 /// Запрос на получение полётных листов.
 /// </summary>
 /// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetFlightSheetsQuery(Guid UserId) : IStreamRequest<FlightSheetModel>;
+public sealed record GetFlightSheetsQuery(Guid UserId) : IStreamRequest<FlightSheetOutputModel>;
 
 /// <summary>
 /// Обработчик <see cref="GetFlightSheetsQuery"/>.
 /// </summary>
-public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheetsQuery, FlightSheetModel>
+public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheetsQuery, FlightSheetOutputModel>
 {
     private readonly IMapper _mapper;
 
@@ -26,12 +26,12 @@ public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheets
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async IAsyncEnumerable<FlightSheetModel> Handle(GetFlightSheetsQuery request,
+    public async IAsyncEnumerable<FlightSheetOutputModel> Handle(GetFlightSheetsQuery request,
                                                           [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         await foreach (var flightSheet in _repository.GetAllAvailable(request.UserId).WithCancellation(cancellationToken))
         {
-            yield return _mapper.Map<FlightSheetModel>(flightSheet);
+            yield return _mapper.Map<FlightSheetOutputModel>(flightSheet);
         }
     }
 }

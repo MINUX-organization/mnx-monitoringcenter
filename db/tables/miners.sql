@@ -3,8 +3,7 @@ CREATE TABLE monitoring_center.miners
     id uuid NOT NULL,
     name text NOT NULL,
     version text NOT NULL,
-    device_type monitoring_center.supported_device NOT NULL,
-    mining_mode monitoring_center.mining_mode,
+    mining_mode monitoring_center.mining_mode NOT NULL DEFAULT 'Single',
 
     CONSTRAINT pk_miners PRIMARY KEY (id)
 );

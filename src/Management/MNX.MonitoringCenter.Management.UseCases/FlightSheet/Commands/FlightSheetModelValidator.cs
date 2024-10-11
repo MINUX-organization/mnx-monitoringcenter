@@ -60,7 +60,7 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
                         return;
                     }
 
-                    if (DeviceTargetTypeConvertor.Convert(miner.DeviceType) != model.Type)
+                    if (miner.DeviceTypes.All(deviceType => DeviceTargetTypeConvertor.Convert(deviceType.DeviceType) != model.Type))
                     {
                         context.AddFailure("Target type is not supported by the miner.");
                     }

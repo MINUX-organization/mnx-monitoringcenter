@@ -79,6 +79,7 @@ public class FlightSheetRepository : IFlightSheetRepository
                                     .Where(x => x.UserId == userId)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.Miner)
+                                            .ThenInclude(miner => miner!.DeviceTypes)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.Configs)
                                             .ThenInclude(config => config.Pool)

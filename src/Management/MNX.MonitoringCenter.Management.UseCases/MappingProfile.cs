@@ -12,6 +12,8 @@ using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.AddCrypto
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Converters;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries.Models;
+using MNX.MonitoringCenter.Management.UseCases.Miner.Models;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
 using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
@@ -39,6 +41,9 @@ public class MappingProfile : Profile
         
         CreateMap<FlightSheetInputModel, Core.FlightSheet.FlightSheet>();
         CreateMap<Core.FlightSheet.FlightSheet, FlightSheetModel>();
+
+        CreateMap<Core.FlightSheet.FlightSheet, FlightSheetOutputModel>();
+        CreateMap<FlightSheetTargetBase, FlightSheetTargetOutputModel>();
 
         CreateMap<FlightSheetTargetBase, FlightSheetTargetModelBase>().ConvertUsing(new FlightSheetTargetConverter());
         CreateMap<CpuFlightSheetTarget, CpuFlightSheetTargetModel>();
@@ -100,5 +105,11 @@ public class MappingProfile : Profile
             .ForMember(destination => destination.Name, options => options.MapFrom(source => source.Model.Name))
             .ForMember(destination => destination.Address, options => options.MapFrom(source => source.Model.Address))
             .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId));
+
+        // miners
+
+        CreateMap<Core.Miner.Miner, MinerOutputModel>()
+            .ForMember(destination => destination.DeviceTypes,
+                options => options.MapFrom(source => source.DeviceTypes.Select(x => x.DeviceType)));
     }
 }

@@ -16,18 +16,20 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Core.Miner> GetAvailableMiners()
+    public IAsyncEnumerable<Core.Miner.Miner> GetAvailableMiners()
     {
         return _context.Miners
                        .AsNoTracking()
+                       .Include(x => x.DeviceTypes)
                        .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<Core.Miner?> GetMinerById(Guid id)
+    public Task<Core.Miner.Miner?> GetMinerById(Guid id)
     {
         return _context.Miners
             .AsNoTracking()
+            .Include(x => x.DeviceTypes)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
