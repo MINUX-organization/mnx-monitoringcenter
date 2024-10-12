@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Inventory.UseCases.Drive;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Queries;
+
+namespace MNX.MonitoringCenter.Inventory.UseCases.Drive;
 
 /// <summary>
 /// Репозиторий для доступа к дискам.

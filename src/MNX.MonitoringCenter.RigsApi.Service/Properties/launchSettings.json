@@ -1,0 +1,12 @@
+﻿{
+  "profiles": {
+    "MNX.MonitoringCenter.RigsApi.Service": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://192.168.0.108:8001"
+    }
+  }
+}

@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Inventory.UseCases.NetworkAdapter;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Queries;
+
+namespace MNX.MonitoringCenter.Inventory.UseCases.NetworkAdapter;
 
 using NetworkAdapter = Contracts.NetworkAdapter.NetworkAdapter;
 

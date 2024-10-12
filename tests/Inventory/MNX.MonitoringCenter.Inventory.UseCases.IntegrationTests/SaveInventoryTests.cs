@@ -8,6 +8,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Information;
 using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries;
 using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Inventory.UseCases.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Drive;

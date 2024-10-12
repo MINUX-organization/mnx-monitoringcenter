@@ -4,16 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Gpu;
 
-namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
+namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
-
-/// <summary>
-/// Предоставляет API для работы с майнинг устройствами.
-/// </summary>
-[ApiController]
 [Route("api/devices")]
+[ApiController]
 [Authorize]
 public class DeviceController : ControllerBase
 {
@@ -59,34 +55,4 @@ public class DeviceController : ControllerBase
         var result = await _mediator.Send(new GetGpuRestrictionsQuery(gpuName));
         return result.ToActionResult();
     }
-
-    /*/// <summary>
-    /// Получить информацию о видеокартах.
-    /// </summary>
-    [HttpGet("gpus")]
-    public IAsyncEnumerable<GpuInfo> GetGpusInfo()
-    {
-        var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetGpusInfoQuery(userId));
-    }
-
-    /// <summary>
-    /// Получить информацию о процессорах.
-    /// </summary>
-    [HttpGet("cpus")]
-    public IAsyncEnumerable<CpuInfo> GetCpusInfo()
-    {
-        var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetCpusInfoQuery(userId));
-    }
-
-    /// <summary>
-    /// Получить разгон видеокарты.
-    /// </summary>
-    [HttpGet("gpus/{id:Guid}/overclocking")]
-    public async Task<IActionResult> GetGpuOverclocking(Guid id)
-    {
-        var result = await _mediator.Send(new GetGpuOverclockingQuery(id));
-        return result.ToActionResult();
-    }*/
 }

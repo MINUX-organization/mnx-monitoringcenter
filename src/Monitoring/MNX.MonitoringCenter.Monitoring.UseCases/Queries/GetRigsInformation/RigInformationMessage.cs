@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
+﻿using MNX.MonitoringCenter.Inventory.UseCases.CountDevices;
+
+namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
 /// Модель рига.
@@ -35,6 +37,18 @@ public class RigInformationMessage
     /// </summary>
     public string Mac { get; set; }
 
+    public required SoftwareVersions SoftwareVersions { get; set; }
+
+    //public required GetCountDevicesQueryResponse DevicesCount { get; set; }
+
+    /// <summary>
+    /// Майнинг устройства.
+    /// </summary>
+    public List<MiningDeviceModel> Devices { get; set; } = new();
+}
+
+public class SoftwareVersions
+{
     /// <summary>
     /// Версия Minux.
     /// </summary>
@@ -69,49 +83,4 @@ public class RigInformationMessage
     /// Версия CUDA.
     /// </summary>
     public string CudaVersion { get; set; }
-
-    /// <summary>
-    /// Количество карт Nvidia.
-    /// </summary>
-    public int NvidiaGpusCount { get; set; }
-
-    /// <summary>
-    /// Количество карт Amd.
-    /// </summary>
-    public int AmdGpusCount { get; set; }
-
-    /// <summary>
-    /// Количество карт Intel.
-    /// </summary>
-    public int IntelGpusCount { get; set; }
-
-    /// <summary>
-    /// Общее количество видеокарт.
-    /// </summary>
-    public int TotalGpusCount { get; set; }
-
-    /// <summary>
-    /// Количество процессоров AMD.
-    /// </summary>
-    public int AmdCpusCount { get; set; }
-
-    /// <summary>
-    /// Количество процессоров Intel.
-    /// </summary>
-    public int IntelCpusCount { get; set; }
-
-    /// <summary>
-    /// Общее количество процессоров.
-    /// </summary>
-    public int TotalCpusCount { get; set; }
-
-    /// <summary>
-    /// Общее количество жёстких дисков.
-    /// </summary>
-    public int TotalHddsCount { get; set; }
-
-    /// <summary>
-    /// Майнинг устройства.
-    /// </summary>
-    public List<MiningDeviceModel> Devices { get; set; } = new();
 }

@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Inventory.UseCases.Cpu;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Queries;
+
+namespace MNX.MonitoringCenter.Inventory.UseCases.Cpu;
 
 using Cpu = Contracts.Cpu.Cpu;
 

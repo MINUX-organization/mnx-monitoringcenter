@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases.Cpu;
+namespace MNX.MonitoringCenter.Inventory.Contracts.Queries.Cpu;
 
 using Cpu = Contracts.Cpu.Cpu;
 
@@ -36,23 +36,5 @@ public class GetCpusInfoQuery : IStreamRequest<Cpu>
     public GetCpusInfoQuery(Guid userId, Guid rigId, string[]? models = null, string[]? manufacturers = null)
     {
         Specification = new(userId, new Guid[] { rigId }, models, manufacturers);
-    }
-}
-
-/// <summary>
-/// Обработчик <see cref="GetCpusInfoQuery"/>.
-/// </summary>
-public class GetCpusInfoQueryHandler : IStreamRequestHandler<GetCpusInfoQuery, Cpu>
-{
-    private readonly ICpuRepository _cpuRepository;
-
-    public GetCpusInfoQueryHandler(ICpuRepository cpuRepository)
-    {
-        _cpuRepository = cpuRepository ?? throw new ArgumentNullException(nameof(cpuRepository));
-    }
-
-    public IAsyncEnumerable<Cpu> Handle(GetCpusInfoQuery request, CancellationToken cancellationToken)
-    {
-        return _cpuRepository.GetList(request.Specification);
     }
 }

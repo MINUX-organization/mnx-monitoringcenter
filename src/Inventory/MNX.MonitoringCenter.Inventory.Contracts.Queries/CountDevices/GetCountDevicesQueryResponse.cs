@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Inventory.UseCases.CountDevices;
+﻿namespace MNX.MonitoringCenter.Inventory.Contracts.Queries.CountDevices;
 
 /// <summary>
 /// Ответ на <see cref="GetCountDevicesQueryResponse"/>.

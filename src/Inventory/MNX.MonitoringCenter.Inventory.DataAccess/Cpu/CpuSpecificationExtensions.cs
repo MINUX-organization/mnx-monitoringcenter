@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.Inventory.UseCases;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Queries;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Cpu;
 

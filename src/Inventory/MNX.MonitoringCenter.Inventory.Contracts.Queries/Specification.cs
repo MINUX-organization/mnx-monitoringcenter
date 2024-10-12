@@ -1,6 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Inventory.UseCases;
+﻿namespace MNX.MonitoringCenter.Inventory.Contracts.Queries;
 
-/// <summary>
+// <summary>
 /// Спецификация инвентаризации.
 /// </summary>
 public readonly struct InventorySpecification

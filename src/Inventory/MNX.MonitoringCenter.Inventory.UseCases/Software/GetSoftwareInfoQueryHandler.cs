@@ -1,15 +1,9 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Software;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Software;
-
-/// <summary>
-/// Запрос на получение информации о программном обеспечении.
-/// </summary>
-/// <param name="UserId"> Идентификатор пользователя. </param>
-/// <param name="RigId"> Идентификатор рига. </param>
-public sealed record GetSoftwareInfoQuery(Guid UserId, Guid RigId) : IRequest<Result<SoftwareInventory>>;
 
 /// <summary>
 /// Обработчик <see cref="GetSoftwareInfoQuery"/>.

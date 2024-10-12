@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.UseCases;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries;
 using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Gpu;

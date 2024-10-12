@@ -1,31 +1,11 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.CountDevices;
 using MNX.MonitoringCenter.Inventory.UseCases.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Drive;
 using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.CountDevices;
-
-/// <summary>
-/// Запрос на получение количества устройств инвентаризации.
-/// </summary>
-public sealed class GetCountDevicesQuery : IRequest<Result<GetCountDevicesQueryResponse>>
-{
-    /// <summary>
-    /// Спецификация.
-    /// </summary>
-    public DeviceSpecification Specification { get; }
-
-    public GetCountDevicesQuery(Guid userId, Guid rigId)
-    {
-        Specification = new DeviceSpecification(userId, new Guid[] { rigId });
-    }
-
-    public GetCountDevicesQuery(Guid userId, Guid[]? rigsIds = null)
-    {
-        Specification = new DeviceSpecification(userId, rigsIds);
-    }
-}
 
 /// <summary>
 /// Реализация <see cref="GetCountDevicesQuery"/>.

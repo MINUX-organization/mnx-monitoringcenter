@@ -1,6 +1,8 @@
-﻿namespace MNX.MonitoringCenter.Inventory.UseCases.Gpu;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries;
 
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
+namespace MNX.MonitoringCenter.Inventory.UseCases.Gpu;
+
 using Gpu = Contracts.Gpu.Gpu;
 
 /// <summary>

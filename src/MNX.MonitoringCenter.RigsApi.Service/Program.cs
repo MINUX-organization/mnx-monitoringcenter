@@ -1,18 +1,13 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MNX.Application.Consul;
-using MNX.Application.Data.DI;
-using MNX.Application.RabbitMQ;
 using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Monitoring.DataAccess;
-using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
-using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories.MiningDevices;
-using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
+using MNX.MonitoringCenter.Inventory.Integration;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
 using System.Reflection;
-using ZiggyCreatures.Caching.Fusion;
+
+namespace MNX.MonitoringCenter.RigsApi.Service;
 
 internal class Program
 {
@@ -27,7 +22,7 @@ internal class Program
         }
         catch (Exception ex)
         {
-            logger.Error(ex, "Произошла ошибка при запуске хоста");
+            logger.Error(ex, "An error occurred while starting the host");
             throw;
         }
         finally
@@ -86,28 +81,10 @@ internal class Program
 
     private static void ConfigureDI(IServiceCollection services, ConfigurationManager configuration)
     {
-        services.AddDataContext<Context>(configuration);
+        services.AddInventoryModule(configuration);
+
         services.AddSignalR();
-        services.AddEasyNetQ(configuration, [Assembly.GetExecutingAssembly()]);
-        services.AddMemoryCache()
-                .AddFusionCache()
-                .WithDefaultEntryOptions(options => options.Duration = TimeSpan.FromMinutes(15)); // todo: вынести настройку в конфиг
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(new Assembly[]
-        {
-            Assembly.GetExecutingAssembly(),
-            typeof(GetRigsInformationQuery).Assembly
-        }));
-
-        services.AddAutoMapper(new Assembly[]
-        {
-            typeof(MNX.MonitoringCenter.Monitoring.UseCases.MappingProfile).Assembly,
-            typeof(DbMappingProfile).Assembly
-        });
-
-        services.AddScoped<IRigRepository, RigRepository>();
-        services.AddScoped<IMiningDeviceRepository, MiningDeviceRepository>();
-        services.AddScoped<IGpuRepository, GpuRepository>();
         services.AddScoped<UserAccessor>();
         services.AddHttpContextAccessor();
     }
@@ -116,7 +93,7 @@ internal class Program
     {
         var app = builder.Build();
         var appName = builder.Configuration["ServiceName"]
-            ?? throw new ArgumentNullException(null, "Не указано название сервиса");
+            ?? throw new ArgumentNullException(null, "�� ������� �������� �������");
 
         //if (app.Environment.IsDevelopment())
         {
@@ -128,12 +105,11 @@ internal class Program
         app.UseRouting();
         app.UseCors();
 
-        app.MapHealthChecks("/health").AllowAnonymous();
-        app.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName)).AllowAnonymous();
-
         app.UseAuthentication();
         app.UseAuthorization();
 
+        app.MapHealthChecks("/health").AllowAnonymous();
+        app.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName)).AllowAnonymous();
         app.MapControllers();
 
         await app.RunAsync();

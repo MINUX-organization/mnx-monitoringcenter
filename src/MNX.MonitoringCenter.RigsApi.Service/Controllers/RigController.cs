@@ -9,16 +9,15 @@ using MNX.MonitoringCenter.Inventory.Contracts.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.UseCases.CountDevices;
-using MNX.MonitoringCenter.Inventory.UseCases.Cpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Drive;
-using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Motherboard;
-using MNX.MonitoringCenter.Inventory.UseCases.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.UseCases.Software;
-using MNX.MonitoringCenter.Monitoring.Core;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.CountDevices;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Cpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Software;
 
-namespace MNX.MonitoringCenter.Monitoring.Service.Controllers;
+namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
 /// <summary>
 /// Предоставляет API для работы с ригами.
@@ -43,23 +42,6 @@ public class RigController : ControllerBase
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
     }
-
-    /*
-    /// <summary>
-    /// Получить информацию о ригах.
-    /// </summary>
-    /// <returns> Информация о ригах. </returns>
-    /// <response code="200"> Успешно </response>
-    [HttpGet("info")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<RigInformationMessage>), 200)]
-    public IAsyncEnumerable<RigInformationMessage> GetRigsInfo(string? searchString = null,
-                                                               string? filter = null,
-                                                               [FromQuery] string[]? filterParameters = null)
-    {
-        var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(
-            new GetRigsInformationQuery(userId, searchString, filter, filterParameters));
-    }*/
 
     /// <summary>
     /// Получить обобщённые количественные данные.

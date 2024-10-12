@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases.Gpu;
+namespace MNX.MonitoringCenter.Inventory.Contracts.Queries.Gpu;
 
 using Gpu = Contracts.Gpu.Gpu;
 
@@ -39,25 +39,4 @@ public sealed record GetSliceGpuInventoryForAPeriodQuery : IStreamRequest<List<G
                                                DateTimeOffset startPeriod,
                                                DateTimeOffset endPeriod)
         : this(userId, new Guid[] { rigId }, startPeriod, endPeriod) { }
-}
-
-
-/// <summary>
-/// Обработчик <see cref="GetSliceGpuInventoryForAPeriodQuery"/>.
-/// </summary>
-public class GetSliceGpuInventoryForAPeriodQueryHandler
-    : IStreamRequestHandler<GetSliceGpuInventoryForAPeriodQuery, List<Gpu>>
-{
-    private readonly IGpuRepository _gpuRepository;
-
-    public GetSliceGpuInventoryForAPeriodQueryHandler(IGpuRepository gpuRepository)
-    {
-        _gpuRepository = gpuRepository ?? throw new ArgumentNullException(nameof(gpuRepository));
-    }
-
-    public IAsyncEnumerable<List<Gpu>> Handle(GetSliceGpuInventoryForAPeriodQuery request,
-                                              CancellationToken cancellationToken)
-    {
-        return _gpuRepository.GetSliceForAPeriod(request.Specification, request.StartPeriod, request.EndPeriod);
-    }
 }

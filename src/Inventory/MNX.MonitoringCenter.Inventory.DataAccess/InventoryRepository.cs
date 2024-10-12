@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries;
 using MNX.MonitoringCenter.Inventory.UseCases;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;

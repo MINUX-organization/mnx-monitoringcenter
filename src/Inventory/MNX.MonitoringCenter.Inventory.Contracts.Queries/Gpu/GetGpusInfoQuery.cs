@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases.Gpu;
+namespace MNX.MonitoringCenter.Inventory.Contracts.Queries.Gpu;
 
 using Gpu = Contracts.Gpu.Gpu;
 
@@ -36,23 +36,5 @@ public class GetGpusInfoQuery : IStreamRequest<Gpu>
     public GetGpusInfoQuery(Guid userId, Guid rigId, string[]? models = null, string[]? manufacturers = null)
     {
         Specification = new(userId, new Guid[] { rigId }, models, manufacturers);
-    }
-}
-
-/// <summary>
-/// Обработчик <see cref="GetGpusInfoQuery"/>.
-/// </summary>
-public class GetGpusInfoQueryHandler : IStreamRequestHandler<GetGpusInfoQuery, Gpu>
-{
-    private readonly IGpuRepository _gpuRepository;
-
-    public GetGpusInfoQueryHandler(IGpuRepository gpuRepository)
-    {
-        _gpuRepository = gpuRepository ?? throw new ArgumentNullException(nameof(gpuRepository));
-    }
-
-    public IAsyncEnumerable<Gpu> Handle(GetGpusInfoQuery request, CancellationToken cancellationToken)
-    {
-        return _gpuRepository.GetList(request.Specification);
     }
 }

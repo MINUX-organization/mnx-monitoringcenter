@@ -1,16 +1,10 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Motherboard;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Motherboard;
 
 using Motherboard = Contracts.Motherboard.Motherboard;
-
-/// <summary>
-/// Запрос на получение материнской платы.
-/// </summary>
-/// <param name="UserId"> Идентификатор пользователя. </param>
-/// <param name="RigId"> Идентификатор рига. </param>
-public sealed record GetMotherboardInfoQuery(Guid UserId, Guid RigId) : IRequest<Result<Motherboard>>;
 
 /// <summary>
 /// Обработчик <see cref="GetMotherboardInfoQuery"/>.

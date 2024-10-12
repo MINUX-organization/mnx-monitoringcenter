@@ -1,22 +1,7 @@
 ﻿using MediatR;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Gpu;
-
-/// <summary>
-/// Запрос на получение уникальных названий видеокарт.
-/// </summary>
-public sealed class GetGpuUniqueNamesQuery : IStreamRequest<string>
-{
-    /// <summary>
-    /// Спецификация инвентаризации.
-    /// </summary>
-    public InventorySpecification Specification { get; }
-
-    public GetGpuUniqueNamesQuery(Guid userId)
-    {
-        Specification = new InventorySpecification(userId);
-    }
-}
 
 /// <summary>
 /// Обработчик <see cref="GetGpuUniqueNamesQuery"/>.

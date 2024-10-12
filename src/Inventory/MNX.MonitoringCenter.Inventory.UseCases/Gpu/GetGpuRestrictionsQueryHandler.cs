@@ -1,14 +1,9 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
+using MNX.MonitoringCenter.Inventory.Contracts.Queries.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Gpu;
-
-/// <summary>
-/// Запрос на получение ограничений видеокарты.
-/// </summary>
-/// <param name="GpuName"> Название видеокарты. </param>
-public sealed record GetGpuRestrictionsQuery(string GpuName) : IRequest<Result<GpuRestrictions>>;
 
 /// <summary>
 /// Обработчик <see cref="GetGpuRestrictionsQuery"/>.

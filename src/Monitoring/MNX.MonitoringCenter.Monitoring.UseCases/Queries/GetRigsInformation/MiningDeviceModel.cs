@@ -13,10 +13,5 @@ public class MiningDeviceModel
     /// <summary>
     /// Полётный лист.
     /// </summary>
-    public FlightSheetModel FlightSheet { get; set; }
-
-    /// <summary>
-    /// Майнер.
-    /// </summary>
-    public string Miner { get; set; }
+    public FlightSheetModel? FlightSheet { get; set; }
 }

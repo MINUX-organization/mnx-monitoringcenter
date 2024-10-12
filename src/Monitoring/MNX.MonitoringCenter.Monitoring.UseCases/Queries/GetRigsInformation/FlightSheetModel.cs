@@ -11,6 +11,11 @@ public class FlightSheetModel
     public string Name { get; set; }
 
     /// <summary>
+    /// Майнер.
+    /// </summary>
+    public string Miner { get; set; }
+
+    /// <summary>
     /// Список монет.
     /// </summary>
     public List<CoinModel> Coins { get; set; }
