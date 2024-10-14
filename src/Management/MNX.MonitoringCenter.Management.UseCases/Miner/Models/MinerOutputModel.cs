@@ -23,7 +23,7 @@ public class MinerOutputModel
     public required string Version { get; set; }
 
     /// <summary>
-    /// Тип дивайса.
+    /// Типы девайсов.
     /// </summary>
     public List<SupportedDeviceEnum> DeviceTypes { get; set; } = [];
 

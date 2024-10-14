@@ -6,7 +6,6 @@
 
 -- CREATING TYPES
 \ir 'types/mining_mode.sql'
-\ir 'types/supported_device.sql'
 
 -- CREATING TABLES
 \ir 'tables/algorithms.sql'

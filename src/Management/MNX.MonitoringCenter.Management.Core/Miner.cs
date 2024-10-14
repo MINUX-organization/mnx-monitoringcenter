@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Enums;
 
-namespace MNX.MonitoringCenter.Management.Core.Miner;
+namespace MNX.MonitoringCenter.Management.Core;
 
 /// <summary>
 /// Майнер.
@@ -23,9 +23,9 @@ public class Miner : IEquatable<Miner>
     public required string Version { get; set; }
 
     /// <summary>
-    /// Тип дивайса.
+    /// Типы девайсов.
     /// </summary>
-    public List<SupportedDeviceType> DeviceTypes { get; set; } = [];
+    public SupportedDeviceEnum SupportedDevices { get; set; }
 
     /// <summary>
     /// Режим майнинга монет (для GPU).
@@ -62,6 +62,6 @@ public class Miner : IEquatable<Miner>
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Name);
+        return HashCode.Combine(Name, Version);
     }
 }

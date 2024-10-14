@@ -1,6 +1,6 @@
 ﻿using Swashbuckle.AspNetCore.Annotations;
 using System.Text.Json.Serialization;
-using MNX.MonitoringCenter.Management.Core.Miner;
+using MNX.MonitoringCenter.Management.Core;
 
 namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
 

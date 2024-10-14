@@ -3,7 +3,6 @@ using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using System.Reflection;
 using MNX.MonitoringCenter.Management.Core.Enums;
-using MNX.MonitoringCenter.Management.Core.Miner;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
@@ -22,7 +21,7 @@ public class Context : DbContext
 
     internal DbSet<FlightSheetTargetConfig> FlightSheetTargetConfigs { get; set; }
 
-    internal DbSet<Core.Miner.Miner> Miners { get; set; }
+    internal DbSet<Core.Miner> Miners { get; set; }
 
     internal DbSet<Core.Pool> Pools { get; set; }
 
@@ -38,9 +37,14 @@ public class Context : DbContext
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         modelBuilder.Entity<Core.Algorithm>().HasData(new Core.Algorithm { Name = "Algorithm" });
-        modelBuilder.Entity<Core.Miner.Miner>().HasData(
-            new Core.Miner.Miner {Id = Guid.Parse("251752F8-419A-4EB3-8631-50A7557CFF7B"), Name = "Miner", Version = "1.0", MiningMode = GpuMiningModeEnum.Dual });
-        modelBuilder.Entity<SupportedDeviceType>().HasData(
-            new SupportedDeviceType {DeviceType = SupportedDeviceEnum.NVidiaGpu, MinerId = Guid.Parse("251752F8-419A-4EB3-8631-50A7557CFF7B") });
+        modelBuilder.Entity<Core.Miner>().HasData(
+            new Core.Miner
+            {
+                Id = Guid.Parse("251752F8-419A-4EB3-8631-50A7557CFF7B"), 
+                Name = "Miner", 
+                Version = "1.0", 
+                MiningMode = GpuMiningModeEnum.Dual, 
+                SupportedDevices = SupportedDeviceEnum.AmdGpu | SupportedDeviceEnum.IntelGpu | SupportedDeviceEnum.NVidiaGpu
+            });
     }
 }

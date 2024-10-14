@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 
 namespace MNX.MonitoringCenter.Management.Core.Enums;
@@ -7,41 +6,66 @@ namespace MNX.MonitoringCenter.Management.Core.Enums;
 /// <summary>
 /// Тип поддерживаемого устройства.
 /// </summary>
+[Flags]
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum SupportedDeviceEnum
 {
-    NVidiaGpu,
+    NVidiaGpu = 1,
 
-    IntelGpu,
+    IntelGpu = 1 << 1,
 
-    IntelCpu,
+    IntelCpu = 1 << 2,
 
-    AmdGpu,
+    AmdGpu = 1 << 3,
 
-    AmdCpu
+    AmdCpu = 1 << 4
 }
 
 /// <summary>
 /// Конвертор из <see cref="SupportedDeviceEnum"/> в <see cref="FlightSheetTargetType"/>.
 /// </summary>
-public static class DeviceTargetTypeConvertor
+public static class DeviceEnumConvertor
 {
-    /// <summary>
-    /// Конвертировать из <see cref="SupportedDeviceEnum"/> в <see cref="FlightSheetTargetType"/>.
-    /// </summary>
-    /// <param name="convertible"> Конвертируемое значение. </param>
-    /// <returns> Сконвертированное значение. </returns>
-    /// <exception cref="InvalidEnumArgumentException"> Значение не было добавлено в конвертор. </exception>
-    public static FlightSheetTargetType Convert(SupportedDeviceEnum convertible)
+    private static readonly Dictionary<FlightSheetTargetType, List<SupportedDeviceEnum>> TargetToDeviceType = new()
     {
-        return convertible switch
+        { 
+            FlightSheetTargetType.GPU, 
+            [
+                SupportedDeviceEnum.AmdGpu, 
+                SupportedDeviceEnum.IntelGpu, 
+                SupportedDeviceEnum.NVidiaGpu
+            ]
+        },
         {
-            SupportedDeviceEnum.NVidiaGpu => FlightSheetTargetType.GPU,
-            SupportedDeviceEnum.IntelGpu => FlightSheetTargetType.GPU,
-            SupportedDeviceEnum.IntelCpu => FlightSheetTargetType.CPU,
-            SupportedDeviceEnum.AmdGpu => FlightSheetTargetType.GPU,
-            SupportedDeviceEnum.AmdCpu => FlightSheetTargetType.CPU,
-            _ => throw new InvalidEnumArgumentException(convertible.ToString(), (int)convertible, typeof(SupportedDeviceEnum))
-        };
+            FlightSheetTargetType.CPU, 
+            [
+                SupportedDeviceEnum.AmdCpu, 
+                SupportedDeviceEnum.IntelCpu
+            ]
+        }
+    };
+
+    /// <summary>
+    /// Конвертирует Enum-значение поддерживаемых устройств в список строк.
+    /// </summary>
+    /// <param name="deviceEnum"> Типы устроств. </param>
+    /// <returns> Список строк. </returns>
+    public static string[] ToStrings(this SupportedDeviceEnum deviceEnum)
+    {
+        var maxValue = (int) Enum.GetValues(typeof(SupportedDeviceEnum)).Cast<SupportedDeviceEnum>().Last() * 2; 
+        return 0 < (int)deviceEnum && (int)deviceEnum < maxValue
+            ? deviceEnum.ToString().Split(", ")
+            : [];
+    }
+
+    /// <summary>
+    /// Проверка на совместимость типа таргета и устройств.
+    /// </summary>
+    /// <param name="targetType"> Тип таргета. </param>
+    /// <param name="deviceEnum"> Типы устроств. </param>
+    /// <returns> <see langword="true"/>, если тип дивайса поддерживается типом таргета, иначе <see langword="false"/>. </returns>
+    public static bool IsDeviceSupported(this SupportedDeviceEnum deviceEnum, FlightSheetTargetType targetType)
+    {
+        return TargetToDeviceType[targetType].Any(x => deviceEnum.HasFlag(x));
     }
 }

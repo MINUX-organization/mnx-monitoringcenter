@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MNX.MonitoringCenter.Management.DataAccess.Miner.Cfg;
+namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
 
 /// <summary>
 /// Конфигурация для таблицы с майнерами.
 /// </summary>
-internal class MinerCfg : IEntityTypeConfiguration<Core.Miner.Miner>
+internal class MinerCfg : IEntityTypeConfiguration<Core.Miner>
 {
-    public void Configure(EntityTypeBuilder<Core.Miner.Miner> builder)
+    public void Configure(EntityTypeBuilder<Core.Miner> builder)
     {
         builder.HasIndex(x => x.Name);
 

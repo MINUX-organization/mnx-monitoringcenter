@@ -4,6 +4,7 @@ using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core;
+using MNX.MonitoringCenter.Management.Core.Enums;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
@@ -108,8 +109,8 @@ public class MappingProfile : Profile
 
         // miners
 
-        CreateMap<Core.Miner.Miner, MinerOutputModel>()
+        CreateMap<Core.Miner, MinerOutputModel>()
             .ForMember(destination => destination.DeviceTypes,
-                options => options.MapFrom(source => source.DeviceTypes.Select(x => x.DeviceType)));
+                options => options.MapFrom(source => source.SupportedDevices.ToStrings()));
     }
 }

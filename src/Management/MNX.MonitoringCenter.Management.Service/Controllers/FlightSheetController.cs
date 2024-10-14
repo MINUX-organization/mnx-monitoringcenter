@@ -10,7 +10,7 @@ using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.RemoveFlight
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries.Models;
 
-namespace MNX.MonitoringCenter.Management.Service.Controllers.Configurations;
+namespace MNX.MonitoringCenter.Management.Service.Controllers;
 
 /// <summary>
 /// Предоставляет API для работы с полётными листами.

@@ -9,14 +9,14 @@ public interface IMinerRepository
     /// Получить список доступных майнеров.
     /// </summary>
     /// <returns> Список доступных майнеров. </returns>
-    IAsyncEnumerable<Core.Miner.Miner> GetAvailableMiners();
+    IAsyncEnumerable<Core.Miner> GetAvailableMiners();
 
     /// <summary>
     /// Получить майнер по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор майнера. </param>
     /// <returns> Майнер. </returns>
-    Task<Core.Miner.Miner?> GetMinerById(Guid id);
+    Task<Core.Miner?> GetMinerById(Guid id);
 
     /// <summary>
     /// Получить майнер по идентификатору.

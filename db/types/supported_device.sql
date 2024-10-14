@@ -1,1 +1,0 @@
-create type monitoring_center.supported_device as enum ('NVidiaGpu', 'IntelGpu', 'IntelCpu', 'AmdGpu', 'AmdCpu');
