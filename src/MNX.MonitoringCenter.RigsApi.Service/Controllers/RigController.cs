@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
-using MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu;
@@ -17,7 +17,6 @@ using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
-using MNX.MonitoringCenter.Inventory.Contracts.Rig;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 

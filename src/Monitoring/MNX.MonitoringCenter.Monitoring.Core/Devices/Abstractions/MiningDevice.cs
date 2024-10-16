@@ -39,11 +39,6 @@ public abstract class MiningDevice
     public string Manufacturer { get; }
 
     /// <summary>
-    /// Полётный лист.
-    /// </summary>
-    public FlightSheet? FlightSheet { get; set; }
-
-    /// <summary>
     /// Разгон.
     /// </summary>
     public GpuOverclocking? Overclocking { get; set; }

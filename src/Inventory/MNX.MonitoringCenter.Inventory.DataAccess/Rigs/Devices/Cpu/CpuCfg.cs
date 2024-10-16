@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Cpu;
 /// <summary>
 /// Конфигурация таблицы с процессорами.
 /// </summary>
-internal class CpuCfg : IEntityTypeConfiguration<Contracts.Cpu.Cpu>
+internal class CpuCfg : IEntityTypeConfiguration<Contracts.Devices.Cpu.Cpu>
 {
-    public void Configure(EntityTypeBuilder<Contracts.Cpu.Cpu> builder)
+    public void Configure(EntityTypeBuilder<Contracts.Devices.Cpu.Cpu> builder)
     {
         builder.ComplexProperty(e => e.Pci);
 

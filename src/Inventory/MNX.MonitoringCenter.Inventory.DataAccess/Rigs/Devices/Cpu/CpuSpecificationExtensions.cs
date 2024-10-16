@@ -2,7 +2,7 @@
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Cpu;
 
-using Cpu = Contracts.Cpu.Cpu;
+using Cpu = Contracts.Devices.Cpu.Cpu;
 
 /// <summary>
 /// Расширения для <see cref="IQueryable{Cpu}"/>, для обработки спецификации.

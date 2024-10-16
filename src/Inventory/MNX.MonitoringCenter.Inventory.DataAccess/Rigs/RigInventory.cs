@@ -1,5 +1,9 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory;
 
@@ -31,22 +35,22 @@ public class RigInventory : IEquatable<RigInventory>
     /// <summary>
     /// Процессоры.
     /// </summary>
-    public List<Contracts.Cpu.Cpu> Cpus { get; set; } = new();
+    public List<Cpu> Cpus { get; set; } = new();
 
     /// <summary>
     /// Диски.
     /// </summary>
-    public List<Contracts.Drive.Drive> Drives { get; set; } = new();
+    public List<Drive> Drives { get; set; } = new();
 
     /// <summary>
     /// Видеокарты.
     /// </summary>
-    public List<Contracts.Gpu.Gpu> Gpus { get; set; } = new();
+    public List<Gpu> Gpus { get; set; } = new();
 
     /// <summary>
     /// Сетевые адаптеры.
     /// </summary>
-    public List<Contracts.NetworkAdapter.NetworkAdapter> NetworkAdapters { get; set; } = new();
+    public List<NetworkAdapter> NetworkAdapters { get; set; } = new();
 
     /// <summary>
     /// Материнская плата.

@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Network
 /// <summary>
 /// Конфигурация для таблицы с сетевыми адаптерами.
 /// </summary>
-internal class NetworkAdapterCfg : IEntityTypeConfiguration<Contracts.NetworkAdapter.NetworkAdapter>
+internal class NetworkAdapterCfg : IEntityTypeConfiguration<Contracts.Devices.NetworkAdapter.NetworkAdapter>
 {
-    public void Configure(EntityTypeBuilder<Contracts.NetworkAdapter.NetworkAdapter> builder)
+    public void Configure(EntityTypeBuilder<Contracts.Devices.NetworkAdapter.NetworkAdapter> builder)
     {
         builder.ComplexProperty(e => e.Information);
     }

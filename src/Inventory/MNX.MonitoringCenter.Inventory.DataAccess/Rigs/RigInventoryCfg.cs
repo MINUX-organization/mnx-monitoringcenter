@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory;
 

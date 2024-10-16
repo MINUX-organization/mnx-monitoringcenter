@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;

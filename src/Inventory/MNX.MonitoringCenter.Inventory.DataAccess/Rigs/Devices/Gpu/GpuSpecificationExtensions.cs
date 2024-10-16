@@ -2,7 +2,7 @@
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
 
-using Gpu = Contracts.Gpu.Gpu;
+using Gpu = Contracts.Devices.Gpu.Gpu;
 
 /// <summary>
 /// Расширения для <see cref="IQueryable{Gpu}"/>, для обработки спецификации.

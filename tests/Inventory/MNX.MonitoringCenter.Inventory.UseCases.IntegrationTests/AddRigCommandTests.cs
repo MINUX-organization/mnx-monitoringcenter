@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
 using MNX.MonitoringCenter.Inventory.IntegrationTests;
-using MNX.MonitoringCenter.Inventory.UseCases.Rigs;
 using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests;

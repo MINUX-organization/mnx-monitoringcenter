@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
 /// <summary>
 /// Конфигурация таблицы с видеокартами.
 /// </summary>
-internal class GpuCfg : IEntityTypeConfiguration<Contracts.Gpu.Gpu>
+internal class GpuCfg : IEntityTypeConfiguration<Contracts.Devices.Gpu.Gpu>
 {
-    public void Configure(EntityTypeBuilder<Contracts.Gpu.Gpu> builder)
+    public void Configure(EntityTypeBuilder<Contracts.Devices.Gpu.Gpu> builder)
     {
         builder.ComplexProperty(e => e.Pci);
 

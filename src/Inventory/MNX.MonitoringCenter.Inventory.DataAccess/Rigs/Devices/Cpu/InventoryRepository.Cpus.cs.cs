@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Cpu;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -11,13 +12,13 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : ICpuRepository
 {
     /// <inheritdoc/>
-    public IAsyncEnumerable<Contracts.Cpu.Cpu> GetCpus(DeviceSpecification specification)
+    public IAsyncEnumerable<Cpu> GetCpus(DeviceSpecification specification)
     {
         return GetCpusList(specification).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<List<Contracts.Cpu.Cpu>> GetCpusSliceForAPeriod(InventorySpecification specification,
+    public IAsyncEnumerable<List<Cpu>> GetCpusSliceForAPeriod(InventorySpecification specification,
                                                                             DateTimeOffset startPeriod,
                                                                             DateTimeOffset endPeriod)
     {
@@ -42,7 +43,7 @@ public partial class InventoryRepository : ICpuRepository
     }
 
     /// <inheritdoc/>
-    private IQueryable<Contracts.Cpu.Cpu> GetCpusList(DeviceSpecification specification)
+    private IQueryable<Cpu> GetCpusList(DeviceSpecification specification)
     {
         return GetInventoryBySpecification(specification.InventorySpecification)
                                  .Include(x => x.Cpus)

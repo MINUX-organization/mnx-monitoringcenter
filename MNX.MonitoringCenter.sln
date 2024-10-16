@@ -23,8 +23,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management", "Management", 
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Monitoring", "Monitoring", "{7BEC6D83-F850-4C4C-82C8-012F67D2507C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Monitoring.DataAccess", "src\Monitoring\MNX.MonitoringCenter.Monitoring.DataAccess\MNX.MonitoringCenter.Monitoring.DataAccess.csproj", "{C069577F-5973-4B40-9931-AC9846967B28}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Monitoring.Service", "src\Monitoring\MNX.MonitoringCenter.Monitoring.Service\MNX.MonitoringCenter.Monitoring.Service.csproj", "{13425A34-C3EE-4AB3-91FF-5E9BF88C2792}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Monitoring.UseCases", "src\Monitoring\MNX.MonitoringCenter.Monitoring.UseCases\MNX.MonitoringCenter.Monitoring.UseCases.csproj", "{D003C366-93D4-48C6-AAB5-8F6C7D75872E}"
@@ -67,7 +65,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.Service", "src\MNX.MonitoringCenter.RigsApi.Service\MNX.MonitoringCenter.RigsApi.Service.csproj", "{754794D6-8D34-4526-A3B7-01C2BAB05D6B}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Inventory.Contracts.Requests", "src\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Queries\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj", "{7F0C4DA8-F741-4352-B597-7B4F9CA43BF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Inventory.Contracts.Requests", "src\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj", "{EAA1A118-7935-450D-A7A4-C437BC674357}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Inventory.Controllers", "src\Inventory\MNX.MonitoringCenter.Inventory.Controllers\MNX.MonitoringCenter.Inventory.Controllers.csproj", "{AAB48DA7-2C30-407B-973B-66F8561F71FD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,10 +95,6 @@ Global
 		{36695482-7A7E-4B48-9CCA-3BF6864E7056}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{36695482-7A7E-4B48-9CCA-3BF6864E7056}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{36695482-7A7E-4B48-9CCA-3BF6864E7056}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C069577F-5973-4B40-9931-AC9846967B28}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C069577F-5973-4B40-9931-AC9846967B28}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C069577F-5973-4B40-9931-AC9846967B28}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C069577F-5973-4B40-9931-AC9846967B28}.Release|Any CPU.Build.0 = Release|Any CPU
 		{13425A34-C3EE-4AB3-91FF-5E9BF88C2792}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{13425A34-C3EE-4AB3-91FF-5E9BF88C2792}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{13425A34-C3EE-4AB3-91FF-5E9BF88C2792}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -163,10 +159,14 @@ Global
 		{754794D6-8D34-4526-A3B7-01C2BAB05D6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{754794D6-8D34-4526-A3B7-01C2BAB05D6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{754794D6-8D34-4526-A3B7-01C2BAB05D6B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7F0C4DA8-F741-4352-B597-7B4F9CA43BF1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7F0C4DA8-F741-4352-B597-7B4F9CA43BF1}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7F0C4DA8-F741-4352-B597-7B4F9CA43BF1}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7F0C4DA8-F741-4352-B597-7B4F9CA43BF1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EAA1A118-7935-450D-A7A4-C437BC674357}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EAA1A118-7935-450D-A7A4-C437BC674357}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EAA1A118-7935-450D-A7A4-C437BC674357}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EAA1A118-7935-450D-A7A4-C437BC674357}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAB48DA7-2C30-407B-973B-66F8561F71FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAB48DA7-2C30-407B-973B-66F8561F71FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAB48DA7-2C30-407B-973B-66F8561F71FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAB48DA7-2C30-407B-973B-66F8561F71FD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -180,7 +180,6 @@ Global
 		{36695482-7A7E-4B48-9CCA-3BF6864E7056} = {9C628EEF-6EAA-4451-83D8-74D9E717C558}
 		{614A467A-DD66-457E-AB9D-8883B0F6B2D2} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
 		{7BEC6D83-F850-4C4C-82C8-012F67D2507C} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
-		{C069577F-5973-4B40-9931-AC9846967B28} = {7BEC6D83-F850-4C4C-82C8-012F67D2507C}
 		{13425A34-C3EE-4AB3-91FF-5E9BF88C2792} = {7BEC6D83-F850-4C4C-82C8-012F67D2507C}
 		{D003C366-93D4-48C6-AAB5-8F6C7D75872E} = {7BEC6D83-F850-4C4C-82C8-012F67D2507C}
 		{805D2321-19BC-4D53-A3CE-3E1487E916F7} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
@@ -202,7 +201,8 @@ Global
 		{2D21B338-3F41-4A46-802D-3F89B88A1106} = {1E261990-E4F1-48AF-8714-FAE68EB1188A}
 		{AEB9D484-A398-485F-B63C-BB0337DDC38C} = {198834A4-ED46-455D-8BEE-DF41A7AB10C0}
 		{754794D6-8D34-4526-A3B7-01C2BAB05D6B} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
-		{7F0C4DA8-F741-4352-B597-7B4F9CA43BF1} = {87F9E337-4D37-415A-9BC2-43FB5AC423A9}
+		{EAA1A118-7935-450D-A7A4-C437BC674357} = {87F9E337-4D37-415A-9BC2-43FB5AC423A9}
+		{AAB48DA7-2C30-407B-973B-66F8561F71FD} = {87F9E337-4D37-415A-9BC2-43FB5AC423A9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}

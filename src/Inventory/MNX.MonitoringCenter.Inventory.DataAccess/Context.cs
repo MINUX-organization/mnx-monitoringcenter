@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 using System.Reflection;
 
@@ -22,7 +23,7 @@ public class Context : DbContext
     /// <summary>
     /// Видеокарты.
     /// </summary>
-    internal DbSet<Contracts.Gpu.Gpu> Gpu { get; set; }
+    internal DbSet<Gpu> Gpu { get; set; }
 
     public Context(DbContextOptions<Context> options) : base(options) { }
 

@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -12,13 +13,13 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : IGpuRepository
 {
     /// <inheritdoc/>
-    public IAsyncEnumerable<Contracts.Gpu.Gpu> GetGpus(DeviceSpecification specification)
+    public IAsyncEnumerable<Gpu> GetGpus(DeviceSpecification specification)
     {
         return GetGpusList(specification).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<List<Contracts.Gpu.Gpu>> GetGpusSliceForAPeriod(InventorySpecification specification,
+    public IAsyncEnumerable<List<Gpu>> GetGpusSliceForAPeriod(InventorySpecification specification,
                                                                             DateTimeOffset startPeriod,
                                                                             DateTimeOffset endPeriod)
     {
@@ -65,7 +66,7 @@ public partial class InventoryRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
-    private IQueryable<Contracts.Gpu.Gpu> GetGpusList(DeviceSpecification specification)
+    private IQueryable<Gpu> GetGpusList(DeviceSpecification specification)
     {
         return GetInventoryBySpecification(specification.InventorySpecification)
                                  .Include(x => x.Gpus)

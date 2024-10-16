@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
     <ProjectReference Include="..\..\..\src\Inventory\MNX.MonitoringCenter.Inventory.DataAccess\MNX.MonitoringCenter.Inventory.DataAccess.csproj" />
   </ItemGroup>
 

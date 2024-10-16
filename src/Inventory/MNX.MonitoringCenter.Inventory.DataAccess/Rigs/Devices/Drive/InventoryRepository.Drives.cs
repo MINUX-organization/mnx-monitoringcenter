@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -10,7 +11,7 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : IDriveRepository
 {
     /// <inheritdoc/>
-    public Task<List<Contracts.Drive.Drive>?> GetDrives(InventorySpecification specification,
+    public Task<List<Drive>?> GetDrives(InventorySpecification specification,
                                                             CancellationToken cancellationToken)
     {
         return GetInventoryBySpecification(specification)

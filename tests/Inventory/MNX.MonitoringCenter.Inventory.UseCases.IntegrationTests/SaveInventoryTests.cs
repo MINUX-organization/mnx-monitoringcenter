@@ -1,22 +1,24 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Information;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
-using MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.Cpu;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.Drive;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.Gpu;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.Motherboard;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Software;
-using MNX.MonitoringCenter.Inventory.UseCases.Rigs;
+using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
+using MNX.MonitoringCenter.Inventory.UseCases;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.UseCases.Software;
 using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Inventory.IntegrationTests;
@@ -37,7 +39,7 @@ public class SaveInventoryTests : BaseTest
     public async Task SaveInventory(RigInventoryMsg inventoryMsg)
     {
         var rigRepository = ServiceProvider.GetRequiredService<IRigRepository>();
-        await rigRepository.Add(new Contracts.Rig.Rig()
+        await rigRepository.Add(new Rig()
         {
             Id = inventoryMsg.RigId,
             OwnerId = OWNER_ID,
@@ -114,7 +116,7 @@ public class SaveInventoryTests : BaseTest
                     {
                         Cpus = new()
                         {
-                            new Contracts.Cpu.Cpu()
+                            new Cpu()
                             {
                                 Id = Guid.NewGuid(),
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
@@ -138,7 +140,7 @@ public class SaveInventoryTests : BaseTest
                         },
                         Drives = new()
                         {
-                            new Contracts.Drive.Drive()
+                            new Drive()
                             {
                                 Id = Guid.NewGuid(),
                                 Information = new DriveInformation()
@@ -152,7 +154,7 @@ public class SaveInventoryTests : BaseTest
                         },
                         Gpus = new()
                         {
-                            new Contracts.Gpu.Gpu()
+                            new Gpu()
                             {
                                 Id = Guid.NewGuid(),
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
@@ -232,7 +234,7 @@ public class SaveInventoryTests : BaseTest
                                 }
                             }
                         },
-                        Motherboard = new Contracts.Motherboard.Motherboard()
+                        Motherboard = new Motherboard()
                         {
                             Id = Guid.NewGuid(),
                             Information = new MotherboardInformation()
@@ -276,7 +278,7 @@ public class SaveInventoryTests : BaseTest
                     {
                         Cpus = new()
                         {
-                            new Contracts.Cpu.Cpu()
+                            new Cpu()
                             {
                                 Id = Guid.NewGuid(),
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
@@ -300,7 +302,7 @@ public class SaveInventoryTests : BaseTest
                         },
                         Drives = new()
                         {
-                            new Contracts.Drive.Drive()
+                            new Drive()
                             {
                                 Id = Guid.NewGuid(),
                                 Information = new DriveInformation()
@@ -314,7 +316,7 @@ public class SaveInventoryTests : BaseTest
                         },
                         Gpus = new()
                         {
-                            new Contracts.Gpu.Gpu()
+                            new Gpu()
                             {
                                 Id = Guid.NewGuid(),
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
@@ -394,7 +396,7 @@ public class SaveInventoryTests : BaseTest
                                 }
                             }
                         },
-                        Motherboard = new Contracts.Motherboard.Motherboard()
+                        Motherboard = new Motherboard()
                         {
                             Id = Guid.NewGuid(),
                             Information = new MotherboardInformation()
