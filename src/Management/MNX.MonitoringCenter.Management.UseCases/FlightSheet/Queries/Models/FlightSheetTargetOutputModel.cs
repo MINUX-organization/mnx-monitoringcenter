@@ -1,5 +1,4 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
-using MNX.MonitoringCenter.Management.UseCases.Miner.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries.Models;
 
@@ -16,7 +15,7 @@ public class FlightSheetTargetOutputModel
     /// <summary>
     /// Список конфигов для майнинга.
     /// </summary>
-    public List<FlightSheetTargetConfigModel> Configs { get; set; } = new();
+    public List<FlightSheetTargetConfigModel> Configs { get; set; } = [];
 
     /// <summary>
     /// Строка аргументов для майнера.
@@ -26,5 +25,5 @@ public class FlightSheetTargetOutputModel
     /// <summary>
     /// Майнер.
     /// </summary>
-    public required MinerOutputModel Miner { get; set; }
+    public required Core.Miner Miner { get; set; }
 }

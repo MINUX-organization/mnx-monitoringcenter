@@ -4,7 +4,6 @@ using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.Core.Enums;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
@@ -14,7 +13,6 @@ using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Converters;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries.Models;
-using MNX.MonitoringCenter.Management.UseCases.Miner.Models;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
 using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
@@ -106,11 +104,5 @@ public class MappingProfile : Profile
             .ForMember(destination => destination.Name, options => options.MapFrom(source => source.Model.Name))
             .ForMember(destination => destination.Address, options => options.MapFrom(source => source.Model.Address))
             .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId));
-
-        // miners
-
-        CreateMap<Core.Miner, MinerOutputModel>()
-            .ForMember(destination => destination.DeviceTypes,
-                options => options.MapFrom(source => source.SupportedDevices.ToStrings()));
     }
 }

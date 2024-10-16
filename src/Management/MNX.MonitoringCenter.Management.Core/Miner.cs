@@ -23,9 +23,9 @@ public class Miner : IEquatable<Miner>
     public required string Version { get; set; }
 
     /// <summary>
-    /// Типы девайсов.
+    /// Типы поддерживаемых девайсов.
     /// </summary>
-    public SupportedDeviceEnum SupportedDevices { get; set; }
+    public DeviceEnum SupportedDevices { get; set; }
 
     /// <summary>
     /// Режим майнинга монет (для GPU).

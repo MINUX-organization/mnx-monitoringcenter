@@ -44,7 +44,7 @@ public class Context : DbContext
                 Name = "Miner", 
                 Version = "1.0", 
                 MiningMode = GpuMiningModeEnum.Dual, 
-                SupportedDevices = SupportedDeviceEnum.AmdGpu | SupportedDeviceEnum.IntelGpu | SupportedDeviceEnum.NVidiaGpu
+                SupportedDevices = DeviceEnum.AmdGpu | DeviceEnum.IntelGpu | DeviceEnum.NVidiaGpu
             });
     }
 }
