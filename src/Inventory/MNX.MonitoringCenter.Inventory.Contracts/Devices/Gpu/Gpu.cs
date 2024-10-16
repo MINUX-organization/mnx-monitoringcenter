@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;

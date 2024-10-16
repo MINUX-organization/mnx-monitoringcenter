@@ -30,13 +30,26 @@ public partial class InventoryRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<string> GetGpusUniqueNames(InventorySpecification specification)
+    public async IAsyncEnumerable<string> GetGpusUniqueNames(InventorySpecification specification)
     {
-        return GetInventoryBySpecification(specification)
+        var nameSet = new HashSet<string>();
+
+        var stream = GetInventoryBySpecification(specification)
                                  .Include(x => x.Gpus)
                                  .SelectMany(x => x.Gpus)
                                  .Select(gpu => gpu.Information.Name)
                                  .AsAsyncEnumerable();
+
+        await foreach (var name in stream)
+        {
+            if (nameSet.Contains(name))
+                continue;
+
+            nameSet.Add(name);
+            yield return name;
+        }
+
+        // todo: найти способ правильной трансляции Distinct() в sql
     }
 
     /// <inheritdoc/>
@@ -45,10 +58,11 @@ public partial class InventoryRepository : IGpuRepository
         var manufacturer = gpuName.ToLower().Split().First();
         var model = string.Join(" ", gpuName.ToLower().Split().Skip(1));
 
-        return _context.Gpu.Where(x => x.Information.Manufacturer.ToLower() == manufacturer &&
-                                       x.Information.Model.ToLower() == model)
-                           .Select(x => x.Restrictions)
-                           .FirstOrDefaultAsync();
+        return _context.Gpu
+            .Where(x => x.Information.Manufacturer.Equals(manufacturer, StringComparison.CurrentCultureIgnoreCase) &&
+                         x.Information.Model.Equals(model, StringComparison.CurrentCultureIgnoreCase))
+            .Select(x => x.Restrictions)
+            .FirstOrDefaultAsync();
     }
 
     /// <inheritdoc/>
