@@ -1,0 +1,52 @@
+﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.Devices.Cpu;
+
+namespace MNX.MonitoringCenter.Inventory.DataAccess;
+
+/// <summary>
+/// Репозиторий инвентаризации процессоров.
+/// </summary>
+public partial class InventoryRepository : ICpuRepository
+{
+    /// <inheritdoc/>
+    public IAsyncEnumerable<Contracts.Cpu.Cpu> GetCpus(DeviceSpecification specification)
+    {
+        return GetCpusList(specification).AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
+    public IAsyncEnumerable<List<Contracts.Cpu.Cpu>> GetCpusSliceForAPeriod(InventorySpecification specification,
+                                                                            DateTimeOffset startPeriod,
+                                                                            DateTimeOffset endPeriod)
+    {
+        return GetInventorySliceForAPeriod(specification, startPeriod, endPeriod)
+                                 .Include(x => x.Cpus)
+                                 .Select(x => x.Cpus)
+                                 .AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
+    public Task<int> GetCpusCount(DeviceSpecification specification, CancellationToken cancellationToken)
+    {
+        return GetCpusList(specification).CountAsync(cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<Dictionary<string, int>> GetCpusCountGroupedByManufacturer(DeviceSpecification specification,
+                                                                           CancellationToken cancellationToken)
+    {
+        return GetCpusList(specification).GroupBy(x => x.Information.Manufacturer)
+                                     .ToDictionaryAsync(x => x.Key, y => y.Count(), cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    private IQueryable<Contracts.Cpu.Cpu> GetCpusList(DeviceSpecification specification)
+    {
+        return GetInventoryBySpecification(specification.InventorySpecification)
+                                 .Include(x => x.Cpus)
+                                 .SelectMany(x => x.Cpus)
+                                 .Filter(specification);
+    }
+}

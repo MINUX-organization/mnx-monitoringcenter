@@ -93,7 +93,7 @@ internal class Program
     {
         var app = builder.Build();
         var appName = builder.Configuration["ServiceName"]
-            ?? throw new ArgumentNullException(null, "Не указано название сервиса");
+            ?? throw new ArgumentNullException(null, "Service name not specified");
 
         //if (app.Environment.IsDevelopment())
         {

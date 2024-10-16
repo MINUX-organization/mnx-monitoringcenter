@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 using System.Reflection;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
@@ -9,9 +10,14 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public class Context : DbContext
 {
     /// <summary>
+    /// Риги.
+    /// </summary>
+    internal DbSet<RigDto> Rigs { get; set; }
+
+    /// <summary>
     /// Записи инвентаризаций.
     /// </summary>
-    internal DbSet<Inventory> Inventory { get; set; }
+    internal DbSet<RigInventory.RigInventory> RigInventory { get; set; }
 
     /// <summary>
     /// Видеокарты.

@@ -1,7 +1,7 @@
 ﻿using EasyNetQ.AutoSubscribe;
 using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.UseCases;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 using MNX.MonitoringCenter.Monitoring.UseCases.Commands.Devices.Gpu.ConfirmOverclocking;
 using MNX.MonitoringCenter.Monitoring.UseCases.Notifications;
@@ -14,7 +14,7 @@ namespace MNX.MonitoringCenter.Monitoring.Service.Consumers;
 public class RigConsumer :
     IConsumeAsync<OverclockingSettingSuccessMessage>,
     IConsumeAsync<OverclockingSettingFailMessage>,
-    IConsumeAsync<InventoryMsg>
+    IConsumeAsync<RigInventoryMsg>
 {
     private readonly IMediator _mediator;
 
@@ -54,8 +54,8 @@ public class RigConsumer :
     /// <param name="message"> Сообщение с инвентаризацией. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns></returns>
-    public Task ConsumeAsync(InventoryMsg message, CancellationToken cancellationToken = default)
+    public Task ConsumeAsync(RigInventoryMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Send(new SaveInventoryCommand(message), cancellationToken);
+        return _mediator.Send(new SaveRigInventoryCommand(message), cancellationToken);
     }
 }

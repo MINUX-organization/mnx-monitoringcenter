@@ -1,30 +1,37 @@
-﻿namespace MNX.MonitoringCenter.Inventory.Contracts.Queries;
+﻿namespace MNX.MonitoringCenter.Inventory.Contracts.Requests;
 
-// <summary>
+/// <summary>
 /// Спецификация инвентаризации.
 /// </summary>
 public readonly struct InventorySpecification
 {
     /// <summary>
-    /// Идентификатор пользователя.
+    /// Идентификатор владельца.
     /// </summary>
-    public Guid UserId { get; }
+    public Guid? OwnerId { get; }
 
     /// <summary>
     /// Идентификаторы ригов.
     /// </summary>
     public Guid[]? RigsIds { get; }
 
-    public InventorySpecification(Guid userId, Guid rigId)
+    /// <summary>
+    /// Признак актуальности инвентаризации.
+    /// </summary>
+    public bool IsActuality { get; }
+
+    public InventorySpecification(Guid? ownerId, Guid rigId, bool isActuality = false)
     {
-        UserId = userId;
+        OwnerId = ownerId;
         RigsIds = new[] { rigId };
+        IsActuality = isActuality;
     }
 
-    public InventorySpecification(Guid userId, Guid[]? rigsIds = null)
+    public InventorySpecification(Guid? ownerId, Guid[]? rigsIds = null, bool isActuality = false)
     {
-        UserId = userId;
+        OwnerId = ownerId;
         RigsIds = rigsIds;
+        IsActuality = isActuality;
     }
 }
 
@@ -51,17 +58,24 @@ public readonly struct DeviceSpecification
     /// <summary>
     /// Создаёт экземпляр структуры <see cref="DeviceSpecification"/>.
     /// </summary>
-    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="ownerId"> Идентификатор владельца. </param>
     /// <param name="rigsIds"> Идентификаторы запрашиваемых ригов. Если нет, то все доступные риги. </param>
     /// <param name="models"> Запрашиваемые модели процессоров. Если нет, то все доступные модели. </param>
     /// <param name="manufacturers"> Запрашиваемый производители процессоров. Если нет, то все доступные производители. </param>
-    public DeviceSpecification(Guid userId,
+    public DeviceSpecification(Guid ownerId,
                                Guid[]? rigsIds = null,
                                string[]? models = null,
                                string[]? manufacturers = null)
     {
-        InventorySpecification = new(userId, rigsIds);
+        InventorySpecification = new(ownerId, rigsIds, true);
         Models = models;
         Manufacturers = manufacturers;
     }
+
+    public DeviceSpecification(Guid ownerId,
+                               Guid rigId,
+                               string[]? models = null,
+                               string[]? manufacturers = null)
+        : this(ownerId, new Guid[] { rigId }, models, manufacturers)
+    { }
 }

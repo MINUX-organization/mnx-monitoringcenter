@@ -1,6 +1,4 @@
-﻿using MNX.MonitoringCenter.Inventory.UseCases.CountDevices;
-
-namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
+﻿namespace MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 
 /// <summary>
 /// Модель рига.

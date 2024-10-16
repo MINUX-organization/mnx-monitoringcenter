@@ -65,9 +65,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffic.IntegrationTests", "tests\Traffic\MNX.MonitoringCenter.Traffic.IntegrationTests\MNX.MonitoringCenter.Traffic.IntegrationTests.csproj", "{AEB9D484-A398-485F-B63C-BB0337DDC38C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.RigsApi.Service", "src\MNX.MonitoringCenter.RigsApi.Service\MNX.MonitoringCenter.RigsApi.Service.csproj", "{754794D6-8D34-4526-A3B7-01C2BAB05D6B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.Service", "src\MNX.MonitoringCenter.RigsApi.Service\MNX.MonitoringCenter.RigsApi.Service.csproj", "{754794D6-8D34-4526-A3B7-01C2BAB05D6B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Inventory.Contracts.Queries", "src\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Queries\MNX.MonitoringCenter.Inventory.Contracts.Queries.csproj", "{7F0C4DA8-F741-4352-B597-7B4F9CA43BF1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Inventory.Contracts.Requests", "src\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Queries\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj", "{7F0C4DA8-F741-4352-B597-7B4F9CA43BF1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

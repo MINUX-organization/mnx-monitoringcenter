@@ -9,13 +9,15 @@ using MNX.MonitoringCenter.Inventory.Contracts.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.CountDevices;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Gpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Motherboard;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Software;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
+using MNX.MonitoringCenter.Inventory.Contracts.Rig;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
@@ -41,6 +43,18 @@ public class RigController : ControllerBase
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
+    }
+
+    /// <summary>
+    /// Получить список ригов.
+    /// </summary>
+    /// <returns> Асинхронный поток ригов. </returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Rig>), 200)]
+    public IAsyncEnumerable<Rig> GetList()
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetRigsQuery(userId));
     }
 
     /// <summary>
