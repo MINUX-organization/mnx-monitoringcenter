@@ -14,8 +14,8 @@ CREATE TABLE monitoring_center.network_adapter
 
     CONSTRAINT pk_network_adapter PRIMARY KEY (id),
 
-    CONSTRAINT fk_network_adapter_inventory_inventory_id FOREIGN KEY (inventory_id)
-        REFERENCES monitoring_center.inventory (id) MATCH SIMPLE
+    CONSTRAINT fk_network_adapter_rig_inventory_inventory_id FOREIGN KEY (inventory_id)
+        REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );

@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using EasyNetQ;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
@@ -33,12 +34,12 @@ public class AddRigCommandTests : BaseTest
         Assert.That(rigs.Any(x => x.Id == message.RigId && x.OwnerId == message.OwnerId));
     }
 
-    /*[TestCaseSource(typeof(AddRigCommandTestCase), nameof(AddRigCommandTestCase.Rigs))]
+    [TestCaseSource(typeof(AddRigCommandTestCase), nameof(AddRigCommandTestCase.Rigs))]
     public async Task AddRegisteredCommandWithRabbitMQ(RigRegisteredMsg message)
     {
         using var bus = RabbitHutch.CreateBus("host=77.37.200.24:5672;username=guest;password=guest;publisherConfirms=true");
         await bus.PubSub.PublishAsync(message);
-    }*/
+    }
 
     private class AddRigCommandTestCase
     {

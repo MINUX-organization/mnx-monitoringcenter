@@ -15,13 +15,13 @@ CREATE TABLE monitoring_center.software_inventory
 
     CONSTRAINT pk_software_inventory PRIMARY KEY (id),
 
-    CONSTRAINT fk_software_inventory_inventory_inventory_id FOREIGN KEY (inventory_id)
-        REFERENCES monitoring_center.inventory (id) MATCH SIMPLE
+    CONSTRAINT fk_software_inventory_rig_inventory_inventory_id FOREIGN KEY (inventory_id)
+        REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
 
-CREATE UNIQUE INDEX IF NOT EXISTS ix_software_inventory_inventory_id
+CREATE UNIQUE INDEX ix_software_inventory_inventory_id
     ON monitoring_center.software_inventory USING btree
     (inventory_id ASC NULLS LAST);
 
