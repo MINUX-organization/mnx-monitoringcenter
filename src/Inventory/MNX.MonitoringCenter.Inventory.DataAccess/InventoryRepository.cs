@@ -9,6 +9,13 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 /// </summary>
 public partial class InventoryRepository
 {
+    private readonly Context _context;
+
+    public InventoryRepository(Context context)
+    {
+        _context = context ?? throw new ArgumentNullException(nameof(context));
+    }
+
     /// <inheritdoc/>
     internal async Task Save(Guid rigId, DateTimeOffset createdDate,
                              RigInventoryModel inventory, CancellationToken cancellationToken)
@@ -56,7 +63,9 @@ public partial class InventoryRepository
     private IQueryable<RigInventory.RigInventory> GetInventoryBySpecification(InventorySpecification specification)
     {
         return from rig in GetRigsBySpecification(specification)
-               join inventory in _context.RigInventory.AsNoTrackingWithIdentityResolution().Actualize(specification)
+               join inventory in _context.RigInventory.AsNoTrackingWithIdentityResolution()
+                                                      .Include(x => x.Rig)
+                                                      .Actualize(specification)
                     on rig.Id equals inventory.RigId
                select inventory;
     }

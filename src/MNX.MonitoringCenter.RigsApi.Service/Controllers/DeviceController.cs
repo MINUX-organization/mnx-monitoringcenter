@@ -4,13 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
-[Route("api/devices")]
-[ApiController]
+/// <summary>
+/// Контроллер, предоставляющий rest api для устройств.
+/// </summary>
 [Authorize]
+[ApiController]
+[Route("api/devices")]
 public class DeviceController : ControllerBase
 {
     /// <summary>
@@ -27,6 +32,18 @@ public class DeviceController : ControllerBase
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
+    }
+
+    /// <summary>
+    /// Получить список видеокарт.
+    /// </summary>
+    /// <returns> Асинхронный поток видеокарт. </returns>
+    [HttpGet("gpus")]
+    [ProducesResponseType(typeof(IAsyncEnumerable<GpuModel>), 200)]
+    public IAsyncEnumerable<GpuModel> GetGpus()
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetGpusInfoQuery(userId));
     }
 
     /// <summary>
@@ -54,5 +71,17 @@ public class DeviceController : ControllerBase
     {
         var result = await _mediator.Send(new GetGpuRestrictionsQuery(gpuName));
         return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Получить список процессоров.
+    /// </summary>
+    /// <returns> Асинхронный поток процессоров. </returns>
+    [HttpGet("сpus")]
+    [ProducesResponseType(typeof(IAsyncEnumerable<CpuModel>), 200)]
+    public IAsyncEnumerable<CpuModel> GetСpus()
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetCpusInfoQuery(userId));
     }
 }

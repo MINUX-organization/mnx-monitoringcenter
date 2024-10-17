@@ -23,6 +23,11 @@ public class RigInventory : IEquatable<RigInventory>
     public Guid RigId { get; set; }
 
     /// <summary>
+    /// Риг.
+    /// </summary>
+    public Rig? Rig { get; set; }
+
+    /// <summary>
     /// Дата и время проведения инвентаризации.
     /// </summary>
     public DateTimeOffset CreatedDateTime { get; set; }

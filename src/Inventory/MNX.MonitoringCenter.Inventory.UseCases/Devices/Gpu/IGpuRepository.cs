@@ -1,5 +1,6 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 
@@ -15,7 +16,7 @@ public interface IGpuRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Список видеокарт. </returns>
-    IAsyncEnumerable<Gpu> GetGpus(DeviceSpecification specification);
+    IAsyncEnumerable<GpuModel> GetGpus(DeviceSpecification specification);
 
     /// <summary>
     /// Получить срез инвентаризации видеокарт за указанный период.

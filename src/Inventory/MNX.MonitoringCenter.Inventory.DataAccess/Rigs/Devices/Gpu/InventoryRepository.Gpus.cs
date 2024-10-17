@@ -2,6 +2,7 @@
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 
@@ -13,9 +14,20 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : IGpuRepository
 {
     /// <inheritdoc/>
-    public IAsyncEnumerable<Gpu> GetGpus(DeviceSpecification specification)
+    public IAsyncEnumerable<GpuModel> GetGpus(DeviceSpecification specification)
     {
-        return GetGpusList(specification).AsAsyncEnumerable();
+        return GetInventoryBySpecification(specification.InventorySpecification)
+                                 .Include(inventory => inventory.Gpus)
+                                 .SelectMany(inventory => inventory.Gpus.Select(gpu => new GpuModel()
+                                 {
+                                     Id = gpu.Id,
+                                     RigName = inventory.Rig!.Name,
+                                     Information = gpu.Information,
+                                     Pci = gpu.Pci,
+                                     Restrictions = gpu.Restrictions
+                                 }))
+                                 .Filter(specification)
+                                 .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>

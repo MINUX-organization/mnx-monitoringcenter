@@ -1,13 +1,11 @@
 ﻿using MediatR;
 
-namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
-
-using Gpu = Contracts.Devices.Gpu.Gpu;
+namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
 
 /// <summary>
 /// Запрос на получение списка видеокарт.
 /// </summary>
-public class GetGpusInfoQuery : IStreamRequest<Gpu>
+public class GetGpusInfoQuery : IStreamRequest<GpuModel>
 {
     /// <summary>
     /// Спецификация устройств.

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 
@@ -12,9 +13,20 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : ICpuRepository
 {
     /// <inheritdoc/>
-    public IAsyncEnumerable<Cpu> GetCpus(DeviceSpecification specification)
+    public IAsyncEnumerable<CpuModel> GetCpus(DeviceSpecification specification)
     {
-        return GetCpusList(specification).AsAsyncEnumerable();
+        return GetInventoryBySpecification(specification.InventorySpecification)
+                                 .Include(inventory => inventory.Cpus)
+                                 .SelectMany(inventory => inventory.Cpus.Select(cpu => new CpuModel()
+                                 {
+                                     Id = cpu.Id,
+                                     RigName = inventory.Rig!.Name,
+                                     Information = cpu.Information,
+                                     Pci = cpu.Pci,
+                                     Restrictions = cpu.Restrictions
+                                 }))
+                                 .Filter(specification)
+                                 .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>

@@ -1,4 +1,5 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 
@@ -14,7 +15,7 @@ public interface ICpuRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Список процессоров. </returns>
-    IAsyncEnumerable<Cpu> GetCpus(DeviceSpecification specification);
+    IAsyncEnumerable<CpuModel> GetCpus(DeviceSpecification specification);
 
     /// <summary>
     /// Получить срез инвентаризации процессоров за указанный период.

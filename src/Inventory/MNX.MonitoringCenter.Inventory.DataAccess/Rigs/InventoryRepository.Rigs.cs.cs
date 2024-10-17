@@ -10,13 +10,6 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 /// </summary>
 public partial class InventoryRepository
 {
-    private readonly Context _context;
-
-    public InventoryRepository(Context context)
-    {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
-    }
-
     /// <summary>
     /// Получить риги по спецификации.
     /// </summary>

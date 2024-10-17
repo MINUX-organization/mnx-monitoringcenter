@@ -1,13 +1,11 @@
 ﻿using MediatR;
 
-namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu;
-
-using Cpu = Contracts.Devices.Cpu.Cpu;
+namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
 
 /// <summary>
 /// Запрос на получение списка процессоров.
 /// </summary>
-public class GetCpusInfoQuery : IStreamRequest<Cpu>
+public class GetCpusInfoQuery : IStreamRequest<CpuModel>
 {
     /// <summary>
     /// Спецификация устройств.

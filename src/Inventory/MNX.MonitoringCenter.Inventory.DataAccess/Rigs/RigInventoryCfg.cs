@@ -20,6 +20,10 @@ internal class RigInventoryCfg : IEntityTypeConfiguration<RigInventory>
                .WithOne()
                .HasForeignKey<SoftwareInventory>("InventoryId");
 
+        builder.HasOne(x => x.Rig)
+               .WithMany()
+               .HasForeignKey(x => x.RigId);
+
         builder.HasIndex(x => new { x.RigId, x.CreatedDateTime }).IsDescending(false, true);
     }
 }
