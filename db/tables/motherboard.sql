@@ -12,8 +12,8 @@ CREATE TABLE monitoring_center.motherboard
 
     CONSTRAINT pk_motherboard PRIMARY KEY (id),
 
-    CONSTRAINT fk_motherboard_inventory_inventory_id FOREIGN KEY (inventory_id)
-        REFERENCES monitoring_center.inventory (id) MATCH SIMPLE
+    CONSTRAINT fk_motherboard_rig_inventory_inventory_id FOREIGN KEY (inventory_id)
+        REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );

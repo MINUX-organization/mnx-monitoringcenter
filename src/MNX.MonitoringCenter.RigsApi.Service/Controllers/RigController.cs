@@ -4,27 +4,26 @@ using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
-using MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.CountDevices;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Gpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Motherboard;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Software;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
 /// <summary>
 /// Предоставляет API для работы с ригами.
 /// </summary>
+[Authorize]
 [ApiController]
 [Route("api/rigs")]
-[Authorize]
 public class RigController : ControllerBase
 {
     /// <summary>
@@ -41,6 +40,18 @@ public class RigController : ControllerBase
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _userAccessor = userAccessor ?? throw new ArgumentNullException(nameof(userAccessor));
+    }
+
+    /// <summary>
+    /// Получить список ригов.
+    /// </summary>
+    /// <returns> Асинхронный поток ригов. </returns>
+    [HttpGet]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Rig>), 200)]
+    public IAsyncEnumerable<Rig> GetList()
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetRigsQuery(userId));
     }
 
     /// <summary>
@@ -79,8 +90,8 @@ public class RigController : ControllerBase
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("{rigId:Guid}/cpus")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Cpu>), 200)]
-    public IAsyncEnumerable<Cpu> GetCpus(Guid rigId)
+    [ProducesResponseType(typeof(IAsyncEnumerable<CpuModel>), 200)]
+    public IAsyncEnumerable<CpuModel> GetCpus(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetCpusInfoQuery(userId, rigId));
@@ -110,8 +121,8 @@ public class RigController : ControllerBase
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("{rigId:Guid}/gpus")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Gpu>), 200)]
-    public IAsyncEnumerable<Gpu> GetGpus(Guid rigId)
+    [ProducesResponseType(typeof(IAsyncEnumerable<GpuModel>), 200)]
+    public IAsyncEnumerable<GpuModel> GetGpus(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetGpusInfoQuery(userId, rigId));

@@ -14,5 +14,5 @@ public interface ISoftwareRepository
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Текущая инвентаризация программного обеспечения </returns>
-    Task<SoftwareInventory?> GetByRigId(Guid rigId, Guid userId, CancellationToken cancellationToken);
+    Task<SoftwareInventory?> GetSoftwareByRigId(Guid rigId, Guid userId, CancellationToken cancellationToken);
 }

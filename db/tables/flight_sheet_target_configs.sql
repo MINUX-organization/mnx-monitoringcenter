@@ -36,4 +36,4 @@ CREATE INDEX IF NOT EXISTS ix_flight_sheet_target_configs_wallet_id
     ON monitoring_center.flight_sheet_target_configs USING btree
     (wallet_id ASC NULLS LAST);
 
-COMMENT ON TABLE monitoring_center.flight_sheet_configs IS 'Конфиги для таргетов полётных листов';
+COMMENT ON TABLE monitoring_center.flight_sheet_target_configs IS 'Конфиги для таргетов полётных листов';

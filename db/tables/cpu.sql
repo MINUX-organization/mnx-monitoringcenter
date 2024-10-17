@@ -32,8 +32,8 @@ CREATE TABLE monitoring_center.cpu
 
     CONSTRAINT pk_cpu PRIMARY KEY (id),
 
-    CONSTRAINT fk_cpu_inventory_inventory_id FOREIGN KEY (inventory_id)
-        REFERENCES monitoring_center.inventory (id) MATCH SIMPLE
+    CONSTRAINT fk_cpu_rig_inventory_inventory_id FOREIGN KEY (inventory_id)
+        REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );

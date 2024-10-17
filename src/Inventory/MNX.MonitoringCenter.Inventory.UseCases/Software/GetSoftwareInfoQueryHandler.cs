@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries.Software;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Software;
 
@@ -20,7 +20,7 @@ public class GetSoftwareInfoQueryHandler : IRequestHandler<GetSoftwareInfoQuery,
     public async Task<Result<SoftwareInventory>> Handle(GetSoftwareInfoQuery request,
                                                         CancellationToken cancellationToken)
     {
-        var software = await _repository.GetByRigId(request.RigId, request.UserId, cancellationToken);
+        var software = await _repository.GetSoftwareByRigId(request.RigId, request.UserId, cancellationToken);
 
         if (software == null)
         {

@@ -1,20 +1,23 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Information;
-using MNX.MonitoringCenter.Inventory.Contracts.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.Contracts.Motherboard;
-using MNX.MonitoringCenter.Inventory.Contracts.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Queries;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
+using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.UseCases;
-using MNX.MonitoringCenter.Inventory.UseCases.Cpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Drive;
-using MNX.MonitoringCenter.Inventory.UseCases.Gpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Motherboard;
-using MNX.MonitoringCenter.Inventory.UseCases.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.UseCases.Software;
 using NUnit.Framework;
 
@@ -24,6 +27,8 @@ public class SaveInventoryTests : BaseTest
 {
     private IMediator _mediator;
 
+    private readonly static Guid OWNER_ID = Guid.Parse("1dcc87f7-a326-4765-befa-680ed6cb7649");
+
     [SetUp]
     public void SetUp()
     {
@@ -31,40 +36,49 @@ public class SaveInventoryTests : BaseTest
     }
 
     [TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
-    public async Task SaveInventory(InventoryMsg inventoryMsg)
+    public async Task SaveInventory(RigInventoryMsg inventoryMsg)
     {
-        var command = new SaveInventoryCommand(inventoryMsg);
+        var rigRepository = ServiceProvider.GetRequiredService<IRigRepository>();
+        await rigRepository.Add(new Rig()
+        {
+            Id = inventoryMsg.RigId,
+            OwnerId = OWNER_ID,
+            Name = "Minux"
+        },
+        default);
+
+        var command = new SaveRigInventoryCommand(inventoryMsg);
 
         var result = await _mediator.Send(command);
 
         Assert.That(result.IsSuccess, Is.True, "Результат сохранения инвентаризации не успешен.");
 
         var cpuRepository = ServiceProvider.GetRequiredService<ICpuRepository>();
-        var cpus = cpuRepository.GetList(new DeviceSpecification(inventoryMsg.RigOwnerId))
+        var cpus = cpuRepository.GetCpus(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId))
                                 .ToBlockingEnumerable()
                                 .ToList();
 
         var driveRepository = ServiceProvider.GetRequiredService<IDriveRepository>();
         var drives = await driveRepository
-            .GetList(new InventorySpecification(inventoryMsg.RigOwnerId), default);
+            .GetDrives(new InventorySpecification(OWNER_ID, inventoryMsg.RigId), default);
         
 
         var gpuRepository = ServiceProvider.GetRequiredService<IGpuRepository>();
-        var gpus = gpuRepository.GetList(new DeviceSpecification(inventoryMsg.RigOwnerId))
+        var gpus = gpuRepository.GetGpus(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId))
                                 .ToBlockingEnumerable()
                                 .ToList();
 
         var motherboardRepository = ServiceProvider.GetRequiredService<IMotherboardRepository>();
         var motherboard = await motherboardRepository
-            .GetByRigId(inventoryMsg.RigId, inventoryMsg.RigOwnerId, default);
+            .GetMotherboardByRigId(inventoryMsg.RigId, OWNER_ID, default);
 
         var networkAdaptersRepository = ServiceProvider.GetRequiredService<INetworkAdapterRepository>();
         var adapters = await networkAdaptersRepository
-            .GetList(new InventorySpecification(inventoryMsg.RigOwnerId), default);
+            .GetNetworkAdapters(new InventorySpecification(OWNER_ID, inventoryMsg.RigId), default);
 
         var softwareRepository = ServiceProvider.GetRequiredService<ISoftwareRepository>();
         var software = await softwareRepository
-            .GetByRigId(inventoryMsg.RigId, inventoryMsg.RigOwnerId, default);
+            .GetSoftwareByRigId(inventoryMsg.RigId, OWNER_ID, default);
 
         Assert.Multiple(() =>
         {
@@ -88,22 +102,28 @@ public class SaveInventoryTests : BaseTest
         });
     }
 
+    /*[TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
+    public async Task Test(RigInventoryMsg inventoryMsg)
+    {
+        using var bus = RabbitHutch.CreateBus("host=77.37.200.24:5672;username=guest;password=guest;publisherConfirms=true");
+        await bus.PubSub.PublishAsync(inventoryMsg);
+    }*/
+
     private class SaveCommandTestCase
     {
-        public static IEnumerable<InventoryMsg> InventoryMessages
+        public static IEnumerable<RigInventoryMsg> InventoryMessages
         {
             get
             {
-                yield return new InventoryMsg()
+                yield return new RigInventoryMsg()
                 {
-                    RigOwnerId = Guid.Parse("0b8e36f9-bf02-4c88-97f8-cb5a81715000"),
-                    RigId = Guid.NewGuid(),
+                    RigId = Guid.Parse("162bcfd3-75eb-46e2-815a-4e0f5ff52cad"),
                     CreatedDateTime = DateTime.UtcNow,
-                    Inventory = new InventoryModel()
+                    Inventory = new RigInventoryModel()
                     {
                         Cpus = new()
                         {
-                            new Contracts.Cpu.Cpu()
+                            new Cpu()
                             {
                                 Id = Guid.NewGuid(),
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
@@ -127,7 +147,7 @@ public class SaveInventoryTests : BaseTest
                         },
                         Drives = new()
                         {
-                            new Contracts.Drive.Drive()
+                            new Drive()
                             {
                                 Id = Guid.NewGuid(),
                                 Information = new DriveInformation()
@@ -141,7 +161,7 @@ public class SaveInventoryTests : BaseTest
                         },
                         Gpus = new()
                         {
-                            new Contracts.Gpu.Gpu()
+                            new Gpu()
                             {
                                 Id = Guid.NewGuid(),
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
@@ -221,7 +241,331 @@ public class SaveInventoryTests : BaseTest
                                 }
                             }
                         },
-                        Motherboard = new Contracts.Motherboard.Motherboard()
+                        Motherboard = new Motherboard()
+                        {
+                            Id = Guid.NewGuid(),
+                            Information = new MotherboardInformation()
+                            {
+                                Manufacturer = "Manufacturer",
+                                Model = "Model",
+                                SerialNumber = "SerialNumber"
+                            },
+                            Pcies = new()
+                            {
+                                new MotherboardPci() { Id = 1, Bus = "00:1f.4", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "00:1f.5", IsInstalled = false }
+                            }
+                        },
+                        Software = new SoftwareInventory()
+                        {
+                            Id = Guid.NewGuid(),
+                            MinuxVersion = "1.0.0",
+                            LinuxVersion = "1.0.0",
+                            AmdDriverVersion = "1.0.0",
+                            NvidiaDriverVersion = "1.0.0",
+                            IntelDriverVersion = "1.0.0",
+                            OpenCLVersion = "1.0.0",
+                            CudaVersion = "1.0.0",
+                            AgentVersion = "1.0.0",
+                            HardwareManagerVersion = "1.0.0",
+                            Miners = new()
+                            {
+                                { "miner_1", "1.0.0" },
+                                { "miner_2", "1.0.0" }
+                            }
+                        }
+                    }
+                };
+
+                yield return new RigInventoryMsg()
+                {
+                    RigId = Guid.Parse("162bcfd3-75eb-46e2-815a-4e0f5ff52cad"),
+                    CreatedDateTime = DateTime.UtcNow,
+                    Inventory = new RigInventoryModel()
+                    {
+                        Cpus = new()
+                        {
+                            new Cpu()
+                            {
+                                Id = Guid.NewGuid(),
+                                Pci = new() { Id = 1, Bus = "00:1f.4" },
+                                Information = new CpuInformation()
+                                {
+                                    Manufacturer = "Amd",
+                                    Model = "Model",
+                                    CoresCount = 10,
+                                    ThreadsCount = 12,
+                                    Architecture = "x86_64",
+                                    Cache = new CpuCache() { L1 = 1, L2 = 2, L3 = 3 }
+                                },
+                                Restrictions = new CpuRestrictions()
+                                {
+                                    Power = new RangeValue(),
+                                    FanSpeed = new RangeValue(),
+                                    Temperature = new RangeValue(),
+                                    Clock = new RangeValue()
+                                }
+                            }
+                        },
+                        Drives = new()
+                        {
+                            new Drive()
+                            {
+                                Id = Guid.NewGuid(),
+                                Information = new DriveInformation()
+                                {
+                                    Manufacturer = "Manufacturer",
+                                    Model = "Model",
+                                    SerialNumber = "SerialNumber",
+                                    Capacity = 1_000_000
+                                }
+                            }
+                        },
+                        Gpus = new()
+                        {
+                            new Gpu()
+                            {
+                                Id = Guid.NewGuid(),
+                                Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
+                                Information = new GpuInformation()
+                                {
+                                    Manufacturer = "Amd",
+                                    Model = "Model",
+                                    SerialNumber = "SerialNumber",
+                                    Vendor = "Vendor",
+                                    BiosVersion = "1.0.0",
+                                    Technology = new ParallelComputingTechnology()
+                                    {
+                                        Type = ParallelComputingTechnologyEnum.OpenCL,
+                                        Version = "1.0.0"
+                                    },
+                                    Memory = new MemoryInformation()
+                                    {
+                                        Total = 1000,
+                                        Type = "Type",
+                                        Vendor = "Vendor"
+                                    }
+                                },
+                                Restrictions = new GpuRestrictions()
+                                {
+                                    Power = new RangeValue(),
+                                    FanSpeed = new RangeValue(),
+                                    Temperature = new GpuTemperature()
+                                    {
+                                        Core = new RangeValue(),
+                                        Memory = new RangeValue(),
+                                    },
+                                    Voltage = new GpuVoltage()
+                                    {
+                                        Core = new GpuChangingValue()
+                                        {
+                                            Lock = new RangeValue(),
+                                            Offset = new RangeValue(),
+                                        },
+                                        Memory = new GpuChangingValue()
+                                        {
+                                            Lock = new RangeValue(),
+                                            Offset = new RangeValue(),
+                                        }
+                                    },
+                                    Clock = new GpuClock()
+                                    {
+                                        Core = new GpuChangingValue()
+                                        {
+                                            Lock = new RangeValue(),
+                                            Offset = new RangeValue(),
+                                        },
+                                        Memory = new GpuChangingValue()
+                                        {
+                                            Lock = new RangeValue(),
+                                            Offset = new RangeValue(),
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        NetworkAdapters = new()
+                        {
+                            new NetworkAdapter()
+                            {
+                                Id = Guid.NewGuid(),
+                                GlobalIP = "192.168.0.1",
+                                LocalIP = "127.0.0.1",
+                                Information = new NetworkAdapterInformation()
+                                {
+                                    Manufacturer = "Manufacturer",
+                                    Model = "Model",
+                                    SerialNumber = "SerialNumber",
+                                    VendorCode = "Vendor",
+                                    BusInfo = "BusInfo",
+                                    LogicalName = "LogicalName",
+                                    Mac = "Mac address"
+                                }
+                            }
+                        },
+                        Motherboard = new Motherboard()
+                        {
+                            Id = Guid.NewGuid(),
+                            Information = new MotherboardInformation()
+                            {
+                                Manufacturer = "Manufacturer",
+                                Model = "Model",
+                                SerialNumber = "SerialNumber"
+                            },
+                            Pcies = new()
+                            {
+                                new MotherboardPci() { Id = 1, Bus = "00:1f.4", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "00:1f.5", IsInstalled = false }
+                            }
+                        },
+                        Software = new SoftwareInventory()
+                        {
+                            Id = Guid.NewGuid(),
+                            MinuxVersion = "1.0.0",
+                            LinuxVersion = "1.0.0",
+                            AmdDriverVersion = "1.0.0",
+                            NvidiaDriverVersion = "1.0.0",
+                            IntelDriverVersion = "1.0.0",
+                            OpenCLVersion = "1.0.0",
+                            CudaVersion = "1.0.0",
+                            AgentVersion = "1.0.0",
+                            HardwareManagerVersion = "1.0.0",
+                            Miners = new()
+                            {
+                                { "miner_1", "1.0.0" },
+                                { "miner_2", "1.0.0" }
+                            }
+                        }
+                    }
+                };
+
+                yield return new RigInventoryMsg()
+                {
+                    RigId = Guid.Parse("1935b083-acff-4d87-bfca-0f848a161ce8"),
+                    CreatedDateTime = DateTime.UtcNow,
+                    Inventory = new RigInventoryModel()
+                    {
+                        Cpus = new()
+                        {
+                            new Cpu()
+                            {
+                                Id = Guid.NewGuid(),
+                                Pci = new() { Id = 1, Bus = "00:1f.4" },
+                                Information = new CpuInformation()
+                                {
+                                    Manufacturer = "Amd",
+                                    Model = "Model",
+                                    CoresCount = 10,
+                                    ThreadsCount = 12,
+                                    Architecture = "x86_64",
+                                    Cache = new CpuCache() { L1 = 1, L2 = 2, L3 = 3 }
+                                },
+                                Restrictions = new CpuRestrictions()
+                                {
+                                    Power = new RangeValue(),
+                                    FanSpeed = new RangeValue(),
+                                    Temperature = new RangeValue(),
+                                    Clock = new RangeValue()
+                                }
+                            }
+                        },
+                        Drives = new()
+                        {
+                            new Drive()
+                            {
+                                Id = Guid.NewGuid(),
+                                Information = new DriveInformation()
+                                {
+                                    Manufacturer = "Manufacturer",
+                                    Model = "Model",
+                                    SerialNumber = "SerialNumber",
+                                    Capacity = 1_000_000
+                                }
+                            }
+                        },
+                        Gpus = new()
+                        {
+                            new Gpu()
+                            {
+                                Id = Guid.NewGuid(),
+                                Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
+                                Information = new GpuInformation()
+                                {
+                                    Manufacturer = "Amd",
+                                    Model = "Model",
+                                    SerialNumber = "SerialNumber",
+                                    Vendor = "Vendor",
+                                    BiosVersion = "1.0.0",
+                                    Technology = new ParallelComputingTechnology()
+                                    {
+                                        Type = ParallelComputingTechnologyEnum.OpenCL,
+                                        Version = "1.0.0"
+                                    },
+                                    Memory = new MemoryInformation()
+                                    {
+                                        Total = 1000,
+                                        Type = "Type",
+                                        Vendor = "Vendor"
+                                    }
+                                },
+                                Restrictions = new GpuRestrictions()
+                                {
+                                    Power = new RangeValue(),
+                                    FanSpeed = new RangeValue(),
+                                    Temperature = new GpuTemperature()
+                                    {
+                                        Core = new RangeValue(),
+                                        Memory = new RangeValue(),
+                                    },
+                                    Voltage = new GpuVoltage()
+                                    {
+                                        Core = new GpuChangingValue()
+                                        {
+                                            Lock = new RangeValue(),
+                                            Offset = new RangeValue(),
+                                        },
+                                        Memory = new GpuChangingValue()
+                                        {
+                                            Lock = new RangeValue(),
+                                            Offset = new RangeValue(),
+                                        }
+                                    },
+                                    Clock = new GpuClock()
+                                    {
+                                        Core = new GpuChangingValue()
+                                        {
+                                            Lock = new RangeValue(),
+                                            Offset = new RangeValue(),
+                                        },
+                                        Memory = new GpuChangingValue()
+                                        {
+                                            Lock = new RangeValue(),
+                                            Offset = new RangeValue(),
+                                        }
+                                    }
+                                }
+                            }
+                        },
+                        NetworkAdapters = new()
+                        {
+                            new NetworkAdapter()
+                            {
+                                Id = Guid.NewGuid(),
+                                GlobalIP = "192.168.0.1",
+                                LocalIP = "127.0.0.1",
+                                Information = new NetworkAdapterInformation()
+                                {
+                                    Manufacturer = "Manufacturer",
+                                    Model = "Model",
+                                    SerialNumber = "SerialNumber",
+                                    VendorCode = "Vendor",
+                                    BusInfo = "BusInfo",
+                                    LogicalName = "LogicalName",
+                                    Mac = "Mac address"
+                                }
+                            }
+                        },
+                        Motherboard = new Motherboard()
                         {
                             Id = Guid.NewGuid(),
                             Information = new MotherboardInformation()

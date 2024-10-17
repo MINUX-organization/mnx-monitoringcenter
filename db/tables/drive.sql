@@ -9,8 +9,8 @@ CREATE TABLE monitoring_center.drive
 
     CONSTRAINT pk_drive PRIMARY KEY (id),
 
-    CONSTRAINT fk_drive_inventory_inventory_id FOREIGN KEY (inventory_id)
-        REFERENCES monitoring_center.inventory (id) MATCH SIMPLE
+    CONSTRAINT fk_drive_rig_inventory_inventory_id FOREIGN KEY (inventory_id)
+        REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
