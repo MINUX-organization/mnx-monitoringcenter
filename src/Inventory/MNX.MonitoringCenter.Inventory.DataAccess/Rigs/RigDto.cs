@@ -3,7 +3,7 @@
 /// <summary>
 /// Риг
 /// </summary>
-internal class RigDto
+public class RigDto
 {
     /// <summary>
     /// Идентификатор рига.

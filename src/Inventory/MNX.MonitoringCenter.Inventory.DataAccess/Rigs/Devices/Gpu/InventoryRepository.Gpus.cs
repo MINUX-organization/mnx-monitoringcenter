@@ -71,8 +71,8 @@ public partial class InventoryRepository : IGpuRepository
         var model = string.Join(" ", gpuName.ToLower().Split().Skip(1));
 
         return _context.Gpu
-            .Where(x => x.Information.Manufacturer.Equals(manufacturer, StringComparison.CurrentCultureIgnoreCase) &&
-                         x.Information.Model.Equals(model, StringComparison.CurrentCultureIgnoreCase))
+            .Where(x => x.Information.Manufacturer.ToLower().Equals(manufacturer) &&
+                         x.Information.Model.ToLower().Equals(model))
             .Select(x => x.Restrictions)
             .FirstOrDefaultAsync();
     }

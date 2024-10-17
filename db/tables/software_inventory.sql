@@ -11,11 +11,11 @@ CREATE TABLE monitoring_center.software_inventory
     agent_version text NOT NULL,
     hardware_manager_version text NOT NULL,
     miners text NOT NULL,
-    inventory_id bigint,
+    rig_inventory_id bigint,
 
     CONSTRAINT pk_software_inventory PRIMARY KEY (id),
 
-    CONSTRAINT fk_software_inventory_rig_inventory_inventory_id FOREIGN KEY (inventory_id)
+    CONSTRAINT fk_software_inventory_rig_inventory_rig_inventory_id FOREIGN KEY (rig_inventory_id)
         REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -23,6 +23,6 @@ CREATE TABLE monitoring_center.software_inventory
 
 CREATE UNIQUE INDEX ix_software_inventory_inventory_id
     ON monitoring_center.software_inventory USING btree
-    (inventory_id ASC NULLS LAST);
+    (rig_inventory_id ASC NULLS LAST);
 
 COMMENT ON TABLE monitoring_center.software_inventory IS 'Инвентаризация программного обеспечения';

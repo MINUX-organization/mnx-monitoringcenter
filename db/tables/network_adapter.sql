@@ -3,7 +3,7 @@ CREATE TABLE monitoring_center.network_adapter
     id uuid NOT NULL,
     global_ip text DEFAULT NULL,
     local_ip text DEFAULT NULL,
-    inventory_id bigint,
+    rig_inventory_id bigint,
     information_bus_info text NOT NULL,
     information_logical_name text NOT NULL,
     information_mac text NOT NULL,
@@ -14,7 +14,7 @@ CREATE TABLE monitoring_center.network_adapter
 
     CONSTRAINT pk_network_adapter PRIMARY KEY (id),
 
-    CONSTRAINT fk_network_adapter_rig_inventory_inventory_id FOREIGN KEY (inventory_id)
+    CONSTRAINT fk_network_adapter_rig_inventory_rig_inventory_id FOREIGN KEY (rig_inventory_id)
         REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
@@ -22,6 +22,6 @@ CREATE TABLE monitoring_center.network_adapter
 
 CREATE INDEX ix_network_adapter_inventory_id
     ON monitoring_center.network_adapter USING btree
-    (inventory_id ASC NULLS LAST);
+    (rig_inventory_id ASC NULLS LAST);
 
 COMMENT ON TABLE monitoring_center.network_adapter IS 'Инвентаризация сетевых адаптеров';

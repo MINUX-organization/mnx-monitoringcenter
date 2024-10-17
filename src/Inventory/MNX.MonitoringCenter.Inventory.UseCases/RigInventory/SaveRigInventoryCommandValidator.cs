@@ -8,7 +8,7 @@ namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 /// </summary>
 public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInventoryCommand>
 {
-    public SaveRigInventoryCommandValidator()
+    public SaveRigInventoryCommandValidator(IRigRepository rigRepository)
     {
         RuleFor(x => x.Message)
             .NotNull()
@@ -17,7 +17,14 @@ public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInvento
             {
                 RuleFor(x => x.Message.RigId)
                     .NotEmpty()
-                    .WithMessage(x => "Rig id is required");
+                    .WithMessage(x => "Rig id is required")
+                    .DependentRules(() =>
+                    {
+                        RuleFor(x => x.Message.RigId)
+                            .MustAsync(async (rigId, cancellationToken)
+                                => await rigRepository.Exists(rigId, cancellationToken))
+                            .WithMessage("Rig not found");
+                    });
 
                 RuleFor(x => x.Message.Inventory)
                     .NotNull()

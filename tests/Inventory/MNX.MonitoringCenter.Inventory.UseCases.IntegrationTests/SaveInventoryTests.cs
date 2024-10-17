@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using EasyNetQ;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices;
@@ -103,7 +104,7 @@ public class SaveInventoryTests : BaseTest
     }
 
     /*[TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
-    public async Task Test(RigInventoryMsg inventoryMsg)
+    public async Task SaveInventoryWithRabbitMq(RigInventoryMsg inventoryMsg)
     {
         using var bus = RabbitHutch.CreateBus("host=77.37.200.24:5672;username=guest;password=guest;publisherConfirms=true");
         await bus.PubSub.PublishAsync(inventoryMsg);
@@ -117,7 +118,7 @@ public class SaveInventoryTests : BaseTest
             {
                 yield return new RigInventoryMsg()
                 {
-                    RigId = Guid.Parse("162bcfd3-75eb-46e2-815a-4e0f5ff52cad"),
+                    RigId = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54558"),
                     CreatedDateTime = DateTime.UtcNow,
                     Inventory = new RigInventoryModel()
                     {
@@ -279,7 +280,7 @@ public class SaveInventoryTests : BaseTest
 
                 yield return new RigInventoryMsg()
                 {
-                    RigId = Guid.Parse("162bcfd3-75eb-46e2-815a-4e0f5ff52cad"),
+                    RigId = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54558"),
                     CreatedDateTime = DateTime.UtcNow,
                     Inventory = new RigInventoryModel()
                     {
@@ -291,8 +292,8 @@ public class SaveInventoryTests : BaseTest
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
                                 Information = new CpuInformation()
                                 {
-                                    Manufacturer = "Amd",
-                                    Model = "Model",
+                                    Manufacturer = "Intel",
+                                    Model = "Core i7",
                                     CoresCount = 10,
                                     ThreadsCount = 12,
                                     Architecture = "x86_64",
@@ -441,7 +442,7 @@ public class SaveInventoryTests : BaseTest
 
                 yield return new RigInventoryMsg()
                 {
-                    RigId = Guid.Parse("1935b083-acff-4d87-bfca-0f848a161ce8"),
+                    RigId = Guid.Parse("58c5749c-84fc-4148-84ed-8532a195e733"),
                     CreatedDateTime = DateTime.UtcNow,
                     Inventory = new RigInventoryModel()
                     {
@@ -491,8 +492,8 @@ public class SaveInventoryTests : BaseTest
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
                                 Information = new GpuInformation()
                                 {
-                                    Manufacturer = "Amd",
-                                    Model = "Model",
+                                    Manufacturer = "Nvidia",
+                                    Model = "Geforce RTX 3060",
                                     SerialNumber = "SerialNumber",
                                     Vendor = "Vendor",
                                     BiosVersion = "1.0.0",

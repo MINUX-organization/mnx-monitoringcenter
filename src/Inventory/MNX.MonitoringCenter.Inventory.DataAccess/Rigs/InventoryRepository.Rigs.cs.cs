@@ -23,6 +23,19 @@ public partial class InventoryRepository
     }
 
     /// <summary>
+    /// Получить признак существования рига.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns>
+    /// <see cref="true"/>, если риг существует, иначе <see cref="false"/>.
+    /// </returns>
+    internal Task<bool> Exists(Guid rigId, CancellationToken cancellationToken)
+    {
+        return _context.Rigs.AnyAsync(rig => rig.Id == rigId, cancellationToken);
+    }
+
+    /// <summary>
     /// Добавить риг.
     /// </summary>
     /// <param name="rig"> Риг. </param>
@@ -34,7 +47,7 @@ public partial class InventoryRepository
             OwnerId = rig.OwnerId,
             Name = rig.Name
         },
-        cancellationToken);
+            cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
     }

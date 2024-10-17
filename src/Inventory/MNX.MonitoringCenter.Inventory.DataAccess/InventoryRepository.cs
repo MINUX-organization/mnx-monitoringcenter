@@ -62,15 +62,14 @@ public partial class InventoryRepository
     /// <returns> Инвентаризация. </returns>
     private IQueryable<RigInventory.RigInventory> GetInventoryBySpecification(InventorySpecification specification)
     {
-        return from rig in GetRigsBySpecification(specification)
-               join inventory in _context.RigInventory.AsNoTrackingWithIdentityResolution()
-                                                      .Include(x => x.Rig)
-                                                      .Actualize(specification)
-                    on rig.Id equals inventory.RigId
-               select inventory;
+        return _context.RigInventory.AsNoTrackingWithIdentityResolution()
+                                    .Include(inventory => inventory.Rig)
+                                    .Where(inventory => GetRigsBySpecification(specification).Contains(inventory.Rig))
+                                    .Actualize(specification);
     }
 
-    private static RigInventory.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, RigInventoryModel inventory)
+    private static RigInventory.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
+                                                          RigInventoryModel inventory)
     {
         return new RigInventory.RigInventory()
         {

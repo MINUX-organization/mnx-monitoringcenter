@@ -32,6 +32,12 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
+    public Task<bool> Exists(Guid rigId, CancellationToken cancellationToken)
+    {
+        return _inventoryRepository.Exists(rigId, cancellationToken);
+    }
+
+    /// <inheritdoc/>
     public Task Add(Rig rig, CancellationToken cancellationToken)
     {
         return _inventoryRepository.AddRig(rig, cancellationToken);

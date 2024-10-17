@@ -4,6 +4,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory;
 
@@ -25,7 +26,7 @@ public class RigInventory : IEquatable<RigInventory>
     /// <summary>
     /// Риг.
     /// </summary>
-    public Rig? Rig { get; set; }
+    public RigDto? Rig { get; set; }
 
     /// <summary>
     /// Дата и время проведения инвентаризации.

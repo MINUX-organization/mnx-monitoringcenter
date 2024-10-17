@@ -17,6 +17,16 @@ public interface IRigRepository
     IAsyncEnumerable<Rig> GetRigs(InventorySpecification specification);
 
     /// <summary>
+    /// Получить признак существования рига.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns>
+    /// <see cref="true"/>, если риг существует, иначе <see cref="false"/>.
+    /// </returns>
+    Task<bool> Exists(Guid rigId, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Добавить риг.
     /// </summary>
     /// <param name="rig"> Риг. </param>

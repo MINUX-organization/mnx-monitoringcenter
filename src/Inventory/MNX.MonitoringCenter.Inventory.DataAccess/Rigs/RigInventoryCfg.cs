@@ -14,11 +14,11 @@ internal class RigInventoryCfg : IEntityTypeConfiguration<RigInventory>
     {
         builder.HasOne(x => x.Motherboard)
                .WithOne()
-               .HasForeignKey<Motherboard>("InventoryId");
+               .HasForeignKey<Motherboard>("RigInventoryId");
 
         builder.HasOne(x => x.Software)
                .WithOne()
-               .HasForeignKey<SoftwareInventory>("InventoryId");
+               .HasForeignKey<SoftwareInventory>("RigInventoryId");
 
         builder.HasOne(x => x.Rig)
                .WithMany()
