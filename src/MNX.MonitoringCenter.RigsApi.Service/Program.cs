@@ -1,10 +1,13 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using MNX.Application.Consul;
+using MNX.Application.RabbitMQ;
+using MNX.MonitoringCenter.Inventory.Controllers;
 using MNX.MonitoringCenter.Inventory.Integration;
 using MNX.MonitoringCenter.Management.Integration;
 using MNX.MonitoringCenter.RigsApi.Service.Hubs;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Traffic.Controllers;
 using MNX.MonitoringCenter.Traffic.Integration;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
@@ -127,6 +130,13 @@ internal class Program
         services.AddInventoryModule(configuration);
         services.AddManagementModule(configuration);
         services.AddTrafficProcessing(configuration);
+
+        // todo: сделать отдельные методы для регистрации консюмеров в DI и для автоподписки
+        services.AddEasyNetQ(configuration, new Assembly[]
+        {
+            typeof(RigsDynamicIndicatorsConsumer).Assembly,
+            typeof(RigConsumer).Assembly
+        });
 
         services.AddSignalR();
 

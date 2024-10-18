@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory;
 
@@ -18,10 +18,10 @@ internal class RigInventoryCfg : IEntityTypeConfiguration<RigInventory>
 
         builder.HasOne(x => x.Software)
                .WithOne()
-               .HasForeignKey<SoftwareInventory>("RigInventoryId");
+               .HasForeignKey<SoftwareInventoryDto>("RigInventoryId");
 
         builder.HasOne(x => x.Rig)
-               .WithMany()
+               .WithMany(x => x.Inventories)
                .HasForeignKey(x => x.RigId);
 
         builder.HasIndex(x => new { x.RigId, x.CreatedDateTime }).IsDescending(false, true);

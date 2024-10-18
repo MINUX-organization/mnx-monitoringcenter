@@ -3,6 +3,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.UseCases;
+using AutoMapper;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
@@ -11,22 +12,29 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 /// </summary>
 public class RigRepository : IRigRepository
 {
+    private readonly IMapper _mapper;
+
     private readonly InventoryRepository _inventoryRepository;
 
-    public RigRepository(Context context)
+    public RigRepository(Context context, IMapper mapper)
     {
-        _inventoryRepository = new InventoryRepository(context);
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _inventoryRepository = new InventoryRepository(context, mapper);
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Rig> GetRigs(InventorySpecification specification)
+    public IAsyncEnumerable<RigDetails> GetRigs(InventorySpecification specification)
     {
         return _inventoryRepository.GetRigsBySpecification(specification)
-                    .Select(dto => new Rig()
+                    .Include(rig => rig.Inventories)
+                        .ThenInclude(inventory => inventory.Software)
+                    .Where(rig => rig.Inventories.Count != 0)
+                    .Select(rig => new RigDetails()
                     {
-                        Id = dto.Id,
-                        OwnerId = dto.OwnerId,
-                        Name = dto.Name
+                        Id = rig.Id,
+                        OwnerId = rig.OwnerId,
+                        Name = rig.Name,
+                        Software = _mapper.Map<SoftwareInventory>(rig.CurrentInventory!.Software)
                     })
                     .AsAsyncEnumerable();
     }

@@ -103,12 +103,12 @@ public class SaveInventoryTests : BaseTest
         });
     }
 
-    /*[TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
+    [TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
     public async Task SaveInventoryWithRabbitMq(RigInventoryMsg inventoryMsg)
     {
         using var bus = RabbitHutch.CreateBus("host=77.37.200.24:5672;username=guest;password=guest;publisherConfirms=true");
         await bus.PubSub.PublishAsync(inventoryMsg);
-    }*/
+    }
 
     private class SaveCommandTestCase
     {
@@ -259,7 +259,6 @@ public class SaveInventoryTests : BaseTest
                         },
                         Software = new SoftwareInventory()
                         {
-                            Id = Guid.NewGuid(),
                             MinuxVersion = "1.0.0",
                             LinuxVersion = "1.0.0",
                             AmdDriverVersion = "1.0.0",
@@ -421,7 +420,6 @@ public class SaveInventoryTests : BaseTest
                         },
                         Software = new SoftwareInventory()
                         {
-                            Id = Guid.NewGuid(),
                             MinuxVersion = "1.0.0",
                             LinuxVersion = "1.0.0",
                             AmdDriverVersion = "1.0.0",
@@ -583,7 +581,6 @@ public class SaveInventoryTests : BaseTest
                         },
                         Software = new SoftwareInventory()
                         {
-                            Id = Guid.NewGuid(),
                             MinuxVersion = "1.0.0",
                             LinuxVersion = "1.0.0",
                             AmdDriverVersion = "1.0.0",

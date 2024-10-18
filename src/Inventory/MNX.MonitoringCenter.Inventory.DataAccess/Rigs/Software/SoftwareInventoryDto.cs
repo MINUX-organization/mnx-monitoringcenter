@@ -1,10 +1,18 @@
-﻿namespace MNX.MonitoringCenter.Inventory.Contracts;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 
 /// <summary>
-/// Инвентаризация программного обеспечения.
+/// Dto инвентаризации программного обеспечения.
 /// </summary>
-public class SoftwareInventory : IEquatable<SoftwareInventory>
+[Table("software_inventory")]
+public class SoftwareInventoryDto
 {
+    /// <summary>
+    /// Идентификатор.
+    /// </summary>
+    public long Id { get; init; }
+
     /// <summary>
     /// Версия Minux.
     /// </summary>
@@ -57,45 +65,4 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     /// Ключ - название майнера. Значение - версия майнера.
     /// </remarks>
     public Dictionary<string, string> Miners { get; init; } = new();
-
-    /// <inheritdoc/>
-    public override bool Equals(object? obj)
-    {
-        if (obj is SoftwareInventory software)
-        {
-            return Equals(software);
-        }
-
-        return false;
-    }
-
-    /// <inheritdoc/>
-    public bool Equals(SoftwareInventory? other)
-    {
-        if (other == null) return false;
-
-        if (ReferenceEquals(this, other)) return true;
-
-        return MinuxVersion.Equals(other.MinuxVersion) &&
-               LinuxVersion.Equals(other.LinuxVersion) &&
-               AmdDriverVersion.Equals(other.AmdDriverVersion) &&
-               NvidiaDriverVersion.Equals(other.NvidiaDriverVersion) &&
-               IntelDriverVersion.Equals(other.IntelDriverVersion) &&
-               OpenCLVersion.Equals(other.OpenCLVersion) &&
-               CudaVersion.Equals(other.CudaVersion) &&
-               Miners.SequenceEqual(other.Miners);
-    }
-
-    public override int GetHashCode()
-    {
-        var minersHash = 0;
-
-        foreach (var miner in Miners)
-        {
-            minersHash = HashCode.Combine(miner.Key, miner.Value);
-        }
-
-        return HashCode.Combine(MinuxVersion, LinuxVersion, AmdDriverVersion, NvidiaDriverVersion,
-                                IntelDriverVersion, OpenCLVersion, CudaVersion) + minersHash;
-    }
 }

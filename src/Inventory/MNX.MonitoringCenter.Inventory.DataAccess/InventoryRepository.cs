@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
+using AutoMapper;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -11,9 +13,12 @@ public partial class InventoryRepository
 {
     private readonly Context _context;
 
-    public InventoryRepository(Context context)
+    private readonly IMapper _mapper;
+
+    public InventoryRepository(Context context, IMapper mapper)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <inheritdoc/>
@@ -68,8 +73,8 @@ public partial class InventoryRepository
                                     .Actualize(specification);
     }
 
-    private static RigInventory.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
-                                                          RigInventoryModel inventory)
+    private RigInventory.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
+                                                   RigInventoryModel inventory)
     {
         return new RigInventory.RigInventory()
         {
@@ -80,7 +85,7 @@ public partial class InventoryRepository
             Gpus = inventory.Gpus,
             NetworkAdapters = inventory.NetworkAdapters,
             Motherboard = inventory.Motherboard,
-            Software = inventory.Software
+            Software = _mapper.Map<SoftwareInventoryDto>(inventory)
         };
     }
 }

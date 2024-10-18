@@ -3,13 +3,13 @@
 namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
 /// <summary>
-/// Запрос на получение ригов.
+/// Запрос на получение детального описания ригов.
 /// </summary>
-public sealed class GetRigsQuery : IStreamRequest<Contracts.Rig>
+public sealed class GetRigsDetailsQuery : IStreamRequest<RigDetails>
 {
     public InventorySpecification Specification { get; }
 
-    public GetRigsQuery(Guid userId, Guid[]? rigsIds = null)
+    public GetRigsDetailsQuery(Guid userId, Guid[]? rigsIds = null)
     {
         Specification = new InventorySpecification(userId, rigsIds);
     }

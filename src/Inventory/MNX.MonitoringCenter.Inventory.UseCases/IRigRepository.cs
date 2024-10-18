@@ -14,7 +14,7 @@ public interface IRigRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Асинхронный поток ригов. </returns>
-    IAsyncEnumerable<Rig> GetRigs(InventorySpecification specification);
+    IAsyncEnumerable<RigDetails> GetRigs(InventorySpecification specification);
 
     /// <summary>
     /// Получить признак существования рига.

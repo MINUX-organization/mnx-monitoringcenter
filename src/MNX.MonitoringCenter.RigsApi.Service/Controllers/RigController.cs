@@ -47,11 +47,11 @@ public class RigController : ControllerBase
     /// </summary>
     /// <returns> Асинхронный поток ригов. </returns>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Rig>), 200)]
-    public IAsyncEnumerable<Rig> GetList()
+    [ProducesResponseType(typeof(IAsyncEnumerable<RigDetails>), 200)]
+    public IAsyncEnumerable<RigDetails> GetList()
     {
         var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetRigsQuery(userId));
+        return _mediator.CreateStream(new GetRigsDetailsQuery(userId));
     }
 
     /// <summary>

@@ -21,7 +21,15 @@ public class RigDto
     public required string Name { get; init; }
 
     /// <summary>
+    /// Список инвентаризаций.
+    /// </summary>
+    public List<RigInventory.RigInventory> Inventories { get; init; } = new();
+
+    /// <summary>
     /// Текущая инвентаризация.
     /// </summary>
-    public RigInventory.RigInventory? CurrentInventory { get; set; }
+    public RigInventory.RigInventory? CurrentInventory
+    {
+        get => Inventories.FirstOrDefault(x => x.EndDateTime == null);
+    }
 }

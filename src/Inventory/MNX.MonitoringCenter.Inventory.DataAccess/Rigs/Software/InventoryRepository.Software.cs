@@ -15,7 +15,7 @@ public partial class InventoryRepository : ISoftwareRepository
     {
         return GetInventoryBySpecification(new InventorySpecification(userId, rigId))
                                  .Include(x => x.Software)
-                                 .Select(x => x.Software)
+                                 .Select(x => _mapper.Map<SoftwareInventory>(x.Software))
                                  .FirstOrDefaultAsync(cancellationToken);
     }
 }
