@@ -23,7 +23,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddTrafficProcessing(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddSingleton<IUserRigsObserverAggregator, UserRigsObserverAggregator>();
-        services.AddSignalR();
         services.AddEasyNetQ(configuration, new Assembly[] { typeof(RigsDynamicIndicatorsConsumer).Assembly });
         services.AddAutoMapper(x => x.AddProfile<MappingProfile>());
 

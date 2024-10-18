@@ -1,24 +1,29 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
 using MNX.Application.Consul;
-using MNX.MonitoringCenter.Infrastructure;
 using MNX.MonitoringCenter.Inventory.Integration;
+using MNX.MonitoringCenter.Management.Integration;
+using MNX.MonitoringCenter.RigsApi.Service.Hubs;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Traffic.Integration;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
 using System.Reflection;
+using System.Text.Json.Serialization;
 
 namespace MNX.MonitoringCenter.RigsApi.Service;
 
 internal class Program
 {
-    private static async Task Main(string[] args)
+    private static Task Main(string[] args)
     {
         var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
         try
         {
             logger.Debug("init main");
             var builder = ConfigureApp(args);
-            await RunApp(builder);
+            return RunApp(builder);
         }
         catch (Exception ex)
         {
@@ -40,11 +45,49 @@ internal class Program
 
         services.AddControllers();
         services.AddConsulIntegration(builder.Configuration);
-        services.AddHealthChecks();
+
+        services.AddEndpointsApiExplorer();
 
         var basePath = AppContext.BaseDirectory;
-        var xmlFilePath = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-        services.AddSwagger(Path.Combine(basePath, xmlFilePath));
+        var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+        services.AddSwaggerGen(opts =>
+        {
+            opts.IncludeXmlComments(Path.Combine(basePath, xmlFile), includeControllerXmlComments: true);
+
+            opts.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "Enter access token",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+            opts.AddSecurityRequirement(new OpenApiSecurityRequirement {
+            {
+                new OpenApiSecurityScheme
+                {
+                    Reference = new OpenApiReference
+                    {
+                        Id = "Bearer",
+                        Type = ReferenceType.SecurityScheme
+                    }
+                },
+                Array.Empty<string>()
+            } });
+
+            opts.EnableAnnotations();
+            opts.UseAllOfToExtendReferenceSchemas();
+            opts.UseAllOfForInheritance();
+            opts.UseOneOfForPolymorphism();
+            opts.UseInlineDefinitionsForEnums();
+
+            opts.SelectDiscriminatorNameUsing(_ => "$type");
+            opts.SelectDiscriminatorValueUsing(subType => subType.BaseType!
+                    .GetCustomAttributes<JsonDerivedTypeAttribute>()
+                    .FirstOrDefault(x => x.DerivedType == subType)?
+                    .TypeDiscriminator!.ToString());
+        });
 
         services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!, new JwtBearerEvents()
         {
@@ -82,6 +125,8 @@ internal class Program
     private static void ConfigureDI(IServiceCollection services, ConfigurationManager configuration)
     {
         services.AddInventoryModule(configuration);
+        services.AddManagementModule(configuration);
+        services.AddTrafficProcessing(configuration);
 
         services.AddSignalR();
 
@@ -89,7 +134,7 @@ internal class Program
         services.AddHttpContextAccessor();
     }
 
-    private static async Task RunApp(WebApplicationBuilder builder)
+    private static Task RunApp(WebApplicationBuilder builder)
     {
         var app = builder.Build();
         var appName = builder.Configuration["ServiceName"]
@@ -112,6 +157,8 @@ internal class Program
         app.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName)).AllowAnonymous();
         app.MapControllers();
 
-        await app.RunAsync();
+        app.MapHub<MonitoringHub>("hubs/monitoring");
+
+        return app.RunAsync();
     }
 }

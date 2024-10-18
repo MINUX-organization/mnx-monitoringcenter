@@ -32,7 +32,6 @@
 	
   <ItemGroup>
     <ProjectReference Include="..\..\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
-    <ProjectReference Include="..\..\MNX.MonitoringCenter.Infrastructure\MNX.MonitoringCenter.Infrastructure.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Monitoring.UseCases\MNX.MonitoringCenter.Monitoring.UseCases.csproj" />
   </ItemGroup>
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MNX.Application.Consul;
 using MNX.Application.RabbitMQ;
-using MNX.MonitoringCenter.Infrastructure;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
@@ -85,9 +84,6 @@ internal class Program
         services.AddMemoryCache()
                 .AddFusionCache()
                 .WithDefaultEntryOptions(options => options.Duration = TimeSpan.FromMinutes(15)); // todo: вынести настройку в конфиг
-
-        services.AddScoped<UserAccessor>();
-        services.AddHttpContextAccessor();
     }
 
     private static async Task RunApp(WebApplicationBuilder builder)

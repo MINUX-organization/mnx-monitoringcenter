@@ -3,24 +3,9 @@
 
 ### Пример конфигурации:
 
-Management
 ```
 {
-    "ServiceName": "monitoring_center_manamgement",
-    "ConsulUri": "localhost:8500",
-    "SecretKey": "LDktKdoQak3Pk0cnXxCltA-LDktKdoQak3Pk0cnXxCltA",
-
-    "ConnectionStrings": {
-        "Npgsql": "host=localhost;database=monitoring_center;username=postgres;password=admin"
-    }
-}
-```
-
-Monitoring
-
-```
-{
-    "ServiceName": "monitoring_center_monitoring",
+    "ServiceName": "rigs_api",
     "ConsulUri": "localhost:8500",
     "SecretKey": "LDktKdoQak3Pk0cnXxCltA-LDktKdoQak3Pk0cnXxCltA",
 
