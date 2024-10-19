@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
@@ -60,7 +61,7 @@ public class RigController : ControllerBase
     /// <returns> Результат получения обобщённых количественных данных. </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("total_data")]
-    [ProducesResponseType(typeof(GetCountDevicesQueryResponse), 200)]
+    [ProducesResponseType(typeof(ModelWithCountDevices), 200)]
     public async Task<IActionResult> GetSummarizedQuantitativeData()
     {
         var userId = _userAccessor.GetUserId();
@@ -75,7 +76,7 @@ public class RigController : ControllerBase
     /// <returns> Кол-во устройств на риге. </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("{rigId:Guid}/devices/count")]
-    [ProducesResponseType(typeof(GetCountDevicesQueryResponse), 200)]
+    [ProducesResponseType(typeof(ModelWithCountDevices), 200)]
     public async Task<IActionResult> GetDevicesCount(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();

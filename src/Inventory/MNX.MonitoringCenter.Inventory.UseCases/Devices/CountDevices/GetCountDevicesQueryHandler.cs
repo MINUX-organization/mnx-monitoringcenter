@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
@@ -10,7 +11,7 @@ namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.CountDevices;
 /// <summary>
 /// Реализация <see cref="GetCountDevicesQuery"/>.
 /// </summary>
-public class GetCountDevicesQueryHandler : IRequestHandler<GetCountDevicesQuery, Result<GetCountDevicesQueryResponse>>
+public class GetCountDevicesQueryHandler : IRequestHandler<GetCountDevicesQuery, Result<ModelWithCountDevices>>
 {
     private readonly ICpuRepository _cpuRepository;
 
@@ -27,7 +28,7 @@ public class GetCountDevicesQueryHandler : IRequestHandler<GetCountDevicesQuery,
         _gpuRepository = gpuRepository ?? throw new ArgumentNullException(nameof(gpuRepository));
     }
 
-    public async Task<Result<GetCountDevicesQueryResponse>> Handle(GetCountDevicesQuery request,
+    public async Task<Result<ModelWithCountDevices>> Handle(GetCountDevicesQuery request,
                                                                    CancellationToken cancellationToken)
     {
         var cpusCount = await _cpuRepository
@@ -38,7 +39,7 @@ public class GetCountDevicesQueryHandler : IRequestHandler<GetCountDevicesQuery,
 
         var drivesCount = await _driveRepository.GetDrivesCount(request.Specification, cancellationToken);
 
-        return Result<GetCountDevicesQueryResponse>.Success(new GetCountDevicesQueryResponse()
+        return Result<ModelWithCountDevices>.Success(new ModelWithCountDevices()
         {
             TotalCpusCountGroupedByManufacturer = cpusCount,
             TotalCpusCount = cpusCount.Values.Sum(),

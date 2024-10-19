@@ -4,6 +4,8 @@ using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.UseCases;
 using AutoMapper;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
+using System.Threading;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
@@ -28,13 +30,31 @@ public class RigRepository : IRigRepository
         return _inventoryRepository.GetRigsBySpecification(specification)
                     .Include(rig => rig.Inventories)
                         .ThenInclude(inventory => inventory.Software)
+                    .Include(rig => rig.Inventories)
+                        .ThenInclude(inventory => inventory.Cpus)
+                    .Include(rig => rig.Inventories)
+                        .ThenInclude(inventory => inventory.Drives)
+                    .Include(rig => rig.Inventories)
+                        .ThenInclude(inventory => inventory.Gpus)
                     .Where(rig => rig.Inventories.Count != 0)
                     .Select(rig => new RigDetails()
                     {
                         Id = rig.Id,
                         OwnerId = rig.OwnerId,
                         Name = rig.Name,
-                        Software = _mapper.Map<SoftwareInventory>(rig.CurrentInventory!.Software)
+                        Software = _mapper.Map<SoftwareInventory>(rig.CurrentInventory!.Software),
+                        CountDevices = new ModelWithCountDevices()
+                        {
+                            TotalCpusCountGroupedByManufacturer = rig.CurrentInventory.Cpus
+                                                                        .GroupBy(x => x.Information.Manufacturer)
+                                                                        .ToDictionary(x => x.Key, y => y.Count()),
+
+                            TotalGpusCountGroupedByManufacturer = rig.CurrentInventory.Gpus
+                                                                        .GroupBy(x => x.Information.Manufacturer)
+                                                                        .ToDictionary(x => x.Key, y => y.Count()),
+
+                            TotalDrivesCount = rig.CurrentInventory.Drives.Count(),
+                        }
                     })
                     .AsAsyncEnumerable();
     }

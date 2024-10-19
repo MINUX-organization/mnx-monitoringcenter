@@ -1,9 +1,9 @@
-﻿namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
+﻿namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 
 /// <summary>
-/// Ответ на <see cref="GetCountDevicesQueryResponse"/>.
+/// Ответ на <see cref="ModelWithCountDevices"/>.
 /// </summary>
-public class GetCountDevicesQueryResponse
+public class ModelWithCountDevices
 {
     /// <summary>
     /// Общее кол-во процессоров, сгруппированных по производителю.
@@ -13,7 +13,12 @@ public class GetCountDevicesQueryResponse
     /// <summary>
     /// Общее кол-во процессоров.
     /// </summary>
-    public int TotalCpusCount { get; init; }
+    private int? _totalCpusCount;
+    public int TotalCpusCount
+    {
+        get => _totalCpusCount ??= TotalCpusCountGroupedByManufacturer.Sum(x => x.Value);
+        init => _totalCpusCount = value;
+    }
 
     /// <summary>
     /// Общее кол-во видеокарт, сгруппированных по производителю.
@@ -23,7 +28,12 @@ public class GetCountDevicesQueryResponse
     /// <summary>
     /// Общее кол-во видеокарт.
     /// </summary>
-    public int TotalGpusCount { get; init; }
+    private int? _totalGpusCount;
+    public int TotalGpusCount
+    {
+        get => _totalGpusCount ??= TotalGpusCountGroupedByManufacturer.Sum(x => x.Value);
+        init => _totalGpusCount = value;
+    }
 
     /// <summary>
     /// Общее кол-во жёстких дисков.

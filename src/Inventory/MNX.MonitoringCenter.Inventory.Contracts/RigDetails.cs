@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Inventory.Contracts;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
+
+namespace MNX.MonitoringCenter.Inventory.Contracts;
 
 /// <summary>
 /// Детали рига.
@@ -24,4 +26,9 @@ public class RigDetails
     /// Программное обеспечение.
     /// </summary>
     public required SoftwareInventory Software { get; init; }
+
+    /// <summary>
+    /// Кол-во устройств.
+    /// </summary>
+    public required ModelWithCountDevices CountDevices { get; init; }
 }

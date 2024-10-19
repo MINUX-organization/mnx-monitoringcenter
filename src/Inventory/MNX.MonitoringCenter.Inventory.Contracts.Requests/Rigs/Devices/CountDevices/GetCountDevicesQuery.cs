@@ -1,12 +1,13 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
 
 /// <summary>
 /// Запрос на получение количества устройств инвентаризации.
 /// </summary>
-public sealed class GetCountDevicesQuery : IRequest<Result<GetCountDevicesQueryResponse>>
+public sealed class GetCountDevicesQuery : IRequest<Result<ModelWithCountDevices>>
 {
     /// <summary>
     /// Спецификация.
