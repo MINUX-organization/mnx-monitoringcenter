@@ -12,7 +12,6 @@ using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.AddCrypto
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Converters;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries.Models;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
 using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
@@ -40,9 +39,6 @@ public class MappingProfile : Profile
         
         CreateMap<FlightSheetInputModel, Core.FlightSheet.FlightSheet>();
         CreateMap<Core.FlightSheet.FlightSheet, FlightSheetModel>();
-
-        CreateMap<Core.FlightSheet.FlightSheet, FlightSheetOutputModel>();
-        CreateMap<FlightSheetTargetBase, FlightSheetTargetOutputModel>();
 
         CreateMap<FlightSheetTargetBase, FlightSheetTargetModelBase>().ConvertUsing(new FlightSheetTargetConverter());
         CreateMap<CpuFlightSheetTarget, CpuFlightSheetTargetModel>();

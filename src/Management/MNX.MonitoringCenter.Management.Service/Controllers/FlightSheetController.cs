@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Infrastructure;
+using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.EditFightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.RemoveFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries.Models;
 
 namespace MNX.MonitoringCenter.Management.Service.Controllers;
 
@@ -36,8 +36,8 @@ public class FlightSheetController : ControllerBase
     /// <returns> Список полётных листов. </returns>
     /// <response code="200"> Успешно. </response>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<FlightSheetOutputModel>), 200)]
-    public IAsyncEnumerable<FlightSheetOutputModel> GetList()
+    [ProducesResponseType(typeof(IAsyncEnumerable<FlightSheetModel>), 200)]
+    public IAsyncEnumerable<FlightSheetModel> GetList()
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetFlightSheetsQuery(userId));
@@ -51,7 +51,7 @@ public class FlightSheetController : ControllerBase
     /// <response code="200"> Успешно. </response>
     /// <response code="400"> Полётный лист не найден. </response>
     [HttpGet("{id:Guid}")]
-    [ProducesResponseType(typeof(FlightSheetOutputModel), 200)]
+    [ProducesResponseType(typeof(FlightSheetModel), 200)]
     [ProducesResponseType(typeof(IEnumerable<string>), 400)]
     public async Task<IActionResult> GetById(Guid id)
     {
