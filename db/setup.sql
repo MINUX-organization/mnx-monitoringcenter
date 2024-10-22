@@ -4,6 +4,9 @@
 -- CREATING SCHEMA
 \ir 'schemas/monitoring_center.sql'
 
+-- CREATING TYPES
+\ir 'types/mining_mode.sql'
+
 -- CREATING TABLES
 \ir 'tables/algorithms.sql'
 \ir 'tables/cryptocurrencies.sql'

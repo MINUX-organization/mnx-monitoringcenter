@@ -38,7 +38,7 @@ public abstract class FlightSheetTargetBase : IEquatable<FlightSheetTargetBase>
     /// <summary>
     /// Майнер.
     /// </summary>
-    public Miner? Miner { get; set; }
+    public Miner.Miner? Miner { get; set; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

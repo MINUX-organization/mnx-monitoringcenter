@@ -30,7 +30,7 @@ public class MinerController : ControllerBase
     /// <returns> Список доступных майнеров </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("available")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<Miner>), 200)]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Core.Miner.Miner>), 200)]
     public IAsyncEnumerable<Miner> GetAvailable()
     {
         return _mediator.CreateStream(new GetAvailableMinersQuery());

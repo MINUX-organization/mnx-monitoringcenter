@@ -1,0 +1,1 @@
+create type monitoring_center.mining_mode as enum ('Single', 'Dual', 'Triple');

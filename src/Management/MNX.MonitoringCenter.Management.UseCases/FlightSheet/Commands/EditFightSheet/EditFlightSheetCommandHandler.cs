@@ -28,7 +28,7 @@ public class EditFlightSheetCommandHandler : IRequestHandler<EditFlightSheetComm
 
         if (flightSheet is null)
         {
-            return Result<Unit>.Invalid($"Flight sheet with id is equaled {request.Id} was not found!");
+            return Result<Unit>.Invalid($"Flight sheet with id equaled {request.Id} was not found!");
         }
 
         var newFlightSheet = _mapper.Map<Core.FlightSheet.FlightSheet>(request.Model);

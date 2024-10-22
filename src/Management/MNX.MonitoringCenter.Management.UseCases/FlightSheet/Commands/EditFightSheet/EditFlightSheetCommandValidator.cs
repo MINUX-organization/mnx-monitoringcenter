@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Validators;
 using MNX.MonitoringCenter.Management.UseCases.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Wallet;

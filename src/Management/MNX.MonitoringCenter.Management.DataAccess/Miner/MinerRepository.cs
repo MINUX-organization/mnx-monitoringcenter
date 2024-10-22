@@ -3,6 +3,8 @@ using MNX.MonitoringCenter.Management.UseCases.Miner;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
 
+using Miner = Core.Miner.Miner;
+
 /// <summary>
 /// Реализация <see cref="IMinerRepository"/>.
 /// </summary>
@@ -16,11 +18,19 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Core.Miner> GetAvailableMiners()
+    public IAsyncEnumerable<Miner> GetAvailableMiners()
     {
         return _context.Miners
                        .AsNoTracking()
                        .AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
+    public Task<Miner?> GetMinerById(Guid id)
+    {
+        return _context.Miners
+                       .AsNoTracking()
+                       .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     /// <inheritdoc/>

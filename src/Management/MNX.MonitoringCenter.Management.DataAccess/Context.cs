@@ -20,7 +20,7 @@ public class Context : DbContext
 
     internal DbSet<FlightSheetTargetConfig> FlightSheetTargetConfigs { get; set; }
 
-    internal DbSet<Core.Miner> Miners { get; set; }
+    internal DbSet<Core.Miner.Miner> Miners { get; set; }
 
     internal DbSet<Core.Pool> Pools { get; set; }
 
@@ -35,7 +35,5 @@ public class Context : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        modelBuilder.Entity<Core.Algorithm>().HasData(new Core.Algorithm() { Name = "Algorithm" });
-        modelBuilder.Entity<Core.Miner>().HasData(new Core.Miner() { Name = "Miner" });
     }
 }

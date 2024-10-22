@@ -33,7 +33,7 @@ public class GetFLightSheetByIdQueryHandler : IRequestHandler<GetFlightSheetById
 
         if (flightSheet is null)
         {
-            return Result<FlightSheetModel>.Invalid("Flight sheet wasn`t found!");
+            return Result<FlightSheetModel>.Invalid("Flight sheet was not found!");
         }
 
         return Result<FlightSheetModel>.Success(_mapper.Map<FlightSheetModel>(flightSheet));

@@ -2,7 +2,7 @@
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Converters;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Converters;
 
 /// <summary>
 /// Конвертер таргета полётного листа.
@@ -15,7 +15,8 @@ internal class FlightSheetTargetConverter : ITypeConverter<FlightSheetTargetBase
         {
             return context.Mapper.Map<CpuFlightSheetTargetModel>(cpuFlightSheet);
         }
-        else if (source is GpuFlightSheetTarget gpuFlightSheet)
+
+        if (source is GpuFlightSheetTarget gpuFlightSheet)
         {
             return context.Mapper.Map<GpuFlightSheetTargetModel>(gpuFlightSheet);
         }
