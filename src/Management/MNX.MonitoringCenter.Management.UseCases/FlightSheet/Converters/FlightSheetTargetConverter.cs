@@ -2,7 +2,7 @@
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Converters;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Converters;
 
 /// <summary>
 /// Конвертер таргета полётного листа.

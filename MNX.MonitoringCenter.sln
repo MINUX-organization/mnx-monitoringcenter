@@ -51,7 +51,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Inventory", "Inventory", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests", "tests\Inventory\MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests\MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests.csproj", "{5B2A9BF1-DFBA-462A-A0BA-31B5858B0E86}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Inventory.Integration", "src\Inventory\MNX.MonitoringCenter.Inventory.Integration\MNX.MonitoringCenter.Inventory.Integration.csproj", "{C82B2514-573B-4752-BC20-B4338A244526}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Inventory.Integration", "src\Inventory\MNX.MonitoringCenter.Inventory.Integration\MNX.MonitoringCenter.Inventory.Integration.csproj", "{C82B2514-573B-4752-BC20-B4338A244526}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

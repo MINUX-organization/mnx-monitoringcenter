@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Management.Core.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Miner.Enums;
 
-namespace MNX.MonitoringCenter.Management.Core;
+namespace MNX.MonitoringCenter.Management.Core.Miner;
 
 /// <summary>
 /// Майнер.
@@ -25,7 +25,7 @@ public class Miner : IEquatable<Miner>
     /// <summary>
     /// Типы поддерживаемых девайсов.
     /// </summary>
-    public DeviceEnum SupportedDevices { get; set; }
+    public SupportedDeviceEnum SupportedDevices { get; set; }
 
     /// <summary>
     /// Режим майнинга монет (для GPU).

@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
 /// <summary>
 /// Конфигурация для таблицы с майнерами.
 /// </summary>
-internal class MinerCfg : IEntityTypeConfiguration<Core.Miner>
+internal class MinerCfg : IEntityTypeConfiguration<Core.Miner.Miner>
 {
-    public void Configure(EntityTypeBuilder<Core.Miner> builder)
+    public void Configure(EntityTypeBuilder<Core.Miner.Miner> builder)
     {
         builder.HasIndex(x => x.Name);
 

@@ -1,5 +1,7 @@
 ﻿namespace MNX.MonitoringCenter.Management.UseCases.Miner;
 
+using Miner = Core.Miner.Miner;
+
 /// <summary>
 /// Репозиторий для доступа к майнерам
 /// </summary>
@@ -9,14 +11,14 @@ public interface IMinerRepository
     /// Получить список доступных майнеров.
     /// </summary>
     /// <returns> Список доступных майнеров. </returns>
-    IAsyncEnumerable<Core.Miner> GetAvailableMiners();
+    IAsyncEnumerable<Miner> GetAvailableMiners();
 
     /// <summary>
     /// Получить майнер по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор майнера. </param>
     /// <returns> Майнер. </returns>
-    Task<Core.Miner?> GetMinerById(Guid id);
+    Task<Miner?> GetMinerById(Guid id);
 
     /// <summary>
     /// Получить майнер по идентификатору.

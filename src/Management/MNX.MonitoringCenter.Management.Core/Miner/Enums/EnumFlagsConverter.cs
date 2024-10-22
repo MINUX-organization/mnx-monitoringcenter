@@ -1,10 +1,10 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MNX.MonitoringCenter.Management.Core.Enums;
+namespace MNX.MonitoringCenter.Management.Core.Miner.Enums;
 
 /// <summary>
-/// Конвертирует enum-значения в и из Json списка строк.
+/// Конвертирует enum-значения в Json список строк и наоборот.
 /// </summary>
 public class EnumFlagsConverter : JsonConverterFactory
 {
@@ -18,12 +18,12 @@ public class EnumFlagsConverter : JsonConverterFactory
     public override JsonConverter CreateConverter(Type typeToConvert, JsonSerializerOptions options)
     {
         var converterType = typeof(EnumFlagsConversionHandler<>).MakeGenericType(typeToConvert);
-        return (JsonConverter) Activator.CreateInstance(converterType)!;
+        return (JsonConverter)Activator.CreateInstance(converterType)!;
     }
 }
 
 /// <summary>
-/// Обработчик конвертации enum-значений в Json список строк.
+/// Обработчик конвертации enum-значений в Json список строк и наоборот.
 /// </summary>
 /// <typeparam name="T"> Enum. </typeparam>
 file class EnumFlagsConversionHandler<T> : JsonConverter<T> where T : Enum
@@ -31,8 +31,15 @@ file class EnumFlagsConversionHandler<T> : JsonConverter<T> where T : Enum
     /// <inheritdoc/>
     public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
+        if (reader.TokenType != JsonTokenType.Number)
+            throw new JsonException($"Expected a number token, but got {reader.TokenType}.");
+
         var intValue = reader.GetInt32();
-        return (T) Enum.ToObject(typeof(T), intValue);
+
+        if (!Enum.IsDefined(typeof(T), intValue))
+            throw new JsonException($"The value {intValue} is not valid for enum {typeof(T)}.");
+
+        return (T)Enum.ToObject(typeof(T), intValue);
     }
 
     /// <inheritdoc/>
@@ -40,23 +47,30 @@ file class EnumFlagsConversionHandler<T> : JsonConverter<T> where T : Enum
     {
         var flagNames = GetFlagsAsList(value);
         writer.WriteStartArray();
+
         foreach (var flagName in flagNames)
         {
             writer.WriteStringValue(flagName);
         }
+
         writer.WriteEndArray();
     }
 
     private static List<string> GetFlagsAsList(T enumValue)
     {
-        var enumFlags = new List<string>();
+        var enumFlags = new HashSet<string>();
+
         foreach (Enum flag in Enum.GetValues(typeof(T)))
         {
-            if (enumValue.HasFlag(flag) && Convert.ToInt32(flag) != 0)
+            if (flag.Equals(0))
+                continue;
+
+            if (enumValue.HasFlag(flag))
             {
                 enumFlags.Add(flag.ToString());
             }
         }
-        return enumFlags;
+
+        return enumFlags.ToList();
     }
 }

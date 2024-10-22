@@ -2,7 +2,6 @@
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using System.Reflection;
-using MNX.MonitoringCenter.Management.Core.Enums;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
@@ -21,7 +20,7 @@ public class Context : DbContext
 
     internal DbSet<FlightSheetTargetConfig> FlightSheetTargetConfigs { get; set; }
 
-    internal DbSet<Core.Miner> Miners { get; set; }
+    internal DbSet<Core.Miner.Miner> Miners { get; set; }
 
     internal DbSet<Core.Pool> Pools { get; set; }
 
@@ -36,15 +35,5 @@ public class Context : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        modelBuilder.Entity<Core.Algorithm>().HasData(new Core.Algorithm { Name = "Algorithm" });
-        modelBuilder.Entity<Core.Miner>().HasData(
-            new Core.Miner
-            {
-                Id = Guid.Parse("251752F8-419A-4EB3-8631-50A7557CFF7B"), 
-                Name = "Miner", 
-                Version = "1.0", 
-                MiningMode = GpuMiningModeEnum.Dual, 
-                SupportedDevices = DeviceEnum.AmdGpu | DeviceEnum.IntelGpu | DeviceEnum.NVidiaGpu
-            });
     }
 }

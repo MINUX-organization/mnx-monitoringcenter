@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MNX.MonitoringCenter.Management.Core.Enums;
+namespace MNX.MonitoringCenter.Management.Core.Miner.Enums;
 
 /// <summary>
 /// Режим майнинга монет на GPU.
@@ -8,7 +8,7 @@ namespace MNX.MonitoringCenter.Management.Core.Enums;
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum GpuMiningModeEnum
 {
-    Single = 1, 
+    Single = 1,
 
     Dual = 2,
 

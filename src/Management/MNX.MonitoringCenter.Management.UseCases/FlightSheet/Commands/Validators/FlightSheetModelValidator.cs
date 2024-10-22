@@ -2,18 +2,17 @@
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.PropertyValidators;
 using MNX.MonitoringCenter.Management.UseCases.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Wallet;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Validators;
 
 /// <summary>
 /// Валидатор модели полётного листа.
 /// </summary>
 internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputModel>
-{ 
+{
     public FlightSheetModelValidator(Guid userId,
                                      IMinerRepository minerRepository,
                                      IWalletRepository walletRepository,
@@ -56,8 +55,8 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
             RuleFor(model => model.Configs)
                 .NotEmpty()
                     .WithMessage("Configs are required!")
-                .Must((target, configs) => (target.Type == FlightSheetTargetType.GPU && configs.Count <= 3) ||
-                                           (target.Type == FlightSheetTargetType.CPU && configs.Count <= 1))
+                .Must((target, configs) => target.Type == FlightSheetTargetType.GPU && configs.Count <= 3 ||
+                                           target.Type == FlightSheetTargetType.CPU && configs.Count <= 1)
                 .WithMessage(
                     "The number of configs for a flight sheet should not exceed 3 for a GPU and not exceed 1 for a CPU!");
 

@@ -4,8 +4,11 @@ using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Targe
 using MNX.MonitoringCenter.Management.UseCases.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Wallet;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.PropertyValidators;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Validators;
 
+/// <summary>
+/// Валидатор конфигов в таргета.
+/// </summary>
 internal class TargetConfigsValidator : IAsyncPropertyValidator<FlightSheetTargetInputModel, List<FlightSheetTargetConfigInputModel>>
 {
     private readonly IWalletRepository _walletRepository;
@@ -13,6 +16,9 @@ internal class TargetConfigsValidator : IAsyncPropertyValidator<FlightSheetTarge
     private readonly IPoolRepository _poolRepository;
 
     private readonly Guid _userId;
+
+    /// <inheritdoc/>
+    public string Name { get => "TargetConfigs"; }
 
     internal TargetConfigsValidator(IWalletRepository walletRepository, IPoolRepository poolRepository, Guid userId)
     {
@@ -53,16 +59,16 @@ internal class TargetConfigsValidator : IAsyncPropertyValidator<FlightSheetTarge
                 context.AddFailure(
                     $"Cannot use the same cryptocurrency ({pool.CryptocurrencyId}) in different target configs.");
             }
+
             coinIds.Add(pool.CryptocurrencyId);
         }
 
         return true;
     }
 
+    /// <inheritdoc/>
     public string GetDefaultMessageTemplate(string errorCode)
     {
         return "Passed flight sheet target configs were invalid!";
     }
-
-    public string Name => "TargetConfigs";
 }

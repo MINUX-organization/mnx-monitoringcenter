@@ -1,15 +1,21 @@
 ﻿using FluentValidation;
 using FluentValidation.Validators;
-using MNX.MonitoringCenter.Management.Core.Enums;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.Core.Miner.Enums;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
 using MNX.MonitoringCenter.Management.UseCases.Miner;
 
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.PropertyValidators;
+namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Validators;
 
+/// <summary>
+/// Валидатор майнера таргета.
+/// </summary>
 internal class TargetMinerValidator : IAsyncPropertyValidator<FlightSheetTargetInputModel, Guid>
 {
     private readonly IMinerRepository _minerRepository;
+
+    /// <inheritdoc/>
+    public string Name { get => "TargetMiner"; }
 
     public TargetMinerValidator(IMinerRepository minerRepository)
     {
@@ -20,6 +26,7 @@ internal class TargetMinerValidator : IAsyncPropertyValidator<FlightSheetTargetI
     {
         var model = context.InstanceToValidate;
         var miner = await _minerRepository.GetMinerById(model.MinerId);
+
         if (miner == null)
         {
             context.AddFailure($"Miner with id equaled {model.MinerId} was not found!");
@@ -40,10 +47,6 @@ internal class TargetMinerValidator : IAsyncPropertyValidator<FlightSheetTargetI
         return true;
     }
 
-    public string GetDefaultMessageTemplate(string errorCode)
-    {
-        return "Passed miner id is invalid!";
-    }
-
-    public string Name => "TargetMiner";
+    /// <inheritdoc/>
+    public string GetDefaultMessageTemplate(string errorCode) => "Passed miner id is invalid!";
 }
