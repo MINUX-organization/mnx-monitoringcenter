@@ -51,7 +51,7 @@ public partial class InventoryRepository : ICpuRepository
                                                                            CancellationToken cancellationToken)
     {
         return GetCpusList(specification).GroupBy(x => x.Information.Manufacturer)
-                                     .ToDictionaryAsync(x => x.Key, y => y.Count(), cancellationToken);
+                                     .ToDictionaryAsync(x => x.Key.ToLower(), y => y.Count(), cancellationToken);
     }
 
     /// <inheritdoc/>

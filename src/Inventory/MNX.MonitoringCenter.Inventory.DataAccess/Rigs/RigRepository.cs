@@ -60,11 +60,11 @@ public class RigRepository : IRigRepository
                 {
                     TotalCpusCountGroupedByManufacturer = rig.CurrentInventory.Cpus
                                                                 .GroupBy(x => x.Information.Manufacturer)
-                                                                .ToDictionary(x => x.Key, y => y.Count()),
+                                                                .ToDictionary(x => x.Key.ToLower(), y => y.Count()),
 
                     TotalGpusCountGroupedByManufacturer = rig.CurrentInventory.Gpus
                                                                 .GroupBy(x => x.Information.Manufacturer)
-                                                                .ToDictionary(x => x.Key, y => y.Count()),
+                                                                .ToDictionary(x => x.Key.ToLower(), y => y.Count()),
 
                     TotalDrivesCount = rig.CurrentInventory.Drives.Count,
                 }
