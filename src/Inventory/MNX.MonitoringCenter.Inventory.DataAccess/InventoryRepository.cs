@@ -1,42 +1,34 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.UseCases;
+using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
+using AutoMapper;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
 /// <summary>
-/// Реализация <see cref="IInventoryRepository"/>.
+/// Репозиторий инвентаризации.
 /// </summary>
-public class InventoryRepository : IInventoryRepository
+public partial class InventoryRepository
 {
     private readonly Context _context;
 
-    public InventoryRepository(Context context)
+    private readonly IMapper _mapper;
+
+    public InventoryRepository(Context context, IMapper mapper)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <inheritdoc/>
-    public async Task Save(Guid ownerId, Guid rigId, DateTimeOffset createdDate,
-                           InventoryModel inventory, CancellationToken cancellationToken)
+    internal async Task Save(Guid rigId, DateTimeOffset createdDate,
+                             RigInventoryModel inventory, CancellationToken cancellationToken)
     {
-        var oldInventory = await _context.Inventory
-            .GetCurrentInventory()
-            .InventoryFilter(new InventorySpecification(ownerId, rigId))
-            .FirstOrDefaultAsync(cancellationToken);
+        var oldInventory = await GetInventoryBySpecification(new InventorySpecification(null, rigId, true))
+                                    .FirstOrDefaultAsync(cancellationToken);
 
-        var newInventory = new Inventory()
-        {
-            RigOwnerId = ownerId,
-            RigId = rigId,
-            CreatedDateTime = createdDate,
-            Cpus = inventory.Cpus,
-            Drives = inventory.Drives,
-            Gpus = inventory.Gpus,
-            NetworkAdapters = inventory.NetworkAdapters,
-            Motherboard = inventory.Motherboard,
-            Software = inventory.Software
-        };
+        var newInventory = MapInventory(rigId, createdDate, inventory);
 
         if (newInventory.Equals(oldInventory))
         {
@@ -46,10 +38,54 @@ public class InventoryRepository : IInventoryRepository
         if (oldInventory != null)
         {
             oldInventory.EndDateTime = createdDate;
+            _context.RigInventory.Update(oldInventory);
         }
 
-        await _context.Inventory.AddAsync(newInventory, cancellationToken);
+        await _context.RigInventory.AddAsync(newInventory, cancellationToken);
 
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Получить срез инвентаризации за период.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <param name="startPeriod"> Начало периода. </param>
+    /// <param name="endPeriod"> Конец периода. </param>
+    /// <returns> Инвентаризация. </returns>
+    private IQueryable<RigInventory.RigInventory> GetInventorySliceForAPeriod(InventorySpecification specification,
+                                                                              DateTimeOffset startPeriod,
+                                                                              DateTimeOffset endPeriod)
+    {
+        return GetInventoryBySpecification(specification).GetForAPeriod(startPeriod, endPeriod);
+    }
+
+    /// <summary>
+    /// Получение инвентаризации по спецификации.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Инвентаризация. </returns>
+    private IQueryable<RigInventory.RigInventory> GetInventoryBySpecification(InventorySpecification specification)
+    {
+        return _context.RigInventory.AsNoTrackingWithIdentityResolution()
+                                    .Include(inventory => inventory.Rig)
+                                    .Where(inventory => GetRigsBySpecification(specification).Contains(inventory.Rig))
+                                    .Actualize(specification);
+    }
+
+    private RigInventory.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
+                                                   RigInventoryModel inventory)
+    {
+        return new RigInventory.RigInventory()
+        {
+            RigId = rigId,
+            CreatedDateTime = createdDate,
+            Cpus = inventory.Cpus,
+            Drives = inventory.Drives,
+            Gpus = inventory.Gpus,
+            NetworkAdapters = inventory.NetworkAdapters,
+            Motherboard = inventory.Motherboard,
+            Software = _mapper.Map<SoftwareInventoryDto>(inventory)
+        };
     }
 }

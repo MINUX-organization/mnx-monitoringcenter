@@ -1,16 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MNX.Application.Consul;
-using MNX.Application.Data.DI;
 using MNX.Application.RabbitMQ;
-using MNX.MonitoringCenter.Infrastructure;
-using MNX.MonitoringCenter.Inventory.Integration;
-using MNX.MonitoringCenter.Monitoring.DataAccess;
-using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories;
-using MNX.MonitoringCenter.Monitoring.DataAccess.Repositories.MiningDevices;
-using MNX.MonitoringCenter.Monitoring.Hubs;
-using MNX.MonitoringCenter.Monitoring.Service.Infrastructure;
-using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.GetRigsInformation;
 using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
@@ -89,36 +79,11 @@ internal class Program
 
     private static void ConfigureDI(IServiceCollection services, ConfigurationManager configuration)
     {
-        services.AddInventoryModule(configuration);
-
-        services.AddDataContext<Context>(configuration);
         services.AddSignalR();
         services.AddEasyNetQ(configuration, [Assembly.GetExecutingAssembly()]);
         services.AddMemoryCache()
                 .AddFusionCache()
                 .WithDefaultEntryOptions(options => options.Duration = TimeSpan.FromMinutes(15)); // todo: вынести настройку в конфиг
-
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(new Assembly[]
-        {
-            Assembly.GetExecutingAssembly(),
-            typeof(GetRigsInformationQuery).Assembly
-        }));
-
-        services.AddAutoMapper(new Assembly[]
-        {
-            typeof(MappingProfile).Assembly,
-            typeof(MNX.MonitoringCenter.Monitoring.UseCases.MappingProfile).Assembly,
-            typeof(DbMappingProfile).Assembly
-        });
-
-        services.AddScoped<IRigRepository, RigRepository>();
-        services.AddScoped<IMiningDeviceRepository, MiningDeviceRepository>();
-        services.AddScoped<IGpuRepository, GpuRepository>();
-        services.AddScoped<UserAccessor>();
-        services.AddSingleton<IUserRigsObserverWrapper, UserRigsObserverWrapper>();
-        services.AddHttpContextAccessor();
-
-        services.Configure<DynamicDataOptions>(configuration);
     }
 
     private static async Task RunApp(WebApplicationBuilder builder)
@@ -143,7 +108,6 @@ internal class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapHub<MonitoringHub>("hubs/monitoring");
         app.MapControllers();
 
         await app.RunAsync();

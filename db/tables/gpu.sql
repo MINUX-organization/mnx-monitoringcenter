@@ -1,7 +1,7 @@
 CREATE TABLE monitoring_center.gpu
 (
     id uuid NOT NULL,
-    inventory_id bigint,
+    rig_inventory_id bigint,
     information_bios_version text NOT NULL,
     information_manufacturer text NOT NULL,
     information_model text NOT NULL,
@@ -65,14 +65,14 @@ CREATE TABLE monitoring_center.gpu
 
     CONSTRAINT pk_gpu PRIMARY KEY (id),
 
-    CONSTRAINT fk_gpu_inventory_inventory_id FOREIGN KEY (inventory_id)
-        REFERENCES monitoring_center.inventory (id) MATCH SIMPLE
+    CONSTRAINT fk_gpu_rig_inventory_rig_inventory_id FOREIGN KEY (rig_inventory_id)
+        REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
 
 CREATE INDEX ix_gpu_inventory_id
     ON monitoring_center.gpu USING btree
-    (inventory_id ASC NULLS LAST);
+    (rig_inventory_id ASC NULLS LAST);
 
 COMMENT ON TABLE monitoring_center.gpu IS 'Инвентаризация видеокарт';

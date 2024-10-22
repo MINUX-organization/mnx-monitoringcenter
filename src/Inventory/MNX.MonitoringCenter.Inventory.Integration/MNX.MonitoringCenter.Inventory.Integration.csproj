@@ -9,10 +9,13 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="MNX.Application.Data.DI" Version="1.0.0" />
+    <PackageReference Include="MNX.Application.RabbitMQ" Version="1.0.0" />
     <PackageReference Include="MNX.Application.UseCases.DI" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.Controllers\MNX.MonitoringCenter.Inventory.Controllers.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.DataAccess\MNX.MonitoringCenter.Inventory.DataAccess.csproj" />
   </ItemGroup>
 

@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Monitoring.Core.Devices.Abstractions;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Monitoring.Core.Devices.Abstractions;
 using MNX.MonitoringCenter.Monitoring.Core.Devices.Gpu;
-using MNX.MonitoringCenter.Monitoring.UseCases.Queries.Devices;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 
