@@ -23,7 +23,7 @@ public class RigDto
     /// <summary>
     /// Список инвентаризаций.
     /// </summary>
-    public List<RigInventory.RigInventory> Inventories { get; init; } = new();
+    public List<RigInventory.RigInventory> Inventories { get; init; } = new(0);
 
     /// <summary>
     /// Текущая инвентаризация.

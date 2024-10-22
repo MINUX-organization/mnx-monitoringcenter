@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.UseCases;
-using AutoMapper;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
-using System.Threading;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
+using MNX.MonitoringCenter.Inventory.UseCases;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
@@ -25,38 +24,52 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<RigDetails> GetRigs(InventorySpecification specification)
+    public async IAsyncEnumerable<RigDetails> GetRigs(InventorySpecification specification)
     {
-        return _inventoryRepository.GetRigsBySpecification(specification)
-                    .Include(rig => rig.Inventories)
-                        .ThenInclude(inventory => inventory.Software)
-                    .Include(rig => rig.Inventories)
-                        .ThenInclude(inventory => inventory.Cpus)
-                    .Include(rig => rig.Inventories)
-                        .ThenInclude(inventory => inventory.Drives)
-                    .Include(rig => rig.Inventories)
-                        .ThenInclude(inventory => inventory.Gpus)
-                    .Where(rig => rig.Inventories.Count != 0)
-                    .Select(rig => new RigDetails()
-                    {
-                        Id = rig.Id,
-                        OwnerId = rig.OwnerId,
-                        Name = rig.Name,
-                        Software = _mapper.Map<SoftwareInventory>(rig.CurrentInventory!.Software),
-                        CountDevices = new ModelWithCountDevices()
-                        {
-                            TotalCpusCountGroupedByManufacturer = rig.CurrentInventory.Cpus
-                                                                        .GroupBy(x => x.Information.Manufacturer)
-                                                                        .ToDictionary(x => x.Key, y => y.Count()),
+        var rigsQuery = _inventoryRepository.GetRigsBySpecification(specification)
 
-                            TotalGpusCountGroupedByManufacturer = rig.CurrentInventory.Gpus
-                                                                        .GroupBy(x => x.Information.Manufacturer)
-                                                                        .ToDictionary(x => x.Key, y => y.Count()),
+                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                                .ThenInclude(inventory => inventory.Software)
 
-                            TotalDrivesCount = rig.CurrentInventory.Drives.Count(),
-                        }
-                    })
-                    .AsAsyncEnumerable();
+                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                                .ThenInclude(inventory => inventory.Cpus)
+
+                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                                .ThenInclude(inventory => inventory.Drives)
+
+                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                                .ThenInclude(inventory => inventory.Gpus)
+
+                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                                .ThenInclude(inventory => inventory.NetworkAdapters.Where(x => x.GlobalIP != null))
+
+                            .Where(rig => rig.Inventories.Count != 0);
+
+        await foreach (var rig in rigsQuery.AsAsyncEnumerable())
+        {
+            yield return new RigDetails()
+            {
+                Id = rig.Id,
+                OwnerId = rig.OwnerId,
+                Name = rig.Name,
+                Mac = rig.CurrentInventory!.NetworkAdapters.First().Information.Mac,
+                GlobalIP = rig.CurrentInventory!.NetworkAdapters.First().GlobalIP!,
+                LocalIP = rig.CurrentInventory!.NetworkAdapters.First().LocalIP!,
+                Software = _mapper.Map<SoftwareInventory>(rig.CurrentInventory!.Software),
+                CountDevices = new ModelWithCountDevices()
+                {
+                    TotalCpusCountGroupedByManufacturer = rig.CurrentInventory.Cpus
+                                                                .GroupBy(x => x.Information.Manufacturer)
+                                                                .ToDictionary(x => x.Key, y => y.Count()),
+
+                    TotalGpusCountGroupedByManufacturer = rig.CurrentInventory.Gpus
+                                                                .GroupBy(x => x.Information.Manufacturer)
+                                                                .ToDictionary(x => x.Key, y => y.Count()),
+
+                    TotalDrivesCount = rig.CurrentInventory.Drives.Count,
+                }
+            };
+        }
     }
 
     /// <inheritdoc/>

@@ -23,6 +23,21 @@ public class RigDetails
     public required string Name { get; init; }
 
     /// <summary>
+    /// Mac адрес.
+    /// </summary>
+    public required string Mac {  get; init; }
+
+    /// <summary>
+    /// Глобальный IP адрес.
+    /// </summary>
+    public required string GlobalIP { get; init; }
+
+    /// <summary>
+    /// Локальный IP адрес.
+    /// </summary>
+    public required string LocalIP { get; init; }
+
+    /// <summary>
     /// Программное обеспечение.
     /// </summary>
     public required SoftwareInventory Software { get; init; }

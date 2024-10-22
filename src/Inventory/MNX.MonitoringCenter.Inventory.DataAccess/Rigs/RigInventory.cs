@@ -69,6 +69,8 @@ public class RigInventory : IEquatable<RigInventory>
     /// </summary>
     public required SoftwareInventoryDto Software { get; set; }
 
+    public bool IsActive { get => EndDateTime == null; } 
+
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
