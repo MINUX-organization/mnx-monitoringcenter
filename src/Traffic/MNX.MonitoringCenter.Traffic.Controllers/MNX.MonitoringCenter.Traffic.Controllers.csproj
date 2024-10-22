@@ -12,7 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\MNX.MonitoringCenter.Infrastructure\MNX.MonitoringCenter.Infrastructure.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Traffic.Observers\MNX.MonitoringCenter.Traffic.Observers.csproj" />
   </ItemGroup>
 

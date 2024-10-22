@@ -1,12 +1,12 @@
 name: monitoring_center
 services:
 
-    management:
-        container_name: management
-        image: management-service
+    rigs_api:
+        container_name: rigs_api
+        image: rigs_api
         build:
             context: .
-            dockerfile: ./src/Management/MNX.MonitoringCenter.Management.Service/Dockerfile
+            dockerfile: ./src/MNX.MonitoringCenter.RigsApi.Service/Dockerfile
             args:
                 - nuget_server=http://77.37.200.24:5554/v3/index.json
         restart: unless-stopped
@@ -14,21 +14,5 @@ services:
              - "8001:8080"
         environment:
              - applicationUrl=http://77.37.200.24:8001
-             - ServiceName=monitoring_center_management
-             - ConsulUri=http://77.37.200.24:8500
-    
-    monitoring:
-        container_name: monitoring
-        image: monitoring-service
-        build:
-            context: .
-            dockerfile: ./src/Monitoring/MNX.MonitoringCenter.Monitoring.Service/Dockerfile
-            args:
-                - nuget_server=http://77.37.200.24:5554/v3/index.json
-        restart: unless-stopped
-        ports:
-             - "8002:8080"
-        environment:
-             - applicationUrl=http://77.37.200.24:8001
-             - ServiceName=monitoring_center_monitoring
+             - ServiceName=rigs_api
              - ConsulUri=http://77.37.200.24:8500

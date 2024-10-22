@@ -6,11 +6,6 @@
 public class SoftwareInventory : IEquatable<SoftwareInventory>
 {
     /// <summary>
-    /// Идентификатор.
-    /// </summary>
-    public Guid Id { get; init; }
-
-    /// <summary>
     /// Версия Minux.
     /// </summary>
     public required string MinuxVersion { get; init; }
@@ -81,8 +76,7 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
 
         if (ReferenceEquals(this, other)) return true;
 
-        return Id.Equals(other.Id) &&
-               MinuxVersion.Equals(other.MinuxVersion) &&
+        return MinuxVersion.Equals(other.MinuxVersion) &&
                LinuxVersion.Equals(other.LinuxVersion) &&
                AmdDriverVersion.Equals(other.AmdDriverVersion) &&
                NvidiaDriverVersion.Equals(other.NvidiaDriverVersion) &&
@@ -101,7 +95,7 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
             minersHash = HashCode.Combine(miner.Key, miner.Value);
         }
 
-        return HashCode.Combine(Id, MinuxVersion, LinuxVersion, AmdDriverVersion, NvidiaDriverVersion,
+        return HashCode.Combine(MinuxVersion, LinuxVersion, AmdDriverVersion, NvidiaDriverVersion,
                                 IntelDriverVersion, OpenCLVersion, CudaVersion) + minersHash;
     }
 }

@@ -8,6 +8,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Controllers\**" />
+    <Content Remove="Controllers\**" />
+    <EmbeddedResource Remove="Controllers\**" />
+    <None Remove="Controllers\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.3" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
@@ -24,9 +31,7 @@
   </ItemGroup>
 	
   <ItemGroup>
-    <ProjectReference Include="..\..\Inventory\MNX.MonitoringCenter.Inventory.Integration\MNX.MonitoringCenter.Inventory.Integration.csproj" />
-    <ProjectReference Include="..\..\MNX.MonitoringCenter.Infrastructure\MNX.MonitoringCenter.Infrastructure.csproj" />
-    <ProjectReference Include="..\MNX.MonitoringCenter.Monitoring.DataAccess\MNX.MonitoringCenter.Monitoring.DataAccess.csproj" />
+    <ProjectReference Include="..\..\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Monitoring.UseCases\MNX.MonitoringCenter.Monitoring.UseCases.csproj" />
   </ItemGroup>
 

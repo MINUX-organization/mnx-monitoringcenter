@@ -7,11 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	<PackageReference Include="MNX.Application.UseCases" Version="1.0.0" />
-  </ItemGroup>	
-
-  <ItemGroup>
-    <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.Contracts\MNX.MonitoringCenter.Inventory.Contracts.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
   </ItemGroup>
 
 </Project>
