@@ -15,7 +15,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
-    <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.Controllers\MNX.MonitoringCenter.Inventory.Controllers.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.DataAccess\MNX.MonitoringCenter.Inventory.DataAccess.csproj" />
   </ItemGroup>
 

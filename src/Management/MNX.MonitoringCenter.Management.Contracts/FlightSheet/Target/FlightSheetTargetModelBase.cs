@@ -22,7 +22,7 @@ public abstract class FlightSheetTargetModelBase
     /// <summary>
     /// Список конфигов для майнинга.
     /// </summary>
-    public List<FlightSheetTargetConfigModel> Configs { get; set; } = new();
+    public List<FlightSheetTargetConfigModel> Configs { get; set; } = new(0);
 
     /// <summary>
     /// Строка аргументов для майнера.
@@ -32,5 +32,5 @@ public abstract class FlightSheetTargetModelBase
     /// <summary>
     /// Майнер.
     /// </summary>
-    public Miner Miner { get; set; }
+    public required Miner Miner { get; set; }
 }

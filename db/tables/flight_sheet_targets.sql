@@ -5,8 +5,9 @@ CREATE TABLE monitoring_center.flight_sheet_targets
     additional_arguments text,
     miner_id uuid NOT NULL,
     flight_sheet_id uuid,
-    huge_page integer,
+    huge_pages integer,
     config_file text,
+    threads_count integer
 
     CONSTRAINT pk_flight_sheet_targets PRIMARY KEY (id),
 
