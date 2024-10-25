@@ -16,7 +16,7 @@ public interface IGpuRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Список видеокарт. </returns>
-    IAsyncEnumerable<GpuModel> GetGpus(DeviceSpecification specification);
+    IAsyncEnumerable<GpuDetails> GetGpus(DeviceSpecification specification);
 
     /// <summary>
     /// Получить срез инвентаризации видеокарт за указанный период.

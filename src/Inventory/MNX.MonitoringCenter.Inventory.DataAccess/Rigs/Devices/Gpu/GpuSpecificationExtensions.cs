@@ -28,9 +28,9 @@ internal static class GpuSpecificationExtensions
     /// <param name="gpus"> Запрашиваемый список видеокарт. </param>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Запрашиваемый список видеокарт. </returns>
-    internal static IQueryable<GpuModel> Filter(this IQueryable<GpuModel> gpus, DeviceSpecification specification)
+    internal static IQueryable<GpuDetails> Filter(this IQueryable<GpuDetails> gpus, DeviceSpecification specification)
     {
-        return gpus.Filter<GpuModel>(specification);
+        return gpus.Filter<GpuDetails>(specification);
     }
 
     private static IQueryable<TGpu> Filter<TGpu>(this IQueryable<TGpu> gpus, DeviceSpecification specification)

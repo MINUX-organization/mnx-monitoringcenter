@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 /// <summary>
 /// Обработчик <see cref="GetGpusInfoQuery"/>.
 /// </summary>
-public class GetGpusInfoQueryHandler : IStreamRequestHandler<GetGpusInfoQuery, GpuModel>
+public class GetGpusInfoQueryHandler : IStreamRequestHandler<GetGpusInfoQuery, GpuDetails>
 {
     private readonly IGpuRepository _gpuRepository;
 
@@ -15,7 +15,7 @@ public class GetGpusInfoQueryHandler : IStreamRequestHandler<GetGpusInfoQuery, G
         _gpuRepository = gpuRepository ?? throw new ArgumentNullException(nameof(gpuRepository));
     }
 
-    public IAsyncEnumerable<GpuModel> Handle(GetGpusInfoQuery request, CancellationToken cancellationToken)
+    public IAsyncEnumerable<GpuDetails> Handle(GetGpusInfoQuery request, CancellationToken cancellationToken)
     {
         return _gpuRepository.GetGpus(request.Specification);
     }

@@ -39,8 +39,8 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <returns> Асинхронный поток видеокарт. </returns>
     [HttpGet("gpus")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<GpuModel>), 200)]
-    public IAsyncEnumerable<GpuModel> GetGpus()
+    [ProducesResponseType(typeof(IAsyncEnumerable<GpuDetails>), 200)]
+    public IAsyncEnumerable<GpuDetails> GetGpus()
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetGpusInfoQuery(userId));

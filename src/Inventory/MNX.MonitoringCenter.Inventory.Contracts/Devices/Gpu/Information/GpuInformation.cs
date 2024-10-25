@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
 

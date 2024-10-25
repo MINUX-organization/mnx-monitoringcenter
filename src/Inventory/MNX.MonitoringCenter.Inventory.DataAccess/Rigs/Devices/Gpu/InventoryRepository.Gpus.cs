@@ -4,6 +4,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
@@ -14,11 +15,11 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : IGpuRepository
 {
     /// <inheritdoc/>
-    public IAsyncEnumerable<GpuModel> GetGpus(DeviceSpecification specification)
+    public IAsyncEnumerable<GpuDetails> GetGpus(DeviceSpecification specification)
     {
         return GetInventoryBySpecification(specification.InventorySpecification)
                                  .Include(inventory => inventory.Gpus)
-                                 .SelectMany(inventory => inventory.Gpus.Select(gpu => new GpuModel()
+                                 .SelectMany(inventory => inventory.Gpus.Select(gpu => new GpuDetails()
                                  {
                                      Id = gpu.Id,
                                      RigName = inventory.Rig!.Name,
@@ -91,12 +92,56 @@ public partial class InventoryRepository : IGpuRepository
                                      .ToDictionaryAsync(x => x.Key.ToLower(), y => y.Count(), cancellationToken);
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Получить список видеокарт.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Список видеокарт. </returns>
     private IQueryable<Gpu> GetGpusList(DeviceSpecification specification)
     {
         return GetInventoryBySpecification(specification.InventorySpecification)
                                  .Include(x => x.Gpus)
                                  .SelectMany(x => x.Gpus)
                                  .Filter(specification);
+    }
+
+    /// <summary>
+    /// Получить версию драйвера для работы с видеокартой по её производителю.
+    /// </summary>
+    /// <param name="software"> Программное обеспечение. </param>
+    /// <param name="gpuManufacturer"> Производитель видеокарты. </param>
+    /// <returns>
+    /// Версия драйвера, если производитель поддерживается системой, иначе <see langword="null"/>.
+    /// </returns>
+    private static string? GetDriverVersionByGpuManufacturer(SoftwareInventoryDto software, string gpuManufacturer)
+    {
+        if (gpuManufacturer == SupportedGpuManufacturer.Amd.ToString())
+        {
+            return software.AmdDriverVersion;
+        }
+
+        if (gpuManufacturer == SupportedGpuManufacturer.Nvidia.ToString())
+        {
+            return software.NvidiaDriverVersion;
+        }
+
+        if (gpuManufacturer == SupportedGpuManufacturer.Intel.ToString())
+        {
+            return software.IntelDriverVersion;
+        }
+
+        return null;
+    }
+
+    /// <summary>
+    /// Поддерживаемые производители видеокарт.
+    /// </summary>
+    private enum SupportedGpuManufacturer
+    {
+        Amd,
+
+        Nvidia,
+
+        Intel
     }
 }

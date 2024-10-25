@@ -5,7 +5,7 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.Get
 /// <summary>
 /// Запрос на получение списка видеокарт.
 /// </summary>
-public class GetGpusInfoQuery : IStreamRequest<GpuModel>
+public class GetGpusInfoQuery : IStreamRequest<GpuDetails>
 {
     /// <summary>
     /// Спецификация устройств.

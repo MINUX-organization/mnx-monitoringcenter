@@ -122,8 +122,8 @@ public class RigController : ControllerBase
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("{rigId:Guid}/gpus")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<GpuModel>), 200)]
-    public IAsyncEnumerable<GpuModel> GetGpus(Guid rigId)
+    [ProducesResponseType(typeof(IAsyncEnumerable<GpuDetails>), 200)]
+    public IAsyncEnumerable<GpuDetails> GetGpus(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetGpusInfoQuery(userId, rigId));
