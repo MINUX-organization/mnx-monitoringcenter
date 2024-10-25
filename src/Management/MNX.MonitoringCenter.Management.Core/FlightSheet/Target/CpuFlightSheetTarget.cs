@@ -20,7 +20,7 @@ public class CpuFlightSheetTarget : FlightSheetTargetBase, IEquatable<CpuFlightS
     /// <summary>
     /// Страницы.
     /// </summary>
-    public int HugePages { get; set; }
+    public int? HugePages { get; set; }
 
     /// <summary>
     /// Строка конфигурации формата Json.
@@ -30,7 +30,7 @@ public class CpuFlightSheetTarget : FlightSheetTargetBase, IEquatable<CpuFlightS
     /// <summary>
     /// Кол-во потоков.
     /// </summary>
-    public int ThreadsCount { get; set; }
+    public int? ThreadsCount { get; set; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

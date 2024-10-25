@@ -16,7 +16,7 @@ public class CpuFlightSheetTargetInputModel : FlightSheetTargetInputModel
     /// <summary>
     /// Страницы.
     /// </summary>
-    public int HugePages { get; init; }
+    public int? HugePages { get; init; }
 
     /// <summary>
     /// Строка конфигурации формата Json.
@@ -26,5 +26,5 @@ public class CpuFlightSheetTargetInputModel : FlightSheetTargetInputModel
     /// <summary>
     /// Кол-во потоков.
     /// </summary>
-    public int ThreadsCount { get; init; }
+    public int? ThreadsCount { get; init; }
 }

@@ -8,7 +8,7 @@ public class CpuFlightSheetTargetModel : FlightSheetTargetModelBase
     /// <summary>
     /// Страницы.
     /// </summary>
-    public int HugePages { get; set; }
+    public int? HugePages { get; set; }
 
     /// <summary>
     /// Строка конфигурации формата Json.
@@ -18,5 +18,5 @@ public class CpuFlightSheetTargetModel : FlightSheetTargetModelBase
     /// <summary>
     /// Кол-во потоков.
     /// </summary>
-    public int ThreadsCount { get; set; }
+    public int? ThreadsCount { get; set; }
 }

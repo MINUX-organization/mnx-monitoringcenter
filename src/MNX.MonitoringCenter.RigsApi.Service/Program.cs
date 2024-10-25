@@ -100,8 +100,7 @@ internal class Program
 
                 var path = context.HttpContext.Request.Path;
 
-                if (!string.IsNullOrEmpty(accessToken)
-                && path.StartsWithSegments("hubs"))
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("hubs"))
                 {
                     context.Token = accessToken;
                 }
