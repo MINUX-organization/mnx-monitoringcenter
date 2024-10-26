@@ -30,7 +30,7 @@ public class FlightSheetTargetConfigInputModel
     public Guid WalletId { get; init; }
 
     /// <summary>
-    /// Обработать пробелы в начале и в конце <see cref="PoolPassword"/>.
+    /// Убрать пробелы в начале и в конце <see cref="PoolPassword"/>.
     /// </summary>
     public void TrimGapsInPoolPassword()
     {
