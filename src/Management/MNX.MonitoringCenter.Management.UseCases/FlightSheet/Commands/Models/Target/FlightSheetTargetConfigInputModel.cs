@@ -6,6 +6,11 @@
 public class FlightSheetTargetConfigInputModel
 {
     /// <summary>
+    /// Поле пароля подключения к пулу.
+    /// </summary>
+    private string? _poolPassword;
+
+    /// <summary>
     /// Идентификатор пула.
     /// </summary>
     public Guid PoolId { get; init; }
@@ -13,10 +18,22 @@ public class FlightSheetTargetConfigInputModel
     /// <summary>
     /// Пароль подключения к пулу.
     /// </summary>
-    public string? PoolPassword { get; init; }
+    public string? PoolPassword 
+    { 
+        get => _poolPassword; 
+        init => _poolPassword = value;
+    }
 
     /// <summary>
     /// Идентификатор кошелька.
     /// </summary>
     public Guid WalletId { get; init; }
+
+    /// <summary>
+    /// Обработать пробелы в начале и в конце <see cref="PoolPassword"/>.
+    /// </summary>
+    public void TrimGapsInPoolPassword()
+    {
+        _poolPassword = _poolPassword?.Trim();
+    }
 }
