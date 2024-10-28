@@ -45,6 +45,12 @@ internal class TargetConfigsValidator : IAsyncPropertyValidator<FlightSheetTarge
                 context.AddFailure($"Pool with id equaled {config.PoolId} was not found!");
             }
 
+            config.TrimGapsInPoolPassword();
+            if (config.PoolPassword != null && config.PoolPassword.Contains(' '))
+            {
+                context.AddFailure($"Pool password {config.PoolPassword} cannot contain space characters");
+            }
+
             if (pool == null || wallet == null)
                 continue;
 
