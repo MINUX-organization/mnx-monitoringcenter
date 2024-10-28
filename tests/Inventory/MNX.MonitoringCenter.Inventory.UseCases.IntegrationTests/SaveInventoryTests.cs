@@ -130,7 +130,7 @@ public class SaveInventoryTests : BaseTest
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
                                 Information = new CpuInformation()
                                 {
-                                    Manufacturer = "Amd",
+                                    Manufacturer = "AMD",
                                     Model = "Model",
                                     CoresCount = 10,
                                     ThreadsCount = 12,
@@ -168,7 +168,7 @@ public class SaveInventoryTests : BaseTest
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
                                 Information = new GpuInformation()
                                 {
-                                    Manufacturer = "Amd",
+                                    Manufacturer = "AMD",
                                     Model = "Model",
                                     SerialNumber = "SerialNumber",
                                     Vendor = "Vendor",
@@ -261,9 +261,9 @@ public class SaveInventoryTests : BaseTest
                         {
                             MinuxVersion = "1.0.0",
                             LinuxVersion = "1.0.0",
-                            AmdDriverVersion = "1.0.0",
-                            NvidiaDriverVersion = "1.0.0",
-                            IntelDriverVersion = "1.0.0",
+                            AmdGpuDriverVersion = "1.0.0",
+                            NvidiaGpuDriverVersion = "1.0.0",
+                            IntelGpuDriverVersion = "1.0.0",
                             OpenCLVersion = "1.0.0",
                             CudaVersion = "1.0.0",
                             AgentVersion = "1.0.0",
@@ -422,9 +422,9 @@ public class SaveInventoryTests : BaseTest
                         {
                             MinuxVersion = "1.0.0",
                             LinuxVersion = "1.0.0",
-                            AmdDriverVersion = "1.0.0",
-                            NvidiaDriverVersion = "1.0.0",
-                            IntelDriverVersion = "1.0.0",
+                            AmdGpuDriverVersion = "1.0.0",
+                            NvidiaGpuDriverVersion = "1.0.0",
+                            IntelGpuDriverVersion = "1.0.0",
                             OpenCLVersion = "1.0.0",
                             CudaVersion = "1.0.0",
                             AgentVersion = "1.0.0",
@@ -583,9 +583,9 @@ public class SaveInventoryTests : BaseTest
                         {
                             MinuxVersion = "1.0.0",
                             LinuxVersion = "1.0.0",
-                            AmdDriverVersion = "1.0.0",
-                            NvidiaDriverVersion = "1.0.0",
-                            IntelDriverVersion = "1.0.0",
+                            AmdGpuDriverVersion = "1.0.0",
+                            NvidiaGpuDriverVersion = "1.0.0",
+                            IntelGpuDriverVersion = "1.0.0",
                             OpenCLVersion = "1.0.0",
                             CudaVersion = "1.0.0",
                             AgentVersion = "1.0.0",

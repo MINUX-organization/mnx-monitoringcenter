@@ -24,19 +24,19 @@ public class SoftwareInventoryDto
     public required string LinuxVersion { get; init; }
 
     /// <summary>
-    /// Версия AMD драйвера.
+    /// Версия AMD драйвера для видеокарты.
     /// </summary>
-    public required string AmdDriverVersion { get; init; }
+    public required string AmdGpuDriverVersion { get; init; }
 
     /// <summary>
-    /// Версия драйвера Nvidia.
+    /// Версия драйвера Nvidia для видеокарты.
     /// </summary>
-    public required string NvidiaDriverVersion { get; init; }
+    public required string NvidiaGpuDriverVersion { get; init; }
 
     /// <summary>
-    /// Версия драйвера Intel.
+    /// Версия драйвера Intelдля видеокарты.
     /// </summary>
-    public required string IntelDriverVersion { get; init; }
+    public required string IntelGpuDriverVersion { get; init; }
 
     /// <summary>
     /// Версия OpenCL.

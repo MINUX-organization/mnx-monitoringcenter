@@ -4,7 +4,6 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
@@ -19,22 +18,28 @@ public partial class InventoryRepository : IGpuRepository
     {
         return GetInventoryBySpecification(specification.InventorySpecification)
                                  .Include(inventory => inventory.Gpus)
+                                 .Include(inventory => inventory.Software)
                                  .SelectMany(inventory => inventory.Gpus.Select(gpu => new GpuDetails()
                                  {
                                      Id = gpu.Id,
                                      RigName = inventory.Rig!.Name,
                                      Information = gpu.Information,
                                      Pci = gpu.Pci,
-                                     Restrictions = gpu.Restrictions
-                                 }))
+                                     Restrictions = gpu.Restrictions,
+                                     DriverVersion = Context
+                                        .GetGpuDriverVersion(inventory.Software.AmdGpuDriverVersion,
+                                                             inventory.Software.IntelGpuDriverVersion,
+                                                             inventory.Software.NvidiaGpuDriverVersion,
+                                                             gpu.Information.Manufacturer)
+                                 })) 
                                  .Filter(specification)
                                  .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
     public IAsyncEnumerable<List<Gpu>> GetGpusSliceForAPeriod(InventorySpecification specification,
-                                                                            DateTimeOffset startPeriod,
-                                                                            DateTimeOffset endPeriod)
+                                                              DateTimeOffset startPeriod,
+                                                              DateTimeOffset endPeriod)
     {
         return GetInventorySliceForAPeriod(specification, startPeriod, endPeriod)
                                  .Include(x => x.Gpus)
@@ -103,45 +108,5 @@ public partial class InventoryRepository : IGpuRepository
                                  .Include(x => x.Gpus)
                                  .SelectMany(x => x.Gpus)
                                  .Filter(specification);
-    }
-
-    /// <summary>
-    /// Получить версию драйвера для работы с видеокартой по её производителю.
-    /// </summary>
-    /// <param name="software"> Программное обеспечение. </param>
-    /// <param name="gpuManufacturer"> Производитель видеокарты. </param>
-    /// <returns>
-    /// Версия драйвера, если производитель поддерживается системой, иначе <see langword="null"/>.
-    /// </returns>
-    private static string? GetDriverVersionByGpuManufacturer(SoftwareInventoryDto software, string gpuManufacturer)
-    {
-        if (gpuManufacturer == SupportedGpuManufacturer.Amd.ToString())
-        {
-            return software.AmdDriverVersion;
-        }
-
-        if (gpuManufacturer == SupportedGpuManufacturer.Nvidia.ToString())
-        {
-            return software.NvidiaDriverVersion;
-        }
-
-        if (gpuManufacturer == SupportedGpuManufacturer.Intel.ToString())
-        {
-            return software.IntelDriverVersion;
-        }
-
-        return null;
-    }
-
-    /// <summary>
-    /// Поддерживаемые производители видеокарт.
-    /// </summary>
-    private enum SupportedGpuManufacturer
-    {
-        Amd,
-
-        Nvidia,
-
-        Intel
     }
 }

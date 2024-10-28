@@ -16,19 +16,19 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     public required string LinuxVersion { get; init; }
 
     /// <summary>
-    /// Версия AMD драйвера.
+    /// Версия AMD драйвера для видеокарты.
     /// </summary>
-    public required string AmdDriverVersion { get; init; }
+    public required string AmdGpuDriverVersion { get; init; }
 
     /// <summary>
-    /// Версия драйвера Nvidia.
+    /// Версия драйвера Nvidia для видеокарты.
     /// </summary>
-    public required string NvidiaDriverVersion { get; init; }
+    public required string NvidiaGpuDriverVersion { get; init; }
 
     /// <summary>
-    /// Версия драйвера Intel.
+    /// Версия драйвера Intel для видеокарты.
     /// </summary>
-    public required string IntelDriverVersion { get; init; }
+    public required string IntelGpuDriverVersion { get; init; }
 
     /// <summary>
     /// Версия OpenCL.
@@ -78,9 +78,9 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
 
         return MinuxVersion.Equals(other.MinuxVersion) &&
                LinuxVersion.Equals(other.LinuxVersion) &&
-               AmdDriverVersion.Equals(other.AmdDriverVersion) &&
-               NvidiaDriverVersion.Equals(other.NvidiaDriverVersion) &&
-               IntelDriverVersion.Equals(other.IntelDriverVersion) &&
+               AmdGpuDriverVersion.Equals(other.AmdGpuDriverVersion) &&
+               NvidiaGpuDriverVersion.Equals(other.NvidiaGpuDriverVersion) &&
+               IntelGpuDriverVersion.Equals(other.IntelGpuDriverVersion) &&
                OpenCLVersion.Equals(other.OpenCLVersion) &&
                CudaVersion.Equals(other.CudaVersion) &&
                Miners.SequenceEqual(other.Miners);
@@ -95,7 +95,7 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
             minersHash = HashCode.Combine(miner.Key, miner.Value);
         }
 
-        return HashCode.Combine(MinuxVersion, LinuxVersion, AmdDriverVersion, NvidiaDriverVersion,
-                                IntelDriverVersion, OpenCLVersion, CudaVersion) + minersHash;
+        return HashCode.Combine(MinuxVersion, LinuxVersion, AmdGpuDriverVersion, NvidiaGpuDriverVersion,
+                                IntelGpuDriverVersion, OpenCLVersion, CudaVersion) + minersHash;
     }
 }

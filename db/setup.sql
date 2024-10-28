@@ -30,5 +30,8 @@
 
 \ir 'tables/version_info.sql'
 
+-- CREATING FUNCTIONS
+\ir 'functions/get_gpu_driver_version.sql'
+
 -- DATA INSERT
 \ir 'data_tables/version_info.sql'
