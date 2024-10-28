@@ -33,7 +33,7 @@ internal class TargetMinerValidator : IAsyncPropertyValidator<FlightSheetTargetI
             return true;
         }
 
-        if (miner.SupportedDevices.IsDeviceSupported(model.Type))
+        if (!miner.SupportedDevices.IsDeviceSupported(model.Type))
         {
             context.AddFailure("Target type is not supported by the miner.");
         }
