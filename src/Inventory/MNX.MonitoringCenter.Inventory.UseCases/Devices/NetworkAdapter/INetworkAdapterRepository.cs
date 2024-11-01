@@ -15,6 +15,6 @@ public interface INetworkAdapterRepository
     /// <param name="specification"> Спецификация инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Список сетевых адаптеров. </returns>
-    Task<List<NetworkAdapter>?> GetNetworkAdapters(InventorySpecification specification,
+    Task<List<NetworkAdapter>?> GetNetworkAdapters(DeviceSpecification specification,
                                                    CancellationToken cancellationToken);
 }

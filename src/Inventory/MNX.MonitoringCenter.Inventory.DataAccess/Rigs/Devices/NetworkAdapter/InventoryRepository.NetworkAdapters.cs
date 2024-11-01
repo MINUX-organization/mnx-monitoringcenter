@@ -12,9 +12,9 @@ public partial class InventoryRepository : INetworkAdapterRepository
 {
     /// <inheritdoc/>
     public Task<List<NetworkAdapter>?> GetNetworkAdapters
-        (InventorySpecification specification, CancellationToken cancellationToken)
+        (DeviceSpecification specification, CancellationToken cancellationToken)
     {
-        return GetInventoryBySpecification(specification)
+        return GetInventoryBySpecification(specification.InventorySpecification)
                                  .Include(x => x.NetworkAdapters)
                                  .Select(x => x.NetworkAdapters)
                                  .FirstOrDefaultAsync(cancellationToken);

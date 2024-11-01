@@ -1,5 +1,5 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Cpu;
 
@@ -27,9 +27,9 @@ internal static class CpuSpecificationExtensions
     /// <param name="cpus"> Запрашиваемый список процессоров. </param>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Запрашиваемый список процессоров. </returns>
-    internal static IQueryable<CpuModel> Filter(this IQueryable<CpuModel> cpus, DeviceSpecification specification)
+    internal static IQueryable<CpuDetails> Filter(this IQueryable<CpuDetails> cpus, DeviceSpecification specification)
     {
-        return cpus.Filter<CpuModel>(specification);
+        return cpus.Filter<CpuDetails>(specification);
     }
 
     private static IQueryable<TCpu> Filter<TCpu>(this IQueryable<TCpu> cpus, DeviceSpecification specification)

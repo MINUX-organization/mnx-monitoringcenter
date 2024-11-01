@@ -1,11 +1,11 @@
 ﻿using MediatR;
 
-namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
+namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 
 /// <summary>
-/// Запрос на получение списка видеокарт.
+/// Запрос на получение списка процессоров с деталями.
 /// </summary>
-public class GetGpusInfoQuery : IStreamRequest<GpuDetails>
+public class GetCpusDetailsQuery : IStreamRequest<CpuDetails>
 {
     /// <summary>
     /// Спецификация устройств.
@@ -13,25 +13,25 @@ public class GetGpusInfoQuery : IStreamRequest<GpuDetails>
     public DeviceSpecification Specification { get; }
 
     /// <summary>
-    /// Создаёт экземпляр класса <see cref="GetGpusInfoQuery"/>.
+    /// Создаёт экземпляр класса <see cref="GetCpusDetailsQuery"/>.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="rigsIds"> Идентификаторы запрашиваемых ригов. Если нет, то все доступные риги. </param>
-    /// <param name="models"> Запрашиваемые модели видеокарт. Если нет, то все доступные модели. </param>
-    /// <param name="manufacturers"> Запрашиваемый производители видеокарт. Если нет, то все доступные производители. </param>
-    public GetGpusInfoQuery(Guid userId, Guid[]? rigsIds = null, string[]? models = null, string[]? manufacturers = null)
+    /// <param name="models"> Запрашиваемые модели процессоров. Если нет, то все доступные модели. </param>
+    /// <param name="manufacturers"> Запрашиваемый производители процессоров. Если нет, то все доступные производители. </param>
+    public GetCpusDetailsQuery(Guid userId, Guid[]? rigsIds = null, string[]? models = null, string[]? manufacturers = null)
     {
         Specification = new(userId, rigsIds, models, manufacturers);
     }
 
     /// <summary>
-    /// Создаёт экземпляр класса <see cref="GetGpusInfoQuery"/>.
+    /// Создаёт экземпляр класса <see cref="GetCpusDetailsQuery"/>.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <param name="models"> Запрашиваемые модели процессоров. Если нет, то все доступные модели. </param>
     /// <param name="manufacturers"> Запрашиваемый производители процессоров. Если нет, то все доступные производители. </param>
-    public GetGpusInfoQuery(Guid userId, Guid rigId, string[]? models = null, string[]? manufacturers = null)
+    public GetCpusDetailsQuery(Guid userId, Guid rigId, string[]? models = null, string[]? manufacturers = null)
     {
         Specification = new(userId, new Guid[] { rigId }, models, manufacturers);
     }

@@ -13,8 +13,8 @@ public interface IDriveRepository
     /// <param name="specification"> Спецификация инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Список дисков. </returns>
-    Task<List<Contracts.Devices.Drive.Drive>?> GetDrives(InventorySpecification specification,
-                                                 CancellationToken cancellationToken);
+    Task<List<Contracts.Devices.Drive.Drive>?> GetDrives(DeviceSpecification specification,
+                                                         CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить кол-во дисков по спецификации.

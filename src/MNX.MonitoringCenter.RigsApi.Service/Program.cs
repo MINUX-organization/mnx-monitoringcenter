@@ -13,7 +13,9 @@ using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
 using System.Reflection;
+using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
+using System.Text.Unicode;
 
 namespace MNX.MonitoringCenter.RigsApi.Service;
 
@@ -46,7 +48,14 @@ internal class Program
         builder.Host.UseNLog();
         var services = builder.Services;
 
-        services.AddControllers();
+        services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+                    options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
+                });
+
         services.AddConsulIntegration(builder.Configuration);
 
         services.AddEndpointsApiExplorer();

@@ -2,7 +2,7 @@
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 
@@ -37,22 +37,22 @@ public partial class InventoryRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<List<Gpu>> GetGpusSliceForAPeriod(InventorySpecification specification,
+    public IAsyncEnumerable<List<Gpu>> GetGpusSliceForAPeriod(DeviceSpecification specification,
                                                               DateTimeOffset startPeriod,
                                                               DateTimeOffset endPeriod)
     {
-        return GetInventorySliceForAPeriod(specification, startPeriod, endPeriod)
+        return GetInventorySliceForAPeriod(specification.InventorySpecification, startPeriod, endPeriod)
                                  .Include(x => x.Gpus)
                                  .Select(x => x.Gpus)
                                  .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public async IAsyncEnumerable<string> GetGpusUniqueNames(InventorySpecification specification)
+    public async IAsyncEnumerable<string> GetGpusUniqueNames(DeviceSpecification specification)
     {
         var nameSet = new HashSet<string>();
 
-        var stream = GetInventoryBySpecification(specification)
+        var stream = GetInventoryBySpecification(specification.InventorySpecification)
                                  .Include(x => x.Gpus)
                                  .SelectMany(x => x.Gpus)
                                  .Select(gpu => gpu.Information.Name)

@@ -1,5 +1,5 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 
@@ -15,7 +15,7 @@ public interface ICpuRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Список процессоров. </returns>
-    IAsyncEnumerable<CpuModel> GetCpus(DeviceSpecification specification);
+    IAsyncEnumerable<CpuDetails> GetCpus(DeviceSpecification specification);
 
     /// <summary>
     /// Получить срез инвентаризации процессоров за указанный период.
@@ -24,9 +24,9 @@ public interface ICpuRepository
     /// <param name="startPeriod"> Начало периода. </param>
     /// <param name="endPeriod"> Конец периода. </param>
     /// <returns> Срез инвентаризации процессоров. </returns>
-    IAsyncEnumerable<List<Cpu>> GetCpusSliceForAPeriod(InventorySpecification specification,
-                                                   DateTimeOffset startPeriod,
-                                                   DateTimeOffset endPeriod);
+    IAsyncEnumerable<List<Cpu>> GetCpusSliceForAPeriod(DeviceSpecification specification,
+                                                       DateTimeOffset startPeriod,
+                                                       DateTimeOffset endPeriod);
 
     /// <summary>
     /// Получить кол-во процессоров по спецификации.

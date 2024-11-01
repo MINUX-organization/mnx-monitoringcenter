@@ -61,7 +61,7 @@ public class SaveInventoryTests : BaseTest
 
         var driveRepository = ServiceProvider.GetRequiredService<IDriveRepository>();
         var drives = await driveRepository
-            .GetDrives(new InventorySpecification(OWNER_ID, inventoryMsg.RigId), default);
+            .GetDrives(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId), default);
         
 
         var gpuRepository = ServiceProvider.GetRequiredService<IGpuRepository>();
@@ -75,7 +75,7 @@ public class SaveInventoryTests : BaseTest
 
         var networkAdaptersRepository = ServiceProvider.GetRequiredService<INetworkAdapterRepository>();
         var adapters = await networkAdaptersRepository
-            .GetNetworkAdapters(new InventorySpecification(OWNER_ID, inventoryMsg.RigId), default);
+            .GetNetworkAdapters(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId), default);
 
         var softwareRepository = ServiceProvider.GetRequiredService<ISoftwareRepository>();
         var software = await softwareRepository

@@ -25,7 +25,7 @@ public partial class InventoryRepository
     internal async Task Save(Guid rigId, DateTimeOffset createdDate,
                              RigInventoryModel inventory, CancellationToken cancellationToken)
     {
-        var oldInventory = await GetInventoryBySpecification(new InventorySpecification(null, rigId, true))
+        var oldInventory = await GetInventoryBySpecification(new InventorySpecification(null, rigId))
                                     .FirstOrDefaultAsync(cancellationToken);
 
         var newInventory = MapInventory(rigId, createdDate, inventory);
