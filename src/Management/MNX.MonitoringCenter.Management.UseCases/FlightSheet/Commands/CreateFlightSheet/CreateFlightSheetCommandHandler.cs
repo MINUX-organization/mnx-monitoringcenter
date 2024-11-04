@@ -29,7 +29,7 @@ public class CreateFlightSheetCommandHandler :
         var flightSheet = _mapper.Map<Core.FlightSheet.FlightSheet>(request.Model);
         flightSheet.UserId = request.UserId;
 
-        if (await _flightSheetRepository.Exists(flightSheet.Name, request.UserId, cancellationToken))
+        if (await _flightSheetRepository.ExistsAvailable(flightSheet.Name, request.UserId, cancellationToken))
         {
             return Result<Guid>
                 .Invalid($"Flight sheet with name {flightSheet.Name} already exist!");

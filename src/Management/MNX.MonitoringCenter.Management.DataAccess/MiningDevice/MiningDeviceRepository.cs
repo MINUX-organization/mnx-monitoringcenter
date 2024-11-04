@@ -63,27 +63,16 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public async Task DeactivateDevicesByRigId(Guid rigId, CancellationToken cancellationToken)
+    public Task DeactivateDevicesByRigId(Guid rigId, CancellationToken cancellationToken)
     {
-        var devices = await _context.MiningDevices.Where(device => device.RigId == rigId)
-                                                  .ToListAsync(cancellationToken);
-
-        devices.ForEach(device => device.IsActive = false);
-
-        await _context.SaveChangesAsync(cancellationToken);
+        return _context.MiningDevices.ExecuteUpdateAsync(x =>
+            x.SetProperty(device => device.IsActive, d => false), cancellationToken);
     }
 
     /// <inheritdoc/>
-    public async Task SetFlightSheet(Guid[] devicesIds, Guid flightSheetId, CancellationToken cancellationToken)
+    public Task SetFlightSheet(Guid[] devicesIds, Guid flightSheetId, CancellationToken cancellationToken)
     {
-        var devices = _context.MiningDevices.Where(device => devicesIds.Contains(device.Id))
-                                            .AsAsyncEnumerable();
-
-        await foreach (var device in devices)
-        {
-            device.FLightSheetId = flightSheetId;
-        }
-
-        await _context.SaveChangesAsync(cancellationToken);
+        return _context.MiningDevices.ExecuteUpdateAsync(x =>
+            x.SetProperty(device => device.FLightSheetId, d => flightSheetId), cancellationToken);
     }
 }

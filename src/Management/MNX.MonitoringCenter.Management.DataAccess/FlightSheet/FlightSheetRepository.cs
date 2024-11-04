@@ -32,11 +32,18 @@ public class FlightSheetRepository : IFlightSheetRepository
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken)
+    public Task<bool> ExistsAvailable(string name, Guid userId, CancellationToken cancellationToken)
     {
         return _context.FlightSheets.AsNoTracking()
                                     .Where(x => x.UserId == userId)
                                     .AnyAsync(x => x.Name == name, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<bool> Exists(Guid id, CancellationToken cancellationToken)
+    {
+        return _context.FlightSheets.AsNoTracking()
+                                    .AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
