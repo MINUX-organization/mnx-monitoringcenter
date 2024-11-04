@@ -30,6 +30,11 @@ public abstract class FlightSheetTargetModelBase
     public string? AdditionalArguments { get; set; }
 
     /// <summary>
+    /// Строка конфигурации формата Json.
+    /// </summary>
+    public string? ConfigFileContent { get; set; }
+
+    /// <summary>
     /// Майнер.
     /// </summary>
     public required Miner Miner { get; set; }

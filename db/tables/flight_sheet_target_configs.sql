@@ -4,7 +4,7 @@ CREATE TABLE monitoring_center.flight_sheet_target_configs
     pool_id uuid NOT NULL,
     pool_password text,
     wallet_id uuid NOT NULL,
-    flight_sheet_target_base_id uuid,
+    flight_sheet_target_base_id uuid NOT NULL,
 
     CONSTRAINT pk_flight_sheet_target_configs PRIMARY KEY (id),
 

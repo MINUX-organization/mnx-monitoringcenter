@@ -30,6 +30,11 @@ public abstract class FlightSheetTargetInputModel
     public string? AdditionalArguments { get; init; }
 
     /// <summary>
+    /// Строка конфигурации формата Json.
+    /// </summary>
+    public string? ConfigFileContent { get; init; }
+
+    /// <summary>
     /// Идентификатор майнера.
     /// </summary>
     public Guid MinerId { get; init; }

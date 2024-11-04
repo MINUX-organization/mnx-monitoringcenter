@@ -11,11 +11,6 @@ public class CpuFlightSheetTargetModel : FlightSheetTargetModelBase
     public int? HugePages { get; set; }
 
     /// <summary>
-    /// Строка конфигурации формата Json.
-    /// </summary>
-    public string? ConfigFile { get; set; }
-
-    /// <summary>
     /// Кол-во потоков.
     /// </summary>
     public int? ThreadsCount { get; set; }

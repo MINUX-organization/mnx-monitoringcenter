@@ -65,14 +65,14 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     /// <inheritdoc/>
     public Task DeactivateDevicesByRigId(Guid rigId, CancellationToken cancellationToken)
     {
-        return _context.MiningDevices.ExecuteUpdateAsync(x =>
+        return _context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
             x.SetProperty(device => device.IsActive, d => false), cancellationToken);
     }
 
     /// <inheritdoc/>
     public Task SetFlightSheet(Guid[] devicesIds, Guid flightSheetId, CancellationToken cancellationToken)
     {
-        return _context.MiningDevices.ExecuteUpdateAsync(x =>
+        return _context.MiningDevices.Where(device => devicesIds.Contains(device.Id)).ExecuteUpdateAsync(x =>
             x.SetProperty(device => device.FLightSheetId, d => flightSheetId), cancellationToken);
     }
 }

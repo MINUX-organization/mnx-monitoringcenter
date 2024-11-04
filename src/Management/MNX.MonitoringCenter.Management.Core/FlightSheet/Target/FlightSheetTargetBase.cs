@@ -31,6 +31,11 @@ public abstract class FlightSheetTargetBase : IEquatable<FlightSheetTargetBase>
     public string? AdditionalArguments { get; set; }
 
     /// <summary>
+    /// Строка конфигурации формата Json.
+    /// </summary>
+    public string? ConfigFileContent { get; set; }
+
+    /// <summary>
     /// Название майнера.
     /// </summary>
     public Guid MinerId { get; set; }
@@ -66,6 +71,7 @@ public abstract class FlightSheetTargetBase : IEquatable<FlightSheetTargetBase>
 
         return Type == other.Type && MinerId == other.MinerId &&
                AdditionalArguments == other.AdditionalArguments &&
+               ConfigFileContent == other.ConfigFileContent && 
                Configs.SequenceEqual(other.Configs);
     }
 
@@ -79,6 +85,6 @@ public abstract class FlightSheetTargetBase : IEquatable<FlightSheetTargetBase>
             hashCode += config.GetHashCode();
         }
 
-        return HashCode.Combine(hashCode, Type, AdditionalArguments, MinerId);
+        return HashCode.Combine(hashCode, Type, AdditionalArguments, ConfigFileContent, MinerId);
     }
 }

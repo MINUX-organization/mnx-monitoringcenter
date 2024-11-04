@@ -23,11 +23,6 @@ public class CpuFlightSheetTarget : FlightSheetTargetBase, IEquatable<CpuFlightS
     public int? HugePages { get; set; }
 
     /// <summary>
-    /// Строка конфигурации формата Json.
-    /// </summary>
-    public string? ConfigFile { get; set; }
-
-    /// <summary>
     /// Кол-во потоков.
     /// </summary>
     public int? ThreadsCount { get; set; }
@@ -46,12 +41,12 @@ public class CpuFlightSheetTarget : FlightSheetTargetBase, IEquatable<CpuFlightS
     /// <inheritdoc/>
     public bool Equals(CpuFlightSheetTarget? other)
     {
-        return base.Equals(other) && HugePages == other.HugePages && ConfigFile == other.ConfigFile;
+        return base.Equals(other) && HugePages == other.HugePages;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(base.GetHashCode(), HugePages, ConfigFile);
+        return HashCode.Combine(base.GetHashCode(), HugePages);
     }
 }
