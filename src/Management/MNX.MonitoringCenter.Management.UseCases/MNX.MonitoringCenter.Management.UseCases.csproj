@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Inventory\MNX.MonitoringCenter.Inventory.Contracts\MNX.MonitoringCenter.Inventory.Contracts.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.Contracts\MNX.MonitoringCenter.Management.Contracts.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.Core\MNX.MonitoringCenter.Management.Core.csproj" />
   </ItemGroup>

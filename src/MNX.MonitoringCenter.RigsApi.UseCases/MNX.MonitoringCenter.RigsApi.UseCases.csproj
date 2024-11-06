@@ -1,0 +1,14 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
+    <ProjectReference Include="..\Management\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj" />
+  </ItemGroup>
+
+</Project>

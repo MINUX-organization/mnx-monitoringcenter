@@ -11,7 +11,6 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
 using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
@@ -19,6 +18,7 @@ using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 using MNX.MonitoringCenter.Inventory.UseCases.Software;
 using NUnit.Framework;
 

@@ -1,5 +1,4 @@
 ﻿using FluentValidation;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 

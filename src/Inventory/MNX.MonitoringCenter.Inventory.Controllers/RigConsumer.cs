@@ -1,8 +1,9 @@
 ﻿using EasyNetQ.AutoSubscribe;
 using MediatR;
-using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
+using MNX.MonitoringCenter.Inventory.UseCases;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 
 namespace MNX.MonitoringCenter.Inventory.Controllers;
 

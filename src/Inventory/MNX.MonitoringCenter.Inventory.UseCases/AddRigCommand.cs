@@ -1,9 +1,30 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases;
+
+/// <summary>
+/// Команда на добавление рига.
+/// </summary>
+public class AddRigCommand : IValidatableCommand<Unit>
+{
+    /// <summary>
+    /// Уникальный идентификатор рига.
+    /// </summary>
+    public Guid Id { get; init; }
+
+    /// <summary>
+    /// Уникальный идентификатор владельца рига.
+    /// </summary>
+    public Guid OwnerId { get; init; }
+
+    public AddRigCommand(Guid id, Guid ownerId)
+    {
+        Id = id;
+        OwnerId = ownerId;
+    }
+}
 
 /// <summary>
 /// Обработчик <see cref="AddRigCommand"/>.
@@ -23,7 +44,7 @@ public class AddRigCommandHandler : IRequestHandler<AddRigCommand, Result<Unit>>
         {
             Id = request.Id,
             OwnerId = request.OwnerId,
-            Name = "Minux"
+            Name = "Minux" // todo: set rig name
         }, cancellationToken);
 
         return Result<Unit>.Empty();

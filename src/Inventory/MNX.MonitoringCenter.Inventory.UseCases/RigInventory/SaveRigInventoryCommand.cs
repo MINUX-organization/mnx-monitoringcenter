@@ -1,8 +1,14 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
+using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
+
+/// <summary>
+/// Команда сохранения инвентаризации рига.
+/// </summary>
+/// <param name="Message"> Сообщение с инвентаризацией. </param>
+public sealed record SaveRigInventoryCommand(RigInventoryMsg Message) : IValidatableCommand<Unit>;
 
 /// <summary>
 /// Обработчик <see cref="SaveRigInventoryCommand"/>.
