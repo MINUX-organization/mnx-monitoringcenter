@@ -16,6 +16,11 @@ public class MiningDevice
     public Guid RigId { get; init; }
 
     /// <summary>
+    /// Идентификатор владельца.
+    /// </summary>
+    public Guid OwnerId { get; init; }
+
+    /// <summary>
     /// Тип майнинг устройства.
     /// </summary>
     public MiningDeviceType Type { get; init; }

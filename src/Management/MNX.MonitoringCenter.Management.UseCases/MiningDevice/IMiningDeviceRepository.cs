@@ -8,13 +8,20 @@ namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice;
 public interface IMiningDeviceRepository
 {
     /// <summary>
+    /// Получить доступные майнинг устройства по спецификации.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Поток запрашиваемых майнинг устройств. </returns>
+    IAsyncEnumerable<MiningDeviceInfo> GetAvailable(Specification specification);
+
+    /// <summary>
     /// Получить активное майнинг устройство по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор. </param>
     /// <param name="userId"> идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Майнинг устройство. </returns>
-    Task<MiningDeviceDetails?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Задать текущие устройства ригов.

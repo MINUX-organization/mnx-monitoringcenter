@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
-using MiningDeviceDetails = Core.MiningDevice.MiningDeviceDetails;
+using MiningDeviceInfo = Core.MiningDevice.MiningDeviceInfo;
 
 /// <summary>
 /// Реализация <see cref="IMiningDeviceRepository"/>.
@@ -18,10 +19,19 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public Task<MiningDeviceDetails?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken)
+    public IAsyncEnumerable<MiningDeviceInfo> GetAvailable(Specification specification)
+    {
+        return _context.MiningDevices.AsNoTrackingWithIdentityResolution()
+                                     .Include(device => device.FlightSheet)
+                                     .Available(specification)
+                                     .Filter(specification)
+                                     .AsAsyncEnumerable();
+    }
+
+    /// <inheritdoc/>
+    public Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return _context.MiningDevices.AsNoTracking()
-                                     .Where(x => x.IsActive)
                                      .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
@@ -32,6 +42,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
         // делаем выборку устройств всех ригов, для которых пришли устройства
         var dbDevices = await _context
             .MiningDevices
+            .IgnoreQueryFilters()
             .Where(device => devices.ToDictionary(x => x.RigId).Keys.Contains(device.RigId))
             .ToListAsync(cancellationToken);
 
@@ -49,10 +60,11 @@ public class MiningDeviceRepository : IMiningDeviceRepository
         // берём часть из множества входящих устройств, которая не пересекается со множеством устройств из БД
         // записываем их в базу
         var newDevices = devices.ExceptBy(dbDevices.Select(x => x.Id), device => device.Id)
-                                .Select(device => new MiningDeviceDetails()
+                                .Select(device => new MiningDeviceInfo()
                                 {
                                     Id = device.Id,
                                     RigId = device.RigId,
+                                    OwnerId = device.OwnerId,
                                     Type = device.Type,
                                     IsActive = true
                                 });
@@ -73,6 +85,6 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     public Task SetFlightSheet(Guid[] devicesIds, Guid flightSheetId, CancellationToken cancellationToken)
     {
         return _context.MiningDevices.Where(device => devicesIds.Contains(device.Id)).ExecuteUpdateAsync(x =>
-            x.SetProperty(device => device.FLightSheetId, d => flightSheetId), cancellationToken);
+            x.SetProperty(device => device.FlightSheetId, d => flightSheetId), cancellationToken);
     }
 }

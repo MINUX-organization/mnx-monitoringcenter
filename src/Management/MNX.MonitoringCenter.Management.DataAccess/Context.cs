@@ -22,7 +22,7 @@ public class Context : DbContext
 
     internal DbSet<Core.Miner.Miner> Miners { get; set; }
 
-    internal DbSet<Core.MiningDevice.MiningDeviceDetails> MiningDevices { get; set; }
+    internal DbSet<Core.MiningDevice.MiningDeviceInfo> MiningDevices { get; set; }
 
     internal DbSet<Core.Pool> Pools { get; set; }
 

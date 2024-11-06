@@ -1,9 +1,9 @@
 ﻿namespace MNX.MonitoringCenter.Management.Core.MiningDevice;
 
 /// <summary>
-/// Майнинг устройство c деталями.
+/// Информация о майнинга устройстве.
 /// </summary>
-public class MiningDeviceDetails : MiningDevice
+public class MiningDeviceInfo : MiningDevice
 {
     /// <summary>
     /// Признак активности устройства ( в данных момент установлен на риге ).
@@ -13,5 +13,10 @@ public class MiningDeviceDetails : MiningDevice
     /// <summary>
     /// Идентификатор полётного листа.
     /// </summary>
-    public Guid? FLightSheetId { get; set; }
+    public Guid? FlightSheetId { get; set; }
+
+    /// <summary>
+    /// Полётный лист.
+    /// </summary>
+    public FlightSheet.FlightSheet? FlightSheet { get; set; }
 }

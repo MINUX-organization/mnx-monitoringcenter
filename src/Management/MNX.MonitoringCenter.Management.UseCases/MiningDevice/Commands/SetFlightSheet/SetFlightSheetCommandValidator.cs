@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
 
-namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands;
+namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetFlightSheet;
 
 /// <summary>
 /// Валидатор команды установки полётного листа.

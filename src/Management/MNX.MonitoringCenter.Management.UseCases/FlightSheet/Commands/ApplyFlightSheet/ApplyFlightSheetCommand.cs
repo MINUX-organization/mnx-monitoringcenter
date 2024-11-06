@@ -43,7 +43,7 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
             return Result<Guid[]>.Invalid("Flight sheet wasn`t found");
         }
 
-        var processedDevices = new List<MiningDeviceDetails>();
+        var processedDevices = new List<MiningDeviceInfo>();
 
         foreach (var deviceId in request.MiningDevices)
         {
