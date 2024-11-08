@@ -11,9 +11,9 @@ public readonly struct Specification
     public Guid UserId { get; }
 
     /// <summary>
-    /// Идентификаторы устройств.
+    /// Идентификаторы запрашиваемых объектов.
     /// </summary>
-    public Guid[]? DevicesIds { get; }
+    public Guid[]? Ids { get; }
 
     /// <summary>
     /// Строка фильтрации.
@@ -25,14 +25,14 @@ public readonly struct Specification
     /// </summary>
     public string[]? FilterParameters { get; }
 
-    public Specification(Guid userId, Guid[]? devicesIds = null)
+    public Specification(Guid userId, Guid[]? ids = null)
     {
         UserId = userId;
-        DevicesIds = devicesIds;
+        Ids = ids;
     }
 
-    public Specification(Guid userId, Guid[]? devicesIds, string filterString, string[] filterParameters)
-        : this(userId, devicesIds)
+    public Specification(Guid userId, Guid[]? ids, string filterString, string[] filterParameters)
+        : this(userId, ids)
     {
         FilterString = filterString;
         FilterParameters = filterParameters;

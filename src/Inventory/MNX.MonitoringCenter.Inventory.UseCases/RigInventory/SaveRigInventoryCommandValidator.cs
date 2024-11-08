@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 
@@ -24,6 +25,10 @@ public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInvento
                                 => await rigRepository.Exists(rigId, cancellationToken))
                             .WithMessage("Rig not found");
                     });
+
+                RuleFor(x => x.Message.RigOwnerId)
+                    .NotEmpty()
+                    .WithMessage(x => "Rig owner id is required");
 
                 RuleFor(x => x.Message.Inventory)
                     .NotNull()

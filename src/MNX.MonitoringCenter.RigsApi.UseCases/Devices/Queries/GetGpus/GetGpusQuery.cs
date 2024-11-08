@@ -39,7 +39,8 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
         GetGpusQuery request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var inventoryGpus = _mediator.CreateStream(new GetGpusDetailsQuery(request.UserId), cancellationToken)
-                                     .ToBlockingEnumerable(cancellationToken);
+                                     .ToBlockingEnumerable(cancellationToken)
+                                     .ToList();
 
         var miningDevices = _mediator.CreateStream(
             new GetMiningDevicesQuery(request.UserId, inventoryGpus.Select(x => x.Id).ToArray()),
@@ -54,7 +55,6 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
                 Id = gpu.Id,
                 Pci = inventoryGpu.Pci,
                 Information = inventoryGpu.Information,
-                Restrictions = inventoryGpu.Restrictions,
                 RigName = inventoryGpu.RigName,
                 DriverVersion = inventoryGpu.DriverVersion,
                 FlightSheetName = gpu.FlightSheet?.Name,

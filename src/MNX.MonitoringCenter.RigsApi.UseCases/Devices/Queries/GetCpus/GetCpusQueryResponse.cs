@@ -1,12 +1,12 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices;
 
-namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
+namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
 
 /// <summary>
-/// Ответ на запрос на получение видеокарт.
+/// Ответ на запрос на получения списка процессоров.
 /// </summary>
-public class GetGpusQueryResponse
+public class GetCpusQueryResponse
 {
     /// <summary>
     /// Уникальный идентификатор.
@@ -21,17 +21,12 @@ public class GetGpusQueryResponse
     /// <summary>
     /// Информация.
     /// </summary>
-    public required GpuInformation Information { get; init; }
+    public required CpuInformation Information { get; init; }
 
     /// <summary>
     /// Название рига.
     /// </summary>
     public required string RigName { get; init; }
-
-    /// <summary>
-    /// Версия драйвера для работы с видеокартой.
-    /// </summary>
-    public string? DriverVersion { get; init; }
 
     /// <summary>
     /// Название полётного листа.

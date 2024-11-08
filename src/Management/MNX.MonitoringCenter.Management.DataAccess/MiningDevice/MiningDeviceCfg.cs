@@ -16,6 +16,9 @@ internal class MiningDeviceCfg : IEntityTypeConfiguration<MiningDeviceInfo>
 
         builder.HasQueryFilter(x => x.IsActive);
 
+        builder.Property(x => x.Type)
+               .HasConversion<string>();
+
         builder.HasOne(device => device.FlightSheet)
                .WithMany()
                .HasForeignKey(device => device.FlightSheetId);

@@ -32,9 +32,9 @@ public static class ServiceCollectionExtensions
     {
         services.AddMediatR(x => x.RegisterServicesFromAssemblies(
             typeof(GetRigsDetailsQuery).Assembly,
-            typeof(SaveRigInventoryCommand).Assembly
+            typeof(SaveRigInventoryCommandHandler).Assembly
             ));
-        services.AddValidationPipelines(typeof(SaveRigInventoryCommand).Assembly);
+        services.AddValidationPipelines(typeof(SaveRigInventoryCommandHandler).Assembly);
 
         services.AddDataContext<Context>(configuration);
 

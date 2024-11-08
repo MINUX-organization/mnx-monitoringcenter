@@ -1,11 +1,11 @@
 ﻿using EasyNetQ.AutoSubscribe;
 using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
-using MNX.MonitoringCenter.Inventory.UseCases;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
+using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetRigDevices;
 
-namespace MNX.MonitoringCenter.Inventory.Controllers;
+namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 
 /// <summary>
 /// Потребитель сообщений от ригов.
@@ -26,7 +26,15 @@ public class RigConsumer : IConsumeAsync<RigInventoryMsg>, IConsumeAsync<RigRegi
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(RigInventoryMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Send(new SaveRigInventoryCommand(message), cancellationToken);
+        return Task.WhenAll(
+
+            _mediator.Send(new SaveRigInventoryCommand(message), cancellationToken),
+
+            _mediator.Send(
+                new SetRigDevicesCommand(message.RigId, message.RigOwnerId,
+                                         message.Inventory.Gpus, message.Inventory.Cpus),
+                cancellationToken)
+        );
     }
 
     /// <summary>
@@ -39,3 +47,4 @@ public class RigConsumer : IConsumeAsync<RigInventoryMsg>, IConsumeAsync<RigRegi
         return _mediator.Send(new AddRigCommand(message.RigId, message.OwnerId), cancellationToken);
     }
 }
+

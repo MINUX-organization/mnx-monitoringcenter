@@ -85,7 +85,7 @@ public partial class InventoryRepository
             Gpus = inventory.Gpus,
             NetworkAdapters = inventory.NetworkAdapters,
             Motherboard = inventory.Motherboard,
-            Software = _mapper.Map<SoftwareInventoryDto>(inventory)
+            Software = _mapper.Map<SoftwareInventoryDto>(inventory.Software)
         };
     }
 }
