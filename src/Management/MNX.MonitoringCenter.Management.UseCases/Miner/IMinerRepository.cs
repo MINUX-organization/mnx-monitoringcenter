@@ -10,8 +10,9 @@ public interface IMinerRepository
     /// <summary>
     /// Получить список доступных майнеров.
     /// </summary>
+    /// <param name="specification"> Спецификация. </param>
     /// <returns> Список доступных майнеров. </returns>
-    IAsyncEnumerable<Miner> GetAvailableMiners();
+    IAsyncEnumerable<Miner> GetAvailableMiners(Specification specification);
 
     /// <summary>
     /// Получить майнер по идентификатору.

@@ -9,7 +9,7 @@ public interface IAlgorithmRepository
     /// Получить доступные алгоритмы.
     /// </summary>
     /// <returns> Список алгоритмов. </returns>
-    IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms();
+    IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms(Specification specification);
 
     /// <summary>
     /// Получить алгоритм по идентификатору.

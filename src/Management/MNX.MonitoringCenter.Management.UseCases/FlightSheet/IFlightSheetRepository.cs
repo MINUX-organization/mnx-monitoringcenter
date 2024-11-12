@@ -10,9 +10,9 @@ public interface IFlightSheetRepository
     /// <summary>
     /// Получить список всех доступных полётных листов.
     /// </summary>
-    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="specification"> Спецификация. </param>
     /// <returns> Асинхронный список полётных листов. </returns>
-    IAsyncEnumerable<FlightSheet> GetAllAvailable(Guid userId);
+    IAsyncEnumerable<FlightSheet> GetAllAvailable(Specification specification);
 
     /// <summary>
     /// Получить полётный лист по идентификатору.

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Pool;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Pool;
@@ -18,10 +19,11 @@ public class PoolRepository : IPoolRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Pool> GetAllAvailable(Guid userId)
+    public IAsyncEnumerable<Pool> GetAllAvailable(Specification specification)
     {
         return _context.Pools.Include(x => x.Cryptocurrency)
-                             .Where(x => x.UserId == userId)
+                             .Where(x => x.UserId == specification.UserId)
+                             .Filter(specification)
                              .AsNoTracking()
                              .AsAsyncEnumerable();
     }

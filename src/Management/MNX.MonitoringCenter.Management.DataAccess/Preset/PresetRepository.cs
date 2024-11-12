@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases.Presets;
 using System.Linq.Expressions;
+using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Preset;
 
@@ -19,26 +20,25 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, Guid userId)
+    public IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, Specification specification)
     {
-        IQueryable<Preset> presets = _context.Presets.AsNoTrackingWithIdentityResolution()
-                                                     .Include(x => x.Overclocking)
-                                                     .Where(x => x.UserId == userId);
+        var presets = _context.Presets.AsNoTrackingWithIdentityResolution()
+                                                      .Include(x => x.Overclocking)
+                                                      .Where(x => x.UserId == specification.UserId)
+                                                      .Filter(specification);
 
-        if (!string.IsNullOrWhiteSpace(gpuName))
-        {
-            return presets.Where(x => x.GpuName == gpuName).AsAsyncEnumerable();
-        }
-
-        return presets.AsAsyncEnumerable();
+        return string.IsNullOrWhiteSpace(gpuName) 
+            ? presets.AsAsyncEnumerable()
+            : presets.Where(x => x.GpuName == gpuName).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
     public Task<Dictionary<string, List<Preset>>> GetGroupedList(
-            Expression<Func<Preset, string>> expression, Guid userId)
+            Expression<Func<Preset, string>> expression, Specification specification)
     {
         return _context.Presets.AsNoTrackingWithIdentityResolution()
-                               .Where(x => x.UserId == userId)
+                               .Where(x => x.UserId == specification.UserId)
+                               .Filter(specification)
                                .Include(x => x.Overclocking)
                                .GroupBy(expression)
                                .ToDictionaryAsync(g => g.Key, g => g.ToList());

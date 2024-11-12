@@ -5,7 +5,23 @@ namespace MNX.MonitoringCenter.Management.UseCases.Algorithm.Queries;
 /// <summary>
 /// Запрос на получение доступных алгоритмов
 /// </summary>
-public sealed record GetAvailableAlgorithmsQuery() : IStreamRequest<Core.Algorithm>;
+public sealed record GetAvailableAlgorithmsQuery : IStreamRequest<Core.Algorithm>
+{
+    /// <summary>
+    /// Спецификация.
+    /// </summary>
+    public Specification Specification { get; }
+
+    public GetAvailableAlgorithmsQuery(Guid userId)
+    {
+        Specification = new Specification(userId);
+    }
+
+    public GetAvailableAlgorithmsQuery(Guid userId, string filterString, object[] filterParameters)
+    {
+        Specification = new Specification(userId, filterString, filterParameters);
+    }
+}
 
 /// <summary>
 /// Обработчик запроса на получение доступных алгоритмов
@@ -21,6 +37,6 @@ public class GetAvailableAlgorithmsQueryHandler : IStreamRequestHandler<GetAvail
 
     public IAsyncEnumerable<Core.Algorithm> Handle(GetAvailableAlgorithmsQuery request, CancellationToken cancellationToken)
     {
-        return _repository.GetNamesOfAvailableAlgorithms();
+        return _repository.GetNamesOfAvailableAlgorithms(request.Specification);
     }
 }

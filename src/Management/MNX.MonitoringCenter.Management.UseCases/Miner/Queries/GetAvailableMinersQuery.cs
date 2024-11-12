@@ -7,7 +7,23 @@ using Miner = Core.Miner.Miner;
 /// <summary>
 /// Запрос на получение списка доступных майнеров.
 /// </summary>
-public sealed record GetAvailableMinersQuery : IStreamRequest<Miner>;
+public sealed record GetAvailableMinersQuery : IStreamRequest<Miner>
+{
+    /// <summary>
+    /// Спецификация.
+    /// </summary>
+    public Specification Specification { get; }
+
+    public GetAvailableMinersQuery(Guid userId)
+    {
+        Specification = new Specification(userId);
+    }
+
+    public GetAvailableMinersQuery(Guid userId, string filterString, object[] filterParameters)
+    {
+        Specification = new Specification(userId, filterString, filterParameters);
+    }
+}
 
 /// <summary>
 /// Обработчик запроса на получения списка доступных майнеров.
@@ -23,6 +39,6 @@ public class GetAvailableMinersQueryHandler : IStreamRequestHandler<GetAvailable
 
     public IAsyncEnumerable<Miner> Handle(GetAvailableMinersQuery request, CancellationToken cancellationToken)
     {
-        return _repository.GetAvailableMiners();
+        return _repository.GetAvailableMiners(request.Specification);
     }
 }

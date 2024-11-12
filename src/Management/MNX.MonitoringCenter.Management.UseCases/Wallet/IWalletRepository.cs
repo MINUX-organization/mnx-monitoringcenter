@@ -10,17 +10,17 @@ public interface IWalletRepository
     /// <summary>
     /// Получить список кошельков
     /// </summary>
-    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="specification"> Спецификация. </param>
     /// <returns> Список кошельков </returns>
-    IAsyncEnumerable<Wallet> GetAllAvailable(Guid userId);
+    IAsyncEnumerable<Wallet> GetAllAvailable(Specification specification);
 
     /// <summary>
     /// Получить кошелёк по уникальному идентификатору
     /// </summary>
-    /// <param name="Id"> Уникальный идентификатор </param>
+    /// <param name="id"> Уникальный идентификатор </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Кошелёк </returns>
-    Task<Wallet?> GetAvailableById(Guid Id, Guid userId);
+    Task<Wallet?> GetAvailableById(Guid id, Guid userId);
 
     /// <summary>
     /// Получить признак существования кошелька c переданным названием.

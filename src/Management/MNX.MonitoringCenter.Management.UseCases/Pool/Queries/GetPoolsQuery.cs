@@ -8,8 +8,23 @@ namespace MNX.MonitoringCenter.Management.UseCases.Pool.Queries;
 /// <summary>
 /// Запрос на получение списка пулов.
 /// </summary>
-/// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetPoolsQuery(Guid UserId) : IStreamRequest<PoolModel>;
+public sealed record GetPoolsQuery : IStreamRequest<PoolModel>
+{
+    /// <summary>
+    /// Спецификация.
+    /// </summary>
+    public Specification Specification { get; }
+
+    public GetPoolsQuery(Guid userId)
+    {
+        Specification = new Specification(userId);
+    }
+
+    public GetPoolsQuery(Guid userId, string filterString, object[] filterParameters)
+    {
+        Specification = new Specification(userId, filterString, filterParameters);
+    }
+}
 
 /// <summary>
 /// Обработчик запроса на получение списка пулов. <see cref="GetPoolsQuery"/>.
@@ -29,7 +44,7 @@ public class GetPoolsQueryHandler : IStreamRequestHandler<GetPoolsQuery, PoolMod
     public async IAsyncEnumerable<PoolModel> Handle(GetPoolsQuery request,
                                                    [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var pool in _repository.GetAllAvailable(request.UserId))
+        await foreach (var pool in _repository.GetAllAvailable(request.Specification).WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<PoolModel>(pool);
         }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases.Wallet;
 using System.Linq.Expressions;
+using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Wallet;
 
@@ -19,21 +20,22 @@ public class WalletRepository : IWalletRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Wallet> GetAllAvailable(Guid userId)
+    public IAsyncEnumerable<Wallet> GetAllAvailable(Specification specification)
     {
         return _context.Wallets.Include(x => x.Cryptocurrency)
-                               .Where(x => x.UserId == userId)
+                               .Where(x => x.UserId == specification.UserId)
+                               .Filter(specification)
                                .AsNoTracking()
                                .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<Wallet?> GetAvailableById(Guid Id, Guid userId)
+    public Task<Wallet?> GetAvailableById(Guid id, Guid userId)
     {
         return _context.Wallets.Include(x => x.Cryptocurrency)
                                .AsNoTrackingWithIdentityResolution()
                                .Where(x => x.UserId == userId)
-                               .FirstOrDefaultAsync(x => x.Id == Id);
+                               .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     /// <inheritdoc/>

@@ -8,8 +8,23 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
 /// <summary>
 /// Запрос на получение полётных листов.
 /// </summary>
-/// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetFlightSheetsQuery(Guid UserId) : IStreamRequest<FlightSheetModel>;
+public sealed record GetFlightSheetsQuery : IStreamRequest<FlightSheetModel>
+{
+    /// <summary>
+    /// Спецификация.
+    /// </summary>
+    public Specification Specification { get; }
+
+    public GetFlightSheetsQuery(Guid userId)
+    {
+        Specification = new Specification(userId);
+    }
+
+    public GetFlightSheetsQuery(Guid userId, string filterString, object[] filterParameters)
+    {
+        Specification = new Specification(userId, filterString, filterParameters);
+    }
+}
 
 /// <summary>
 /// Обработчик <see cref="GetFlightSheetsQuery"/>.
@@ -29,7 +44,7 @@ public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheets
     public async IAsyncEnumerable<FlightSheetModel> Handle(GetFlightSheetsQuery request,
                                                           [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var flightSheet in _repository.GetAllAvailable(request.UserId).WithCancellation(cancellationToken))
+        await foreach (var flightSheet in _repository.GetAllAvailable(request.Specification).WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<FlightSheetModel>(flightSheet);
         }

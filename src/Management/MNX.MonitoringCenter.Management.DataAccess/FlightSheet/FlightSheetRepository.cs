@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.FlightSheet;
@@ -18,9 +19,11 @@ public class FlightSheetRepository : IFlightSheetRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<FlightSheet> GetAllAvailable(Guid userId)
+    public IAsyncEnumerable<FlightSheet> GetAllAvailable(Specification specification)
     {
-        return GetFlightSheets(userId).AsAsyncEnumerable();
+        return GetFlightSheets(specification.UserId)
+            .Filter(specification)
+            .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
