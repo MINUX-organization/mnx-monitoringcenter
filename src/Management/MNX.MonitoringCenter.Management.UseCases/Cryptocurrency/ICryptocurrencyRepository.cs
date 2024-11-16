@@ -10,9 +10,9 @@ public interface ICryptocurrencyRepository
     /// <summary>
     /// Получить список всех добавленных криптовалют
     /// </summary>
-    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="specification"> Спецификация. </param>
     /// <returns> Список криптовалют. </returns>
-    IAsyncEnumerable<Cryptocurrency> GetAllAvailable(Guid userId);
+    IAsyncEnumerable<Cryptocurrency> GetAllAvailable(Specification specification);
 
     /// <summary>
     /// Получить криптовалюту по идентификатору

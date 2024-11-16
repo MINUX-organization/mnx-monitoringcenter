@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Algorithm;
@@ -16,9 +17,12 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms()
+    public IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
     {
-        return _context.Algorithms.AsNoTracking().AsAsyncEnumerable();
+        return _context.Algorithms
+            .Filter(specification)
+            .AsNoTracking()
+            .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>

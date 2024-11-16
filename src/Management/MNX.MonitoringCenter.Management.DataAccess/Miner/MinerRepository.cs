@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Miner;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
@@ -18,10 +19,11 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Miner> GetAvailableMiners()
+    public IAsyncEnumerable<Miner> GetAvailableMiners(Specification specification)
     {
         return _context.Miners
                        .AsNoTracking()
+                       .Filter(specification)
                        .AsAsyncEnumerable();
     }
 

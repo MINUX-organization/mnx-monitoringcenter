@@ -8,9 +8,23 @@ namespace MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
 /// <summary>
 /// Запрос на получение сгруппированного по названию видеокарт списка пресетов.
 /// </summary>
-/// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetPresetsGroupedByGpuNameQuery(Guid UserId)
-    : IRequest<Result<List<PresetGroup>>>;
+public sealed record GetPresetsGroupedByGpuNameQuery : IRequest<Result<List<PresetGroup>>>
+{
+    /// <summary>
+    /// Спецификация.
+    /// </summary>
+    public Specification Specification { get; }
+
+    public GetPresetsGroupedByGpuNameQuery(Guid userId)
+    {
+        Specification = new Specification(userId);
+    }
+
+    public GetPresetsGroupedByGpuNameQuery(Guid userId, string filterString, object[] filterParameters)
+    {
+        Specification = new Specification(userId, filterString, filterParameters);
+    }
+}
 
 /// <summary>
 /// Обработчик <see cref="GetPresetsGroupedByGpuNameQuery"/>.
@@ -31,9 +45,9 @@ public class GetPresetsGroupedByGpuNameQueryHandler
     public async Task<Result<List<PresetGroup>>> Handle(GetPresetsGroupedByGpuNameQuery request,
                                                         CancellationToken cancellationToken)
     {
-        var groups = await _presetRepository.GetGroupedList(x => x.GpuName, request.UserId);
+        var groups = await _presetRepository.GetGroupedList(x => x.GpuName, request.Specification);
 
-        return Result<List<PresetGroup>>.Success(groups.Select(x => new PresetGroup()
+        return Result<List<PresetGroup>>.Success(groups.Select(x => new PresetGroup
         {
             Name = x.Key,
             Presets = _mapper.Map<List<PresetModel>>(x.Value)

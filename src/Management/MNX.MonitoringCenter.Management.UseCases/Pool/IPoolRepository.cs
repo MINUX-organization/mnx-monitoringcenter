@@ -10,9 +10,9 @@ public interface IPoolRepository
     /// <summary>
     /// Получить список всех пулов
     /// </summary>
-    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="specification"> Спецификация. </param>
     /// <returns> Список пулов </returns>
-    IAsyncEnumerable<Pool> GetAllAvailable(Guid userId);
+    IAsyncEnumerable<Pool> GetAllAvailable(Specification specification);
 
     /// <summary>
     /// Получить пул

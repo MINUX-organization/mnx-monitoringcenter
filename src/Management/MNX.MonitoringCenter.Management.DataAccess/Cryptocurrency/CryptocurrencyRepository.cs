@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
@@ -18,10 +19,11 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Cryptocurrency> GetAllAvailable(Guid userId)
+    public IAsyncEnumerable<Cryptocurrency> GetAllAvailable(Specification specification)
     {
         return _context.Cryptocurrencies.AsNoTrackingWithIdentityResolution()
-                                        .Where(x => x.UserId == userId)
+                                        .Where(x => x.UserId == specification.UserId)
+                                        .Filter(specification)
                                         .Include(x => x.Algorithm)
                                         .AsAsyncEnumerable();
     }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.MonitoringCenter.Management.Core.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Miner.Queries;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -19,9 +20,15 @@ public class MinerController : ControllerBase
     /// </summary>
     private readonly IMediator _mediator;
 
-    public MinerController(IMediator mediator)
+    /// <summary>
+    /// Сервис для доступ к данным пользователя.
+    /// </summary>
+    private readonly UserAccessor _accessor;
+
+    public MinerController(IMediator mediator, UserAccessor accessor)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
     }
 
     /// <summary>
@@ -33,6 +40,6 @@ public class MinerController : ControllerBase
     [ProducesResponseType(typeof(IAsyncEnumerable<Miner>), 200)]
     public IAsyncEnumerable<Miner> GetAvailable()
     {
-        return _mediator.CreateStream(new GetAvailableMinersQuery());
+        return _mediator.CreateStream(new GetAvailableMinersQuery(_accessor.GetUserId()));
     }
 }

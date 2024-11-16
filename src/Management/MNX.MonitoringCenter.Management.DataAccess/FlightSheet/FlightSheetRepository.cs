@@ -24,9 +24,10 @@ public class FlightSheetRepository : IFlightSheetRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<FlightSheet> GetAllAvailable(Guid userId)
+    public IAsyncEnumerable<FlightSheet> GetAllAvailable(Specification specification)
     {
-        return GetFlightSheets(userId)
+        return GetFlightSheets(specification.UserId)
+            .Filter(specification)
             .ProjectTo<FlightSheet>(_mapper.ConfigurationProvider)
             .AsAsyncEnumerable();
     }

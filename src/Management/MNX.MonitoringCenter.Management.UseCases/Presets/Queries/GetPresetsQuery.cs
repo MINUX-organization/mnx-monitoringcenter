@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
-using MNX.MonitoringCenter.Management.Core;
 using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
@@ -9,7 +8,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
 /// <summary>
 /// Запрос на получение сохранённых пресетов для выбранной серии GPU
 /// </summary>
-public class GetPresetsQuery : IStreamRequest<PresetModel>
+public sealed record GetPresetsQuery : IStreamRequest<PresetModel>
 {
     /// <summary>
     /// Название GPU
@@ -17,14 +16,20 @@ public class GetPresetsQuery : IStreamRequest<PresetModel>
     public string? GpuName { get; }
 
     /// <summary>
-    /// Идентификатор пользователя.
+    /// Спецификация.
     /// </summary>
-    public Guid UserId { get; }
+    public Specification Specification { get; }
 
     public GetPresetsQuery(string? gpuName, Guid userId)
     {
         GpuName = gpuName;
-        UserId = userId;
+        Specification = new Specification(userId);
+    }
+
+    public GetPresetsQuery(string? gpuName, Guid userId, string filterString, object[] filterParameters)
+    {
+        GpuName = gpuName;
+        Specification = new Specification(userId, filterString, filterParameters);
     }
 }
 
@@ -46,7 +51,7 @@ public class GetPresetsQueryHandler : IStreamRequestHandler<GetPresetsQuery, Pre
     public async IAsyncEnumerable<PresetModel> Handle(GetPresetsQuery request,
                                                      [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (Preset preset in _repository.GetAllAvailable(request.GpuName, request.UserId))
+        await foreach (var preset in _repository.GetAllAvailable(request.GpuName, request.Specification).WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<PresetModel>(preset);
         }

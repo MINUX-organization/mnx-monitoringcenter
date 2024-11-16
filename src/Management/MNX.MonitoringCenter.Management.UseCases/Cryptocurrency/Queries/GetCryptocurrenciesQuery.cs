@@ -8,8 +8,23 @@ namespace MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Queries;
 /// <summary>
 /// Запрос на получение списка криптовалют.
 /// </summary>
-/// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record GetCryptocurrenciesQuery(Guid UserId) : IStreamRequest<CryptocurrencyModel>;
+public sealed record GetCryptocurrenciesQuery : IStreamRequest<CryptocurrencyModel>
+{
+    /// <summary>
+    /// Спецификация.
+    /// </summary>
+    public Specification Specification { get; }
+
+    public GetCryptocurrenciesQuery(Guid userId)
+    {
+        Specification = new Specification(userId);
+    }
+
+    public GetCryptocurrenciesQuery(Guid userId, string filterString, object[] filterParameters)
+    {
+        Specification = new Specification(userId, filterString, filterParameters);
+    }
+}
 
 /// <summary>
 /// Обработчик <see cref="GetCryptocurrenciesQuery"/>.
@@ -29,7 +44,7 @@ public class GetCryptocurrenciesQueryHandler : IStreamRequestHandler<GetCryptocu
     public async IAsyncEnumerable<CryptocurrencyModel> Handle(GetCryptocurrenciesQuery request,
                                                              [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var cryptocurrency in _repository.GetAllAvailable(request.UserId))
+        await foreach (var cryptocurrency in _repository.GetAllAvailable(request.Specification).WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<CryptocurrencyModel>(cryptocurrency);
         }
