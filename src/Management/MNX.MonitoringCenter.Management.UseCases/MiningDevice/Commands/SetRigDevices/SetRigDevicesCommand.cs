@@ -2,7 +2,7 @@
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
-using MNX.MonitoringCenter.Management.Core.MiningDevice;
+using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetRigDevices;
 

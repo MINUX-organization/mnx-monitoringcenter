@@ -1,17 +1,17 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
-using MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.Core.Miner.Configs;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Converters;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.MiningConfig;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
 using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
@@ -37,19 +37,33 @@ public class MappingProfile : Profile
 
         // flight sheets
         
+            // request  
+
         CreateMap<FlightSheetInputModel, Core.FlightSheet.FlightSheet>();
+        CreateMap<FlightSheetTargetInputModel, FlightSheetTarget>();
+
+        CreateMap<MiningConfigInputModel, BaseMiningConfig>()
+            .Include<CpuMiningConfigInputModel, CpuMiningConfig>()
+            .Include<GpuMiningConfigInputModel, GpuMiningConfig>();
+
+        CreateMap<CpuMiningConfigInputModel, CpuMiningConfig>();
+        CreateMap<GpuMiningConfigInputModel, GpuMiningConfig>();
+
+        CreateMap<MiningCoinConfigInputModel, MiningCoinConfig>();
+
+            // response
+
         CreateMap<Core.FlightSheet.FlightSheet, FlightSheetModel>();
+        CreateMap<FlightSheetTarget, FlightSheetTargetModel>();
 
-        CreateMap<FlightSheetTargetBase, FlightSheetTargetModelBase>().ConvertUsing(new FlightSheetTargetConverter());
-        CreateMap<CpuFlightSheetTarget, CpuFlightSheetTargetModel>();
-        CreateMap<GpuFlightSheetTarget, GpuFlightSheetTargetModel>();
+        CreateMap<BaseMiningConfig, BaseMiningConfigModel>()
+            .Include<CpuMiningConfig, CpuMiningConfigModel>()
+            .Include<GpuMiningConfig, GpuMiningConfigModel>();
 
-        CreateMap<FlightSheetTargetInputModel, FlightSheetTargetBase>().ConvertUsing(new FlightSheetTargetInputModelConverter());
-        CreateMap<CpuFlightSheetTargetInputModel, CpuFlightSheetTarget>();
-        CreateMap<GpuFlightSheetTargetInputModel, GpuFlightSheetTarget>();
+        CreateMap<CpuMiningConfig, CpuMiningConfigModel>();
+        CreateMap<GpuMiningConfig, GpuMiningConfigModel>();
 
-        CreateMap<FlightSheetTargetConfig, FlightSheetTargetConfigModel>();
-        CreateMap<FlightSheetTargetConfigInputModel, FlightSheetTargetConfig>();
+        CreateMap<MiningCoinConfig, MiningCoinConfigModel>();
 
         // pools
 

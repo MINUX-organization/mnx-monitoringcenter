@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Core.MiningDevice;
+﻿using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
+
+namespace MNX.MonitoringCenter.Management.Core.MiningDevice;
 
 /// <summary>
 /// Майнинг устройство.

@@ -54,7 +54,7 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
                 continue;
             }
 
-            if (flightSheet.Targets.Any(flightSheet => flightSheet.Type.ToString() == device.Type.ToString()))
+            if (flightSheet.IsDeviceSupport(device))
             {
                 processedDevices.Add(device);
             }

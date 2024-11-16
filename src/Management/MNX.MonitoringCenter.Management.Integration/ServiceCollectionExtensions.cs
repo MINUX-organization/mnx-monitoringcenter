@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.Application.Data.DI;
 using MNX.Application.UseCases.DI;
@@ -39,7 +40,12 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddManagementModule(this IServiceCollection services,
                                                          IConfiguration configuration)
     {
-        services.AddAutoMapper(cfg => cfg.AddProfile(typeof(MappingProfile)));
+        services.AddAutoMapper(cfg => cfg.AddProfiles(new List<Profile>()
+        {
+            new MappingProfile(),
+            new DbMappingProfile()
+        }));
+
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAvailableAlgorithmsQuery).Assembly));
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddDataContext<Context>(configuration);

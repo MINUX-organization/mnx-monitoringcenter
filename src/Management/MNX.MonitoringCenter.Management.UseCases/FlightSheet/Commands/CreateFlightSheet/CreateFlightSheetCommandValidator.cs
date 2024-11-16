@@ -1,5 +1,5 @@
-﻿using FluentValidation;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Validators;
+﻿using AutoMapper;
+using FluentValidation;
 using MNX.MonitoringCenter.Management.UseCases.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Wallet;
@@ -11,7 +11,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFl
 /// </summary>
 public class CreateFlightSheetCommandValidator : AbstractValidator<CreateFlightSheetCommand>
 {
-    public CreateFlightSheetCommandValidator(IMinerRepository minerRepository,
+    public CreateFlightSheetCommandValidator(IMapper mapper,
+                                             IMinerRepository minerRepository,
                                              IWalletRepository walletRepository,
                                              IPoolRepository poolRepository)
     {
@@ -19,6 +20,7 @@ public class CreateFlightSheetCommandValidator : AbstractValidator<CreateFlightS
             .NotNull()
             .WithMessage("Flight sheet data is required!")
             .SetValidator(x => new FlightSheetModelValidator(x.UserId,
+                                                             mapper,
                                                              minerRepository,
                                                              walletRepository,
                                                              poolRepository));

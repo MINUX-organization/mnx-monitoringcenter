@@ -70,6 +70,9 @@ public class RigRepository : IRigRepository
                 }
             };
         }
+
+        // todo: поддержка GroupBy для сложных типов присутствует в EF 9. Это должно помочь не загружать лишних данных.
+        //       https://learn.microsoft.com/ru-ru/ef/core/what-is-new/ef-core-9.0/whatsnew#complex-types-groupby-and-executeupdate-support
     }
 
     /// <inheritdoc/>

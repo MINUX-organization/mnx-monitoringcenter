@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
-using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 using System.Runtime.CompilerServices;
 
@@ -43,7 +43,7 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
                                      .ToList();
 
         var miningDevices = _mediator.CreateStream(
-            new GetMiningDevicesQuery(request.UserId, inventoryGpus.Select(x => x.Id).ToArray()),
+            new GetAvailableMiningDevicesQuery(request.UserId, inventoryGpus.Select(x => x.Id).ToArray()),
             cancellationToken);
 
         await foreach (var gpu in miningDevices)
@@ -58,7 +58,7 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
                 RigName = inventoryGpu.RigName,
                 DriverVersion = inventoryGpu.DriverVersion,
                 FlightSheetName = gpu.FlightSheet?.Name,
-                MinerName = gpu.FlightSheet?.Targets.First(x => x.Type == FlightSheetTargetType.GPU).Miner?.Name
+                MinerName = gpu.FlightSheet?.Targets.First(x => x.DeviceType == MiningDeviceType.GPU).Miner?.Name
             };
         }
     }

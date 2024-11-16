@@ -24,6 +24,13 @@ public interface IMiningDeviceRepository
     Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
+    /// Получить устройства, поддерживаемые полётным листом.
+    /// </summary>
+    /// <param name="flightSheet"> Полётный лист. </param>
+    /// <returns> Устройства, поддерживаемые полётным листом. </returns>
+    IAsyncEnumerable<MiningDeviceInfo> GetFlightSheetSupportedDevices(Core.FlightSheet.FlightSheet flightSheet);
+
+    /// <summary>
     /// Задать текущие устройства ригов.
     /// </summary>
     /// <param name="devices"> Устройства. </param>

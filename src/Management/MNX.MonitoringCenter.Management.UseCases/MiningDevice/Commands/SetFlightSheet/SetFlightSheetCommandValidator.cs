@@ -16,6 +16,10 @@ public class SetFlightSheetCommandValidator : AbstractValidator<SetFlightSheetCo
             .WithMessage("Mining devices are required");
 
         RuleFor(x => x.FightSheetId)
+            .NotEmpty()
+            .WithMessage("Flight sheet id is required");
+
+        RuleFor(x => x.FightSheetId)
             .MustAsync(flightSheetRepository.Exists)
             .WithMessage("Flight sheet was`t found");
     }

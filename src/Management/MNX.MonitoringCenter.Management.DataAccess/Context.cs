@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.Core.Miner.Configs;
+using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
+using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 using System.Reflection;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
@@ -14,11 +16,11 @@ public class Context : DbContext
 
     internal DbSet<Core.Cryptocurrency> Cryptocurrencies { get; set; }
 
-    internal DbSet<Core.FlightSheet.FlightSheet> FlightSheets { get; set; }
+    internal DbSet<FlightSheetDto> FlightSheets { get; set; }
 
-    internal DbSet<FlightSheetTargetBase> FlightSheetTargets { get; set; }
+    internal DbSet<BaseFlightSheetTargetDto> FlightSheetTargets { get; set; }
 
-    internal DbSet<FlightSheetTargetConfig> FlightSheetTargetConfigs { get; set; }
+    internal DbSet<MiningCoinConfig> MiningCoinConfigs { get; set; }
 
     internal DbSet<Core.Miner.Miner> Miners { get; set; }
 

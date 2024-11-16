@@ -22,7 +22,7 @@ public class PoolRepository : IPoolRepository
     {
         return _context.Pools.Include(x => x.Cryptocurrency)
                              .Where(x => x.UserId == userId)
-                             .AsNoTracking()
+                             .AsNoTrackingWithIdentityResolution()
                              .AsAsyncEnumerable();
     }
 
@@ -30,7 +30,8 @@ public class PoolRepository : IPoolRepository
     public Task<Pool?> GetAvailableById(Guid id, Guid userId)
     {
         return _context.Pools.Include(x => x.Cryptocurrency)
-                             .AsNoTracking()
+                                .ThenInclude(c => c!.Algorithm)
+                             .AsNoTrackingWithIdentityResolution()
                              .Where(x => x.UserId == userId)
                              .FirstOrDefaultAsync(x => x.Id == id);
     }

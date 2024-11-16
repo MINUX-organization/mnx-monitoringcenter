@@ -1,21 +1,23 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
+using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Cfg;
 
 /// <summary>
 /// Конфигурация таблицы с таргетами полётных листов.
 /// </summary>
-internal class FlightSheetTargetCfg : IEntityTypeConfiguration<FlightSheetTargetBase>
+internal class FlightSheetTargetCfg : IEntityTypeConfiguration<BaseFlightSheetTargetDto>
 {
-    public void Configure(EntityTypeBuilder<FlightSheetTargetBase> builder)
+    public void Configure(EntityTypeBuilder<BaseFlightSheetTargetDto> builder)
     {
-        builder.HasDiscriminator(x => x.Type)
-               .HasValue<CpuFlightSheetTarget>(FlightSheetTargetType.CPU)
-               .HasValue<GpuFlightSheetTarget>(FlightSheetTargetType.GPU);
+        builder.HasDiscriminator(x => x.DeviceType)
+               .HasValue<CpuFlightSheetTargetDto>(MiningDeviceType.CPU)
+               .HasValue<GpuFlightSheetTargetDto>(MiningDeviceType.GPU);
 
-        builder.HasOne<Core.FlightSheet.FlightSheet>()
+        builder.HasOne<FlightSheetDto>()
                .WithMany(flightSheet => flightSheet.Targets)
                .HasForeignKey(target => target.FlightSheetId)
                .OnDelete(DeleteBehavior.Cascade);

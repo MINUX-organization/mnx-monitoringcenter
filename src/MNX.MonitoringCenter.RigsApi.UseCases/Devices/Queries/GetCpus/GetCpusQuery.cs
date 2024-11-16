@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 using System.Runtime.CompilerServices;
 
@@ -42,7 +43,7 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
                                      .ToList();
 
         var miningDevices = _mediator.CreateStream(
-            new GetMiningDevicesQuery(request.UserId, inventoryCpus.Select(x => x.Id).ToArray()),
+            new GetAvailableMiningDevicesQuery(request.UserId, inventoryCpus.Select(x => x.Id).ToArray()),
             cancellationToken);
 
         await foreach (var cpu in miningDevices)
@@ -56,7 +57,7 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
                 Information = inventoryCpu.Information,
                 RigName = inventoryCpu.RigName,
                 FlightSheetName = cpu.FlightSheet?.Name,
-                MinerName = cpu.FlightSheet?.Targets.First(x => x.Type == FlightSheetTargetType.CPU).Miner?.Name
+                MinerName = cpu.FlightSheet?.Targets.First(x => x.DeviceType == MiningDeviceType.CPU).Miner?.Name
             };
         }
     }

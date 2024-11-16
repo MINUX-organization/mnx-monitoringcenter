@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice;
 using System.Data;
@@ -7,6 +8,7 @@ namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
 using MiningDeviceInfo = Core.MiningDevice.MiningDeviceInfo;
 using MiningDevice = Core.MiningDevice.MiningDevice;
+using FlightSheet = Core.FlightSheet.FlightSheet;
 
 /// <summary>
 /// Реализация <see cref="IMiningDeviceRepository"/>.
@@ -15,21 +17,18 @@ public class MiningDeviceRepository : IMiningDeviceRepository
 {
     private readonly Context _context;
 
-    public MiningDeviceRepository(Context context)
+    private readonly IMapper _mapper;
+
+    public MiningDeviceRepository(Context context, IMapper mapper)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <inheritdoc/>
     public IAsyncEnumerable<MiningDeviceInfo> GetAvailable(Specification specification)
     {
-        return _context.MiningDevices.AsNoTrackingWithIdentityResolution()
-                                     .Include(device => device.FlightSheet)
-                                        .ThenInclude(flightSheet => flightSheet!.Targets)
-                                            .ThenInclude(target => target.Miner)
-                                     .Available(specification)
-                                     .Filter(specification)
-                                     .AsAsyncEnumerable();
+        return GetDevicesQuery(specification).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
@@ -37,6 +36,14 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     {
         return _context.MiningDevices.AsNoTracking()
                                      .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public IAsyncEnumerable<MiningDeviceInfo> GetFlightSheetSupportedDevices(FlightSheet flightSheet)
+    {
+        return GetDevicesQuery(new Specification(flightSheet.UserId))
+                .Where(device => flightSheet.IsDeviceSupport(device))
+                .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
@@ -133,5 +140,35 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                 await _context.MiningDevices.AddAsync(device, cancellationToken);
             }
         }
+    }
+
+    /// <summary>
+    /// Получить запрос списка устройств.
+    /// </summary>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Запрос списка устройств. </returns>
+    private IQueryable<MiningDeviceInfo> GetDevicesQuery(Specification specification)
+    {
+        return from device in _context.MiningDevices.AsNoTrackingWithIdentityResolution()
+                                                    .Available(specification)
+                                                    .Filter(specification)
+
+               join flightSheet in _context.FlightSheets.AsNoTrackingWithIdentityResolution()
+                                                        .Include(x => x.Targets)
+                                                            .ThenInclude(target => target.Miner)
+                                                        .Include(x => x.Targets)
+                                                            .ThenInclude(target => target.CoinConfigs)
+                    on device.FlightSheetId equals flightSheet.Id
+
+               select new MiningDeviceInfo()
+               {
+                   Id = device.Id,
+                   OwnerId = device.OwnerId,
+                   RigId = device.RigId,
+                   IsActive = device.IsActive,
+                   Type = device.Type,
+                   FlightSheetId = device.FlightSheetId,
+                   FlightSheet = _mapper.Map<FlightSheet>(flightSheet)
+               };
     }
 }
