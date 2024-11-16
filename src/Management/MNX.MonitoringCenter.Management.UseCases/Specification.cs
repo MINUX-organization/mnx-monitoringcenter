@@ -3,17 +3,12 @@
 /// <summary>
 /// Спецификация.
 /// </summary>
-public readonly struct Specification
+public readonly struct Specification(Guid userId)
 {
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; }
-
-    /// <summary>
-    /// Идентификаторы запрашиваемых объектов.
-    /// </summary>
-    public Guid[]? Ids { get; }
+    public Guid UserId { get; } = userId;
 
     /// <summary>
     /// Строка фильтрации.
@@ -23,16 +18,10 @@ public readonly struct Specification
     /// <summary>
     /// Параметры фильтрации.
     /// </summary>
-    public string[]? FilterParameters { get; }
+    public object[]? FilterParameters { get; }
 
-    public Specification(Guid userId, Guid[]? ids = null)
-    {
-        UserId = userId;
-        Ids = ids;
-    }
-
-    public Specification(Guid userId, Guid[]? ids, string filterString, string[] filterParameters)
-        : this(userId, ids)
+    public Specification(Guid userId, string filterString, object[] filterParameters)
+        : this(userId)
     {
         FilterString = filterString;
         FilterParameters = filterParameters;

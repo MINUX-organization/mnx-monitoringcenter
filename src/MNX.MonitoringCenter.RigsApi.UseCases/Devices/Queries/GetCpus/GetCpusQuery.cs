@@ -43,7 +43,7 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
                                      .ToList();
 
         var miningDevices = _mediator.CreateStream(
-            new GetAvailableMiningDevicesQuery(request.UserId, inventoryCpus.Select(x => x.Id).ToArray()),
+            new GetAvailableMiningDevicesQuery(request.UserId/*, inventoryCpus.Select(x => x.Id).ToArray()*/),
             cancellationToken);
 
         await foreach (var cpu in miningDevices)

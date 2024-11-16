@@ -13,15 +13,16 @@ public sealed class GetAvailableMiningDevicesQuery : IStreamRequest<MiningDevice
     /// </summary>
     public Specification Specification { get; }
 
-    public GetAvailableMiningDevicesQuery(Guid userId, Guid[]? devicesIds = null)
+    public GetAvailableMiningDevicesQuery(Guid userId)
     {
-        Specification = new Specification(userId, devicesIds);
+        Specification = new Specification(userId);
     }
 
-    public GetAvailableMiningDevicesQuery(Guid userId, Guid[]? devicesIds,
-                                 string filterString, string[] filterParameters)
+    public GetAvailableMiningDevicesQuery(Guid userId,
+                                          string filterString,
+                                          string[] filterParameters)
     {
-        Specification = new Specification(userId, devicesIds, filterString, filterParameters);
+        Specification = new Specification(userId, filterString, filterParameters);
     }
 }
 

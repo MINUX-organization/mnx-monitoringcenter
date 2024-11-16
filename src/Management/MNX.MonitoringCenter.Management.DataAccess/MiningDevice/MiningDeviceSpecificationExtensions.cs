@@ -30,10 +30,10 @@ internal static class MiningDeviceSpecificationExtensions
     internal static IQueryable<MiningDeviceInfo> Filter(
         this IQueryable<MiningDeviceInfo> devices, Specification specification)
     {
-        if (specification.Ids is not null)
+        /*if (specification.Ids is not null)
         {
             devices = devices.Where(device => specification.Ids.Contains(device.Id));
-        }
+        }*/
 
         if (!string.IsNullOrWhiteSpace(specification.FilterString) &&
             specification.FilterParameters is not null)

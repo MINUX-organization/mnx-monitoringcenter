@@ -43,7 +43,7 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
                                      .ToList();
 
         var miningDevices = _mediator.CreateStream(
-            new GetAvailableMiningDevicesQuery(request.UserId, inventoryGpus.Select(x => x.Id).ToArray()),
+            new GetAvailableMiningDevicesQuery(request.UserId/*, inventoryGpus.Select(x => x.Id).ToArray()*/),
             cancellationToken);
 
         await foreach (var gpu in miningDevices)
