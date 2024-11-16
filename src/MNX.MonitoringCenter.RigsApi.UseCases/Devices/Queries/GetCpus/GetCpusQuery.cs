@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
-using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 using System.Runtime.CompilerServices;
@@ -42,8 +41,10 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
                                      .ToBlockingEnumerable(cancellationToken)
                                      .ToList();
 
+        var filterString = string.Join(" or ", inventoryCpus.Select((cpu, index) => $"Id == @{index}"));
+        var filterParameters = inventoryCpus.Select(x => (object)x.Id).ToArray();
         var miningDevices = _mediator.CreateStream(
-            new GetAvailableMiningDevicesQuery(request.UserId/*, inventoryCpus.Select(x => x.Id).ToArray()*/),
+            new GetAvailableMiningDevicesQuery(request.UserId, filterString, filterParameters),
             cancellationToken);
 
         await foreach (var cpu in miningDevices)

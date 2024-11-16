@@ -158,8 +158,10 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                                                             .ThenInclude(target => target.Miner)
                                                         .Include(x => x.Targets)
                                                             .ThenInclude(target => target.CoinConfigs)
-                    on device.FlightSheetId equals flightSheet.Id
 
+               on device.FlightSheetId equals flightSheet.Id into flightSheets
+
+               from flightSheet in flightSheets.DefaultIfEmpty()
                select new MiningDeviceInfo()
                {
                    Id = device.Id,

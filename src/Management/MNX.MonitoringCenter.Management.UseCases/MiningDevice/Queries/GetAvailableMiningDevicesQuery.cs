@@ -20,7 +20,7 @@ public sealed class GetAvailableMiningDevicesQuery : IStreamRequest<MiningDevice
 
     public GetAvailableMiningDevicesQuery(Guid userId,
                                           string filterString,
-                                          string[] filterParameters)
+                                          object[] filterParameters)
     {
         Specification = new Specification(userId, filterString, filterParameters);
     }
