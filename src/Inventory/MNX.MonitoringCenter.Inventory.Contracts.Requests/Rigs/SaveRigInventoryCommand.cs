@@ -2,7 +2,7 @@
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 
-namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
+namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
 /// <summary>
 /// Команда сохранения инвентаризации рига.

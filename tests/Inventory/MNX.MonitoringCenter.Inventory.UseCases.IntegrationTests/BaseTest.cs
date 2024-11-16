@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.Application.UseCases.DI;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.DataAccess;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 using MNX.MonitoringCenter.Inventory.UseCases;
@@ -41,8 +41,8 @@ public abstract class BaseTest
         });
 
         services.AddMediatR(x => x.RegisterServicesFromAssemblies(
-            typeof(SaveRigInventoryCommand).Assembly,
-            typeof(SaveRigInventoryCommandHandler).Assembly
+            typeof(GetRigsDetailsQuery).Assembly,
+            typeof(SaveRigInventoryCommand).Assembly
             ));
         services.AddValidationPipelines(typeof(SaveRigInventoryCommandValidator).Assembly);
 

@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
 
-namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
+namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
 /// <summary>
 /// Команда на добавление рига.
@@ -12,7 +12,7 @@ public class AddRigCommand : IValidatableCommand<Unit>
     /// Уникальный идентификатор рига.
     /// </summary>
     public Guid Id { get; init; }
-    
+
     /// <summary>
     /// Уникальный идентификатор владельца рига.
     /// </summary>

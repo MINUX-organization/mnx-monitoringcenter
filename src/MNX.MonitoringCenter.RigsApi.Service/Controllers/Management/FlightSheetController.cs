@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.ApplyFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.EditFightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
@@ -61,6 +62,22 @@ public class FlightSheetController : ControllerBase
     }
 
     /// <summary>
+    /// Применить полётный лист.
+    /// </summary>
+    /// <param name="id"> Идентификатор полётного листа. </param>
+    /// <param name="miningDevicesIds"> Идентификаторы майнинг устройств. </param>
+    /// <returns> Идентификаторы устройств, на которые применился полётный лист. </returns>
+    [HttpPost("{id:Guid}/apply")]
+    [ProducesResponseType(typeof(IEnumerable<Guid>), 201)]
+    [ProducesResponseType(typeof(IEnumerable<string>), 400)]
+    public async Task<IActionResult> Apply(Guid id, Guid[] miningDevicesIds)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new ApplyFlightSheetCommand(userId, id, miningDevicesIds));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
     /// Создать полётный лист.
     /// </summary>
     /// <param name="model"> Модель полётного листа. </param>
@@ -68,7 +85,7 @@ public class FlightSheetController : ControllerBase
     /// <response code="201"> Успешно. </response>
     /// <response code="400"> Введены некорректные данные. </response>
     [HttpPost]
-    [ProducesResponseType(typeof(IEnumerable<Guid>), 201)]
+    [ProducesResponseType(typeof(Guid), 201)]
     [ProducesResponseType(typeof(IEnumerable<string>), 400)]
     public async Task<IActionResult> Create(FlightSheetInputModel model)
     {

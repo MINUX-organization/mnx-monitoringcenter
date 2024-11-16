@@ -11,7 +11,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
@@ -28,7 +28,7 @@ public class SaveInventoryTests : BaseTest
 {
     private IMediator _mediator;
 
-    private readonly static Guid OWNER_ID = Guid.Parse("1dcc87f7-a326-4765-befa-680ed6cb7649");
+    private readonly static Guid OWNER_ID = Guid.Parse("0b8e36f9-bf02-4c88-97f8-cb5a81715000");
 
     [SetUp]
     public void SetUp()
@@ -61,7 +61,7 @@ public class SaveInventoryTests : BaseTest
 
         var driveRepository = ServiceProvider.GetRequiredService<IDriveRepository>();
         var drives = await driveRepository
-            .GetDrives(new InventorySpecification(OWNER_ID, inventoryMsg.RigId), default);
+            .GetDrives(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId), default);
         
 
         var gpuRepository = ServiceProvider.GetRequiredService<IGpuRepository>();
@@ -75,7 +75,7 @@ public class SaveInventoryTests : BaseTest
 
         var networkAdaptersRepository = ServiceProvider.GetRequiredService<INetworkAdapterRepository>();
         var adapters = await networkAdaptersRepository
-            .GetNetworkAdapters(new InventorySpecification(OWNER_ID, inventoryMsg.RigId), default);
+            .GetNetworkAdapters(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId), default);
 
         var softwareRepository = ServiceProvider.GetRequiredService<ISoftwareRepository>();
         var software = await softwareRepository
@@ -119,6 +119,7 @@ public class SaveInventoryTests : BaseTest
                 yield return new RigInventoryMsg()
                 {
                     RigId = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54558"),
+                    RigOwnerId = OWNER_ID,
                     CreatedDateTime = DateTime.UtcNow,
                     Inventory = new RigInventoryModel()
                     {
@@ -280,6 +281,7 @@ public class SaveInventoryTests : BaseTest
                 yield return new RigInventoryMsg()
                 {
                     RigId = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54558"),
+                    RigOwnerId = OWNER_ID,
                     CreatedDateTime = DateTime.UtcNow,
                     Inventory = new RigInventoryModel()
                     {
@@ -329,7 +331,7 @@ public class SaveInventoryTests : BaseTest
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
                                 Information = new GpuInformation()
                                 {
-                                    Manufacturer = "Amd",
+                                    Manufacturer = "AMD",
                                     Model = "Model",
                                     SerialNumber = "SerialNumber",
                                     Vendor = "Vendor",
@@ -441,6 +443,7 @@ public class SaveInventoryTests : BaseTest
                 yield return new RigInventoryMsg()
                 {
                     RigId = Guid.Parse("58c5749c-84fc-4148-84ed-8532a195e733"),
+                    RigOwnerId = OWNER_ID,
                     CreatedDateTime = DateTime.UtcNow,
                     Inventory = new RigInventoryModel()
                     {
@@ -452,7 +455,7 @@ public class SaveInventoryTests : BaseTest
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
                                 Information = new CpuInformation()
                                 {
-                                    Manufacturer = "Amd",
+                                    Manufacturer = "AMD",
                                     Model = "Model",
                                     CoresCount = 10,
                                     ThreadsCount = 12,

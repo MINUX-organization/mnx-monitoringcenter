@@ -1,6 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models.Target;
-
-namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
+﻿namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 
 /// <summary>
 /// Входная модель полётного листа.

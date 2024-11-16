@@ -4,13 +4,11 @@
 -- CREATING SCHEMA
 \ir 'schemas/monitoring_center.sql'
 
--- CREATING TYPES
-\ir 'types/mining_mode.sql'
-
 -- CREATING TABLES
 \ir 'tables/algorithms.sql'
 \ir 'tables/cryptocurrencies.sql'
 \ir 'tables/miners.sql'
+\ir 'tables/mining_devices.sql'
 \ir 'tables/overclocking.sql'
 \ir 'tables/pools.sql'
 \ir 'tables/presets.sql'

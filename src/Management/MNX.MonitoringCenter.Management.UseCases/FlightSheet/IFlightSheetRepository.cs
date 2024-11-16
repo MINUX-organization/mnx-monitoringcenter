@@ -32,7 +32,17 @@ public interface IFlightSheetRepository
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken);
+    Task<bool> ExistsAvailable(string name, Guid userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получить признак существования полётного листа с переданным идентификатором.
+    /// </summary>
+    /// <param name="id"> Идентификатор. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns>
+    /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
+    /// </returns>
+    Task<bool> Exists(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Добавить полётный лист.

@@ -17,10 +17,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
-    <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Controllers\MNX.MonitoringCenter.Inventory.Controllers.csproj" />
     <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Integration\MNX.MonitoringCenter.Inventory.Integration.csproj" />
     <ProjectReference Include="..\Management\MNX.MonitoringCenter.Management.Integration\MNX.MonitoringCenter.Management.Integration.csproj" />
     <ProjectReference Include="..\Management\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.RigsApi.UseCases\MNX.MonitoringCenter.RigsApi.UseCases.csproj" />
     <ProjectReference Include="..\Traffic\MNX.MonitoringCenter.Traffic.Integration\MNX.MonitoringCenter.Traffic.Integration.csproj" />
   </ItemGroup>
 

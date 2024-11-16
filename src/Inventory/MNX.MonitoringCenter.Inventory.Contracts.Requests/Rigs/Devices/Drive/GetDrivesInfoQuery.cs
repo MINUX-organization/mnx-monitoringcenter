@@ -13,10 +13,10 @@ public class GetDrivesInfoQuery : IRequest<Result<List<Drive>>>
     /// <summary>
     /// Спецификация инвентаризации.
     /// </summary>
-    public InventorySpecification Specification { get; }
+    public DeviceSpecification Specification { get; }
 
     public GetDrivesInfoQuery(Guid userId, Guid rigId)
     {
-        Specification = new InventorySpecification(userId, rigId, true);
+        Specification = new DeviceSpecification(userId, rigId);
     }
 }

@@ -11,6 +11,11 @@ public class RigInventoryMsg
     public Guid RigId { get; init; }
 
     /// <summary>
+    /// Идентификатор владельца рига.
+    /// </summary>
+    public Guid RigOwnerId { get; init; }
+
+    /// <summary>
     /// Дата и время проведения инвентаризации.
     /// </summary>
     public DateTimeOffset CreatedDateTime { get; init; }

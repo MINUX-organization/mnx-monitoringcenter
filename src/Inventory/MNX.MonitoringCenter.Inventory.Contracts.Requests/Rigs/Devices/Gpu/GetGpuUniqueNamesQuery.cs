@@ -10,10 +10,10 @@ public sealed class GetGpuUniqueNamesQuery : IStreamRequest<string>
     /// <summary>
     /// Спецификация инвентаризации.
     /// </summary>
-    public InventorySpecification Specification { get; }
+    public DeviceSpecification Specification { get; }
 
     public GetGpuUniqueNamesQuery(Guid userId)
     {
-        Specification = new InventorySpecification(userId);
+        Specification = new DeviceSpecification(userId);
     }
 }

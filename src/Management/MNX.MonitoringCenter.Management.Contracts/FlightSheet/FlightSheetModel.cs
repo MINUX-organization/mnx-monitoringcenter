@@ -1,6 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet.Target;
-
-namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+﻿namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 
 /// <summary>
 /// Модель полётного листа.
@@ -20,5 +18,5 @@ public class FlightSheetModel
     /// <summary>
     /// Таргеты.
     /// </summary>
-    public List<FlightSheetTargetModelBase> Targets { get; set; } = new(2);
+    public List<FlightSheetTargetModel> Targets { get; set; } = new(0);
 }

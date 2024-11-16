@@ -11,10 +11,10 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : IDriveRepository
 {
     /// <inheritdoc/>
-    public Task<List<Drive>?> GetDrives(InventorySpecification specification,
-                                                            CancellationToken cancellationToken)
+    public Task<List<Drive>?> GetDrives(DeviceSpecification specification,
+                                        CancellationToken cancellationToken)
     {
-        return GetInventoryBySpecification(specification)
+        return GetInventoryBySpecification(specification.InventorySpecification)
                     .Include(x => x.Drives)
                     .Select(x => x.Drives)
                     .FirstOrDefaultAsync(cancellationToken);

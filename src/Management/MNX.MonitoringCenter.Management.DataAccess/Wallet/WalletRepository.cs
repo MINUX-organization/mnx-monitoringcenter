@@ -25,7 +25,7 @@ public class WalletRepository : IWalletRepository
         return _context.Wallets.Include(x => x.Cryptocurrency)
                                .Where(x => x.UserId == specification.UserId)
                                .Filter(specification)
-                               .AsNoTracking()
+                               .AsNoTrackingWithIdentityResolution()
                                .AsAsyncEnumerable();
     }
 
@@ -33,6 +33,7 @@ public class WalletRepository : IWalletRepository
     public Task<Wallet?> GetAvailableById(Guid id, Guid userId)
     {
         return _context.Wallets.Include(x => x.Cryptocurrency)
+                                    .ThenInclude(c => c!.Algorithm)
                                .AsNoTrackingWithIdentityResolution()
                                .Where(x => x.UserId == userId)
                                .FirstOrDefaultAsync(x => x.Id == id);

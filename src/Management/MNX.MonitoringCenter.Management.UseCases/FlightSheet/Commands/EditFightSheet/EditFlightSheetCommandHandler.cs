@@ -37,7 +37,7 @@ public class EditFlightSheetCommandHandler : IRequestHandler<EditFlightSheetComm
         newFlightSheet.Targets.ForEach(x => x.FlightSheetId = newFlightSheet.Id);
 
         if (flightSheet.Name != newFlightSheet.Name &&
-            await _flightSheetRepository.Exists(newFlightSheet.Name, request.UserId, cancellationToken))
+            await _flightSheetRepository.ExistsAvailable(newFlightSheet.Name, request.UserId, cancellationToken))
         {
             return Result<Unit>.Invalid($"Flight sheet with name {newFlightSheet.Name} already exist!");
         }
