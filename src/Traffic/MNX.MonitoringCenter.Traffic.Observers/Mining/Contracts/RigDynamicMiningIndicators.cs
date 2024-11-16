@@ -68,14 +68,14 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     /// <summary>
     /// Получить обобщённую статистику по монетам.
     /// </summary>
-    private List<CoinStatistics>? _totalCoinsStatistics;
-    public List<CoinStatistics> TotalCoinStatistics
+    private List<RigCoinStatistics>? _totalCoinsStatistics;
+    public List<RigCoinStatistics> TotalCoinStatistics
     {
         get
         {
             if (_totalCoinsStatistics is null)
             {
-                var coinsStatistics = new Dictionary<Guid, CoinStatistics>(); // ключ - идентификатор монеты
+                var coinsStatistics = new Dictionary<Guid, RigCoinStatistics>(); // ключ - идентификатор монеты
 
                 foreach (var device in Devices)
                 {
@@ -86,20 +86,22 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
 
                     foreach (var coin in device.FlightSheet.Coins)
                     {
-                        var newCoinStatistics = new CoinStatistics()
-                        {
-                            CoinId = coin.CoinId,
-                            HashRate = coin.HashRate,
-                            Shares = coin.Shares
-                        };
-
-                        if (coinsStatistics.TryGetValue(coin.CoinId, out CoinStatistics? statistics))
+                        if (coinsStatistics.TryGetValue(coin.CoinId, out RigCoinStatistics? statistics))
                         {
                             statistics.HashRate += coin.HashRate;
                             statistics.Shares += coin.Shares;
                         }
                         else
                         {
+                            var newCoinStatistics = new RigCoinStatistics()
+                            {
+                                CoinId = coin.CoinId,
+                                MinerId = device.FlightSheet.MinerId,
+                                FlightSheetId = device.FlightSheet.Id,
+                                HashRate = coin.HashRate,
+                                Shares = coin.Shares
+                            };
+
                             coinsStatistics.Add(coin.CoinId, newCoinStatistics);
                         }
                     }
