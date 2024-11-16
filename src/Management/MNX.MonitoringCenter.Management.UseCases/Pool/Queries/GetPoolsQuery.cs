@@ -44,7 +44,9 @@ public class GetPoolsQueryHandler : IStreamRequestHandler<GetPoolsQuery, PoolMod
     public async IAsyncEnumerable<PoolModel> Handle(GetPoolsQuery request,
                                                    [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var pool in _repository.GetAllAvailable(request.Specification).WithCancellation(cancellationToken))
+        var pools = _repository.GetAllAvailable(request.Specification);
+
+        await foreach (var pool in pools.WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<PoolModel>(pool);
         }

@@ -58,35 +58,35 @@ public class FlightSheetRepository : IFlightSheetRepository
     }
 
     /// <inheritdoc/>
-    public async Task Add(FlightSheet flightSheet, CancellationToken cancellationToken)
+    public async Task Add(FlightSheet flightSheet)
     {
         var dto = _mapper.Map<FlightSheetDto>(flightSheet);
-        await _context.FlightSheets.AddAsync(dto, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.FlightSheets.AddAsync(dto);
+        await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public async Task Edit(FlightSheet flightSheet, CancellationToken cancellationToken)
+    public async Task Edit(FlightSheet flightSheet)
     {
         var dto = _mapper.Map<FlightSheetDto>(flightSheet);
 
         var oldFlightSheet = await _context.FlightSheets
                                         .Where(x => x.UserId == dto.UserId)
                                         .Include(x => x.Targets)
-                                        .FirstAsync(x => x.Id == dto.Id, cancellationToken);
+                                        .FirstAsync(x => x.Id == dto.Id);
 
         _context.FlightSheetTargets.RemoveRange(oldFlightSheet.Targets);
         oldFlightSheet.Name = dto.Name;
-        await _context.FlightSheetTargets.AddRangeAsync(dto.Targets, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.FlightSheetTargets.AddRangeAsync(dto.Targets);
+        await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public Task Remove(Guid id, Guid userId, CancellationToken cancellationToken)
+    public Task Remove(Guid id, Guid userId)
     {
         return _context.FlightSheets
             .Where(x => x.Id == id && x.UserId == userId)
-            .ExecuteDeleteAsync(cancellationToken);
+            .ExecuteDeleteAsync();
     }
 
     /// <summary>

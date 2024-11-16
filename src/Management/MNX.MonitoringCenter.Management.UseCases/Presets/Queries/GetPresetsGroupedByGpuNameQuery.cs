@@ -45,7 +45,7 @@ public class GetPresetsGroupedByGpuNameQueryHandler
     public async Task<Result<List<PresetGroup>>> Handle(GetPresetsGroupedByGpuNameQuery request,
                                                         CancellationToken cancellationToken)
     {
-        var groups = await _presetRepository.GetGroupedList(x => x.GpuName, request.Specification);
+        var groups = await _presetRepository.GetGroupedList(x => x.GpuName, request.Specification, cancellationToken);
 
         return Result<List<PresetGroup>>.Success(groups.Select(x => new PresetGroup
         {

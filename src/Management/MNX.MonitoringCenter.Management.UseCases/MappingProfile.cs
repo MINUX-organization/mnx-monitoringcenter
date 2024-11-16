@@ -2,10 +2,12 @@
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
+using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.Core.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.Miner.Configs;
+using MNX.MonitoringCenter.Management.Core.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
@@ -64,6 +66,19 @@ public class MappingProfile : Profile
         CreateMap<GpuMiningConfig, GpuMiningConfigModel>();
 
         CreateMap<MiningCoinConfig, MiningCoinConfigModel>();
+
+        // mining devices
+
+        CreateMap<MiningDeviceInfo, MiningDeviceModel>().ConstructUsing(info => new MiningDeviceModel()
+        {
+            Id = info.Id,
+            RigId = info.RigId,
+            Type = info.Type.ToString(),
+            FlightSheetName = info.FlightSheet != null ? info.FlightSheet.Name : null,
+            MinerName = info.FlightSheet != null
+                            ? info.FlightSheet.Targets.First(x => x.DeviceType == info.Type).Miner!.Name
+                            : null
+        });
 
         // pools
 

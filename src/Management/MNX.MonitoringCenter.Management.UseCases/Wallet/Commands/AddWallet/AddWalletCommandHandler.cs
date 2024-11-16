@@ -30,18 +30,18 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
 
     public async Task<Result<WalletModel>> Handle(AddWalletCommand request, CancellationToken cancellationToken)
     {
-        if (await _walletRepository.ExistsWithName(request.UserId, request.Model.Name))
+        if (await _walletRepository.ExistsWithName(request.UserId, request.Model.Name, cancellationToken))
         {
             return Result<WalletModel>.Conflict($"Wallet with name is equaled {request.Model.Name} already exists");
         }
 
-        if (await _walletRepository.ExistsWithAddress(request.UserId, request.Model.Address))
+        if (await _walletRepository.ExistsWithAddress(request.UserId, request.Model.Address, cancellationToken))
         {
             return Result<WalletModel>.Conflict($"Wallet with address is equaled {request.Model.Address} already exists");
         }
 
         var cryptocurrency = await _cryptocurrencyRepository
-            .GetAvailableById(request.Model.CryptocurrencyId, request.UserId);
+            .GetAvailableById(request.Model.CryptocurrencyId, request.UserId, cancellationToken);
 
         if (cryptocurrency is null)
         {

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
-using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 using System.Runtime.CompilerServices;
 
@@ -59,8 +58,8 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
                 Information = inventoryGpu.Information,
                 RigName = inventoryGpu.RigName,
                 DriverVersion = inventoryGpu.DriverVersion,
-                FlightSheetName = gpu.FlightSheet?.Name,
-                MinerName = gpu.FlightSheet?.Targets.First(x => x.DeviceType == MiningDeviceType.GPU).Miner?.Name
+                FlightSheetName = gpu.FlightSheetName,
+                MinerName = gpu.MinerName
             };
         }
     }

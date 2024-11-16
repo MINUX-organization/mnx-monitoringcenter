@@ -27,7 +27,7 @@ public class SetFlightSheetCommandHandler : IRequestHandler<SetFlightSheetComman
 
     public async Task<Result<Unit>> Handle(SetFlightSheetCommand request, CancellationToken cancellationToken)
     {
-        await _miningDeviceRepository.SetFlightSheet(request.MiningDevices, request.FightSheetId, cancellationToken);
+        await _miningDeviceRepository.SetFlightSheet(request.MiningDevices, request.FightSheetId);
         return Result<Unit>.Empty();
     }
 }

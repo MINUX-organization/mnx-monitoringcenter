@@ -1,12 +1,14 @@
-﻿using MediatR;
-using MNX.MonitoringCenter.Management.Core.MiningDevice;
+﻿using AutoMapper;
+using MediatR;
+using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 
 /// <summary>
 /// Запрос на получение майнинг устройств.
 /// </summary>
-public sealed class GetAvailableMiningDevicesQuery : IStreamRequest<MiningDeviceInfo>
+public sealed class GetAvailableMiningDevicesQuery : IStreamRequest<MiningDeviceModel>
 {
     /// <summary>
     /// Спецификация.
@@ -31,19 +33,29 @@ public sealed class GetAvailableMiningDevicesQuery : IStreamRequest<MiningDevice
 /// Обработчик <see cref="GetAvailableMiningDevicesQuery"/>.
 /// </summary>
 public class GetAvailableMiningDevicesQueryHandler
-    : IStreamRequestHandler<GetAvailableMiningDevicesQuery, MiningDeviceInfo>
+    : IStreamRequestHandler<GetAvailableMiningDevicesQuery, MiningDeviceModel>
 {
+    private readonly IMapper _mapper;
+
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    public GetAvailableMiningDevicesQueryHandler(IMiningDeviceRepository miningDeviceRepository)
+    public GetAvailableMiningDevicesQueryHandler(IMapper mapper,
+                                                 IMiningDeviceRepository miningDeviceRepository)
     {
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+
         _miningDeviceRepository = miningDeviceRepository
             ?? throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
-    public IAsyncEnumerable<MiningDeviceInfo> Handle(GetAvailableMiningDevicesQuery request,
-                                                     CancellationToken cancellationToken)
+    public async IAsyncEnumerable<MiningDeviceModel> Handle(GetAvailableMiningDevicesQuery request,
+                                                            [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        return _miningDeviceRepository.GetAvailable(request.Specification);
+        var devices = _miningDeviceRepository.GetAvailable(request.Specification);
+
+        await foreach (var device in devices.WithCancellation(cancellationToken))
+        {
+            yield return _mapper.Map<MiningDeviceModel>(device);
+        }
     }
 }

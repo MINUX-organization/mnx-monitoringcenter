@@ -35,7 +35,7 @@ public class CreateFlightSheetCommandHandler :
                 .Invalid($"Flight sheet with name {flightSheet.Name} already exist!");
         }
 
-        await _flightSheetRepository.Add(flightSheet, cancellationToken);
+        await _flightSheetRepository.Add(flightSheet);
 
         return Result<Guid>.SuccessfullyCreated(flightSheet.Id);
     }

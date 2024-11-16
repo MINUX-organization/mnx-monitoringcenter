@@ -42,7 +42,7 @@ public class EditFlightSheetCommandHandler : IRequestHandler<EditFlightSheetComm
             return Result<Unit>.Invalid($"Flight sheet with name {newFlightSheet.Name} already exist!");
         }
 
-        await _flightSheetRepository.Edit(newFlightSheet, cancellationToken);
+        await _flightSheetRepository.Edit(newFlightSheet);
 
         return Result<Unit>.Empty();
     }

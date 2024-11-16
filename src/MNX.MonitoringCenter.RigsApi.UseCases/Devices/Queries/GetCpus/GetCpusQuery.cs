@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
-using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 using System.Runtime.CompilerServices;
 
@@ -57,8 +56,8 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
                 Pci = inventoryCpu.Pci,
                 Information = inventoryCpu.Information,
                 RigName = inventoryCpu.RigName,
-                FlightSheetName = cpu.FlightSheet?.Name,
-                MinerName = cpu.FlightSheet?.Targets.First(x => x.DeviceType == MiningDeviceType.CPU).Miner?.Name
+                FlightSheetName = cpu.FlightSheetName,
+                MinerName = cpu.MinerName
             };
         }
     }

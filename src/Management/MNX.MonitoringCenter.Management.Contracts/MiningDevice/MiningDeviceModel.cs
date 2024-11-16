@@ -18,7 +18,7 @@ public class MiningDeviceModel
     /// <summary>
     /// Тип майнинг устройства.
     /// </summary>
-    //public MiningDeviceType Type { get; init; }
+    public required string Type { get; init; }
 
     /// <summary>
     /// Название полётного листа.

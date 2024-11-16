@@ -47,8 +47,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public async Task SetCurrentRigsDevices(List<MiningDevice> devices,
-                                            CancellationToken cancellationToken)
+    public async Task SetCurrentRigsDevices(List<MiningDevice> devices)
     {
         using var transaction = _context.Database.BeginTransaction(IsolationLevel.ReadCommitted);
 
@@ -61,7 +60,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
             var dbDevices = await _context.MiningDevices
                 .IgnoreQueryFilters()
                 .Where(device => groupedDevices.Keys.Contains(device.RigId))
-                .ToListAsync(cancellationToken);
+                .ToListAsync();
 
             // берём ту часть устройств из БД, которая не пересекается со входящим набором устройств
             // ( те устройства, которые убрали с рига )
@@ -87,44 +86,42 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                                     })
                                     .ToList();
 
-            await AddOrUpdateDevices(newDevices, cancellationToken);
+            await AddOrUpdateDevices(newDevices);
 
-            await _context.SaveChangesAsync(cancellationToken);
-            await transaction.CommitAsync(cancellationToken);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
         }
         catch (Exception)
         {
-            await transaction.RollbackAsync(cancellationToken);
+            await transaction.RollbackAsync();
             throw;
         }
     }
 
     /// <inheritdoc/>
-    public Task DeactivateDevicesByRigId(Guid rigId, CancellationToken cancellationToken)
+    public Task DeactivateDevicesByRigId(Guid rigId)
     {
         return _context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
-            x.SetProperty(device => device.IsActive, d => false), cancellationToken);
+            x.SetProperty(device => device.IsActive, d => false));
     }
 
     /// <inheritdoc/>
-    public Task SetFlightSheet(Guid[] devicesIds, Guid flightSheetId, CancellationToken cancellationToken)
+    public Task SetFlightSheet(Guid[] devicesIds, Guid flightSheetId)
     {
         return _context.MiningDevices.Where(device => devicesIds.Contains(device.Id)).ExecuteUpdateAsync(x =>
-            x.SetProperty(device => device.FlightSheetId, d => flightSheetId), cancellationToken);
+            x.SetProperty(device => device.FlightSheetId, d => flightSheetId));
     }
 
     /// <summary>
     /// Добавить или обновить устройства.
     /// </summary>
     /// <param name="devices"> Устройства. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    private async Task AddOrUpdateDevices(List<MiningDeviceInfo> devices,
-                                          CancellationToken cancellationToken)
+    private async Task AddOrUpdateDevices(List<MiningDeviceInfo> devices)
     {
         var dbDevices = (await _context.MiningDevices
                                        .IgnoreQueryFilters()
                                        .Where(device => devices.Select(x => x.Id).Contains(device.Id))
-                                       .ToListAsync(cancellationToken))
+                                       .ToListAsync())
                                        .ToHashSet();
 
         foreach (var device in devices)
@@ -137,7 +134,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
             }
             else
             {
-                await _context.MiningDevices.AddAsync(device, cancellationToken);
+                await _context.MiningDevices.AddAsync(device);
             }
         }
     }

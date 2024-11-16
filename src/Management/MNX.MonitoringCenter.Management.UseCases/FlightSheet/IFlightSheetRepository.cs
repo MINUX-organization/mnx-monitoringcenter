@@ -48,21 +48,18 @@ public interface IFlightSheetRepository
     /// Добавить полётный лист.
     /// </summary>
     /// <param name="flightSheet"> Полётный лист. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Add(FlightSheet flightSheet, CancellationToken cancellationToken);
+    Task Add(FlightSheet flightSheet);
 
     /// <summary>
     /// Редактировать полётный лист.
     /// </summary>
     /// <param name="flightSheet"> Новый полётный лист. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Edit(FlightSheet flightSheet, CancellationToken cancellationToken);
+    Task Edit(FlightSheet flightSheet);
 
     /// <summary>
     /// Удалить полётный лист.
     /// </summary>
     /// <param name="id"> Идентификатор полетного листа. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Remove(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task Remove(Guid id, Guid userId);
 }

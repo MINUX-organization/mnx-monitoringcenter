@@ -24,7 +24,7 @@ public class EditPresetCommandHandler : IRequestHandler<EditPresetCommand, Resul
 
     public async Task<Result<PresetModel>> Handle(EditPresetCommand request, CancellationToken cancellationToken)
     {
-        var preset = await _repository.GetAvailableById(request.Id, request.UserId);
+        var preset = await _repository.GetAvailableById(request.Id, request.UserId, cancellationToken);
 
         if (preset is null)
         {
@@ -44,7 +44,7 @@ public class EditPresetCommandHandler : IRequestHandler<EditPresetCommand, Resul
         }
 
         if (preset.Name != newPreset.Name &&
-            await _repository.Exists(request.UserId, request.Model.Name))
+            await _repository.Exists(request.UserId, request.Model.Name, cancellationToken))
         {
             return Result<PresetModel>.Conflict($"Preset with name equaled {request.Model.Name} already exists");
         }

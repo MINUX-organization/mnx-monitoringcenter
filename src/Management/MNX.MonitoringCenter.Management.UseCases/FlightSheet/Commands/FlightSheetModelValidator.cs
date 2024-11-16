@@ -80,7 +80,7 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
                                              FlightSheetTargetInputModel value,
                                              CancellationToken cancellation)
         {
-            var miner = await _minerRepository.GetMinerById(value.MinerId);
+            var miner = await _minerRepository.GetMinerById(value.MinerId, default);
 
             if (miner == null)
             {
@@ -138,14 +138,14 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
         {
             var isValid = true;
 
-            var wallet = await _walletRepository.GetAvailableById(config.WalletId, _userId);
+            var wallet = await _walletRepository.GetAvailableById(config.WalletId, _userId, default);
             if (wallet == null)
             {
                 context.AddFailure($"Wallet with id equaled {config.WalletId} was not found!");
                 isValid = false;
             }
 
-            var pool = await _poolRepository.GetAvailableById(config.PoolId, _userId);
+            var pool = await _poolRepository.GetAvailableById(config.PoolId, _userId, default);
             if (pool == null)
             {
                 context.AddFailure($"Pool with id equaled {config.PoolId} was not found!");
