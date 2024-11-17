@@ -33,15 +33,15 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public Task<Dictionary<string, List<Preset>>> GetGroupedList(
-            Expression<Func<Preset, string>> expression, Specification specification, CancellationToken cancellationToken)
+    public IAsyncEnumerable<IGrouping<string, Preset>> GetGroupedList(
+            Expression<Func<Preset, string>> expression, Specification specification)
     {
         return _context.Presets.AsNoTrackingWithIdentityResolution()
                                .Where(x => x.UserId == specification.UserId)
                                .Filter(specification)
                                .Include(x => x.Overclocking)
                                .GroupBy(expression)
-                               .ToDictionaryAsync(g => g.Key, g => g.ToList(), cancellationToken);
+                               .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
