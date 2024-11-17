@@ -41,18 +41,21 @@ public class GetFlightSheetSupportedDevicesQueryHandler
     }
 
     public async IAsyncEnumerable<MiningDeviceModel> Handle(GetFlightSheetSupportedDevicesQuery request,
-                                                            [EnumeratorCancellation] CancellationToken cancellationToken)
+                                                           [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var flightSheet = await _flightSheetRepository
             .GetAvailableById(request.FlightSheetId, request.UserId, cancellationToken);
 
         if (flightSheet is not null)
         {
-            var devices = _miningDeviceRepository.GetFlightSheetSupportedDevices(flightSheet);
+            var devices = _miningDeviceRepository.GetAvailable(new Specification(request.UserId));
 
             await foreach (var device in devices.WithCancellation(cancellationToken))
             {
-                yield return _mapper.Map<MiningDeviceModel>(device);
+                if (flightSheet.IsDeviceSupport(device))
+                {
+                    yield return _mapper.Map<MiningDeviceModel>(device);
+                }
             }
         }
     }

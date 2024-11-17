@@ -37,17 +37,16 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
     public async IAsyncEnumerable<GetGpusQueryResponse> Handle(
         GetGpusQuery request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var inventoryGpus = _mediator.CreateStream(new GetGpusDetailsQuery(request.UserId), cancellationToken)
-                                     .ToBlockingEnumerable(cancellationToken)
-                                     .ToList();
+        var inventoryGpus = await GetInventoryGpus(request, cancellationToken);
 
         var filterString = string.Join(" or ", inventoryGpus.Select((gpu, index) => $"Id == @{index}"));
         var filterParameters = inventoryGpus.Select(x => (object)x.Id).ToArray();
+
         var miningDevices = _mediator.CreateStream(
             new GetAvailableMiningDevicesQuery(request.UserId, filterString, filterParameters),
             cancellationToken);
 
-        await foreach (var gpu in miningDevices)
+        await foreach (var gpu in miningDevices.WithCancellation(cancellationToken))
         {
             var inventoryGpu = inventoryGpus.First(x => x.Id == gpu.Id);
 
@@ -62,5 +61,19 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
                 MinerName = gpu.MinerName
             };
         }
+    }
+
+    private async Task<List<GpuDetails>> GetInventoryGpus(GetGpusQuery request, CancellationToken cancellationToken)
+    {
+        var inventoryGpus = new List<GpuDetails>();
+
+        var stream = _mediator.CreateStream(new GetGpusDetailsQuery(request.UserId), cancellationToken);
+
+        await foreach (var cpu in stream)
+        {
+            inventoryGpus.Add(cpu);
+        }
+
+        return inventoryGpus;
     }
 }

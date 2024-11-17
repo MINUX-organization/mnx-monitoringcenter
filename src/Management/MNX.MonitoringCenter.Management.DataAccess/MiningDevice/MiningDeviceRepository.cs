@@ -6,9 +6,9 @@ using System.Data;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
-using MiningDeviceInfo = Core.MiningDevice.MiningDeviceInfo;
-using MiningDevice = Core.MiningDevice.MiningDevice;
 using FlightSheet = Core.FlightSheet.FlightSheet;
+using MiningDevice = Core.MiningDevice.MiningDevice;
+using MiningDeviceInfo = Core.MiningDevice.MiningDeviceInfo;
 
 /// <summary>
 /// Реализация <see cref="IMiningDeviceRepository"/>.
@@ -36,14 +36,6 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     {
         return _context.MiningDevices.AsNoTracking()
                                      .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
-    }
-
-    /// <inheritdoc/>
-    public IAsyncEnumerable<MiningDeviceInfo> GetFlightSheetSupportedDevices(FlightSheet flightSheet)
-    {
-        return GetDevicesQuery(new Specification(flightSheet.UserId))
-                .Where(device => flightSheet.IsDeviceSupport(device))
-                .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>

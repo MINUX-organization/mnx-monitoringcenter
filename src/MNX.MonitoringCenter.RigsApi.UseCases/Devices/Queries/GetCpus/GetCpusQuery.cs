@@ -36,17 +36,16 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
     public async IAsyncEnumerable<GetCpusQueryResponse> Handle(
         GetCpusQuery request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var inventoryCpus = _mediator.CreateStream(new GetCpusDetailsQuery(request.UserId), cancellationToken)
-                                     .ToBlockingEnumerable(cancellationToken)
-                                     .ToList();
+        var inventoryCpus = await GetInventoryCpus(request, cancellationToken);
 
         var filterString = string.Join(" or ", inventoryCpus.Select((cpu, index) => $"Id == @{index}"));
         var filterParameters = inventoryCpus.Select(x => (object)x.Id).ToArray();
+
         var miningDevices = _mediator.CreateStream(
             new GetAvailableMiningDevicesQuery(request.UserId, filterString, filterParameters),
             cancellationToken);
 
-        await foreach (var cpu in miningDevices)
+        await foreach (var cpu in miningDevices.WithCancellation(cancellationToken))
         {
             var inventoryCpu = inventoryCpus.First(x => x.Id == cpu.Id);
 
@@ -60,5 +59,19 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
                 MinerName = cpu.MinerName
             };
         }
+    }
+
+    private async Task<List<CpuDetails>> GetInventoryCpus(GetCpusQuery request, CancellationToken cancellationToken)
+    {
+        var inventoryCpus = new List<CpuDetails>();
+
+        var stream = _mediator.CreateStream(new GetCpusDetailsQuery(request.UserId), cancellationToken);
+
+        await foreach (var cpu in stream)
+        {
+            inventoryCpus.Add(cpu);
+        }
+
+        return inventoryCpus;
     }
 }
