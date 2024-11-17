@@ -34,30 +34,30 @@ public class PresetRepository : IPresetRepository
 
     /// <inheritdoc/>
     public Task<Dictionary<string, List<Preset>>> GetGroupedList(
-            Expression<Func<Preset, string>> expression, Specification specification)
+            Expression<Func<Preset, string>> expression, Specification specification, CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTrackingWithIdentityResolution()
                                .Where(x => x.UserId == specification.UserId)
                                .Filter(specification)
                                .Include(x => x.Overclocking)
                                .GroupBy(expression)
-                               .ToDictionaryAsync(g => g.Key, g => g.ToList());
+                               .ToDictionaryAsync(g => g.Key, g => g.ToList(), cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<Preset?> GetAvailableById(Guid id, Guid userId)
+    public Task<Preset?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
                                .Where(x => x.UserId == userId)
-                               .FirstOrDefaultAsync(x => x.Id == id);
+                               .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(Guid userId, string name)
+    public Task<bool> Exists(Guid userId, string name, CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
                                .Where(x => x.UserId == userId)
-                               .AnyAsync(x => x.Name.Equals(name));
+                               .AnyAsync(x => x.Name.Equals(name), cancellationToken);
     }
 
     /// <inheritdoc/>

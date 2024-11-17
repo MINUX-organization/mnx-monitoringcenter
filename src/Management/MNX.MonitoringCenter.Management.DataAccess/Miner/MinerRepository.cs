@@ -28,15 +28,15 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
-    public Task<Miner?> GetMinerById(Guid id)
+    public Task<Miner?> GetMinerById(Guid id, CancellationToken cancellationToken)
     {
         return _context.Miners
                        .AsNoTracking()
-                       .FirstOrDefaultAsync(x => x.Id == id);
+                       .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(Guid id, CancellationToken cancellationToken = default)
+    public Task<bool> Exists(Guid id, CancellationToken cancellationToken)
     {
         return _context.Miners
                        .AsNoTracking()

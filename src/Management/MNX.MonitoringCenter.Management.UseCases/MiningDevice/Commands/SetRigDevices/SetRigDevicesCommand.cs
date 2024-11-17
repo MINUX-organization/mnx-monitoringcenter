@@ -48,7 +48,7 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
             Type = MiningDeviceType.CPU
         }));
 
-        await _repository.SetCurrentRigsDevices(miningDevices, cancellationToken);
+        await _repository.SetCurrentRigsDevices(miningDevices);
 
         return Result<Unit>.Empty();
     }

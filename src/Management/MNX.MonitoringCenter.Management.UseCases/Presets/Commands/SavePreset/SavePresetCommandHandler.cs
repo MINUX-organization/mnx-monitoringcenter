@@ -25,7 +25,7 @@ public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Resul
 
     public async Task<Result<PresetModel>> Handle(SavePresetCommand request, CancellationToken cancellationToken)
     {
-        if (await _presetRepository.Exists(request.UserId, request.Model.Name))
+        if (await _presetRepository.Exists(request.UserId, request.Model.Name, cancellationToken))
         {
             return Result<PresetModel>.Conflict("Preset already exists");
         }
