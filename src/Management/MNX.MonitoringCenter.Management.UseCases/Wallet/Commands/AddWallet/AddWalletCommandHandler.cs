@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
 

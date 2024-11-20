@@ -1,5 +1,6 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.CommandValidation;
+using MNX.Application.UseCases.Results;
 
 namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetFlightSheet;
 
@@ -9,7 +10,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetFlig
 /// <param name="FightSheetId"> Идентификатор полётного листа. </param>
 /// <param name="MiningDevices"> Майнинг устройства. </param>
 public sealed record SetFlightSheetCommand(Guid FightSheetId, Guid[] MiningDevices)
-    : IRequest<Result<Unit>>;
+    : IValidatableCommand<Unit>;
 
 
 /// <summary>

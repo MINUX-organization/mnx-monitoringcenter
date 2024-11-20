@@ -1,7 +1,9 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.CommandValidation;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Core.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice;
+using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetFlightSheet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.ApplyFlightSheet;
 
@@ -12,7 +14,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.ApplyFli
 /// <param name="FightSheetId"> Идентификатор полётного листа. </param>
 /// <param name="MiningDevices"> Идентификаторы майнинг устройств. </param>
 public sealed record ApplyFlightSheetCommand(Guid UserId, Guid FightSheetId, Guid[] MiningDevices)
-    : IRequest<Result<Guid[]>>;
+    : IValidatableCommand<Guid[]>;
 
 
 /// <summary>  
@@ -20,13 +22,18 @@ public sealed record ApplyFlightSheetCommand(Guid UserId, Guid FightSheetId, Gui
 /// </summary>
 public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCommand, Result<Guid[]>>
 {
+    private readonly IMediator _mediator;
+
     private readonly IFlightSheetRepository _flightSheetRepository;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    public ApplyFlightSheetCommandHandler(IFlightSheetRepository flightSheetRepository,
+    public ApplyFlightSheetCommandHandler(IMediator mediator,
+                                          IFlightSheetRepository flightSheetRepository,
                                           IMiningDeviceRepository miningDeviceRepository)
     {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+
         _flightSheetRepository = flightSheetRepository
             ?? throw new ArgumentNullException(nameof(flightSheetRepository));
 
@@ -60,11 +67,14 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
             }
         }
 
-        var groupedDevices = processedDevices.GroupBy(device => device.RigId);
+        var groupedDevices = processedDevices.Where(device => device.FlightSheetId != request.FightSheetId)
+                                             .GroupBy(device => device.RigId);
 
         foreach (var rigDevices in groupedDevices)
         {
             // todo: отправка сообщения ригу
+            await _mediator.Send(new SetFlightSheetCommand(request.FightSheetId, processedDevices.Select(device => device.Id).ToArray()),
+                                 cancellationToken);
         }
 
         return Result<Guid[]>.Success(processedDevices.Select(device => device.Id).ToArray());

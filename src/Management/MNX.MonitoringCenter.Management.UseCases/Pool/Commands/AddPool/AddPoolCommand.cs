@@ -1,4 +1,4 @@
-﻿using MNX.Application.UseCases;
+﻿using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
 /// <summary>
 /// Команда добавления пула
 /// </summary>
-public class AddPoolCommand : IValidatableCommand<PoolModel>
+public class AddPoolCommand : IUserableValidatableCommand<PoolModel>
 {
     /// <summary>
     /// Модель пула

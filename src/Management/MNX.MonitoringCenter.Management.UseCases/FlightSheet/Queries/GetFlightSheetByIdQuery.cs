@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;

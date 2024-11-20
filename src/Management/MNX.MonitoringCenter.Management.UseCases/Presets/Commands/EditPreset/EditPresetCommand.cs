@@ -1,4 +1,4 @@
-﻿using MNX.Application.UseCases;
+﻿using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
 
@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 /// <summary>
 /// Команда редактирования пресета
 /// </summary>
-public class EditPresetCommand : IValidatableCommand<PresetModel>
+public class EditPresetCommand : IUserableValidatableCommand<PresetModel>
 {
     /// <summary>
     /// Уникальный идентификатор

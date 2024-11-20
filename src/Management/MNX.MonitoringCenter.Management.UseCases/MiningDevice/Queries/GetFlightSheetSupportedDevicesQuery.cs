@@ -3,16 +3,44 @@ using MediatR;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
 using System.Runtime.CompilerServices;
+using MNX.Application.UseCases.Requests;
 
 namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 
 /// <summary>
 /// Получить поддерживаемые полётным листом майнинг устройства.
 /// </summary>
-/// <param name="UserId"></param>
-/// <param name="FlightSheetId"></param>
-public record GetFlightSheetSupportedDevicesQuery(Guid UserId, Guid FlightSheetId)
-    : IStreamRequest<MiningDeviceModel>;
+public record GetFlightSheetSupportedDevicesQuery
+    : IUserableStreamRequest<MiningDeviceModel>
+{
+    /// <inheritdoc/>
+    public Guid UserId { get => Specification.UserId; }
+
+    /// <summary>
+    /// Идентификатор полётного листа.
+    /// </summary>
+    public Guid FlightSheetId { get; init; }
+
+    /// <summary>
+    /// Спецификация.
+    /// </summary>
+    public Specification Specification { get; init; }
+
+    public GetFlightSheetSupportedDevicesQuery(Guid userId, Guid flightSheetId)
+    {
+        FlightSheetId = flightSheetId;
+        Specification = new Specification(userId);
+    }
+
+    public GetFlightSheetSupportedDevicesQuery(Guid userId,
+                                               Guid flightSheetId,
+                                               string filterString,
+                                               object[] filterParameters)
+    {
+        FlightSheetId = flightSheetId;
+        Specification = new Specification(userId, filterString, filterParameters);
+    }
+}
 
 
 /// <summary>
@@ -44,11 +72,11 @@ public class GetFlightSheetSupportedDevicesQueryHandler
                                                            [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var flightSheet = await _flightSheetRepository
-            .GetAvailableById(request.FlightSheetId, request.UserId, cancellationToken);
+            .GetAvailableById(request.FlightSheetId, request.Specification.UserId, cancellationToken);
 
         if (flightSheet is not null)
         {
-            var devices = _miningDeviceRepository.GetAvailable(new Specification(request.UserId));
+            var devices = _miningDeviceRepository.GetAvailable(request.Specification);
 
             await foreach (var device in devices.WithCancellation(cancellationToken))
             {

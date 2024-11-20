@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.UseCases.Presets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;

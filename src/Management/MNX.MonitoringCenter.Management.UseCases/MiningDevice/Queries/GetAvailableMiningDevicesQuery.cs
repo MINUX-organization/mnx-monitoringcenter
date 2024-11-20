@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
+using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 using System.Runtime.CompilerServices;
 
@@ -8,8 +9,11 @@ namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 /// <summary>
 /// Запрос на получение майнинг устройств.
 /// </summary>
-public sealed class GetAvailableMiningDevicesQuery : IStreamRequest<MiningDeviceModel>
+public sealed class GetAvailableMiningDevicesQuery : IUserableStreamRequest<MiningDeviceModel>
 {
+    /// <inheritdoc/>
+    public Guid UserId { get => Specification.UserId; }
+
     /// <summary>
     /// Спецификация.
     /// </summary>

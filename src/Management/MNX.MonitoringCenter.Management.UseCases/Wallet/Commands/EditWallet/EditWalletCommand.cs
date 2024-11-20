@@ -1,4 +1,4 @@
-﻿using MNX.Application.UseCases;
+﻿using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.EditWallet;
@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.EditWallet;
 /// <summary>
 /// Команда редактирования данных кошелька
 /// </summary>
-public class EditWalletCommand : IValidatableCommand<WalletModel>
+public class EditWalletCommand : IUserableValidatableCommand<WalletModel>
 {
     /// <summary>
     /// Уникальный идентификатор

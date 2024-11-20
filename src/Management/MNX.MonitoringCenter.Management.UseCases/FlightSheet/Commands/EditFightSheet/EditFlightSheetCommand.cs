@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.EditFightSheet;
@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.EditFigh
 /// <summary>
 /// Команды обновления полётного листа.
 /// </summary>
-public sealed class EditFlightSheetCommand : IValidatableCommand<Unit>
+public sealed class EditFlightSheetCommand : IUserableValidatableCommand<Unit>
 {
     /// <summary>
     /// Идентификатор.

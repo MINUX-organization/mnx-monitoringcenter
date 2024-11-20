@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
+using MNX.Application.UseCases.Mediator;
 using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
@@ -36,7 +37,8 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
     public async IAsyncEnumerable<GetCpusQueryResponse> Handle(
         GetCpusQuery request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var inventoryCpus = await GetInventoryCpus(request, cancellationToken);
+        var inventoryCpus =
+            await _mediator.GetHashSetAsync(new GetCpusDetailsQuery(request.UserId), cancellationToken);
 
         var filterString = string.Join(" or ", inventoryCpus.Select((cpu, index) => $"Id == @{index}"));
         var filterParameters = inventoryCpus.Select(x => (object)x.Id).ToArray();
@@ -59,19 +61,5 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
                 MinerName = cpu.MinerName
             };
         }
-    }
-
-    private async Task<List<CpuDetails>> GetInventoryCpus(GetCpusQuery request, CancellationToken cancellationToken)
-    {
-        var inventoryCpus = new List<CpuDetails>();
-
-        var stream = _mediator.CreateStream(new GetCpusDetailsQuery(request.UserId), cancellationToken);
-
-        await foreach (var cpu in stream)
-        {
-            inventoryCpus.Add(cpu);
-        }
-
-        return inventoryCpus;
     }
 }

@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
     <PackageReference Include="MNX.Application.Data.DI" Version="1.0.0" />
-    <PackageReference Include="MNX.Application.UseCases.DI" Version="1.0.0" />
+    <PackageReference Include="MNX.Application.UseCases.DI" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
