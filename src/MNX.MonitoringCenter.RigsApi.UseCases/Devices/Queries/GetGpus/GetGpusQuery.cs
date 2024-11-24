@@ -41,7 +41,7 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
         var inventoryGpus =
             await _mediator.GetHashSetAsync(new GetGpusDetailsQuery(request.UserId), cancellationToken);
 
-        var filterString = string.Join(" or ", inventoryGpus.Select((gpu, index) => $"Id == @{index}"));
+        var filterString = $"Id in ({string.Join(",", inventoryGpus.Select((cpu, index) => $"@{index}"))})";
         var filterParameters = inventoryGpus.Select(x => (object)x.Id).ToArray();
 
         var miningDevices = _mediator.CreateStream(

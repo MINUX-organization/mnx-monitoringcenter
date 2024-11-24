@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
+﻿using MNX.MonitoringCenter.Inventory.Contracts;
+
+namespace MNX.MonitoringCenter.Common.AgentMessages;
 
 /// <summary>
 /// Сообщение с инвентаризацией рига.

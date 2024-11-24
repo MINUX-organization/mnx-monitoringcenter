@@ -10,6 +10,8 @@ internal class NetworkAdapterCfg : IEntityTypeConfiguration<Contracts.Devices.Ne
 {
     public void Configure(EntityTypeBuilder<Contracts.Devices.NetworkAdapter.NetworkAdapter> builder)
     {
+        builder.HasKey("RigInventoryId", "Id");
+
         builder.ComplexProperty(e => e.Information);
     }
 }

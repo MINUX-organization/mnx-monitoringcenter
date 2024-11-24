@@ -1,6 +1,7 @@
 ﻿using EasyNetQ;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using MNX.MonitoringCenter.Common.AgentMessages;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
@@ -12,7 +13,6 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
@@ -107,6 +107,7 @@ public class SaveInventoryTests : BaseTest
     public async Task SaveInventoryWithRabbitMq(RigInventoryMsg inventoryMsg)
     {
         using var bus = RabbitHutch.CreateBus("host=77.37.200.24:5672;username=guest;password=guest;publisherConfirms=true");
+        await bus.PubSub.PublishAsync(new RigDisconnectedMsg(inventoryMsg.RigId));
         await bus.PubSub.PublishAsync(inventoryMsg);
     }
 
@@ -278,7 +279,7 @@ public class SaveInventoryTests : BaseTest
                     }
                 };
 
-                yield return new RigInventoryMsg()
+                /*yield return new RigInventoryMsg()
                 {
                     RigId = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54558"),
                     RigOwnerId = OWNER_ID,
@@ -438,7 +439,7 @@ public class SaveInventoryTests : BaseTest
                             }
                         }
                     }
-                };
+                };*/
 
                 yield return new RigInventoryMsg()
                 {

@@ -63,7 +63,7 @@ CREATE TABLE monitoring_center.gpu
     restrictions_voltage_memory_offset_maximal integer NOT NULL,
     restrictions_voltage_memory_offset_minimal integer NOT NULL,
 
-    CONSTRAINT pk_gpu PRIMARY KEY (id),
+    CONSTRAINT pk_gpu PRIMARY KEY (rig_inventory_id, id),
 
     CONSTRAINT fk_gpu_rig_inventory_rig_inventory_id FOREIGN KEY (rig_inventory_id)
         REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE

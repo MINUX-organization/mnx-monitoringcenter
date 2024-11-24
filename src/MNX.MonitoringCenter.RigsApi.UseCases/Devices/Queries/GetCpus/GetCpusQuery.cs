@@ -40,7 +40,7 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
         var inventoryCpus =
             await _mediator.GetHashSetAsync(new GetCpusDetailsQuery(request.UserId), cancellationToken);
 
-        var filterString = string.Join(" or ", inventoryCpus.Select((cpu, index) => $"Id == @{index}"));
+        var filterString = $"Id in ({string.Join(",", inventoryCpus.Select((cpu, index) => $"@{index}"))})";
         var filterParameters = inventoryCpus.Select(x => (object)x.Id).ToArray();
 
         var miningDevices = _mediator.CreateStream(

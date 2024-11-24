@@ -1,16 +1,19 @@
 ﻿using EasyNetQ.AutoSubscribe;
 using MediatR;
-using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Common.AgentMessages;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetRigDevices;
+using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Events;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 
 /// <summary>
 /// Потребитель сообщений от ригов.
 /// </summary>
-public class RigConsumer : IConsumeAsync<RigInventoryMsg>, IConsumeAsync<RigRegisteredMsg>
+public class RigConsumer :
+    IConsumeAsync<RigInventoryMsg>,
+    IConsumeAsync<RigRegisteredMsg>,
+    IConsumeAsync<RigDisconnectedMsg>
 {
     private readonly IMediator _mediator;
 
@@ -45,6 +48,16 @@ public class RigConsumer : IConsumeAsync<RigInventoryMsg>, IConsumeAsync<RigRegi
     public Task ConsumeAsync(RigRegisteredMsg message, CancellationToken cancellationToken = default)
     {
         return _mediator.Send(new AddRigCommand(message.RigId, message.OwnerId), cancellationToken);
+    }
+
+    /// <summary>
+    /// Получить сообщение об отключении рига от сервера.
+    /// </summary>
+    /// <param name="message"> Сообщение. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public Task ConsumeAsync(RigDisconnectedMsg message, CancellationToken cancellationToken = default)
+    {
+        return _mediator.Publish(new RigDisconnectedEvent(message.RigId), cancellationToken);
     }
 }
 

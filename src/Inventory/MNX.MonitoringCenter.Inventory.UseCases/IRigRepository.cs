@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases;

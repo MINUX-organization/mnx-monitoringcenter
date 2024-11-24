@@ -53,7 +53,7 @@ public class GetAvailableMiningDevicesQueryHandler
     }
 
     public async IAsyncEnumerable<MiningDeviceModel> Handle(GetAvailableMiningDevicesQuery request,
-                                                            [EnumeratorCancellation] CancellationToken cancellationToken)
+                                                           [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var devices = _miningDeviceRepository.GetAvailable(request.Specification);
 

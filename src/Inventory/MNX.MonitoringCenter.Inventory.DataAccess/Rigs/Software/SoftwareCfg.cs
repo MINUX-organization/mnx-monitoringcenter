@@ -12,6 +12,8 @@ internal class SoftwareCfg : IEntityTypeConfiguration<SoftwareInventoryDto>
 {
     public void Configure(EntityTypeBuilder<SoftwareInventoryDto> builder)
     {
+        builder.HasKey("RigInventoryId", "Id");
+
         builder.Property(x => x.Miners)
                .HasConversion(
                     x => JsonSerializer.Serialize(x, (JsonSerializerOptions)null!),

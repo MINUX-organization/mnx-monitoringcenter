@@ -13,7 +13,7 @@ CREATE TABLE monitoring_center.software_inventory
     miners text NOT NULL,
     rig_inventory_id bigint,
 
-    CONSTRAINT pk_software_inventory PRIMARY KEY (id),
+    CONSTRAINT pk_software_inventory PRIMARY KEY (rig_inventory_id, id),
 
     CONSTRAINT fk_software_inventory_rig_inventory_rig_inventory_id FOREIGN KEY (rig_inventory_id)
         REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE

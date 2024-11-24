@@ -26,7 +26,7 @@ public class FlightSheet : IEquatable<FlightSheet>
     /// <summary>
     /// Таргеты.
     /// </summary>
-    public List<FlightSheetTarget> Targets { get; set; } = new(2);
+    public List<FlightSheetTarget> Targets { get; set; } = new(0);
 
     /// <summary>
     /// Получить признак валидности полётного листа.
