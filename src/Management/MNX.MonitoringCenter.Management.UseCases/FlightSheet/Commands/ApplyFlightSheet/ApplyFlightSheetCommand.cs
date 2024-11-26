@@ -126,11 +126,9 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
     {
         // todo: рассылка сообщений ригам.
 
-        Task.Run(async () =>
-        {
-            await Task.Delay(5000); // имитация ожидания сообщения от ригов.
-            await _mediator.Send(new ConfirmFlightSheetCommand(devicesToApply.ToArray()), cancellationToken);
-            await _mediator.Send(new ConfirmFlightSheetCommand(devicesToDisapply.ToArray()), cancellationToken);
-        });
+        await Task.WhenAll(
+            _mediator.Send(new ConfirmFlightSheetCommand(devicesToApply.ToArray()), cancellationToken),
+            _mediator.Send(new ConfirmFlightSheetCommand(devicesToDisapply.ToArray()), cancellationToken)
+        );
     }
 }

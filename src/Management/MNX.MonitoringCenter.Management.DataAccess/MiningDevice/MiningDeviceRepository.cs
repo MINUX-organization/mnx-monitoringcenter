@@ -84,7 +84,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
             await _context.SaveChangesAsync();
             await transaction.CommitAsync();
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             await transaction.RollbackAsync();
             throw;

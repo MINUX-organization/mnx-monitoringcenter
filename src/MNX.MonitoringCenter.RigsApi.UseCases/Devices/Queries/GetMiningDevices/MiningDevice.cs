@@ -26,6 +26,14 @@ public class MiningDevice
     public string? FlightSheetName { get; init; }
 
     /// <summary>
+    /// Признак подтверждения текущего значения полётного листа.
+    /// </summary>
+    /// <returns>
+    /// <see langword="true"/>, если  значение подтверждено ригом, иначе <see langword="false"/>.
+    /// </returns>
+    public bool FlightSheetIsConfirm { get; init; }
+
+    /// <summary>
     /// Название майнера.
     /// </summary>
     public string? MinerName { get; init; }
