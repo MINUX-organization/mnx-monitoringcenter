@@ -6,7 +6,6 @@ using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.DataAccess;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 using MNX.MonitoringCenter.Inventory.UseCases;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
@@ -45,7 +44,6 @@ public static class ServiceCollectionExtensions
                 .AddScoped<IGpuRepository, InventoryRepository>()
                 .AddScoped<IMotherboardRepository, InventoryRepository>()
                 .AddScoped<INetworkAdapterRepository, InventoryRepository>()
-                .AddScoped<IDevicesRepository, InventoryRepository>()
                 .AddScoped<ISoftwareRepository, InventoryRepository>()
                 .AddScoped<IRigRepository, RigRepository>();
 
