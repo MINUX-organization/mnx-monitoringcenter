@@ -1,4 +1,4 @@
-﻿using MNX.Application.UseCases;
+﻿using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
 /// <summary>
 /// Команда обновления пула
 /// </summary>
-public class EditPoolCommand : IValidatableCommand<PoolModel>
+public class EditPoolCommand : IUserableValidatableCommand<PoolModel>
 {
     /// <summary>
     /// Уникальный идентификатор

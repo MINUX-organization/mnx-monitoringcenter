@@ -19,10 +19,9 @@ public class AlgorithmRepository : IAlgorithmRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
     {
-        return _context.Algorithms
-            .Filter(specification)
-            .AsNoTracking()
-            .AsAsyncEnumerable();
+        return _context.Algorithms.Filter(specification)
+                                  .AsNoTracking()
+                                  .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>

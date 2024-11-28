@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
@@ -25,7 +25,7 @@ public class EditPoolCommandHandler : IRequestHandler<EditPoolCommand, Result<Po
 
     public async Task<Result<PoolModel>> Handle(EditPoolCommand request, CancellationToken cancellationToken)
     {
-        var pool = await _poolRepository.GetAvailableById(request.Id, request.UserId);
+        var pool = await _poolRepository.GetAvailableById(request.Id, request.UserId, cancellationToken);
 
         if (pool is null)
         {
@@ -45,7 +45,7 @@ public class EditPoolCommandHandler : IRequestHandler<EditPoolCommand, Result<Po
         }
 
         if (( newPool.Domain != pool.Domain || newPool.Port != pool.Port) &&
-            await _poolRepository.Exists(request.UserId, newPool.Domain, newPool.Port))
+            await _poolRepository.Exists(request.UserId, newPool.Domain, newPool.Port, cancellationToken))
         {
             return Result<PoolModel>.Conflict("Pool already exists");
         }

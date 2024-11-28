@@ -19,28 +19,31 @@ public interface IWalletRepository
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Кошелёк </returns>
-    Task<Wallet?> GetAvailableById(Guid id, Guid userId);
+    Task<Wallet?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существования кошелька c переданным названием.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="name"> Название. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    Task<bool> ExistsWithName(Guid userId, string name);
+    Task<bool> ExistsWithName(Guid userId, string name, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существования кошелька с переданным адресом.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="address"> Адрес. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    Task<bool> ExistsWithAddress(Guid userId, string address);
+    Task<bool> ExistsWithAddress(Guid userId, string address, CancellationToken cancellationToken);
 
     /// <summary>
     /// Добавить кошелёк

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
@@ -60,12 +61,11 @@ public class PresetController : ControllerBase
     /// <returns> Список сгруппированных пресетов. </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("gpu_groups")]
-    [ProducesResponseType(typeof(List<PresetGroup>), 200)]
-    public async Task<IActionResult> GetPresetsGroupedByGpuName()
+    [ProducesResponseType(typeof(IAsyncEnumerable<PresetGroup>), 200)]
+    public IAsyncEnumerable<PresetGroup> GetPresetsGroupedByGpuName()
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new GetPresetsGroupedByGpuNameQuery(userId));
-        return result.ToActionResult();
+        return _mediator.CreateStream(new GetPresetsGroupedByGpuNameQuery(userId));
     }
 
     /// <summary>

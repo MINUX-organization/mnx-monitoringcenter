@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdapter;
 
@@ -13,7 +13,7 @@ public sealed record GetNetworkAdaptersInfoQuery : IRequest<Result<List<NetworkA
     /// <summary>
     /// Спецификация инвентаризации.
     /// </summary>
-    public InventorySpecification Specification { get; }
+    public DeviceSpecification Specification { get; }
 
     /// <summary>
     /// Признак того, что адаптер подключен к сети Интернет.
@@ -22,7 +22,7 @@ public sealed record GetNetworkAdaptersInfoQuery : IRequest<Result<List<NetworkA
 
     public GetNetworkAdaptersInfoQuery(Guid userId, Guid rigId, bool? isOnline = null)
     {
-        Specification = new InventorySpecification(userId, rigId, true);
+        Specification = new DeviceSpecification(userId, rigId);
         IsOnline = isOnline;
     }
 }

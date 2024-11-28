@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 
@@ -13,11 +13,11 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : ICpuRepository
 {
     /// <inheritdoc/>
-    public IAsyncEnumerable<CpuModel> GetCpus(DeviceSpecification specification)
+    public IAsyncEnumerable<CpuDetails> GetCpus(DeviceSpecification specification)
     {
         return GetInventoryBySpecification(specification.InventorySpecification)
                                  .Include(inventory => inventory.Cpus)
-                                 .SelectMany(inventory => inventory.Cpus.Select(cpu => new CpuModel()
+                                 .SelectMany(inventory => inventory.Cpus.Select(cpu => new CpuDetails()
                                  {
                                      Id = cpu.Id,
                                      RigName = inventory.Rig!.Name,
@@ -30,11 +30,11 @@ public partial class InventoryRepository : ICpuRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<List<Cpu>> GetCpusSliceForAPeriod(InventorySpecification specification,
-                                                                            DateTimeOffset startPeriod,
-                                                                            DateTimeOffset endPeriod)
+    public IAsyncEnumerable<List<Cpu>> GetCpusSliceForAPeriod(DeviceSpecification specification,
+                                                              DateTimeOffset startPeriod,
+                                                              DateTimeOffset endPeriod)
     {
-        return GetInventorySliceForAPeriod(specification, startPeriod, endPeriod)
+        return GetInventorySliceForAPeriod(specification.InventorySpecification, startPeriod, endPeriod)
                                  .Include(x => x.Cpus)
                                  .Select(x => x.Cpus)
                                  .AsAsyncEnumerable();

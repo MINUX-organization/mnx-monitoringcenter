@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
@@ -9,9 +10,9 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
@@ -91,11 +92,11 @@ public class RigController : ControllerBase
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно </response>
     [HttpGet("{rigId:Guid}/cpus")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<CpuModel>), 200)]
-    public IAsyncEnumerable<CpuModel> GetCpus(Guid rigId)
+    [ProducesResponseType(typeof(IAsyncEnumerable<CpuDetails>), 200)]
+    public IAsyncEnumerable<CpuDetails> GetCpus(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetCpusInfoQuery(userId, rigId));
+        return _mediator.CreateStream(new GetCpusDetailsQuery(userId, rigId));
     }
 
     /// <summary>
@@ -126,7 +127,7 @@ public class RigController : ControllerBase
     public IAsyncEnumerable<GpuDetails> GetGpus(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetGpusInfoQuery(userId, rigId));
+        return _mediator.CreateStream(new GetGpusDetailsQuery(userId, rigId));
     }
 
     /// <summary>

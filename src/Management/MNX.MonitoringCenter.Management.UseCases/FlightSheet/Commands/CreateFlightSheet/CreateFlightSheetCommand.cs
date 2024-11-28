@@ -1,4 +1,4 @@
-﻿using MNX.Application.UseCases;
+﻿using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFlightSheet;
@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFl
 /// <summary>
 /// Команда добавления полётного листа.
 /// </summary>
-public sealed class CreateFlightSheetCommand : IValidatableCommand<Guid>
+public sealed class CreateFlightSheetCommand : IUserableValidatableCommand<Guid>
 {
     /// <summary>
     /// Идентификатор пользователя.

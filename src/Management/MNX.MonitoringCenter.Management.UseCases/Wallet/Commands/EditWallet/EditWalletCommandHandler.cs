@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.EditWallet;
@@ -24,7 +24,7 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
 
     public async Task<Result<WalletModel>> Handle(EditWalletCommand request, CancellationToken cancellationToken)
     {
-        var wallet = await _walletRepository.GetAvailableById(request.Id, request.UserId);
+        var wallet = await _walletRepository.GetAvailableById(request.Id, request.UserId, cancellationToken);
 
         if (wallet is null)
         {
@@ -44,13 +44,13 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
         }
 
         if (wallet.Name != newWallet.Name &&
-            await _walletRepository.ExistsWithName(request.UserId, newWallet.Name))
+            await _walletRepository.ExistsWithName(request.UserId, newWallet.Name, cancellationToken))
         {
             return Result<WalletModel>.Conflict($"Wallet with name is equaled {newWallet.Name} already exists");
         }
 
         if (wallet.Address != newWallet.Address &&
-            await _walletRepository.ExistsWithAddress(request.UserId, newWallet.Address))
+            await _walletRepository.ExistsWithAddress(request.UserId, newWallet.Address, cancellationToken))
         {
             return Result<WalletModel>.Conflict($"Wallet with address is equaled {newWallet.Address} already exists");
         }

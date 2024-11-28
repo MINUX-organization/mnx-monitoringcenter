@@ -18,8 +18,9 @@ public interface IMinerRepository
     /// Получить майнер по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор майнера. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Майнер. </returns>
-    Task<Miner?> GetMinerById(Guid id);
+    Task<Miner?> GetMinerById(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить майнер по идентификатору.
@@ -27,5 +28,5 @@ public interface IMinerRepository
     /// <param name="id"> Идентификатор. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Признак существования майнера. </returns>
-    Task<bool> Exists(Guid id, CancellationToken cancellationToken = default);
+    Task<bool> Exists(Guid id, CancellationToken cancellationToken);
 }

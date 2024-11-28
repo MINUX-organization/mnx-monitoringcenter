@@ -10,6 +10,8 @@ internal class GpuCfg : IEntityTypeConfiguration<Contracts.Devices.Gpu.Gpu>
 {
     public void Configure(EntityTypeBuilder<Contracts.Devices.Gpu.Gpu> builder)
     {
+        builder.HasKey("RigInventoryId", "Id");
+
         builder.ComplexProperty(e => e.Pci);
 
         builder.ComplexProperty(e => e.Information, x =>

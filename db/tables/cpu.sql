@@ -30,7 +30,7 @@ CREATE TABLE monitoring_center.cpu
     restrictions_temperature_maximal integer NOT NULL,
     restrictions_temperature_minimal integer NOT NULL,
 
-    CONSTRAINT pk_cpu PRIMARY KEY (id),
+    CONSTRAINT pk_cpu PRIMARY KEY (rig_inventory_id, id),
 
     CONSTRAINT fk_cpu_rig_inventory_rig_inventory_id FOREIGN KEY (rig_inventory_id)
         REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE

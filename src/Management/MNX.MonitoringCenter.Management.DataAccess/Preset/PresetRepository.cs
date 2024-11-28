@@ -33,7 +33,7 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public Task<Dictionary<string, List<Preset>>> GetGroupedList(
+    public IAsyncEnumerable<IGrouping<string, Preset>> GetGroupedList(
             Expression<Func<Preset, string>> expression, Specification specification)
     {
         return _context.Presets.AsNoTrackingWithIdentityResolution()
@@ -41,23 +41,23 @@ public class PresetRepository : IPresetRepository
                                .Filter(specification)
                                .Include(x => x.Overclocking)
                                .GroupBy(expression)
-                               .ToDictionaryAsync(g => g.Key, g => g.ToList());
+                               .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<Preset?> GetAvailableById(Guid id, Guid userId)
+    public Task<Preset?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
                                .Where(x => x.UserId == userId)
-                               .FirstOrDefaultAsync(x => x.Id == id);
+                               .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(Guid userId, string name)
+    public Task<bool> Exists(Guid userId, string name, CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
                                .Where(x => x.UserId == userId)
-                               .AnyAsync(x => x.Name.Equals(name));
+                               .AnyAsync(x => x.Name.Equals(name), cancellationToken);
     }
 
     /// <inheritdoc/>

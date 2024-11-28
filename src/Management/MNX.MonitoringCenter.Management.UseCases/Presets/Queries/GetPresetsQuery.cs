@@ -51,7 +51,9 @@ public class GetPresetsQueryHandler : IStreamRequestHandler<GetPresetsQuery, Pre
     public async IAsyncEnumerable<PresetModel> Handle(GetPresetsQuery request,
                                                      [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var preset in _repository.GetAllAvailable(request.GpuName, request.Specification).WithCancellation(cancellationToken))
+        var presets = _repository.GetAllAvailable(request.GpuName, request.Specification);
+
+        await foreach (var preset in presets.WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<PresetModel>(preset);
         }

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Monitoring.Core.Devices.Gpu;
 using MNX.MonitoringCenter.Monitoring.UseCases.Abstractions;
 

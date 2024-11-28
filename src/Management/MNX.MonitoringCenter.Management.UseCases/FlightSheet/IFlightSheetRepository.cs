@@ -32,27 +32,34 @@ public interface IFlightSheetRepository
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken);
+    Task<bool> ExistsAvailable(string name, Guid userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получить признак существования полётного листа с переданным идентификатором.
+    /// </summary>
+    /// <param name="id"> Идентификатор. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns>
+    /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
+    /// </returns>
+    Task<bool> Exists(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
     /// Добавить полётный лист.
     /// </summary>
     /// <param name="flightSheet"> Полётный лист. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Add(FlightSheet flightSheet, CancellationToken cancellationToken);
+    Task Add(FlightSheet flightSheet);
 
     /// <summary>
     /// Редактировать полётный лист.
     /// </summary>
     /// <param name="flightSheet"> Новый полётный лист. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Edit(FlightSheet flightSheet, CancellationToken cancellationToken);
+    Task Edit(FlightSheet flightSheet);
 
     /// <summary>
     /// Удалить полётный лист.
     /// </summary>
     /// <param name="id"> Идентификатор полетного листа. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    Task Remove(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task Remove(Guid id, Guid userId);
 }

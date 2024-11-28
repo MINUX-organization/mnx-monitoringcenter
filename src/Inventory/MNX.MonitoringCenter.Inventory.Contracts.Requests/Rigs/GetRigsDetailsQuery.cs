@@ -7,6 +7,9 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 /// </summary>
 public sealed class GetRigsDetailsQuery : IStreamRequest<RigDetails>
 {
+    /// <summary>
+    /// Спецификация для инвентаризации.
+    /// </summary>
     public InventorySpecification Specification { get; }
 
     public GetRigsDetailsQuery(Guid userId, Guid[]? rigsIds = null)

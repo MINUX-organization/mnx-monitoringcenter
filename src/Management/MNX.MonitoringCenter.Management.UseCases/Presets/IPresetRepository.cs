@@ -13,8 +13,9 @@ public interface IPresetRepository
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="id">  Уникальный идентификатор</param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Пресет </returns>
-    Task<Preset?> GetAvailableById(Guid id, Guid userId);
+    Task<Preset?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить список пресетов
@@ -29,17 +30,18 @@ public interface IPresetRepository
     /// </summary>
     /// <param name="expression"> Выражение, указывающее правила группировки. </param>
     /// <param name="specification"> Спецификация. </param>
-    /// <returns> Словарь, в котором ключ - название видеокарты, значение - список пресетов. </returns>
-    Task<Dictionary<string, List<Preset>>> GetGroupedList(
+    /// <returns> Группы, в которых ключ - название видеокарты, значение - список пресетов. </returns>
+    IAsyncEnumerable<IGrouping<string, Preset>> GetGroupedList(
         Expression<Func<Preset, string>> expression, Specification specification);
 
     /// <summary>
     /// Проверить наличие пресета по названию
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя </param>
-    /// <param name="name"> Название пресета ы</param>
+    /// <param name="name"> Название пресета </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> <see langword="true"/>, если пресет существует, иначе <see langword="false"/> </returns>
-    Task<bool> Exists(Guid userId, string name);
+    Task<bool> Exists(Guid userId, string name, CancellationToken cancellationToken);
 
     /// <summary>
     /// Сохранить пресет для выбранной 

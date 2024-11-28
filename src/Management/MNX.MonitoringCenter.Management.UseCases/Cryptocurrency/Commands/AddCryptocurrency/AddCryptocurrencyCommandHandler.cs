@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Algorithm;
 
@@ -30,7 +30,7 @@ public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrency
 
     public async Task<Result<CryptocurrencyModel>> Handle(AddCryptocurrencyCommand request, CancellationToken cancellationToken)
     {
-        if (await _cryptocurrencyRepository.Exists(request.UserId, request.Model.FullName, request.Model.ShortName))
+        if (await _cryptocurrencyRepository.Exists(request.UserId, request.Model.FullName, request.Model.ShortName, cancellationToken))
         {
             return Result<CryptocurrencyModel>.Conflict("Cryptocurrency already exists");
         }

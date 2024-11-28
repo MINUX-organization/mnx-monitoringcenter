@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.CommandValidation;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Models;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands.Devices.Gpu.SetOverclocking;

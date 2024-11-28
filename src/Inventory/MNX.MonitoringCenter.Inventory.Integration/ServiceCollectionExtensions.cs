@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using MNX.Application.Data.DI;
 using MNX.Application.UseCases.DI;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.DataAccess;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 using MNX.MonitoringCenter.Inventory.UseCases;
@@ -30,10 +30,10 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddInventoryModule(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddMediatR(x => x.RegisterServicesFromAssemblies(
-            typeof(SaveRigInventoryCommand).Assembly,
+            typeof(GetRigsDetailsQuery).Assembly,
             typeof(SaveRigInventoryCommandHandler).Assembly
             ));
-        services.AddValidationPipelines(typeof(SaveRigInventoryCommand).Assembly);
+        services.AddValidationPipelines(typeof(SaveRigInventoryCommandHandler).Assembly);
 
         services.AddDataContext<Context>(configuration);
 

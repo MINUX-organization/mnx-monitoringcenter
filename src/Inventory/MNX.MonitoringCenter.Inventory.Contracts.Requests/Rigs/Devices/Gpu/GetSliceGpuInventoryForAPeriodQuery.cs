@@ -12,7 +12,7 @@ public sealed record GetSliceGpuInventoryForAPeriodQuery : IStreamRequest<List<G
     /// <summary>
     /// Спецификация инвентаризации.
     /// </summary>
-    public InventorySpecification Specification { get; }
+    public DeviceSpecification Specification { get; }
 
     /// <summary>
     /// Начало периода.
@@ -29,7 +29,7 @@ public sealed record GetSliceGpuInventoryForAPeriodQuery : IStreamRequest<List<G
                                                DateTimeOffset startPeriod,
                                                DateTimeOffset endPeriod)
     {
-        Specification = new InventorySpecification(userId, rigsIds);
+        Specification = new DeviceSpecification(userId, rigsIds);
         StartPeriod = startPeriod;
         EndPeriod = endPeriod;
     }

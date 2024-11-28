@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.UseCases;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
@@ -70,6 +69,9 @@ public class RigRepository : IRigRepository
                 }
             };
         }
+
+        // todo: поддержка GroupBy для сложных типов присутствует в EF 9. Это должно помочь не загружать лишних данных.
+        //       https://learn.microsoft.com/ru-ru/ef/core/what-is-new/ef-core-9.0/whatsnew#complex-types-groupby-and-executeupdate-support
     }
 
     /// <inheritdoc/>

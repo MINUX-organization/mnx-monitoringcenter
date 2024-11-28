@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rig;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases;
 
@@ -23,7 +23,7 @@ public class AddRigCommandHandler : IRequestHandler<AddRigCommand, Result<Unit>>
         {
             Id = request.Id,
             OwnerId = request.OwnerId,
-            Name = "Minux"
+            Name = "Minux" // todo: set rig name
         }, cancellationToken);
 
         return Result<Unit>.Empty();

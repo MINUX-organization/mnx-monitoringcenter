@@ -24,25 +24,26 @@ public class PoolRepository : IPoolRepository
         return _context.Pools.Include(x => x.Cryptocurrency)
                              .Where(x => x.UserId == specification.UserId)
                              .Filter(specification)
-                             .AsNoTracking()
+                             .AsNoTrackingWithIdentityResolution()
                              .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<Pool?> GetAvailableById(Guid id, Guid userId)
+    public Task<Pool?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return _context.Pools.Include(x => x.Cryptocurrency)
-                             .AsNoTracking()
+                                .ThenInclude(c => c!.Algorithm)
+                             .AsNoTrackingWithIdentityResolution()
                              .Where(x => x.UserId == userId)
-                             .FirstOrDefaultAsync(x => x.Id == id);
+                             .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(Guid userId, string domain, int port)
+    public Task<bool> Exists(Guid userId, string domain, int port, CancellationToken cancellationToken)
     {
         return _context.Pools.AsNoTracking()
                              .Where(x => x.UserId == userId)
-                             .AnyAsync(x => x.Domain == domain && x.Port == port);
+                             .AnyAsync(x => x.Domain == domain && x.Port == port, cancellationToken);
     }
 
     /// <inheritdoc/>

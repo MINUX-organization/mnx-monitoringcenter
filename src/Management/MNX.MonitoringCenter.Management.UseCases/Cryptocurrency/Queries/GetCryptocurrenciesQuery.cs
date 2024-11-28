@@ -44,7 +44,9 @@ public class GetCryptocurrenciesQueryHandler : IStreamRequestHandler<GetCryptocu
     public async IAsyncEnumerable<CryptocurrencyModel> Handle(GetCryptocurrenciesQuery request,
                                                              [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var cryptocurrency in _repository.GetAllAvailable(request.Specification).WithCancellation(cancellationToken))
+        var cryptocurrencies = _repository.GetAllAvailable(request.Specification);
+
+        await foreach (var cryptocurrency in cryptocurrencies.WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<CryptocurrencyModel>(cryptocurrency);
         }

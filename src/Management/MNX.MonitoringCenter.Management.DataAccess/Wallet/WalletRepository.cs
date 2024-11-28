@@ -25,29 +25,30 @@ public class WalletRepository : IWalletRepository
         return _context.Wallets.Include(x => x.Cryptocurrency)
                                .Where(x => x.UserId == specification.UserId)
                                .Filter(specification)
-                               .AsNoTracking()
+                               .AsNoTrackingWithIdentityResolution()
                                .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<Wallet?> GetAvailableById(Guid id, Guid userId)
+    public Task<Wallet?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return _context.Wallets.Include(x => x.Cryptocurrency)
+                                    .ThenInclude(c => c!.Algorithm)
                                .AsNoTrackingWithIdentityResolution()
                                .Where(x => x.UserId == userId)
-                               .FirstOrDefaultAsync(x => x.Id == id);
+                               .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<bool> ExistsWithName(Guid userId, string name)
+    public Task<bool> ExistsWithName(Guid userId, string name, CancellationToken cancellationToken)
     {
-        return Exists(userId, x => x.Name == name);
+        return Exists(userId, x => x.Name == name, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<bool> ExistsWithAddress(Guid userId, string address)
+    public Task<bool> ExistsWithAddress(Guid userId, string address, CancellationToken cancellationToken)
     {
-        return Exists(userId, x => x.Address == address);
+        return Exists(userId, x => x.Address == address, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -77,13 +78,14 @@ public class WalletRepository : IWalletRepository
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="expression"> Выражение, по которому должен производиться поиск. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    private Task<bool> Exists(Guid userId, Expression<Func<Wallet, bool>> expression)
+    private Task<bool> Exists(Guid userId, Expression<Func<Wallet, bool>> expression, CancellationToken cancellationToken)
     {
         return _context.Wallets.AsNoTracking()
                                .Where(x => x.UserId == userId)
-                               .AnyAsync(expression);
+                               .AnyAsync(expression, cancellationToken);
     }
 }

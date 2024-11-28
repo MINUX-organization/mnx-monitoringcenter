@@ -2,11 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusInfo;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusInfo;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
@@ -39,11 +40,11 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <returns> Асинхронный поток видеокарт. </returns>
     [HttpGet("gpus")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<GpuDetails>), 200)]
-    public IAsyncEnumerable<GpuDetails> GetGpus()
+    [ProducesResponseType(typeof(IAsyncEnumerable<GetGpusQueryResponse>), 200)]
+    public IAsyncEnumerable<GetGpusQueryResponse> GetGpus()
     {
         var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetGpusInfoQuery(userId));
+        return _mediator.CreateStream(new GetGpusQuery(userId));
     }
 
     /// <summary>
@@ -78,10 +79,10 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <returns> Асинхронный поток процессоров. </returns>
     [HttpGet("сpus")]
-    [ProducesResponseType(typeof(IAsyncEnumerable<CpuModel>), 200)]
-    public IAsyncEnumerable<CpuModel> GetСpus()
+    [ProducesResponseType(typeof(IAsyncEnumerable<GetCpusQueryResponse>), 200)]
+    public IAsyncEnumerable<GetCpusQueryResponse> GetСpus()
     {
         var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetCpusInfoQuery(userId));
+        return _mediator.CreateStream(new GetCpusQuery(userId));
     }
 }

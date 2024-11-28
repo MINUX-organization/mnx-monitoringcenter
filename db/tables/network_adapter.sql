@@ -12,7 +12,7 @@ CREATE TABLE monitoring_center.network_adapter
     information_serial_number text NOT NULL,
     information_vendor_code text NOT NULL,
 
-    CONSTRAINT pk_network_adapter PRIMARY KEY (id),
+    CONSTRAINT pk_network_adapter PRIMARY KEY (rig_inventory_id, id),
 
     CONSTRAINT fk_network_adapter_rig_inventory_rig_inventory_id FOREIGN KEY (rig_inventory_id)
         REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.EditFightSheet;
 
@@ -37,12 +37,12 @@ public class EditFlightSheetCommandHandler : IRequestHandler<EditFlightSheetComm
         newFlightSheet.Targets.ForEach(x => x.FlightSheetId = newFlightSheet.Id);
 
         if (flightSheet.Name != newFlightSheet.Name &&
-            await _flightSheetRepository.Exists(newFlightSheet.Name, request.UserId, cancellationToken))
+            await _flightSheetRepository.ExistsAvailable(newFlightSheet.Name, request.UserId, cancellationToken))
         {
             return Result<Unit>.Invalid($"Flight sheet with name {newFlightSheet.Name} already exist!");
         }
 
-        await _flightSheetRepository.Edit(newFlightSheet, cancellationToken);
+        await _flightSheetRepository.Edit(newFlightSheet);
 
         return Result<Unit>.Empty();
     }

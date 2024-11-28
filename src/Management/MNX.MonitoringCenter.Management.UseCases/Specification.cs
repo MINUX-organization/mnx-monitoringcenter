@@ -20,7 +20,8 @@ public readonly struct Specification(Guid userId)
     /// </summary>
     public object[]? FilterParameters { get; }
 
-    public Specification(Guid userId, string filterString, object[] filterParameters) : this(userId)
+    public Specification(Guid userId, string filterString, object[] filterParameters)
+        : this(userId)
     {
         FilterString = filterString;
         FilterParameters = filterParameters;

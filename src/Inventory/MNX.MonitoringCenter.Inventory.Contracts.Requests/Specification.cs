@@ -20,14 +20,14 @@ public readonly struct InventorySpecification
     /// </summary>
     public bool IsActuality { get; }
 
-    public InventorySpecification(Guid? ownerId, Guid rigId, bool isActuality = false)
+    public InventorySpecification(Guid? ownerId, Guid rigId, bool isActuality = true)
     {
         OwnerId = ownerId;
         RigsIds = new[] { rigId };
         IsActuality = isActuality;
     }
 
-    public InventorySpecification(Guid? ownerId, Guid[]? rigsIds = null, bool isActuality = false)
+    public InventorySpecification(Guid? ownerId, Guid[]? rigsIds = null, bool isActuality = true)
     {
         OwnerId = ownerId;
         RigsIds = rigsIds;

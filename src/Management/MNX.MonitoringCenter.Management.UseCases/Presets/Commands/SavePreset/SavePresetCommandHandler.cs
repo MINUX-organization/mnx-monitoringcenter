@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Presets;
@@ -25,7 +25,7 @@ public class SavePresetCommandHandler : IRequestHandler<SavePresetCommand, Resul
 
     public async Task<Result<PresetModel>> Handle(SavePresetCommand request, CancellationToken cancellationToken)
     {
-        if (await _presetRepository.Exists(request.UserId, request.Model.Name))
+        if (await _presetRepository.Exists(request.UserId, request.Model.Name, cancellationToken))
         {
             return Result<PresetModel>.Conflict("Preset already exists");
         }

@@ -8,6 +8,7 @@ public interface IAlgorithmRepository
     /// <summary>
     /// Получить доступные алгоритмы.
     /// </summary>
+    /// <param name="specification"> Спецификация. </param>
     /// <returns> Список алгоритмов. </returns>
     IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms(Specification specification);
 

@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 using AutoMapper;
+using MNX.MonitoringCenter.Inventory.Contracts;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -25,7 +25,7 @@ public partial class InventoryRepository
     internal async Task Save(Guid rigId, DateTimeOffset createdDate,
                              RigInventoryModel inventory, CancellationToken cancellationToken)
     {
-        var oldInventory = await GetInventoryBySpecification(new InventorySpecification(null, rigId, true))
+        var oldInventory = await GetInventoryBySpecification(new InventorySpecification(null, rigId))
                                     .FirstOrDefaultAsync(cancellationToken);
 
         var newInventory = MapInventory(rigId, createdDate, inventory);
@@ -85,7 +85,7 @@ public partial class InventoryRepository
             Gpus = inventory.Gpus,
             NetworkAdapters = inventory.NetworkAdapters,
             Motherboard = inventory.Motherboard,
-            Software = _mapper.Map<SoftwareInventoryDto>(inventory)
+            Software = _mapper.Map<SoftwareInventoryDto>(inventory.Software)
         };
     }
 }

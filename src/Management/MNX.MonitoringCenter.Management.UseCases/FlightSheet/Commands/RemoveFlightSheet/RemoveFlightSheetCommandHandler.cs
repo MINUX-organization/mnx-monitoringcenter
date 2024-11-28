@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.RemoveFlightSheet;
 
@@ -20,7 +20,7 @@ public class RemoveFlightSheetCommandHandler : IRequestHandler<RemoveFlightSheet
 
     public async Task<Result<Unit>> Handle(RemoveFlightSheetCommand request, CancellationToken cancellationToken)
     {
-        await _flightSheetRepository.Remove(request.Id, request.UserId, cancellationToken);
+        await _flightSheetRepository.Remove(request.Id, request.UserId);
         return Result<Unit>.Empty();
     }
 }

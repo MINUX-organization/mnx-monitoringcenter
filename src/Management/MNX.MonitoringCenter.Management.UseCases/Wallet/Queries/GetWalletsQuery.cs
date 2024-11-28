@@ -44,7 +44,9 @@ public class GetWalletsQueryHandler : IStreamRequestHandler<GetWalletsQuery, Wal
     public async IAsyncEnumerable<WalletModel> Handle(GetWalletsQuery request,
                                                      [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var wallet in _repository.GetAllAvailable(request.Specification).WithCancellation(cancellationToken))
+        var wallets = _repository.GetAllAvailable(request.Specification);
+
+        await foreach (var wallet in wallets.WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<WalletModel>(wallet);
         }

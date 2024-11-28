@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 
 namespace MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFlightSheet;
 
@@ -29,13 +29,13 @@ public class CreateFlightSheetCommandHandler :
         var flightSheet = _mapper.Map<Core.FlightSheet.FlightSheet>(request.Model);
         flightSheet.UserId = request.UserId;
 
-        if (await _flightSheetRepository.Exists(flightSheet.Name, request.UserId, cancellationToken))
+        if (await _flightSheetRepository.ExistsAvailable(flightSheet.Name, request.UserId, cancellationToken))
         {
             return Result<Guid>
                 .Invalid($"Flight sheet with name {flightSheet.Name} already exist!");
         }
 
-        await _flightSheetRepository.Add(flightSheet, cancellationToken);
+        await _flightSheetRepository.Add(flightSheet);
 
         return Result<Guid>.SuccessfullyCreated(flightSheet.Id);
     }

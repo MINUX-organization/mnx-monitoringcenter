@@ -29,21 +29,21 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     }
 
     /// <inheritdoc/>
-    public Task<Cryptocurrency?> GetAvailableById(Guid id, Guid userId)
+    public Task<Cryptocurrency?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return _context.Cryptocurrencies.AsNoTrackingWithIdentityResolution()
                                         .Where(x => x.UserId == userId)
                                         .Include(x => x.Algorithm)
-                                        .FirstOrDefaultAsync(x => x.Id == id);
+                                        .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(Guid userId, string fullName, string shortName)
+    public Task<bool> Exists(Guid userId, string fullName, string shortName, CancellationToken cancellationToken)
     {
         return _context.Cryptocurrencies
                             .AsNoTracking()
                             .Where(x => x.UserId == userId)
-                            .AnyAsync(x => x.FullName.Equals(fullName) || x.ShortName.Equals(shortName));
+                            .AnyAsync(x => x.FullName.Equals(fullName) || x.ShortName.Equals(shortName), cancellationToken);
     }
 
     /// <inheritdoc/>
