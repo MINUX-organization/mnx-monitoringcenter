@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using MNX.Application.UseCases.Mediator;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
 using System.Runtime.CompilerServices;
@@ -37,17 +38,17 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
     public async IAsyncEnumerable<GetGpusQueryResponse> Handle(
         GetGpusQuery request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var inventoryGpus = _mediator.CreateStream(new GetGpusDetailsQuery(request.UserId), cancellationToken)
-                                     .ToBlockingEnumerable(cancellationToken)
-                                     .ToList();
+        var inventoryGpus =
+            await _mediator.GetHashSetAsync(new GetGpusDetailsQuery(request.UserId), cancellationToken);
 
-        var filterString = string.Join(" or ", inventoryGpus.Select((gpu, index) => $"Id == @{index}"));
+        var filterString = $"Id in ({string.Join(",", inventoryGpus.Select((cpu, index) => $"@{index}"))})";
         var filterParameters = inventoryGpus.Select(x => (object)x.Id).ToArray();
+
         var miningDevices = _mediator.CreateStream(
             new GetAvailableMiningDevicesQuery(request.UserId, filterString, filterParameters),
             cancellationToken);
 
-        await foreach (var gpu in miningDevices)
+        await foreach (var gpu in miningDevices.WithCancellation(cancellationToken))
         {
             var inventoryGpu = inventoryGpus.First(x => x.Id == gpu.Id);
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;

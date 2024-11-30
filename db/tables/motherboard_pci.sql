@@ -2,13 +2,14 @@ CREATE TABLE monitoring_center.motherboard_pci
 (
     id integer NOT NULL,
     motherboard_id uuid NOT NULL,
+    rig_inventory_id bigint NOT NULL,
     is_installed boolean NOT NULL,
     bus text NOT NULL,
 
-    CONSTRAINT pk_motherboard_pci PRIMARY KEY (id, motherboard_id),
+    CONSTRAINT pk_motherboard_pci PRIMARY KEY (motherboard_id, id),
 
-    CONSTRAINT fk_motherboard_pci_motherboard_motherboard_id FOREIGN KEY (motherboard_id)
-        REFERENCES monitoring_center.motherboard (id) MATCH SIMPLE
+    CONSTRAINT fk_motherboard_pci_motherboard_motherboard_id FOREIGN KEY (rig_inventory_id, motherboard_id)
+        REFERENCES monitoring_center.motherboard (rig_inventory_id, id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE
 );

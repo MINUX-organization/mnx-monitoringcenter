@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
+﻿namespace MNX.MonitoringCenter.Inventory.Contracts;
 
 /// <summary>
 /// Модель инвентаризации рига.

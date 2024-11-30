@@ -10,7 +10,7 @@ CREATE TABLE monitoring_center.motherboard
     information_sata_ports_count integer NOT NULL,
     information_serial_number text NOT NULL,
 
-    CONSTRAINT pk_motherboard PRIMARY KEY (id),
+    CONSTRAINT pk_motherboard PRIMARY KEY (rig_inventory_id, id),
 
     CONSTRAINT fk_motherboard_rig_inventory_inventory_id FOREIGN KEY (rig_inventory_id)
         REFERENCES monitoring_center.rig_inventory (id) MATCH SIMPLE

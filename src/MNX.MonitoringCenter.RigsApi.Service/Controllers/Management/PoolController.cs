@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;

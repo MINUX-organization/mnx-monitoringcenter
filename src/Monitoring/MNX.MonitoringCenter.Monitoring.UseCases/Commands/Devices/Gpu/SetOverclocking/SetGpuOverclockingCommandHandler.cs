@@ -1,6 +1,6 @@
 ﻿using EasyNetQ;
 using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Monitoring.Contracts.Bus.Messages;
 
 namespace MNX.MonitoringCenter.Monitoring.UseCases.Commands.Devices.Gpu.SetOverclocking;

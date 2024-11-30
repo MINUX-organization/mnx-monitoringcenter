@@ -15,14 +15,14 @@ public class PresetInputModel
     /// <summary>
     /// Название GPU
     /// </summary>
-    public string GpuName { get; }
+    public string? GpuName { get; }
 
     /// <summary>
     /// Модель разгона
     /// </summary>
     public OverclockingInputModel Overclocking { get; }
 
-    public PresetInputModel(string name, string gpuName, OverclockingInputModel overclocking)
+    public PresetInputModel(string name, string? gpuName, OverclockingInputModel overclocking)
     {
         Name = name;
         GpuName = gpuName;

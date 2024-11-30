@@ -73,6 +73,11 @@ public partial class InventoryRepository : IGpuRepository
     /// <inheritdoc/>
     public Task<GpuRestrictions?> GetGpusRestrictions(string gpuName)
     {
+        if (string.IsNullOrWhiteSpace(gpuName))
+        {
+            return Task.FromResult<GpuRestrictions?>(null);
+        }
+
         var manufacturer = gpuName.ToLower().Split().First();
         var model = string.Join(" ", gpuName.ToLower().Split().Skip(1));
 

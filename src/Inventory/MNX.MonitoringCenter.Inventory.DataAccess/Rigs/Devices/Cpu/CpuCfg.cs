@@ -10,6 +10,8 @@ internal class CpuCfg : IEntityTypeConfiguration<Contracts.Devices.Cpu.Cpu>
 {
     public void Configure(EntityTypeBuilder<Contracts.Devices.Cpu.Cpu> builder)
     {
+        builder.HasKey("RigInventoryId", "Id");
+
         builder.ComplexProperty(e => e.Pci);
 
         builder.ComplexProperty(e => e.Information, x =>

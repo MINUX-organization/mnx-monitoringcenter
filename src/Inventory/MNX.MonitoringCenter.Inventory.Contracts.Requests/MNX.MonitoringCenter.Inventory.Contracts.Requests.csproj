@@ -7,10 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MNX.Application.UseCases" Version="1.0.0" />
+    <PackageReference Include="MNX.Application.UseCases" Version="1.0.2" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Common\MNX.MonitoringCenter.Common.AgentMessages\MNX.MonitoringCenter.Common.AgentMessages.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Inventory.Contracts\MNX.MonitoringCenter.Inventory.Contracts.csproj" />
   </ItemGroup>
 

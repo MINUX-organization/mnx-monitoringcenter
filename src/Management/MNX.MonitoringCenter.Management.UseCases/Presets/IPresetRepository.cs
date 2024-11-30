@@ -30,10 +30,9 @@ public interface IPresetRepository
     /// </summary>
     /// <param name="expression"> Выражение, указывающее правила группировки. </param>
     /// <param name="specification"> Спецификация. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> Словарь, в котором ключ - название видеокарты, значение - список пресетов. </returns>
-    Task<Dictionary<string, List<Preset>>> GetGroupedList(
-        Expression<Func<Preset, string>> expression, Specification specification, CancellationToken cancellationToken);
+    /// <returns> Группы, в которых ключ - название видеокарты, значение - список пресетов. </returns>
+    IAsyncEnumerable<IGrouping<string, Preset>> GetGroupedList(
+        Expression<Func<Preset, string>> expression, Specification specification);
 
     /// <summary>
     /// Проверить наличие пресета по названию

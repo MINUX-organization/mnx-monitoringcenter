@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Inventory.Contracts;
+﻿namespace MNX.MonitoringCenter.Common.AgentMessages;
 
 /// <summary>
 /// Сообщение о регистрации рига.

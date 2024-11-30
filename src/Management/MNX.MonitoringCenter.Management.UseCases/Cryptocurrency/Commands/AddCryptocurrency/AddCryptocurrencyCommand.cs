@@ -1,4 +1,4 @@
-﻿using MNX.Application.UseCases;
+﻿using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.AddCryptocurrency;
@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Cryptocurrency.Commands.AddCr
 /// <summary>
 /// Команда добавления криптовалюты.
 /// </summary>
-public class AddCryptocurrencyCommand : IValidatableCommand<CryptocurrencyModel>
+public class AddCryptocurrencyCommand : IUserableValidatableCommand<CryptocurrencyModel>
 {
     /// <summary>
     /// Входная модель крипты.

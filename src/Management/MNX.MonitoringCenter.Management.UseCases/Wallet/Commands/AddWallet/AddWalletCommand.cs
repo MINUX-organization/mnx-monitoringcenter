@@ -1,4 +1,4 @@
-﻿using MNX.Application.UseCases;
+﻿using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
 /// <summary>
 /// Команда добавления кошелька
 /// </summary>
-public class AddWalletCommand : IValidatableCommand<WalletModel>
+public class AddWalletCommand : IUserableValidatableCommand<WalletModel>
 {
     /// <summary>
     /// Модель кошелька

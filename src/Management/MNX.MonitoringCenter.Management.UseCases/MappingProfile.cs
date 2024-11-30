@@ -75,6 +75,7 @@ public class MappingProfile : Profile
             RigId = info.RigId,
             Type = info.Type.ToString(),
             FlightSheetName = info.FlightSheet != null ? info.FlightSheet.Name : null,
+            FlightSheetIsConfirm = info.FlightSheetIsConfirm,
             MinerName = info.FlightSheet != null
                             ? info.FlightSheet.Targets.First(x => x.DeviceType == info.Type).Miner!.Name
                             : null

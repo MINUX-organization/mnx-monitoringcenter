@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Drive;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;

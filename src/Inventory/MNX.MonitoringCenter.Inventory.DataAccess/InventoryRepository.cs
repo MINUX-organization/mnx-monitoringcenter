@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts.RigInventory;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 using AutoMapper;
+using MNX.MonitoringCenter.Inventory.Contracts;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 

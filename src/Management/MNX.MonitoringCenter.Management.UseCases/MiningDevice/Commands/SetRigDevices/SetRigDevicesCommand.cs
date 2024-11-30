@@ -1,5 +1,7 @@
 ﻿using MediatR;
 using MNX.Application.UseCases;
+using MNX.Application.UseCases.CommandValidation;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;

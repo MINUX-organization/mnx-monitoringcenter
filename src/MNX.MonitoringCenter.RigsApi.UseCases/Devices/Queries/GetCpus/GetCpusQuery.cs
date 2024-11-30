@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
+using MNX.Application.UseCases.Mediator;
 using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
@@ -36,17 +37,17 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
     public async IAsyncEnumerable<GetCpusQueryResponse> Handle(
         GetCpusQuery request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var inventoryCpus = _mediator.CreateStream(new GetCpusDetailsQuery(request.UserId), cancellationToken)
-                                     .ToBlockingEnumerable(cancellationToken)
-                                     .ToList();
+        var inventoryCpus =
+            await _mediator.GetHashSetAsync(new GetCpusDetailsQuery(request.UserId), cancellationToken);
 
-        var filterString = string.Join(" or ", inventoryCpus.Select((cpu, index) => $"Id == @{index}"));
+        var filterString = $"Id in ({string.Join(",", inventoryCpus.Select((cpu, index) => $"@{index}"))})";
         var filterParameters = inventoryCpus.Select(x => (object)x.Id).ToArray();
+
         var miningDevices = _mediator.CreateStream(
             new GetAvailableMiningDevicesQuery(request.UserId, filterString, filterParameters),
             cancellationToken);
 
-        await foreach (var cpu in miningDevices)
+        await foreach (var cpu in miningDevices.WithCancellation(cancellationToken))
         {
             var inventoryCpu = inventoryCpus.First(x => x.Id == cpu.Id);
 

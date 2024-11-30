@@ -4,8 +4,9 @@ CREATE TABLE monitoring_center.mining_devices
     rig_id uuid NOT NULL,
     owner_id uuid NOT NULL,
     type text NOT NULL CHECK ( type in ('CPU', 'GPU') ),
-    is_active boolean NOT NULL,
+    life_cycle_status text NOT NULL DEFAULT 'Online',
     flight_sheet_id uuid,
+    flight_sheet_is_confirm boolean NOT NULL DEFAULT TRUE,
 
     CONSTRAINT pk_mining_devices PRIMARY KEY (id),
 

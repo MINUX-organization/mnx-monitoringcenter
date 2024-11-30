@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.RemoveFlightSheet;
 

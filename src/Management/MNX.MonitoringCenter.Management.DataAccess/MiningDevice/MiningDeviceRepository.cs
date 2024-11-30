@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.MiningDevice;
 using System.Data;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
-using MiningDeviceInfo = Core.MiningDevice.MiningDeviceInfo;
-using MiningDevice = Core.MiningDevice.MiningDevice;
 using FlightSheet = Core.FlightSheet.FlightSheet;
+using MiningDevice = Core.MiningDevice.MiningDevice;
+using MiningDeviceInfo = Core.MiningDevice.MiningDeviceInfo;
 
 /// <summary>
 /// Реализация <see cref="IMiningDeviceRepository"/>.
@@ -39,39 +40,31 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<MiningDeviceInfo> GetFlightSheetSupportedDevices(FlightSheet flightSheet)
-    {
-        return GetDevicesQuery(new Specification(flightSheet.UserId))
-                .Where(device => flightSheet.IsDeviceSupport(device))
-                .AsAsyncEnumerable();
-    }
-
-    /// <inheritdoc/>
     public async Task SetCurrentRigsDevices(List<MiningDevice> devices)
     {
-        using var transaction = _context.Database.BeginTransaction(IsolationLevel.ReadCommitted);
+        using var transaction = _context.Database.BeginTransaction(IsolationLevel.Serializable);
 
         try
         {
-            var groupedDevices = devices.GroupBy(x => x.RigId)
-                                        .ToDictionary(g => g.Key, g => g.ToList());
+            var groupedInputDevices = devices.GroupBy(x => x.RigId)
+                                             .ToDictionary(g => g.Key, g => g.ToList());
 
             // делаем выборку устройств всех ригов, для которых пришли устройства
             var dbDevices = await _context.MiningDevices
                 .IgnoreQueryFilters()
-                .Where(device => groupedDevices.Keys.Contains(device.RigId))
+                .Where(device => groupedInputDevices.Keys.Contains(device.RigId))
                 .ToListAsync();
 
             // берём ту часть устройств из БД, которая не пересекается со входящим набором устройств
             // ( те устройства, которые убрали с рига )
-            // для них мы ставим признак не активности
+            // для них мы ставим статус не активности
             var noActiveDevices = dbDevices.ExceptBy(devices.Select(x => x.Id), device => device.Id).ToList();
-            noActiveDevices.ForEach(device => device.IsActive = false);
+            noActiveDevices.ForEach(device => device.LifeCycleStatus = MiningDeviceLifeCycleStatus.Inactive);
 
             // берём часть устройств из БД, которая пересекается со входящей коллекцией устройств
-            // активируем полученные устройства
+            // ставим статус "в сети" для полученных устройств
             var activeDevices = dbDevices.IntersectBy(devices.Select(x => x.Id), device => device.Id).ToList();
-            activeDevices.ForEach(device => device.IsActive = true);
+            activeDevices.ForEach(device => device.LifeCycleStatus = MiningDeviceLifeCycleStatus.Online);
 
             // берём часть из множества входящих устройств, которая не пересекается со множеством устройств из БД
             // обновляем их, если уже существуют в базе, иначе добавляем.
@@ -82,7 +75,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                                         RigId = device.RigId,
                                         OwnerId = device.OwnerId,
                                         Type = device.Type,
-                                        IsActive = true
+                                        LifeCycleStatus = MiningDeviceLifeCycleStatus.Online
                                     })
                                     .ToList();
 
@@ -99,17 +92,36 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public Task DeactivateDevicesByRigId(Guid rigId)
+    public Task SetStatusForRigDevices(Guid rigId, MiningDeviceLifeCycleStatus status)
     {
         return _context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
-            x.SetProperty(device => device.IsActive, d => false));
+            x.SetProperty(device => device.LifeCycleStatus, d => status));
     }
 
     /// <inheritdoc/>
     public Task SetFlightSheet(Guid[] devicesIds, Guid flightSheetId)
     {
-        return _context.MiningDevices.Where(device => devicesIds.Contains(device.Id)).ExecuteUpdateAsync(x =>
-            x.SetProperty(device => device.FlightSheetId, d => flightSheetId));
+        return _context.MiningDevices
+                .Where(device => devicesIds.Contains(device.Id))
+                .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetId, d => flightSheetId)
+                                          .SetProperty(device => device.FlightSheetIsConfirm, d => false));
+    }
+
+    /// <inheritdoc/>
+    public Task RemoveFlightSheet(Guid[] devicesIds)
+    {
+        return _context.MiningDevices
+                .Where(device => devicesIds.Contains(device.Id))
+                .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetId, d => null)
+                                          .SetProperty(device => device.FlightSheetIsConfirm, d => false));
+    }
+
+    /// <inheritdoc/>
+    public Task ConfirmFlightSheet(Guid[] devicesIds)
+    {
+        return _context.MiningDevices
+                .Where(device => devicesIds.Contains(device.Id))
+                .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetIsConfirm, d => true));
     }
 
     /// <summary>
@@ -130,7 +142,8 @@ public class MiningDeviceRepository : IMiningDeviceRepository
             {
                 dbDevice.RigId = device.RigId;
                 dbDevice.OwnerId = device.OwnerId;
-                dbDevice.IsActive = device.IsActive;
+                dbDevice.LifeCycleStatus = device.LifeCycleStatus;
+                dbDevice.FlightSheetIsConfirm = device.FlightSheetIsConfirm;
             }
             else
             {
@@ -164,9 +177,10 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                    Id = device.Id,
                    OwnerId = device.OwnerId,
                    RigId = device.RigId,
-                   IsActive = device.IsActive,
+                   LifeCycleStatus = device.LifeCycleStatus,
                    Type = device.Type,
                    FlightSheetId = device.FlightSheetId,
+                   FlightSheetIsConfirm = device.FlightSheetIsConfirm,
                    FlightSheet = _mapper.Map<FlightSheet>(flightSheet)
                };
     }

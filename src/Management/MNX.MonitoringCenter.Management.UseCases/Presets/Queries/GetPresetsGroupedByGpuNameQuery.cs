@@ -1,14 +1,14 @@
 ﻿using AutoMapper;
 using MediatR;
-using MNX.Application.UseCases;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
 
 /// <summary>
 /// Запрос на получение сгруппированного по названию видеокарт списка пресетов.
 /// </summary>
-public sealed record GetPresetsGroupedByGpuNameQuery : IRequest<Result<List<PresetGroup>>>
+public sealed record GetPresetsGroupedByGpuNameQuery : IStreamRequest<PresetGroup>
 {
     /// <summary>
     /// Спецификация.
@@ -30,7 +30,7 @@ public sealed record GetPresetsGroupedByGpuNameQuery : IRequest<Result<List<Pres
 /// Обработчик <see cref="GetPresetsGroupedByGpuNameQuery"/>.
 /// </summary>
 public class GetPresetsGroupedByGpuNameQueryHandler
-    : IRequestHandler<GetPresetsGroupedByGpuNameQuery, Result<List<PresetGroup>>>
+    : IStreamRequestHandler<GetPresetsGroupedByGpuNameQuery, PresetGroup>
 {
     private readonly IMapper _mapper;
 
@@ -42,15 +42,18 @@ public class GetPresetsGroupedByGpuNameQueryHandler
         _presetRepository = presetRepository ?? throw new ArgumentNullException(nameof(presetRepository));
     }
 
-    public async Task<Result<List<PresetGroup>>> Handle(GetPresetsGroupedByGpuNameQuery request,
-                                                        CancellationToken cancellationToken)
+    public async IAsyncEnumerable<PresetGroup> Handle(GetPresetsGroupedByGpuNameQuery request,
+                                                     [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        var groups = await _presetRepository.GetGroupedList(x => x.GpuName, request.Specification, cancellationToken);
+        var groups = _presetRepository.GetGroupedList(x => x.GpuName, request.Specification);
 
-        return Result<List<PresetGroup>>.Success(groups.Select(x => new PresetGroup
+        await foreach (var group in groups.WithCancellation(cancellationToken))
         {
-            Name = x.Key,
-            Presets = _mapper.Map<List<PresetModel>>(x.Value)
-        }).ToList());
+            yield return new PresetGroup()
+            {
+                Name = group.Key,
+                Presets = _mapper.Map<List<PresetModel>>(group.ToList())
+            };
+        }
     }
 }

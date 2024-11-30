@@ -11,7 +11,6 @@ public class ApplyFlightSheetCommandValidator : AbstractValidator<ApplyFlightShe
     {
         RuleFor(x => x.MiningDevices)
             .NotNull()
-            .NotEmpty()
             .WithMessage("Mining devices are required");
     }
 }

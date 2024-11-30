@@ -1,4 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Core.MiningDevice;
+using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.UseCases.MiningDevice;
 
@@ -24,28 +25,34 @@ public interface IMiningDeviceRepository
     Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Получить устройства, поддерживаемые полётным листом.
-    /// </summary>
-    /// <param name="flightSheet"> Полётный лист. </param>
-    /// <returns> Устройства, поддерживаемые полётным листом. </returns>
-    IAsyncEnumerable<MiningDeviceInfo> GetFlightSheetSupportedDevices(Core.FlightSheet.FlightSheet flightSheet);
-
-    /// <summary>
     /// Задать текущие устройства ригов.
     /// </summary>
     /// <param name="devices"> Устройства. </param>
     Task SetCurrentRigsDevices(List<Core.MiningDevice.MiningDevice> devices);
 
     /// <summary>
-    /// Деактивировать устройства установленные на риге по переданному идентификатору рига.
+    /// Установить <see cref="MiningDeviceLifeCycleStatus"/> для устройств рига.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
-    Task DeactivateDevicesByRigId(Guid rigId);
+    /// <param name="status"> Статус жизненного цикла устройства. </param>
+    Task SetStatusForRigDevices(Guid rigId, MiningDeviceLifeCycleStatus status);
 
     /// <summary>
-    /// Установить полётный лист на устройство.
+    /// Установить полётный лист на устройства.
     /// </summary>
     /// <param name="devicesIds"> Идентификаторы устройств. </param>
     /// <param name="flightSheetId"> Идентификатор полётного листа. </param>
     Task SetFlightSheet(Guid[] devicesIds, Guid flightSheetId);
+
+    /// <summary>
+    /// Снять полётный лист с устройств.
+    /// </summary>
+    /// <param name="devicesIds"> Идентификаторы устройств. </param>
+    Task RemoveFlightSheet(Guid[] devicesIds);
+
+    /// <summary>
+    /// Подтвердить значение полётного листа на устройствах.
+    /// </summary>
+    /// <param name="devicesIds"> Идентификаторы устройств. </param>
+    Task ConfirmFlightSheet(Guid[] devicesIds);
 }

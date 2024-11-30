@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.CommandValidation;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 

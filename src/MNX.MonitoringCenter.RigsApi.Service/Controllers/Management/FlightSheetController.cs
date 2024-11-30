@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.Application.UseCases;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.ApplyFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.CreateFlightSheet;
@@ -10,6 +10,8 @@ using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Commands.RemoveFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.FlightSheet.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices.GetFlightSheetDevices;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -42,6 +44,32 @@ public class FlightSheetController : ControllerBase
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetFlightSheetsQuery(userId));
+    }
+
+    /// <summary>
+    /// Получить список майнинг устройств, к котором применён полётный лист.
+    /// </summary>
+    /// <param name="id"> Идентификатор полётного листа. </param>
+    /// <returns> Список майнинг устройств, сгруппированных по ригу и по типу. </returns>
+    [HttpGet("{id:Guid}/devices")]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Group<Group<MiningDevice>>>), 200)]
+    public IAsyncEnumerable<Group<Group<MiningDevice>>> GetMiningDevices(Guid id)
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetFlightSheetMiningDevicesQuery(userId, id));
+    }
+
+    /// <summary>
+    /// Получить список поддерживаемых майнинг устройств.
+    /// </summary>
+    /// <param name="id"> Идентификатор полётного листа. </param>
+    /// <returns> Список поддерживаемых майнинг устройств, сгруппированных по ригу и по типу. </returns>
+    [HttpGet("{id:Guid}/devices/supported")]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Group<Group<MiningDevice>>>), 200)]
+    public IAsyncEnumerable<Group<Group<MiningDevice>>> GetSupportedMiningDevices(Guid id)
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetFlightSheetSupportedMiningDevicesQuery(userId, id));
     }
 
     /// <summary>

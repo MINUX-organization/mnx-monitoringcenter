@@ -11,11 +11,14 @@ internal class MotherboardCfg : IEntityTypeConfiguration<Contracts.Devices.Mothe
 {
     public void Configure(EntityTypeBuilder<Contracts.Devices.Motherboard.Motherboard> builder)
     {
+        builder.Property<long>("RigInventoryId");
+        builder.HasKey("RigInventoryId", "Id");
+
         builder.ComplexProperty(e => e.Information);
 
         builder.HasMany(x => x.Pcies)
                .WithOne()
-               .HasForeignKey("motherboard_id");
+               .HasForeignKey("RigInventoryId", "MotherboardId");
     }
 }
 
@@ -26,6 +29,6 @@ internal class MotherboardPciCfg : IEntityTypeConfiguration<MotherboardPci>
 {
     public void Configure(EntityTypeBuilder<MotherboardPci> builder)
     {
-        builder.HasKey("Id", "motherboard_id");
+        builder.HasKey("MotherboardId", "Id");
     }
 }
