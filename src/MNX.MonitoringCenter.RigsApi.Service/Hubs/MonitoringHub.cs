@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Args;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
-using MNX.MonitoringCenter.RigsApi.UnionStreams.Contracts;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Hubs;
 

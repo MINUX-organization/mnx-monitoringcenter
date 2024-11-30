@@ -3,7 +3,7 @@ using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MediatR;
 using MNX.MonitoringCenter.Management.UseCases.Combinations.Queries;
-using MNX.MonitoringCenter.RigsApi.Args;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Args;
 
 namespace MNX.MonitoringCenter.RigsApi.Streams;
 

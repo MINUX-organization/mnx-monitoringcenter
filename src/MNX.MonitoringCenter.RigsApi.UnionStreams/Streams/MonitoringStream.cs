@@ -17,7 +17,7 @@ namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams
 
         private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
 
-        private readonly MiningCombinations _miningCombinations;
+        private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> _miningCombinations;
 
         protected override SubscriptionType[] SubscriptionTypes => new[] {
             SubscriptionType.TotalCoinsStatistics,
@@ -29,7 +29,7 @@ namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams
 
         public MonitoringStream(
             Guid userId,
-            MiningCombinations miningCombinations,
+            Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations,
             string connectionId,
             IUserRigsObserverAggregator userRigsObserverAggregator)
         {

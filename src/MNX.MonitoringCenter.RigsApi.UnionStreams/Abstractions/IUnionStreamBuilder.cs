@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.RigsApi.Args;
+﻿using MNX.MonitoringCenter.RigsApi.UnionStreams.Args;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 

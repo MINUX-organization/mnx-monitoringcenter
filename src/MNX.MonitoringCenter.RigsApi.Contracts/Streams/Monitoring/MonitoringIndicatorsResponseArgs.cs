@@ -16,7 +16,7 @@ public class MonitoringIndicatorsResponseArgs
 
     public IEnumerable<RigDynamicMiningIndicators> RigsDynamicMiningIndicators { get; set; }
 
-    public MiningCombinations MiningCombinations { get; set; }
+    public Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> MiningCombinations { get; set; }
 
     public MonitoringIndicatorsResponseArgs(
         IEnumerable<CoinStatistics> coinStatistics,
@@ -24,7 +24,7 @@ public class MonitoringIndicatorsResponseArgs
         int totalPower,
         int totalHashrate,
         IEnumerable<RigDynamicMiningIndicators> rigsDynamicMiningIndicators,
-        MiningCombinations miningCombinations)
+        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations)
     {
         TotalCoinStatistics = coinStatistics;
         TotalShares = sharesModel;

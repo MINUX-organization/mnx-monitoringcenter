@@ -20,6 +20,7 @@ public class MonitoringIndicatorsResponse : IConverterFrom<MonitoringIndicatorsR
     {
         if (source is MonitoringIndicatorsResponseArgs monitoringIndicatorsResponseArgs)
         {
+            /// TODO: Add mining combinations
             IEnumerable<MiningRigIndicatorsModel> rigsDynamicMiningIndicators = monitoringIndicatorsResponseArgs
                 .RigsDynamicMiningIndicators
                 .Select(rig => new MiningRigIndicatorsModel
@@ -29,23 +30,14 @@ public class MonitoringIndicatorsResponse : IConverterFrom<MonitoringIndicatorsR
                     TotalShares = rig.TotalShares,
                     TotalHashRate = rig.TotalHashRate,
                     MiningUpTime = rig.MiningUpTime,
-                    TotalCoinStatistics = rig
-                        .TotalCoinStatistics
-                        .Select(coinStatistic => new RigCoinStatisticModel 
-                        { 
-                            Shares = coinStatistic.Shares,
-                            MinerName = coinStatistic.MinerName,
-                            FlightSheetName
-                            CoinName = coinStatistic.CoinName, 
-                            HashRate = coinStatistic.HashRate
-                        })
+                    TotalCoinStatistics = rig.TotalCoinStatistics
                 });
 
             return new MonitoringIndicatorsResponse
             {
-                TotalShares = monitoringIndicators.TotalShares,
-                TotalPower = monitoringIndicators.TotalPower,
-                TotalHashrate = monitoringIndicators.TotalHashrate,
+                TotalShares = monitoringIndicatorsResponseArgs.TotalShares,
+                TotalPower = monitoringIndicatorsResponseArgs.TotalPower,
+                TotalHashrate = monitoringIndicatorsResponseArgs.TotalHashrate,
                 MiningRigsIndicators = rigsDynamicMiningIndicators
             };
         }

@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.RigsApi.UnionStreams.Contracts;
-using MNX.MonitoringCenter.Traffic.Observers;
+﻿using MNX.MonitoringCenter.Traffic.Observers;
 using System.Reactive.Subjects;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
