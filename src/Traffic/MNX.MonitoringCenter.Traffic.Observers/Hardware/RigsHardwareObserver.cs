@@ -28,7 +28,7 @@ public class RigsHardwareObserver : BaseRigsObserver<RigDynamicHardwareIndicator
 
     /// <inheritdoc/>
     public override (bool IsSuccessful, int SubscriptionsCount) TrySubscribe
-        (string subscriberId, SubscriptionType subscriptionType, ChannelWriter<object> writer)
+        (string subscriberId, SubscriptionType subscriptionType, Action<object> onNext)
     {
         var subscription = _subscriberSubscriptions.GetValueOrDefault(subscriberId);
 
@@ -41,16 +41,16 @@ public class RigsHardwareObserver : BaseRigsObserver<RigDynamicHardwareIndicator
         bool isSuccessful = false;
 
         if (subscriptionType == SubscriptionType.GeneralHardwareRigsIndicators)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _generalIndicatorsStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _generalIndicatorsStream);
 
         else if (subscriptionType == SubscriptionType.CpusHardwareIndicators)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _cpusIndicatorsStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _cpusIndicatorsStream);
 
         else if (subscriptionType == SubscriptionType.GpusHardwareIndicators)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _gpusIndicatorsStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _gpusIndicatorsStream);
 
         else if (subscriptionType == SubscriptionType.TotalPower)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _totalPowerStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _totalPowerStream);
 
         return new (isSuccessful, _subscriptionsCount);
     }

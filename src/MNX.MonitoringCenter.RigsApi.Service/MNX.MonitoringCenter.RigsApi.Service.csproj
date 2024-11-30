@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\MNX.MonitoringCenter.RigsApi.Observers\MNX.MonitoringCenter.RigsApi.UnionStreams.csproj" />
     <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
     <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Integration\MNX.MonitoringCenter.Inventory.Integration.csproj" />
     <ProjectReference Include="..\Management\MNX.MonitoringCenter.Management.Integration\MNX.MonitoringCenter.Management.Integration.csproj" />

@@ -77,7 +77,7 @@ public class UserRigsObserver : IUserRigsObserver
 
     /// <inheritdoc/>
     public (bool IsSuccessful, int SubscriptionsCount) TrySubscribe
-        (string subscriberId, SubscriptionType subscriptionType, ChannelWriter<object> writer)
+        (string subscriberId, SubscriptionType subscriptionType, Action<object> onNext)
     {
         bool isSuccessful = false;
         var subscriptions = 0;
@@ -85,7 +85,7 @@ public class UserRigsObserver : IUserRigsObserver
         if (subscriptionType.IsHardwareSubscription())
         {
             var (IsSuccessful, SubscriptionsCount)
-                = _rigsHardwareObserver.TrySubscribe(subscriberId, subscriptionType, writer);
+                = _rigsHardwareObserver.TrySubscribe(subscriberId, subscriptionType, onNext);
 
             isSuccessful = IsSuccessful;
             subscriptions += SubscriptionsCount;
@@ -95,7 +95,7 @@ public class UserRigsObserver : IUserRigsObserver
         else if (subscriptionType.IsMiningSubscription())
         {
             var (IsSuccessful, SubscriptionsCount)
-                = _rigsMiningObserver.TrySubscribe(subscriberId, subscriptionType, writer);
+                = _rigsMiningObserver.TrySubscribe(subscriberId, subscriptionType, onNext);
 
             isSuccessful = IsSuccessful;
             subscriptions += SubscriptionsCount;

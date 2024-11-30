@@ -7,11 +7,16 @@ using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Network;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.IntegrationTests;
 
+public enum SubStream
+{
+    Monitoring
+}
+
 internal class Program
 {
     static async Task Main(string[] args)
     {
-        await Task.WhenAll(SendIndicators(), StartConnectionAsync());
+        await Task.WhenAll(/*SendIndicators(),*/ StartConnectionAsync());
     }
 
     private static async Task SendIndicators()
@@ -29,7 +34,7 @@ internal class Program
 
         using var bus = RabbitHutch.CreateBus("host=localhost:5672;username=guest;password=guest;publisherConfirms=true");
 
-        for (int i = 0; i < 10000; i++)
+        for (int i = 0; i < 10; i++)
         {
             for (int j = 0; j < 5; j++)
             {
@@ -104,7 +109,7 @@ internal class Program
     private static async Task StartConnectionAsync()
     {
         var connection = new HubConnectionBuilder()
-            .WithUrl("http://localhost:5172/hubs/monitoring")
+            .WithUrl("http://localhost:8001/hubs/monitoring")
             .Build();
 
         try
@@ -113,9 +118,7 @@ internal class Program
             await connection.StartAsync();
             Console.WriteLine("Connected to SignalR hub");
 
-            var stream1 = connection.StreamAsync<int>("Subscribe", SubscriptionType.TotalPower);
-            var stream2 = connection.StreamAsync<SharesModel>("Subscribe", SubscriptionType.TotalShares);
-            var stream3 = connection.StreamAsync<int>("Subscribe", SubscriptionType.TotalHashRate);
+            var stream1 = connection.StreamAsync<int>("Subscribe", SubStream.Monitoring);
 
             _ = Task.Run(async () =>
             {
@@ -125,33 +128,7 @@ internal class Program
                 }
             });
 
-            _ = Task.Run(async () =>
-            {
-                await foreach (var item in stream2)
-                {
-                    Console.WriteLine($"accepted: {item.Accepted}, rejected: {item.Rejected}");
-                }
-            });
-
-            _ = Task.Run(async () =>
-            {
-                await foreach (var item in stream3)
-                {
-                    Console.WriteLine($"Total HashRate: {item}");
-                }
-            });
-
             await Task.Delay(4000);
-
-            var stream4 = connection.StreamAsync<int>("Subscribe", SubscriptionType.TotalHashRate);
-
-            _ = Task.Run(async () =>
-            {
-                await foreach (var item in stream4)
-                {
-                    Console.WriteLine($"Duplicate Total HashRate: {item}");
-                }
-            });
 
             Console.ReadKey();
         }

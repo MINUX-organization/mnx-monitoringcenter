@@ -47,19 +47,19 @@ public class UserRigsObserverAggregator : IUserRigsObserverAggregator
 
     /// <inheritdoc/>
     public bool TrySubscribe(Guid userId, string subscriberId,
-                             SubscriptionType subscriptionType, ChannelWriter<object> writer)
+                             SubscriptionType subscriptionType, Action<object> onNext)
     {
         IUserRigsObserver observer;
 
         try
         {
             observer = GetOrCreateObserver(userId);
-            return observer.TrySubscribe(subscriberId, subscriptionType, writer).IsSuccessful;
+            return observer.TrySubscribe(subscriberId, subscriptionType, onNext).IsSuccessful;
         }
         catch (ObjectDisposedException)
         {
             observer = GetOrCreateObserver(userId);
-            return observer.TrySubscribe(subscriberId, subscriptionType, writer).IsSuccessful;
+            return observer.TrySubscribe(subscriberId, subscriptionType, onNext).IsSuccessful;
         }
     }
 

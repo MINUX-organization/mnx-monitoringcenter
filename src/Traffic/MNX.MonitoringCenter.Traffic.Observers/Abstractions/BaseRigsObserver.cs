@@ -67,7 +67,7 @@ public abstract class BaseRigsObserver<TRigsIndicators, TDeviceIndicators, TCpus
 
     /// <inheritdoc/>
     public abstract (bool IsSuccessful, int SubscriptionsCount) TrySubscribe(
-        string subscriberId, SubscriptionType subscriptionType, ChannelWriter<object> writer);
+        string subscriberId, SubscriptionType subscriptionType, Action<object> onNext);
 
     /// <inheritdoc/>
     public virtual int Unsubscribe(string subscriberId, SubscriptionType subscriptionType)
@@ -119,12 +119,11 @@ public abstract class BaseRigsObserver<TRigsIndicators, TDeviceIndicators, TCpus
     /// <param name="stream"> Поток показателей. </param>
     /// <returns> Признак успешной подписки. </returns>
     protected bool TrySubscribeToStream<TIndicators>(Subscription subscription, SubscriptionType subscriptionType,
-                                                     ChannelWriter<object> writer, IObservable<TIndicators> stream)
+                                                     Action<object> onNext, IObservable<TIndicators> stream)
     {
         var streamSubscription = new Subscription.StreamSubscription<object>(
                                         subscriptionType,
-                                        stream.Subscribe(async data => await writer.WriteAsync(data!)),
-                                        writer);
+                                        stream.Subscribe(data => onNext(data!)));
 
         if (subscription.TryAdd(streamSubscription))
         {
@@ -256,17 +255,11 @@ public abstract class BaseRigsObserver<TRigsIndicators, TDeviceIndicators, TCpus
             /// </summary>
             public Specification Specification { get; set; }
 
-            /// <summary>
-            /// Писатель в канал.
-            /// </summary>
-            public ChannelWriter<TIndicators> Writer { get; }
-
-            public StreamSubscription(SubscriptionType type, IDisposable value, ChannelWriter<TIndicators> channelWriter)
+            public StreamSubscription(SubscriptionType type, IDisposable value)
             {
                 Type = type;
                 Value = value;
                 Specification = new Specification();
-                Writer = channelWriter;
             }
 
             /// <summary>
@@ -275,7 +268,6 @@ public abstract class BaseRigsObserver<TRigsIndicators, TDeviceIndicators, TCpus
             public readonly void Dispose()
             {
                 Value.Dispose();
-                Writer.TryComplete();
             }
         }
     }

@@ -61,7 +61,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Traffic", "Traffic", "{9FA0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffic.IntegrationTests", "tests\Traffic\MNX.MonitoringCenter.Traffic.IntegrationTests\MNX.MonitoringCenter.Traffic.IntegrationTests.csproj", "{EC72CF96-FA6C-41C2-85BD-691FFB40AC1A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.RigsApi.UseCases", "src\MNX.MonitoringCenter.RigsApi.UseCases\MNX.MonitoringCenter.RigsApi.UseCases.csproj", "{03157656-45B4-4312-86D0-A332D6766F9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.UseCases", "src\MNX.MonitoringCenter.RigsApi.UseCases\MNX.MonitoringCenter.RigsApi.UseCases.csproj", "{03157656-45B4-4312-86D0-A332D6766F9C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.UnionStreams", "MNX.MonitoringCenter.RigsApi.Observers\MNX.MonitoringCenter.RigsApi.UnionStreams.csproj", "{BE715858-887A-4E1D-8818-91C4C0EE875B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.RigsApi.Contracts", "MNX.MonitoringCenter.RigsApi.Contracts\MNX.MonitoringCenter.RigsApi.Contracts.csproj", "{2F0466B1-2B68-4FDE-AA60-48C05300606A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -157,6 +161,14 @@ Global
 		{03157656-45B4-4312-86D0-A332D6766F9C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{03157656-45B4-4312-86D0-A332D6766F9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{03157656-45B4-4312-86D0-A332D6766F9C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE715858-887A-4E1D-8818-91C4C0EE875B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE715858-887A-4E1D-8818-91C4C0EE875B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE715858-887A-4E1D-8818-91C4C0EE875B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE715858-887A-4E1D-8818-91C4C0EE875B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F0466B1-2B68-4FDE-AA60-48C05300606A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F0466B1-2B68-4FDE-AA60-48C05300606A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F0466B1-2B68-4FDE-AA60-48C05300606A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F0466B1-2B68-4FDE-AA60-48C05300606A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -190,6 +202,8 @@ Global
 		{9FA013FC-79DD-4969-BBF5-5F547838C0B4} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
 		{EC72CF96-FA6C-41C2-85BD-691FFB40AC1A} = {9FA013FC-79DD-4969-BBF5-5F547838C0B4}
 		{03157656-45B4-4312-86D0-A332D6766F9C} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{BE715858-887A-4E1D-8818-91C4C0EE875B} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{2F0466B1-2B68-4FDE-AA60-48C05300606A} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}

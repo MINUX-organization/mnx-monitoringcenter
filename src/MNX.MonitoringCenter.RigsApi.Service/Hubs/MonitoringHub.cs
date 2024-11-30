@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.Traffic.Observers;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using System.Threading.Channels;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Contracts;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Hubs;
 
@@ -15,16 +14,16 @@ public class MonitoringHub : Hub
 {
     private readonly UserAccessor _userAccessor;
 
-    private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
+    private readonly IUnionStreamBuilder _unionStreamBuilder;
 
     public MonitoringHub(UserAccessor userAccessor,
-                         IUserRigsObserverAggregator userRigsObserverAggregator)
+                         IUnionStreamBuilder unionStreamBuilder)
     {
         _userAccessor = userAccessor
             ?? throw new ArgumentNullException(nameof(userAccessor));
 
-        _userRigsObserverAggregator = userRigsObserverAggregator
-            ?? throw new ArgumentNullException(nameof(userRigsObserverAggregator));
+        _unionStreamBuilder = unionStreamBuilder
+            ?? throw new ArgumentNullException(nameof(unionStreamBuilder));
     }
 
     /// <summary>
@@ -34,23 +33,32 @@ public class MonitoringHub : Hub
     public override Task OnDisconnectedAsync(Exception? exception)
     {
         var userId = _userAccessor.GetUserId();
-        _userRigsObserverAggregator.UnsubscribeFromAll(userId, Context.ConnectionId);
+        
+        if (Context.Items.TryGetValue(userId, out var stream))
+        {
+            if (stream is UnionStreams.Abstractions.Stream s)
+            {
+                s.StopStreaming(userId, Context.ConnectionId);
+            }
+        }
+
         return base.OnDisconnectedAsync(exception);
     }
 
     /// <summary>
     /// Подписаться на поток показателей.
     /// </summary>
-    /// <param name="subscriptionType"> Тип подписки. </param>
-    /// <returns> Читатель из канала. </returns>
-    public ChannelReader<object> Subscribe(SubscriptionType subscriptionType)
+    /// <param name="streamType"> Тип потока. </param>
+    /// <returns> Поток данных. </returns>
+    public async IAsyncEnumerable<object> Subscribe(StreamType streamType)
     {
         var userId = _userAccessor.GetUserId();
-        var channel = Channel.CreateUnbounded<object>();
 
-        _userRigsObserverAggregator.TrySubscribe(userId, Context.ConnectionId,
-                                                 subscriptionType, channel.Writer);
+        var stream = await _unionStreamBuilder.Build(
+            new UnionStreamBuilderArgs(userId, Context.ConnectionId, streamType));
 
-        return channel.Reader;
+        Context.Items.Add(userId, stream);
+
+        yield return stream.StartStreaming();
     }
 }
