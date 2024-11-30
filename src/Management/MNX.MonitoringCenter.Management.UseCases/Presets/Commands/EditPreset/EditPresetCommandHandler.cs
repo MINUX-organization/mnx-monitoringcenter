@@ -4,23 +4,21 @@ using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core;
 using MNX.MonitoringCenter.Management.UseCases.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Presets.Commands.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 
 /// <summary>
 /// Обработчик команды редактирования пресета
 /// </summary>
-public class EditPresetCommandHandler : IRequestHandler<EditPresetCommand, Result<PresetModel>>
+public class EditPresetCommandHandler :
+    SavePresetCommandBaseHandler,
+    IRequestHandler<EditPresetCommand, Result<PresetModel>>
 {
-    private readonly IPresetRepository _repository;
-
-    private readonly IMapper _mapper;
-
-    public EditPresetCommandHandler(IPresetRepository repository, IMapper mapper)
-    {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-    }
+    public EditPresetCommandHandler(IMapper mapper,
+                                    IMediator mediator,
+                                    IPresetRepository repository)
+        : base(mapper, mediator, repository) { }
 
     public async Task<Result<PresetModel>> Handle(EditPresetCommand request, CancellationToken cancellationToken)
     {
@@ -31,16 +29,20 @@ public class EditPresetCommandHandler : IRequestHandler<EditPresetCommand, Resul
             return Result<PresetModel>.Invalid("Preset with this Id wasn`t found");
         }
 
+        var overclockingValidationResult = await IsValidOverclocking(preset.GpuName,
+                                                                     request.Model.Overclocking,
+                                                                     cancellationToken);
+        if (!overclockingValidationResult.IsSuccess)
+        {
+            return overclockingValidationResult;
+        }
+
         var newPreset = _mapper.Map<Preset>(request);
+        newPreset.GpuName = preset.GpuName;
 
         if (preset.Equals(newPreset))
         {
             return Result<PresetModel>.Success(_mapper.Map<PresetModel>(newPreset));
-        }
-
-        if (preset.GpuName != preset.GpuName)
-        {
-            return Result<PresetModel>.Invalid("Cannot change the gpu name");
         }
 
         if (preset.Name != newPreset.Name &&

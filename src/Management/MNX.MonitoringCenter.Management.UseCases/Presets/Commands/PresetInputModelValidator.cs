@@ -13,10 +13,6 @@ public class PresetInputModelValidator : AbstractValidator<PresetInputModel>
             .NotEmpty()
             .WithMessage("The Preset Name must not be empty");
 
-        RuleFor(x => x.GpuName)
-            .NotEmpty()
-            .WithMessage("The GPU name must not be empty");
-
         RuleFor(x => x.Overclocking)
             .NotNull()
             .WithMessage("Preset data is required");

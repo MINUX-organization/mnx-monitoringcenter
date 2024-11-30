@@ -1,13 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.Application.UseCases;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Presets.Commands.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
@@ -100,11 +100,11 @@ public class PresetController : ControllerBase
     /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id.
     /// </response>
     /// <response code="409"> Пресет с переданным именем уже существует. </response>
-    [HttpPut("{id:Guid}")]
+    [HttpPatch("{id:Guid}")]
     [ProducesResponseType(typeof(PresetModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     [ProducesResponseType(typeof(List<string>), 409)]
-    public async Task<IActionResult> Edit(Guid id, PresetInputModel model)
+    public async Task<IActionResult> Edit(Guid id, EditPresetModel model)
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new EditPresetCommand(id, model, userId));
