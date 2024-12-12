@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Pool;
 
-using Pool = Core.Pool;
+using Pool = Core.Mining.Pool;
 
 /// <summary>
 /// Реализует <see cref="IPoolRepository"/>

@@ -29,6 +29,8 @@ CREATE TABLE monitoring_center.cpu
     restrictions_temperature_is_writable boolean NOT NULL,
     restrictions_temperature_maximal integer NOT NULL,
     restrictions_temperature_minimal integer NOT NULL,
+    overclocking_core_clock_lock integer NOT NULL,
+    overclocking_core_voltage integer NOT NULL,
 
     CONSTRAINT pk_cpu PRIMARY KEY (rig_inventory_id, id),
 

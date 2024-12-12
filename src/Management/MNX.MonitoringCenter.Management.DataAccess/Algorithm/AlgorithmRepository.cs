@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.Algorithm;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Algorithm;
 
@@ -17,7 +17,7 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Core.Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
+    public IAsyncEnumerable<Core.Mining.Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
     {
         return _context.Algorithms.Filter(specification)
                                   .AsNoTracking()
@@ -25,7 +25,7 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public Task<Core.Algorithm?> GetById(Guid id, CancellationToken cancellationToken = default)
+    public Task<Core.Mining.Algorithm?> GetById(Guid id, CancellationToken cancellationToken = default)
     {
         return _context.Algorithms
                        .AsNoTracking()

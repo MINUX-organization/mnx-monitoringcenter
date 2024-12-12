@@ -1,5 +1,6 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpuInfo;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
@@ -35,6 +36,14 @@ public interface IGpuRepository
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Уникальные названия видеокарт. </returns>
     IAsyncEnumerable<string> GetGpusUniqueNames(DeviceSpecification specification);
+
+    /// <summary>
+    /// Получить информацию о видеокарте.
+    /// </summary>
+    /// <param name="gpuId"> Идентификатор видеокарты. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Информация о видеокарте. </returns>
+    Task<GpuInfo?> GetInfo(Guid gpuId, Guid userId);
 
     /// <summary>
     /// Получение ограничений по названию видеокарты.

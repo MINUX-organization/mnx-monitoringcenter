@@ -3,12 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.EditPreset;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.RemovePreset;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Presets.Commands;
-using MNX.MonitoringCenter.Management.UseCases.Presets.Commands.EditPreset;
-using MNX.MonitoringCenter.Management.UseCases.Presets.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.RemovePreset;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;

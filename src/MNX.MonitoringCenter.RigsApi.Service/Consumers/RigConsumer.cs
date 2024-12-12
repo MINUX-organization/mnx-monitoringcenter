@@ -2,8 +2,8 @@
 using MediatR;
 using MNX.MonitoringCenter.Common.AgentMessages;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetRigDevices;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Events;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetRigDevices;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Events;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 

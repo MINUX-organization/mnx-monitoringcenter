@@ -3,11 +3,11 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.FlightSheet;
 
-using FlightSheet = Core.FlightSheet.FlightSheet;
+using FlightSheet = Core.Mining.FlightSheet.FlightSheet;
 
 /// <summary>
 /// Реализация <see cref="IFlightSheetRepository"/>.

@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands;
-using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.AddWallet;
-using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.EditWallet;
-using MNX.MonitoringCenter.Management.UseCases.Wallet.Commands.RemoveWallet;
-using MNX.MonitoringCenter.Management.UseCases.Wallet.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.AddWallet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.EditWallet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.RemoveWallet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
