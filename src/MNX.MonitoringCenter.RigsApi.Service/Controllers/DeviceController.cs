@@ -6,6 +6,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
@@ -88,11 +89,29 @@ public class DeviceController : ControllerBase
     }
 
     /// <summary>
+    /// Получить разгон майнинг устройства.
+    /// </summary>
+    /// <param name="deviceId"> Идентификатор майнинг устройства. </param>
+    /// <returns> Результат выполнения запроса. </returns>
+    /// <response code="200"> Успешно </response>
+    /// <response code="400"> Майнинг устройство не найдено. </response>
+    [HttpGet("overclocking")]
+    [ProducesResponseType(typeof(IOverclockingModel), 200)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> GetOverclocking(Guid deviceId)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new GetDeviceOverclockingQuery(deviceId, userId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
     /// Задать разгон устройству.
     /// </summary>
     /// <param name="deviceId"> Идентификатор устройства. </param>
     /// <param name="overclocking"> Разгон. </param>
     /// <returns> Результат выполнения запроса. </returns>
+    /// <response code="200"> Успешно </response>
     [HttpPost("overclocking")]
     [ProducesResponseType(typeof(Guid[]), 200)]
     public async Task<IActionResult> SetOverclocking(Guid deviceId, IOverclockingModel overclocking)

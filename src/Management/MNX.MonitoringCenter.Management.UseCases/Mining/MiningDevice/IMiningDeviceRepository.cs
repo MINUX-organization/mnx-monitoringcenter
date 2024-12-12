@@ -67,9 +67,17 @@ public interface IMiningDeviceRepository
     Task ConfirmFlightSheet(Guid[] devicesIds);
 
     /// <summary>
+    /// Получить разгон майнинг устройства.
+    /// </summary>
+    /// <param name="deviceId"> Идентификатор устройства. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Разгон майнинг устройства. </returns>
+    Task<IOverclocking?> GetOverclocking(Guid deviceId, Guid userId);
+
+    /// <summary>
     /// Задать разгон майнинг устройствам.
     /// </summary>
     /// <param name="overclocking"> Разгон. </param>
     /// <param name="devicesIds"> Идентификаторы устройств. </param>
-    Task SetOverclocking(Core.Overclocking.IOverclocking overclocking, params Guid[] devicesIds);
+    Task SetOverclocking(IOverclocking overclocking, params Guid[] devicesIds);
 }

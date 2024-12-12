@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
@@ -163,6 +164,23 @@ public class MiningDeviceRepository : IMiningDeviceRepository
         return context.MiningDevices
                 .Where(device => devicesIds.Contains(device.Id))
                 .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetIsConfirm, d => true));
+    }
+
+    /// <inheritdoc/>
+    public async Task<IOverclocking?> GetOverclocking(Guid deviceId, Guid userId)
+    {
+        var context = _contextFactory.CreateDbContext();
+
+        var query = from device in context.MiningDevices.AsNoTrackingWithIdentityResolution()
+                                                        .Available(new Specification(userId))
+
+                    join overclocking in context.Overclocking.AsNoTracking() 
+                        on device.OverclockingId equals overclocking.Id
+
+                    select overclocking;
+
+        var clock = await query.FirstOrDefaultAsync();
+        return _mapper.Map<IOverclocking>(clock);
     }
 
     /// <inheritdoc/>
