@@ -18,7 +18,7 @@ public readonly struct InventorySpecification
     /// <summary>
     /// Признак актуальности инвентаризации.
     /// </summary>
-    public bool IsActuality { get; }
+    public bool IsActuality { get; } = true;
 
     public InventorySpecification(Guid? ownerId, Guid rigId, bool isActuality = true)
     {

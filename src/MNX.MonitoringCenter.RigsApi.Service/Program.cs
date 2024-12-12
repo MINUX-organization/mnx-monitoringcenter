@@ -96,10 +96,25 @@ internal class Program
             opts.UseInlineDefinitionsForEnums();
 
             opts.SelectDiscriminatorNameUsing(_ => "$type");
-            opts.SelectDiscriminatorValueUsing(subType => subType.BaseType!
-                    .GetCustomAttributes<JsonDerivedTypeAttribute>()
-                    .FirstOrDefault(x => x.DerivedType == subType)?
-                    .TypeDiscriminator!.ToString());
+
+            var allTypes = AppDomain.CurrentDomain.GetAssemblies()
+                                                  .Where(a => !a.IsDynamic)
+                                                  .SelectMany(a => a.GetTypes());
+
+            // Swashbuckle работает только с классами, как с базовыми типами, и не работает с интерфейсами
+            opts.SelectSubTypesUsing(baseType =>
+            {
+                if (baseType.IsInterface)
+                {
+                    return allTypes.Where(t => t.GetInterfaces()
+                                                .Where(i => i.GetCustomAttributes<JsonDerivedTypeAttribute>()
+                                                .Any(x => x.DerivedType == t)).Any());
+                }
+
+                return allTypes.Where(t => t.IsSubclassOf(baseType));
+            });
+
+            
         });
 
         services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!, new JwtBearerEvents()

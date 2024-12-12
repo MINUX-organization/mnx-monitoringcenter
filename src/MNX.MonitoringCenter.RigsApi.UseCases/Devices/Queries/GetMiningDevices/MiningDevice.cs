@@ -11,6 +11,16 @@ public class MiningDevice
     public Guid Id { get; init; }
 
     /// <summary>
+    /// Производитель майнинг устройства.
+    /// </summary>
+    public required string Manufacturer { get; init; }
+
+    /// <summary>
+    /// Модель майнинг устройства.
+    /// </summary>
+    public required string Model { get; init; }
+
+    /// <summary>
     /// Название рига.
     /// </summary>
     public required string RigName { get; init; }

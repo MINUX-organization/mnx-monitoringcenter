@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.MonitoringCenter.Management.Core;
-using MNX.MonitoringCenter.Management.UseCases.Algorithm.Queries;
+using MNX.MonitoringCenter.Management.Core.Mining;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;

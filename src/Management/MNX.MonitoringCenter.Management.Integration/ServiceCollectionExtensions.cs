@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MNX.Application.Data.DI;
+using MNX.Application.Data.EF.DI;
 using MNX.Application.UseCases.DI;
 using MNX.MonitoringCenter.Management.DataAccess;
 using MNX.MonitoringCenter.Management.DataAccess.Algorithm;
@@ -13,16 +13,16 @@ using MNX.MonitoringCenter.Management.DataAccess.Pool;
 using MNX.MonitoringCenter.Management.DataAccess.Preset;
 using MNX.MonitoringCenter.Management.DataAccess.Wallet;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.Algorithm;
-using MNX.MonitoringCenter.Management.UseCases.Algorithm.Queries;
-using MNX.MonitoringCenter.Management.UseCases.Commands.Presets.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
-using MNX.MonitoringCenter.Management.UseCases.Miner;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice;
-using MNX.MonitoringCenter.Management.UseCases.Pool;
-using MNX.MonitoringCenter.Management.UseCases.Presets;
-using MNX.MonitoringCenter.Management.UseCases.Wallet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
 
 namespace MNX.MonitoringCenter.Management.Integration;
 

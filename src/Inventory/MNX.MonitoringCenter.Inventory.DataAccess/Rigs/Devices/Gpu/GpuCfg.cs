@@ -59,5 +59,7 @@ internal class GpuCfg : IEntityTypeConfiguration<Contracts.Devices.Gpu.Gpu>
                 });
             });
         });
+
+        builder.ComplexProperty(e => e.Overclocking);
     }
 }

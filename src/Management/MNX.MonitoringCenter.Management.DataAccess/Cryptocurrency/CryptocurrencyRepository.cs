@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.Cryptocurrency;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
 
-using Cryptocurrency = Core.Cryptocurrency;
+using Cryptocurrency = Core.Mining.Cryptocurrency;
 
 /// <summary>
 /// Реализация <see cref="ICryptocurrencyRepository"/>.

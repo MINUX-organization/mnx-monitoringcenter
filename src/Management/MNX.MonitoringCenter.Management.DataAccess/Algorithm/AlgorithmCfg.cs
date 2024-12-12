@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Algorithm;
 /// <summary>
 /// Конфигурация для таблицы с алгоритмами.
 /// </summary>
-internal class AlgorithmCfg : IEntityTypeConfiguration<Core.Algorithm>
+internal class AlgorithmCfg : IEntityTypeConfiguration<Core.Mining.Algorithm>
 {
-    public void Configure(EntityTypeBuilder<Core.Algorithm> builder)
+    public void Configure(EntityTypeBuilder<Core.Mining.Algorithm> builder)
     {
         builder.HasIndex(x => x.Name);
     }

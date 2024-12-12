@@ -117,6 +117,11 @@ public class SaveInventoryTests : BaseTest
         {
             get
             {
+                var gpuRig1Id = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54551");
+                var cpuRig1Id = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54552");
+                var gpuRig2Id = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54533");
+                var cpuRig2Id = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54544");
+
                 yield return new RigInventoryMsg()
                 {
                     RigId = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54558"),
@@ -128,7 +133,7 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Cpu()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = cpuRig1Id,
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
                                 Information = new CpuInformation()
                                 {
@@ -145,7 +150,8 @@ public class SaveInventoryTests : BaseTest
                                     FanSpeed = new RangeValue(),
                                     Temperature = new RangeValue(),
                                     Clock = new RangeValue()
-                                }
+                                },
+                                Overclocking = new CpuOverclocking()
                             }
                         },
                         Drives = new()
@@ -166,7 +172,7 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Gpu()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = gpuRig1Id,
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
                                 Information = new GpuInformation()
                                 {
@@ -191,12 +197,12 @@ public class SaveInventoryTests : BaseTest
                                 {
                                     Power = new RangeValue(),
                                     FanSpeed = new RangeValue(),
-                                    Temperature = new GpuTemperature()
+                                    Temperature = new GpuTemperatureRestrictions()
                                     {
                                         Core = new RangeValue(),
                                         Memory = new RangeValue(),
                                     },
-                                    Voltage = new GpuVoltage()
+                                    Voltage = new GpuVoltageRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
@@ -209,7 +215,7 @@ public class SaveInventoryTests : BaseTest
                                             Offset = new RangeValue(),
                                         }
                                     },
-                                    Clock = new GpuClock()
+                                    Clock = new GpuClockRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
@@ -222,7 +228,8 @@ public class SaveInventoryTests : BaseTest
                                             Offset = new RangeValue(),
                                         }
                                     }
-                                }
+                                },
+                                Overclocking = new()
                             }
                         },
                         NetworkAdapters = new()
@@ -279,7 +286,7 @@ public class SaveInventoryTests : BaseTest
                     }
                 };
 
-                /*yield return new RigInventoryMsg()
+                yield return new RigInventoryMsg()
                 {
                     RigId = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54558"),
                     RigOwnerId = OWNER_ID,
@@ -290,7 +297,7 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Cpu()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = cpuRig1Id,
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
                                 Information = new CpuInformation()
                                 {
@@ -307,7 +314,8 @@ public class SaveInventoryTests : BaseTest
                                     FanSpeed = new RangeValue(),
                                     Temperature = new RangeValue(),
                                     Clock = new RangeValue()
-                                }
+                                },
+                                Overclocking = new CpuOverclocking()
                             }
                         },
                         Drives = new()
@@ -328,7 +336,7 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Gpu()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = gpuRig1Id,
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
                                 Information = new GpuInformation()
                                 {
@@ -353,12 +361,12 @@ public class SaveInventoryTests : BaseTest
                                 {
                                     Power = new RangeValue(),
                                     FanSpeed = new RangeValue(),
-                                    Temperature = new GpuTemperature()
+                                    Temperature = new GpuTemperatureRestrictions()
                                     {
                                         Core = new RangeValue(),
                                         Memory = new RangeValue(),
                                     },
-                                    Voltage = new GpuVoltage()
+                                    Voltage = new GpuVoltageRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
@@ -371,7 +379,7 @@ public class SaveInventoryTests : BaseTest
                                             Offset = new RangeValue(),
                                         }
                                     },
-                                    Clock = new GpuClock()
+                                    Clock = new GpuClockRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
@@ -384,7 +392,8 @@ public class SaveInventoryTests : BaseTest
                                             Offset = new RangeValue(),
                                         }
                                     }
-                                }
+                                },
+                                Overclocking = new GpuOverclocking()
                             }
                         },
                         NetworkAdapters = new()
@@ -439,7 +448,7 @@ public class SaveInventoryTests : BaseTest
                             }
                         }
                     }
-                };*/
+                };
 
                 yield return new RigInventoryMsg()
                 {
@@ -452,7 +461,7 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Cpu()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = cpuRig2Id,
                                 Pci = new() { Id = 1, Bus = "00:1f.4" },
                                 Information = new CpuInformation()
                                 {
@@ -469,7 +478,8 @@ public class SaveInventoryTests : BaseTest
                                     FanSpeed = new RangeValue(),
                                     Temperature = new RangeValue(),
                                     Clock = new RangeValue()
-                                }
+                                },
+                                Overclocking = new CpuOverclocking()
                             }
                         },
                         Drives = new()
@@ -490,7 +500,7 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Gpu()
                             {
-                                Id = Guid.NewGuid(),
+                                Id = gpuRig2Id,
                                 Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
                                 Information = new GpuInformation()
                                 {
@@ -515,12 +525,12 @@ public class SaveInventoryTests : BaseTest
                                 {
                                     Power = new RangeValue(),
                                     FanSpeed = new RangeValue(),
-                                    Temperature = new GpuTemperature()
+                                    Temperature = new GpuTemperatureRestrictions()
                                     {
                                         Core = new RangeValue(),
                                         Memory = new RangeValue(),
                                     },
-                                    Voltage = new GpuVoltage()
+                                    Voltage = new GpuVoltageRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
@@ -533,7 +543,7 @@ public class SaveInventoryTests : BaseTest
                                             Offset = new RangeValue(),
                                         }
                                     },
-                                    Clock = new GpuClock()
+                                    Clock = new GpuClockRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
@@ -546,7 +556,8 @@ public class SaveInventoryTests : BaseTest
                                             Offset = new RangeValue(),
                                         }
                                     }
-                                }
+                                },
+                                Overclocking = new()
                             }
                         },
                         NetworkAdapters = new()

@@ -62,6 +62,16 @@ CREATE TABLE monitoring_center.gpu
     restrictions_voltage_memory_offset_is_writable boolean NOT NULL,
     restrictions_voltage_memory_offset_maximal integer NOT NULL,
     restrictions_voltage_memory_offset_minimal integer NOT NULL,
+    overclocking_core_clock_lock integer NOT NULL,
+    overclocking_core_clock_offset integer NOT NULL,
+    overclocking_memory_clock_lock integer NOT NULL,
+    overclocking_memory_clock_offset integer NOT NULL,
+    overclocking_core_voltage integer NOT NULL,
+    overclocking_core_voltage_offset integer NOT NULL,
+    overclocking_memory_voltage integer NOT NULL,
+    overclocking_memory_voltage_offset integer NOT NULL,
+    overclocking_power_limit integer NOT NULL,
+    overclocking_fan_speed integer NOT NULL,
 
     CONSTRAINT pk_gpu PRIMARY KEY (rig_inventory_id, id),
 

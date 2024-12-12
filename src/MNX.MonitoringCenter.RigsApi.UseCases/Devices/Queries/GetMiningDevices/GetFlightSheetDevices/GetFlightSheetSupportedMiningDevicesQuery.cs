@@ -1,5 +1,5 @@
 ﻿using MediatR;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 
 namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices.GetFlightSheetDevices;
 

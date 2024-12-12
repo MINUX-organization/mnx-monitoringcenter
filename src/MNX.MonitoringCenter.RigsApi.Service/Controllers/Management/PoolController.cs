@@ -1,14 +1,13 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.Application.UseCases;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.UseCases.Pool.Commands;
-using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.AddPool;
-using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.EditPool;
-using MNX.MonitoringCenter.Management.UseCases.Pool.Commands.RemovePool;
-using MNX.MonitoringCenter.Management.UseCases.Pool.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.RemovePool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;

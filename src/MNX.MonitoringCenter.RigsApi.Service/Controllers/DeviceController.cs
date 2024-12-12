@@ -1,10 +1,11 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.Application.UseCases;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
+using MNX.MonitoringCenter.Management.Contracts.Overclocking;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
@@ -84,5 +85,20 @@ public class DeviceController : ControllerBase
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetCpusQuery(userId));
+    }
+
+    /// <summary>
+    /// Задать разгон устройству.
+    /// </summary>
+    /// <param name="deviceId"> Идентификатор устройства. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <returns> Результат выполнения запроса. </returns>
+    [HttpPost("overclocking")]
+    [ProducesResponseType(typeof(Guid[]), 200)]
+    public async Task<IActionResult> SetOverclocking(Guid deviceId, IOverclockingModel overclocking)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new SetOverclockingCommand(userId, overclocking, deviceId));
+        return result.ToActionResult();
     }
 }

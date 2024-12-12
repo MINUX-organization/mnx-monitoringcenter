@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.Mediator;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
@@ -50,7 +50,7 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
 
         await foreach (var gpu in miningDevices.WithCancellation(cancellationToken))
         {
-            var inventoryGpu = inventoryGpus.First(x => x.Id == gpu.Id);
+            var inventoryGpu = inventoryGpus.First(x => x.Id == gpu.Id); // todo: использовать hash set
 
             yield return new GetGpusQueryResponse()
             {

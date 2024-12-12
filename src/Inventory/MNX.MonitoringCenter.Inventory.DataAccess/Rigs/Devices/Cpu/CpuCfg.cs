@@ -26,5 +26,7 @@ internal class CpuCfg : IEntityTypeConfiguration<Contracts.Devices.Cpu.Cpu>
             x.ComplexProperty(e => e.Clock);
             x.ComplexProperty(e => e.FanSpeed);
         });
+
+        builder.ComplexProperty(e => e.Overclocking);
     }
 }

@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core.MiningDevice;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases;
 using System.Linq.Dynamic.Core;
 

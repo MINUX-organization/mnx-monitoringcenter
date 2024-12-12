@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 
@@ -22,15 +21,15 @@ public record GpuRestrictions
     /// <summary>
     /// Температура.
     /// </summary>
-    public required GpuTemperature Temperature { get; init; }
+    public required GpuTemperatureRestrictions Temperature { get; init; }
 
     /// <summary>
     /// Напряжение.
     /// </summary>
-    public required GpuVoltage Voltage { get; init; }
+    public required GpuVoltageRestrictions Voltage { get; init; }
 
     /// <summary>
     /// Разгон.
     /// </summary>
-    public required GpuClock Clock { get; init; }
+    public required GpuClockRestrictions Clock { get; init; }
 }

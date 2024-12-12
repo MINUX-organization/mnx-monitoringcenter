@@ -68,6 +68,8 @@ public abstract class GetMiningDevicesBaseQueryHandler
         var device = new MiningDevice()
         {
             Id = model.Id,
+            Manufacturer = model.Manufacturer,
+            Model = model.Model,
             Type = model.Type,
             RigName = rigs.First(rig => rig.Id == model.RigId).Name,
             FlightSheetName = model.FlightSheetName,

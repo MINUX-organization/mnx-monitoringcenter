@@ -1,6 +1,6 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 using MNX.Application.UseCases.Mediator;
 using System.Runtime.CompilerServices;
 

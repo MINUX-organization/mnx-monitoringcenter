@@ -23,7 +23,8 @@ public partial class InventoryRepository : ICpuRepository
                                      RigName = inventory.Rig!.Name,
                                      Information = cpu.Information,
                                      Pci = cpu.Pci,
-                                     Restrictions = cpu.Restrictions
+                                     Restrictions = cpu.Restrictions,
+                                     Overclocking = cpu.Overclocking
                                  }))
                                  .Filter(specification)
                                  .AsAsyncEnumerable();
