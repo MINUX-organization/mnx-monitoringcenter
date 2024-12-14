@@ -16,3 +16,19 @@ services:
              - applicationUrl=http://77.37.200.24:8001
              - ServiceName=rigs_api
              - ConsulUri=http://77.37.200.24:8500
+
+    monitoring_center_db:
+        container_name: monitoring_center_db
+        image: postgres:15-alpine
+        restart: always
+
+        ports:
+            - 6543:5432
+
+        volumes:
+            - ./db/:/docker-entrypoint-initdb.d
+
+        environment:
+            - POSTGRES_DB=monitoring_center
+            - POSTGRES_USER=MinuxDbAdmin
+            - POSTGRES_PASSWORD=MinuxDbAdmin
