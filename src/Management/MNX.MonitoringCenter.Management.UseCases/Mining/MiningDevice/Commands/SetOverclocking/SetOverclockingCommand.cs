@@ -62,6 +62,12 @@ public class SetOverclockingCommandHandler :
                 continue;
             }
 
+            if (device.Type.ToString() != request.Overclocking.TargetDeviceType.ToString())
+            {
+                _logger.LogError("Device with type of {deviceType} is not supported this overclocking", device.Type.ToString());
+                continue;
+            }
+
             var overclockingValidationResult =
                 await IsValidOverclocking(device.Name, overclocking, cancellationToken);
 

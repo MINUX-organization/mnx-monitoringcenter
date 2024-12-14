@@ -4,9 +4,9 @@ using System.Text.Json.Serialization;
 namespace MNX.MonitoringCenter.Management.Contracts.Overclocking;
 
 /// <summary>
-/// Модель разгона для видеокарты.
+/// Модель разгона для процессора.
 /// </summary>
-public record GpuOverclockingModel : Inventory.Contracts.Devices.Gpu.GpuOverclocking, IOverclockingModel
+public record CpuOverclockingModel : Inventory.Contracts.Devices.Cpu.CpuOverclocking, IOverclockingModel
 {
     private OverclockingTargetDeviceType _targetDeviceType;
 
@@ -15,6 +15,6 @@ public record GpuOverclockingModel : Inventory.Contracts.Devices.Gpu.GpuOvercloc
     public OverclockingTargetDeviceType TargetDeviceType
     {
         get => _targetDeviceType;
-        init => _targetDeviceType = OverclockingTargetDeviceType.GPU;
+        init => _targetDeviceType = OverclockingTargetDeviceType.CPU;
     }
 }

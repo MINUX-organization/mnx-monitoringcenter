@@ -119,9 +119,11 @@ public class MappingProfile : Profile
 
         CreateMap<IOverclocking, IOverclockingModel>()
             .Include<GpuOverclocking, GpuOverclockingModel>()
+            .Include<CpuOverclocking, CpuOverclockingModel>()
             .ReverseMap();
 
         CreateMap<GpuOverclocking, GpuOverclockingModel>().ReverseMap();
+        CreateMap<CpuOverclocking, CpuOverclockingModel>().ReverseMap();
 
         // wallets
 

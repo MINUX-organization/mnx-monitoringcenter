@@ -134,11 +134,11 @@ public class SaveInventoryTests : BaseTest
                             new Cpu()
                             {
                                 Id = cpuRig1Id,
-                                Pci = new() { Id = 1, Bus = "00:1f.4" },
+                                Pci = new() { Id = 0, Bus = "00:00.0" },
                                 Information = new CpuInformation()
                                 {
                                     Manufacturer = "AMD",
-                                    Model = "Model",
+                                    Model = "Ryzen 5 7500f",
                                     CoresCount = 10,
                                     ThreadsCount = 12,
                                     Architecture = "x86_64",
@@ -146,12 +146,40 @@ public class SaveInventoryTests : BaseTest
                                 },
                                 Restrictions = new CpuRestrictions()
                                 {
-                                    Power = new RangeValue(),
-                                    FanSpeed = new RangeValue(),
-                                    Temperature = new RangeValue(),
+                                    Power = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 150,
+                                        Default = 100,
+                                        IsWritable = false,
+                                    },
+                                    FanSpeed = new RangeValue()
+                                    {
+                                        Minimal = 0,
+                                        Maximal = 100,
+                                        Default = 50,
+                                        IsWritable = false,
+                                    },
+                                    Temperature = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 120,
+                                        Default = 100,
+                                        IsWritable = false
+                                    },
                                     Clock = new RangeValue()
+                                    {
+                                        Minimal = 2000,
+                                        Maximal = 5000,
+                                        Default = 2500,
+                                        IsWritable = false
+                                    }
                                 },
                                 Overclocking = new CpuOverclocking()
+                                {
+                                    CoreClockLock = 2500,
+                                    CoreVoltage = 25
+                                }
                             }
                         },
                         Drives = new()
@@ -173,13 +201,13 @@ public class SaveInventoryTests : BaseTest
                             new Gpu()
                             {
                                 Id = gpuRig1Id,
-                                Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
+                                Pci = new Pci() { Id = 1, Bus = "00:01.0" },
                                 Information = new GpuInformation()
                                 {
                                     Manufacturer = "AMD",
-                                    Model = "Model",
+                                    Model = "RX 580",
                                     SerialNumber = "SerialNumber",
-                                    Vendor = "Vendor",
+                                    Vendor = "MSI",
                                     BiosVersion = "1.0.0",
                                     Technology = new ParallelComputingTechnology()
                                     {
@@ -189,47 +217,83 @@ public class SaveInventoryTests : BaseTest
                                     Memory = new MemoryInformation()
                                     {
                                         Total = 1000,
-                                        Type = "Type",
-                                        Vendor = "Vendor"
+                                        Type = "GDDR 4",
+                                        Vendor = "Samsung"
                                     }
                                 },
                                 Restrictions = new GpuRestrictions()
                                 {
-                                    Power = new RangeValue(),
-                                    FanSpeed = new RangeValue(),
+                                    Power = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 150,
+                                        Default = 100,
+                                        IsWritable = true
+                                    },
+                                    FanSpeed = new RangeValue()
+                                    {
+                                        Minimal = 0,
+                                        Maximal = 100,
+                                        Default = 100,
+                                        IsWritable = true
+                                    },
                                     Temperature = new GpuTemperatureRestrictions()
                                     {
-                                        Core = new RangeValue(),
-                                        Memory = new RangeValue(),
+                                        Core = new RangeValue()
+                                        {
+                                            Minimal = 30,
+                                            Maximal = 150,
+                                            Default = 100,
+                                            IsWritable = true
+                                        },
+                                        Memory = new RangeValue()
+                                        {
+                                            Minimal = 30,
+                                            Maximal = 150,
+                                            Default = 100,
+                                            IsWritable = true
+                                        },
                                     },
                                     Voltage = new GpuVoltageRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 30, Maximal = 75, Default = 50, IsWritable = true },
+                                            Offset = new RangeValue() { Minimal = -30, Maximal = 50, Default = 0, IsWritable = true },
                                         },
                                         Memory = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 30, Maximal = 75, Default = 50, IsWritable = true },
+                                            Offset = new RangeValue(){ Minimal = -30, Maximal = 50, Default = 0, IsWritable = true },
                                         }
                                     },
                                     Clock = new GpuClockRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 300, Maximal = 2000, Default = 1500, IsWritable = true },
+                                            Offset = new RangeValue() { Minimal = -1000, Maximal = 1000, Default = 0, IsWritable = true },
                                         },
                                         Memory = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue(){ Minimal = 150, Maximal = 2500, Default = 1000, IsWritable = true },
+                                            Offset = new RangeValue(){ Minimal = -30, Maximal = 75, Default = 50, IsWritable = true },
                                         }
                                     }
                                 },
-                                Overclocking = new()
+                                Overclocking = new GpuOverclocking()
+                                {
+                                    FanSpeed = 50,
+                                    PowerLimit = 100,
+                                    CoreClockLock = 1500,
+                                    CoreClockOffset = 0,
+                                    MemoryClockLock = 1000,
+                                    MemoryClockOffset = 0,
+                                    CoreVoltage = 50,
+                                    CoreVoltageOffset = 0,
+                                    MemoryVoltage = 50,
+                                    MemoryVoltageOffset = 0
+                                }
                             }
                         },
                         NetworkAdapters = new()
@@ -262,8 +326,14 @@ public class SaveInventoryTests : BaseTest
                             },
                             Pcies = new()
                             {
-                                new MotherboardPci() { Id = 1, Bus = "00:1f.4", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:1f.5", IsInstalled = false }
+                                new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -279,8 +349,8 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "miner_1", "1.0.0" },
-                                { "miner_2", "1.0.0" }
+                                { "lolMiner", "1.0.0" },
+                                { "rigel", "1.0.0" }
                             }
                         }
                     }
@@ -298,11 +368,11 @@ public class SaveInventoryTests : BaseTest
                             new Cpu()
                             {
                                 Id = cpuRig1Id,
-                                Pci = new() { Id = 1, Bus = "00:1f.4" },
+                                Pci = new() { Id = 0, Bus = "00:00.0" },
                                 Information = new CpuInformation()
                                 {
-                                    Manufacturer = "Intel",
-                                    Model = "Core i7",
+                                    Manufacturer = "AMD",
+                                    Model = "Ryzen 5 7500f",
                                     CoresCount = 10,
                                     ThreadsCount = 12,
                                     Architecture = "x86_64",
@@ -310,12 +380,40 @@ public class SaveInventoryTests : BaseTest
                                 },
                                 Restrictions = new CpuRestrictions()
                                 {
-                                    Power = new RangeValue(),
-                                    FanSpeed = new RangeValue(),
-                                    Temperature = new RangeValue(),
+                                    Power = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 150,
+                                        Default = 100,
+                                        IsWritable = false,
+                                    },
+                                    FanSpeed = new RangeValue()
+                                    {
+                                        Minimal = 0,
+                                        Maximal = 100,
+                                        Default = 50,
+                                        IsWritable = false,
+                                    },
+                                    Temperature = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 120,
+                                        Default = 100,
+                                        IsWritable = false
+                                    },
                                     Clock = new RangeValue()
+                                    {
+                                        Minimal = 2000,
+                                        Maximal = 5000,
+                                        Default = 2500,
+                                        IsWritable = false
+                                    }
                                 },
                                 Overclocking = new CpuOverclocking()
+                                {
+                                    CoreClockLock = 2500,
+                                    CoreVoltage = 25
+                                }
                             }
                         },
                         Drives = new()
@@ -337,13 +435,13 @@ public class SaveInventoryTests : BaseTest
                             new Gpu()
                             {
                                 Id = gpuRig1Id,
-                                Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
+                                Pci = new Pci() { Id = 1, Bus = "00:01.0" },
                                 Information = new GpuInformation()
                                 {
                                     Manufacturer = "AMD",
-                                    Model = "Model",
+                                    Model = "RX 580",
                                     SerialNumber = "SerialNumber",
-                                    Vendor = "Vendor",
+                                    Vendor = "MSI",
                                     BiosVersion = "1.0.0",
                                     Technology = new ParallelComputingTechnology()
                                     {
@@ -353,47 +451,83 @@ public class SaveInventoryTests : BaseTest
                                     Memory = new MemoryInformation()
                                     {
                                         Total = 1000,
-                                        Type = "Type",
-                                        Vendor = "Vendor"
+                                        Type = "GDDR 4",
+                                        Vendor = "Samsung"
                                     }
                                 },
                                 Restrictions = new GpuRestrictions()
                                 {
-                                    Power = new RangeValue(),
-                                    FanSpeed = new RangeValue(),
+                                    Power = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 150,
+                                        Default = 100,
+                                        IsWritable = true
+                                    },
+                                    FanSpeed = new RangeValue()
+                                    {
+                                        Minimal = 0,
+                                        Maximal = 100,
+                                        Default = 100,
+                                        IsWritable = true
+                                    },
                                     Temperature = new GpuTemperatureRestrictions()
                                     {
-                                        Core = new RangeValue(),
-                                        Memory = new RangeValue(),
+                                        Core = new RangeValue()
+                                        {
+                                            Minimal = 30,
+                                            Maximal = 150,
+                                            Default = 100,
+                                            IsWritable = true
+                                        },
+                                        Memory = new RangeValue()
+                                        {
+                                            Minimal = 30,
+                                            Maximal = 150,
+                                            Default = 100,
+                                            IsWritable = true
+                                        },
                                     },
                                     Voltage = new GpuVoltageRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 30, Maximal = 75, Default = 50, IsWritable = true },
+                                            Offset = new RangeValue() { Minimal = -30, Maximal = 50, Default = 0, IsWritable = true },
                                         },
                                         Memory = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 30, Maximal = 75, Default = 50, IsWritable = true },
+                                            Offset = new RangeValue(){ Minimal = -30, Maximal = 50, Default = 0, IsWritable = true },
                                         }
                                     },
                                     Clock = new GpuClockRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 300, Maximal = 2000, Default = 1500, IsWritable = true },
+                                            Offset = new RangeValue() { Minimal = -1000, Maximal = 1000, Default = 0, IsWritable = true },
                                         },
                                         Memory = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue(){ Minimal = 150, Maximal = 2500, Default = 1000, IsWritable = true },
+                                            Offset = new RangeValue(){ Minimal = -30, Maximal = 75, Default = 50, IsWritable = true },
                                         }
                                     }
                                 },
                                 Overclocking = new GpuOverclocking()
+                                {
+                                    FanSpeed = 50,
+                                    PowerLimit = 100,
+                                    CoreClockLock = 1500,
+                                    CoreClockOffset = 0,
+                                    MemoryClockLock = 1000,
+                                    MemoryClockOffset = 0,
+                                    CoreVoltage = 50,
+                                    CoreVoltageOffset = 0,
+                                    MemoryVoltage = 50,
+                                    MemoryVoltageOffset = 0
+                                }
                             }
                         },
                         NetworkAdapters = new()
@@ -426,8 +560,14 @@ public class SaveInventoryTests : BaseTest
                             },
                             Pcies = new()
                             {
-                                new MotherboardPci() { Id = 1, Bus = "00:1f.4", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:1f.5", IsInstalled = false }
+                                new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -443,8 +583,8 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "miner_1", "1.0.0" },
-                                { "miner_2", "1.0.0" }
+                                { "lolMiner", "1.0.0" },
+                                { "rigel", "1.0.0" }
                             }
                         }
                     }
@@ -461,12 +601,12 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Cpu()
                             {
-                                Id = cpuRig2Id,
-                                Pci = new() { Id = 1, Bus = "00:1f.4" },
+                                Id = cpuRig1Id,
+                                Pci = new() { Id = 0, Bus = "00:00.0" },
                                 Information = new CpuInformation()
                                 {
                                     Manufacturer = "AMD",
-                                    Model = "Model",
+                                    Model = "Ryzen 5 7500f",
                                     CoresCount = 10,
                                     ThreadsCount = 12,
                                     Architecture = "x86_64",
@@ -474,12 +614,40 @@ public class SaveInventoryTests : BaseTest
                                 },
                                 Restrictions = new CpuRestrictions()
                                 {
-                                    Power = new RangeValue(),
-                                    FanSpeed = new RangeValue(),
-                                    Temperature = new RangeValue(),
+                                    Power = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 150,
+                                        Default = 100,
+                                        IsWritable = false,
+                                    },
+                                    FanSpeed = new RangeValue()
+                                    {
+                                        Minimal = 0,
+                                        Maximal = 100,
+                                        Default = 50,
+                                        IsWritable = false,
+                                    },
+                                    Temperature = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 120,
+                                        Default = 100,
+                                        IsWritable = false
+                                    },
                                     Clock = new RangeValue()
+                                    {
+                                        Minimal = 2000,
+                                        Maximal = 5000,
+                                        Default = 2500,
+                                        IsWritable = false
+                                    }
                                 },
                                 Overclocking = new CpuOverclocking()
+                                {
+                                    CoreClockLock = 2500,
+                                    CoreVoltage = 25
+                                }
                             }
                         },
                         Drives = new()
@@ -500,14 +668,14 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Gpu()
                             {
-                                Id = gpuRig2Id,
-                                Pci = new Pci() { Id = 1, Bus = "00:1f.4" },
+                                Id = gpuRig1Id,
+                                Pci = new Pci() { Id = 1, Bus = "00:01.0" },
                                 Information = new GpuInformation()
                                 {
                                     Manufacturer = "Nvidia",
-                                    Model = "Geforce RTX 3060",
+                                    Model = "GeForce RTX 8090",
                                     SerialNumber = "SerialNumber",
-                                    Vendor = "Vendor",
+                                    Vendor = "MSI",
                                     BiosVersion = "1.0.0",
                                     Technology = new ParallelComputingTechnology()
                                     {
@@ -517,47 +685,83 @@ public class SaveInventoryTests : BaseTest
                                     Memory = new MemoryInformation()
                                     {
                                         Total = 1000,
-                                        Type = "Type",
-                                        Vendor = "Vendor"
+                                        Type = "GDDR 4",
+                                        Vendor = "Samsung"
                                     }
                                 },
                                 Restrictions = new GpuRestrictions()
                                 {
-                                    Power = new RangeValue(),
-                                    FanSpeed = new RangeValue(),
+                                    Power = new RangeValue()
+                                    {
+                                        Minimal = 30,
+                                        Maximal = 150,
+                                        Default = 100,
+                                        IsWritable = true
+                                    },
+                                    FanSpeed = new RangeValue()
+                                    {
+                                        Minimal = 0,
+                                        Maximal = 100,
+                                        Default = 100,
+                                        IsWritable = true
+                                    },
                                     Temperature = new GpuTemperatureRestrictions()
                                     {
-                                        Core = new RangeValue(),
-                                        Memory = new RangeValue(),
+                                        Core = new RangeValue()
+                                        {
+                                            Minimal = 30,
+                                            Maximal = 150,
+                                            Default = 100,
+                                            IsWritable = true
+                                        },
+                                        Memory = new RangeValue()
+                                        {
+                                            Minimal = 30,
+                                            Maximal = 150,
+                                            Default = 100,
+                                            IsWritable = true
+                                        },
                                     },
                                     Voltage = new GpuVoltageRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 30, Maximal = 75, Default = 50, IsWritable = true },
+                                            Offset = new RangeValue() { Minimal = -30, Maximal = 50, Default = 0, IsWritable = true },
                                         },
                                         Memory = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 30, Maximal = 75, Default = 50, IsWritable = true },
+                                            Offset = new RangeValue(){ Minimal = -30, Maximal = 50, Default = 0, IsWritable = true },
                                         }
                                     },
                                     Clock = new GpuClockRestrictions()
                                     {
                                         Core = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue() { Minimal = 300, Maximal = 2000, Default = 1500, IsWritable = true },
+                                            Offset = new RangeValue() { Minimal = -1000, Maximal = 1000, Default = 0, IsWritable = true },
                                         },
                                         Memory = new GpuChangingValue()
                                         {
-                                            Lock = new RangeValue(),
-                                            Offset = new RangeValue(),
+                                            Lock = new RangeValue(){ Minimal = 150, Maximal = 2500, Default = 1000, IsWritable = true },
+                                            Offset = new RangeValue(){ Minimal = -30, Maximal = 75, Default = 50, IsWritable = true },
                                         }
                                     }
                                 },
-                                Overclocking = new()
+                                Overclocking = new GpuOverclocking()
+                                {
+                                    FanSpeed = 50,
+                                    PowerLimit = 100,
+                                    CoreClockLock = 1500,
+                                    CoreClockOffset = 0,
+                                    MemoryClockLock = 1000,
+                                    MemoryClockOffset = 0,
+                                    CoreVoltage = 50,
+                                    CoreVoltageOffset = 0,
+                                    MemoryVoltage = 50,
+                                    MemoryVoltageOffset = 0
+                                }
                             }
                         },
                         NetworkAdapters = new()
@@ -590,8 +794,14 @@ public class SaveInventoryTests : BaseTest
                             },
                             Pcies = new()
                             {
-                                new MotherboardPci() { Id = 1, Bus = "00:1f.4", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:1f.5", IsInstalled = false }
+                                new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -607,8 +817,8 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "miner_1", "1.0.0" },
-                                { "miner_2", "1.0.0" }
+                                { "lolMiner", "1.0.0" },
+                                { "rigel", "1.0.0" }
                             }
                         }
                     }
