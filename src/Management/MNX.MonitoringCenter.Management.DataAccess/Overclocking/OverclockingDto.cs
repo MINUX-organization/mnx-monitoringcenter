@@ -18,52 +18,52 @@ public class OverclockingDto
     public OverclockingTargetDeviceType TargetDeviceType { get; init; }
 
     /// <summary>
-    /// Фиксированная частота ядра
+    /// Фиксированная частота ядра.
     /// </summary>
-    public int CoreClockLock { get; set; }
+    public int? CoreClockLock { get; set; }
 
     /// <summary>
-    /// Смещение частоты ядра
+    /// Смещение частоты ядра.
     /// </summary>
-    public int CoreClockOffset { get; set; }
+    public int? CoreClockOffset { get; set; }
 
     /// <summary>
-    /// Фиксированная частота памяти
+    /// Фиксированная частота памяти.
     /// </summary>
-    public int MemoryClockLock { get; set; }
+    public int? MemoryClockLock { get; set; }
 
     /// <summary>
-    /// Смещение частоты памяти
+    /// Смещение частоты памяти.
     /// </summary>
-    public int MemoryClockOffset { get; set; }
+    public int? MemoryClockOffset { get; set; }
 
     /// <summary>
-    /// Напряжение на ядре
+    /// Напряжение на ядре.
     /// </summary>
-    public int CoreVoltage { get; set; }
+    public int? CoreVoltage { get; set; }
 
     /// <summary>
-    /// Смещение напряжения на ядре
+    /// Смещение напряжения на ядре.
     /// </summary>
-    public int CoreVoltageOffset { get; set; }
+    public int? CoreVoltageOffset { get; set; }
 
     /// <summary>
-    /// Напряжение памяти
+    /// Напряжение памяти.
     /// </summary>
-    public int MemoryVoltage { get; set; }
+    public int? MemoryVoltage { get; set; }
 
     /// <summary>
-    /// Смещение напряжения памяти
+    /// Смещение напряжения памяти.
     /// </summary>
-    public int MemoryVoltageOffset { get; set; }
+    public int? MemoryVoltageOffset { get; set; }
 
     /// <summary>
-    /// Ограничение мощности
+    /// Ограничение мощности.
     /// </summary>
-    public int PowerLimit { get; set; }
+    public int? PowerLimit { get; set; }
 
     /// <summary>
-    /// Скорость вентилятора
+    /// Скорость вентилятора.
     /// </summary>
-    public int FanSpeed { get; set; }
+    public int? FanSpeed { get; set; }
 }

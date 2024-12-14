@@ -601,7 +601,7 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Cpu()
                             {
-                                Id = cpuRig1Id,
+                                Id = cpuRig2Id,
                                 Pci = new() { Id = 0, Bus = "00:00.0" },
                                 Information = new CpuInformation()
                                 {
@@ -668,7 +668,7 @@ public class SaveInventoryTests : BaseTest
                         {
                             new Gpu()
                             {
-                                Id = gpuRig1Id,
+                                Id = gpuRig2Id,
                                 Pci = new Pci() { Id = 1, Bus = "00:01.0" },
                                 Information = new GpuInformation()
                                 {

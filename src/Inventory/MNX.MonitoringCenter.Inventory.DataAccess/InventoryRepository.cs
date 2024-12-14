@@ -37,6 +37,7 @@ public partial class InventoryRepository
 
         if (oldInventory != null)
         {
+            // todo: устанавливать дату и время окончания действия инвентаризации при отключении рига по некоторым правилам
             oldInventory.EndDateTime = createdDate;
             _context.RigInventory.Update(oldInventory);
         }
