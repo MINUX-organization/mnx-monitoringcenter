@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Events;
 

@@ -18,10 +18,10 @@ public class CpuOverclocking : IOverclocking
     /// <summary>
     /// Фиксированная частота ядра.
     /// </summary>
-    public int CoreClockLock { get; }
+    public int CoreClockLock { get; set; }
 
     /// <summary>
     /// Напряжение.
     /// </summary>
-    public int CoreVoltage { get; }
+    public int CoreVoltage { get; set; }
 }

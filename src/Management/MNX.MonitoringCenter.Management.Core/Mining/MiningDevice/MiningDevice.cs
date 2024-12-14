@@ -14,11 +14,6 @@ public class MiningDevice
     public Guid Id { get; init; }
 
     /// <summary>
-    /// Идентификатор рига.
-    /// </summary>
-    public Guid RigId { get; set; }
-
-    /// <summary>
     /// Идентификатор владельца.
     /// </summary>
     public Guid OwnerId { get; set; }

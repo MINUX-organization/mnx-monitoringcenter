@@ -517,7 +517,7 @@ public class SaveInventoryTests : BaseTest
                                 },
                                 Overclocking = new GpuOverclocking()
                                 {
-                                    FanSpeed = 50,
+                                    FanSpeed = 70,
                                     PowerLimit = 100,
                                     CoreClockLock = 1500,
                                     CoreClockOffset = 0,

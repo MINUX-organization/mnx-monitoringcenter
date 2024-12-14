@@ -15,6 +15,12 @@ public record GpuOverclockingModel : Inventory.Contracts.Devices.Gpu.GpuOvercloc
     public OverclockingTargetDeviceType TargetDeviceType
     {
         get => _targetDeviceType;
-        init => _targetDeviceType = OverclockingTargetDeviceType.GPU;
+        init
+        {
+            if (value != OverclockingTargetDeviceType.GPU)
+                throw new ArgumentException("Target device type is not supported", nameof(TargetDeviceType));
+
+            _targetDeviceType = value;
+        }
     }
 }

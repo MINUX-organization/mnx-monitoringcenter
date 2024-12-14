@@ -15,6 +15,12 @@ public record CpuOverclockingModel : Inventory.Contracts.Devices.Cpu.CpuOvercloc
     public OverclockingTargetDeviceType TargetDeviceType
     {
         get => _targetDeviceType;
-        init => _targetDeviceType = OverclockingTargetDeviceType.CPU;
+        init
+        {
+            if (value != OverclockingTargetDeviceType.CPU)
+                throw new ArgumentException("Target device type is not supported", nameof(TargetDeviceType));
+
+            _targetDeviceType = value;
+        }
     }
 }

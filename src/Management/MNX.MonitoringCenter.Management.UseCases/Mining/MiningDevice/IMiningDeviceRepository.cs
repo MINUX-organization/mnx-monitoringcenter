@@ -35,10 +35,11 @@ public interface IMiningDeviceRepository
     Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Задать текущие устройства ригов.
+    /// Задать текущие устройства рига.
     /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
     /// <param name="devices"> Устройства. </param>
-    Task SetCurrentRigsDevices(List<Core.Mining.MiningDevice.MiningDevice> devices);
+    Task SetCurrentRigDevices(Guid rigId, List<Core.Mining.MiningDevice.MiningDevice> devices);
 
     /// <summary>
     /// Установить <see cref="MiningDeviceLifeCycleStatus"/> для устройств рига.

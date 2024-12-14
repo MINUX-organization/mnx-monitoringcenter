@@ -43,7 +43,6 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
                 Id = gpu.Id,
                 Manufacturer = gpu.Information.Manufacturer,
                 Model = gpu.Information.Model,
-                RigId = request.RigId,
                 OwnerId = request.RigOwnerId,
                 Type = MiningDeviceType.GPU
             };
@@ -61,7 +60,6 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
                 Id = cpu.Id,
                 Manufacturer = cpu.Information.Manufacturer,
                 Model = cpu.Information.Model,
-                RigId = request.RigId,
                 OwnerId = request.RigOwnerId,
                 Type = MiningDeviceType.CPU
             };
@@ -71,7 +69,7 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
             return device;
         }));
 
-        await _repository.SetCurrentRigsDevices(miningDevices);
+        await _repository.SetCurrentRigDevices(request.RigId, miningDevices);
 
         return Result<Unit>.Empty();
     }

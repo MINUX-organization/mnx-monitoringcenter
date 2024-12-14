@@ -8,6 +8,11 @@ namespace MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 public class MiningDeviceInfo : MiningDevice
 {
     /// <summary>
+    /// Идентификатор рига.
+    /// </summary>
+    public Guid RigId { get; set; }
+
+    /// <summary>
     /// Признак активности устройства ( в данных момент установлен на риге ).
     /// </summary>
     public bool IsActive

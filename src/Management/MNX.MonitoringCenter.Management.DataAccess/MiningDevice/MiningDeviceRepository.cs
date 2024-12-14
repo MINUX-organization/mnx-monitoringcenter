@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
@@ -61,7 +60,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public async Task SetCurrentRigsDevices(List<MiningDevice> devices)
+    public async Task SetCurrentRigDevices(Guid rigId, List<MiningDevice> devices)
     {
         var retryPolicy = Policy
             .Handle<Exception>()
@@ -74,13 +73,10 @@ public class MiningDeviceRepository : IMiningDeviceRepository
 
             try
             {
-                var groupedInputDevices = devices.GroupBy(x => x.RigId)
-                                                 .ToDictionary(g => g.Key, g => g.ToList());
-
                 // делаем выборку устройств всех ригов, для которых пришли устройства
                 var dbDevices = await context.MiningDevices
                     .IgnoreQueryFilters()
-                    .Where(device => groupedInputDevices.Keys.Contains(device.RigId))
+                    .Where(device => device.RigId == rigId)
                     .ToListAsync();
 
                 // берём ту часть устройств из БД, которая не пересекается со входящим набором устройств
@@ -106,7 +102,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                                                 Id = device.Id,
                                                 Manufacturer = device.Manufacturer,
                                                 Model = device.Model,
-                                                RigId = device.RigId,
+                                                RigId = rigId,
                                                 OwnerId = device.OwnerId,
                                                 Type = device.Type
                                             };
