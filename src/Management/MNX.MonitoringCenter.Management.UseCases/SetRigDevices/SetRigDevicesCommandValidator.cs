@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetRigDevices;
+namespace MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 
 /// <summary>
 /// Валидатор команды установки устройств на риг.

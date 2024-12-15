@@ -6,7 +6,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetRigDevices;
+namespace MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 
 /// <summary>
 /// Команда на установку майнинг устройств на риг.
@@ -26,9 +26,9 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
 {
     private readonly IMapper _mapper;
 
-    private readonly IMiningDeviceRepository _repository;
+    private readonly IRigRepository _repository;
 
-    public SetRigsDevicesCommandHandler(IMapper mapper, IMiningDeviceRepository repository)
+    public SetRigsDevicesCommandHandler(IMapper mapper, IRigRepository repository)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
@@ -69,7 +69,7 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
             return device;
         }));
 
-        await _repository.SetCurrentRigDevices(request.RigId, miningDevices);
+        await _repository.SetDevices(request.RigId, miningDevices);
 
         return Result<Unit>.Empty();
     }

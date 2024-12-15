@@ -50,6 +50,7 @@ public static class ServiceCollectionExtensions
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddDataContext<Context>(configuration);
 
+        services.AddScoped<IRigRepository, RigRepository>();
         services.AddScoped<IAlgorithmRepository, AlgorithmRepository>();
         services.AddScoped<ICryptocurrencyRepository, CryptocurrencyRepository>();
         services.AddScoped<IFlightSheetRepository, FlightSheetRepository>();
