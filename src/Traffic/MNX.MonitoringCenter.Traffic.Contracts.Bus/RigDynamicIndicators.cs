@@ -20,7 +20,7 @@ public class RigDynamicIndicators
     /// <summary>
     /// Дата и время отправки.
     /// </summary>
-    public DateTime SendingDateTime { get; } = DateTime.Now;
+    public DateTime SendingDateTime { get; init; } = DateTime.Now;
 
     /// <summary>
     /// Время работы рига с момента последнего включения.

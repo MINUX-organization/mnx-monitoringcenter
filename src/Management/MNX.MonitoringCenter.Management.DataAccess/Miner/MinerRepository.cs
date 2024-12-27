@@ -22,7 +22,8 @@ public class MinerRepository : IMinerRepository
     public IAsyncEnumerable<Miner> GetAvailableMiners(Specification specification)
     {
         return _context.Miners
-                       .AsNoTracking()
+                       .AsNoTrackingWithIdentityResolution()
+                       .Include(miner => miner.SupportedDevices)
                        .Filter(specification)
                        .AsAsyncEnumerable();
     }
@@ -31,7 +32,8 @@ public class MinerRepository : IMinerRepository
     public Task<Miner?> GetMinerById(Guid id, CancellationToken cancellationToken)
     {
         return _context.Miners
-                       .AsNoTracking()
+                       .AsNoTrackingWithIdentityResolution()
+                       .Include(miner => miner.SupportedDevices)
                        .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

@@ -35,13 +35,6 @@ public interface IMiningDeviceRepository
     Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Установить <see cref="MiningDeviceLifeCycleStatus"/> для устройств рига.
-    /// </summary>
-    /// <param name="rigId"> Идентификатор рига. </param>
-    /// <param name="status"> Статус жизненного цикла устройства. </param>
-    Task SetStatusForRigDevices(Guid rigId, MiningDeviceLifeCycleStatus status);
-
-    /// <summary>
     /// Установить полётный лист на устройства.
     /// </summary>
     /// <param name="devicesIds"> Идентификаторы устройств. </param>

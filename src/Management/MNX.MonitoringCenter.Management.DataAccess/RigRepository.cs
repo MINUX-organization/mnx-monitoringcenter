@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases;
@@ -30,6 +31,7 @@ public class RigRepository : IRigRepository
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
     }
 
+    /// <inheritdoc/>
     public async Task SetDevices(Guid rigId, List<Core.Mining.MiningDevice.MiningDevice> devices)
     {
         var retryPolicy = Policy
@@ -93,6 +95,14 @@ public class RigRepository : IRigRepository
                 throw;
             }
         });
+    }
+
+    /// <inheritdoc/>
+    public Task SwitchToOffline(Guid rigId)
+    {
+        var context = _contextFactory.CreateDbContext();
+        return context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
+            x.SetProperty(device => device.LifeCycleStatus, d => MiningDeviceLifeCycleStatus.Offline));
     }
 
     /// <summary>

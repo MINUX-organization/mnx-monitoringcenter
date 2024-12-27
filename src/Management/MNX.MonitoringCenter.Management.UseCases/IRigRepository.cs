@@ -11,4 +11,10 @@ public interface IRigRepository
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <param name="devices"> Устройства. </param>
     Task SetDevices(Guid rigId, List<Core.Mining.MiningDevice.MiningDevice> devices);
+
+    /// <summary>
+    /// Перевести в состояние "оффлайн"
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    Task SwitchToOffline(Guid rigId);
 }

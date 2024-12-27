@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases;
@@ -47,13 +46,6 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                        .AsNoTracking()
                        .Where(device => device.OwnerId == userId)
                        .AnyAsync(device => (device.Manufacturer + ' ' + device.Model) == name, cancellationToken);
-    }
-
-    /// <inheritdoc/>
-    public Task SetStatusForRigDevices(Guid rigId, MiningDeviceLifeCycleStatus status)
-    {
-        return _context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
-            x.SetProperty(device => device.LifeCycleStatus, d => status));
     }
 
     /// <inheritdoc/>

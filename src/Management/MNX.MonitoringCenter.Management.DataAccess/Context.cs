@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
@@ -24,6 +25,8 @@ public class Context : DbContext
     internal DbSet<MiningCoinConfig> MiningCoinConfigs { get; set; }
 
     internal DbSet<Core.Mining.Miner.Miner> Miners { get; set; }
+
+    internal DbSet<MinerAlgorithm> MinerAlgorithms { get; set; }
 
     internal DbSet<MiningDeviceInfo> MiningDevices { get; set; }
 

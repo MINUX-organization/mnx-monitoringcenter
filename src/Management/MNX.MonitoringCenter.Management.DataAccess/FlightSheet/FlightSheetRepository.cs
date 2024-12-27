@@ -97,16 +97,20 @@ public class FlightSheetRepository : IFlightSheetRepository
     private IQueryable<FlightSheetDto> GetFlightSheets(Guid userId)
     {
         return _context.FlightSheets.AsNoTrackingWithIdentityResolution()
+                                    .AsSplitQuery()
                                     .Where(x => x.UserId == userId)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.Miner)
+                                            .ThenInclude(miner => miner!.SupportedAlgorithms)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.CoinConfigs)
                                             .ThenInclude(config => config.Pool)
                                                 .ThenInclude(pool => pool!.Cryptocurrency)
+                                                    .ThenInclude(cryptocurrency => cryptocurrency!.Algorithm)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.CoinConfigs)
                                             .ThenInclude(config => config.Wallet)
-                                                .ThenInclude(wallet => wallet!.Cryptocurrency);
+                                                .ThenInclude(wallet => wallet!.Cryptocurrency)
+                                                    .ThenInclude(cryptocurrency => cryptocurrency!.Algorithm);
     }
 }

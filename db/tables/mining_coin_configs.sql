@@ -8,7 +8,7 @@ CREATE TABLE monitoring_center.mining_coin_configs
 
     CONSTRAINT pk_mining_coin_configs PRIMARY KEY (id),
 
-    CONSTRAINT fk_mining_coin_configs_flight_sheet_targets_flight_she FOREIGN KEY (flight_sheet_target_id)
+    CONSTRAINT fk_mining_coin_configs_flight_sheet_targets_flight_sheet_target_id FOREIGN KEY (flight_sheet_target_id)
         REFERENCES monitoring_center.flight_sheet_targets (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE,

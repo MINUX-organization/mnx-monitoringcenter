@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Events;
+namespace MNX.MonitoringCenter.Management.UseCases;
 
 /// <summary>
 /// Событие об отключении рига от сервера.
@@ -15,15 +14,15 @@ public record RigDisconnectedEvent(Guid RigId) : INotification;
 /// </summary>
 public class RigDisconnectedEventHandler : INotificationHandler<RigDisconnectedEvent>
 {
-    private readonly IMiningDeviceRepository _repository;
+    private readonly IRigRepository _repository;
 
-    public RigDisconnectedEventHandler(IMiningDeviceRepository repository)
+    public RigDisconnectedEventHandler(IRigRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public Task Handle(RigDisconnectedEvent notification, CancellationToken cancellationToken)
     {
-        return _repository.SetStatusForRigDevices(notification.RigId, MiningDeviceLifeCycleStatus.Offline);
+        return _repository.SwitchToOffline(notification.RigId);
     }
 }

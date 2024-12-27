@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.Application.Data.EF.DI;
 using MNX.Application.UseCases.DI;
+using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.DataAccess;
 using MNX.MonitoringCenter.Management.DataAccess.Algorithm;
 using MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
@@ -23,6 +24,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
+using MNX.RigCommander.MessageQueue.Clients.Bus.Integration;
 
 namespace MNX.MonitoringCenter.Management.Integration;
 
@@ -46,7 +48,10 @@ public static class ServiceCollectionExtensions
             new DbMappingProfile()
         }));
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(GetAvailableAlgorithmsQuery).Assembly));
+        services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
+            typeof(GetAvailableAlgorithmsQuery).Assembly,
+            typeof(ApplyWorkerSettingsCommand).Assembly
+        ));
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
         services.AddDataContext<Context>(configuration);
 
@@ -59,6 +64,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IPoolRepository, PoolRepository>();
         services.AddScoped<IPresetRepository, PresetRepository>();
         services.AddScoped<IWalletRepository, WalletRepository>();
+        services.AddAgentQueueClient();
 
         return services;
     }

@@ -22,17 +22,22 @@ public class Miner : IEquatable<Miner>
     /// <summary>
     /// Версия.
     /// </summary>
-    public required string Version { get; set; }
+    public required string Version { get; init; }
+
+    /// <summary>
+    /// Поддерживаемые алгоритмы.
+    /// </summary>
+    public List<MinerAlgorithm> SupportedAlgorithms { get; init; } = new(0);
 
     /// <summary>
     /// Поддерживаемые комбинации типа устройств и производителя.
     /// </summary>
-    public DeviceTypeManufacturerCombination SupportedDevices { get; set; }
+    public DeviceTypeManufacturerCombination SupportedDevices { get; init; }
 
     /// <summary>
     /// Режим майнинга монет.
     /// </summary>
-    public MiningModeEnum MiningMode { get; set; } = MiningModeEnum.Single;
+    public MiningModeEnum MiningMode { get; init; } = MiningModeEnum.Single;
 
     /// <summary>
     /// Получить признак поддержки майнером переданной конфигурации.

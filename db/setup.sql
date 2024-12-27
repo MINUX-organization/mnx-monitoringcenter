@@ -8,6 +8,7 @@
 \ir 'tables/algorithms.sql'
 \ir 'tables/cryptocurrencies.sql'
 \ir 'tables/miners.sql'
+\ir 'tables/miner_algorithms.sql'
 \ir 'tables/overclocking.sql'
 \ir 'tables/pools.sql'
 \ir 'tables/presets.sql'
