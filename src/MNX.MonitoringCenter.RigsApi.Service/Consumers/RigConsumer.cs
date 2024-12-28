@@ -4,6 +4,7 @@ using MNX.MonitoringCenter.Common.AgentMessages;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
+using MNX.SecurityManagement.Authentication.Contracts;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 
@@ -12,7 +13,7 @@ namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 /// </summary>
 public class RigConsumer :
     IConsumeAsync<RigInventoryMsg>,
-    IConsumeAsync<RigRegisteredMsg>,
+    IConsumeAsync<AgentRegisteredMsg>,
     IConsumeAsync<RigDisconnectedMsg>
 {
     private readonly IMediator _mediator;
@@ -41,13 +42,13 @@ public class RigConsumer :
     }
 
     /// <summary>
-    /// Получить сообщение о регистрации рига.
+    /// Получить сообщение о регистрации Агента.
     /// </summary>
-    /// <param name="message"> Сообщение о регистрации рига. </param>
+    /// <param name="message"> Сообщение о регистрации Агента. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public Task ConsumeAsync(RigRegisteredMsg message, CancellationToken cancellationToken = default)
+    public Task ConsumeAsync(AgentRegisteredMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Send(new AddRigCommand(message.RigId, message.OwnerId), cancellationToken);
+        return _mediator.Send(new AddRigCommand(message.Id, message.OwnerId), cancellationToken);
     }
 
     /// <summary>

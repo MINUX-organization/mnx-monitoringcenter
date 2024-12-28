@@ -6,9 +6,10 @@
     <Nullable>enable</Nullable>
 	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Company>Minux</Company>
-    <Authors>Minux</Authors>
+    <Authors>Zakharov</Authors>
     <Description>Содержит контракты инвентаризации.</Description>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	<Version>0.0.6</Version>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RepositoryUrl>https://github.com/MINUX-organization/MNX.MonitoringCenter.git</RepositoryUrl>
