@@ -1,7 +1,6 @@
 ﻿using EasyNetQ;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using MNX.MonitoringCenter.Common.AgentMessages;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
@@ -20,6 +19,7 @@ using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.UseCases.Software;
+using MNX.RigCommander.Contracts;
 using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Inventory.IntegrationTests;
@@ -107,7 +107,7 @@ public class SaveInventoryTests : BaseTest
     public async Task SaveInventoryWithRabbitMq(RigInventoryMsg inventoryMsg)
     {
         using var bus = RabbitHutch.CreateBus("host=77.37.200.24:5672;username=guest;password=guest;publisherConfirms=true");
-        await bus.PubSub.PublishAsync(new RigDisconnectedMsg(inventoryMsg.RigId));
+        await bus.PubSub.PublishAsync(new AgentDisconnectedMsg(inventoryMsg.RigId));
         await bus.PubSub.PublishAsync(inventoryMsg);
     }
 

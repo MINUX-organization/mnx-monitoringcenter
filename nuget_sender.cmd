@@ -1,16 +1,8 @@
 SET host=77.37.200.24:5554
-SET version=0.0.6
+SET version=1.0.3
 
 cd ./src
 
-cd ./Common
-
-cd ./MNX.MonitoringCenter.Common.AgentMessages/bin/Release
-
-dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY MNX.MonitoringCenter.Common.AgentMessages.%version%.nupkg
-dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY MNX.MonitoringCenter.Common.AgentMessages.%version%.snupkg
-
-cd ../../../../
 cd ./Inventory
 cd ./MNX.MonitoringCenter.Inventory.Contracts/bin/Release
 

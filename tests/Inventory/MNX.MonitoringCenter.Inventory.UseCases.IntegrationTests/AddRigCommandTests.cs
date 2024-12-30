@@ -1,9 +1,9 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
-using MNX.MonitoringCenter.Common.AgentMessages;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.IntegrationTests;
+using MNX.SecurityManagement.Authentication.Contracts;
 using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests;
@@ -19,18 +19,18 @@ public class AddRigCommandTests : BaseTest
     }
 
     [TestCaseSource(typeof(AddRigCommandTestCase), nameof(AddRigCommandTestCase.Rigs))]
-    public async Task AddRigCommandTest(RigRegisteredMsg message)
+    public async Task AddRigCommandTest(AgentRegisteredMsg message)
     {
-        var result = await _mediator.Send(new AddRigCommand(message.RigId, message.OwnerId));
+        var result = await _mediator.Send(new AddRigCommand(message.Id, message.OwnerId));
 
         Assert.That(result.IsSuccess);
 
         var rigRepository = ServiceProvider.GetRequiredService<IRigRepository>();
-        var rigs = rigRepository.GetRigs(new InventorySpecification(message.OwnerId, message.RigId))
+        var rigs = rigRepository.GetRigs(new InventorySpecification(message.OwnerId, message.Id))
                                 .ToBlockingEnumerable()
                                 .ToList();
 
-        Assert.That(rigs.Any(x => x.Id == message.RigId && x.OwnerId == message.OwnerId));
+        Assert.That(rigs.Any(x => x.Id == message.Id && x.OwnerId == message.OwnerId));
     }
 
     /*[TestCaseSource(typeof(AddRigCommandTestCase), nameof(AddRigCommandTestCase.Rigs))]
@@ -44,23 +44,23 @@ public class AddRigCommandTests : BaseTest
     {
         private readonly static Guid OWNER_ID = Guid.Parse("0b8e36f9-bf02-4c88-97f8-cb5a81715000");
 
-        public static IEnumerable<RigRegisteredMsg> Rigs
+        public static IEnumerable<AgentRegisteredMsg> Rigs
         {
             get
             {
-                yield return new RigRegisteredMsg()
+                yield return new AgentRegisteredMsg()
                 {
-                    RigId = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     OwnerId = OWNER_ID
                 };
-                yield return new RigRegisteredMsg()
+                yield return new AgentRegisteredMsg()
                 {
-                    RigId = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     OwnerId = OWNER_ID
                 };
-                yield return new RigRegisteredMsg()
+                yield return new AgentRegisteredMsg()
                 {
-                    RigId = Guid.NewGuid(),
+                    Id = Guid.NewGuid(),
                     OwnerId = OWNER_ID
                 };
             }
