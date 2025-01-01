@@ -19,5 +19,12 @@ public class FlightSheetStatistics
     /// Статистика майнинга монет.
     /// </summary>
     public List<CoinStatistics> Coins { get; init; } = new(0);
+
+    public void Deconstruct(out Guid flightSheetId, out Guid minerId, out List<CoinStatistics> coins)
+    {
+        flightSheetId = Id;
+        minerId = MinerId;
+        coins = Coins;
+    }
 }
 

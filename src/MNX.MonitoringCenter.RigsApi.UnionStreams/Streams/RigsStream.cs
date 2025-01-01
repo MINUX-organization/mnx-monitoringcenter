@@ -1,18 +1,15 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.RigsApi.Contracts.Args;
-using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
+﻿using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
-using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 using System.Reactive.Linq;
 using System.Threading.Channels;
+using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.RigsApi.Contracts.Args;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
+using MNX.MonitoringCenter.RigsApi.Contracts;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 
-public class MonitoringStream : Abstractions.Stream
+public class RigsStream : Abstractions.Stream
 {
     private readonly IDisposable _subscription;
 
@@ -20,28 +17,20 @@ public class MonitoringStream : Abstractions.Stream
 
     private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
 
-    private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> _miningCombinations;
-
     private readonly Dictionary<Guid, Rig> _rigs;
 
     protected override SubscriptionType[] SubscriptionTypes => new[] {
-        SubscriptionType.TotalCoinsStatistics,
-        SubscriptionType.TotalShares,
-        SubscriptionType.TotalPower,
-        SubscriptionType.TotalHashRate,
-        SubscriptionType.GeneralMiningRigsIndicators,
         SubscriptionType.GeneralHardwareRigsIndicators,
     };
 
-    public MonitoringStream(
+    public RigsStream(
         Guid userId,
         string connectionId,
-        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations,
-        IEnumerable<Rig> rigs,
+        List<Rig> rigs,
         IUserRigsObserverAggregator userRigsObserverAggregator)
     {
         _userRigsObserverAggregator = userRigsObserverAggregator;
-        _miningCombinations = miningCombinations;
+
         _rigs = rigs.ToDictionary(x => x.Id);
 
         _subscription = Subject
@@ -61,25 +50,18 @@ public class MonitoringStream : Abstractions.Stream
         }
     }
 
-    private MonitoringIndicatorsStreamResponse OnNewDataReceived(IList<(SubscriptionType, object)> data)
+    private IEnumerable<RigDynamicHardwareIndicatorsModel> OnNewDataReceived(IList<(SubscriptionType, object)> data)
     {
         var messages = data.ToDictionary(x => x.Item1, x => x.Item2);
 
-        var response = MonitoringIndicatorsStreamResponse.ConvertFrom(new MonitoringIndicatorsStreamResponseArgs(
-            (IEnumerable<CoinStatistics>)messages[SubscriptionType.TotalCoinsStatistics],
-            (SharesModel)messages[SubscriptionType.TotalShares],
-            (int)messages[SubscriptionType.TotalHashRate],
-            (int)messages[SubscriptionType.TotalPower],
-            (IEnumerable<RigDynamicMiningIndicators>)messages[SubscriptionType.GeneralMiningRigsIndicators],
+        var response = RigDynamicHardwareIndicatorsModel.ConvertFrom(new RigDynamicHardwareIndicatorsModelArgs(
             (IEnumerable<RigDynamicHardwareIndicators>)messages[SubscriptionType.GeneralHardwareRigsIndicators],
-            _miningCombinations,
-            _rigs
-        ));
+            _rigs));
 
         if (response is null)
         {
             // TODO: Реализация отправки прошлого результата.
-            return new MonitoringIndicatorsStreamResponse();
+            return new List<RigDynamicHardwareIndicatorsModel>();
         }
 
         return response;

@@ -20,6 +20,11 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     public DateTime MiningUpTime { get; init; }
 
     /// <summary>
+    /// Время работы рига с момента последнего включения.
+    /// </summary>
+    public DateTime BootedUpTime { get; init; }
+
+    /// <summary>
     /// Общее кол-во решений.
     /// </summary>
     private SharesModel? _totalShares;

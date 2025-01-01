@@ -52,7 +52,7 @@ public class MonitoringHub : Hub
     /// <returns> Поток данных. </returns>
     public async IAsyncEnumerable<object> Subscribe(StreamType streamType)
     {
-        var userId = _userAccessor.GetUserId();
+        var userId = _userAccessor.GetUserId(); 
 
         var stream = await _unionStreamBuilder.Build(
             new UnionStreamBuilderArgs(userId, Context.ConnectionId, streamType));

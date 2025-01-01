@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
+    <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Contracts\MNX.MonitoringCenter.Inventory.Contracts.csproj" />
     <ProjectReference Include="..\Management\MNX.MonitoringCenter.Management.Contracts\MNX.MonitoringCenter.Management.Contracts.csproj" />
     <ProjectReference Include="..\Traffic\MNX.MonitoringCenter.Traffic.Contracts.Bus\MNX.MonitoringCenter.Traffic.Contracts.Bus.csproj" />
     <ProjectReference Include="..\Traffic\MNX.MonitoringCenter.Traffic.Observers\MNX.MonitoringCenter.Traffic.Observers.csproj" />

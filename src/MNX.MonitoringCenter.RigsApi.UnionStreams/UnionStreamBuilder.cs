@@ -4,6 +4,10 @@ using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MediatR;
 using MNX.MonitoringCenter.Management.UseCases.Combinations.Queries;
 using MNX.MonitoringCenter.RigsApi.UnionStreams.Args;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.Application.UseCases.Mediator;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 
 namespace MNX.MonitoringCenter.RigsApi.Streams;
 
@@ -16,17 +20,27 @@ public class UnionStreamBuilder : IUnionStreamBuilder
     {
         return streamBuilderArgs.StreamType switch
         {
-            StreamType.Monitoring => new MonitoringStream
-                                     (
-                                        streamBuilderArgs.UserId,
-                                        await _mediator.Send(new GetAvailableMiningCombinationsQuery(streamBuilderArgs.UserId)),
-                                        streamBuilderArgs.ConnectionId,
-                                        _userRigsObserverAggregator
-                                     ),
+            StreamType.Monitoring => new MonitoringStream(
+                streamBuilderArgs.UserId,
+                streamBuilderArgs.ConnectionId,
+                await _mediator.Send(new GetAvailableMiningCombinationsQuery(streamBuilderArgs.UserId)),
+                await _mediator.GetListAsync(new GetRigsQuery(streamBuilderArgs.UserId), default),
+                _userRigsObserverAggregator),
 
-            StreamType.Devices => throw new NotImplementedException(),
-            StreamType.Rigs => throw new NotImplementedException(),
-            StreamType.Statistics => throw new NotImplementedException(),
+            StreamType.Devices => new DevicesStream(
+                streamBuilderArgs.UserId, 
+                streamBuilderArgs.ConnectionId, 
+                _mediator.CreateStream(new GetCpusDetailsQuery(streamBuilderArgs.UserId)),
+                _mediator.CreateStream(new GetGpusDetailsQuery(streamBuilderArgs.UserId)),
+                await _mediator.Send(new GetAvailableMiningCombinationsQuery(streamBuilderArgs.UserId)),
+                _userRigsObserverAggregator),
+
+            StreamType.Rigs => new RigsStream(
+                streamBuilderArgs.UserId,
+                streamBuilderArgs.ConnectionId,
+                await _mediator.GetListAsync(new GetRigsQuery(streamBuilderArgs.UserId), default),
+                _userRigsObserverAggregator),
+
             _ => throw new NotImplementedException(),
         };
     }

@@ -1,19 +1,10 @@
-﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
+﻿using MNX.MonitoringCenter.RigsApi.Contracts.FlightSheet;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
 
-namespace MNX.MonitoringCenter.RigsApi.Contracts.Rigs;
+namespace MNX.MonitoringCenter.RigsApi.Contracts;
 
-public class MiningRigIndicatorsModel
+public class GeneralRigIndicatorsModel : RigDynamicHardwareIndicatorsModel
 {
-    /// <summary>
-    /// Уникальный идентификатор рига.
-    /// </summary>
-    public Guid RigId { get; set; }
-
-    /// <summary>
-    /// Название рига.
-    /// </summary>
-    public required string RigName { get; set; }
-
     /// <summary>
     /// Время майнинга с момента последнего включения.
     /// </summary>
@@ -32,5 +23,5 @@ public class MiningRigIndicatorsModel
     /// <summary>
     /// Обобщённая статистика по монетам.
     /// </summary>
-    public List<RigCoinStatistics> TotalCoinStatistics { get; set; } = new();
+    public List<RigCoinStatisticModel> TotalCoinStatistics { get; set; } = new();
 }

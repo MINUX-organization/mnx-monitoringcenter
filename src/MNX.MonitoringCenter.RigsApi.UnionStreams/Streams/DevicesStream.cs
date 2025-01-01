@@ -1,18 +1,18 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.RigsApi.Contracts.Args;
 using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
 using MNX.MonitoringCenter.Traffic.Observers;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
-using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices;
 using System.Reactive.Linq;
 using System.Threading.Channels;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 
-public class MonitoringStream : Abstractions.Stream
+public class DevicesStream : Abstractions.Stream
 {
     private readonly IDisposable _subscription;
 
@@ -20,29 +20,31 @@ public class MonitoringStream : Abstractions.Stream
 
     private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
 
+    private readonly IAsyncEnumerable<CpuDetails> _cpuDetails;
+
+    private readonly IAsyncEnumerable<GpuDetails> _gpusDatails;
+
     private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> _miningCombinations;
 
-    private readonly Dictionary<Guid, Rig> _rigs;
-
     protected override SubscriptionType[] SubscriptionTypes => new[] {
-        SubscriptionType.TotalCoinsStatistics,
-        SubscriptionType.TotalShares,
-        SubscriptionType.TotalPower,
-        SubscriptionType.TotalHashRate,
-        SubscriptionType.GeneralMiningRigsIndicators,
-        SubscriptionType.GeneralHardwareRigsIndicators,
+        SubscriptionType.CpusHardwareIndicators,
+        SubscriptionType.GpusHardwareIndicators,
+        SubscriptionType.CpusMiningIndicators,
+        SubscriptionType.GpusMiningIndicators,
     };
 
-    public MonitoringStream(
+    public DevicesStream(
         Guid userId,
         string connectionId,
+        IAsyncEnumerable<CpuDetails> cpusNames,
+        IAsyncEnumerable<GpuDetails>  gpusNames,
         Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations,
-        IEnumerable<Rig> rigs,
         IUserRigsObserverAggregator userRigsObserverAggregator)
     {
         _userRigsObserverAggregator = userRigsObserverAggregator;
+        _cpuDetails = cpusNames;
+        _gpusDatails = gpusNames;
         _miningCombinations = miningCombinations;
-        _rigs = rigs.ToDictionary(x => x.Id);
 
         _subscription = Subject
             .GroupBy(x => x.Item1)
@@ -61,25 +63,36 @@ public class MonitoringStream : Abstractions.Stream
         }
     }
 
-    private MonitoringIndicatorsStreamResponse OnNewDataReceived(IList<(SubscriptionType, object)> data)
+    private async Task<DevicesIndicatorsStreamResponse> OnNewDataReceived(IList<(SubscriptionType, object)> data)
     {
         var messages = data.ToDictionary(x => x.Item1, x => x.Item2);
 
-        var response = MonitoringIndicatorsStreamResponse.ConvertFrom(new MonitoringIndicatorsStreamResponseArgs(
-            (IEnumerable<CoinStatistics>)messages[SubscriptionType.TotalCoinsStatistics],
-            (SharesModel)messages[SubscriptionType.TotalShares],
-            (int)messages[SubscriptionType.TotalHashRate],
-            (int)messages[SubscriptionType.TotalPower],
-            (IEnumerable<RigDynamicMiningIndicators>)messages[SubscriptionType.GeneralMiningRigsIndicators],
-            (IEnumerable<RigDynamicHardwareIndicators>)messages[SubscriptionType.GeneralHardwareRigsIndicators],
-            _miningCombinations,
-            _rigs
-        ));
+        var cpusNames = new Dictionary<Guid, string>();
+        var gpusNames = new Dictionary<Guid, string>();
+
+        await foreach (var cpuDetails in _cpuDetails)
+        {
+            cpusNames.Add(cpuDetails.Id, cpuDetails.Information.Name);
+        }
+
+        await foreach (var gpuDetails in _gpusDatails)
+        {
+            gpusNames.Add(gpuDetails.Id, gpuDetails.Information.Name);
+        }
+
+        var response = DevicesIndicatorsStreamResponse.ConvertFrom(new DevicesIndicatorsStreamResponseArgs(
+            (IEnumerable<CpuDynamicMiningIndicators>)messages[SubscriptionType.CpusMiningIndicators],
+            (IEnumerable<CpuDynamicHardwareIndicators>)messages[SubscriptionType.CpusHardwareIndicators],
+            (IEnumerable<GpuDynamicMiningIndicators>)messages[SubscriptionType.GpusMiningIndicators],
+            (IEnumerable<GpuDynamicHardwareIndicators>)messages[SubscriptionType.GpusHardwareIndicators],
+            cpusNames,
+            gpusNames,
+            _miningCombinations));
 
         if (response is null)
         {
             // TODO: Реализация отправки прошлого результата.
-            return new MonitoringIndicatorsStreamResponse();
+            return new DevicesIndicatorsStreamResponse();
         }
 
         return response;
