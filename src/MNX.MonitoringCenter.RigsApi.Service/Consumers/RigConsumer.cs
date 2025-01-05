@@ -15,6 +15,7 @@ namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 public class RigConsumer :
     IConsumeAsync<RigInventoryMsg>,
     IConsumeAsync<AgentRegisteredMsg>,
+    IConsumeAsync<AgentConnectedMsg>,
     IConsumeAsync<AgentDisconnectedMsg>
 {
     private readonly IMediator _mediator;
@@ -50,6 +51,16 @@ public class RigConsumer :
     public Task ConsumeAsync(AgentRegisteredMsg message, CancellationToken cancellationToken = default)
     {
         return _mediator.Send(new AddRigCommand(message.Id, message.OwnerId), cancellationToken);
+    }
+
+    /// <summary>
+    /// Получить сообщение об установке соединения Агента с сервером.
+    /// </summary>
+    /// <param name="message"> Сообщение. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public Task ConsumeAsync(AgentConnectedMsg message, CancellationToken cancellationToken = default)
+    {
+        throw new NotImplementedException();
     }
 
     /// <summary>

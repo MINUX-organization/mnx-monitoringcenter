@@ -6,6 +6,14 @@
 public interface IRigRepository
 {
     /// <summary>
+    /// Получить признак существования рига по идентификатору.
+    /// </summary>
+    /// <param name="id"> Идентификатор рига. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Признак существования рига. </returns>
+    Task<bool> Exists(Guid id, Guid userId);
+
+    /// <summary>
     /// Установить устройства на риг.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>

@@ -22,13 +22,24 @@ public class RigRepository : IRigRepository
 
     private readonly IDbContextFactory<Context> _contextFactory;
 
-    public RigRepository(IDbContextFactory<Context> contextFactory,
-                         IMapper mapper,
-                         ILogger<RigRepository> logger)
+    public RigRepository(IMapper mapper,
+                         ILogger<RigRepository> logger,
+                         IDbContextFactory<Context> contextFactory)
     {
-        _contextFactory = contextFactory;
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+        _contextFactory = contextFactory
+            ?? throw new ArgumentNullException(nameof(contextFactory));
+    }
+
+    /// <inheritdoc/>
+    public Task<bool> Exists(Guid id, Guid userId)
+    {
+        var context = _contextFactory.CreateDbContext();
+        return context.MiningDevices
+                      .AsNoTracking()
+                      .AnyAsync(x => x.RigId == id && x.OwnerId == userId);
     }
 
     /// <inheritdoc/>
