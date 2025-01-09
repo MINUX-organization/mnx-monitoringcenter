@@ -149,8 +149,13 @@ public class MappingProfile : Profile
             .ForMember(destination => destination.DeviceName, options => options.MapFrom(source => source.Model.DeviceName))
             .ForMember(destination => destination.Overclocking, options => options.MapFrom(source => source.Model.Overclocking));
 
-        CreateMap<Inventory.Contracts.Devices.Gpu.GpuOverclocking, GpuOverclocking>();
-        CreateMap<Inventory.Contracts.Devices.Cpu.CpuOverclocking, CpuOverclocking>();
+        CreateMap<IOverclocking, Inventory.Contracts.Devices.Overclocking>()
+            .Include<CpuOverclocking, Inventory.Contracts.Devices.Cpu.CpuOverclocking>()
+            .Include<GpuOverclocking, Inventory.Contracts.Devices.Gpu.GpuOverclocking>()
+            .ReverseMap();
+
+        CreateMap<Inventory.Contracts.Devices.Gpu.GpuOverclocking, GpuOverclocking>().ReverseMap();
+        CreateMap<Inventory.Contracts.Devices.Cpu.CpuOverclocking, CpuOverclocking>().ReverseMap();
 
         CreateMap<IOverclocking, IOverclockingModel>()
             .Include<GpuOverclocking, GpuOverclockingModel>()

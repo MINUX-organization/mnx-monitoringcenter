@@ -8,19 +8,13 @@ namespace MNX.MonitoringCenter.Management.Contracts.Overclocking;
 /// </summary>
 public record GpuOverclockingModel : Inventory.Contracts.Devices.Gpu.GpuOverclocking, IOverclockingModel
 {
-    private OverclockingTargetDeviceType _targetDeviceType;
+    private OverclockingTargetDeviceType _targetDeviceType = OverclockingTargetDeviceType.GPU;
 
     /// <<inheritdoc/>
     [JsonPropertyName("$type")]
     public OverclockingTargetDeviceType TargetDeviceType
     {
         get => _targetDeviceType;
-        init
-        {
-            if (value != OverclockingTargetDeviceType.GPU)
-                throw new ArgumentException("Target device type is not supported", nameof(TargetDeviceType));
-
-            _targetDeviceType = value;
-        }
+        init => _targetDeviceType = OverclockingTargetDeviceType.GPU;
     }
 }

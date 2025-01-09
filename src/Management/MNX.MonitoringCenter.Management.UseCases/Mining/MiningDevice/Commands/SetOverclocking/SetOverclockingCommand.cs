@@ -4,8 +4,10 @@ using Microsoft.Extensions.Logging;
 using MNX.Application.UseCases.Requests;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking;
+using MNX.RigCommander.MessageQueue.Clients.Bus;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
 
@@ -28,6 +30,8 @@ public class SetOverclockingCommandHandler :
 {
     private readonly IMapper _mapper;
 
+    private readonly IQueueBusClient _queueClient;
+
     private readonly ILogger<SetOverclockingCommandHandler> _logger;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
@@ -35,6 +39,7 @@ public class SetOverclockingCommandHandler :
     public SetOverclockingCommandHandler(
         IMapper mapper,
         IMediator mediator,
+        IQueueBusClient queueClient,
         ILogger<SetOverclockingCommandHandler> logger,
         IMiningDeviceRepository miningDeviceRepository)
         : base(mediator)
@@ -43,13 +48,15 @@ public class SetOverclockingCommandHandler :
 
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
+        _queueClient = queueClient ?? throw new ArgumentNullException(nameof(queueClient));
+
         _miningDeviceRepository = miningDeviceRepository
             ?? throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
     public async Task<Result<Guid[]>> Handle(SetOverclockingCommand request, CancellationToken cancellationToken)
     {
-        var devicesToProcessing = new List<Guid>(request.DeviceIds.Length);
+        var devicesToProcessing = new List<MiningDeviceInfo>(request.DeviceIds.Length);
         var overclocking = _mapper.Map<IOverclocking>(request.Overclocking);
 
         foreach (var deviceId in request.DeviceIds)
@@ -77,18 +84,18 @@ public class SetOverclockingCommandHandler :
                 continue;
             }
 
-            devicesToProcessing.Add(deviceId);
+            devicesToProcessing.Add(device);
         }
 
         if (devicesToProcessing.Count == 0)
-            return Result<Guid[]>.Success(devicesToProcessing.ToArray());
+            return Result<Guid[]>.Success(devicesToProcessing.Select(x => x.Id).ToArray());
 
         await _miningDeviceRepository
-            .SetOverclocking(overclocking, devicesToProcessing.ToArray());
+            .SetOverclocking(overclocking, devicesToProcessing.Select(x => x.Id).ToArray());
 
-        // todo: отправка сообщения на риги
+        await SendOverclockingToRigs(overclocking, devicesToProcessing, request.UserId);
 
-        return Result<Guid[]>.Success(devicesToProcessing.ToArray());
+        return Result<Guid[]>.Success(devicesToProcessing.Select(x => x.Id).ToArray());
     }
 
     private void LogErrors(IReadOnlyCollection<string> errors)
@@ -96,6 +103,19 @@ public class SetOverclockingCommandHandler :
         foreach (var error in errors)
         {
             _logger.LogError("{error}", error);
+        }
+    }
+
+    private async Task SendOverclockingToRigs(IOverclocking overclocking, List<MiningDeviceInfo> devices, Guid userId)
+    {
+        foreach (var rigDevices in devices.GroupBy(x => x.RigId))
+        {
+            var rigOverclocking = _mapper.Map<Inventory.Contracts.Devices.Overclocking>(overclocking);
+
+            var command = new Agent.Commands.Overclocking.SetOverclockingCommand(
+                rigOverclocking, rigDevices.Select(x => x.Id).ToArray());
+
+            await _queueClient.Enqueue(command, new Guid[] { rigDevices.Key }, userId);
         }
     }
 }

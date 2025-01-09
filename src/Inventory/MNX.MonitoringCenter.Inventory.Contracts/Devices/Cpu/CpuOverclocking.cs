@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 /// Разгон процессора.
 /// </summary>
 [ComplexType]
-public record CpuOverclocking
+public record CpuOverclocking : Overclocking
 {
     /// <summary>
     /// Фиксированная частота ядра.

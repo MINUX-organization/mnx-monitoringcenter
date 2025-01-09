@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 /// Разгон видеокарты.
 /// </summary>
 [ComplexType]
-public record GpuOverclocking
+public record GpuOverclocking : Overclocking
 {
     /// <summary>
     /// Мощность.
