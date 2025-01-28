@@ -7,67 +7,66 @@ namespace MNX.MonitoringCenter.RigsApi.Contracts.Streams;
 
 public class DevicesIndicatorsStreamResponse : IConverterFrom<DevicesIndicatorsStreamResponse>
 {
-    public IEnumerable<CpuDynamicMiningIndicatorsModel>? CpuDynamicMiningIndicators { get; set; }
+    public IEnumerable<CpuDynamicTotalIndicators>? CpuDynamicTotalIndicators { get; set; }
 
-    public IEnumerable<CpuDynamicHardwareIndicatorsModel>? CpuDynamicHardwareIndicators { get; set; }
-
-    public IEnumerable<GpuDynamicMiningIndicatorsModel>? GpuDynamicMiningIndicators { get; set; }
-
-    public IEnumerable<GpuDynamicHardwareIndicatorsModel>? GpuDynamicHardwareIndicators { get; set; }
+    public IEnumerable<GpuDynamicTotalIndicatorsModel>? GpuDynamicTotalIndicators { get; set; }
 
     public static DevicesIndicatorsStreamResponse? ConvertFrom<TSource>(TSource source)
     {
-        // TODO: работа с (Guid, string) кортежами имен девайсов.
         if (source is DevicesIndicatorsStreamResponseArgs devicesIndicatorsResponseArgs)
         {
-            IEnumerable<CpuDynamicMiningIndicatorsModel> cpuDynamicMiningIndicators = devicesIndicatorsResponseArgs
+            var cpuDynamicHardwareIndicatorsDictionary = devicesIndicatorsResponseArgs
+                        .CpuDynamicHardwareIndicators
+                        .ToDictionary(c => c.DeviceId);
+
+            var gpuDynamicHardwareIndicatorsDictionary = devicesIndicatorsResponseArgs
+                        .GpuDynamicHardwareIndicators
+                        .ToDictionary(g => g.DeviceId);
+
+            IEnumerable<CpuDynamicTotalIndicators> cpuDynamicTotalIndicators = devicesIndicatorsResponseArgs
                 .CpuDynamicMiningIndicators
-                .Select(cpu => new CpuDynamicMiningIndicatorsModel
-                {
-                    DeviceId = cpu.DeviceId,
-                    DeviceName = devicesIndicatorsResponseArgs.CpusNames.GetValueOrDefault(cpu.DeviceId),
-                    MiningState = cpu.MiningState,
-                    FlightSheet = FlightSheetStatisticsModel.ConvertFrom(new FlightSheetStatisticsModelArgs
-                    { 
-                        FlightSheetStatistics = cpu.FlightSheet, 
-                        MiningCombinations = devicesIndicatorsResponseArgs.MiningCombinations 
-                    }),
-                });
+                .Select(cpu => {
+                    var cpuDynamicHardwareIndicatorsItem = cpuDynamicHardwareIndicatorsDictionary
+                        .GetValueOrDefault(cpu.DeviceId);
 
-            IEnumerable<CpuDynamicHardwareIndicatorsModel> cpuDynamicHardwareIndicators = devicesIndicatorsResponseArgs
-                .CpuDynamicHardwareIndicators
-                .Select(cpu => new CpuDynamicHardwareIndicatorsModel
-                {
-                    DeviceId = cpu.DeviceId,
-                    DeviceName = devicesIndicatorsResponseArgs.CpusNames.GetValueOrDefault(cpu.DeviceId),
-                    Power = cpu.Power,
-                    FanSpeed = cpu.FanSpeed,
-                    Temperature = cpu.Temperature,
-                });
-
-            IEnumerable<GpuDynamicMiningIndicatorsModel> gpuDynamicMiningIndicators = devicesIndicatorsResponseArgs
-                .GpuDynamicMiningIndicators
-                .Select(gpu => new GpuDynamicMiningIndicatorsModel
-                {
-                    DeviceId = gpu.DeviceId,
-                    DeviceName = devicesIndicatorsResponseArgs.GpusNames.GetValueOrDefault(gpu.DeviceId),
-                    MiningState = gpu.MiningState,
-                    FlightSheet = FlightSheetStatisticsModel.ConvertFrom(new FlightSheetStatisticsModelArgs
+                    return new CpuDynamicTotalIndicators
                     {
-                        FlightSheetStatistics = gpu.FlightSheet,
-                        MiningCombinations = devicesIndicatorsResponseArgs.MiningCombinations
-                    }),
+                        DeviceId = cpu.DeviceId,
+                        DeviceName = devicesIndicatorsResponseArgs.CpusNames.GetValueOrDefault(cpu.DeviceId),
+                        MiningState = cpu.MiningState,
+                        FanSpeed = cpuDynamicHardwareIndicatorsItem?.FanSpeed ?? 0,
+                        Temperature = cpuDynamicHardwareIndicatorsItem?.Temperature ?? 0,
+                        Power = cpuDynamicHardwareIndicatorsItem?.Power ?? 0,
+                        FlightSheet = FlightSheetStatisticsModel.ConvertFrom(new FlightSheetStatisticsModelArgs
+                        { 
+                            FlightSheetStatistics = cpu.FlightSheet, 
+                            MiningCombinations = devicesIndicatorsResponseArgs.MiningCombinations 
+                        }),
+                    };
                 });
-                
-            IEnumerable<GpuDynamicHardwareIndicatorsModel> gpuDynamicHardwareIndicators = devicesIndicatorsResponseArgs
-                .GpuDynamicHardwareIndicators
-                .Select(gpu => new GpuDynamicHardwareIndicatorsModel
-                {
-                    DeviceId = gpu.DeviceId,
-                    DeviceName = devicesIndicatorsResponseArgs.GpusNames.GetValueOrDefault(gpu.DeviceId),
-                    Power = gpu.Power,
-                    AvarageTemperature = gpu.GetAverageTemperature(),
-                    FanSpeed = gpu.FanSpeed,
+
+            IEnumerable<GpuDynamicTotalIndicatorsModel> gpuDynamicMiningIndicators = devicesIndicatorsResponseArgs
+                .GpuDynamicMiningIndicators
+                .Select(gpu => {
+                    var gpuDynamicHardwareIndicatorsItem = gpuDynamicHardwareIndicatorsDictionary
+                        .GetValueOrDefault(gpu.DeviceId);
+
+                    return new GpuDynamicTotalIndicatorsModel
+                    {
+                        DeviceId = gpu.DeviceId,
+                        DeviceName = devicesIndicatorsResponseArgs.GpusNames.GetValueOrDefault(gpu.DeviceId),
+                        FanSpeed = gpuDynamicHardwareIndicatorsItem?.FanSpeed ?? 0,
+                        CoreTemperature = gpuDynamicHardwareIndicatorsItem?.CoreTemperature ?? 0,
+                        MemoryTemperature = gpuDynamicHardwareIndicatorsItem?.MemoryTemperature ?? 0,
+                        AvarageTemperature = gpuDynamicHardwareIndicatorsItem?.GetAverageTemperature() ?? 0,
+                        Power = gpuDynamicHardwareIndicatorsItem?.Power ?? 0,
+                        MiningState = gpu.MiningState,
+                        FlightSheet = FlightSheetStatisticsModel.ConvertFrom(new FlightSheetStatisticsModelArgs
+                        {
+                            FlightSheetStatistics = gpu.FlightSheet,
+                            MiningCombinations = devicesIndicatorsResponseArgs.MiningCombinations
+                        }),
+                    };
                 });
         }
 

@@ -22,7 +22,7 @@ public class MonitoringIndicatorsStreamResponseArgs
 
     public Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> MiningCombinations { get; set; }
 
-    public Dictionary<Guid, Rig> Rigs { get; set; }
+    public Dictionary<Guid, RigDetails> Rigs { get; set; }
 
     public MonitoringIndicatorsStreamResponseArgs(
         IEnumerable<CoinStatistics> coinStatistics,
@@ -32,7 +32,7 @@ public class MonitoringIndicatorsStreamResponseArgs
         IEnumerable<RigDynamicMiningIndicators> rigsDynamicMiningIndicators,
         IEnumerable<RigDynamicHardwareIndicators> rigDynamicHardwareIndicators,
         Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations,
-        Dictionary<Guid, Rig> rigs)
+        Dictionary<Guid, RigDetails> rigs)
     {
         TotalCoinStatistics = coinStatistics;
         TotalShares = sharesModel;

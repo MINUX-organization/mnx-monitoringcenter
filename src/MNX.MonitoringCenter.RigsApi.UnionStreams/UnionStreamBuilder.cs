@@ -24,7 +24,7 @@ public class UnionStreamBuilder : IUnionStreamBuilder
                 streamBuilderArgs.UserId,
                 streamBuilderArgs.ConnectionId,
                 await _mediator.Send(new GetAvailableMiningCombinationsQuery(streamBuilderArgs.UserId)),
-                await _mediator.GetListAsync(new GetRigsQuery(streamBuilderArgs.UserId), default),
+                await _mediator.GetListAsync(new GetRigsDetailsQuery(streamBuilderArgs.UserId), default),
                 _userRigsObserverAggregator),
 
             StreamType.Devices => new DevicesStream(

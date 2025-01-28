@@ -22,7 +22,7 @@ public class MonitoringStream : Abstractions.Stream
 
     private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> _miningCombinations;
 
-    private readonly Dictionary<Guid, Rig> _rigs;
+    private readonly Dictionary<Guid, RigDetails> _rigs;
 
     protected override SubscriptionType[] SubscriptionTypes => new[] {
         SubscriptionType.TotalCoinsStatistics,
@@ -37,7 +37,7 @@ public class MonitoringStream : Abstractions.Stream
         Guid userId,
         string connectionId,
         Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations,
-        IEnumerable<Rig> rigs,
+        IEnumerable<RigDetails> rigs,
         IUserRigsObserverAggregator userRigsObserverAggregator)
     {
         _userRigsObserverAggregator = userRigsObserverAggregator;
