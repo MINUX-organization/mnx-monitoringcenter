@@ -42,7 +42,7 @@ public class SavePresetCommandHandler :
             return Result<PresetModel>.Conflict("Preset already exists");
         }
 
-        if (!await _miningDeviceRepository.Exists(request.Model.Name, request.UserId, cancellationToken))
+        if (!await _miningDeviceRepository.Exists(request.Model.DeviceName!, request.UserId, cancellationToken))
         {
             return Result<PresetModel>.Invalid("Invalid mining device name.");
         }

@@ -59,19 +59,21 @@ public class SetOverclockingCommandHandler :
         var devicesToProcessing = new List<MiningDeviceInfo>(request.DeviceIds.Length);
         var overclocking = _mapper.Map<IOverclocking>(request.Overclocking);
 
+        var errors = new List<string>();
+
         foreach (var deviceId in request.DeviceIds)
         {
             var device = await _miningDeviceRepository.GetActiveDeviceById(deviceId, request.UserId, cancellationToken);
 
             if (device is null)
             {
-                _logger.LogError("Mining device with id equaled {id} was not found!", deviceId);
+                errors.Add($"Mining device with id equaled {deviceId} was not found!");
                 continue;
             }
 
             if (device.Type.ToString() != request.Overclocking.TargetDeviceType.ToString())
             {
-                _logger.LogError("Device with type of {deviceType} is not supported this overclocking", device.Type.ToString());
+                errors.Add($"Device with type of {device.Type} is not supported this overclocking");
                 continue;
             }
 
@@ -80,7 +82,11 @@ public class SetOverclockingCommandHandler :
 
             if (!overclockingValidationResult.IsSuccess)
             {
-                LogErrors(overclockingValidationResult.Errors ?? Array.Empty<string>());
+                if (overclockingValidationResult.Errors is not null)
+                {
+                    errors.AddRange(overclockingValidationResult.Errors);
+                }
+                
                 continue;
             }
 
@@ -88,7 +94,9 @@ public class SetOverclockingCommandHandler :
         }
 
         if (devicesToProcessing.Count == 0)
-            return Result<Guid[]>.Success(devicesToProcessing.Select(x => x.Id).ToArray());
+        {
+            return Result<Guid[]>.Invalid(errors);
+        }
 
         await _miningDeviceRepository
             .SetOverclocking(overclocking, devicesToProcessing.Select(x => x.Id).ToArray());
@@ -96,14 +104,6 @@ public class SetOverclockingCommandHandler :
         await SendOverclockingToRigs(overclocking, devicesToProcessing, request.UserId);
 
         return Result<Guid[]>.Success(devicesToProcessing.Select(x => x.Id).ToArray());
-    }
-
-    private void LogErrors(IReadOnlyCollection<string> errors)
-    {
-        foreach (var error in errors)
-        {
-            _logger.LogError("{error}", error);
-        }
     }
 
     private async Task SendOverclockingToRigs(IOverclocking overclocking, List<MiningDeviceInfo> devices, Guid userId)

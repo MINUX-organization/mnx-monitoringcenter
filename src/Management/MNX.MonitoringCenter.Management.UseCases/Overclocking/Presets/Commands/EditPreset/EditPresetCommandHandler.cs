@@ -39,7 +39,7 @@ public class EditPresetCommandHandler :
         newPreset.DeviceName = preset.DeviceName;
 
         var overclockingValidationResult = await IsValidOverclocking(preset.DeviceName,
-                                                                     preset.Overclocking!,
+                                                                     newPreset.Overclocking!,
                                                                      cancellationToken);
         if (!overclockingValidationResult.IsSuccess)
         {

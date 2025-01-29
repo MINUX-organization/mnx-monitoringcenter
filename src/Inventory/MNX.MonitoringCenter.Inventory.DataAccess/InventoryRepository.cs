@@ -21,30 +21,38 @@ public partial class InventoryRepository
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    /// <inheritdoc/>
+    /// <summary>
+    /// Сохранить инвентаризацию.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="createdDate"> Дата и время создания инвентаризации. </param>
+    /// <param name="inventory"> Результат инвентаризации. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     internal async Task Save(Guid rigId, DateTimeOffset createdDate,
                              RigInventoryModel inventory, CancellationToken cancellationToken)
     {
-        var oldInventory = await GetInventoryBySpecification(new InventorySpecification(null, rigId))
-                                    .FirstOrDefaultAsync(cancellationToken);
-
         var newInventory = MapInventory(rigId, createdDate, inventory);
 
-        if (newInventory.Equals(oldInventory))
-        {
-            return;
-        }
-
-        if (oldInventory != null)
-        {
-            // todo: устанавливать дату и время окончания действия инвентаризации при отключении рига по некоторым правилам
-            oldInventory.EndDateTime = createdDate;
-            _context.RigInventory.Update(oldInventory);
-        }
-
         await _context.RigInventory.AddAsync(newInventory, cancellationToken);
-
         await _context.SaveChangesAsync(cancellationToken);
+    }
+
+    /// <summary>
+    /// Установить дату и время окончания действия инвентаризации.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    internal async Task SetExpirationDate(Guid rigId, CancellationToken cancellationToken)
+    {
+        var inventory = await GetInventoryBySpecification(new InventorySpecification(null, rigId))
+                                    .FirstOrDefaultAsync(cancellationToken);
+
+        if (inventory != null)
+        {
+            inventory.EndDateTime = DateTimeOffset.Now;
+            _context.RigInventory.Update(inventory);
+            await _context.SaveChangesAsync(cancellationToken);
+        }
     }
 
     /// <summary>

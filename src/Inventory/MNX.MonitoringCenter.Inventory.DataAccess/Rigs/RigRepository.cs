@@ -92,4 +92,10 @@ public class RigRepository : IRigRepository
     {
         return _inventoryRepository.Save(rigId, createdDate, inventory, cancellationToken);
     }
+
+    /// <inheritdoc/>
+    public Task SetInventoryExpirationDate(Guid rigId, CancellationToken cancellationToken)
+    {
+        return _inventoryRepository.SetExpirationDate(rigId, cancellationToken);
+    }
 }

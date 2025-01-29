@@ -2,7 +2,6 @@
 using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 using MNX.RigCommander.Contracts;
 using MNX.SecurityManagement.Authentication.Contracts;
@@ -70,7 +69,10 @@ public class RigConsumer :
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(AgentDisconnectedMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Publish(new RigDisconnectedEvent(message.AgentId), cancellationToken);
+        return Task.WhenAll(
+            _mediator.Publish(new Management.UseCases.RigDisconnectedEvent(message.AgentId), cancellationToken),
+            _mediator.Publish(new Inventory.UseCases.RigDisconnectedEvent(message.AgentId), cancellationToken)
+        );
     }
 }
 

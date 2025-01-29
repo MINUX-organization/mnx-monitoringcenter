@@ -79,6 +79,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     {
         var query = from device in _context.MiningDevices.AsNoTrackingWithIdentityResolution()
                                                          .Available(new Specification(userId))
+                                                         .Where(device => device.Id == deviceId)
 
                     join overclocking in _context.Overclocking.AsNoTracking() 
                         on device.OverclockingId equals overclocking.Id

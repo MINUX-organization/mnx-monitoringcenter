@@ -142,12 +142,14 @@ public class MappingProfile : Profile
         CreateMap<EditPresetCommand, Preset>()
             .ForMember(destination => destination.Name, options => options.MapFrom(source => source.Model.Name))
             .ForMember(destination => destination.DeviceName, options => options.MapFrom(source => source.Model.DeviceName))
-            .ForMember(destination => destination.Overclocking, options => options.MapFrom(source => source.Model.Overclocking));
+            .ForMember(destination => destination.Overclocking, options => options.MapFrom(source => source.Model.Overclocking))
+            .AfterMap((command, preset) => preset.OverclockingId = preset.Overclocking!.Id);
 
         CreateMap<SavePresetCommand, Preset>()
             .ForMember(destination => destination.Name, options => options.MapFrom(source => source.Model.Name))
             .ForMember(destination => destination.DeviceName, options => options.MapFrom(source => source.Model.DeviceName))
-            .ForMember(destination => destination.Overclocking, options => options.MapFrom(source => source.Model.Overclocking));
+            .ForMember(destination => destination.Overclocking, options => options.MapFrom(source => source.Model.Overclocking))
+            .AfterMap((command, preset) => preset.OverclockingId = preset.Overclocking!.Id);
 
         CreateMap<IOverclocking, Inventory.Contracts.Devices.Overclocking>()
             .Include<CpuOverclocking, Inventory.Contracts.Devices.Cpu.CpuOverclocking>()
