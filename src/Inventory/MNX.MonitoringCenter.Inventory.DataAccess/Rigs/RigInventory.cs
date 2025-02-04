@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
@@ -69,6 +68,9 @@ public class RigInventory : IEquatable<RigInventory>
     /// </summary>
     public required SoftwareInventoryDto Software { get; set; }
 
+    /// <summary>
+    /// Признак актуальности инвентаризации.
+    /// </summary>
     public bool IsActive { get => EndDateTime == null; } 
 
     /// <inheritdoc/>

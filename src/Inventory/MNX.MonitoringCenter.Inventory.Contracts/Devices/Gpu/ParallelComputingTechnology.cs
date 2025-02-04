@@ -16,5 +16,5 @@ public record ParallelComputingTechnology
     /// <summary>
     /// Версия.
     /// </summary>
-    public required string Version { get; init; }
+    public string? Version { get; init; }
 }
