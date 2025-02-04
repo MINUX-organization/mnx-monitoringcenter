@@ -1,6 +1,6 @@
 CREATE TABLE monitoring_center.algorithms
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name text NOT NULL,
 
     CONSTRAINT pk_algorithms PRIMARY KEY (id)

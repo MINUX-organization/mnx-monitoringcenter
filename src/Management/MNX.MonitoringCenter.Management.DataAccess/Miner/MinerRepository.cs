@@ -23,7 +23,7 @@ public class MinerRepository : IMinerRepository
     {
         return _context.Miners
                        .AsNoTrackingWithIdentityResolution()
-                       .Include(miner => miner.SupportedDevices)
+                       .Include(miner => miner.SupportedAlgorithms)
                        .Filter(specification)
                        .AsAsyncEnumerable();
     }
@@ -33,7 +33,7 @@ public class MinerRepository : IMinerRepository
     {
         return _context.Miners
                        .AsNoTrackingWithIdentityResolution()
-                       .Include(miner => miner.SupportedDevices)
+                       .Include(miner => miner.SupportedAlgorithms)
                        .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

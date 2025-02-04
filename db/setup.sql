@@ -4,6 +4,9 @@
 -- CREATING SCHEMA
 \ir 'schemas/monitoring_center.sql'
 
+-- CREATING EXTENSIONS
+\ir 'extensions/guid_generator_extension.sql'
+
 -- CREATING TABLES
 \ir 'tables/algorithms.sql'
 \ir 'tables/cryptocurrencies.sql'
@@ -34,4 +37,7 @@
 \ir 'functions/get_gpu_driver_version.sql'
 
 -- DATA INSERT
+\ir 'data_tables/algorithms.sql'
+\ir 'data_tables/miners.sql'
+\ir 'data_tables/miner_algorithms.sql'
 \ir 'data_tables/version_info.sql'

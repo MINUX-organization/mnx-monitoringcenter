@@ -4,7 +4,6 @@ using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Events;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.ApplyFlightSheet;
@@ -137,11 +136,5 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
         {
             await _mediator.Publish(new FlightSheetAppliedToRigEvent(group.Key, userId, group.ToList()), cancellationToken);
         }
-
-        // todo: удалить, когда будет налажена связь с ригом.
-        await Task.WhenAll(
-            _mediator.Send(new ConfirmFlightSheetCommand(devicesToApply.Select(x => x.Id).ToArray()), cancellationToken),
-            _mediator.Send(new ConfirmFlightSheetCommand(devicesToDisapply.Select(x => x.Id).ToArray()), cancellationToken)
-        );
     }
 }

@@ -1,16 +1,16 @@
 CREATE TABLE monitoring_center.network_adapter
 (
     id uuid NOT NULL,
-    global_ip text DEFAULT NULL,
-    local_ip text DEFAULT NULL,
-    rig_inventory_id bigint,
-    information_bus_info text NOT NULL,
+    global_ip text,
+    local_ip text,
+    rig_inventory_id bigint NOT NULL,
+    information_bus_info text,
     information_logical_name text NOT NULL,
     information_mac text NOT NULL,
-    information_manufacturer text NOT NULL,
-    information_model text NOT NULL,
-    information_serial_number text NOT NULL,
-    information_vendor_code text NOT NULL,
+    information_manufacturer text,
+    information_model text,
+    information_serial_number text,
+    information_vendor_code text,
 
     CONSTRAINT pk_network_adapter PRIMARY KEY (rig_inventory_id, id),
 

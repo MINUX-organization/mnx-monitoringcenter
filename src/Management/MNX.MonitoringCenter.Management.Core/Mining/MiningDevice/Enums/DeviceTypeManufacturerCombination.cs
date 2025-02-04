@@ -9,15 +9,15 @@ namespace MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 [JsonConverter(typeof(EnumFlagsConverter))]
 public enum DeviceTypeManufacturerCombination
 {
-    NvidiaGpu = 1,
+    NvidiaGpu = 1, // 1
 
-    IntelGpu = 1 << 1,
+    IntelGpu = 1 << 1, // 2
 
-    IntelCpu = 1 << 2,
+    IntelCpu = 1 << 2, // 4
 
-    AmdGpu = 1 << 3,
+    AmdGpu = 1 << 3, // 8
 
-    AmdCpu = 1 << 4
+    AmdCpu = 1 << 4 // 16
 }
 
 /// <summary>
