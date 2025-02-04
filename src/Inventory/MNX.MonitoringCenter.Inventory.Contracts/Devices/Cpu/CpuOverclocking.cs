@@ -11,10 +11,10 @@ public record CpuOverclocking : Overclocking
     /// <summary>
     /// Фиксированная частота ядра.
     /// </summary>
-    public int CoreClockLock { get; init; }
+    public int? CoreClockLock { get; init; }
 
     /// <summary>
     /// Напряжение.
     /// </summary>
-    public int CoreVoltage { get; init; }
+    public int? CoreVoltage { get; init; }
 }

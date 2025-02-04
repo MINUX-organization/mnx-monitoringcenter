@@ -4,7 +4,7 @@ CREATE TABLE monitoring_center.gpu
     rig_inventory_id bigint NOT NULL,
     information_bios_version text,
     information_manufacturer text NOT NULL,
-    information_model text,
+    information_model text NOT NULL DEFAULT 'Unknown',
     information_serial_number text,
     information_vendor text,
     information_memory_total integer NOT NULL,
