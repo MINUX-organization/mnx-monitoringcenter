@@ -50,7 +50,7 @@ public class RigConsumer :
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(AgentRegisteredMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Send(new AddRigCommand(message.Id, message.OwnerId), cancellationToken);
+        return _mediator.Send(new AddRigCommand(message.Id, message.OwnerId, message.Nickname), cancellationToken);
     }
 
     /// <summary>
