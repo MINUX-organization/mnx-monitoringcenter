@@ -13,6 +13,8 @@ internal class FlightSheetTargetCfg : IEntityTypeConfiguration<BaseFlightSheetTa
 {
     public void Configure(EntityTypeBuilder<BaseFlightSheetTargetDto> builder)
     {
+        builder.Property(x => x.DeviceType).HasConversion<string>();
+
         builder.HasDiscriminator(x => x.DeviceType)
                .HasValue<CpuFlightSheetTargetDto>(MiningDeviceType.CPU)
                .HasValue<GpuFlightSheetTargetDto>(MiningDeviceType.GPU);

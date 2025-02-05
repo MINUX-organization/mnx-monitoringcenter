@@ -1,7 +1,7 @@
 CREATE TABLE monitoring_center.flight_sheet_targets
 (
     id uuid NOT NULL,
-    type integer NOT NULL,
+    device_type text NOT NULL CHECK ( device_type in ('CPU', 'GPU') ),
     miner_id uuid NOT NULL,
     flight_sheet_id uuid NOT NULL,
     additional_arguments text,
