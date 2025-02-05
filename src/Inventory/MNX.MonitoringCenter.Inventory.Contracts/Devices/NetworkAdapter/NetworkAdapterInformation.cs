@@ -42,7 +42,7 @@ public record NetworkAdapterInformation
     /// <summary>
     /// Код продавца.
     /// </summary>
-    public string? de { get; init; }
+    public string? VendorCode { get; init; }
 
     /// <summary>
     /// Информация о BUS.

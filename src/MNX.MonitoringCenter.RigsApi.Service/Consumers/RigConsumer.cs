@@ -2,7 +2,9 @@
 using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.UseCases;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 using MNX.RigCommander.Contracts;
 using MNX.SecurityManagement.Authentication.Contracts;
@@ -16,7 +18,8 @@ public class RigConsumer :
     IConsumeAsync<RigInventoryMsg>,
     IConsumeAsync<AgentRegisteredMsg>,
     IConsumeAsync<AgentConnectedMsg>,
-    IConsumeAsync<AgentDisconnectedMsg>
+    IConsumeAsync<AgentDisconnectedMsg>,
+    IConsumeAsync<ApplyWorkerSettingsCommandResult>
 {
     private readonly IMediator _mediator;
 
@@ -74,6 +77,16 @@ public class RigConsumer :
             _mediator.Publish(new Management.UseCases.RigDisconnectedEvent(message.AgentId), cancellationToken),
             _mediator.Publish(new Inventory.UseCases.RigDisconnectedEvent(message.AgentId), cancellationToken)
         );
+    }
+
+    /// <summary>
+    /// Получить сообщение с результатом применения настроек на воркеры.
+    /// </summary>
+    /// <param name="message"> Сообщение. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public Task ConsumeAsync(ApplyWorkerSettingsCommandResult message, CancellationToken cancellationToken = default)
+    {
+        return _mediator.Send(new ConfirmFlightSheetCommand(message.SuccessfullyWorkersIds.ToArray()), cancellationToken);
     }
 }
 
