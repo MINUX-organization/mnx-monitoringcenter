@@ -29,6 +29,6 @@ internal class MotherboardPciCfg : IEntityTypeConfiguration<MotherboardPci>
 {
     public void Configure(EntityTypeBuilder<MotherboardPci> builder)
     {
-        builder.HasKey("MotherboardId", "Id");
+        builder.HasKey("RigInventoryId", "MotherboardId", "Id");
     }
 }

@@ -39,6 +39,11 @@ public class RigInventory : IEquatable<RigInventory>
     public DateTimeOffset? EndDateTime { get; set; }
 
     /// <summary>
+    /// Признак текущей инвентаризации.
+    /// </summary>
+    public bool IsCurrent { get; set; } = true;
+
+    /// <summary>
     /// Процессоры.
     /// </summary>
     public List<Cpu> Cpus { get; set; } = new();
@@ -66,12 +71,7 @@ public class RigInventory : IEquatable<RigInventory>
     /// <summary>
     /// Программное обеспечение.
     /// </summary>
-    public required SoftwareInventoryDto Software { get; set; }
-
-    /// <summary>
-    /// Признак актуальности инвентаризации.
-    /// </summary>
-    public bool IsActive { get => EndDateTime == null; } 
+    public required SoftwareInventoryDto Software { get; set; } 
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

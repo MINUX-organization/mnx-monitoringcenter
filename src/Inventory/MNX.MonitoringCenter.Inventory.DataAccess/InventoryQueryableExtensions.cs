@@ -17,7 +17,7 @@ internal static class InventoryQueryableExtensions
     {
         if (specification.IsActuality)
         {
-            return inventory.Where(x => x.EndDateTime == null);
+            return inventory.Where(x => x.IsCurrent);
         }
 
         return inventory;

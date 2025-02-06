@@ -46,7 +46,7 @@ public record GpuOverclocking : Overclocking
     /// <summary>
     /// Смещение напряжения на ядре.
     /// </summary>
-    public int CoreVoltageOffset { get; init; }
+    public int? CoreVoltageOffset { get; init; }
 
     /// <summary>
     /// Напряжение памяти.

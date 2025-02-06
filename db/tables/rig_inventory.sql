@@ -4,6 +4,7 @@ CREATE TABLE monitoring_center.rig_inventory
     rig_id uuid NOT NULL,
     created_date_time timestamp with time zone NOT NULL,
     end_date_time timestamp with time zone,
+    is_current boolean NOT NULL DEFAULT TRUE,
 
     CONSTRAINT pk_rig_inventory PRIMARY KEY (id),
 

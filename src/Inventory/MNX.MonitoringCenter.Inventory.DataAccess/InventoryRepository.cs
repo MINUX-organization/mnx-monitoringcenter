@@ -33,6 +33,15 @@ public partial class InventoryRepository
     {
         var newInventory = MapInventory(rigId, createdDate, inventory);
 
+        var oldInventory = await GetInventoryBySpecification(new InventorySpecification(null, rigId))
+                                    .FirstOrDefaultAsync(cancellationToken);
+
+        if (oldInventory != null)
+        {
+            oldInventory.IsCurrent = false;
+            _context.RigInventory.Update(oldInventory);
+        }
+
         await _context.RigInventory.AddAsync(newInventory, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
     }
