@@ -60,6 +60,14 @@ public class Miner : IEquatable<Miner>
             return false;
         }
 
+        if (!SupportedAlgorithms.Any(x 
+            => config.CoinConfigs.Any(y => x.AlgorithmId == y.Pool!.Cryptocurrency!.AlgorithmId)))
+        {
+            e.Add("Algorithm is not supported by miner.");
+            errors = e;
+            return false;
+        }
+
         if (!SupportedDevices.IsSupportDeviceType(config.DeviceType))
         {
             e.Add("Device type in config is not supported by the miner.");
