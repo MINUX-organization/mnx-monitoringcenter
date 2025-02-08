@@ -58,7 +58,7 @@ public partial class InventoryRepository
 
         if (inventory != null)
         {
-            inventory.EndDateTime = DateTimeOffset.Now;
+            inventory.EndDateTime = DateTimeOffset.UtcNow;
             _context.RigInventory.Update(inventory);
             await _context.SaveChangesAsync(cancellationToken);
         }

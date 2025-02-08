@@ -213,9 +213,9 @@ select monitoring_center.get_miner_id('OneZeroMiner', '1.4.3'), f.algorithm_id, 
     SELECT monitoring_center.get_algorithm_id('Ziliqa (ZIL)'), 'zil' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Xelis (Xel)'), 'xelis' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Xelis V2 (Xel)'), 'xelishashv2'
-) f;
+) f union all
 
-select monitoring_center.get_miner_id('LolMiner', '1.94a'), f.algorithm_id, f.name from
+select monitoring_center.get_miner_id('Lolminer', '1.94a'), f.algorithm_id, f.name from
 (
     SELECT monitoring_center.get_algorithm_id('Ethash') algorithm_id, 'ETHASH' name UNION ALL
     SELECT monitoring_center.get_algorithm_id('Etchash'), 'ETCHASH' UNION ALL
