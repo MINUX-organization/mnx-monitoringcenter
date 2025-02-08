@@ -53,7 +53,7 @@ public class MiningController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Stop(Guid rigId)
     {
-        var result = await _mediator.Send(new StartMiningCommand(rigId, _userId));
+        var result = await _mediator.Send(new StopMiningCommand(rigId, _userId));
         return result.ToActionResult();
     }
 }

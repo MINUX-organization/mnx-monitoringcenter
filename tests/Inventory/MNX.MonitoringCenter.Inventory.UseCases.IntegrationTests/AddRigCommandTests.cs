@@ -21,7 +21,7 @@ public class AddRigCommandTests : BaseTest
     [TestCaseSource(typeof(AddRigCommandTestCase), nameof(AddRigCommandTestCase.Rigs))]
     public async Task AddRigCommandTest(AgentRegisteredMsg message)
     {
-        var result = await _mediator.Send(new AddRigCommand(message.Id, message.OwnerId));
+        var result = await _mediator.Send(new AddRigCommand(message.Id, message.OwnerId, message.Nickname));
 
         Assert.That(result.IsSuccess);
 
@@ -51,17 +51,20 @@ public class AddRigCommandTests : BaseTest
                 yield return new AgentRegisteredMsg()
                 {
                     Id = Guid.NewGuid(),
-                    OwnerId = OWNER_ID
+                    OwnerId = OWNER_ID,
+                    Nickname = "Minux_1"
                 };
                 yield return new AgentRegisteredMsg()
                 {
                     Id = Guid.NewGuid(),
-                    OwnerId = OWNER_ID
+                    OwnerId = OWNER_ID,
+                    Nickname = "Minux_2"
                 };
                 yield return new AgentRegisteredMsg()
                 {
                     Id = Guid.NewGuid(),
-                    OwnerId = OWNER_ID
+                    OwnerId = OWNER_ID,
+                    Nickname = "Minux_3"
                 };
             }
         }

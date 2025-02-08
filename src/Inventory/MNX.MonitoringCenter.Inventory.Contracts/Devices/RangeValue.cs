@@ -26,5 +26,5 @@ public record RangeValue
     /// <summary>
     /// Значение по умолчанию.
     /// </summary>
-    public int Default { get; init; }
+    public int? Default { get; init; }
 }

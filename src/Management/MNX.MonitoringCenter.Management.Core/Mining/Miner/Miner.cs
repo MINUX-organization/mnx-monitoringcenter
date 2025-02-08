@@ -71,6 +71,17 @@ public class Miner : IEquatable<Miner>
         return true;
     }
 
+    /// <summary>
+    /// Получить признак поддержки устройства.
+    /// </summary>
+    /// <param name="device"> Устройство. </param>
+    /// <returns> Признак поддержки устройства. </returns>
+    public bool IsDeviceSupport(MiningDevice.MiningDevice device)
+    {
+        return SupportedDevices.IsSupportDeviceType(device.Type) &&
+               SupportedDevices.IsSupportDeviceManufacturer(device.Manufacturer);
+    }
+
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {

@@ -31,7 +31,7 @@ internal static class MiningDeviceSpecificationExtensions
         this IQueryable<MiningDeviceInfo> devices, Specification specification)
     {
         if (!string.IsNullOrWhiteSpace(specification.FilterString) &&
-            specification.FilterParameters is not null)
+            specification.FilterParameters is not null && specification.FilterParameters.Length > 0)
         {
             return devices.Where(specification.FilterString, specification.FilterParameters);
         }

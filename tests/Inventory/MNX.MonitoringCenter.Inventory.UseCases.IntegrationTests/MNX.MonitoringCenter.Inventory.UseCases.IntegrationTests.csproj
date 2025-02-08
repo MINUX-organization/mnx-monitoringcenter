@@ -16,8 +16,8 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
     <PackageReference Include="MNX.Application.UseCases.DI" Version="1.0.2" />
-	<PackageReference Include="MNX.RigCommander.Contracts" Version="1.0.4" />
-    <PackageReference Include="MNX.SecurityManagement.Authentication.Contracts" Version="1.2.3" />
+	<PackageReference Include="MNX.RigCommander.Contracts" Version="1.0.5" />
+    <PackageReference Include="MNX.SecurityManagement.Authentication.Contracts" Version="1.2.4" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.8" />
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.2.1" />

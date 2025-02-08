@@ -27,19 +27,19 @@ public class RigRepository : IRigRepository
     {
         var rigsQuery = _inventoryRepository.GetRigsBySpecification(specification)
 
-                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                            .Include(rig => rig.Inventories.Where(x => x.IsCurrent))
                                 .ThenInclude(inventory => inventory.Software)
 
-                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                            .Include(rig => rig.Inventories.Where(x => x.IsCurrent))
                                 .ThenInclude(inventory => inventory.Cpus)
 
-                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                            .Include(rig => rig.Inventories.Where(x => x.IsCurrent))
                                 .ThenInclude(inventory => inventory.Drives)
 
-                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                            .Include(rig => rig.Inventories.Where(x => x.IsCurrent))
                                 .ThenInclude(inventory => inventory.Gpus)
 
-                            .Include(rig => rig.Inventories.Where(x => x.EndDateTime == null))
+                            .Include(rig => rig.Inventories.Where(x => x.IsCurrent))
                                 .ThenInclude(inventory => inventory.NetworkAdapters.Where(x => x.GlobalIP != null))
 
                             .Where(rig => rig.Inventories.Count != 0);

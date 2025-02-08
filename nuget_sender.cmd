@@ -5,7 +5,7 @@ cd ./src
 cd ./Inventory
 cd ./MNX.MonitoringCenter.Inventory.Contracts/bin/Release
 
-dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY MNX.MonitoringCenter.Inventory.Contracts.1.0.4.nupkg
+dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY MNX.MonitoringCenter.Inventory.Contracts.1.0.5.nupkg
 
 cd ../../../../
 cd ./Management

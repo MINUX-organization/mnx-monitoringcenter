@@ -45,6 +45,31 @@ public static class DeviceEnumExtensions
         }
     };
 
+    private static readonly Dictionary<string, List<DeviceTypeManufacturerCombination>>
+        DeviceManufacturerToTypeCombination = new()
+        {
+            {
+                MiningDeviceManufacturer.AMD.ToString(),
+                [
+                    DeviceTypeManufacturerCombination.AmdGpu,
+                    DeviceTypeManufacturerCombination.AmdCpu
+                ]
+            },
+            {
+                MiningDeviceManufacturer.Nvidia.ToString(),
+                [
+                    DeviceTypeManufacturerCombination.NvidiaGpu
+                ]
+            },
+            {
+                MiningDeviceManufacturer.Intel.ToString(),
+                [
+                    DeviceTypeManufacturerCombination.IntelGpu,
+                    DeviceTypeManufacturerCombination.IntelCpu
+                ]
+            }
+        };
+
     /// <summary>
     /// Проверка на совместимость типа устройства и комбинаций производителей и типов устройств.
     /// </summary>
@@ -58,5 +83,25 @@ public static class DeviceEnumExtensions
                                            MiningDeviceType deviceType)
     {
         return DeviceTypeToTypeManufacturerCombination[deviceType].Any(x => deviceEnum.HasFlag(x));
+    }
+
+    /// <summary>
+    /// Проверка на совместимость производителя устройства и комбинаций производителей и типов устройств.
+    /// </summary>
+    /// <param name="deviceEnum"> Комбинации производителей и типов устройств. </param>
+    /// <param name="manufacturer"> Производитель. </param>
+    /// <returns>
+    /// <see langword="true"/>, если комбинация производителя и устройства содержит в себе переданный тип устройства,
+    /// иначе <see langword="false"/>.
+    /// </returns>
+    public static bool IsSupportDeviceManufacturer(this DeviceTypeManufacturerCombination deviceEnum,
+                                                   string manufacturer)
+    {
+        if (DeviceManufacturerToTypeCombination.TryGetValue(manufacturer, out List<DeviceTypeManufacturerCombination>? list))
+        {
+            return list.Any(x => deviceEnum.HasFlag(x));
+        };
+
+        return false;
     }
 }
