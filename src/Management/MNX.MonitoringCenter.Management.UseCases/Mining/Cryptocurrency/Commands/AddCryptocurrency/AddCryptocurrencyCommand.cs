@@ -1,6 +1,5 @@
 ﻿using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.AddCryptocurrency;
 

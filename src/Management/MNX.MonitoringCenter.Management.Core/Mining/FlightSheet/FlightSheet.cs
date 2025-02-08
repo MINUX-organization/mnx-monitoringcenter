@@ -76,7 +76,12 @@ public class FlightSheet : IEquatable<FlightSheet>
     /// <returns> Признак поддержки устройства. </returns>
     public bool IsDeviceSupport(MiningDevice.MiningDevice device)
     {
-        return Targets.Any(target => target.MiningConfig.DeviceType == device.Type);
+        var target = Targets.FirstOrDefault(target => target.MiningConfig.DeviceType == device.Type);
+
+        if (target is null)
+            return false;
+
+        return target.Miner!.IsDeviceSupport(device);
     }
 
     /// <inheritdoc/>

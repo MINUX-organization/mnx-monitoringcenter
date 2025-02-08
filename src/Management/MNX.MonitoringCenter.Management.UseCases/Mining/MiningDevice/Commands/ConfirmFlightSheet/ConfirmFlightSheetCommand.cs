@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.CommandValidation;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
 

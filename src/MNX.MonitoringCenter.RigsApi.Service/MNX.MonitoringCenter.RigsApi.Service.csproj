@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="MNX.Application.Consul" Version="1.0.0" />
+    <PackageReference Include="MNX.Application.RabbitMQ" Version="1.0.1" />
     <PackageReference Include="MNX.RigCommander.Contracts" Version="1.0.5" />
     <PackageReference Include="MNX.SecurityManagement.Authentication.Contracts" Version="1.2.4" />
     <PackageReference Include="MNX.SecurityManagement.Authentication.Integration" Version="1.2.3" />
