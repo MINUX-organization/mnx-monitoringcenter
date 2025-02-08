@@ -92,8 +92,9 @@ public class AlgorithmController : ControllerBase
     /// <param name="id"> Идентификатор алгоритма. </param>
     /// <param name="model"> Новый пользовательский алгоритм. </param>
     /// <response code="204"> Успешно. </response>
-    /// <response code="400"> Переданные параметры не прошли валидацию 
-    /// или не был найден алгоритм с переданным id. </response>
+    /// <response code="400"> Переданные параметры не прошли валидацию,
+    /// не был найден алгоритм с переданным id или алгоритм 
+    /// является доменным и не может быть отредактирован. </response>
     [HttpPatch("{id:Guid}")]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 204)]
     [ProducesResponseType(typeof(List<string>), 400)]
@@ -110,8 +111,10 @@ public class AlgorithmController : ControllerBase
     /// </summary>
     /// <param name="id"> Идентификатор алгоритма. </param>
     /// <response code="204"> Успешно. </response>
+    /// <response code="400"> Алгоритм не может быть удален. </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 204)]
+    [ProducesResponseType(typeof(AlgorithmBindingModel), 400)]
     public async Task<IActionResult> DeleteAlgorithm(Guid id)
     {
         var result = await _mediator.Send(

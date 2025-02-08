@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.Results;
+using MNX.MonitoringCenter.Management.Core.Mining;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameCommand;
@@ -28,6 +29,14 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
         var bindings = model.Bindings;
         var relativeNames = bindings.Select(x => x.RelativeName).ToList();
         var minerIds = bindings.Select(x => x.MinerId).ToList();
+
+        var algorithm = await _algorithmRepository.GetById(request.AlgorithmId,
+                                                           request.UserId);
+
+        if (algorithm!.UserId == null)
+        {
+            return Result<Unit>.Invalid("Domain algorithms cannot be edited");
+        }
 
         await _algorithmRepository.EditAlgorithmName(request.AlgorithmId,
                                                      request.UserId,

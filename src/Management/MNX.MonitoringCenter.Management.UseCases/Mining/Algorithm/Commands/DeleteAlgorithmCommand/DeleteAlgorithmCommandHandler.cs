@@ -27,6 +27,13 @@ public class DeleteAlgorithmCommandHandler : IRequestHandler<DeleteAlgorithmComm
         var algorithmId = request.AlgorithmId;
         var userId = request.UserId;
 
+        var algorithm = await _algorithmRepository.GetById(algorithmId, userId);
+
+        if (algorithm!.UserId == null)
+        {
+            return Result<Unit>.Invalid("Domain algorithms cannot be deleted");
+        }
+
         using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
             await _minerRepository.RemoveAllMinerAlgorithmsById(algorithmId);
