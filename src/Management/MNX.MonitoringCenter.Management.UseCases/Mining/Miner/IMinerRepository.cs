@@ -1,5 +1,7 @@
 ﻿namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 
+using MNX.MonitoringCenter.Management.Core.Mining.Miner;
+using System.Collections.Generic;
 using Miner = Core.Mining.Miner.Miner;
 
 /// <summary>
@@ -29,4 +31,14 @@ public interface IMinerRepository
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Признак существования майнера. </returns>
     Task<bool> Exists(Guid id, CancellationToken cancellationToken);
+
+    Task AddMinerAlgorithm(MinerAlgorithm minerAlgorithm);
+
+    Task RemoveAllMinerAlgorithmsById(Guid id);
+
+    Task EditMinerBindingsByAlgorithmId(Guid algorithmId,
+                                        List<string> RelativeNames,
+                                        List<Guid> minerIds);
+    
+    Task<List<MinerAlgorithm>> GetMinerAlgorithmsByAlgorithmId(Guid id);
 }

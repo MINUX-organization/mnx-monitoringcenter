@@ -11,6 +11,16 @@ public class Algorithm : IEquatable<Algorithm>
     public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
+    /// Пользовательский идентификатор.
+    /// </summary>
+    public Guid? UserId { get; init; }
+
+    /// <summary>
+    /// Признак доменного алгоритма.
+    /// </summary>
+    public bool IsDomain => UserId is null ? true : false;
+
+    /// <summary>
     /// Название.
     /// </summary>
     public required string Name { get; set; }

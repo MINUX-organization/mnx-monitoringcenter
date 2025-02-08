@@ -4,6 +4,8 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Algorithm;
 
+using Algorithm = Core.Mining.Algorithm;
+
 /// <summary>
 /// Реализация <see cref="IAlgorithmRepository"/>.
 /// </summary>
@@ -17,18 +19,47 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Core.Mining.Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
+    public IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
     {
         return _context.Algorithms.Filter(specification)
-                                  .AsNoTracking()
-                                  .AsAsyncEnumerable();
+                                      .AsNoTracking()
+                                      .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<Core.Mining.Algorithm?> GetById(Guid id, CancellationToken cancellationToken = default)
+    public Task<Algorithm?> GetById(Guid id,
+                                    Guid userId,
+                                    CancellationToken cancellationToken = default)
     {
         return _context.Algorithms
+                       .Where(x => x.Id == id && (x.UserId == userId || x.IsDomain == true))
                        .AsNoTracking()
-                       .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+                       .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task Add(Algorithm algorithm)
+    {
+        await _context.Algorithms.AddAsync(algorithm);
+        await _context.SaveChangesAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task RemoveUsersAlgorithm(Guid id, Guid userId)
+    {
+        await _context.Algorithms
+            .Where(x => x.Id == id && x.UserId == userId)
+            .ExecuteDeleteAsync();
+    }
+
+    /// <inheritdoc/>
+    public async Task EditAlgorithmName(Guid algorithmId,
+                                        Guid userId,
+                                        string newName)
+    {
+        await _context.Algorithms
+            .Where(x => x.Id == algorithmId || x.UserId == userId)
+                .ExecuteUpdateAsync(x => x
+                    .SetProperty(a => a.Name, newName));
     }
 }

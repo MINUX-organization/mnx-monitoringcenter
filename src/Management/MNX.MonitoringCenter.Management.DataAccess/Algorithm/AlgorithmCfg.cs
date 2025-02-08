@@ -3,12 +3,14 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Algorithm;
 
+using Algorithm = Core.Mining.Algorithm;
+
 /// <summary>
 /// Конфигурация для таблицы с алгоритмами.
 /// </summary>
-internal class AlgorithmCfg : IEntityTypeConfiguration<Core.Mining.Algorithm>
+internal class AlgorithmCfg : IEntityTypeConfiguration<Algorithm>
 {
-    public void Configure(EntityTypeBuilder<Core.Mining.Algorithm> builder)
+    public void Configure(EntityTypeBuilder<Algorithm> builder)
     {
         builder.HasIndex(x => x.Name);
     }

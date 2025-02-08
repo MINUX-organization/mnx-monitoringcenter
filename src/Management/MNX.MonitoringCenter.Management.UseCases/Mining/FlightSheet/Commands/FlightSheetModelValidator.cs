@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
 using FluentValidation;
 using FluentValidation.Validators;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands;
 
