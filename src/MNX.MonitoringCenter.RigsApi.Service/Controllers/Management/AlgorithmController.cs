@@ -44,10 +44,11 @@ public class AlgorithmController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("available")]
     [ProducesResponseType(typeof(IAsyncEnumerable<Algorithm>), 200)]
-    public IAsyncEnumerable<Algorithm> GetAvailable()
+    public IAsyncEnumerable<Algorithm> GetAvailable(string searchString = "")
     {
         return _mediator.CreateStream(
-            new GetAvailableAlgorithmsQuery(_accessor.GetUserId()));
+            new GetAvailableAlgorithmsQuery(_accessor.GetUserId(),
+                                            searchString));
     }
 
     /// <summary>
@@ -90,11 +91,11 @@ public class AlgorithmController : ControllerBase
     /// </summary>
     /// <param name="id"> Идентификатор алгоритма. </param>
     /// <param name="model"> Новый пользовательский алгоритм. </param>
-    /// <response code="200"> Успешно. </response>
+    /// <response code="204"> Успешно. </response>
     /// <response code="400"> Переданные параметры не прошли валидацию 
     /// или не был найден алгоритм с переданным id. </response>
     [HttpPatch("{id:Guid}")]
-    [ProducesResponseType(typeof(AlgorithmBindingModel), 200)]
+    [ProducesResponseType(typeof(AlgorithmBindingModel), 204)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> EditAlgorithm(Guid id,
                                                    [FromBody] AlgorithmBindingModel model)

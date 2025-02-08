@@ -12,9 +12,9 @@ public sealed record GetAvailableAlgorithmsQuery : IStreamRequest<Core.Mining.Al
     /// </summary>
     public Specification Specification { get; }
 
-    public GetAvailableAlgorithmsQuery(Guid userId)
+    public GetAvailableAlgorithmsQuery(Guid userId, string searchString)
     {
-        Specification = new Specification(userId);
+        Specification = new Specification(userId, searchString);
     }
 
     public GetAvailableAlgorithmsQuery(Guid userId, string filterString, object[] filterParameters)

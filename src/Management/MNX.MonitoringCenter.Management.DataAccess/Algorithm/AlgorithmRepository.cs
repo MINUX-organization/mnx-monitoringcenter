@@ -21,7 +21,7 @@ public class AlgorithmRepository : IAlgorithmRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
     {
-        return _context.Algorithms.Filter(specification)
+        return _context.Algorithms.Search(specification)
                                       .AsNoTracking()
                                       .AsAsyncEnumerable();
     }
@@ -32,7 +32,7 @@ public class AlgorithmRepository : IAlgorithmRepository
                                     CancellationToken cancellationToken = default)
     {
         return _context.Algorithms
-                       .Where(x => x.Id == id && (x.UserId == userId || x.IsDomain == true))
+                       .Where(x => x.Id == id && (x.UserId == userId || x.UserId == null))
                        .AsNoTracking()
                        .FirstOrDefaultAsync(cancellationToken);
     }

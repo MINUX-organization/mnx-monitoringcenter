@@ -12,13 +12,9 @@ public class Algorithm : IEquatable<Algorithm>
 
     /// <summary>
     /// Пользовательский идентификатор.
+    /// Если имеет значение NULL, значит алгоритм является доменным.
     /// </summary>
     public Guid? UserId { get; init; }
-
-    /// <summary>
-    /// Признак доменного алгоритма.
-    /// </summary>
-    public bool IsDomain => UserId is null ? true : false;
 
     /// <summary>
     /// Название.
