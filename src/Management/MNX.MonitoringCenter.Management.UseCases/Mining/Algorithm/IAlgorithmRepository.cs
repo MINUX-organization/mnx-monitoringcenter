@@ -26,17 +26,17 @@ public interface IAlgorithmRepository
                              CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// Добавить новый алгоритм.
+    /// Добавить новый пользовательский алгоритм.
     /// </summary>
     /// <param name="algorithm"> Алгоритм. </param>
-    Task Add(Algorithm algorithm);
+    Task AddUserAlgorithmAsync(Algorithm algorithm);
 
     /// <summary>
     /// Удалить пользовательский алгоритм по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор алгоритма. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
-    Task RemoveUsersAlgorithm(Guid id, Guid userId);
+    Task RemoveUserAlgorithm(Guid id, Guid userId);
 
     /// <summary>
     /// Редактировать имя алгоритма.

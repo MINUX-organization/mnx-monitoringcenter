@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using System.Transactions;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.AddAlgorithmCommand;
 
@@ -42,7 +42,7 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
         
         using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
-            await _algorithmRepository.Add(algorithm);
+            await _algorithmRepository.AddUserAlgorithmAsync(algorithm);
 
             var algorithmBindingsList = relativeNames
                 .Zip(minerIds, (name, id) => new MinerAlgorithm

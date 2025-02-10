@@ -47,10 +47,10 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
-    public async Task<List<MinerAlgorithm>> GetMinerAlgorithmsByAlgorithmId(Guid id)
+    public IAsyncEnumerable<MinerAlgorithm> GetMinerAlgorithmsByAlgorithmId(Guid id)
     {
-        return await _context.MinerAlgorithms
-            .Where(x => x.AlgorithmId == id).ToListAsync();
+        return _context.MinerAlgorithms
+            .Where(x => x.AlgorithmId == id).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
@@ -61,9 +61,9 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
-    public async Task RemoveAllMinerAlgorithmsById(Guid id)
+    public Task RemoveAllMinerAlgorithmsById(Guid id)
     {
-        await _context.MinerAlgorithms
+        return _context.MinerAlgorithms
             .Where(x => x.AlgorithmId == id).ExecuteDeleteAsync();
     }
 
@@ -85,6 +85,7 @@ public class MinerRepository : IMinerRepository
 
         foreach (var algorithmBinding in algorithmBindingsList)
             await _context.MinerAlgorithms.AddAsync(algorithmBinding);
+
         await _context.SaveChangesAsync();
     }
 }

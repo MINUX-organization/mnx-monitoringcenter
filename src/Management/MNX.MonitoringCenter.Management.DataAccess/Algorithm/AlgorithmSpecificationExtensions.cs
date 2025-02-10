@@ -12,8 +12,19 @@ using Algorithm = Core.Mining.Algorithm;
 internal static class AlgorithmSpecificationExtensions
 {
     /// <summary>
-    /// Фильтровать запрашиваемые алгоритмы 
-    /// с возможностью поиска подстрок.
+    /// Получить доступные алгоритмы.
+    /// </summary>
+    /// <param name="devices"> Сущности алгоритмов. </param>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Доступные алгоритмы. </returns>
+    internal static IQueryable<Algorithm> Avilable(
+        this IQueryable<Algorithm> entities, Specification specification)
+    {
+        return entities.Where(x => x.UserId == specification.UserId || x.UserId == null);
+    }
+
+    /// <summary>
+    /// Поиск алгоритмов по подстроке названия.
     /// </summary>
     /// <param name="entities"> Сущности алгоритмов. </param>
     /// <param name="specification"> Спецификация. </param>
@@ -23,13 +34,10 @@ internal static class AlgorithmSpecificationExtensions
     {
         if (specification.SearchSubString != string.Empty)
         {
-            return entities
-                .Where(x => (x.UserId == specification.UserId || 
-                       x.UserId == null) &&
-                       EF.Functions.Like(x.Name, $"%{specification.SearchSubString}%"));
+            return entities.Where(x => EF.Functions.Like(
+                x.Name, $"%{specification.SearchSubString}%"));
         }
 
-        return entities.Where(x => x.UserId == specification.UserId ||
-                              x.UserId == null);
+        return entities;
     }
 }

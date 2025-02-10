@@ -21,9 +21,10 @@ public class AlgorithmRepository : IAlgorithmRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
     {
-        return _context.Algorithms.Search(specification)
-                                      .AsNoTracking()
-                                      .AsAsyncEnumerable();
+        return _context.Algorithms.Avilable(specification)
+            .Search(specification)
+            .AsNoTracking()
+            .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
@@ -38,26 +39,26 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public async Task Add(Algorithm algorithm)
+    public async Task AddUserAlgorithmAsync(Algorithm algorithm)
     {
         await _context.Algorithms.AddAsync(algorithm);
         await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public async Task RemoveUsersAlgorithm(Guid id, Guid userId)
+    public Task RemoveUserAlgorithm(Guid id, Guid userId)
     {
-        await _context.Algorithms
+        return _context.Algorithms
             .Where(x => x.Id == id && x.UserId == userId)
             .ExecuteDeleteAsync();
     }
 
     /// <inheritdoc/>
-    public async Task EditAlgorithmName(Guid algorithmId,
-                                        Guid userId,
-                                        string newName)
+    public Task EditAlgorithmName(Guid algorithmId,
+                                  Guid userId,
+                                  string newName)
     {
-        await _context.Algorithms
+        return _context.Algorithms
             .Where(x => x.Id == algorithmId || x.UserId == userId)
                 .ExecuteUpdateAsync(x => x
                     .SetProperty(a => a.Name, newName));
