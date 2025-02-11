@@ -39,7 +39,7 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
         GetGpusQuery request, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var inventoryGpus =
-            await _mediator.GetHashSetAsync(new GetGpusDetailsQuery(request.UserId), cancellationToken);
+            await _mediator.GetListAsync(new GetGpusDetailsQuery(request.UserId), cancellationToken);
 
         var filterString = $"Id in ({string.Join(",", inventoryGpus.Select((cpu, index) => $"@{index}"))})";
         var filterParameters = inventoryGpus.Select(x => (object)x.Id).ToArray();
@@ -50,7 +50,10 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
 
         await foreach (var gpu in miningDevices.WithCancellation(cancellationToken))
         {
-            var inventoryGpu = inventoryGpus.First(x => x.Id == gpu.Id); // todo: использовать hash set
+            // Берём последнюю карту, так как она из последней инвентаризации.
+            // Если риг выключили, то у него будет последняя актуальная инвентаризация,
+            // пока его не включат, даже если карты уже перенесли на другой риг.
+            var inventoryGpu = inventoryGpus.Last(x => x.Id == gpu.Id);
 
             yield return new GetGpusQueryResponse()
             {
