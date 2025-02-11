@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 /// <summary>
 /// Майнинг устройство.
 /// </summary>
-public class MiningDevice
+public class MiningDevice : IEquatable<MiningDevice>
 {
     /// <summary>
     /// Идентификатор майнинг устройства.
@@ -65,5 +65,34 @@ public class MiningDevice
     public override int GetHashCode()
     {
         return HashCode.Combine(Id, Name, Type);
+    }
+
+    /// <inheritdoc/>
+    public override bool Equals(object? obj)
+    {
+        if (obj is MiningDevice miningDevice)
+        {
+            return Equals(miningDevice);
+        }
+
+        return false;
+    }
+
+    /// <inheritdoc/>
+    public bool Equals(MiningDevice? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        if (ReferenceEquals(this, other))
+        {
+            return true;
+        }
+
+        return Id == other.Id &&
+               Name == other.Name &&
+               Type == other.Type;
     }
 }
