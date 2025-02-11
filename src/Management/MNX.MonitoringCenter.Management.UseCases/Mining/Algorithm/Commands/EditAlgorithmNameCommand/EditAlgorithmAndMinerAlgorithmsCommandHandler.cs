@@ -48,8 +48,7 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
                                                      model.FullName);
 
             await _minerRepository.EditMinerBindingsByAlgorithmId(request.AlgorithmId,
-                                                                  relativeNames,
-                                                                  minerIds);
+                                                                  bindings);
 
             transaction.Complete();
         }

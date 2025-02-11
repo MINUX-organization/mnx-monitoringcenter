@@ -2,6 +2,7 @@
 using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
+using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
 
@@ -69,24 +70,22 @@ public class MinerRepository : IMinerRepository
 
     /// <inheritdoc/>
     public async Task EditMinerBindingsByAlgorithmId(Guid algorithmId,
-                                                     List<string> newNames,
-                                                     List<Guid> minerIds)
+                                                     List<RelativeNameBindingModel> bindings)
     {
         var minerAlgorithms = await _context.MinerAlgorithms
             .Where(x => x.AlgorithmId == algorithmId).ToListAsync();
 
         _context.MinerAlgorithms.RemoveRange(minerAlgorithms);
 
-        var algorithmBindingsList = newNames
-                .Zip(minerIds, (name, id) => new MinerAlgorithm
-                {
-                    Name = name,
-                    MinerId = id,
-                    AlgorithmId = algorithmId
-                });
-
-        foreach (var algorithmBinding in algorithmBindingsList)
-            await _context.MinerAlgorithms.AddAsync(algorithmBinding);
+        foreach (var binding in bindings)
+        {
+            await _context.MinerAlgorithms.AddAsync(new MinerAlgorithm()
+            {
+                Name = binding.RelativeName,
+                MinerId = binding.MinerId,
+                AlgorithmId = algorithmId
+            });
+        }
 
         await _context.SaveChangesAsync();
     }

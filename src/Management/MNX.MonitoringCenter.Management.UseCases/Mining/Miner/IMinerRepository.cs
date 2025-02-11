@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner;
+﻿using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 
@@ -63,6 +64,5 @@ public interface IMinerRepository
     /// <param name="RelativeNames"> Список новых наименований. </param>
     /// <param name="minerIds"> Список идентификаторов майнеров. </param>
     Task EditMinerBindingsByAlgorithmId(Guid algorithmId,
-                                        List<string> RelativeNames,
-                                        List<Guid> minerIds);
+                                        List<RelativeNameBindingModel> bindings);
 }
