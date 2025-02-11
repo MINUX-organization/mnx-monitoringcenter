@@ -32,7 +32,7 @@ public class AlgorithmModelValidator : AbstractValidator<AlgorithmBindingModel>
                     .WithMessage("Incorrect relative algorithm name format");
 
             RuleFor(bind => bind.MinerId)
-                .NotEmpty().WithMessage("Miner identificator cannot be NULL");
+                .NotEmpty().WithMessage("Miner identifier cannot be NULL");
         }
     }
 }

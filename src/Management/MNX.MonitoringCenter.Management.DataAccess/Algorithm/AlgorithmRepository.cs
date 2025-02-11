@@ -19,9 +19,10 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
+    public IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithmsBySpecification(
+        Specification specification)
     {
-        return _context.Algorithms.Avilable(specification)
+        return _context.Algorithms.Available(specification)
             .Search(specification)
             .AsNoTracking()
             .AsAsyncEnumerable();
@@ -33,20 +34,20 @@ public class AlgorithmRepository : IAlgorithmRepository
                                     CancellationToken cancellationToken = default)
     {
         return _context.Algorithms
-                       .Where(x => x.Id == id && (x.UserId == userId || x.UserId == null))
+                       .Available(userId)
                        .AsNoTracking()
                        .FirstOrDefaultAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
-    public async Task AddUserAlgorithmAsync(Algorithm algorithm)
+    public async Task AddAsync(Algorithm algorithm)
     {
         await _context.Algorithms.AddAsync(algorithm);
         await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public Task RemoveUserAlgorithm(Guid id, Guid userId)
+    public Task Remove(Guid id, Guid userId)
     {
         return _context.Algorithms
             .Where(x => x.Id == id && x.UserId == userId)

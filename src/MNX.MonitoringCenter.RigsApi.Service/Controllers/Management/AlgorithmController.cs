@@ -44,11 +44,10 @@ public class AlgorithmController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("available")]
     [ProducesResponseType(typeof(IAsyncEnumerable<Algorithm>), 200)]
-    public IAsyncEnumerable<Algorithm> GetAvailable(string searchString = "")
+    public IAsyncEnumerable<Algorithm> GetAvailable(string? searchString = null)
     {
         return _mediator.CreateStream(
-            new GetAvailableAlgorithmsQuery(_accessor.GetUserId(),
-                                            searchString));
+            new GetAvailableAlgorithmsQuery(_accessor.GetUserId(), searchString!));
     }
 
     /// <summary>
@@ -62,7 +61,7 @@ public class AlgorithmController : ControllerBase
     [HttpGet("{id:Guid}")]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> GetAlgorithmById(Guid id)
+    public async Task<IActionResult> GetById(Guid id)
     {
         var result = await _mediator.Send(
             new GetAlgorithmByIdQuery(id, _accessor.GetUserId()));
@@ -79,7 +78,7 @@ public class AlgorithmController : ControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> AddAlgorithm([FromBody] AlgorithmBindingModel model)
+    public async Task<IActionResult> AddAlgorithm(AlgorithmBindingModel model)
     {
         var result = await _mediator.Send(
             new AddAlgorithmCommand(_accessor.GetUserId(), model));

@@ -26,7 +26,9 @@ public class GetAlgorithmByIdQueryHandler
     public async Task<Result<AlgorithmBindingModel>> Handle(GetAlgorithmByIdQuery request,
                                                             CancellationToken cancellationToken)
     {
-        var algorithm = await _algorithmRepository.GetById(request.AlgorithmId, request.UserId);
+        var algorithm = await _algorithmRepository.GetById(request.AlgorithmId,
+                                                           request.UserId,
+                                                           cancellationToken);
 
         if (algorithm == null)
             return Result<AlgorithmBindingModel>.Invalid("Algorithm was not found");
@@ -34,7 +36,7 @@ public class GetAlgorithmByIdQueryHandler
         var bindings = _minerRepository.GetMinerAlgorithmsByAlgorithmId(request.AlgorithmId);
 
         var bindingModels = new List<RelativeNameBindingModel>();
-        await foreach (var binding in bindings)
+        await foreach (var binding in bindings.WithCancellation(cancellationToken))
         {
             var newBinding = new RelativeNameBindingModel(binding.Name, binding.MinerId);
             bindingModels.Add(newBinding);

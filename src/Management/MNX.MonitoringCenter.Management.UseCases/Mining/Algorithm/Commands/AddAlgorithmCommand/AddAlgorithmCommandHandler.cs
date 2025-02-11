@@ -31,8 +31,6 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
     {
         var model = request.Model;
         var bindings = model.Bindings;
-        var relativeNames = bindings.Select(x => x.RelativeName).ToList();
-        var minerIds = bindings.Select(x => x.MinerId).ToList();
 
         var algorithm = new Algorithm 
         {
@@ -42,18 +40,17 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
         
         using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
-            await _algorithmRepository.AddUserAlgorithmAsync(algorithm);
+            await _algorithmRepository.AddAsync(algorithm);
 
-            var algorithmBindingsList = relativeNames
-                .Zip(minerIds, (name, id) => new MinerAlgorithm
+            foreach (var binding in bindings)
+            {
+                await _minerRepository.AddMinerAlgorithm(new MinerAlgorithm()
                 {
-                    Name = name,
-                    MinerId = id,
-                    AlgorithmId = algorithm.Id
+                    Name = binding.RelativeName,
+                    AlgorithmId = algorithm.Id,
+                    MinerId = binding.MinerId
                 });
-
-            foreach (var algorithmBinding in algorithmBindingsList)
-                await _minerRepository.AddMinerAlgorithm(algorithmBinding);
+            }
 
             transaction.Complete();
         }

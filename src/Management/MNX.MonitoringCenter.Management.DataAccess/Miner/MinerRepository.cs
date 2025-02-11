@@ -73,7 +73,9 @@ public class MinerRepository : IMinerRepository
                                                      List<Guid> minerIds)
     {
         var minerAlgorithms = await _context.MinerAlgorithms
-            .Where(x => x.AlgorithmId == algorithmId).ExecuteDeleteAsync();
+            .Where(x => x.AlgorithmId == algorithmId).ToListAsync();
+
+        _context.MinerAlgorithms.RemoveRange(minerAlgorithms);
 
         var algorithmBindingsList = newNames
                 .Zip(minerIds, (name, id) => new MinerAlgorithm

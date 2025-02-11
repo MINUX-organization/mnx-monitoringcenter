@@ -12,7 +12,7 @@ public interface IAlgorithmRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Список алгоритмов. </returns>
-    IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithms(Specification specification);
+    IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithmsBySpecification(Specification specification);
 
     /// <summary>
     /// Получить алгоритм по идентификатору.
@@ -29,14 +29,14 @@ public interface IAlgorithmRepository
     /// Добавить новый пользовательский алгоритм.
     /// </summary>
     /// <param name="algorithm"> Алгоритм. </param>
-    Task AddUserAlgorithmAsync(Algorithm algorithm);
+    Task AddAsync(Algorithm algorithm);
 
     /// <summary>
     /// Удалить пользовательский алгоритм по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор алгоритма. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
-    Task RemoveUserAlgorithm(Guid id, Guid userId);
+    Task Remove(Guid id, Guid userId);
 
     /// <summary>
     /// Редактировать имя алгоритма.

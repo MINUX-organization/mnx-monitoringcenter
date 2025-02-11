@@ -14,30 +14,42 @@ internal static class AlgorithmSpecificationExtensions
     /// <summary>
     /// Получить доступные алгоритмы.
     /// </summary>
-    /// <param name="devices"> Сущности алгоритмов. </param>
+    /// <param name="algorithms"> Сущности алгоритмов. </param>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Доступные алгоритмы. </returns>
-    internal static IQueryable<Algorithm> Avilable(
-        this IQueryable<Algorithm> entities, Specification specification)
+    internal static IQueryable<Algorithm> Available(
+        this IQueryable<Algorithm> algorithms, Specification specification)
     {
-        return entities.Where(x => x.UserId == specification.UserId || x.UserId == null);
+        return algorithms.Where(x => x.UserId == specification.UserId || x.UserId == null);
+    }
+
+    /// <summary>
+    /// Получить доступные алгоритмы.
+    /// </summary>
+    /// <param name="algorithms"> Сущности алгоритмов. </param>
+    /// <param name="specification"> Спецификация. </param>
+    /// <returns> Доступные алгоритмы. </returns>
+    internal static IQueryable<Algorithm> Available(
+        this IQueryable<Algorithm> algorithms, Guid userId)
+    {
+        return algorithms.Where(x => x.UserId == userId || x.UserId == null);
     }
 
     /// <summary>
     /// Поиск алгоритмов по подстроке названия.
     /// </summary>
-    /// <param name="entities"> Сущности алгоритмов. </param>
+    /// <param name="algorithms"> Сущности алгоритмов. </param>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Отфильтрованный запрос. </returns>
     internal static IQueryable<Algorithm> Search(
-        this IQueryable<Algorithm> entities, Specification specification)
+        this IQueryable<Algorithm> algorithms, Specification specification)
     {
-        if (specification.SearchSubString != string.Empty)
+        if (string.IsNullOrWhiteSpace(specification.SearchSubString))
         {
-            return entities.Where(x => EF.Functions.Like(
+            return algorithms.Where(x => EF.Functions.Like(
                 x.Name, $"%{specification.SearchSubString}%"));
         }
 
-        return entities;
+        return algorithms;
     }
 }

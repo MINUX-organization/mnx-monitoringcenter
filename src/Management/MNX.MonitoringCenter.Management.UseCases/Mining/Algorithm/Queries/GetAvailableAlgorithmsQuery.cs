@@ -38,6 +38,6 @@ public class GetAvailableAlgorithmsQueryHandler : IStreamRequestHandler<GetAvail
     public IAsyncEnumerable<Core.Mining.Algorithm> Handle(GetAvailableAlgorithmsQuery request,
                                                                 CancellationToken cancellationToken)
     {
-        return _repository.GetNamesOfAvailableAlgorithms(request.Specification);
+        return _repository.GetNamesOfAvailableAlgorithmsBySpecification(request.Specification);
     }
 }

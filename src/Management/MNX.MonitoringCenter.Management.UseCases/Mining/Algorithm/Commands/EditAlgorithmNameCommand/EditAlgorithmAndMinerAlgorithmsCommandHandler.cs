@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
+using System.Transactions;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameCommand;
 
@@ -30,18 +31,28 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
         var minerIds = bindings.Select(x => x.MinerId).ToList();
 
         var algorithm = await _algorithmRepository.GetById(request.AlgorithmId,
-                                                           request.UserId);
+                                                           request.UserId,
+                                                           cancellationToken);
 
-        if (algorithm!.UserId == null)
+        if (algorithm is null)
+            return Result<Unit>.Invalid(
+                $"Algorithmt with id equaled {request.AlgorithmId} was not found!");
+
+        if (algorithm!.UserId is null)
             return Result<Unit>.Invalid("Domain algorithms cannot be edited");
 
-        await _algorithmRepository.EditAlgorithmName(request.AlgorithmId,
+        using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            await _algorithmRepository.EditAlgorithmName(request.AlgorithmId,
                                                      request.UserId,
                                                      model.FullName);
 
-        await _minerRepository.EditMinerBindingsByAlgorithmId(request.AlgorithmId,
-                                                              relativeNames,
-                                                              minerIds);
+            await _minerRepository.EditMinerBindingsByAlgorithmId(request.AlgorithmId,
+                                                                  relativeNames,
+                                                                  minerIds);
+
+            transaction.Complete();
+        }
 
         return Result<Unit>.Empty();
     }
