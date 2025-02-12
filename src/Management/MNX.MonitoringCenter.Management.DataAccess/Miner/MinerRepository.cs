@@ -1,8 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
-using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
 
@@ -45,48 +43,5 @@ public class MinerRepository : IMinerRepository
         return _context.Miners
                        .AsNoTracking()
                        .AnyAsync(x => x.Id == id, cancellationToken);
-    }
-
-    /// <inheritdoc/>
-    public IAsyncEnumerable<MinerAlgorithm> GetMinerAlgorithmsByAlgorithmId(Guid id)
-    {
-        return _context.MinerAlgorithms.AsNoTracking()
-            .Where(x => x.AlgorithmId == id).AsAsyncEnumerable();
-    }
-
-    /// <inheritdoc/>
-    public async Task AddMinerAlgorithm(MinerAlgorithm minerAlgorithm)
-    {
-        await _context.MinerAlgorithms.AddAsync(minerAlgorithm);
-        await _context.SaveChangesAsync();
-    }
-
-    /// <inheritdoc/>
-    public Task RemoveAllMinerAlgorithmsById(Guid id)
-    {
-        return _context.MinerAlgorithms
-            .Where(x => x.AlgorithmId == id).ExecuteDeleteAsync();
-    }
-
-    /// <inheritdoc/>
-    public async Task EditMinerBindingsByAlgorithmId(Guid algorithmId,
-                                                     List<RelativeNameBindingModel> bindings)
-    {
-        var minerAlgorithms = await _context.MinerAlgorithms
-            .Where(x => x.AlgorithmId == algorithmId).ToListAsync();
-
-        _context.MinerAlgorithms.RemoveRange(minerAlgorithms);
-
-        foreach (var binding in bindings)
-        {
-            await _context.MinerAlgorithms.AddAsync(new MinerAlgorithm()
-            {
-                Name = binding.RelativeName,
-                MinerId = binding.MinerId,
-                AlgorithmId = algorithmId
-            });
-        }
-
-        await _context.SaveChangesAsync();
     }
 }

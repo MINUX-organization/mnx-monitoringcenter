@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries.GetAlgorithmById;
@@ -12,15 +11,15 @@ public class GetAlgorithmByIdQueryHandler
     : IRequestHandler<GetAlgorithmByIdQuery, Result<AlgorithmBindingModel>>
 {
     private readonly IAlgorithmRepository _algorithmRepository;
-    private readonly IMinerRepository _minerRepository;
+    private readonly IMinerAlgorithmRepository _minerRepository;
 
     public GetAlgorithmByIdQueryHandler(IAlgorithmRepository algorithmRepository,
-                                        IMinerRepository minerRepository)
+                                        IMinerAlgorithmRepository minerAlgorithmRepository)
     {
         _algorithmRepository = algorithmRepository 
             ?? throw new ArgumentNullException(nameof(algorithmRepository));
-        _minerRepository = minerRepository
-            ?? throw new ArgumentNullException(nameof(minerRepository)); ;
+        _minerRepository = minerAlgorithmRepository
+            ?? throw new ArgumentNullException(nameof(minerAlgorithmRepository)); ;
     }
 
     public async Task<Result<AlgorithmBindingModel>> Handle(GetAlgorithmByIdQuery request,

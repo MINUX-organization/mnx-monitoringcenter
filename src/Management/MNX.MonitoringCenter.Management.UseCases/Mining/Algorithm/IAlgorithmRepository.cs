@@ -26,6 +26,30 @@ public interface IAlgorithmRepository
                              CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// Получить признак существования алгоритма по наименованию.
+    /// </summary>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="name"> Наименование алгоритма. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Признак существования алгоритма. </returns>
+    Task<bool> Exists(Guid userId,
+                      string name,
+                      CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получить признак возможности для редактирования.
+    /// </summary>
+    /// <param name="algorithmId"> Идентификатор алгоритма. </param>
+    /// <param name="name"> Наименование алгоритма. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Признак редактируемости сущности. </returns>
+    Task<bool> CanEdited(Guid algorithmId,
+                         string name,
+                         Guid userId,
+                         CancellationToken cancellationToken);
+
+    /// <summary>
     /// Добавить новый пользовательский алгоритм.
     /// </summary>
     /// <param name="algorithm"> Алгоритм. </param>

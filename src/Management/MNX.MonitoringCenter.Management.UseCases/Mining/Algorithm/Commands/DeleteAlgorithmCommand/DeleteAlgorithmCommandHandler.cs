@@ -13,15 +13,15 @@ public class DeleteAlgorithmCommandHandler
 {
     private readonly IAlgorithmRepository _algorithmRepository;
 
-    private readonly IMinerRepository _minerRepository;
+    private readonly IMinerAlgorithmRepository _minerRepository;
 
     public DeleteAlgorithmCommandHandler(IAlgorithmRepository algorithmRepository,
-                                         IMinerRepository minerRepository)
+                                         IMinerAlgorithmRepository minerAlgorithmRepository)
     {
         _algorithmRepository = algorithmRepository 
             ?? throw new ArgumentNullException(nameof(algorithmRepository));
-        _minerRepository = minerRepository 
-            ?? throw new ArgumentNullException(nameof(minerRepository));
+        _minerRepository = minerAlgorithmRepository 
+            ?? throw new ArgumentNullException(nameof(minerAlgorithmRepository));
     }
 
     public async Task<Result<Unit>> Handle(DeleteAlgorithmCommand request,

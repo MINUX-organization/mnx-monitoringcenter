@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using System.Transactions;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameAndMinerAlgorithmsCommand;
 
@@ -12,14 +11,15 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
     : IRequestHandler<EditAlgorithmAndMinerAlgorithmsCommand, Result<Unit>>
 {
     private readonly IAlgorithmRepository _algorithmRepository;
-    private readonly IMinerRepository _minerRepository;
+    private readonly IMinerAlgorithmRepository _minerRepository;
 
     public EditAlgorithmAndMinerAlgorithmsCommandHandler(IAlgorithmRepository algorithmRepository,
-                                                  IMinerRepository minerRepository)
+                                                  IMinerAlgorithmRepository minerAlgorithmRepository)
     {
         _algorithmRepository = algorithmRepository
             ?? throw new ArgumentNullException(nameof(algorithmRepository));
-        _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
+        _minerRepository = minerAlgorithmRepository
+            ?? throw new ArgumentNullException(nameof(minerAlgorithmRepository));
     }
 
     public async Task<Result<Unit>> Handle(EditAlgorithmAndMinerAlgorithmsCommand request,
@@ -27,6 +27,16 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
     {
         var model = request.Model;
         var bindings = model.Bindings;
+
+        // Проверка существования доменного алгоритма с заданным наименованием.
+        if (!await _algorithmRepository.CanEdited(request.AlgorithmId,
+                                                  model.FullName,
+                                                  request.UserId,
+                                                  cancellationToken))
+        {
+            return Result<Unit>
+                .Invalid("Algorithm with that name already exists");
+        }
 
         var algorithm = await _algorithmRepository.GetById(request.AlgorithmId,
                                                            request.UserId,

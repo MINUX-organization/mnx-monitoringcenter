@@ -32,10 +32,40 @@ public class AlgorithmRepository : IAlgorithmRepository
                                     Guid userId,
                                     CancellationToken cancellationToken = default)
     {
-        return _context.Algorithms
-                       .Available(userId)
-                       .AsNoTracking()
-                       .FirstOrDefaultAsync(cancellationToken);
+        return _context.Algorithms.Available(userId)
+            .AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<bool> Exists(Guid userId,
+                             string name,
+                             CancellationToken cancellationToken)
+    {
+        return _context.Algorithms.AsNoTracking().Available(userId)
+                .AnyAsync(x => x.Name == name, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task<bool> CanEdited(Guid algorithmId,
+                                string name,
+                                Guid userId,
+                                CancellationToken cancellationToken)
+    {
+       var existsDomain = await _context.Algorithms.AsNoTracking()
+            .AnyAsync(x => x.Name == name &&
+                x.UserId == null, cancellationToken);
+
+        if (existsDomain)
+            return false;
+
+        var existsAnotherAlgorithmWithSameName = await _context.Algorithms
+            .AsNoTracking().AnyAsync(x => x.Id != algorithmId &&
+                x.Name == name && x.UserId == userId, cancellationToken);
+
+        if (existsAnotherAlgorithmWithSameName)
+            return false;
+
+        return true;
     }
 
     /// <inheritdoc/>

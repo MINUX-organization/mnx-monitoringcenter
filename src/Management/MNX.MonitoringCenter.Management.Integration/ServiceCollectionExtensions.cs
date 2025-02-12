@@ -9,6 +9,7 @@ using MNX.MonitoringCenter.Management.DataAccess.Algorithm;
 using MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet;
 using MNX.MonitoringCenter.Management.DataAccess.Miner;
+using MNX.MonitoringCenter.Management.DataAccess.MinerAlgorithm;
 using MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 using MNX.MonitoringCenter.Management.DataAccess.Pool;
 using MNX.MonitoringCenter.Management.DataAccess.Preset;
@@ -61,6 +62,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IFlightSheetRepository, FlightSheetRepository>();
         services.AddScoped<IMiningDeviceRepository, MiningDeviceRepository>();
         services.AddScoped<IMinerRepository, MinerRepository>();
+        services.AddScoped<IMinerAlgorithmRepository, MinerAlgorithmRepository>();
         services.AddScoped<IPoolRepository, PoolRepository>();
         services.AddScoped<IPresetRepository, PresetRepository>();
         services.AddScoped<IWalletRepository, WalletRepository>();

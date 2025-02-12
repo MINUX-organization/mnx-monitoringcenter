@@ -5,6 +5,8 @@ CREATE TABLE monitoring_center.algorithms
     user_id uuid NULL,
 
     CONSTRAINT pk_algorithms PRIMARY KEY (id)
+
+    CONSTRAINT unique_name_user_id UNIQUE (name, user_id)
 );
 
 CREATE UNIQUE INDEX ix_algorithms_name
