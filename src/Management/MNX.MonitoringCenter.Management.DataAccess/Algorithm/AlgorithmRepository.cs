@@ -19,8 +19,7 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithmsBySpecification(
-        Specification specification)
+    public IAsyncEnumerable<Algorithm> GetAvailable(Specification specification)
     {
         return _context.Algorithms.Available(specification)
             .Search(specification)
@@ -60,8 +59,7 @@ public class AlgorithmRepository : IAlgorithmRepository
                                   string newName)
     {
         return _context.Algorithms
-            .Where(x => x.Id == algorithmId || x.UserId == userId)
-                .ExecuteUpdateAsync(x => x
-                    .SetProperty(a => a.Name, newName));
+            .Where(x => x.Id == algorithmId && x.UserId == userId)
+                .ExecuteUpdateAsync(x => x.SetProperty(a => a.Name, newName));
     }
 }

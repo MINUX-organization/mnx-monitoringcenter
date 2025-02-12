@@ -12,7 +12,7 @@ public interface IAlgorithmRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Список алгоритмов. </returns>
-    IAsyncEnumerable<Algorithm> GetNamesOfAvailableAlgorithmsBySpecification(Specification specification);
+    IAsyncEnumerable<Algorithm> GetAvailable(Specification specification);
 
     /// <summary>
     /// Получить алгоритм по идентификатору.

@@ -1,14 +1,14 @@
 ﻿using MediatR;
+using System.Transactions;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
-using System.Transactions;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameCommand;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameAndMinerAlgorithmsCommand;
 
 /// <summary>
 /// Обработчик команды <see cref="EditAlgorithmAndMinerAlgorithmsCommand"/>.
 /// </summary>
-public class EditAlgorithmAndMinerAlgorithmsCommandHandler 
+public class EditAlgorithmAndMinerAlgorithmsCommandHandler
     : IRequestHandler<EditAlgorithmAndMinerAlgorithmsCommand, Result<Unit>>
 {
     private readonly IAlgorithmRepository _algorithmRepository;
@@ -27,8 +27,6 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
     {
         var model = request.Model;
         var bindings = model.Bindings;
-        var relativeNames = bindings.Select(x => x.RelativeName).ToList();
-        var minerIds = bindings.Select(x => x.MinerId).ToList();
 
         var algorithm = await _algorithmRepository.GetById(request.AlgorithmId,
                                                            request.UserId,
@@ -36,7 +34,7 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
 
         if (algorithm is null)
             return Result<Unit>.Invalid(
-                $"Algorithmt with id equaled {request.AlgorithmId} was not found!");
+                $"Algorithm with id equaled {request.AlgorithmId} was not found!");
 
         if (algorithm!.UserId is null)
             return Result<Unit>.Invalid("Domain algorithms cannot be edited");

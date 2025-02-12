@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameCommand;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameAndMinerAlgorithmsCommand;
 
 /// <summary>
 /// Валидатор команды <see cref="EditAlgorithmAndMinerAlgorithmsCommand"/>.

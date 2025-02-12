@@ -9,7 +9,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries.GetAlgorithmById;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.AddAlgorithmCommand;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.DeleteAlgorithmCommand;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameCommand;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameAndMinerAlgorithmsCommand;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 

@@ -50,7 +50,7 @@ public class MinerRepository : IMinerRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<MinerAlgorithm> GetMinerAlgorithmsByAlgorithmId(Guid id)
     {
-        return _context.MinerAlgorithms
+        return _context.MinerAlgorithms.AsNoTracking()
             .Where(x => x.AlgorithmId == id).AsAsyncEnumerable();
     }
 

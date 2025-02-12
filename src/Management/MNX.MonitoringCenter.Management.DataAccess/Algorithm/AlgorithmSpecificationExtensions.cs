@@ -27,7 +27,7 @@ internal static class AlgorithmSpecificationExtensions
     /// Получить доступные алгоритмы.
     /// </summary>
     /// <param name="algorithms"> Сущности алгоритмов. </param>
-    /// <param name="specification"> Спецификация. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Доступные алгоритмы. </returns>
     internal static IQueryable<Algorithm> Available(
         this IQueryable<Algorithm> algorithms, Guid userId)
