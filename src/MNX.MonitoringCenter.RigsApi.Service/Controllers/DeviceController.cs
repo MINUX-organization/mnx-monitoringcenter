@@ -80,7 +80,7 @@ public class DeviceController : ControllerBase
     /// Получить список процессоров.
     /// </summary>
     /// <returns> Асинхронный поток процессоров. </returns>
-    [HttpGet("сpus")]
+    [HttpGet("cpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<GetCpusQueryResponse>), 200)]
     public IAsyncEnumerable<GetCpusQueryResponse> GetСpus()
     {
