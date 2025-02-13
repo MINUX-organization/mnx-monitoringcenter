@@ -36,8 +36,9 @@ public interface IMinerAlgorithmRepository
     /// алгоритма к майнерам соответствующего алгоритма.
     /// </summary>
     /// <param name="algorithmId"> Идентификатор алгоритма. </param>
-    /// <param name="RelativeNames"> Список новых наименований. </param>
-    /// <param name="minerIds"> Список идентификаторов майнеров. </param>
+    /// <param name="bindings">
+    /// Список сущностей относительных наименований алгоритмов с привязкой к майнерам.
+    /// </param>
     Task EditMinerBindingsByAlgorithmId(Guid algorithmId,
                                         List<RelativeNameBindingModel> bindings);
 }

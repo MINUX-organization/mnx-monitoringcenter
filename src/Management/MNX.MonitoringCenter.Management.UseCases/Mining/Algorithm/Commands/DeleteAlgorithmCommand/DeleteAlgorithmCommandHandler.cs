@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using System.Transactions;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.DeleteAlgorithmCommand;
 

@@ -14,7 +14,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlg
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
 /// <summary>
-/// Содержит эндпоинты, связанные с алгоритмами
+/// Содержит эндпоинты, связанные с алгоритмами.
 /// </summary>
 [Route("api/algorithms")]
 [ApiController]
@@ -33,13 +33,16 @@ public class AlgorithmController : ControllerBase
 
     public AlgorithmController(IMediator mediator, UserAccessor accessor)
     {
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _accessor = accessor ?? throw new ArgumentNullException(nameof(accessor));
+        _mediator = mediator
+            ?? throw new ArgumentNullException(nameof(mediator));
+        _accessor = accessor
+            ?? throw new ArgumentNullException(nameof(accessor));
     }
 
     /// <summary>
     /// Получить список доступных алгоритмов.
     /// </summary>
+    /// <param name="searchString"> Подстрока поиска. </param>
     /// <returns> Список доступных алгоритмов. </returns>
     /// <response code="200"> Успешно. </response>
     [HttpGet("available")]
@@ -73,8 +76,10 @@ public class AlgorithmController : ControllerBase
     /// </summary>
     /// <param name="model"> Модель пользовательского алгоритма. </param>
     /// <response code="201"> Успешно. </response>
-    /// <response code="400"> Переданные параметры не прошли валидацию 
-    /// или не был найден алгоритм. </response>
+    /// <response code="400">
+    /// Переданные параметры не прошли валидацию 
+    /// или не был найден алгоритм.
+    /// </response>
     [HttpPost]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
@@ -91,14 +96,16 @@ public class AlgorithmController : ControllerBase
     /// <param name="id"> Идентификатор алгоритма. </param>
     /// <param name="model"> Новый пользовательский алгоритм. </param>
     /// <response code="204"> Успешно. </response>
-    /// <response code="400"> Переданные параметры не прошли валидацию,
+    /// <response code="400">
+    /// Переданные параметры не прошли валидацию,
     /// не был найден алгоритм с переданным id или алгоритм 
-    /// является доменным и не может быть отредактирован. </response>
+    /// является доменным и не может быть отредактирован.
+    /// </response>
     [HttpPatch("{id:Guid}")]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 204)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> EditAlgorithm(Guid id,
-                                                   [FromBody] AlgorithmBindingModel model)
+                                                   AlgorithmBindingModel model)
     {
         var result = await _mediator.Send(
             new EditAlgorithmAndMinerAlgorithmsCommand(id, _accessor.GetUserId(), model));
