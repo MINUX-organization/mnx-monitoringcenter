@@ -12,6 +12,6 @@ internal class FlightSheetCfg : IEntityTypeConfiguration<FlightSheetDto>
     public void Configure(EntityTypeBuilder<FlightSheetDto> builder)
     {
         builder.HasIndex(x => x.UserId);
-        builder.HasIndex(x => x.Name).IsUnique();
+        builder.HasIndex(x => x.Name);
     }
 }
