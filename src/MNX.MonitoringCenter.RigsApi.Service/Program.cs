@@ -22,14 +22,14 @@ namespace MNX.MonitoringCenter.RigsApi.Service;
 
 internal class Program
 {
-    private static Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
         try
         {
             logger.Debug("init main");
             var builder = ConfigureApp(args);
-            return RunApp(builder);
+            await RunApp(builder);
         }
         catch (Exception ex)
         {
