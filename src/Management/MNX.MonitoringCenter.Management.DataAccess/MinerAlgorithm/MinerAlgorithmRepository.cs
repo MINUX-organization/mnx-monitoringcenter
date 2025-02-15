@@ -41,19 +41,18 @@ public class MinerAlgorithmRepository : IMinerAlgorithmRepository
                                                      List<RelativeNameBindingModel> bindings)
     {
         var minerAlgorithms = await _context.MinerAlgorithms
-            .Where(x => x.AlgorithmId == algorithmId).ToListAsync();
+            .AsNoTracking()
+            .Where(x => x.AlgorithmId == algorithmId)
+            .ToListAsync();
 
         _context.MinerAlgorithms.RemoveRange(minerAlgorithms);
 
-        foreach (var binding in bindings)
+        await _context.MinerAlgorithms.AddRangeAsync(bindings.Select(x => new MinerAlgorithm()
         {
-            await _context.MinerAlgorithms.AddAsync(new MinerAlgorithm()
-            {
-                Name = binding.RelativeName,
-                MinerId = binding.MinerId,
-                AlgorithmId = algorithmId
-            });
-        }
+            Name = x.RelativeName,
+            MinerId = x.MinerId,
+            AlgorithmId = algorithmId
+        }));
 
         await _context.SaveChangesAsync();
     }

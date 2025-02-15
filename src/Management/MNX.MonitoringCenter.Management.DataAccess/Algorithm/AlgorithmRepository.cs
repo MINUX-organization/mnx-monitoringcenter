@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Algorithm;
@@ -19,10 +18,9 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Algorithm> GetAvailable(Specification specification)
+    public IAsyncEnumerable<Algorithm> GetAvailable(Guid userId)
     {
-        return _context.Algorithms.Available(specification)
-            .Search(specification)
+        return _context.Algorithms.Available(userId)
             .AsNoTracking()
             .AsAsyncEnumerable();
     }
@@ -43,29 +41,6 @@ public class AlgorithmRepository : IAlgorithmRepository
     {
         return _context.Algorithms.AsNoTracking().Available(userId)
                 .AnyAsync(x => x.Name == name, cancellationToken);
-    }
-
-    /// <inheritdoc/>
-    public async Task<bool> CanEdited(Guid algorithmId,
-                                string name,
-                                Guid userId,
-                                CancellationToken cancellationToken)
-    {
-       var existsDomain = await _context.Algorithms.AsNoTracking()
-            .AnyAsync(x => x.Name == name &&
-                x.UserId == null, cancellationToken);
-
-        if (existsDomain)
-            return false;
-
-        var existsAnotherAlgorithmWithSameName = await _context.Algorithms
-            .AsNoTracking().AnyAsync(x => x.Id != algorithmId &&
-                x.Name == name && x.UserId == userId, cancellationToken);
-
-        if (existsAnotherAlgorithmWithSameName)
-            return false;
-
-        return true;
     }
 
     /// <inheritdoc/>

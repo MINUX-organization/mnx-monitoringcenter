@@ -11,14 +11,14 @@ public class GetAlgorithmByIdQueryHandler
     : IRequestHandler<GetAlgorithmByIdQuery, Result<AlgorithmBindingModel>>
 {
     private readonly IAlgorithmRepository _algorithmRepository;
-    private readonly IMinerAlgorithmRepository _minerRepository;
+    private readonly IMinerAlgorithmRepository _minerAlgorithmRepository;
 
     public GetAlgorithmByIdQueryHandler(IAlgorithmRepository algorithmRepository,
                                         IMinerAlgorithmRepository minerAlgorithmRepository)
     {
         _algorithmRepository = algorithmRepository 
             ?? throw new ArgumentNullException(nameof(algorithmRepository));
-        _minerRepository = minerAlgorithmRepository
+        _minerAlgorithmRepository = minerAlgorithmRepository
             ?? throw new ArgumentNullException(nameof(minerAlgorithmRepository)); ;
     }
 
@@ -32,7 +32,7 @@ public class GetAlgorithmByIdQueryHandler
         if (algorithm == null)
             return Result<AlgorithmBindingModel>.Invalid("Algorithm was not found");
 
-        var bindings = _minerRepository.GetMinerAlgorithmsByAlgorithmId(request.AlgorithmId);
+        var bindings = _minerAlgorithmRepository.GetMinerAlgorithmsByAlgorithmId(request.AlgorithmId);
 
         var bindingModels = new List<RelativeNameBindingModel>();
         await foreach (var binding in bindings.WithCancellation(cancellationToken))

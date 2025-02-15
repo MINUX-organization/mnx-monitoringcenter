@@ -42,15 +42,14 @@ public class AlgorithmController : ControllerBase
     /// <summary>
     /// Получить список доступных алгоритмов.
     /// </summary>
-    /// <param name="searchString"> Подстрока поиска. </param>
     /// <returns> Список доступных алгоритмов. </returns>
     /// <response code="200"> Успешно. </response>
     [HttpGet("available")]
     [ProducesResponseType(typeof(IAsyncEnumerable<Algorithm>), 200)]
-    public IAsyncEnumerable<Algorithm> GetAvailable(string? searchString = null)
+    public IAsyncEnumerable<Algorithm> GetAvailable()
     {
         return _mediator.CreateStream(
-            new GetAvailableAlgorithmsQuery(_accessor.GetUserId(), searchString!));
+            new GetAvailableAlgorithmsQuery(_accessor.GetUserId()));
     }
 
     /// <summary>

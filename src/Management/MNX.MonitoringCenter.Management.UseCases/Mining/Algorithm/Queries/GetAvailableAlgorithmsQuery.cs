@@ -10,16 +10,11 @@ public sealed record GetAvailableAlgorithmsQuery : IStreamRequest<Core.Mining.Al
     /// <summary>
     /// Спецификация.
     /// </summary>
-    public Specification Specification { get; }
+    public Guid UserId { get; }
 
-    public GetAvailableAlgorithmsQuery(Guid userId, string searchString)
+    public GetAvailableAlgorithmsQuery(Guid userId)
     {
-        Specification = new Specification(userId, searchString);
-    }
-
-    public GetAvailableAlgorithmsQuery(Guid userId, string filterString, object[] filterParameters)
-    {
-        Specification = new Specification(userId, filterString, filterParameters);
+        UserId = userId;
     }
 }
 
@@ -38,6 +33,6 @@ public class GetAvailableAlgorithmsQueryHandler : IStreamRequestHandler<GetAvail
     public IAsyncEnumerable<Core.Mining.Algorithm> Handle(GetAvailableAlgorithmsQuery request,
                                                                 CancellationToken cancellationToken)
     {
-        return _repository.GetAvailable(request.Specification);
+        return _repository.GetAvailable(request.UserId);
     }
 }

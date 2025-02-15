@@ -10,9 +10,9 @@ public interface IAlgorithmRepository
     /// <summary>
     /// Получить доступные алгоритмы.
     /// </summary>
-    /// <param name="specification"> Спецификация. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Список алгоритмов. </returns>
-    IAsyncEnumerable<Algorithm> GetAvailable(Specification specification);
+    IAsyncEnumerable<Algorithm> GetAvailable(Guid userId);
 
     /// <summary>
     /// Получить алгоритм по идентификатору.
@@ -28,6 +28,13 @@ public interface IAlgorithmRepository
     /// <summary>
     /// Получить признак существования алгоритма по наименованию.
     /// </summary>
+    /// <remarks>
+    /// Доменные алгоритмы доступны всем пользователям и их UserId равен null.
+    /// Пользовательские алгоритмы доступны только авторизированному 
+    /// под данным UserId пользователю. Данный метод получает признак
+    /// существования всех доступных пользователю алгоритмов,
+    /// совпадающих с именем, подаваемым на вход данному методу.
+    /// </remarks>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="name"> Наименование алгоритма. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
@@ -35,19 +42,6 @@ public interface IAlgorithmRepository
     Task<bool> Exists(Guid userId,
                       string name,
                       CancellationToken cancellationToken);
-
-    /// <summary>
-    /// Получить признак возможности для редактирования.
-    /// </summary>
-    /// <param name="algorithmId"> Идентификатор алгоритма. </param>
-    /// <param name="name"> Наименование алгоритма. </param>
-    /// <param name="userId"> Идентификатор пользователя. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> Признак редактируемости сущности. </returns>
-    Task<bool> CanEdited(Guid algorithmId,
-                         string name,
-                         Guid userId,
-                         CancellationToken cancellationToken);
 
     /// <summary>
     /// Добавить новый пользовательский алгоритм.
