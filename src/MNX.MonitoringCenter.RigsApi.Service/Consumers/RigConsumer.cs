@@ -1,9 +1,13 @@
 ﻿using EasyNetQ.AutoSubscribe;
 using MediatR;
-using MNX.MonitoringCenter.Common.AgentMessages;
+using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Commands.SetRigDevices;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice.Events;
+using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
+using MNX.MonitoringCenter.Management.UseCases;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
+using MNX.RigCommander.Contracts;
+using MNX.SecurityManagement.Authentication.Contracts;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 
@@ -12,8 +16,10 @@ namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 /// </summary>
 public class RigConsumer :
     IConsumeAsync<RigInventoryMsg>,
-    IConsumeAsync<RigRegisteredMsg>,
-    IConsumeAsync<RigDisconnectedMsg>
+    IConsumeAsync<AgentRegisteredMsg>,
+    IConsumeAsync<AgentConnectedMsg>,
+    IConsumeAsync<AgentDisconnectedMsg>,
+    IConsumeAsync<ApplyWorkerSettingsCommandResult>
 {
     private readonly IMediator _mediator;
 
@@ -41,23 +47,46 @@ public class RigConsumer :
     }
 
     /// <summary>
-    /// Получить сообщение о регистрации рига.
+    /// Получить сообщение о регистрации Агента.
     /// </summary>
-    /// <param name="message"> Сообщение о регистрации рига. </param>
+    /// <param name="message"> Сообщение о регистрации Агента. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public Task ConsumeAsync(RigRegisteredMsg message, CancellationToken cancellationToken = default)
+    public Task ConsumeAsync(AgentRegisteredMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Send(new AddRigCommand(message.RigId, message.OwnerId), cancellationToken);
+        return _mediator.Send(new AddRigCommand(message.Id, message.OwnerId, message.Nickname), cancellationToken);
     }
 
     /// <summary>
-    /// Получить сообщение об отключении рига от сервера.
+    /// Получить сообщение об установке соединения Агента с сервером.
     /// </summary>
     /// <param name="message"> Сообщение. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    public Task ConsumeAsync(RigDisconnectedMsg message, CancellationToken cancellationToken = default)
+    public Task ConsumeAsync(AgentConnectedMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Publish(new RigDisconnectedEvent(message.RigId), cancellationToken);
+        return _mediator.Publish(new RigConnectedEvent(message.AgentId), cancellationToken);
+    }
+
+    /// <summary>
+    /// Получить сообщение об отключении Агента от сервера.
+    /// </summary>
+    /// <param name="message"> Сообщение. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public Task ConsumeAsync(AgentDisconnectedMsg message, CancellationToken cancellationToken = default)
+    {
+        return Task.WhenAll(
+            _mediator.Publish(new Management.UseCases.RigDisconnectedEvent(message.AgentId), cancellationToken),
+            _mediator.Publish(new Inventory.UseCases.RigDisconnectedEvent(message.AgentId), cancellationToken)
+        );
+    }
+
+    /// <summary>
+    /// Получить сообщение с результатом применения настроек на воркеры.
+    /// </summary>
+    /// <param name="message"> Сообщение. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public Task ConsumeAsync(ApplyWorkerSettingsCommandResult message, CancellationToken cancellationToken = default)
+    {
+        return _mediator.Send(new ConfirmFlightSheetCommand(message.SuccessfullyWorkersIds.ToArray()), cancellationToken);
     }
 }
 

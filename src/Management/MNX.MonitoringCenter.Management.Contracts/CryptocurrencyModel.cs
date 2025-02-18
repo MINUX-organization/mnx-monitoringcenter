@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core;
+﻿using MNX.MonitoringCenter.Management.Core.Mining;
 
 namespace MNX.MonitoringCenter.Management.Contracts;
 

@@ -3,11 +3,11 @@ using AutoMapper.QueryableExtensions;
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.FlightSheet;
 
-using FlightSheet = Core.FlightSheet.FlightSheet;
+using FlightSheet = Core.Mining.FlightSheet.FlightSheet;
 
 /// <summary>
 /// Реализация <see cref="IFlightSheetRepository"/>.
@@ -97,16 +97,20 @@ public class FlightSheetRepository : IFlightSheetRepository
     private IQueryable<FlightSheetDto> GetFlightSheets(Guid userId)
     {
         return _context.FlightSheets.AsNoTrackingWithIdentityResolution()
+                                    .AsSplitQuery()
                                     .Where(x => x.UserId == userId)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.Miner)
+                                            .ThenInclude(miner => miner!.SupportedAlgorithms)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.CoinConfigs)
                                             .ThenInclude(config => config.Pool)
                                                 .ThenInclude(pool => pool!.Cryptocurrency)
+                                                    .ThenInclude(cryptocurrency => cryptocurrency!.Algorithm)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.CoinConfigs)
                                             .ThenInclude(config => config.Wallet)
-                                                .ThenInclude(wallet => wallet!.Cryptocurrency);
+                                                .ThenInclude(wallet => wallet!.Cryptocurrency)
+                                                    .ThenInclude(cryptocurrency => cryptocurrency!.Algorithm);
     }
 }

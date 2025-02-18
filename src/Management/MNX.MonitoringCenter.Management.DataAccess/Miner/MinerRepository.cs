@@ -1,10 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
 
-using Miner = Core.Miner.Miner;
+using Miner = Core.Mining.Miner.Miner;
 
 /// <summary>
 /// Реализация <see cref="IMinerRepository"/>.
@@ -22,7 +22,8 @@ public class MinerRepository : IMinerRepository
     public IAsyncEnumerable<Miner> GetAvailableMiners(Specification specification)
     {
         return _context.Miners
-                       .AsNoTracking()
+                       .AsNoTrackingWithIdentityResolution()
+                       .Include(miner => miner.SupportedAlgorithms)
                        .Filter(specification)
                        .AsAsyncEnumerable();
     }
@@ -31,7 +32,8 @@ public class MinerRepository : IMinerRepository
     public Task<Miner?> GetMinerById(Guid id, CancellationToken cancellationToken)
     {
         return _context.Miners
-                       .AsNoTracking()
+                       .AsNoTrackingWithIdentityResolution()
+                       .Include(miner => miner.SupportedAlgorithms)
                        .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 

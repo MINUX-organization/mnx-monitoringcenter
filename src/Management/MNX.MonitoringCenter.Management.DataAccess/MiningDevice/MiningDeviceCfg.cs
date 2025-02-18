@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MNX.MonitoringCenter.Management.Core.MiningDevice;
-using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
@@ -15,11 +16,16 @@ internal class MiningDeviceCfg : IEntityTypeConfiguration<MiningDeviceInfo>
         builder.HasIndex(x => x.RigId);
         builder.HasIndex(x => x.OwnerId);
 
+        builder.HasOne<GpuOverclocking>()
+               .WithMany()
+               .HasForeignKey(x => x.OverclockingId);
+
         builder.HasQueryFilter(x => x.LifeCycleStatus != MiningDeviceLifeCycleStatus.Inactive);
 
         builder.Property(x => x.Type).HasConversion<string>();
         builder.Property(x => x.LifeCycleStatus).HasConversion<string>();
 
         builder.Ignore(x => x.FlightSheet);
+        builder.Ignore(x => x.Overclocking);
     }
 }

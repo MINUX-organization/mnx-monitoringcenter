@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.UseCases.Wallet;
 using System.Linq.Expressions;
 using MNX.MonitoringCenter.Management.UseCases;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Wallet;
 
-using Wallet = Core.Wallet;
+using Wallet = Core.Mining.Wallet;
 
 /// <summary>
 /// Реализация <see cref="IWalletRepository"/>

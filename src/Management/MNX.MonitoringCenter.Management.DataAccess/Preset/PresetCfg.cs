@@ -6,12 +6,14 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Preset;
 /// <summary>
 /// Конфигурация для таблицы с пресетами.
 /// </summary>
-internal class PresetCfg : IEntityTypeConfiguration<Core.Preset>
+internal class PresetCfg : IEntityTypeConfiguration<Core.Overclocking.Preset>
 {
-    public void Configure(EntityTypeBuilder<Core.Preset> builder)
+    public void Configure(EntityTypeBuilder<Core.Overclocking.Preset> builder)
     {
         builder.HasIndex(x => x.UserId);
         builder.HasIndex(x => x.Name);
-        builder.HasIndex(x => x.GpuName);
+        builder.HasIndex(x => x.DeviceName);
+
+        builder.Ignore(x => x.Overclocking);
     }
 }

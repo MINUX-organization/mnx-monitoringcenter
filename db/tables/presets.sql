@@ -2,7 +2,7 @@ CREATE TABLE monitoring_center.presets
 (
     id uuid NOT NULL,
     name text NOT NULL,
-    gpu_name text NOT NULL,
+    device_name text NOT NULL,
     overclocking_id uuid NOT NULL,
     user_id uuid NOT NULL,
 

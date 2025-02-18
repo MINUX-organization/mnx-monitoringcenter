@@ -16,10 +16,10 @@ public record MemoryInformation
     /// <summary>
     /// Тип.
     /// </summary>
-    public required string Type { get; init; }
+    public string? Type { get; init; }
 
     /// <summary>
     /// Продавец.
     /// </summary>
-    public required string Vendor { get; init; }
+    public string? Vendor { get; init; }
 }

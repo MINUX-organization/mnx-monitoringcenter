@@ -27,4 +27,9 @@ public record Gpu
     /// Ограничения.
     /// </summary>
     public required GpuRestrictions Restrictions { get; init; }
+
+    /// <summary>
+    /// Разгон.
+    /// </summary>
+    public required GpuOverclocking Overclocking { get; init; }
 }

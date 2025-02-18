@@ -11,32 +11,43 @@ public record NetworkAdapterInformation
     /// <summary>
     /// Производитель.
     /// </summary>
-    public required string Manufacturer { get; init; }
+    public string? Manufacturer { get; init; }
 
     /// <summary>
     /// Модель.
     /// </summary>
-    public required string Model { get; init; }
+    public string? Model { get; init; }
 
     /// <summary>
     /// Полное название.
     /// </summary>
-    public string Name { get => $"{Manufacturer} {Model}"; }
+    public string? Name
+    {
+        get
+        {
+            var value = $"{Manufacturer} {Model}";
+
+            if (string.IsNullOrWhiteSpace(value))
+                return null;
+
+            return value;
+        }
+    }
 
     /// <summary>
     /// Серийный номер.
     /// </summary>
-    public required string SerialNumber { get; init; }
+    public string? SerialNumber { get; init; }
 
     /// <summary>
     /// Код продавца.
     /// </summary>
-    public required string VendorCode { get; init; }
+    public string? VendorCode { get; init; }
 
     /// <summary>
     /// Информация о BUS.
     /// </summary>
-    public required string BusInfo { get; init; }
+    public string? BusInfo { get; init; }
 
     /// <summary>
     /// Логическое имя.

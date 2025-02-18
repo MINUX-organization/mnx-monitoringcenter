@@ -25,14 +25,14 @@ namespace MNX.MonitoringCenter.RigsApi.Service;
 
 internal class Program
 {
-    private static Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
         try
         {
             logger.Debug("init main");
             var builder = ConfigureApp(args);
-            return RunApp(builder);
+            await RunApp(builder);
         }
         catch (Exception ex)
         {
@@ -99,10 +99,25 @@ internal class Program
             opts.UseInlineDefinitionsForEnums();
 
             opts.SelectDiscriminatorNameUsing(_ => "$type");
-            opts.SelectDiscriminatorValueUsing(subType => subType.BaseType!
-                    .GetCustomAttributes<JsonDerivedTypeAttribute>()
-                    .FirstOrDefault(x => x.DerivedType == subType)?
-                    .TypeDiscriminator!.ToString());
+
+            var allTypes = AppDomain.CurrentDomain.GetAssemblies()
+                                                  .Where(a => !a.IsDynamic)
+                                                  .SelectMany(a => a.GetTypes());
+
+            // Swashbuckle работает только с классами, как с базовыми типами, и не работает с интерфейсами
+            opts.SelectSubTypesUsing(baseType =>
+            {
+                if (baseType.IsInterface)
+                {
+                    return allTypes.Where(t => t.GetInterfaces()
+                                                .Where(i => i.GetCustomAttributes<JsonDerivedTypeAttribute>()
+                                                .Any(x => x.DerivedType == t)).Any());
+                }
+
+                return allTypes.Where(t => t.IsSubclassOf(baseType));
+            });
+
+            
         });
 
         services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!, new JwtBearerEvents()

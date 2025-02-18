@@ -1,10 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.Application.UseCases;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
+using MNX.MonitoringCenter.Management.Contracts.Overclocking;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
@@ -78,11 +80,44 @@ public class DeviceController : ControllerBase
     /// Получить список процессоров.
     /// </summary>
     /// <returns> Асинхронный поток процессоров. </returns>
-    [HttpGet("сpus")]
+    [HttpGet("cpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<GetCpusQueryResponse>), 200)]
     public IAsyncEnumerable<GetCpusQueryResponse> GetСpus()
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetCpusQuery(userId));
+    }
+
+    /// <summary>
+    /// Получить разгон майнинг устройства.
+    /// </summary>
+    /// <param name="deviceId"> Идентификатор майнинг устройства. </param>
+    /// <returns> Результат выполнения запроса. </returns>
+    /// <response code="200"> Успешно </response>
+    /// <response code="400"> Майнинг устройство не найдено. </response>
+    [HttpGet("overclocking")]
+    [ProducesResponseType(typeof(IOverclockingModel), 200)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> GetOverclocking(Guid deviceId)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new GetDeviceOverclockingQuery(deviceId, userId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Задать разгон устройству.
+    /// </summary>
+    /// <param name="deviceId"> Идентификатор устройства. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <returns> Результат выполнения запроса. </returns>
+    /// <response code="200"> Успешно </response>
+    [HttpPost("overclocking")]
+    [ProducesResponseType(typeof(Guid[]), 200)]
+    public async Task<IActionResult> SetOverclocking(Guid deviceId, IOverclockingModel overclocking)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new SetOverclockingCommand(userId, overclocking, deviceId));
+        return result.ToActionResult();
     }
 }

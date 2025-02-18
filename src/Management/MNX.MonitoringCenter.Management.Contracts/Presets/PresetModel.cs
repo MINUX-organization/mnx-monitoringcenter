@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Contracts.Presets;
+﻿using MNX.MonitoringCenter.Management.Contracts.Overclocking;
+
+namespace MNX.MonitoringCenter.Management.Contracts.Presets;
 
 /// <summary>
 /// Модель для пресета
@@ -8,20 +10,20 @@ public class PresetModel
     /// <summary>
     /// Идентификатор
     /// </summary>
-    public Guid Id { get; set; }
+    public Guid Id { get; init; }
 
     /// <summary>
     /// Название пресета
     /// </summary>
-    public required string Name { get; set; }
+    public required string Name { get; init; }
 
     /// <summary>
-    /// Название GPU
+    /// Название майнинг устройства.
     /// </summary>
-    public required string GpuName { get; set; }
+    public required string DeviceName { get; init; }
 
     /// <summary>
     /// Модель с разгоном
     /// </summary>
-    public required OverclockingModel Overclocking { get; set; }
+    public required IOverclockingModel Overclocking { get; init; }
 }

@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using MNX.Application.UseCases;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
@@ -16,6 +15,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpus
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
@@ -178,6 +178,40 @@ public class RigController : ControllerBase
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new GetSoftwareInfoQuery(userId, rigId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Выключить риг.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <response code="204"> Успешно </response>
+    /// <response code="400"> Риг не найден </response>
+    /// <returns> Результат выключения. </returns>
+    [HttpPost("{rigId:Guid}/power_off")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> PowerOff(Guid rigId)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new PowerOffRigCommand(rigId, userId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Перезагрузить риг.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <response code="204"> Успешно </response>
+    /// <response code="400"> Риг не найден </response>
+    /// <returns> Результат выключения. </returns>
+    [HttpPost("{rigId:Guid}/reboot")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> Reboot(Guid rigId)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new RebootRigCommand(rigId, userId));
         return result.ToActionResult();
     }
 }

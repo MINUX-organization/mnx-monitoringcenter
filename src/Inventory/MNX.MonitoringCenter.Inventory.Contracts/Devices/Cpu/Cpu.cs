@@ -24,4 +24,9 @@ public record Cpu
     /// Ограничения.
     /// </summary>
     public required CpuRestrictions Restrictions { get; init; }
+
+    /// <summary>
+    /// Разгон.
+    /// </summary>
+    public required CpuOverclocking Overclocking { get; init; }
 }

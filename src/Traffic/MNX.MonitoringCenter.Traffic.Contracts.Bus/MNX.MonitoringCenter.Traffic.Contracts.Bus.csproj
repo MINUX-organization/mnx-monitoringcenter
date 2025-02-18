@@ -4,6 +4,15 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>Minux</Company>
+    <Authors>Zakharov</Authors>
+    <Description>Содержит контракты c динамическими показателями майнинг оборудования и процессов майнинга.</Description>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	<Version>1.0.3</Version>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RepositoryUrl>https://github.com/MINUX-organization/MNX.MonitoringCenter.git</RepositoryUrl>
   </PropertyGroup>
 
 </Project>

@@ -41,4 +41,11 @@ public interface IRigRepository
     /// <param name="cancellationToken"> Токен отмены. </param>
     Task SaveInventory(Guid rigId, DateTimeOffset createdDate,
                        RigInventoryModel inventory, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Установить дату и время окончания действия инвентаризации.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task SetInventoryExpirationDate(Guid rigId, CancellationToken cancellationToken);
 }
