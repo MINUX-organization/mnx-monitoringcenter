@@ -12,7 +12,7 @@ public class Miner : IEquatable<Miner>
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid Id { get; init; } = Guid.NewGuid();
+    public Guid Id { get; set; } = Guid.NewGuid();
 
     /// <summary>
     /// Название.
@@ -22,22 +22,51 @@ public class Miner : IEquatable<Miner>
     /// <summary>
     /// Версия.
     /// </summary>
-    public required string Version { get; init; }
+    public string? Version { get; set; }
 
     /// <summary>
-    /// Поддерживаемые алгоритмы.
+    /// Тип майнера.
     /// </summary>
-    public List<MinerAlgorithm> SupportedAlgorithms { get; init; } = new(0);
+    public MinerTypeEnum Type { get; init; }
 
     /// <summary>
     /// Поддерживаемые комбинации типа устройств и производителя.
     /// </summary>
-    public DeviceTypeManufacturerCombination SupportedDevices { get; init; }
+    public DeviceTypeManufacturerCombination SupportedDevices { get; set; }
 
     /// <summary>
     /// Режим майнинга монет.
     /// </summary>
     public MiningModeEnum MiningMode { get; init; } = MiningModeEnum.Single;
+
+    #region Only for integrated miners
+    /// <summary>
+    /// Поддерживаемые алгоритмы.
+    /// </summary>
+    public List<MinerAlgorithm> SupportedAlgorithms { get; init; } = new(0);
+    #endregion
+
+    #region Only for custom miners
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public Guid? OwnerId { get; set; }
+
+    /// <summary>
+    /// Ссылка на архив, откуда скачивать майнер.
+    /// </summary>
+    public string? InstallationUrl { get; set; }
+
+    /// <summary>
+    /// Шаблон, как подставлять пул в строку для запуска майнера.
+    /// </summary>
+    public string? PoolTemplate { get; set; }
+
+    /// <summary>
+    /// Шаблон, как подставлять кошелек и имя воркера для запуска майнера.
+    /// </summary>
+    public string? WalletWorkerTemplate { get; set; }
+    #endregion
 
     /// <summary>
     /// Получить признак поддержки майнером переданной конфигурации.
@@ -60,8 +89,8 @@ public class Miner : IEquatable<Miner>
             return false;
         }
 
-        if (!SupportedAlgorithms.Any(x 
-            => config.CoinConfigs.Any(y => x.AlgorithmId == y.Pool!.Cryptocurrency!.AlgorithmId)))
+        if (!SupportedAlgorithms.Any(x
+                => config.CoinConfigs.Any(y => x.AlgorithmId == y.Pool!.Cryptocurrency!.AlgorithmId)))
         {
             e.Add("Algorithm is not supported by miner.");
             errors = e;

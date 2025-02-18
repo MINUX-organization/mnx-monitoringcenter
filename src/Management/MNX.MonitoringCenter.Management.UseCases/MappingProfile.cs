@@ -3,13 +3,16 @@ using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
+using MNX.MonitoringCenter.Management.Contracts.Miner;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core.Mining;
 using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet;
 using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
@@ -17,6 +20,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.Ad
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models.MiningConfig;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.AddWallet;
@@ -71,6 +75,14 @@ public class MappingProfile : Profile
         CreateMap<GpuMiningConfig, GpuMiningConfigModel>();
 
         CreateMap<MiningCoinConfig, Contracts.FlightSheet.MiningConfigs.MiningCoinConfigModel>();
+
+        // miners
+
+        CreateMap<MinerInputModel, Miner>()
+            .ForMember(miner => miner.Type, options => options.MapFrom(_ => MinerTypeEnum.Custom));
+        CreateMap<Miner, MinerModel>();
+        CreateMap<MinerAlgorithm, MinerAlgorithmModel>()
+            .ConstructUsing(algo => new MinerAlgorithmModel(algo.AlgorithmId, algo.Name));
 
         // mining devices
 

@@ -29,4 +29,26 @@ public interface IMinerRepository
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Признак существования майнера. </returns>
     Task<bool> Exists(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Создать майнер.
+    /// </summary>
+    /// <param name="miner"> Майнер. </param>
+    /// <param name="cancellationToken"> Токен отмены.</param>
+    Task Add(Miner miner, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Редактировать майнер.
+    /// </summary>
+    /// <param name="miner"></param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task Edit(Miner miner, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Удалить майнер.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userId"></param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task Remove(Guid id, Guid userId, CancellationToken cancellationToken);
 }

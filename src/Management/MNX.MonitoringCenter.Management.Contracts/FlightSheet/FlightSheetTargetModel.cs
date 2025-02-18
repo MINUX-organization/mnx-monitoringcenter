@@ -1,5 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner;
+using MNX.MonitoringCenter.Management.Contracts.Miner;
 
 namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 
@@ -16,5 +16,5 @@ public class FlightSheetTargetModel
     /// <summary>
     /// Майнер.
     /// </summary>
-    public required Miner Miner { get; set; }
+    public required MinerModel Miner { get; set; }
 }

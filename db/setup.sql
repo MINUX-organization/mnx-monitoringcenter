@@ -1,5 +1,6 @@
 \set ON_ERROR_STOP 1
 \set ECHO all
+\encoding UTF8
 
 -- CREATING SCHEMA
 \ir 'schemas/monitoring_center.sql'
