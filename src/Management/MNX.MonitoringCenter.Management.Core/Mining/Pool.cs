@@ -11,6 +11,11 @@ public class Pool : IEquatable<Pool>
     public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
+    /// Признак шифрования по протоколу TLS.
+    /// </summary>
+    public bool Tls { get; set; }
+
+    /// <summary>
     /// Домен
     /// </summary>
     public required string Domain { get; set; }
