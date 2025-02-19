@@ -4,11 +4,13 @@ using MNX.Application.UseCases.Results;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameAndMinerAlgorithmsCommand;
 
+using Algorithm = Core.Mining.Algorithm;
+
 /// <summary>
 /// Обработчик команды <see cref="EditAlgorithmAndMinerAlgorithmsCommand"/>.
 /// </summary>
 public class EditAlgorithmAndMinerAlgorithmsCommandHandler
-    : IRequestHandler<EditAlgorithmAndMinerAlgorithmsCommand, Result<Unit>>
+    : IRequestHandler<EditAlgorithmAndMinerAlgorithmsCommand, Result<Algorithm>>
 {
     private readonly IAlgorithmRepository _algorithmRepository;
     private readonly IMinerAlgorithmRepository _minerRepository;
@@ -22,18 +24,18 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
             ?? throw new ArgumentNullException(nameof(minerAlgorithmRepository));
     }
 
-    public async Task<Result<Unit>> Handle(EditAlgorithmAndMinerAlgorithmsCommand request,
+    public async Task<Result<Algorithm>> Handle(EditAlgorithmAndMinerAlgorithmsCommand request,
                                            CancellationToken cancellationToken)
     {
         var model = request.Model;
         var bindings = model.Bindings;
         
         if (await _algorithmRepository.Exists(request.AlgorithmId,
-                                               model.FullName,
-                                               request.UserId,
-                                               cancellationToken))
+                                              model.FullName,
+                                              request.UserId,
+                                              cancellationToken))
         {
-            return Result<Unit>
+            return Result<Algorithm>
                 .Invalid("Algorithm with that name already exists");
         }
 
@@ -41,11 +43,11 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
                                                            request.UserId);
 
         if (algorithm is null)
-            return Result<Unit>.Invalid(
+            return Result<Algorithm>.Invalid(
                 $"Algorithm with id equaled {request.AlgorithmId} was not found!");
 
         if (algorithm.IsDomain())
-            return Result<Unit>.Invalid("Domain algorithms cannot be edited");
+            return Result<Algorithm>.Invalid("Domain algorithms cannot be edited");
 
         using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
@@ -55,10 +57,10 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
 
             await _minerRepository.EditMinerBindingsByAlgorithmId(request.AlgorithmId,
                                                                   bindings);
-
+            algorithm.Name = model.FullName;
             transaction.Complete();
         }
 
-        return Result<Unit>.Empty();
+        return Result<Algorithm>.Success(algorithm);
     }
 }

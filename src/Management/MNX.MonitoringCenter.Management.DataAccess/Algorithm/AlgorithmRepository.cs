@@ -50,9 +50,9 @@ public class AlgorithmRepository : IAlgorithmRepository
                                    CancellationToken cancellationToken)
     {
         var exists = await _context.Algorithms.AsNoTracking()
-            .AnyAsync(x => (x.Name == name && x.UserId == null) ||
-                           (x.Id != algorithmId && x.Name == name && x.UserId == userId),
-                           cancellationToken);
+            .Available(userId)
+            .Where(x => x.Id != algorithmId)
+            .AnyAsync(x => x.Name == name, cancellationToken);
         return exists;
     }
 

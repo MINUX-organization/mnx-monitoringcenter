@@ -28,14 +28,13 @@ public class Algorithm : IEquatable<Algorithm>
     /// к доменным алгоритмам.
     /// </summary>
     /// <returns>
-    /// True, если алгоритм доменный,
-    /// иначе - false.
+    /// <see langword="true"/>,
+    /// если алгоритм доменный,
+    /// иначе - <see langword="false"/>.
     /// </returns>
     public bool IsDomain()
     {
-        if (UserId is null)
-            return true;
-        return false;
+        return UserId is null;
     }
 
     /// <inheritdoc/>

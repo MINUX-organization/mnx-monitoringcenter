@@ -4,11 +4,13 @@ using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameAndMinerAlgorithmsCommand;
 
+using Algorithm = Core.Mining.Algorithm;
+
 /// <summary>
 /// Команда редактирования пользовательского 
 /// алгоритма и относительных наименований алгоритма.
 /// </summary>
-public class EditAlgorithmAndMinerAlgorithmsCommand : IValidatableCommand<Unit>
+public class EditAlgorithmAndMinerAlgorithmsCommand : IValidatableCommand<Algorithm>
 {
     /// <summary>
     /// Идентификатор алгоритма.

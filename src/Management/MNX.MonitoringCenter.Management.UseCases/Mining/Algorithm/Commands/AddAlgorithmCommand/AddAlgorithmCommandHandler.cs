@@ -48,20 +48,13 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
         using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
             await _algorithmRepository.AddAsync(algorithm);
-
-            var minerAlgorithms = new List<MinerAlgorithm>();
-            foreach (var binding in bindings)
+            
+            await _minerRepository.AddRangeAsync(bindings.Select(binding => new MinerAlgorithm()
             {
-                var minerAlgorithm = new MinerAlgorithm()
-                {
-                    Name = binding.RelativeName,
-                    AlgorithmId = algorithm.Id,
-                    MinerId = binding.MinerId
-                };
-                minerAlgorithms.Add(minerAlgorithm);
-            }
-
-            await _minerRepository.AddRangeAsync(minerAlgorithms);
+                Name = binding.RelativeName,
+                AlgorithmId = algorithm.Id,
+                MinerId = binding.MinerId
+            }).ToList());
 
             transaction.Complete();
         }
