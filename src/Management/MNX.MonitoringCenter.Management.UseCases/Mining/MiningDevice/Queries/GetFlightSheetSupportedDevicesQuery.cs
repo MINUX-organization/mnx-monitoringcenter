@@ -80,8 +80,7 @@ public class GetFlightSheetSupportedDevicesQueryHandler
 
             await foreach (var device in devices.WithCancellation(cancellationToken))
             {
-                if (flightSheet.IsDeviceSupport(device) &&
-                    (device.FlightSheetId == null || device.FlightSheetId == flightSheet.Id))
+                if (flightSheet.IsDeviceSupport(device))
                 {
                     yield return _mapper.Map<MiningDeviceModel>(device);
                 }

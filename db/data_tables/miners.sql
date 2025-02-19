@@ -6,16 +6,16 @@ insert into monitoring_center.miners(name, version, mining_mode, supported_devic
 
 ('wildrig-multi', '0.42.2', 'Single', 1+2+8, 'Integrated'),
 
-('T-Rex', '0.26.8', 'Dual', 1, 'Integrated'),
+('t-rex', '0.26.8', 'Dual', 1, 'Integrated'),
 
-('TeamRedMiner', '0.10.21', 'Triple', 1, 'Integrated'),
+('teamredminer', '0.10.21', 'Triple', 8, 'Integrated'),
 
-('SRBMiner-Multi', '2.7.6', 'Triple', 1+2+4+8+16, 'Integrated'),
+('SRBMiner-MULTI', '2.7.6', 'Triple', 1+2+4+8+16, 'Integrated'),
 
-('Rigel', '1.20.1', 'Triple', 1, 'Integrated'),
+('rigel', '1.20.1', 'Triple', 1, 'Integrated'),
 
-('OneZeroMiner', '1.4.3', 'Dual', 1, 'Integrated'),
+('onezerominer', '1.4.3', 'Dual', 1, 'Integrated'),
 
-('Lolminer', '1.94a', 'Single', 1+2+8, 'Integrated'),
+('lolMiner', '1.94a', 'Dual', 1+2+8, 'Integrated'),
 
-('GMiner', '3.44', 'Single', 1+8, 'Integrated');
+('gminer', '3.44', 'Single', 1+8, 'Integrated');
