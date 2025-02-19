@@ -8,7 +8,7 @@ insert into monitoring_center.miners(name, version, mining_mode, supported_devic
 
 ('t-rex', '0.26.8', 'Dual', 1),
 
-('teamredminer', '0.10.21', 'Triple', 1),
+('teamredminer', '0.10.21', 'Triple', 8),
 
 ('SRBMiner-MULTI', '2.7.6', 'Triple', 1+2+4+8+16),
 
