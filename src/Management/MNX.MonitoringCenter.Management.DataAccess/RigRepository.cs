@@ -136,6 +136,7 @@ public class RigRepository : IRigRepository
 
                 dbDevice.RigId = device.RigId;
                 dbDevice.OwnerId = device.OwnerId;
+                dbDevice.FlightSheetId = device.FlightSheetId;
                 dbDevice.FlightSheetIsConfirm = device.FlightSheetIsConfirm;
                 device.OverclockingId = device.OverclockingId;
                 dbDevice.SwitchToOnline();

@@ -93,8 +93,8 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
         {
             if (inputDevices.Contains(device.Id))
             {
-                // если на устройстве не было полётного листа
-                if (device.FlightSheetName == null)
+                // если на устройстве не было полётного листа или был установлен другой полётный лист
+                if (device.FlightSheetName == null || device.FlightSheetName != flightSheet.Name)
                 {
                     devicesToApply.Add(device);
                 }

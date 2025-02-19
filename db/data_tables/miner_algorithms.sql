@@ -76,7 +76,7 @@ select monitoring_center.get_miner_id('gminer', '3.44'), f.algorithm_id, f.name 
     SELECT monitoring_center.get_algorithm_id('IronFish (Blake3)'), 'ironfish' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Karlsenhash'), 'karlsenhash' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Kaspa (KHeavyHash)'), 'kheavyhash'
-) f;
+) f UNION ALL
 
 select monitoring_center.get_miner_id('xmrig', '6.22.2'), f.algorithm_id, f.name from
 (
@@ -87,7 +87,7 @@ select monitoring_center.get_miner_id('xmrig', '6.22.2'), f.algorithm_id, f.name
     select monitoring_center.get_algorithm_id('RandomKEVA'), 'rx/keva' union all
     select monitoring_center.get_algorithm_id('CryptoNight Talleo'), 'cn-pico/tlo' union all
     select monitoring_center.get_algorithm_id('RandomSFX'), 'rx/sfx' union all
-    select monitoring_center.get_algorithm_id('RandomARQ'), 'rx/arq' union all
+    select monitoring_center.get_algorithm_id('RandomArq'), 'rx/arq' union all
     select monitoring_center.get_algorithm_id('RandomX'), 'rx/0' union all
     select monitoring_center.get_algorithm_id('Chukwa (Argon2id-Chuckwa)'), 'argon2/chukwa' union all
     select monitoring_center.get_algorithm_id('NINJA (Argon2id-NINJA)'), 'argon2/ninja' union all
@@ -133,7 +133,6 @@ select monitoring_center.get_miner_id('wildrig-multi', '0.42.2'), f.algorithm_id
     SELECT monitoring_center.get_algorithm_id('X13'), 'x13' UNION ALL
     SELECT monitoring_center.get_algorithm_id('X14'), 'x14' UNION ALL
     SELECT monitoring_center.get_algorithm_id('X15'), 'x15' UNION ALL
-    SELECT monitoring_center.get_algorithm_id('X16r'), 'x16r' UNION ALL
     SELECT monitoring_center.get_algorithm_id('X16r'), 'x16r' UNION ALL
     SELECT monitoring_center.get_algorithm_id('X16rv2'), 'x16rv2' UNION ALL
     SELECT monitoring_center.get_algorithm_id('X16rt'), 'x16rt' UNION ALL
@@ -183,7 +182,7 @@ select monitoring_center.get_miner_id('teamredminer', '0.10.21'), f.algorithm_id
     SELECT monitoring_center.get_algorithm_id('Lyra2REv3'), 'lyra2rev3' UNION ALL
     SELECT monitoring_center.get_algorithm_id('X16r'), 'x16r' UNION ALL
     SELECT monitoring_center.get_algorithm_id('X16rv2'), 'x16rv2' UNION ALL
-    SELECT monitoring_center.get_algorithm_id('X16S'), 'x16s' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('X16s'), 'x16s' UNION ALL
     SELECT monitoring_center.get_algorithm_id('MTP'), 'mtp' UNION ALL
     SELECT monitoring_center.get_algorithm_id('CuckaToo31 (GRIN)'), 'cuckatoo31_grin' UNION ALL
     SELECT monitoring_center.get_algorithm_id('CuckaRood29 (GRIN)'), 'cuckarood29_grin' UNION ALL
@@ -231,7 +230,7 @@ select monitoring_center.get_miner_id('SRBMiner-MULTI', '2.7.6'), f.algorithm_id
     SELECT monitoring_center.get_algorithm_id('Quai (ProgPow)'), 'progpow_quai' UNION ALL
     SELECT monitoring_center.get_algorithm_id('ProgPowSERO (SERO)'), 'progpow_sero' UNION ALL
     SELECT monitoring_center.get_algorithm_id('ProgPowVeil'), 'progpow_veil' UNION ALL
-    SELECT monitoring_center.get_algorithm_id('RandomARQ'), 'randomarq' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomArq'), 'randomarq' UNION ALL
     SELECT monitoring_center.get_algorithm_id('RandomEpic'), 'randomepic' UNION ALL
     SELECT monitoring_center.get_algorithm_id('RandomSCASH'), 'randomscash' UNION ALL
     SELECT monitoring_center.get_algorithm_id('RandomSFX'), 'randomsfx' UNION ALL
@@ -246,7 +245,6 @@ select monitoring_center.get_miner_id('SRBMiner-MULTI', '2.7.6'), f.algorithm_id
     SELECT monitoring_center.get_algorithm_id('Kaspa (KHeavyHash)'), 'kaspa' UNION ALL
     SELECT monitoring_center.get_algorithm_id('HeavyHash-Pyrin (Pyrin, Pyrinhash)'), 'pyrinhash' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Radiant (SHA-512-256D)'), 'sha512_256d_radiant' UNION ALL
-    SELECT monitoring_center.get_algorithm_id('Aurum'), 'aurum' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Blake (2b)'), 'blake2b' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Blake (2s)'), 'blake2s' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Blake3 (Alephium)'), 'blake3_alephium' UNION ALL
@@ -267,7 +265,7 @@ select monitoring_center.get_miner_id('SRBMiner-MULTI', '2.7.6'), f.algorithm_id
     SELECT monitoring_center.get_algorithm_id('YescryptR16'), 'yescryptr16' UNION ALL
     SELECT monitoring_center.get_algorithm_id('YescryptR32'), 'yescryptr32' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Yespower'), 'yespower' UNION ALL
-    SELECT monitoring_center.get_algorithm_id('Yespower2b'), 'yespower2b' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Yespower2B'), 'yespower2b' UNION ALL
     SELECT monitoring_center.get_algorithm_id('YespowerSugar'), 'yespowersugar' UNION ALL
     SELECT monitoring_center.get_algorithm_id('YespowerUrx'), 'yespowerurx' UNION ALL
     SELECT monitoring_center.get_algorithm_id('YespowerLtncg'), 'yespowerltncg' UNION ALL
@@ -293,7 +291,7 @@ select monitoring_center.get_miner_id('lolMiner', '1.94a'), f.algorithm_id, f.na
     SELECT monitoring_center.get_algorithm_id('CuckaToo31 (GRIN)'), 'C31' UNION ALL
     SELECT monitoring_center.get_algorithm_id('CuckaToo32'), 'C32' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Zhash (Equihash 144,5)'), 'EQUI144_5' UNION ALL
-    SELECT monitoring_center.get_algorithm_id('Equihash(192,7)'), 'EQUI192_7' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Equihash Zero (192,7)'), 'EQUI192_7' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Equihash (210,9)'), 'EQUI210_9' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Ethash-B3'), 'ETHASHB3' UNION ALL
     SELECT monitoring_center.get_algorithm_id('FishHash'), 'FISHHASH' UNION ALL
