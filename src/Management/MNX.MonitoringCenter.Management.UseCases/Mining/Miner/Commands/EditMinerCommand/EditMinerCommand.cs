@@ -28,6 +28,6 @@ public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<
         miner.Id = request.MinerId;
         miner.OwnerId = request.UserId;
         await _minerRepository.Edit(miner, cancellationToken);
-        return Result<Unit>.Success(Unit.Value);
+        return Result<Unit>.Empty();
     }
 }

@@ -17,6 +17,6 @@ public class DeleteMinerCommandHandler : IRequestHandler<DeleteMinerCommand, Res
     public async Task<Result<Unit>> Handle(DeleteMinerCommand request, CancellationToken cancellationToken)
     {
         await _minerRepository.Remove(request.MinerId, request.UserId, cancellationToken);
-        return Result<Unit>.Success(Unit.Value);
+        return Result<Unit>.Empty();
     }
 }
