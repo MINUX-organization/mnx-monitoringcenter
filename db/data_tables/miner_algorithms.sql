@@ -76,7 +76,7 @@ select monitoring_center.get_miner_id('gminer', '3.44'), f.algorithm_id, f.name 
     SELECT monitoring_center.get_algorithm_id('IronFish (Blake3)'), 'ironfish' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Karlsenhash'), 'karlsenhash' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Kaspa (KHeavyHash)'), 'kheavyhash'
-) f;
+) f UNION ALL
 
 select monitoring_center.get_miner_id('xmrig', '6.22.2'), f.algorithm_id, f.name from
 (
