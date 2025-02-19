@@ -11,7 +11,7 @@ CREATE TABLE monitoring_center.algorithms
 
 CREATE UNIQUE INDEX ix_algorithms_name
     ON monitoring_center.algorithms USING btree
-    (name ASC NULLS LAST);
+    (user_id ASC NULLS LAST, name ASC NULLS LAST);
 
 COMMENT ON TABLE monitoring_center.algorithms IS 'Алгоритмы';
 

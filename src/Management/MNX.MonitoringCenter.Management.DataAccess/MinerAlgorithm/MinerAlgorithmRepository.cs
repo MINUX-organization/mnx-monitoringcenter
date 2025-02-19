@@ -23,9 +23,9 @@ public class MinerAlgorithmRepository : IMinerAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public async Task AddMinerAlgorithm(MinerAlgorithm minerAlgorithm)
+    public async Task AddRangeAsync(List<MinerAlgorithm> minerAlgorithms)
     {
-        await _context.MinerAlgorithms.AddAsync(minerAlgorithm);
+        await _context.MinerAlgorithms.AddRangeAsync(minerAlgorithms);
         await _context.SaveChangesAsync();
     }
 

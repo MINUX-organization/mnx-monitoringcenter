@@ -23,6 +23,21 @@ public class Algorithm : IEquatable<Algorithm>
     /// </summary>
     public required string Name { get; set; }
 
+    /// <summary>
+    /// Признак принадлежности алгоритма
+    /// к доменным алгоритмам.
+    /// </summary>
+    /// <returns>
+    /// True, если алгоритм доменный,
+    /// иначе - false.
+    /// </returns>
+    public bool IsDomain()
+    {
+        if (UserId is null)
+            return true;
+        return false;
+    }
+
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {

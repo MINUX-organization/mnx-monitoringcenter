@@ -31,7 +31,9 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
         var model = request.Model;
         var bindings = model.Bindings;
 
-        if (await _algorithmRepository.Exists(request.UserId, model.FullName, cancellationToken))
+        if (await _algorithmRepository.Exists(request.UserId,
+                                              model.FullName,
+                                              cancellationToken))
         {
             return Result<Algorithm>
                 .Invalid("An Algorithm with that name already exists");
@@ -47,15 +49,19 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
         {
             await _algorithmRepository.AddAsync(algorithm);
 
+            var minerAlgorithms = new List<MinerAlgorithm>();
             foreach (var binding in bindings)
             {
-                await _minerRepository.AddMinerAlgorithm(new MinerAlgorithm()
+                var minerAlgorithm = new MinerAlgorithm()
                 {
                     Name = binding.RelativeName,
                     AlgorithmId = algorithm.Id,
                     MinerId = binding.MinerId
-                });
+                };
+                minerAlgorithms.Add(minerAlgorithm);
             }
+
+            await _minerRepository.AddRangeAsync(minerAlgorithms);
 
             transaction.Complete();
         }

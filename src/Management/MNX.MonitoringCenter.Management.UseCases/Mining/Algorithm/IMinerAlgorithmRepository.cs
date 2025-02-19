@@ -16,13 +16,13 @@ public interface IMinerAlgorithmRepository
     IAsyncEnumerable<MinerAlgorithm> GetMinerAlgorithmsByAlgorithmId(Guid algorithmId);
 
     /// <summary>
-    /// Добавить относительное наименование пользовательского
-    /// алгоритма для майнера.
+    /// Добавить список относительных наименований
+    /// пользовательского алгоритма для майнеров.
     /// </summary>
-    /// <param name="minerAlgorithm"> 
-    /// Привязка относительного имени алгоритма к майнеру.
+    /// <param name="minerAlgorithms">
+    /// Список относительных наименований алгоритма.
     /// </param>
-    Task AddMinerAlgorithm(MinerAlgorithm minerAlgorithm);
+    Task AddRangeAsync(List<MinerAlgorithm> minerAlgorithms);
 
     /// <summary>
     /// Удалить все привязки относительных наименований 

@@ -33,7 +33,11 @@ public class DeleteAlgorithmCommandHandler
                                                            userId,
                                                            cancellationToken);
 
-        if (algorithm!.UserId == null)
+        if (algorithm is null)
+            return Result<Unit>.Invalid(
+                $"Algorithm with id equaled {request.AlgorithmId} was not found!");
+
+        if (algorithm.IsDomain())
             return Result<Unit>.Invalid("Domain algorithms cannot be deleted");
 
         using (var transaction = 

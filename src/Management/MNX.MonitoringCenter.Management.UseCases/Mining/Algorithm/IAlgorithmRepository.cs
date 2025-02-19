@@ -44,6 +44,23 @@ public interface IAlgorithmRepository
                       CancellationToken cancellationToken);
 
     /// <summary>
+    /// Получить признак существования алгоритма по наименованию,
+    /// чей идентификатор не равен идентификатору алгоритма,
+    /// передаваемому на вход.
+    /// </summary>
+    /// <param name="algorithmId"> Идентификатор алгоритма. </param>
+    /// <param name="name"> Наименование алгоритма. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns>
+    /// Признак существования алгоритма согласно условию.
+    /// </returns>
+    Task<bool> Exists(Guid algorithmId,
+                      string name,
+                      Guid userId,
+                      CancellationToken cancellationToken);
+
+    /// <summary>
     /// Добавить новый пользовательский алгоритм.
     /// </summary>
     /// <param name="algorithm"> Алгоритм. </param>
