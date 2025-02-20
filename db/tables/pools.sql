@@ -1,7 +1,7 @@
 CREATE TABLE monitoring_center.pools
 (
     id uuid NOT NULL,
-    tls BOOLEAN NOT NULL DEFAULT False,
+    tls boolean NOT NULL DEFAULT False,
     domain text NOT NULL,
     port integer NOT NULL,
     cryptocurrency_id uuid NOT NULL,
