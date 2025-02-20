@@ -34,8 +34,7 @@ public class DeleteAlgorithmCommandHandler
                                                            cancellationToken);
 
         if (algorithm is null)
-            return Result<Unit>.Invalid(
-                $"Algorithm with id equaled {request.AlgorithmId} was not found!");
+            return Result<Unit>.Empty();
 
         if (algorithm.IsDomain())
             return Result<Unit>.Invalid("Domain algorithms cannot be deleted");

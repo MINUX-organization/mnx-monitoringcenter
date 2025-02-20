@@ -36,7 +36,7 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
                                               cancellationToken))
         {
             return Result<Algorithm>
-                .Invalid("An Algorithm with that name already exists");
+                .Conflict("An Algorithm with that name already exists");
         }
 
         var algorithm = new Algorithm 

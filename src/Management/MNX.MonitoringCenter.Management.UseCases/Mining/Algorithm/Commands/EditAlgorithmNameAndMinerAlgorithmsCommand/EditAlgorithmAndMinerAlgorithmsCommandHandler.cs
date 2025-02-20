@@ -36,7 +36,7 @@ public class EditAlgorithmAndMinerAlgorithmsCommandHandler
                                               cancellationToken))
         {
             return Result<Algorithm>
-                .Invalid("Algorithm with that name already exists");
+                .Conflict("Algorithm with that name already exists");
         }
 
         var algorithm = await _algorithmRepository.GetById(request.AlgorithmId,

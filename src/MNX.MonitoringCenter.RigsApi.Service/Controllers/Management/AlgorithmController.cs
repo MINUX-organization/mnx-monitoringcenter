@@ -79,9 +79,13 @@ public class AlgorithmController : ControllerBase
     /// Переданные параметры не прошли валидацию 
     /// или не был найден алгоритм.
     /// </response>
+    /// <response code="409"> 
+    /// Алгоритм с таким наименованием уже существует.
+    /// </response>
     [HttpPost]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [ProducesResponseType(typeof(List<string>), 409)]
     public async Task<IActionResult> AddAlgorithm(AlgorithmBindingModel model)
     {
         var result = await _mediator.Send(
@@ -94,15 +98,19 @@ public class AlgorithmController : ControllerBase
     /// </summary>
     /// <param name="id"> Идентификатор алгоритма. </param>
     /// <param name="model"> Новый пользовательский алгоритм. </param>
-    /// <response code="204"> Успешно. </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию,
     /// не был найден алгоритм с переданным id или алгоритм 
     /// является доменным и не может быть отредактирован.
     /// </response>
+    /// <response code="409"> 
+    /// Алгоритм с таким наименованием уже существует.
+    /// </response>
     [HttpPatch("{id:Guid}")]
-    [ProducesResponseType(typeof(AlgorithmBindingModel), 204)]
+    [ProducesResponseType(typeof(AlgorithmBindingModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [ProducesResponseType(typeof(List<string>), 409)]
     public async Task<IActionResult> EditAlgorithm(Guid id,
                                                    AlgorithmBindingModel model)
     {

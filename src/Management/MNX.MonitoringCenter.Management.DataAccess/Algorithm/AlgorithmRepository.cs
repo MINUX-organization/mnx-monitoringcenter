@@ -44,16 +44,15 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public async Task<bool> Exists(Guid algorithmId,
+    public Task<bool> Exists(Guid algorithmId,
                                    string name,
                                    Guid userId,
                                    CancellationToken cancellationToken)
     {
-        var exists = await _context.Algorithms.AsNoTracking()
+        return _context.Algorithms.AsNoTracking()
             .Available(userId)
             .Where(x => x.Id != algorithmId)
             .AnyAsync(x => x.Name == name, cancellationToken);
-        return exists;
     }
 
     /// <inheritdoc/>
