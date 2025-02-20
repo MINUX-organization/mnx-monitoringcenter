@@ -5,7 +5,6 @@ using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
-using System.Data;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
@@ -29,7 +28,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<MiningDeviceInfo> GetAvailable(Specification specification)
     {
-        return GetDevicesQuery(specification).AsAsyncEnumerable();
+        return GetDevicesQuery(specification).AsNoTrackingWithIdentityResolution().AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>

@@ -5,7 +5,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
 public record MinerInputModel(
     string Name,
-    string? Version,
+    string Version,
     string InstallationUrl,
     DeviceTypeManufacturerCombination SupportedDevices,
     string PoolTemplate,
@@ -15,12 +15,18 @@ public class MinerInputModelValidator : AbstractValidator<MinerInputModel>
 {
     public MinerInputModelValidator()
     {
+    }
+
+    public MinerInputModelValidator(IMinerRepository minerRepository, Guid userId)
+    {
         RuleFor(model => model.Name)
             .NotEmpty()
-            .Matches(@"^[a-zA-Z0-9\-_./ ]+$");
+            .Matches(@"^[a-zA-Z0-9\-_./ ]+$")
+            .MustAsync(async (minerName, cancellationToken) =>
+                !await minerRepository.Exists(userId, minerName, cancellationToken));
 
         RuleFor(model => model.Version)
-            .NotEqual("")
+            .NotEmpty()
             .Matches(@"^[a-zA-Z0-9\-_./ ]+$");
 
         RuleFor(model => model.InstallationUrl)

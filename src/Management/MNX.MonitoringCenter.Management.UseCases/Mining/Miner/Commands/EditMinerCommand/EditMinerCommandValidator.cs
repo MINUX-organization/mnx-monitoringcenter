@@ -14,7 +14,7 @@ public class EditMinerCommandValidator : AbstractValidator<EditMinerCommand>
         RuleFor(x => x.Model)
             .NotNull()
             .WithMessage("Miner data is required!")
-            .SetValidator(new MinerInputModelValidator());
+            .SetValidator(cmd => new MinerInputModelValidator(minerRepository, cmd.UserId));
     }
 
     private class EditMinerCommandPropertyValidator : IAsyncPropertyValidator<EditMinerCommand, EditMinerCommand>

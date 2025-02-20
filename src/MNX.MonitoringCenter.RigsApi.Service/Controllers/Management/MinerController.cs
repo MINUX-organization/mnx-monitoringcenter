@@ -54,6 +54,7 @@ public class MinerController : ControllerBase
     /// <param name="request"> Модель запроса </param>
     /// <response code="201"> Успешно создано </response>
     [HttpPost("custom")]
+    [ProducesResponseType(typeof(MinerModel), 201)]
     public async Task<IActionResult> AddCustom(MinerInputModel request)
     {
         var result = await _mediator.Send(new CreateMinerCommand(request, _accessor.GetUserId()));
@@ -65,7 +66,7 @@ public class MinerController : ControllerBase
     /// </summary>
     /// <param name="request">Модель запроса</param>
     /// <param name="minerId">Идентификатор майнера</param>
-    /// <response code="200"> Успешно </response>
+    /// <response code="204"> Успешно </response>
     [HttpPut("custom/{minerId:Guid}")]
     public async Task<IActionResult> UpdateCustom(MinerInputModel request, Guid minerId)
     {
@@ -77,7 +78,7 @@ public class MinerController : ControllerBase
     /// Удалить кастомный майнер
     /// </summary>
     /// <param name="minerId">Идентификатор майнера</param>
-    /// <response code="200"> Успешно </response>
+    /// <response code="204"> Успешно </response>
     [HttpDelete("custom/{minerId:Guid}")]
     public async Task<IActionResult> DeleteCustom(Guid minerId)
     {

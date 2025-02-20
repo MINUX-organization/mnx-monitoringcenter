@@ -22,7 +22,7 @@ public class Miner : IEquatable<Miner>
     /// <summary>
     /// Версия.
     /// </summary>
-    public string? Version { get; set; }
+    public required string Version { get; init; }
 
     /// <summary>
     /// Тип майнера.
@@ -39,12 +39,10 @@ public class Miner : IEquatable<Miner>
     /// </summary>
     public MiningModeEnum MiningMode { get; init; } = MiningModeEnum.Single;
 
-    #region Only for integrated miners
     /// <summary>
     /// Поддерживаемые алгоритмы.
     /// </summary>
-    public List<MinerAlgorithm> SupportedAlgorithms { get; init; } = new(0);
-    #endregion
+    public List<MinerAlgorithm> SupportedAlgorithms { get; init; } = [];
 
     #region Only for custom miners
     /// <summary>

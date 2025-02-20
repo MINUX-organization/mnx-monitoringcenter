@@ -23,12 +23,21 @@ public interface IMinerRepository
     Task<Miner?> GetMinerById(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Получить майнер по идентификатору.
+    /// Проверить существование майнера по id.
     /// </summary>
     /// <param name="id"> Идентификатор. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Признак существования майнера. </returns>
     Task<bool> Exists(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверить существование майнера по userId и minerId.
+    /// </summary>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="minerName"> Имя майнера. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Признак существования майнера. </returns>
+    Task<bool> Exists(Guid userId, string minerName, CancellationToken cancellationToken);
 
     /// <summary>
     /// Создать майнер.

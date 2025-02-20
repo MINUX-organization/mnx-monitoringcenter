@@ -37,12 +37,12 @@ public class CreateMinerCommandHandler : IRequestHandler<CreateMinerCommand, Res
         miner.OwnerId = request.UserId;
         await _minerRepository.Add(miner, cancellationToken);
 
-        var regIds = await _miningDeviceRepository.GetAvailable(new Specification(request.UserId))
+        var rigIds = await _miningDeviceRepository.GetAvailable(new Specification(request.UserId))
             .Select(device => device.RigId).ToArrayAsync(cancellationToken: cancellationToken);
 
         await _bus.Enqueue(
             new InstallCustomMinerCommand(miner.Id, miner.InstallationUrl!),
-            regIds,
+            rigIds,
             request.UserId,
             cancellationToken: cancellationToken
         );
