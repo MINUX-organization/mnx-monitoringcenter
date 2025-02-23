@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.Core.Mining.Miner;

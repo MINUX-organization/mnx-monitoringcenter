@@ -17,6 +17,7 @@ using MNX.MonitoringCenter.RigsApi.Service.Consumers;
 using MNX.SecurityManagement.Authentication.Integration;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.RigsApi.Service;
 
@@ -52,7 +53,11 @@ internal class Program
         services.AddControllers()
                 .AddJsonOptions(options =>
                 {
+                    // <ÍÅ ÏÅÐÅÑÒÀÂËßÒÜ>
+                    options.JsonSerializerOptions.Converters.Add(new EnumFlagsConverter());
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    // </ÍÅ ÏÅÐÅÑÒÀÂËßÒÜ>
+
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                     options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
                 });
