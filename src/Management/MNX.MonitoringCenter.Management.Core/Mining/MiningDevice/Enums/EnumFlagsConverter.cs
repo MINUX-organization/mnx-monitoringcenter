@@ -31,15 +31,44 @@ file class EnumFlagsConversionHandler<T> : JsonConverter<T> where T : Enum
     /// <inheritdoc/>
     public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
     {
-        if (reader.TokenType != JsonTokenType.Number)
-            throw new JsonException($"Expected a number token, but got {reader.TokenType}.");
+        if (reader.TokenType == JsonTokenType.StartArray)
+        {
+            var enumFlags = new HashSet<string>();
+            while (reader.Read() && reader.TokenType != JsonTokenType.EndArray)
+            {
+                if (reader.TokenType == JsonTokenType.String)
+                {
+                    enumFlags.Add(reader.GetString()!);
+                }
+                else
+                {
+                    throw new JsonException($"Expected a string token, but got {reader.TokenType}.");
+                }
+            }
 
-        var intValue = reader.GetInt32();
-
-        if (!Enum.IsDefined(typeof(T), intValue))
-            throw new JsonException($"The value {intValue} is not valid for enum {typeof(T)}.");
-
-        return (T)Enum.ToObject(typeof(T), intValue);
+            var intValue = 0;
+            foreach (var flagName in enumFlags)
+            {
+                if (Enum.TryParse(typeof(T), flagName, out var flag))
+                {
+                    intValue |= (int)flag;
+                }
+                else
+                {
+                    throw new JsonException($"Invalid flag value: {flagName}");
+                }
+            }
+            return (T)Enum.ToObject(typeof(T), intValue);
+        }
+        else if (reader.TokenType == JsonTokenType.Number)
+        {
+            var intValue = reader.GetInt32();
+            return (T)Enum.ToObject(typeof(T), intValue);
+        }
+        else
+        {
+            throw new JsonException($"Expected start of array or number token, but got {reader.TokenType}.");
+        }
     }
 
     /// <inheritdoc/>
