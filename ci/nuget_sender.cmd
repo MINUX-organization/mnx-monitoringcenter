@@ -1,5 +1,6 @@
 SET host=77.37.200.24:5554
 
+cd ../
 cd ./src
 
 cd ./Inventory
