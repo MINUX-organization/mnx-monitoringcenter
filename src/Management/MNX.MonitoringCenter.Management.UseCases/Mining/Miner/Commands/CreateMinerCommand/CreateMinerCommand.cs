@@ -41,7 +41,12 @@ public class CreateMinerCommandHandler : IRequestHandler<CreateMinerCommand, Res
             .Select(device => device.RigId).ToArrayAsync(cancellationToken: cancellationToken);
 
         await _bus.Enqueue(
-            new InstallCustomMinerCommand(miner.Id, miner.InstallationUrl!),
+            new InstallCustomMinerCommand(
+                miner.Id,
+                miner.Version,
+                miner.InstallationUrl!,
+                miner.PoolTemplate!,
+                miner.WalletWorkerTemplate!),
             rigIds,
             request.UserId,
             cancellationToken: cancellationToken
