@@ -46,15 +46,12 @@ internal class Program
                             FanSpeed = random.Next(100),
                             Temperature = random.Next(100),
                             MiningState = MiningState.Active,
-                            FlightSheet = new FlightSheetStatistics()
-                            {
-                                Id = Guid.NewGuid(),
-                                MinerId = Guid.NewGuid(),
-                                Coins = new()
+                            MinerName = "Miner",
+                            MiningUpTime = new TimeOnly(),
+                            Coins = new()
                                 {
-                                    new CoinStatistics()
+                                    new MiningMetrics()
                                     {
-                                        CoinId = Guid.Parse("7b1d26a9-2418-46b7-9166-fafb9a7f2b1d"),
                                         HashRate = random.Next(1000),
                                         Shares = new SharesModel()
                                         {
@@ -62,9 +59,8 @@ internal class Program
                                             Rejected = random.Next(1000),
                                         }
                                     },
-                                    new CoinStatistics()
+                                    new MiningMetrics()
                                     {
-                                        CoinId = Guid.Parse("a63b11e1-3763-4d3e-9118-a2b81a92634f"),
                                         HashRate = random.Next(1000),
                                         Shares = new SharesModel()
                                         {
@@ -73,7 +69,6 @@ internal class Program
                                         }
                                     },
                                 }
-                            }
                         },
                         new GpuDynamicIndicators()
                         {
@@ -93,7 +88,7 @@ internal class Program
                             InternetSpeed = random.Next(0, 10000),
                         }
                     }
-                });
+                });;
             }
 
             await Task.Delay(2000);

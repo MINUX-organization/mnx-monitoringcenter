@@ -11,12 +11,12 @@ public class GpuDynamicIndicators : MiningDeviceDynamicIndicators
     /// <summary>
     /// Температура памяти.
     /// </summary>
-    public int MemoryTemperature { get; init; }
+    public int MemoryTemperature { get; set; }
 
     /// <summary>
     /// Температура ядра.
     /// </summary>
-    public int CoreTemperature { get; init; }
+    public int CoreTemperature { get; set; }
 
     /// <inheritdoc/>
     public override int GetAverageTemperature()

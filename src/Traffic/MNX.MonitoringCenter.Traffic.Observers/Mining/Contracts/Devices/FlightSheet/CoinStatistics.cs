@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
+﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
+
+namespace MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 
 /// <summary>
 /// Статистика майнинга монеты.
@@ -8,7 +10,7 @@ public class CoinStatistics
     /// <summary>
     /// Идентификатор монеты.
     /// </summary>
-    public Guid CoinId { get; init; }
+    public Guid CoinId { get; set; }
 
     /// <summary>
     /// Скорость хеширования.

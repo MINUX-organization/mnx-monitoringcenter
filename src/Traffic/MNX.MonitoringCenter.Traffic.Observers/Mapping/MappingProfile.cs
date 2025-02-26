@@ -9,6 +9,7 @@ using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices.Abstract
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Mapping;
 
@@ -17,6 +18,8 @@ namespace MNX.MonitoringCenter.Traffic.Observers.Mapping;
 /// </summary>
 public class MappingProfile : Profile
 {
+    private const string MINER_NAME_KEY = "MinerName";
+
     public MappingProfile()
     {
         CreateMap<RigDynamicIndicators, RigDynamicHardwareIndicators>()
@@ -44,7 +47,11 @@ public class MappingProfile : Profile
         CreateMap<GpuDynamicIndicators, GpuDynamicHardwareIndicators>();
         CreateMap<NetworkAdapterDynamicIndicators, NetworkAdapterDynamicHardwareIndicators>();
 
-        CreateMap<CpuDynamicIndicators, CpuDynamicMiningIndicators>();
-        CreateMap<GpuDynamicIndicators, GpuDynamicMiningIndicators>();
+        CreateMap<CpuDynamicIndicators, CpuDynamicMiningIndicators>()
+            .BeforeMap((src, dest, context) => context.Items.Add(MINER_NAME_KEY, src.MinerName))
+            .AfterMap<MiningIndicatorsMappingAction>();
+        CreateMap<GpuDynamicIndicators, GpuDynamicMiningIndicators>()
+            .BeforeMap((src, dest, context) => context.Items.Add(MINER_NAME_KEY, src.MinerName))
+            .AfterMap<MiningIndicatorsMappingAction>();
     }
 }

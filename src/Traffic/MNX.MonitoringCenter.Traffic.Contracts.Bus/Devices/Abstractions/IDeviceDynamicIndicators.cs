@@ -8,7 +8,7 @@ public interface IDeviceDynamicIndicators
     /// <summary>
     /// Идентификатор устройства.
     /// </summary>
-    Guid DeviceId { get; init; }
+    Guid DeviceId { get; set; }
 
     /// <summary>
     /// Тип устройства.
@@ -18,5 +18,5 @@ public interface IDeviceDynamicIndicators
     /// <summary>
     /// Мощность.
     /// </summary>
-    int Power { get; init; }
+    int Power { get; set; }
 }
