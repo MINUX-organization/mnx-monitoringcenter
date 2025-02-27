@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner;
 
-namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
+namespace MNX.MonitoringCenter.Management.DataAccess.MinerAlgorithm;
+
+using MinerAlgorithm = Core.Mining.Miner.MinerAlgorithm;
 
 /// <summary>
 /// Конфигурация для таблицы с алгоритмами майнеров.

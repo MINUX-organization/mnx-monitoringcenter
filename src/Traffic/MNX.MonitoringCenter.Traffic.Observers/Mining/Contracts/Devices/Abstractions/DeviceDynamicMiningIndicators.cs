@@ -10,7 +10,7 @@ namespace MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstra
 public abstract class DeviceDynamicMiningIndicators : IDeviceDynamicMiningIndicators
 {
     /// <inheritdoc/>
-    public Guid DeviceId { get; init; }
+    public Guid DeviceId { get; set; }
 
     /// <inheritdoc/>
     public abstract DeviceType Type { get; }
