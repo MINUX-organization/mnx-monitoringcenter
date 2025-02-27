@@ -75,6 +75,16 @@ public class PresetRepository : IPresetRepository
     {
         return _context.Presets.AsNoTracking()
                                .Where(x => x.UserId == userId)
+                               .Join(_context.Overclocking, z => z.OverclockingId, y => y.Id,
+                               (z, y) => new Preset
+                               {
+                                   Id = z.Id,
+                                   UserId = z.UserId,
+                                   Name = z.Name,
+                                   DeviceName = z.DeviceName,
+                                   OverclockingId = z.OverclockingId,
+                                   Overclocking = _mapper.Map<IOverclocking>(y)
+                               })
                                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
