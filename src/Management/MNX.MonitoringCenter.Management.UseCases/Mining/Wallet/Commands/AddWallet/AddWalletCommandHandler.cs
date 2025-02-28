@@ -36,10 +36,10 @@ public class AddWalletCommandHandler : IRequestHandler<AddWalletCommand, Result<
             return Result<WalletModel>.Conflict($"Wallet with name is equaled {request.Model.Name} already exists");
         }
 
-        if (await _walletRepository.ExistsWithAddress(request.UserId, request.Model.Address, cancellationToken))
-        {
-            return Result<WalletModel>.Conflict($"Wallet with address is equaled {request.Model.Address} already exists");
-        }
+        //if (await _walletRepository.ExistsWithAddress(request.UserId, request.Model.Address, cancellationToken))
+        //{
+        //    return Result<WalletModel>.Conflict($"Wallet with address is equaled {request.Model.Address} already exists");
+        //}
 
         var cryptocurrency = await _cryptocurrencyRepository
             .GetAvailableById(request.Model.CryptocurrencyId, request.UserId, cancellationToken);

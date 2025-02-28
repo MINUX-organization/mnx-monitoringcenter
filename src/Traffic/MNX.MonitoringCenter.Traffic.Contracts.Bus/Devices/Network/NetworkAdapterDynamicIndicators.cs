@@ -13,15 +13,15 @@ public class NetworkAdapterDynamicIndicators : DeviceDynamicIndicators
     /// <summary>
     /// Признак того, что адаптер используется.
     /// </summary>
-    public bool IsUse { get; init; }
+    public bool IsUse { get; set; }
 
     /// <summary>
     /// Уровень интернет соединения.
     /// </summary>
-    public OnlineState OnlineState { get; init; }
+    public OnlineState OnlineState { get; set; }
 
     /// <summary>
     /// Скорость интернета.
     /// </summary>
-    public int InternetSpeed { get; init; }
+    public int InternetSpeed { get; set; }
 }

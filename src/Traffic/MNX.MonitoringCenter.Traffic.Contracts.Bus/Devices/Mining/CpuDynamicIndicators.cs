@@ -11,7 +11,7 @@ public class CpuDynamicIndicators : MiningDeviceDynamicIndicators
     /// <summary>
     /// Температура.
     /// </summary>
-    public int Temperature { get; init; }
+    public int Temperature { get; set; }
 
     /// <inheritdoc/>
     public override int GetAverageTemperature() => Temperature;

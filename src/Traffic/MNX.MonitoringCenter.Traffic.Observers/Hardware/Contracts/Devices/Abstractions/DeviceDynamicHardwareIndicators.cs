@@ -8,11 +8,11 @@ namespace MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices.Abst
 public abstract class DeviceDynamicHardwareIndicators : IDeviceDynamicHardwareIndicators
 {
     /// <inheritdoc/>
-    public Guid DeviceId { get; init; }
+    public Guid DeviceId { get; set; }
 
     /// <inheritdoc/>
     public abstract DeviceType Type { get; }
 
     /// <inheritdoc/>
-    public int Power { get; init; }
+    public int Power { get; set; }
 }

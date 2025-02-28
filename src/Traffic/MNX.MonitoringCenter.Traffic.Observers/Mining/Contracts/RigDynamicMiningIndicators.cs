@@ -1,6 +1,7 @@
 ﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 
@@ -17,7 +18,11 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     /// <summary>
     /// Время майнинга с момента последнего включения.
     /// </summary>
-    public DateTime MiningUpTime { get; init; }
+    private TimeOnly? _miningUpTime;
+    public TimeOnly MiningUpTime
+    {
+        get => _miningUpTime ??= Devices.Max(x => x.MiningUpTime);
+    }
 
     /// <summary>
     /// Общее кол-во решений.
@@ -25,25 +30,22 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     private SharesModel? _totalShares;
     public SharesModel TotalShares
     {
-        get
+        get => _totalShares ??= new SharesModel()
         {
-            return _totalShares ??= new SharesModel()
+            Accepted = Devices.Sum(x =>
             {
-                Accepted = Devices.Sum(x =>
-                {
-                    return x.FlightSheet is not null
-                        ? x.FlightSheet.Coins.Sum(coin => coin.Shares.Accepted)
-                        : 0;
-                }),
+                return x.FlightSheet is not null
+                    ? x.FlightSheet.Coins.Sum(coin => coin.Shares.Accepted)
+                    : 0;
+            }),
 
-                Rejected = Devices.Sum(x =>
-                {
-                    return x.FlightSheet is not null
-                        ? x.FlightSheet.Coins.Sum(coin => coin.Shares.Rejected)
-                        : 0;
-                })
-            };
-        }
+            Rejected = Devices.Sum(x =>
+            {
+                return x.FlightSheet is not null
+                    ? x.FlightSheet.Coins.Sum(coin => coin.Shares.Rejected)
+                    : 0;
+            })
+        };
     }
 
     /// <summary>
@@ -52,17 +54,14 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     private int? _totalHashRate;
     public int TotalHashRate
     {
-        get
+        get => _totalHashRate ??= Devices.Sum(device =>
         {
-            return _totalHashRate ??= Devices.Sum(device =>
+            if (device.FlightSheet is not null)
             {
-                if (device.FlightSheet is not null)
-                {
-                    return device.FlightSheet.Coins.Sum(coin => coin.HashRate);
-                }
-                return 0;
-            });
-        }
+                return device.FlightSheet.Coins.Sum(coin => coin.HashRate);
+            }
+            return 0;
+        });
     }
 
     /// <summary>

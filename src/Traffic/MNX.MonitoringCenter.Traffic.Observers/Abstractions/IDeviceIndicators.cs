@@ -10,7 +10,7 @@ public interface IDeviceIndicators
     /// <summary>
     /// Идентификатор устройства.
     /// </summary>
-    Guid DeviceId { get; init; }
+    Guid DeviceId { get; set; }
 
     /// <summary>
     /// Тип устройства.

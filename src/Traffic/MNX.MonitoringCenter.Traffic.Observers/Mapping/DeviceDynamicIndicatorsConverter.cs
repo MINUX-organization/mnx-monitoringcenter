@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Abstractions;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Network;
@@ -27,17 +28,17 @@ public class DeviceDynamicIndicatorsConverter :
                                                     IDeviceDynamicHardwareIndicators destination,
                                                     ResolutionContext context)
     {
-        if (source is CpuDynamicIndicators cpuIndicators)
+        if (source.Type == DeviceType.CPU)
         {
-            return context.Mapper.Map<CpuDynamicHardwareIndicators>(cpuIndicators);
+            return context.Mapper.Map<CpuDynamicHardwareIndicators>(source);
         }
-        else if (source is GpuDynamicIndicators gpuIndicators)
+        else if (source.Type == DeviceType.GPU)
         {
-            return context.Mapper.Map<GpuDynamicHardwareIndicators>(gpuIndicators);
+            return context.Mapper.Map<GpuDynamicHardwareIndicators>(source);
         }
-        else if (source is NetworkAdapterDynamicIndicators networkAdapterIndicators)
+        else if (source.Type == DeviceType.NetworkAdapter)
         {
-            return context.Mapper.Map<NetworkAdapterDynamicHardwareIndicators>(networkAdapterIndicators);
+            return context.Mapper.Map<NetworkAdapterDynamicHardwareIndicators>(source);
         }
 
         return null!;
@@ -54,13 +55,13 @@ public class DeviceDynamicIndicatorsConverter :
                                                   IDeviceDynamicMiningIndicators destination,
                                                   ResolutionContext context)
     {
-        if (source is CpuDynamicIndicators cpuIndicators)
+        if (source.Type == DeviceType.CPU)
         {
-            return context.Mapper.Map<CpuDynamicMiningIndicators>(cpuIndicators);
+            return context.Mapper.Map<CpuDynamicMiningIndicators>(source);
         }
-        else if (source is GpuDynamicIndicators gpuIndicators)
+        else if (source.Type == DeviceType.GPU)
         {
-            return context.Mapper.Map<GpuDynamicMiningIndicators>(gpuIndicators);
+            return context.Mapper.Map<CpuDynamicMiningIndicators>(source);
         }
 
         return null!;

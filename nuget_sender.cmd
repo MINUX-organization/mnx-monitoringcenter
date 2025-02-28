@@ -17,7 +17,7 @@ cd ../../../../
 cd ./Traffic
 cd ./MNX.MonitoringCenter.Traffic.Contracts.Bus/bin/Release
 
-dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY MNX.MonitoringCenter.Traffic.Contracts.Bus.1.0.3.nupkg
+dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY MNX.MonitoringCenter.Traffic.Contracts.Bus.1.0.6.nupkg
 
 cd ../../../../
 
