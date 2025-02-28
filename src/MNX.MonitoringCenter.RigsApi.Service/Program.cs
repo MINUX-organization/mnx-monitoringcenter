@@ -1,23 +1,26 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
+using MNX.Application.Bus.RabbitMQ;
+using MNX.Application.Consul;
+using MNX.Application.OpenTelemetry;
+using MNX.Application.OpenTelemetry.Metrics;
+using MNX.Application.OpenTelemetry.Tracing;
+using MNX.MonitoringCenter.Inventory.Integration;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Integration;
+using MNX.MonitoringCenter.RigsApi.Service.Consumers;
+using MNX.MonitoringCenter.RigsApi.Service.Hubs;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
+using MNX.MonitoringCenter.Traffic.Controllers;
+using MNX.MonitoringCenter.Traffic.Integration;
+using MNX.SecurityManagement.Authentication.Integration;
 using NLog;
 using NLog.Web;
 using System.Reflection;
-using System.Text.Unicode;
-using MNX.Application.Consul;
-using MNX.Application.RabbitMQ;
-using Microsoft.OpenApi.Models;
 using System.Text.Encodings.Web;
 using System.Text.Json.Serialization;
-using MNX.MonitoringCenter.Traffic.Integration;
-using MNX.MonitoringCenter.Traffic.Controllers;
-using MNX.MonitoringCenter.RigsApi.Service.Hubs;
-using MNX.MonitoringCenter.Inventory.Integration;
-using MNX.MonitoringCenter.Management.Integration;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using MNX.MonitoringCenter.RigsApi.Service.Consumers;
-using MNX.SecurityManagement.Authentication.Integration;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using System.Text.Unicode;
 
 namespace MNX.MonitoringCenter.RigsApi.Service;
 
@@ -49,6 +52,7 @@ internal class Program
         builder.Logging.ClearProviders();
         builder.Host.UseNLog();
         var services = builder.Services;
+        var configuration = builder.Configuration;
 
         services.AddControllers()
                 .AddJsonOptions(options =>
@@ -63,6 +67,10 @@ internal class Program
                 });
 
         services.AddConsulIntegration(builder.Configuration);
+
+        services.ConfigureOpenTelemetry(configuration)
+                .ConfigureTracing(configuration)
+                .ConfigureMetrics(configuration);
 
         services.AddEndpointsApiExplorer();
 
@@ -122,7 +130,7 @@ internal class Program
             
         });
 
-        services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!, new JwtBearerEvents()
+        services.AddJwtBearerAuthentication(configuration["SecretKey"]!, new JwtBearerEvents()
         {
             OnMessageReceived = context =>
             {
