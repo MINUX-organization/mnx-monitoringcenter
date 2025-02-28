@@ -3,10 +3,13 @@ using NLog.Web;
 using System.Reflection;
 using System.Text.Unicode;
 using MNX.Application.Consul;
-using MNX.Application.RabbitMQ;
 using Microsoft.OpenApi.Models;
 using System.Text.Encodings.Web;
+using MNX.Application.Bus.RabbitMQ;
+using MNX.Application.OpenTelemetry;
 using System.Text.Json.Serialization;
+using MNX.Application.OpenTelemetry.Metrics;
+using MNX.Application.OpenTelemetry.Tracing;
 using MNX.MonitoringCenter.Traffic.Integration;
 using MNX.MonitoringCenter.Traffic.Controllers;
 using MNX.MonitoringCenter.RigsApi.Service.Hubs;
@@ -49,6 +52,7 @@ internal class Program
         builder.Logging.ClearProviders();
         builder.Host.UseNLog();
         var services = builder.Services;
+        var configuration = builder.Configuration;
 
         services.AddControllers()
                 .AddJsonOptions(options =>
@@ -63,6 +67,10 @@ internal class Program
                 });
 
         services.AddConsulIntegration(builder.Configuration);
+
+        services.ConfigureOpenTelemetry(configuration)
+                .ConfigureTracing(configuration)
+                .ConfigureMetrics(configuration);
 
         services.AddEndpointsApiExplorer();
 
@@ -122,7 +130,7 @@ internal class Program
             
         });
 
-        services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!, new JwtBearerEvents()
+        services.AddJwtBearerAuthentication(configuration["SecretKey"]!, new JwtBearerEvents()
         {
             OnMessageReceived = context =>
             {
