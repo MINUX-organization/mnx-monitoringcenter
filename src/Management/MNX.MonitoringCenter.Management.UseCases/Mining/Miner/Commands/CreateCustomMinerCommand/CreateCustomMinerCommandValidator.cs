@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateMinerCommand;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateCustomMinerCommand;
 
-public class CreateMinerCommandValidator : AbstractValidator<CreateMinerCommand>
+public class CreateCustomMinerCommandValidator : AbstractValidator<CreateCustomMinerCommand>
 {
-    public CreateMinerCommandValidator(IMinerRepository minerRepository)
+    public CreateCustomMinerCommandValidator(IMinerRepository minerRepository)
     {
         RuleFor(x => x.Model)
             .NotNull()

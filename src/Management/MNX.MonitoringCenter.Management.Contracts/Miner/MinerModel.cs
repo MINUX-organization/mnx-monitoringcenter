@@ -7,7 +7,7 @@ public class MinerModel
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
-    public string? Version { get; set; }
+    public string Version { get; set; }
     public MinerTypeEnum Type { get; set; }
     public DeviceTypeManufacturerCombination SupportedDevices { get; set; }
     public List<MinerAlgorithmModel> Algorithms { get; set; }

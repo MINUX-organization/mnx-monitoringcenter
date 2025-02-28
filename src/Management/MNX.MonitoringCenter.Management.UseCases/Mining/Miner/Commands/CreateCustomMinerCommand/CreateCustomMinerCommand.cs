@@ -8,13 +8,13 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 using MNX.RigCommander.MessageQueue.Clients.Bus;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateMinerCommand;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateCustomMinerCommand;
 
 using Miner = Core.Mining.Miner.Miner;
 
-public sealed record CreateMinerCommand(MinerInputModel Model, Guid UserId) : IUserableValidatableCommand<MinerModel>;
+public sealed record CreateCustomMinerCommand(MinerInputModel Model, Guid UserId) : IUserableValidatableCommand<MinerModel>;
 
-public class CreateMinerCommandHandler : IRequestHandler<CreateMinerCommand, Result<MinerModel>>
+public class CreateMinerCommandHandler : IRequestHandler<CreateCustomMinerCommand, Result<MinerModel>>
 {
     private readonly IMinerRepository _minerRepository;
     private readonly IMapper _mapper;
@@ -31,7 +31,7 @@ public class CreateMinerCommandHandler : IRequestHandler<CreateMinerCommand, Res
             miningDeviceRepository ?? throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
-    public async Task<Result<MinerModel>> Handle(CreateMinerCommand request, CancellationToken cancellationToken)
+    public async Task<Result<MinerModel>> Handle(CreateCustomMinerCommand request, CancellationToken cancellationToken)
     {
         var miner = _mapper.Map<Miner>(request.Model);
         miner.OwnerId = request.UserId;
@@ -42,7 +42,8 @@ public class CreateMinerCommandHandler : IRequestHandler<CreateMinerCommand, Res
 
         await _bus.Enqueue(
             new InstallCustomMinerCommand(
-                miner.Id,
+                miner.Name,
+                request.UserId,
                 miner.Version,
                 miner.InstallationUrl!,
                 miner.PoolTemplate!,

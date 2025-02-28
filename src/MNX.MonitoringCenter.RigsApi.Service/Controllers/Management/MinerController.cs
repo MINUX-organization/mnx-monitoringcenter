@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Miner;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateMinerCommand;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateCustomMinerCommand;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.DeleteMinerCommand;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.EditMinerCommand;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
@@ -57,7 +57,7 @@ public class MinerController : ControllerBase
     [ProducesResponseType(typeof(MinerModel), 201)]
     public async Task<IActionResult> AddCustom(MinerInputModel request)
     {
-        var result = await _mediator.Send(new CreateMinerCommand(request, _accessor.GetUserId()));
+        var result = await _mediator.Send(new CreateCustomMinerCommand(request, _accessor.GetUserId()));
         return result.ToActionResult();
     }
 
