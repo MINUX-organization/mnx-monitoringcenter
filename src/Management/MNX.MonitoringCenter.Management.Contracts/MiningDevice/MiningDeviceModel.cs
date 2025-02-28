@@ -36,6 +36,11 @@ public class MiningDeviceModel
     public required string Type { get; init; }
 
     /// <summary>
+    /// Идентификатор полётного листа.
+    /// </summary>
+    public Guid? FlightSheetId { get; init; }
+
+    /// <summary>
     /// Название полётного листа.
     /// </summary>
     public string? FlightSheetName { get; init; }

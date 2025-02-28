@@ -4,8 +4,9 @@ using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
+using MNX.MonitoringCenter.Traffic.Observers.Mapping;
 using MNX.MonitoringCenter.Traffic.Observers.Mining;
-using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Channels;
@@ -57,6 +58,7 @@ public class UserRigsObserver : IUserRigsObserver
 
         using var scope = serviceScopeFactory.CreateScope();
         var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+        var builder = scope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>();
 
         _groupedRigsIndicatorsStream = _rigsIndicatorsStream
             .Buffer(updateIndicatorsPeriod)
@@ -68,11 +70,13 @@ public class UserRigsObserver : IUserRigsObserver
                            .ToList();
             });
 
-        _groupedRigsIndicatorsStreamSubscription = _groupedRigsIndicatorsStream.Subscribe(list =>
-        {
-            _rigsHardwareObserver.SetIndicators(mapper.Map<IEnumerable<RigDynamicHardwareIndicators>>(list));
-            _rigsMiningObserver.SetIndicators(mapper.Map<IEnumerable<RigDynamicMiningIndicators>>(list));
-        });
+        _groupedRigsIndicatorsStreamSubscription = _groupedRigsIndicatorsStream
+            .ObserveOn(TaskPoolScheduler.Default)
+            .Subscribe(async list =>
+            {
+                _rigsHardwareObserver.SetIndicators(mapper.Map<IEnumerable<RigDynamicHardwareIndicators>>(list));
+                _rigsMiningObserver.SetIndicators(await builder.Build(list));
+            });
     }
 
     /// <inheritdoc/>
