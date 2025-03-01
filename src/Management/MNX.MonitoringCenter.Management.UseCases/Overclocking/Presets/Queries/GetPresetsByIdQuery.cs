@@ -7,12 +7,12 @@ using MNX.MonitoringCenter.Management.Contracts.Presets;
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 
 /// <summary>
-/// Запрос на получение сохранённых пресетов по идентификатору
+/// Запрос на получение сохранённого пресета по идентификатору
 /// </summary>
 public sealed record GetPresetsByIdQuery : IUserableRequest<Result<PresetModel>>
 {
     /// <summary>
-    /// Название GPU
+    /// Идентификатор пресета
     /// </summary>
     public Guid PresetId { get; }
 
@@ -29,7 +29,7 @@ public sealed record GetPresetsByIdQuery : IUserableRequest<Result<PresetModel>>
 }
 
 /// <summary>
-/// Обработчик запроса на получение сохранённых пресетов по идентификатору
+/// Обработчик запроса на получение сохранённого пресета по идентификатору
 /// </summary>
 public class GetPresetsByIdQueryHandler : IRequestHandler<GetPresetsByIdQuery, Result<PresetModel>>
 {
