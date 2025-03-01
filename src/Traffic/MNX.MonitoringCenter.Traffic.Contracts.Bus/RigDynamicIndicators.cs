@@ -23,9 +23,9 @@ public class RigDynamicIndicators
     public DateTime SendingDateTime { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// Время работы рига с момента последнего включения.
+    /// Время работы рига в секундах с момента последнего включения.
     /// </summary>
-    public TimeOnly BootedUpTime { get; set; }
+    public int BootedUpTimeInSeconds { get; set; }
 
     /// <summary>
     /// Динамические показатели устройств.

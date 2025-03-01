@@ -47,7 +47,7 @@ internal class Program
                             Temperature = random.Next(100),
                             MiningState = MiningState.Active,
                             MinerName = "Miner",
-                            MiningUpTime = new TimeOnly(),
+                            MiningUpTimeInSeconds = 1000,
                             Coins = new()
                                 {
                                     new MiningMetrics()

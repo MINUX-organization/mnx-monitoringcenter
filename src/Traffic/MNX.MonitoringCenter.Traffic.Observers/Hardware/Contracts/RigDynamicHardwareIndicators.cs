@@ -17,9 +17,9 @@ public class RigDynamicHardwareIndicators : IRigIndicators<IDeviceDynamicHardwar
     public Guid RigId { get; init; }
 
     /// <summary>
-    /// Время работы рига с момента последнего включения.
+    /// Время работы рига в секундах с момента последнего включения.
     /// </summary>
-    public TimeOnly BootedUpTime { get; init; }
+    public int BootedUpTimeInSeconds { get; init; }
 
     /// <summary>
     /// Общая мощность.
