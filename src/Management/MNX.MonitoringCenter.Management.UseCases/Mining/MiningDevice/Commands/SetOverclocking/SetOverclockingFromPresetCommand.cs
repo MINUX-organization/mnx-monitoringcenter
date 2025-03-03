@@ -45,6 +45,7 @@ public class SetOverclockingFromPresetCommandHandler : IRequestHandler<SetOvercl
         {
             return Result<Guid>.Invalid(presetResult.Errors);
         }
+
         var response = await _mediator.Send(new SetOverclockingCommand(request.UserId, presetResult.GetValue().Overclocking, request.DeviceIds));
         return response.IsSuccess
             ? Result<Guid>.Success(presetResult.GetValue().Id)
