@@ -120,4 +120,22 @@ public class DeviceController : ControllerBase
         var result = await _mediator.Send(new SetOverclockingCommand(userId, overclocking, deviceId));
         return result.ToActionResult();
     }
+
+    /// <summary>
+    /// Задать разгон устройству через пресет.
+    /// </summary>
+    /// <param name="deviceId"> Идентификатор устройства. </param>
+    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <returns> Результат выполнения запроса. </returns>
+    /// <response code="200"> Успешно </response>
+    /// <response code="400"> Майнинг устройство или пресет не найдены. </response>
+    [HttpPost("overclocking_from_preset")]
+    [ProducesResponseType(typeof(Guid), 200)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> SetOverclockingFromPreset(Guid deviceId, Guid presetId)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new SetOverclockingFromPresetCommand(userId, presetId, deviceId));
+        return result.ToActionResult();
+    }
 }
