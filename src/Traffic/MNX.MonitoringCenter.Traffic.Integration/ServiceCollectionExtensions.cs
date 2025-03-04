@@ -22,6 +22,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddSingleton<IUserRigsObserverAggregator, UserRigsObserverAggregator>();
         services.AddAutoMapper(x => x.AddProfile<MappingProfile>());
+        services.AddScoped<MiningIndicatorsBuilder>();
 
         services.Configure<DynamicIndicatorsOptions>(configuration.GetSection(nameof(DynamicIndicatorsOptions)));
 
