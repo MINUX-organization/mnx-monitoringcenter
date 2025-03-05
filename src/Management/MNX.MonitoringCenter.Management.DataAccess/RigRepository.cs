@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
+﻿using Polly;
+using AutoMapper;
+using System.Data;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.UseCases;
+using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
-using MNX.MonitoringCenter.Management.Core.Overclocking;
-using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
-using MNX.MonitoringCenter.Management.UseCases;
-using Polly;
-using System.Data;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
@@ -87,10 +86,10 @@ public class RigRepository : IRigRepository
                                                 Model = device.Model,
                                                 RigId = rigId,
                                                 OwnerId = device.OwnerId,
-                                                Type = device.Type
+                                                Type = device.Type,
+                                                PresetId = device.PresetId,
+                                                Preset = device.Preset
                                             };
-
-                                            d.SetOverclocking(device.Overclocking!);
 
                                             return d;
                                         })
@@ -130,31 +129,35 @@ public class RigRepository : IRigRepository
 
         foreach (var device in devices)
         {
+            var preset = device.Preset;
             if (dbDevices.TryGetValue(device, out MiningDeviceInfo? dbDevice))
             {
-                await AddOverclocking(device.Overclocking!);
-
                 dbDevice.RigId = device.RigId;
                 dbDevice.OwnerId = device.OwnerId;
                 dbDevice.FlightSheetId = device.FlightSheetId;
                 dbDevice.FlightSheetIsConfirm = device.FlightSheetIsConfirm;
-                device.OverclockingId = device.OverclockingId;
+                dbDevice.Preset.Name = preset.Name;
+                dbDevice.Preset.DeviceName = preset.DeviceName;
+                dbDevice.Preset.OverclockingId = preset.OverclockingId;
+                dbDevice.Preset.Overclocking = preset.Overclocking;
                 dbDevice.SwitchToOnline();
 
                 await context.SaveChangesAsync();
             }
             else
             {
-                await AddOverclocking(device.Overclocking!);
+                await AddOverclocking(preset!);
 
                 await context.MiningDevices.AddAsync(device);
                 await context.SaveChangesAsync();
             }
         }
 
-        async Task AddOverclocking(IOverclocking overclocking)
+        async Task AddOverclocking(Core.Overclocking.Preset preset)
         {
-            await context.Overclocking.AddAsync(_mapper.Map<OverclockingDto>(overclocking));
+            var overclocking = _mapper.Map<OverclockingDto>(preset.Overclocking);
+            await context.Overclocking.AddAsync(overclocking);
+            await context.Presets.AddAsync(preset);
             await context.SaveChangesAsync();
         } 
     }

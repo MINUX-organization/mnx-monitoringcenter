@@ -35,8 +35,9 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     /// <inheritdoc/>
     public Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
-        return _context.MiningDevices.AsNoTracking()
-                                     .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var a = _context.MiningDevices.AsNoTracking().FirstOrDefaultAsync(
+            x => x.Id == id && x.OwnerId == userId, cancellationToken);
+        return a;
     }
 
     /// <inheritdoc/>
@@ -82,7 +83,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                                                          .Where(device => device.Id == deviceId)
 
                     join overclocking in _context.Overclocking.AsNoTracking() 
-                        on device.OverclockingId equals overclocking.Id
+                        on device.PresetId equals overclocking.Id
 
                     select overclocking;
 
@@ -101,7 +102,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
 
         await _context.MiningDevices
                 .Where(device => devicesIds.Contains(device.Id))
-                .ExecuteUpdateAsync(x => x.SetProperty(device => device.OverclockingId, d => overclocking.Id));
+                .ExecuteUpdateAsync(x => x.SetProperty(device => device.PresetId, d => overclocking.Id));
     }
 
     /// <summary>
@@ -136,7 +137,8 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                    FlightSheetId = device.FlightSheetId,
                    FlightSheetIsConfirm = device.FlightSheetIsConfirm,
                    FlightSheet = _mapper.Map<FlightSheet>(flightSheet),
-                   OverclockingId = device.OverclockingId
+                   PresetId = device.PresetId,
+                   Preset = device.Preset
                };
     }
 }

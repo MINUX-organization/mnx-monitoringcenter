@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.Application.Data.EF.DI;
@@ -54,7 +55,9 @@ public static class ServiceCollectionExtensions
             typeof(ApplyWorkerSettingsCommand).Assembly
         ));
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
-        services.AddDataContext<Context>(configuration);
+        services.AddDbContextFactory<Context>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
+        );
 
         services.AddScoped<IRigRepository, RigRepository>();
         services.AddScoped<IAlgorithmRepository, AlgorithmRepository>();

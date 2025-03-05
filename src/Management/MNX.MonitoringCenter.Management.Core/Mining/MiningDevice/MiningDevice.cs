@@ -1,5 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
+using System.ComponentModel.DataAnnotations;
 
 namespace MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
@@ -39,23 +40,23 @@ public class MiningDevice : IEquatable<MiningDevice>
     public string Name { get => $"{Manufacturer} {Model}"; }
 
     /// <summary>
-    /// Идентификатор разгона.
+    /// Идентификатор пресета.
     /// </summary>
-    public Guid OverclockingId { get; set; }
+    public Guid PresetId { get; set; }
 
     /// <summary>
-    /// Разгон.
+    /// Пресет.
     /// </summary>
-    public IOverclocking? Overclocking { get; private set; }
+    public required Preset Preset { get; set; }
 
     /// <summary>
     /// Задать разгон.
     /// </summary>
-    /// <param name="overclocking"> Разгон. </param>
-    public void SetOverclocking(IOverclocking overclocking)
+    /// <param name="preset"> Идентификатор пресета. </param>
+    public void SetPreset(Preset preset)
     {
-        OverclockingId = overclocking.Id;
-        Overclocking = overclocking;
+        PresetId = preset.Id;
+        Preset = preset;
     }
 
     /// <summary>
