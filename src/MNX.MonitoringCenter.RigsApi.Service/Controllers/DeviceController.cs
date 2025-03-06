@@ -81,8 +81,8 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <param name="gpuId"> Идентификатор видеокарты. </param>
     /// <returns> Ограничения. </returns>
-    /// <response code="200"> Успешно </response>
-    /// <response code="400"> Майнинг устройство не найдено </response>
+    /// <response code="200"> Успешно. </response>
+    /// <response code="400"> Майнинг устройство не найдено. </response>
     [HttpGet("gpus/{gpuId:guid}/restrictions")]
     [ProducesResponseType(typeof(GpuRestrictions), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]

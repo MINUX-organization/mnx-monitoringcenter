@@ -8,4 +8,5 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
 /// Запрос на получение ограничений по идентификатору видеокарты.
 /// </summary>
 /// <param name="GpuId"> Идентификатор видеокарты. </param>
-public sealed record GetGpuRestrictionsByIdQuery(Guid GpuId) : IRequest<Result<GpuRestrictions>>;
+public sealed record GetGpuRestrictionsByIdQuery(Guid GpuId)
+    : IRequest<Result<GpuRestrictions>>;
