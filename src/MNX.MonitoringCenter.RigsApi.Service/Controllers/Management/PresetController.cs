@@ -60,9 +60,9 @@ public class PresetController : ControllerBase
     /// <param name="presetId"> Идентификатор пресета. </param>
     /// <returns> Пресет. </returns>
     /// <response code="200"> Успешно. </response>
-    /// <response code="200"> Пресета с переданным идентификатором не существует. </response>
+    /// <response code="400"> Пресета с переданным идентификатором не существует. </response>
     [HttpGet("{presetId:Guid}")]
-    [ProducesResponseType(typeof(Task<IActionResult>), 200)]
+    [ProducesResponseType(typeof(PresetModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> GetPresetById(Guid presetId)
     {
