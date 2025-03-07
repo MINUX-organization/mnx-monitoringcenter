@@ -29,9 +29,9 @@ public abstract class MiningDeviceDynamicIndicators : DeviceDynamicIndicators
     public List<MiningMetrics> Coins { get; set; } = new(0);
 
     /// <summary>
-    /// Время майнинга с момента последнего включения.
+    /// Время майнинга в секундах с момента последнего включения.
     /// </summary>
-    public TimeOnly MiningUpTime { get; set; }
+    public int MiningUpTimeInSeconds { get; set; }
 
     /// <summary>
     /// Получить среднюю температуру.

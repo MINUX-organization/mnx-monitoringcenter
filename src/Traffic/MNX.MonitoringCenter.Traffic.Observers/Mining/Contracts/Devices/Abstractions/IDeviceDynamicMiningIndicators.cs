@@ -20,7 +20,7 @@ public interface IDeviceDynamicMiningIndicators : IDeviceIndicators
     public MiningState MiningState { get; init; }
 
     /// <summary>
-    /// Время майнинга с момента последнего включения.
+    /// Время майнинга в секундах с момента последнего включения.
     /// </summary>
-    public TimeOnly MiningUpTime { get; init; }
+    public int MiningUpTimeInSeconds { get; init; }
 }

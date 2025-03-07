@@ -11,7 +11,8 @@ internal class Program
 {
     static async Task Main(string[] args)
     {
-        await Task.WhenAll(SendIndicators(), StartConnectionAsync());
+        await StartConnectionAsync();
+        //await Task.WhenAll(SendIndicators(), StartConnectionAsync());
     }
 
     private static async Task SendIndicators()
@@ -47,7 +48,7 @@ internal class Program
                             Temperature = random.Next(100),
                             MiningState = MiningState.Active,
                             MinerName = "Miner",
-                            MiningUpTime = new TimeOnly(),
+                            MiningUpTimeInSeconds = 1000,
                             Coins = new()
                                 {
                                     new MiningMetrics()
@@ -98,8 +99,9 @@ internal class Program
 
     private static async Task StartConnectionAsync()
     {
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQzNjY4M2YyLTE3MjgtNGUyOS1iMDNkLTIzOTkxMWI0OWQ1ZCIsIkNsaWVudFR5cGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Im1pbnV4IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRGVmYXVsdFVzZXIiLCJleHAiOjE3NDEwODI1NDMsImlzcyI6InNlY3VyaXR5IiwiYXVkIjoiVXNlciJ9.0Y_5EWFSWqbeXdNVmRKKANOKMCAwdnkuPb3FUENuAlI";
         var connection = new HubConnectionBuilder()
-            .WithUrl("http://localhost:5172/hubs/monitoring")
+            .WithUrl($"http://77.37.200.24:7101/hubs/monitoring?access_token={token}")
             .Build();
 
         try
