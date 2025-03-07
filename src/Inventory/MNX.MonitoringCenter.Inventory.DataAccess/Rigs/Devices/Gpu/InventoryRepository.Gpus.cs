@@ -112,6 +112,16 @@ public partial class InventoryRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
+    public Task<GpuRestrictions?> GetGpusRestrictionsById(Guid gpuId)
+    {
+        return _context.Gpu
+            .AsNoTracking()
+            .Where(x => x.Id == gpuId)
+            .Select(x => x.Restrictions)
+            .FirstOrDefaultAsync();
+    }
+
+    /// <inheritdoc/>
     public Task<int> GetGpusCount(DeviceSpecification specification, CancellationToken cancellationToken)
     {
         return GetGpusList(specification).CountAsync(cancellationToken);
