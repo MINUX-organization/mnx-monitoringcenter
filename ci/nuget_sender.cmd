@@ -32,6 +32,6 @@ if exist %projectPath%\bin\Release (
     pause
 )
 
-dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY %csprojFile:~0,-8%.%version%.nupkg
+dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY --skip-duplicate %csprojFile:~0,-8%.%version%.nupkg
 endlocal
 goto :eof

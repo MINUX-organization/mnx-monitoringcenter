@@ -21,8 +21,6 @@ public abstract class DeviceDynamicMiningIndicators : IDeviceDynamicMiningIndica
     /// <inheritdoc/>
     public MiningState MiningState { get; init; }
 
-    /// <summary>
-    /// Время майнинга с момента последнего включения.
-    /// </summary>
-    public TimeOnly MiningUpTime { get; init; }
+    /// <inheritdoc/>
+    public int MiningUpTimeInSeconds { get; init; }
 }

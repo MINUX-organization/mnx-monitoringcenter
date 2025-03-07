@@ -16,12 +16,12 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     public Guid RigId { get; init; }
 
     /// <summary>
-    /// Время майнинга с момента последнего включения.
+    /// Время майнинга в секундах с момента последнего включения.
     /// </summary>
-    private TimeOnly? _miningUpTime;
-    public TimeOnly MiningUpTime
+    private int? _miningUpTimeInSeconds;
+    public int MiningUpTimeInSeconds
     {
-        get => _miningUpTime ??= Devices.Max(x => x.MiningUpTime);
+        get => _miningUpTimeInSeconds ??= Devices.Max(x => x.MiningUpTimeInSeconds);
     }
 
     /// <summary>
