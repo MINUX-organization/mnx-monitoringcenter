@@ -25,4 +25,11 @@ public interface IRigRepository
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     Task SwitchToOffline(Guid rigId);
+
+    /// <summary>
+    /// Получить список ригов пользователя
+    /// </summary>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Список идентификаторов ригов. </returns>
+    IAsyncEnumerable<Guid> GetOwnedRigs(Guid userId);
 }

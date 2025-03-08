@@ -5,30 +5,32 @@ using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining;
 using MNX.MonitoringCenter.Management.Contracts.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 using MNX.RigCommander.MessageQueue.Clients.Bus;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateCustomMinerCommand;
 
 using Miner = Core.Mining.Miner.Miner;
 
-public sealed record CreateCustomMinerCommand(MinerInputModel Model, Guid UserId) : IUserableValidatableCommand<MinerModel>;
+public sealed record CreateCustomMinerCommand(MinerInputModel Model, Guid UserId)
+    : IUserableValidatableCommand<MinerModel>;
 
 public class CreateMinerCommandHandler : IRequestHandler<CreateCustomMinerCommand, Result<MinerModel>>
 {
     private readonly IMinerRepository _minerRepository;
     private readonly IMapper _mapper;
     private readonly IQueueBusClient _bus;
-    private readonly IMiningDeviceRepository _miningDeviceRepository;
+    private readonly IRigRepository _rigRepository;
 
-    public CreateMinerCommandHandler(IMinerRepository minerRepository, IMapper mapper, IQueueBusClient bus,
-        IMiningDeviceRepository miningDeviceRepository)
+    public CreateMinerCommandHandler(
+        IMinerRepository minerRepository, 
+        IMapper mapper, 
+        IQueueBusClient bus,
+        IRigRepository rigRepository)
     {
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _bus = bus ?? throw new ArgumentNullException(nameof(bus));
-        _miningDeviceRepository =
-            miningDeviceRepository ?? throw new ArgumentNullException(nameof(miningDeviceRepository));
+        _rigRepository = rigRepository ?? throw new ArgumentNullException(nameof(rigRepository));
     }
 
     public async Task<Result<MinerModel>> Handle(CreateCustomMinerCommand request, CancellationToken cancellationToken)
@@ -37,8 +39,9 @@ public class CreateMinerCommandHandler : IRequestHandler<CreateCustomMinerComman
         miner.OwnerId = request.UserId;
         await _minerRepository.Add(miner, cancellationToken);
 
-        var rigIds = await _miningDeviceRepository.GetAvailable(new Specification(request.UserId))
-            .Select(device => device.RigId).ToArrayAsync(cancellationToken: cancellationToken);
+        var rigIds = await _rigRepository
+            .GetOwnedRigs(request.UserId)
+            .ToArrayAsync(cancellationToken);
 
         await _bus.Enqueue(
             new InstallCustomMinerCommand(

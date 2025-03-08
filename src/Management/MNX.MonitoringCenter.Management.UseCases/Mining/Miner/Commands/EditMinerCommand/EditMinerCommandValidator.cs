@@ -39,7 +39,7 @@ public class EditMinerCommandValidator : AbstractValidator<EditMinerCommand>
 
             if (miner.OwnerId != value.UserId)
             {
-                context.AddFailure("OwnerId", $"Miner with id equaled {value.MinerId} is owner by another user!");
+                context.AddFailure("OwnerId", $"Miner with id equaled {value.MinerId} is owned by another user!");
                 return false;
             }
 

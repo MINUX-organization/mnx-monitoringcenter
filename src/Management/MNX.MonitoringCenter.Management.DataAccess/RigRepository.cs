@@ -22,24 +22,28 @@ public class RigRepository : IRigRepository
 
     private readonly IDbContextFactory<Context> _contextFactory;
 
+    private readonly Context _context;
+
     public RigRepository(IMapper mapper,
-                         ILogger<RigRepository> logger,
-                         IDbContextFactory<Context> contextFactory)
+        ILogger<RigRepository> logger,
+        IDbContextFactory<Context> contextFactory,
+        Context context)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _logger = logger ?? throw new ArgumentNullException(nameof(logger));
 
         _contextFactory = contextFactory
-            ?? throw new ArgumentNullException(nameof(contextFactory));
+                          ?? throw new ArgumentNullException(nameof(contextFactory));
+        _context = context
+                   ?? throw new ArgumentNullException(nameof(context));
     }
 
     /// <inheritdoc/>
     public Task<bool> Exists(Guid id, Guid userId)
     {
-        var context = _contextFactory.CreateDbContext();
-        return context.MiningDevices
-                      .AsNoTracking()
-                      .AnyAsync(x => x.RigId == id && x.OwnerId == userId);
+        return _context.MiningDevices
+            .AsNoTracking()
+            .AnyAsync(x => x.RigId == id && x.OwnerId == userId);
     }
 
     /// <inheritdoc/>
@@ -111,9 +115,18 @@ public class RigRepository : IRigRepository
     /// <inheritdoc/>
     public Task SwitchToOffline(Guid rigId)
     {
-        var context = _contextFactory.CreateDbContext();
-        return context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
+        return _context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
             x.SetProperty(device => device.LifeCycleStatus, d => MiningDeviceLifeCycleStatus.Offline));
+    }
+
+    /// <inheritdoc/>
+    public IAsyncEnumerable<Guid> GetOwnedRigs(Guid userId)
+    {
+        return _context.MiningDevices
+            .Where(md => md.OwnerId == userId)
+            .Select(md => md.RigId)
+            .Distinct()
+            .AsAsyncEnumerable();
     }
 
     /// <summary>
@@ -156,6 +169,6 @@ public class RigRepository : IRigRepository
         {
             await context.Overclocking.AddAsync(_mapper.Map<OverclockingDto>(overclocking));
             await context.SaveChangesAsync();
-        } 
+        }
     }
 }
