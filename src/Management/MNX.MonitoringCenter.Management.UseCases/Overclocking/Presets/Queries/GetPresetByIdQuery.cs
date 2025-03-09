@@ -9,24 +9,9 @@ namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 /// <summary>
 /// Запрос на получение сохранённого пресета по идентификатору.
 /// </summary>
-public sealed record GetPresetByIdQuery : IUserableRequest<Result<PresetModel>>
-{
-    /// <summary>
-    /// Идентификатор пресета.
-    /// </summary>
-    public Guid PresetId { get; }
-
-    /// <summary>
-    /// Идентификатор пользователя.
-    /// </summary>
-    public Guid UserId { get; }
-
-    public GetPresetByIdQuery(Guid presetId, Guid userId)
-    {
-        PresetId = presetId;
-        UserId = userId;
-    }
-}
+/// <param name="PresetId"> Идентификатор пресета. </param>
+/// <param name="UserId"> Идентификатор пользователя. </param>
+public sealed record GetPresetByIdQuery(Guid PresetId, Guid UserId) : IUserableRequest<Result<PresetModel>>;
 
 /// <summary>
 /// Обработчик запроса на получение сохранённого пресета по идентификатору.
