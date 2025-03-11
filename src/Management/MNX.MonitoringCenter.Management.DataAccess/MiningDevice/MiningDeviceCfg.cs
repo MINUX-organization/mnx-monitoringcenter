@@ -16,7 +16,7 @@ internal class MiningDeviceCfg : IEntityTypeConfiguration<MiningDeviceInfo>
         builder.HasIndex(x => x.RigId);
         builder.HasIndex(x => x.OwnerId);
 
-        builder.HasOne<GpuOverclocking>()
+        builder.HasOne<Core.Overclocking.Preset>()
                .WithMany()
                .HasForeignKey(x => x.PresetId)
                .IsRequired(false);

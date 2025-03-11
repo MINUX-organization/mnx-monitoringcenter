@@ -35,6 +35,14 @@ public interface IMiningDeviceRepository
     Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
+    /// Выполнить обновление пресета с разгоном на устройстве.
+    /// </summary>
+    /// <param name="deviceId"> Идентификатор устройства. </param>
+    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <returns></returns>
+    Task SetPreset(Guid deviceId, Guid presetId);
+
+    /// <summary>
     /// Установить полётный лист на устройства.
     /// </summary>
     /// <param name="devicesIds"> Идентификаторы устройств. </param>

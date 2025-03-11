@@ -35,7 +35,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     /// <inheritdoc/>
     public Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
-        var a = _context.MiningDevices.AsNoTracking().FirstOrDefaultAsync(
+        var a = _context.MiningDevices.FirstOrDefaultAsync(
             x => x.Id == id && x.OwnerId == userId, cancellationToken);
         return a;
     }
@@ -47,6 +47,15 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                        .AsNoTracking()
                        .Where(device => device.OwnerId == userId)
                        .AnyAsync(device => (device.Manufacturer + ' ' + device.Model) == name, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task SetPreset(Guid deviceId, Guid presetId)
+    {
+        return _context.MiningDevices
+            .Where(x => x.Id == deviceId)
+            .ExecuteUpdateAsync(x => x
+                .SetProperty(device => device.PresetId, d => presetId));
     }
 
     /// <inheritdoc/>

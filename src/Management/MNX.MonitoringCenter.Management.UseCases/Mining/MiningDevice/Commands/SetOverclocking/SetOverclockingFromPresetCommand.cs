@@ -12,43 +12,55 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.
 /// </summary>
 /// <param name="UserId"> Идентификатор пользователя. </param>
 /// <param name="PresetId"> Идентификатор пресета. </param>
-/// <param name="DeviceIds"> Идентификатор майнинг устройства. </param>
-public sealed record SetOverclockingFromPresetCommand(Guid UserId, Guid PresetId, Guid DeviceIds)
+/// <param name="DeviceId"> Идентификатор майнинг устройства. </param>
+public sealed record SetOverclockingFromPresetCommand(Guid UserId, Guid PresetId, Guid DeviceId)
     : IUserableValidatableCommand<Guid>;
 
 
 /// <summary>
 /// Обработчик <see cref="SetOverclockingFromPresetCommand"/>.
 /// </summary>
-public class SetOverclockingFromPresetCommandHandler : IRequestHandler<SetOverclockingFromPresetCommand, Result<Guid>>
+public class SetOverclockingFromPresetCommandHandler :
+    IRequestHandler<SetOverclockingFromPresetCommand, Result<Guid>>
 {
-    private readonly IPresetRepository _repository;
+    private readonly IPresetRepository _presetRepository;
 
     private readonly IMediator _mediator;
 
     private readonly IMapper _mapper;
 
-    public SetOverclockingFromPresetCommandHandler(IPresetRepository repository, IMediator mediator, IMapper mapper)
+    private readonly IMiningDeviceRepository _miningDeviceRepository;
+
+    public SetOverclockingFromPresetCommandHandler(IPresetRepository repository,
+                                                   IMediator mediator,
+                                                   IMapper mapper,
+                                                   IMiningDeviceRepository miningDeviceRepository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _presetRepository = repository ??
+            throw new ArgumentNullException(nameof(repository));
+        _mediator = mediator ??
+            throw new ArgumentNullException(nameof(mediator));
+        _mapper = mapper ??
+            throw new ArgumentNullException(nameof(mapper));
+        _miningDeviceRepository = miningDeviceRepository ??
+            throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
     public async Task<Result<Guid>> Handle(SetOverclockingFromPresetCommand request, CancellationToken cancellationToken)
     {
-        var preset = _repository.GetAvailableById(request.PresetId, request.UserId, cancellationToken);
-        var presetResult = preset.Result == null
+        var preset = await _presetRepository.GetAvailableById(request.PresetId, request.UserId, cancellationToken);
+
+        var presetResult = preset == null
             ? Result<PresetModel>.Invalid("Preset with this id must exist")
-            : Result<PresetModel>.Success(_mapper.Map<PresetModel>(preset.Result));
+            : Result<PresetModel>.Success(_mapper.Map<PresetModel>(preset));
+
         if (!presetResult.IsSuccess)
         {
-            return Result<Guid>.Invalid(presetResult.Errors);
+            return Result<Guid>.Invalid(presetResult.Errors!);
         }
 
-        var response = await _mediator.Send(new SetOverclockingCommand(request.UserId, presetResult.GetValue().Overclocking, request.DeviceIds));
-        return response.IsSuccess
-            ? Result<Guid>.Success(presetResult.GetValue().Id)
-            : Result<Guid>.Invalid(response.Errors);
+        await _miningDeviceRepository.SetPreset(request.DeviceId, request.PresetId);
+
+        return Result<Guid>.Success(presetResult.GetValue().Id);
     }
 }
