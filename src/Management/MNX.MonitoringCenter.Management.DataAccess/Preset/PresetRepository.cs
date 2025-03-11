@@ -71,21 +71,23 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public Task<Preset?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken)
+    public Task<Preset?> GetAvailableById(Guid id,
+                                          Guid userId,
+                                          CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
-                               .Where(x => x.UserId == userId)
-                               .Join(_context.Overclocking, z => z.OverclockingId, y => y.Id,
-                               (z, y) => new Preset
-                               {
-                                   Id = z.Id,
-                                   UserId = z.UserId,
-                                   Name = z.Name,
-                                   DeviceName = z.DeviceName,
-                                   OverclockingId = z.OverclockingId,
-                                   Overclocking = _mapper.Map<IOverclocking>(y)
-                               })
-                               .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .Where(x => x.Id == id && x.UserId == userId)
+            .Join(_context.Overclocking.AsNoTracking(),
+            preset => preset.OverclockingId,
+            overclocking => overclocking.Id,
+            (preset, overclocking) => new Preset
+            {
+                Id = preset.Id,
+                Name = preset.Name,
+                DeviceName = preset.DeviceName,
+                OverclockingId = preset.OverclockingId,
+                Overclocking = _mapper.Map<IOverclocking>(overclocking)
+            }).FirstOrDefaultAsync();
     }
 
     /// <inheritdoc/>

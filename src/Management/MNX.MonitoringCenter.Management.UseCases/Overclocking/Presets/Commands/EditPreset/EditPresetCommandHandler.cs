@@ -26,24 +26,31 @@ public class EditPresetCommandHandler :
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<Result<PresetModel>> Handle(EditPresetCommand request, CancellationToken cancellationToken)
+    public async Task<Result<PresetModel>> Handle(EditPresetCommand request,
+                                                  CancellationToken cancellationToken)
     {
-        var preset = await _repository.GetAvailableById(request.Id, request.UserId, cancellationToken);
+        var preset = await _repository.GetAvailableById(request.Id,
+                                                        request.UserId,
+                                                        cancellationToken);
 
         if (preset is null)
         {
-            return Result<PresetModel>.Invalid("Preset with this Id wasn`t found");
+            return Result<PresetModel>
+                .Invalid("Preset with this Id wasn`t found");
         }
 
         var newPreset = _mapper.Map<Preset>(request);
         newPreset.DeviceName = preset.DeviceName;
 
-        var overclockingValidationResult = await IsValidOverclocking(preset.DeviceName,
-                                                                     newPreset.Overclocking!,
-                                                                     cancellationToken);
+        var overclockingValidationResult =
+            await IsValidOverclocking(preset.DeviceName,
+                                      newPreset.Overclocking!,
+                                      cancellationToken);
+
         if (!overclockingValidationResult.IsSuccess)
         {
-            return Result<PresetModel>.Invalid(overclockingValidationResult.Errors ?? new string[] { });
+            return Result<PresetModel>.Invalid(
+                overclockingValidationResult.Errors ?? new string[] { });
         }  
 
         if (preset.Equals(newPreset))
@@ -52,9 +59,12 @@ public class EditPresetCommandHandler :
         }
 
         if (preset.Name != newPreset.Name &&
-            await _repository.Exists(request.UserId, request.Model.Name, cancellationToken))
+            await _repository.Exists(request.UserId,
+                                     request.Model.Name,
+                                     cancellationToken))
         {
-            return Result<PresetModel>.Conflict($"Preset with name equaled {request.Model.Name} already exists");
+            return Result<PresetModel>.Conflict(
+                $"Preset with name equaled {request.Model.Name} already exists");
         }
 
         await _repository.Update(newPreset);

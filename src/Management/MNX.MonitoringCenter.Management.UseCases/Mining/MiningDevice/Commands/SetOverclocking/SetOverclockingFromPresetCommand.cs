@@ -46,9 +46,12 @@ public class SetOverclockingFromPresetCommandHandler :
             throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
-    public async Task<Result<Guid>> Handle(SetOverclockingFromPresetCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(SetOverclockingFromPresetCommand request,
+                                           CancellationToken cancellationToken)
     {
-        var preset = await _presetRepository.GetAvailableById(request.PresetId, request.UserId, cancellationToken);
+        var preset = await _presetRepository.GetAvailableById(request.PresetId,
+                                                              request.UserId,
+                                                              cancellationToken);
 
         var presetResult = preset == null
             ? Result<PresetModel>.Invalid("Preset with this id must exist")

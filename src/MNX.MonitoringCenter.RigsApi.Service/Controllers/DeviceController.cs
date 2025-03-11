@@ -53,7 +53,7 @@ public class DeviceController : ControllerBase
     /// Получить уникальный названия зарегистрированных видеокарт.
     /// </summary>
     /// <returns> Уникальный названия видеокарт. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("gpus/unique_names")]
     [ProducesResponseType(typeof(IAsyncEnumerable<string>), 200)]
     public IAsyncEnumerable<string> GetGpuUniqueNames()
@@ -67,7 +67,7 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <param name="gpuName"> Название видеокарты. </param>
     /// <returns> Ограничения. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("gpus/{gpuName}/restrictions")]
     [ProducesResponseType(typeof(GpuRestrictions), 200)]
     public async Task<IActionResult> GetGpuRestrictions(string gpuName)
@@ -109,7 +109,7 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <param name="deviceId"> Идентификатор майнинг устройства. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400"> Майнинг устройство не найдено. </response>
     [HttpGet("overclocking")]
     [ProducesResponseType(typeof(IOverclockingModel), 200)]
@@ -122,28 +122,12 @@ public class DeviceController : ControllerBase
     }
 
     /// <summary>
-    /// Задать разгон устройству.
-    /// </summary>
-    /// <param name="deviceId"> Идентификатор устройства. </param>
-    /// <param name="overclocking"> Разгон. </param>
-    /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
-    [HttpPost("overclocking")]
-    [ProducesResponseType(typeof(Guid[]), 200)]
-    public async Task<IActionResult> SetOverclocking(Guid deviceId, IOverclockingModel overclocking)
-    {
-        var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new SetOverclockingCommand(userId, overclocking, deviceId));
-        return result.ToActionResult();
-    }
-
-    /// <summary>
     /// Задать разгон устройству через пресет.
     /// </summary>
     /// <param name="deviceId"> Идентификатор устройства. </param>
     /// <param name="presetId"> Идентификатор пресета. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400"> Майнинг устройство или пресет не найдены. </response>
     [HttpPost("overclocking_from_preset")]
     [ProducesResponseType(typeof(Guid), 200)]
