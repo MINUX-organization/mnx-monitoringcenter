@@ -18,8 +18,6 @@ namespace MNX.MonitoringCenter.Traffic.Observers.Mapping;
 /// </summary>
 public class MappingProfile : Profile
 {
-    private const string MINER_NAME_KEY = "MinerName";
-
     public MappingProfile()
     {
         CreateMap<RigDynamicIndicators, RigDynamicHardwareIndicators>()
@@ -48,10 +46,29 @@ public class MappingProfile : Profile
         CreateMap<NetworkAdapterDynamicIndicators, NetworkAdapterDynamicHardwareIndicators>();
 
         CreateMap<CpuDynamicIndicators, CpuDynamicMiningIndicators>()
-            .BeforeMap((src, dest, context) => context.Items.Add(MINER_NAME_KEY, src.MinerName))
-            .AfterMap<MiningIndicatorsMappingAction>();
+            .ForMember(dest => dest.FlightSheet, opt => opt.MapFrom((src, dest, destMember, context) =>
+                CreateFlightSheetStatistics(src)));
+
         CreateMap<GpuDynamicIndicators, GpuDynamicMiningIndicators>()
-            .BeforeMap((src, dest, context) => context.Items.Add(MINER_NAME_KEY, src.MinerName))
-            .AfterMap<MiningIndicatorsMappingAction>();
+            .ForMember(dest => dest.FlightSheet, opt => opt.MapFrom((src, dest, destMember, context) =>
+                CreateFlightSheetStatistics(src)));
+    }
+
+    private static FlightSheetStatistics? CreateFlightSheetStatistics(MiningDeviceDynamicIndicators src)
+    {
+        if (src.MinerName is not null)
+        {
+            return new FlightSheetStatistics()
+            {
+                MinerName = src.MinerName,
+                Coins = src.Coins.Select(coin => new CoinStatistics()
+                {
+                    Shares = coin.Shares,
+                    HashRate = coin.HashRate,
+                }).ToList(),
+            };
+        }
+
+        return null;
     }
 }

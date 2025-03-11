@@ -61,7 +61,7 @@ public class DeviceDynamicIndicatorsConverter :
         }
         else if (source.Type == DeviceType.GPU)
         {
-            return context.Mapper.Map<CpuDynamicMiningIndicators>(source);
+            return context.Mapper.Map<GpuDynamicMiningIndicators>(source);
         }
 
         return null!;

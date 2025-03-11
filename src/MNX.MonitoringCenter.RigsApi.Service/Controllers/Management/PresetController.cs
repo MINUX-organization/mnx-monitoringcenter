@@ -55,6 +55,23 @@ public class PresetController : ControllerBase
     }
 
     /// <summary>
+    /// Получить пресет по его идентификатору.
+    /// </summary>
+    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <returns> Пресет. </returns>
+    /// <response code="200"> Успешно. </response>
+    /// <response code="400"> Пресета с переданным идентификатором не существует. </response>
+    [HttpGet("{presetId:Guid}")]
+    [ProducesResponseType(typeof(PresetModel), 200)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> GetPresetById(Guid presetId)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new GetPresetByIdQuery(presetId, userId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
     /// Получить список пресетов, сгруппированных по названию видеокарт.
     /// </summary>
     /// <returns> Список сгруппированных пресетов. </returns>
