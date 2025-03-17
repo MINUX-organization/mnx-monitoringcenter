@@ -46,7 +46,8 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
                 DeviceName = gpu.Information.Name,
                 OverclockingId = overclocking.Id,
                 Overclocking = overclocking,
-                UserId = request.RigOwnerId
+                UserId = request.RigOwnerId,
+                IsVisible = false
             };
 
             var device = new Core.Mining.MiningDevice.MiningDevice()
@@ -73,7 +74,8 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
                 DeviceName = cpu.Information.Name,
                 OverclockingId = overclocking.Id,
                 Overclocking = overclocking,
-                UserId = request.RigOwnerId
+                UserId = request.RigOwnerId,
+                IsVisible = false
             };
 
             var device = new Core.Mining.MiningDevice.MiningDevice()

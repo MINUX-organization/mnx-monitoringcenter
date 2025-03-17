@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
-using MNX.Application.UseCases.Requests;
+﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
+using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;

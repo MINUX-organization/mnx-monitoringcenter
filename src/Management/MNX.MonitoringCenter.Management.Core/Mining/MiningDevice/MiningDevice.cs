@@ -1,6 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
-using MNX.MonitoringCenter.Management.Core.Overclocking;
-using System.ComponentModel.DataAnnotations;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
@@ -47,7 +46,7 @@ public class MiningDevice : IEquatable<MiningDevice>
     /// <summary>
     /// Пресет.
     /// </summary>
-    public required Preset Preset { get; set; }
+    public Preset? Preset { get; set; }
 
     /// <summary>
     /// Задать разгон.

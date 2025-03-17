@@ -140,6 +140,7 @@ public class RigRepository : IRigRepository
                 dbDevice.Preset.DeviceName = preset.DeviceName;
                 dbDevice.Preset.OverclockingId = preset.OverclockingId;
                 dbDevice.Preset.Overclocking = preset.Overclocking;
+                dbDevice.Preset.IsVisible = preset.IsVisible;
                 dbDevice.SwitchToOnline();
 
                 await context.SaveChangesAsync();

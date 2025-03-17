@@ -5,6 +5,7 @@ CREATE TABLE monitoring_center.presets
     device_name text NOT NULL,
     overclocking_id uuid NOT NULL,
     user_id uuid NOT NULL,
+    is_visible boolean DEFAULT false,
 
     CONSTRAINT pk_presets PRIMARY KEY (id),
 

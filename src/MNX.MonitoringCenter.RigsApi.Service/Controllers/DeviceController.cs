@@ -50,7 +50,7 @@ public class DeviceController : ControllerBase
     }
 
     /// <summary>
-    /// Получить уникальный названия зарегистрированных видеокарт.
+    /// Получить уникальные названия зарегистрированных видеокарт.
     /// </summary>
     /// <returns> Уникальный названия видеокарт. </returns>
     /// <response code="200"> Успешно. </response>
@@ -117,25 +117,30 @@ public class DeviceController : ControllerBase
     public async Task<IActionResult> GetOverclocking(Guid deviceId)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new GetDeviceOverclockingQuery(deviceId, userId));
+        var result = await _mediator.Send(
+            new GetDeviceOverclockingQuery(deviceId, userId));
         return result.ToActionResult();
     }
 
     /// <summary>
-    /// Задать разгон устройству через пресет.
+    /// Задать разгон устройству напрямую.
     /// </summary>
     /// <param name="deviceId"> Идентификатор устройства. </param>
-    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <param name="overclocking"> Разгон. </param>
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно. </response>
-    /// <response code="400"> Майнинг устройство или пресет не найдены. </response>
-    [HttpPost("overclocking_from_preset")]
-    [ProducesResponseType(typeof(Guid), 200)]
+    /// <response code="200">
+    /// Девайса не существует или параметры разгона являются некорректными.
+    /// </response>
+    [HttpPost("overclocking")]
+    [ProducesResponseType(typeof(Guid[]), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> SetOverclockingFromPreset(Guid deviceId, Guid presetId)
+    public async Task<IActionResult> SetOverclockingOnDevice(Guid deviceId,
+                                                             IOverclockingModel overclocking)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new SetOverclockingFromPresetCommand(userId, presetId, deviceId));
+        var result = await _mediator.Send(
+            new SetOverclockingOnDeviceCommand(userId, overclocking, deviceId));
         return result.ToActionResult();
     }
 }

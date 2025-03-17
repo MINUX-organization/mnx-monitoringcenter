@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
-using MNX.Application.UseCases.Requests;
+﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
+using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
@@ -33,7 +33,7 @@ public class GetPresetByIdQueryHandler : IRequestHandler<GetPresetByIdQuery, Res
         var preset = await _repository.GetAvailableById(request.PresetId, request.UserId, cancellationToken);
         if (preset is null)
         {
-            return Result<PresetModel>.Invalid("Preset with this id must exist");
+            return Result<PresetModel>.Invalid($"Preset with id equaled {request.PresetId} was not found");
         }
         return Result<PresetModel>.Success(_mapper.Map<PresetModel>(preset));
     }

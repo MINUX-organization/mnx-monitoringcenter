@@ -1,8 +1,11 @@
-﻿using AutoMapper;
-using MediatR;
-using MNX.Application.UseCases.Requests;
+﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.Contracts.Presets;
+using MNX.Application.UseCases.Requests;
+using MNX.RigCommander.MessageQueue.Clients.Bus;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
@@ -12,58 +15,109 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.
 /// </summary>
 /// <param name="UserId"> Идентификатор пользователя. </param>
 /// <param name="PresetId"> Идентификатор пресета. </param>
-/// <param name="DeviceId"> Идентификатор майнинг устройства. </param>
-public sealed record SetOverclockingFromPresetCommand(Guid UserId, Guid PresetId, Guid DeviceId)
-    : IUserableValidatableCommand<Guid>;
+/// <param name="DeviceIds"> Идентификатор майнинг устройства. </param>
+public sealed record SetOverclockingFromPresetCommand(Guid UserId,
+                                                      Guid PresetId,
+                                                      params Guid[] DeviceIds)
+    : IUserableValidatableCommand<Guid[]>;
 
 
 /// <summary>
 /// Обработчик <see cref="SetOverclockingFromPresetCommand"/>.
 /// </summary>
 public class SetOverclockingFromPresetCommandHandler :
-    IRequestHandler<SetOverclockingFromPresetCommand, Result<Guid>>
+    SaveOverclockingBaseHandler,
+    IRequestHandler<SetOverclockingFromPresetCommand, Result<Guid[]>>
 {
     private readonly IPresetRepository _presetRepository;
 
-    private readonly IMediator _mediator;
-
-    private readonly IMapper _mapper;
-
     private readonly IMiningDeviceRepository _miningDeviceRepository;
+
+    private readonly IQueueBusClient _queueClient;
 
     public SetOverclockingFromPresetCommandHandler(IPresetRepository repository,
                                                    IMediator mediator,
                                                    IMapper mapper,
+                                                   IQueueBusClient queueClient,
                                                    IMiningDeviceRepository miningDeviceRepository)
+        : base (mapper, mediator)
     {
         _presetRepository = repository ??
             throw new ArgumentNullException(nameof(repository));
-        _mediator = mediator ??
-            throw new ArgumentNullException(nameof(mediator));
-        _mapper = mapper ??
-            throw new ArgumentNullException(nameof(mapper));
         _miningDeviceRepository = miningDeviceRepository ??
             throw new ArgumentNullException(nameof(miningDeviceRepository));
+        _queueClient = queueClient ??
+            throw new ArgumentNullException(nameof(queueClient));
     }
 
-    public async Task<Result<Guid>> Handle(SetOverclockingFromPresetCommand request,
+    public async Task<Result<Guid[]>> Handle(SetOverclockingFromPresetCommand request,
                                            CancellationToken cancellationToken)
     {
+        var deviceToProcess = new List<MiningDeviceInfo>(request.DeviceIds.Length);
+
+        var errors = new List<string>();
+
         var preset = await _presetRepository.GetAvailableById(request.PresetId,
                                                               request.UserId,
                                                               cancellationToken);
 
-        var presetResult = preset == null
-            ? Result<PresetModel>.Invalid("Preset with this id must exist")
-            : Result<PresetModel>.Success(_mapper.Map<PresetModel>(preset));
-
-        if (!presetResult.IsSuccess)
+        if (preset is null)
         {
-            return Result<Guid>.Invalid(presetResult.Errors!);
+            return Result<Guid[]>.Invalid(
+                $"Preset with id equaled {request.PresetId} was not found");
         }
 
-        await _miningDeviceRepository.SetPreset(request.DeviceId, request.PresetId);
+        foreach (var deviceId in request.DeviceIds)
+        {
+            var device = await _miningDeviceRepository.GetActiveDeviceById(deviceId,
+                                                                           request.UserId,
+                                                                           cancellationToken);
 
-        return Result<Guid>.Success(presetResult.GetValue().Id);
+            if (device is null)
+            {
+                errors.Add($"Mining device with id equaled {deviceId} was not found");
+                continue;
+            }
+
+            if (device.Type.ToString() != preset.Overclocking!.TargetDeviceType.ToString())
+            {
+                errors.Add($"Device with type of {device.Type} is not supported this overclocking");
+                continue;
+            }
+
+            deviceToProcess.Add(device);
+        }
+
+        if (deviceToProcess.Count == 0)
+        {
+            return Result<Guid[]>.Invalid(errors);
+        }
+
+        await _miningDeviceRepository.SetPreset(request.PresetId,
+                                                cancellationToken,
+                                                deviceToProcess.Select(d => d.Id).ToArray());
+
+        await SendOverclockingToRigs(preset.Overclocking!, deviceToProcess, request.UserId);
+
+        return Result<Guid[]>.Success(deviceToProcess.Select(x => x.Id).ToArray());
+    }
+
+    /// <summary>
+    /// Отправить новый разгон на риги.
+    /// </summary>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <param name="devices"> Устройства. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    protected async Task SendOverclockingToRigs(IOverclocking overclocking, List<MiningDeviceInfo> devices, Guid userId)
+    {
+        foreach (var rigDevices in devices.GroupBy(x => x.RigId))
+        {
+            var rigOverclocking = _mapper.Map<Inventory.Contracts.Devices.Overclocking>(overclocking);
+
+            var command = new Agent.Commands.Overclocking.SetOverclockingCommand(
+                rigOverclocking, rigDevices.Select(x => x.Id).ToArray());
+
+            await _queueClient.Enqueue(command, new Guid[] { rigDevices.Key }, userId);
+        }
     }
 }

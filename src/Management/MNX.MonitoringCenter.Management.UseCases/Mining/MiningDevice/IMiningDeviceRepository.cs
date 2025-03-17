@@ -17,13 +17,24 @@ public interface IMiningDeviceRepository
     IAsyncEnumerable<MiningDeviceInfo> GetAvailable(Specification specification);
 
     /// <summary>
+    /// Получить список устройств, с привязкой к конкретному пресету.
+    /// </summary>
+    /// <param name="presetId">Идентификатор пресета. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Коллекцию объектов <see cref="MiningDeviceInfo"/>. </returns>
+    Task<List<MiningDeviceInfo>> GetAvailableByPresetId(Guid presetId,
+                                                        Guid userId);
+
+    /// <summary>
     /// Получить активное майнинг устройство по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор. </param>
     /// <param name="userId"> идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Майнинг устройство. </returns>
-    Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id,
+                                                Guid userId,
+                                                CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существования устройства с переданным названием.
@@ -31,16 +42,20 @@ public interface IMiningDeviceRepository
     /// <param name="name"> Название. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> <see langword="true"/>, если существует, иначе <see langword="false"/>. </returns>
+    /// <returns>
+    /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
+    /// </returns>
     Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
     /// Выполнить обновление пресета с разгоном на устройстве.
     /// </summary>
-    /// <param name="deviceId"> Идентификатор устройства. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <param name="presetId"> Идентификатор пресета. </param>
-    /// <returns></returns>
-    Task SetPreset(Guid deviceId, Guid presetId);
+    /// <param name="deviceIds"> Идентификаторы устройств. </param>
+    Task SetPreset(Guid presetId,
+                   CancellationToken cancellationToken,
+                   params Guid[] deviceIds);
 
     /// <summary>
     /// Установить полётный лист на устройства.

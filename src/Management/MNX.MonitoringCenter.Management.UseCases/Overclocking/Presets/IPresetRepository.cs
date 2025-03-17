@@ -52,7 +52,7 @@ public interface IPresetRepository
     /// <summary>
     /// Обновить пресет
     /// </summary>
-    /// <param name="preset"> Пресет </param>
+    /// <param name="preset"> Пресет. </param>
     Task Update(Preset preset);
 
     /// <summary>
