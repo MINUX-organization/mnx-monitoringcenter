@@ -8,47 +8,47 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     /// <summary>
     /// Версия Minux.
     /// </summary>
-    public required string MinuxVersion { get; init; }
+    public string? MinuxVersion { get; init; }
 
     /// <summary>
     /// Версия Linux.
     /// </summary>
-    public required string LinuxVersion { get; init; }
+    public string? LinuxVersion { get; init; }
 
     /// <summary>
     /// Версия AMD драйвера для видеокарты.
     /// </summary>
-    public required string AmdGpuDriverVersion { get; init; }
+    public string? AmdGpuDriverVersion { get; init; }
 
     /// <summary>
     /// Версия драйвера Nvidia для видеокарты.
     /// </summary>
-    public required string NvidiaGpuDriverVersion { get; init; }
+    public string? NvidiaGpuDriverVersion { get; init; }
 
     /// <summary>
     /// Версия драйвера Intel для видеокарты.
     /// </summary>
-    public required string IntelGpuDriverVersion { get; init; }
+    public string? IntelGpuDriverVersion { get; init; }
 
     /// <summary>
     /// Версия OpenCL.
     /// </summary>
-    public required string OpenCLVersion { get; init; }
+    public string? OpenCLVersion { get; init; }
 
     /// <summary>
     /// Версия CUDA.
     /// </summary>
-    public required string CudaVersion { get; init; }
+    public string? CudaVersion { get; init; }
 
     /// <summary>
     /// Версия Агента.
     /// </summary>
-    public required string AgentVersion { get; init; }
+    public string? AgentVersion { get; init; }
 
     /// <summary>
     /// Версия менеджера аппаратного обеспечения.
     /// </summary>
-    public required string HardwareManagerVersion { get; init; }
+    public string? HardwareManagerVersion { get; init; }
 
     /// <summary>
     /// Майнеры.
@@ -56,7 +56,7 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     /// <remarks>
     /// Ключ - название майнера. Значение - версия майнера.
     /// </remarks>
-    public Dictionary<string, string> Miners { get; init; } = new();
+    public Dictionary<string, string> Miners { get; init; } = new(0);
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)
@@ -76,13 +76,13 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
 
         if (ReferenceEquals(this, other)) return true;
 
-        return MinuxVersion.Equals(other.MinuxVersion) &&
-               LinuxVersion.Equals(other.LinuxVersion) &&
-               AmdGpuDriverVersion.Equals(other.AmdGpuDriverVersion) &&
-               NvidiaGpuDriverVersion.Equals(other.NvidiaGpuDriverVersion) &&
-               IntelGpuDriverVersion.Equals(other.IntelGpuDriverVersion) &&
-               OpenCLVersion.Equals(other.OpenCLVersion) &&
-               CudaVersion.Equals(other.CudaVersion) &&
+        return MinuxVersion == other.MinuxVersion &&
+               LinuxVersion == other.LinuxVersion &&
+               AmdGpuDriverVersion == other.AmdGpuDriverVersion &&
+               NvidiaGpuDriverVersion == other.NvidiaGpuDriverVersion &&
+               IntelGpuDriverVersion == other.IntelGpuDriverVersion &&
+               OpenCLVersion == other.OpenCLVersion &&
+               CudaVersion == other.CudaVersion &&
                Miners.SequenceEqual(other.Miners);
     }
 

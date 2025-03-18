@@ -23,7 +23,7 @@ public class AddRigCommandHandler : IRequestHandler<AddRigCommand, Result<Unit>>
         {
             Id = request.Id,
             OwnerId = request.OwnerId,
-            Name = "Minux" // todo: set rig name
+            Name = request.Name
         }, cancellationToken);
 
         return Result<Unit>.Empty();

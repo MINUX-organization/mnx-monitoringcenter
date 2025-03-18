@@ -1,0 +1,44 @@
+﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner;
+using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
+
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
+
+/// <summary>
+/// Репозиторий для доступа к относительным наименованиям алгоритмов для майнеров.
+/// </summary>
+public interface IMinerAlgorithmRepository
+{
+    /// <summary>
+    /// Получить все привязки относительных наименований алгоритма к майнерам.
+    /// </summary>
+    /// <param name="algorithmId"> Идентификатор алгоритма. </param>
+    /// <returns> Список относительных наименований алгоритма для манеров. </returns>
+    IAsyncEnumerable<MinerAlgorithm> GetMinerAlgorithmsByAlgorithmId(Guid algorithmId);
+
+    /// <summary>
+    /// Добавить список относительных наименований
+    /// пользовательского алгоритма для майнеров.
+    /// </summary>
+    /// <param name="minerAlgorithms">
+    /// Список относительных наименований алгоритма.
+    /// </param>
+    Task AddRangeAsync(List<MinerAlgorithm> minerAlgorithms);
+
+    /// <summary>
+    /// Удалить все привязки относительных наименований 
+    /// алгоритмов к майнерам соответсвтующего алгоритма.
+    /// </summary>
+    /// <param name="algorithmId"> Идентификатор алгоритма. </param>
+    Task RemoveAllMinerAlgorithmsById(Guid algorithmId);
+
+    /// <summary>
+    /// Редактировать привязки относительных наименований 
+    /// алгоритма к майнерам соответствующего алгоритма.
+    /// </summary>
+    /// <param name="algorithmId"> Идентификатор алгоритма. </param>
+    /// <param name="bindings">
+    /// Список сущностей относительных наименований алгоритмов с привязкой к майнерам.
+    /// </param>
+    Task EditMinerBindingsByAlgorithmId(Guid algorithmId,
+                                        List<RelativeNameBindingModel> bindings);
+}

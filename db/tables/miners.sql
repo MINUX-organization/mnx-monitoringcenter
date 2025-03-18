@@ -1,6 +1,6 @@
 CREATE TABLE monitoring_center.miners
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name text NOT NULL,
     version text NOT NULL,
     mining_mode text CHECK ( mining_mode in ('Single', 'Dual', 'Triple') ) NOT NULL DEFAULT 'Single',

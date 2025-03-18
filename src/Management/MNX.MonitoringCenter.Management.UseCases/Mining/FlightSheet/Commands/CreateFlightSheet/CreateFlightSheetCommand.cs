@@ -1,0 +1,26 @@
+﻿using MNX.Application.UseCases.Requests;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models;
+
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.CreateFlightSheet;
+
+/// <summary>
+/// Команда добавления полётного листа.
+/// </summary>
+public sealed class CreateFlightSheetCommand : IUserableValidatableCommand<Guid>
+{
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public Guid UserId { get; }
+
+    /// <summary>
+    /// Модель полётного листа.
+    /// </summary>
+    public FlightSheetInputModel Model { get; }
+
+    public CreateFlightSheetCommand(Guid userId, FlightSheetInputModel model)
+    {
+        UserId = userId;
+        Model = model;
+    }
+}

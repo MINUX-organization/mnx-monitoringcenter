@@ -3,6 +3,7 @@ using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Channels;
@@ -15,7 +16,7 @@ namespace MNX.MonitoringCenter.Traffic.Observers.Mining;
 public class RigsMiningObserver : BaseRigsObserver<RigDynamicMiningIndicators,
                                                    IDeviceDynamicMiningIndicators,
                                                    CpuDynamicMiningIndicators,
-                                                   GpuDynamicMiningIndicators>
+                                                   CpuDynamicMiningIndicators>
 {
     /// <summary>
     /// Поток общих решений майнинга.

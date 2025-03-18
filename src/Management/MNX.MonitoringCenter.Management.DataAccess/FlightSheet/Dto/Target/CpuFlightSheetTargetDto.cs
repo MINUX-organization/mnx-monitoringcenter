@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core.Miner.Configs;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 

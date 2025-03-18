@@ -1,11 +1,11 @@
 CREATE TABLE monitoring_center.drive
 (
     id uuid NOT NULL,
-    rig_inventory_id bigint,
-    information_capacity integer NOT NULL,
-    information_manufacturer text NOT NULL,
-    information_model text NOT NULL,
-    information_serial_number text NOT NULL,
+    rig_inventory_id bigint NOT NULL,
+    information_capacity integer,
+    information_manufacturer text,
+    information_model text,
+    information_serial_number text,
 
     CONSTRAINT pk_drive PRIMARY KEY (rig_inventory_id, id),
 

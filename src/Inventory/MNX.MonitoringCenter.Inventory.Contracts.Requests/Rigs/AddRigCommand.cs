@@ -18,9 +18,15 @@ public class AddRigCommand : IValidatableCommand<Unit>
     /// </summary>
     public Guid OwnerId { get; init; }
 
-    public AddRigCommand(Guid id, Guid ownerId)
+    /// <summary>
+    /// Имя Агента.
+    /// </summary>
+    public string Name { get; init; }
+
+    public AddRigCommand(Guid id, Guid ownerId, string name)
     {
         Id = id;
         OwnerId = ownerId;
+        Name = name;
     }
 }

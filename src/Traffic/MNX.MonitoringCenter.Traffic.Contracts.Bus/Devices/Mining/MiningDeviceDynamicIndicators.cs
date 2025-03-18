@@ -9,19 +9,29 @@ namespace MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining;
 public abstract class MiningDeviceDynamicIndicators : DeviceDynamicIndicators
 {
     /// <summary>
-    /// Полётный лист.
-    /// </summary>
-    public FlightSheetStatistics? FlightSheet { get; init; }
-
-    /// <summary>
     /// Скорость вентилятора.
     /// </summary>
-    public int FanSpeed { get; init; }
+    public int FanSpeed { get; set; }
 
     /// <summary>
     /// Состояние майнинга.
     /// </summary>
-    public MiningState MiningState { get; init; }
+    public MiningState MiningState { get; set; }
+
+    /// <summary>
+    /// Название майнера.
+    /// </summary>
+    public string? MinerName { get; set; }
+
+    /// <summary>
+    /// Метрики майнинга монет.
+    /// </summary>
+    public List<MiningMetrics> Coins { get; set; } = new(0);
+
+    /// <summary>
+    /// Время майнинга в секундах с момента последнего включения.
+    /// </summary>
+    public int MiningUpTimeInSeconds { get; set; }
 
     /// <summary>
     /// Получить среднюю температуру.

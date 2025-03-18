@@ -11,6 +11,21 @@ public class MiningDeviceModel
     public Guid Id { get; init; }
 
     /// <summary>
+    /// Производитель.
+    /// </summary>
+    public required string Manufacturer { get; init; }
+
+    /// <summary>
+    /// Модель.
+    /// </summary>
+    public required string Model { get; init; }
+
+    /// <summary>
+    /// Название.
+    /// </summary>
+    public string Name { get => $"{Manufacturer} {Model}"; }
+
+    /// <summary>
     /// Идентификатор рига.
     /// </summary>
     public Guid RigId { get; init; }
@@ -19,6 +34,11 @@ public class MiningDeviceModel
     /// Тип майнинг устройства.
     /// </summary>
     public required string Type { get; init; }
+
+    /// <summary>
+    /// Идентификатор полётного листа.
+    /// </summary>
+    public Guid? FlightSheetId { get; init; }
 
     /// <summary>
     /// Название полётного листа.

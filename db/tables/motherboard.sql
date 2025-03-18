@@ -1,14 +1,14 @@
 CREATE TABLE monitoring_center.motherboard
 (
     id uuid NOT NULL,
-    rig_inventory_id bigint,
+    rig_inventory_id bigint NOT NULL,
     information_manufacturer text NOT NULL,
     information_model text NOT NULL,
-    information_pci_x16posrts_count integer NOT NULL,
-    information_pci_x4posrts_count integer NOT NULL,
-    information_ram_ports_count integer NOT NULL,
-    information_sata_ports_count integer NOT NULL,
-    information_serial_number text NOT NULL,
+    information_pci_x16posrts_count integer,
+    information_pci_x4posrts_count integer,
+    information_ram_ports_count integer,
+    information_sata_ports_count integer,
+    information_serial_number text,
 
     CONSTRAINT pk_motherboard PRIMARY KEY (rig_inventory_id, id),
 

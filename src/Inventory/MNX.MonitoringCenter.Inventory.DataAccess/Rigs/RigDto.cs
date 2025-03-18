@@ -30,6 +30,6 @@ public class RigDto
     /// </summary>
     public RigInventory.RigInventory? CurrentInventory
     {
-        get => Inventories.FirstOrDefault(x => x.EndDateTime == null);
+        get => Inventories.FirstOrDefault(x => x.IsCurrent);
     }
 }

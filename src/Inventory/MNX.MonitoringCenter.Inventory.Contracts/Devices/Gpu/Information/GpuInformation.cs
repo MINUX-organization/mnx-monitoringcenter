@@ -16,7 +16,7 @@ public record GpuInformation
     /// <summary>
     /// Модель.
     /// </summary>
-    public required string Model { get; init; }
+    public string Model { get; init; } = "Unknown";
 
     /// <summary>
     /// Полное название.
@@ -26,17 +26,17 @@ public record GpuInformation
     /// <summary>
     /// Серийный номер.
     /// </summary>
-    public required string SerialNumber { get; init; }
+    public string? SerialNumber { get; init; }
 
     /// <summary>
     /// Продавец.
     /// </summary>
-    public required string Vendor { get; init; }
+    public string? Vendor { get; init; }
 
     /// <summary>
     /// Версия BIOS.
     /// </summary>
-    public required string BiosVersion { get; init; }
+    public string? BiosVersion { get; init; }
 
     /// <summary>
     /// Технология параллельных вычислений.

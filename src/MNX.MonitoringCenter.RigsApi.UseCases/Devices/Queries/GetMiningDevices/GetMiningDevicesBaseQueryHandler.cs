@@ -16,7 +16,7 @@ public abstract class GetMiningDevicesBaseQueryHandler
 {
     private readonly IMediator _mediator;
 
-    private HashSet<GpuDetails>? _inventoryGpus;
+    private List<GpuDetails>? _inventoryGpus;
 
     private HashSet<Rig>? _rigs;
 
@@ -68,6 +68,8 @@ public abstract class GetMiningDevicesBaseQueryHandler
         var device = new MiningDevice()
         {
             Id = model.Id,
+            Manufacturer = model.Manufacturer,
+            Model = model.Model,
             Type = model.Type,
             RigName = rigs.First(rig => rig.Id == model.RigId).Name,
             FlightSheetName = model.FlightSheetName,
@@ -78,16 +80,16 @@ public abstract class GetMiningDevicesBaseQueryHandler
         if (device.Type == "GPU")
         {
             var inventoryGpus = await GetInventoryGpus(userId, cancellationToken);
-            device.PciBus = inventoryGpus.First(x => x.Id == device.Id).Pci.Bus;
+            device.PciBus = inventoryGpus.Last(x => x.Id == device.Id).Pci.Bus;
         }
 
         return device;
     }
 
-    private async Task<HashSet<GpuDetails>> GetInventoryGpus(Guid userId, CancellationToken cancellationToken)
+    private async Task<List<GpuDetails>> GetInventoryGpus(Guid userId, CancellationToken cancellationToken)
     {
         return _inventoryGpus ??=
-            await _mediator.GetHashSetAsync(new GetGpusDetailsQuery(userId), cancellationToken);
+            await _mediator.GetListAsync(new GetGpusDetailsQuery(userId), cancellationToken);
     }
 
     private async Task<HashSet<Rig>> GetRigs(Guid userId, CancellationToken cancellationToken)

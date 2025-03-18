@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Mapping;
 using System.Collections.Concurrent;
 using System.Threading.Channels;
 

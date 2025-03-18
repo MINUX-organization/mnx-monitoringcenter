@@ -2,6 +2,7 @@
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpuInfo;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
@@ -26,6 +27,7 @@ public partial class InventoryRepository : IGpuRepository
                                      Information = gpu.Information,
                                      Pci = gpu.Pci,
                                      Restrictions = gpu.Restrictions,
+                                     Overclocking = gpu.Overclocking,
                                      DriverVersion = Context
                                         .GetGpuDriverVersion(inventory.Software.AmdGpuDriverVersion,
                                                              inventory.Software.IntelGpuDriverVersion,
@@ -71,6 +73,26 @@ public partial class InventoryRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
+    public Task<GpuInfo?> GetInfo(Guid gpuId, Guid userId)
+    {
+        return GetInventoryBySpecification(new InventorySpecification(userId))
+            .Include(inventory => inventory.Gpus)
+            .SelectMany(inventory => inventory.Gpus.Select(gpu => new GpuInfo()
+            {
+                Id = gpu.Id,
+                Manufacturer = gpu.Information.Manufacturer,
+                Model = gpu.Information.Model,
+                SerialNumber = gpu.Information.SerialNumber,
+                Vendor = gpu.Information.Vendor,
+                BiosVersion = gpu.Information.BiosVersion,
+                Technology = gpu.Information.Technology,
+                Memory = gpu.Information.Memory
+            }))
+            .FirstOrDefaultAsync(gpu => gpu.Id == gpuId);
+            
+    }
+
+    /// <inheritdoc/>
     public Task<GpuRestrictions?> GetGpusRestrictions(string gpuName)
     {
         if (string.IsNullOrWhiteSpace(gpuName))
@@ -82,8 +104,19 @@ public partial class InventoryRepository : IGpuRepository
         var model = string.Join(" ", gpuName.ToLower().Split().Skip(1));
 
         return _context.Gpu
+            .AsNoTracking()
             .Where(x => x.Information.Manufacturer.ToLower().Equals(manufacturer) &&
                          x.Information.Model.ToLower().Equals(model))
+            .Select(x => x.Restrictions)
+            .FirstOrDefaultAsync();
+    }
+
+    /// <inheritdoc/>
+    public Task<GpuRestrictions?> GetGpusRestrictionsById(Guid gpuId)
+    {
+        return _context.Gpu
+            .AsNoTracking()
+            .Where(x => x.Id == gpuId)
             .Select(x => x.Restrictions)
             .FirstOrDefaultAsync();
     }

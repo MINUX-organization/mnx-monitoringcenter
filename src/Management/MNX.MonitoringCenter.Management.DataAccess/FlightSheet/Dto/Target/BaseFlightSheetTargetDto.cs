@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Miner.Configs;
-using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 
@@ -46,7 +46,7 @@ public abstract class BaseFlightSheetTargetDto
     /// <summary>
     /// Майнер.
     /// </summary>
-    public Core.Miner.Miner? Miner { get; set; }
+    public Core.Mining.Miner.Miner? Miner { get; set; }
 
     /// <summary>
     /// Создать майнинг конфиг.

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 
@@ -13,6 +13,8 @@ internal class FlightSheetTargetCfg : IEntityTypeConfiguration<BaseFlightSheetTa
 {
     public void Configure(EntityTypeBuilder<BaseFlightSheetTargetDto> builder)
     {
+        builder.Property(x => x.DeviceType).HasConversion<string>();
+
         builder.HasDiscriminator(x => x.DeviceType)
                .HasValue<CpuFlightSheetTargetDto>(MiningDeviceType.CPU)
                .HasValue<GpuFlightSheetTargetDto>(MiningDeviceType.GPU);

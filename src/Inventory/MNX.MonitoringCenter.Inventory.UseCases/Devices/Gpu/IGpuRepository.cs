@@ -1,5 +1,6 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpuInfo;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
@@ -37,11 +38,26 @@ public interface IGpuRepository
     IAsyncEnumerable<string> GetGpusUniqueNames(DeviceSpecification specification);
 
     /// <summary>
+    /// Получить информацию о видеокарте.
+    /// </summary>
+    /// <param name="gpuId"> Идентификатор видеокарты. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Информация о видеокарте. </returns>
+    Task<GpuInfo?> GetInfo(Guid gpuId, Guid userId);
+
+    /// <summary>
     /// Получение ограничений по названию видеокарты.
     /// </summary>
     /// <param name="gpuName"> Полное название видеокарты. </param>
     /// <returns> Ограничения. </returns>
     Task<GpuRestrictions?> GetGpusRestrictions(string gpuName);
+
+    /// <summary>
+    /// Получение ограничений по идентификатору видеокарты.
+    /// </summary>
+    /// <param name="gpuId"> Идентификатор видеокарты. </param>
+    /// <returns> Ограничения. </returns>
+    Task<GpuRestrictions?> GetGpusRestrictionsById(Guid gpuId);
 
     /// <summary>
     /// Получить кол-во видеокарт по спецификации.

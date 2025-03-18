@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MNX.MonitoringCenter.Management.Core.Miner.Configs;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Cfg;

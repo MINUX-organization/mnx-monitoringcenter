@@ -1,0 +1,27 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+	<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Company>Minux</Company>
+    <Authors>Zakharov</Authors>
+    <Description>Содержит команды, отправляемые на Агент.</Description>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	<Version>1.0.5</Version>
+    <IncludeSymbols>True</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <RepositoryUrl>https://github.com/MINUX-organization/MNX.MonitoringCenter.git</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MessagePack.Annotations" Version="3.1.0" />
+    <PackageReference Include="MNX.Application.UseCases" Version="1.0.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Inventory\MNX.MonitoringCenter.Inventory.Contracts\MNX.MonitoringCenter.Inventory.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

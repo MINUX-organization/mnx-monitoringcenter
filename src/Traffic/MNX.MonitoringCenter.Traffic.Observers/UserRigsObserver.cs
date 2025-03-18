@@ -4,8 +4,9 @@ using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
+using MNX.MonitoringCenter.Traffic.Observers.Mapping;
 using MNX.MonitoringCenter.Traffic.Observers.Mining;
-using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
+using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading.Channels;
@@ -28,14 +29,14 @@ public class UserRigsObserver : IUserRigsObserver
     private Subject<RigDynamicIndicators> _rigsIndicatorsStream;
 
     /// <summary>
-    /// Поток показателей, сгруппированных по ригам.
+    /// Подписка на поток показателей аппаратного обеспечения.
     /// </summary>
-    private IObservable<IEnumerable<RigDynamicIndicators>> _groupedRigsIndicatorsStream;
+    private IDisposable _hardwareIndicatorsStreamSubscription;
 
     /// <summary>
-    /// Подписка на поток показателей, сгруппированных по ригам.
+    /// Подписка на поток показателей майнинга.
     /// </summary>
-    private IDisposable _groupedRigsIndicatorsStreamSubscription;
+    private IDisposable _miningIndicatorsStreamSubscription;
 
     /// <summary>
     /// Наблюдатель за аппаратными показателями ригов.
@@ -47,6 +48,11 @@ public class UserRigsObserver : IUserRigsObserver
     /// </summary>
     private RigsMiningObserver _rigsMiningObserver;
 
+    /// <summary>
+    /// Скоп сервисов.
+    /// </summary>
+    private IServiceScope _serviceScope;
+
     public UserRigsObserver(IServiceScopeFactory serviceScopeFactory,
                             TimeSpan updateIndicatorsPeriod)
     {
@@ -55,10 +61,11 @@ public class UserRigsObserver : IUserRigsObserver
 
         _rigsIndicatorsStream = new Subject<RigDynamicIndicators>();
 
-        using var scope = serviceScopeFactory.CreateScope();
-        var mapper = scope.ServiceProvider.GetRequiredService<IMapper>();
+        _serviceScope = serviceScopeFactory.CreateScope();
+        var mapper = _serviceScope.ServiceProvider.GetRequiredService<IMapper>();
+        var builder = _serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>();
 
-        _groupedRigsIndicatorsStream = _rigsIndicatorsStream
+        var groupedRigsIndicatorsStream = _rigsIndicatorsStream
             .Buffer(updateIndicatorsPeriod)
             .Where(list => list.Any())
             .Select(list =>
@@ -68,11 +75,18 @@ public class UserRigsObserver : IUserRigsObserver
                            .ToList();
             });
 
-        _groupedRigsIndicatorsStreamSubscription = _groupedRigsIndicatorsStream.Subscribe(list =>
-        {
-            _rigsHardwareObserver.SetIndicators(mapper.Map<IEnumerable<RigDynamicHardwareIndicators>>(list));
-            _rigsMiningObserver.SetIndicators(mapper.Map<IEnumerable<RigDynamicMiningIndicators>>(list));
-        });
+        var hardwareIndicatorsStream = groupedRigsIndicatorsStream
+            .Select(mapper.Map<IEnumerable<RigDynamicHardwareIndicators>>);
+
+        var miningIndicatorsStream = groupedRigsIndicatorsStream
+            .Select(builder.Build)
+            .Concat();
+
+        _hardwareIndicatorsStreamSubscription = hardwareIndicatorsStream
+            .Subscribe(list => _rigsHardwareObserver.SetIndicators(list));
+
+        _miningIndicatorsStreamSubscription = miningIndicatorsStream
+            .Subscribe(list => _rigsMiningObserver.SetIndicators(list));
     }
 
     /// <inheritdoc/>
@@ -154,16 +168,19 @@ public class UserRigsObserver : IUserRigsObserver
         {
             if (disposing)
             {
-                _groupedRigsIndicatorsStreamSubscription.Dispose();
+                _hardwareIndicatorsStreamSubscription.Dispose();
+                _miningIndicatorsStreamSubscription.Dispose();
                 _rigsHardwareObserver.Dispose();
                 _rigsMiningObserver.Dispose();
+                _serviceScope.Dispose();
             }
 
             _rigsIndicatorsStream = null!;
-            _groupedRigsIndicatorsStream = null!;
-            _groupedRigsIndicatorsStreamSubscription = null!;
+            _hardwareIndicatorsStreamSubscription = null!;
+            _miningIndicatorsStreamSubscription = null!;
             _rigsHardwareObserver = null!;
             _rigsMiningObserver = null!;
+            _serviceScope = null!;
 
             _disposedValue = true;
         }

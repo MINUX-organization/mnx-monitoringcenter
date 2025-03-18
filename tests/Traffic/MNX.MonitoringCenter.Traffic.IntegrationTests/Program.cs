@@ -16,7 +16,8 @@ internal class Program
 {
     static async Task Main(string[] args)
     {
-        await Task.WhenAll(/*SendIndicators(),*/ StartConnectionAsync());
+        await StartConnectionAsync();
+        //await Task.WhenAll(SendIndicators(), StartConnectionAsync());
     }
 
     private static async Task SendIndicators()
@@ -51,15 +52,12 @@ internal class Program
                             FanSpeed = random.Next(100),
                             Temperature = random.Next(100),
                             MiningState = MiningState.Active,
-                            FlightSheet = new FlightSheetStatistics()
-                            {
-                                Id = Guid.NewGuid(),
-                                MinerId = Guid.NewGuid(),
-                                Coins = new()
+                            MinerName = "Miner",
+                            MiningUpTimeInSeconds = 1000,
+                            Coins = new()
                                 {
-                                    new CoinStatistics()
+                                    new MiningMetrics()
                                     {
-                                        CoinId = Guid.Parse("7b1d26a9-2418-46b7-9166-fafb9a7f2b1d"),
                                         HashRate = random.Next(1000),
                                         Shares = new SharesModel()
                                         {
@@ -67,9 +65,8 @@ internal class Program
                                             Rejected = random.Next(1000),
                                         }
                                     },
-                                    new CoinStatistics()
+                                    new MiningMetrics()
                                     {
-                                        CoinId = Guid.Parse("a63b11e1-3763-4d3e-9118-a2b81a92634f"),
                                         HashRate = random.Next(1000),
                                         Shares = new SharesModel()
                                         {
@@ -78,7 +75,6 @@ internal class Program
                                         }
                                     },
                                 }
-                            }
                         },
                         new GpuDynamicIndicators()
                         {
@@ -98,7 +94,7 @@ internal class Program
                             InternetSpeed = random.Next(0, 10000),
                         }
                     }
-                });
+                });;
             }
 
             await Task.Delay(2000);
@@ -108,8 +104,9 @@ internal class Program
 
     private static async Task StartConnectionAsync()
     {
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQzNjY4M2YyLTE3MjgtNGUyOS1iMDNkLTIzOTkxMWI0OWQ1ZCIsIkNsaWVudFR5cGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Im1pbnV4IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRGVmYXVsdFVzZXIiLCJleHAiOjE3NDEyNzAyODAsImlzcyI6InNlY3VyaXR5IiwiYXVkIjoiVXNlciJ9.Y1x6mIX0mLuFhM5Sje6HthC0m-T6b3y5mexAea0AxcU";
         var connection = new HubConnectionBuilder()
-            .WithUrl("http://localhost:8001/hubs/monitoring")
+            .WithUrl($"http://localhost:9000/hubs/monitoring?access_token={token}")
             .Build();
 
         try

@@ -1,8 +1,12 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
+using MNX.Application.Bus.RabbitMQ;
 using MNX.Application.Consul;
-using MNX.Application.RabbitMQ;
+using MNX.Application.OpenTelemetry;
+using MNX.Application.OpenTelemetry.Metrics;
+using MNX.Application.OpenTelemetry.Tracing;
 using MNX.MonitoringCenter.Inventory.Integration;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Integration;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
 using MNX.MonitoringCenter.RigsApi.Service.Hubs;
@@ -25,14 +29,14 @@ namespace MNX.MonitoringCenter.RigsApi.Service;
 
 internal class Program
 {
-    private static Task Main(string[] args)
+    private static async Task Main(string[] args)
     {
         var logger = LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
         try
         {
             logger.Debug("init main");
             var builder = ConfigureApp(args);
-            return RunApp(builder);
+            await RunApp(builder);
         }
         catch (Exception ex)
         {
@@ -51,16 +55,25 @@ internal class Program
         builder.Logging.ClearProviders();
         builder.Host.UseNLog();
         var services = builder.Services;
+        var configuration = builder.Configuration;
 
         services.AddControllers()
                 .AddJsonOptions(options =>
                 {
+                    // <Ќ≈ ѕ≈–≈—“ј¬Ћя“№>
+                    options.JsonSerializerOptions.Converters.Add(new EnumFlagsConverter());
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                    // </Ќ≈ ѕ≈–≈—“ј¬Ћя“№>
+
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                     options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
                 });
 
         services.AddConsulIntegration(builder.Configuration);
+
+        services.ConfigureOpenTelemetry(configuration)
+                .ConfigureTracing(configuration)
+                .ConfigureMetrics(configuration);
 
         services.AddEndpointsApiExplorer();
 
@@ -99,13 +112,28 @@ internal class Program
             opts.UseInlineDefinitionsForEnums();
 
             opts.SelectDiscriminatorNameUsing(_ => "$type");
-            opts.SelectDiscriminatorValueUsing(subType => subType.BaseType!
-                    .GetCustomAttributes<JsonDerivedTypeAttribute>()
-                    .FirstOrDefault(x => x.DerivedType == subType)?
-                    .TypeDiscriminator!.ToString());
+
+            var allTypes = AppDomain.CurrentDomain.GetAssemblies()
+                                                  .Where(a => !a.IsDynamic)
+                                                  .SelectMany(a => a.GetTypes());
+
+            // Swashbuckle работает только с классами, как с базовыми типами, и не работает с интерфейсами
+            opts.SelectSubTypesUsing(baseType =>
+            {
+                if (baseType.IsInterface)
+                {
+                    return allTypes.Where(t => t.GetInterfaces()
+                                                .Where(i => i.GetCustomAttributes<JsonDerivedTypeAttribute>()
+                                                .Any(x => x.DerivedType == t)).Any());
+                }
+
+                return allTypes.Where(t => t.IsSubclassOf(baseType));
+            });
+
+            
         });
 
-        services.AddJwtBearerAuthentication(builder.Configuration["SecretKey"]!, new JwtBearerEvents()
+        services.AddJwtBearerAuthentication(configuration["SecretKey"]!, new JwtBearerEvents()
         {
             OnMessageReceived = context =>
             {
@@ -113,7 +141,7 @@ internal class Program
 
                 var path = context.HttpContext.Request.Path;
 
-                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("hubs"))
+                if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/hubs"))
                 {
                     context.Token = accessToken;
                 }

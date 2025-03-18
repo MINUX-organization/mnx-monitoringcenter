@@ -1,28 +1,28 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.Core.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.Management.UseCases.MiningDevice;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 using System.Data;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
-using FlightSheet = Core.FlightSheet.FlightSheet;
-using MiningDevice = Core.MiningDevice.MiningDevice;
-using MiningDeviceInfo = Core.MiningDevice.MiningDeviceInfo;
+using FlightSheet = Core.Mining.FlightSheet.FlightSheet;
 
 /// <summary>
 /// Реализация <see cref="IMiningDeviceRepository"/>.
 /// </summary>
 public class MiningDeviceRepository : IMiningDeviceRepository
 {
-    private readonly Context _context;
-
     private readonly IMapper _mapper;
+
+    private readonly Context _context;
 
     public MiningDeviceRepository(Context context, IMapper mapper)
     {
-        _context = context ?? throw new ArgumentNullException(nameof(context));
+        _context = context;
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
@@ -40,62 +40,12 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public async Task SetCurrentRigsDevices(List<MiningDevice> devices)
+    public Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken)
     {
-        using var transaction = _context.Database.BeginTransaction(IsolationLevel.Serializable);
-
-        try
-        {
-            var groupedInputDevices = devices.GroupBy(x => x.RigId)
-                                             .ToDictionary(g => g.Key, g => g.ToList());
-
-            // делаем выборку устройств всех ригов, для которых пришли устройства
-            var dbDevices = await _context.MiningDevices
-                .IgnoreQueryFilters()
-                .Where(device => groupedInputDevices.Keys.Contains(device.RigId))
-                .ToListAsync();
-
-            // берём ту часть устройств из БД, которая не пересекается со входящим набором устройств
-            // ( те устройства, которые убрали с рига )
-            // для них мы ставим статус не активности
-            var noActiveDevices = dbDevices.ExceptBy(devices.Select(x => x.Id), device => device.Id).ToList();
-            noActiveDevices.ForEach(device => device.LifeCycleStatus = MiningDeviceLifeCycleStatus.Inactive);
-
-            // берём часть устройств из БД, которая пересекается со входящей коллекцией устройств
-            // ставим статус "в сети" для полученных устройств
-            var activeDevices = dbDevices.IntersectBy(devices.Select(x => x.Id), device => device.Id).ToList();
-            activeDevices.ForEach(device => device.LifeCycleStatus = MiningDeviceLifeCycleStatus.Online);
-
-            // берём часть из множества входящих устройств, которая не пересекается со множеством устройств из БД
-            // обновляем их, если уже существуют в базе, иначе добавляем.
-            var newDevices = devices.ExceptBy(dbDevices.Select(x => x.Id), device => device.Id)
-                                    .Select(device => new MiningDeviceInfo()
-                                    {
-                                        Id = device.Id,
-                                        RigId = device.RigId,
-                                        OwnerId = device.OwnerId,
-                                        Type = device.Type,
-                                        LifeCycleStatus = MiningDeviceLifeCycleStatus.Online
-                                    })
-                                    .ToList();
-
-            await AddOrUpdateDevices(newDevices);
-
-            await _context.SaveChangesAsync();
-            await transaction.CommitAsync();
-        }
-        catch (Exception)
-        {
-            await transaction.RollbackAsync();
-            throw;
-        }
-    }
-
-    /// <inheritdoc/>
-    public Task SetStatusForRigDevices(Guid rigId, MiningDeviceLifeCycleStatus status)
-    {
-        return _context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
-            x.SetProperty(device => device.LifeCycleStatus, d => status));
+        return _context.MiningDevices
+                       .AsNoTracking()
+                       .Where(device => device.OwnerId == userId)
+                       .AnyAsync(device => (device.Manufacturer + ' ' + device.Model) == name, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -124,32 +74,34 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                 .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetIsConfirm, d => true));
     }
 
-    /// <summary>
-    /// Добавить или обновить устройства.
-    /// </summary>
-    /// <param name="devices"> Устройства. </param>
-    private async Task AddOrUpdateDevices(List<MiningDeviceInfo> devices)
+    /// <inheritdoc/>
+    public async Task<IOverclocking?> GetOverclocking(Guid deviceId, Guid userId)
     {
-        var dbDevices = (await _context.MiningDevices
-                                       .IgnoreQueryFilters()
-                                       .Where(device => devices.Select(x => x.Id).Contains(device.Id))
-                                       .ToListAsync())
-                                       .ToHashSet();
+        var query = from device in _context.MiningDevices.AsNoTrackingWithIdentityResolution()
+                                                         .Available(new Specification(userId))
+                                                         .Where(device => device.Id == deviceId)
 
-        foreach (var device in devices)
-        {
-            if (dbDevices.TryGetValue(device, out MiningDeviceInfo? dbDevice))
-            {
-                dbDevice.RigId = device.RigId;
-                dbDevice.OwnerId = device.OwnerId;
-                dbDevice.LifeCycleStatus = device.LifeCycleStatus;
-                dbDevice.FlightSheetIsConfirm = device.FlightSheetIsConfirm;
-            }
-            else
-            {
-                await _context.MiningDevices.AddAsync(device);
-            }
-        }
+                    join overclocking in _context.Overclocking.AsNoTracking() 
+                        on device.OverclockingId equals overclocking.Id
+
+                    select overclocking;
+
+        var clock = await query.FirstOrDefaultAsync();
+        return _mapper.Map<IOverclocking>(clock);
+    }
+
+    /// <inheritdoc/>
+    public async Task SetOverclocking(IOverclocking overclocking, params Guid[] devicesIds)
+    {
+        // todo: как удалять ненужный разгон?
+        var dto = _mapper.Map<OverclockingDto>(overclocking);
+
+        await _context.Overclocking.AddAsync(dto);
+        await _context.SaveChangesAsync();
+
+        await _context.MiningDevices
+                .Where(device => devicesIds.Contains(device.Id))
+                .ExecuteUpdateAsync(x => x.SetProperty(device => device.OverclockingId, d => overclocking.Id));
     }
 
     /// <summary>
@@ -175,13 +127,16 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                select new MiningDeviceInfo()
                {
                    Id = device.Id,
+                   Manufacturer = device.Manufacturer,
+                   Model = device.Model,
                    OwnerId = device.OwnerId,
                    RigId = device.RigId,
                    LifeCycleStatus = device.LifeCycleStatus,
                    Type = device.Type,
                    FlightSheetId = device.FlightSheetId,
                    FlightSheetIsConfirm = device.FlightSheetIsConfirm,
-                   FlightSheet = _mapper.Map<FlightSheet>(flightSheet)
+                   FlightSheet = _mapper.Map<FlightSheet>(flightSheet),
+                   OverclockingId = device.OverclockingId
                };
     }
 }

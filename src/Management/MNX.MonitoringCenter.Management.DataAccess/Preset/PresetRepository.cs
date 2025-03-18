@@ -1,11 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.UseCases.Presets;
 using System.Linq.Expressions;
 using MNX.MonitoringCenter.Management.UseCases;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
+using AutoMapper;
+using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Preset;
 
-using Preset = Core.Preset;
+using Preset = Core.Overclocking.Preset;
 
 /// <summary>
 /// Реализация <see cref="IPresetRepository"/>.
@@ -14,34 +17,57 @@ public class PresetRepository : IPresetRepository
 {
     private readonly Context _context;
 
-    public PresetRepository(Context context)
+    private readonly IMapper _mapper;
+
+    public PresetRepository(Context context, IMapper mapper)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <inheritdoc/>
     public IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, Specification specification)
     {
-        var presets = _context.Presets.AsNoTrackingWithIdentityResolution()
-                                                      .Include(x => x.Overclocking)
-                                                      .Where(x => x.UserId == specification.UserId)
-                                                      .Filter(specification);
+        var presets = from preset in _context.Presets.AsNoTrackingWithIdentityResolution()
+                                                     .Where(x => x.UserId == specification.UserId)
+                                                     .Filter(specification)
+                      join overclocking in _context.Overclocking.AsNoTracking()
+                        on preset.OverclockingId equals overclocking.Id
+                      select new Preset()
+                      {
+                          Id = preset.Id,
+                          UserId = preset.UserId,
+                          Name = preset.Name,
+                          DeviceName = preset.DeviceName,
+                          OverclockingId = overclocking.Id,
+                          Overclocking = _mapper.Map<IOverclocking>(overclocking)
+                      };
 
         return string.IsNullOrWhiteSpace(gpuName) 
             ? presets.AsAsyncEnumerable()
-            : presets.Where(x => x.GpuName == gpuName).AsAsyncEnumerable();
+            : presets.Where(x => x.DeviceName == gpuName).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
     public IAsyncEnumerable<IGrouping<string, Preset>> GetGroupedList(
             Expression<Func<Preset, string>> expression, Specification specification)
     {
-        return _context.Presets.AsNoTrackingWithIdentityResolution()
-                               .Where(x => x.UserId == specification.UserId)
-                               .Filter(specification)
-                               .Include(x => x.Overclocking)
-                               .GroupBy(expression)
-                               .AsAsyncEnumerable();
+        var presets = from preset in _context.Presets.AsNoTrackingWithIdentityResolution()
+                                                     .Where(x => x.UserId == specification.UserId)
+                                                     .Filter(specification)
+                      join overclocking in _context.Overclocking.AsNoTracking()
+                        on preset.OverclockingId equals overclocking.Id
+                      select new Preset()
+                      {
+                          Id = preset.Id,
+                          UserId = preset.UserId,
+                          Name = preset.Name,
+                          DeviceName = preset.DeviceName,
+                          OverclockingId = overclocking.Id,
+                          Overclocking = _mapper.Map<IOverclocking>(overclocking)
+                      };
+
+        return presets.GroupBy(expression).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
@@ -49,6 +75,16 @@ public class PresetRepository : IPresetRepository
     {
         return _context.Presets.AsNoTracking()
                                .Where(x => x.UserId == userId)
+                               .Join(_context.Overclocking, z => z.OverclockingId, y => y.Id,
+                               (z, y) => new Preset
+                               {
+                                   Id = z.Id,
+                                   UserId = z.UserId,
+                                   Name = z.Name,
+                                   DeviceName = z.DeviceName,
+                                   OverclockingId = z.OverclockingId,
+                                   Overclocking = _mapper.Map<IOverclocking>(y)
+                               })
                                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
@@ -63,15 +99,20 @@ public class PresetRepository : IPresetRepository
     /// <inheritdoc/>
     public async Task Save(Preset preset)
     {
+        var overclocking = _mapper.Map<OverclockingDto>(preset.Overclocking);
+        await _context.Overclocking.AddAsync(overclocking);
         await _context.Presets.AddAsync(preset);
         await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public Task Update(Preset preset)
+    public async Task Update(Preset preset)
     {
+        var overclocking = _mapper.Map<OverclockingDto>(preset.Overclocking);
+        await _context.Overclocking.AddAsync(overclocking);
+
         _context.Presets.Update(preset);
-        return _context.SaveChangesAsync();
+        await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
