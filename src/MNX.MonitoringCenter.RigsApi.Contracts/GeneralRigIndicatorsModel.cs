@@ -9,7 +9,7 @@ public class GeneralRigIndicatorsModel : RigDynamicHardwareIndicatorsModel
     /// <summary>
     /// Время майнинга с момента последнего включения.
     /// </summary>
-    public DateTime MiningUpTime { get; set; }
+    public int MiningUpTimeInSeconds { get; set; }
 
     /// <summary>
     /// Общее кол-во решений.

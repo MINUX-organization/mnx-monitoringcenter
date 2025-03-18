@@ -95,8 +95,8 @@ public class MonitoringIndicatorsStreamResponse : IConverterFrom<MonitoringIndic
                         OnlineState = hardwareIndicatorsRigs.GetValueOrDefault(rig.RigId)?.OnlineState,
                         TotalShares = rig.TotalShares,
                         TotalHashRate = rig.TotalHashRate,
-                        MiningUpTime = rig.MiningUpTime,
-                        BootedUpTime = hardwareIndicatorsRigs.GetValueOrDefault(rig.RigId)?.BootedUpTime,
+                        MiningUpTimeInSeconds = rig.MiningUpTimeInSeconds,
+                        BootedUpTimeInSeconds = hardwareIndicatorsRigs.GetValueOrDefault(rig.RigId)?.BootedUpTimeInSeconds,
                         TotalCoinStatistics = RigCoinStatisticModel.ConvertFrom(rigCoinStatisticsModelArgs)
                                                                     ?? new List<RigCoinStatisticModel>(),
                         LocalIp = inventoryRig?.LocalIP,

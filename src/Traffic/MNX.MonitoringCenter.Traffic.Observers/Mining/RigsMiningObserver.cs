@@ -6,7 +6,6 @@ using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstractio
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Channels;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Mining;
 

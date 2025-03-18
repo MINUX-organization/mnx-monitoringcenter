@@ -19,7 +19,7 @@ public class RigDynamicHardwareIndicatorsModel : IConverterFrom<IEnumerable<RigD
     /// <summary>
     /// Время работы рига с момента последнего включения.
     /// </summary>
-    public DateTime? BootedUpTime { get; init; }
+    public int? BootedUpTimeInSeconds { get; init; }
 
     /// <summary>
     /// Общая мощность.
@@ -56,7 +56,7 @@ public class RigDynamicHardwareIndicatorsModel : IConverterFrom<IEnumerable<RigD
                 RigName = args.Rigs.GetValueOrDefault(rig.RigId)?.Name,
                 AverageMiningDevicesFanSpeed = rig.AverageMiningDevicesTemperature,
                 AverageMiningDevicesTemperature = rig.AverageMiningDevicesTemperature,
-                BootedUpTime = rig.BootedUpTime,
+                BootedUpTimeInSeconds = rig.BootedUpTimeInSeconds,
                 TotalPower = rig.TotalPower,
                 InternetSpeed = rig.InternetSpeed,
                 OnlineState = rig.OnlineState

@@ -23,4 +23,10 @@ public abstract class DeviceDynamicMiningIndicators : IDeviceDynamicMiningIndica
 
     /// <inheritdoc/>
     public int MiningUpTimeInSeconds { get; init; }
+
+    /// <summary>
+    /// Получить среднюю температуру.
+    /// </summary>
+    /// <returns> Средняя температура. </returns>
+    public abstract int GetAverageTemperature();
 }

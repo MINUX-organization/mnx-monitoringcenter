@@ -11,9 +11,14 @@ public class FlightSheetStatistics
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Идентификатор майнера.
+    /// Майнер.
     /// </summary>
     public Guid MinerId { get; set; }
+
+    /// <summary>
+    /// Статистика майнинга монет.
+    /// </summary>
+    public List<CoinStatistics> Coins { get; set; } = new(0);
 
     /// <summary>
     /// Название майнера.
@@ -21,7 +26,13 @@ public class FlightSheetStatistics
     public required string MinerName { get; set; }
 
     /// <summary>
-    /// Статистика майнинга монет.
+    /// Деструктор.
     /// </summary>
-    public List<CoinStatistics> Coins { get; set; } = new(0);
+    public void Deconstruct(out Guid flightSheetId, out Guid minerId, out List<CoinStatistics> coins)
+    {
+        flightSheetId = Id;
+        minerId = MinerId;
+        coins = Coins;
+    }
 }
+

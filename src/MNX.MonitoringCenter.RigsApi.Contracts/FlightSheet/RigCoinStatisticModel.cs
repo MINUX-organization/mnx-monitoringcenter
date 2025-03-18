@@ -1,6 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.RigsApi.Contracts.Args;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
 
 namespace MNX.MonitoringCenter.RigsApi.Contracts.FlightSheet;
 

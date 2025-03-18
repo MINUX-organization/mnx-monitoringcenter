@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
+﻿namespace MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 
 /// <summary>
 /// Статистика майнинга монеты на риге.

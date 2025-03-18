@@ -2,13 +2,14 @@
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.RigsApi.Contracts.Args;
 using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 using MNX.MonitoringCenter.Traffic.Observers;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 using System.Reactive.Linq;
 using System.Threading.Channels;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 
