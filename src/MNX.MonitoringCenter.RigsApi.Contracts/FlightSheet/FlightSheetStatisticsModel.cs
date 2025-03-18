@@ -45,14 +45,14 @@ public class FlightSheetStatisticsModel : IConverterFrom<FlightSheetStatisticsMo
 
             var miningCombinationsKey = (flightSheetId, minerId, coinStatistics.First().CoinId);
             var (flightSheetName, minerName, _) = args.MiningCombinations
-                .GetValueOrDefault(miningCombinationsKey) ?? new MiningCombinations();
+                .GetValueOrDefault(miningCombinationsKey) ?? new MiningCombination();
 
             var coinStatisticModel = coinStatistics
                 .Aggregate(new List<CoinStatisticsModel>(), (acc, coinStatistic) =>
                 {
                     if (args.MiningCombinations.TryGetValue(
                         (flightSheetId, minerId, coinStatistic.CoinId),
-                        out MiningCombinations? miningCombinations))
+                        out MiningCombination? miningCombinations))
                     {
                         acc.Add(new CoinStatisticsModel
                         {

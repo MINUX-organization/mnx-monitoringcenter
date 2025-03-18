@@ -27,7 +27,7 @@ public class RigCoinStatisticModel : CoinStatisticsModel
                 {
                     if (args.MiningCombinations.TryGetValue(
                         (rigCoinStatistic.FlightSheetId, rigCoinStatistic.MinerId, rigCoinStatistic.CoinId),
-                        out MiningCombinations? miningCombinations))
+                        out MiningCombination? miningCombinations))
                     {
                         acc.Add(new RigCoinStatisticModel
                         {

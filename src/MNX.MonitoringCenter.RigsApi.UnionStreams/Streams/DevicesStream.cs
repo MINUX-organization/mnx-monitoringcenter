@@ -24,7 +24,7 @@ public class DevicesStream : Abstractions.Stream
 
     private readonly IAsyncEnumerable<GpuDetails> _gpusDatails;
 
-    private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> _miningCombinations;
+    private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> _miningCombinations;
 
     protected override SubscriptionType[] SubscriptionTypes => new[] {
         SubscriptionType.CpusHardwareIndicators,
@@ -38,7 +38,7 @@ public class DevicesStream : Abstractions.Stream
         string connectionId,
         IAsyncEnumerable<CpuDetails> cpusNames,
         IAsyncEnumerable<GpuDetails>  gpusNames,
-        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations,
+        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> miningCombinations,
         IUserRigsObserverAggregator userRigsObserverAggregator)
     {
         _userRigsObserverAggregator = userRigsObserverAggregator;

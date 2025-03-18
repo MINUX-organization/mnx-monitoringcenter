@@ -7,5 +7,5 @@ public class FlightSheetStatisticsModelArgs
 {
     public FlightSheetStatistics? FlightSheetStatistics { get; set; }
 
-    public required Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> MiningCombinations { get; set; }
+    public required Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> MiningCombinations { get; set; }
 }

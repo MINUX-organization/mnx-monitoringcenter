@@ -7,5 +7,5 @@ public class RigCoinStatisticsModelArgs
 {
     public required IEnumerable<RigCoinStatistics> RigCoinStatistics { get; set; }
 
-    public required Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> MiningCombinations { get; set; }
+    public required Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> MiningCombinations { get; set; }
 }

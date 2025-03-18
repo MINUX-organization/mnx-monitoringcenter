@@ -1,13 +1,13 @@
-﻿using MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
-using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using MediatR;
-using MNX.MonitoringCenter.Management.UseCases.Combinations.Queries;
-using MNX.MonitoringCenter.RigsApi.UnionStreams.Args;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+﻿using MediatR;
 using MNX.Application.UseCases.Mediator;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
+using MNX.MonitoringCenter.Management.UseCases.Mining;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Args;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
+using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 
 namespace MNX.MonitoringCenter.RigsApi.Streams;
 
@@ -23,7 +23,7 @@ public class UnionStreamBuilder : IUnionStreamBuilder
             StreamType.Monitoring => new MonitoringStream(
                 streamBuilderArgs.UserId,
                 streamBuilderArgs.ConnectionId,
-                await _mediator.Send(new GetAvailableMiningCombinationsQuery(streamBuilderArgs.UserId)),
+                await _mediator.Send(new GetMiningCombinationsQuery(streamBuilderArgs.UserId)),
                 await _mediator.GetListAsync(new GetRigsDetailsQuery(streamBuilderArgs.UserId), default),
                 _userRigsObserverAggregator),
 
@@ -32,7 +32,7 @@ public class UnionStreamBuilder : IUnionStreamBuilder
                 streamBuilderArgs.ConnectionId, 
                 _mediator.CreateStream(new GetCpusDetailsQuery(streamBuilderArgs.UserId)),
                 _mediator.CreateStream(new GetGpusDetailsQuery(streamBuilderArgs.UserId)),
-                await _mediator.Send(new GetAvailableMiningCombinationsQuery(streamBuilderArgs.UserId)),
+                await _mediator.Send(new GetMiningCombinationsQuery(streamBuilderArgs.UserId)),
                 _userRigsObserverAggregator),
 
             StreamType.Rigs => new RigsStream(

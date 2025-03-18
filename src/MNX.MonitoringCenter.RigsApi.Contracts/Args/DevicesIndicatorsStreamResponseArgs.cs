@@ -18,7 +18,7 @@ public class DevicesIndicatorsStreamResponseArgs
 
     public Dictionary<Guid, string> GpusNames { get; set; }
 
-    public Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> MiningCombinations { get; set; }
+    public Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> MiningCombinations { get; set; }
 
     public DevicesIndicatorsStreamResponseArgs(
         IEnumerable<CpuDynamicMiningIndicators> cpuDynamicMiningIndicators,
@@ -27,7 +27,7 @@ public class DevicesIndicatorsStreamResponseArgs
         IEnumerable<GpuDynamicHardwareIndicators> gpuDynamicHardwareIndicators,
         Dictionary<Guid, string> cpusNames,
         Dictionary<Guid, string> gpusNames,
-        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations)
+        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> miningCombinations)
     {
         CpuDynamicMiningIndicators = cpuDynamicMiningIndicators;
         CpuDynamicHardwareIndicators = cpuDynamicHardwareIndicators;

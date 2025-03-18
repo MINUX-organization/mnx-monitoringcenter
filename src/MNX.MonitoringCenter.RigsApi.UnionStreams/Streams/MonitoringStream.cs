@@ -21,7 +21,7 @@ public class MonitoringStream : Abstractions.Stream
 
     private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
 
-    private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> _miningCombinations;
+    private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> _miningCombinations;
 
     private readonly Dictionary<Guid, RigDetails> _rigs;
 
@@ -37,7 +37,7 @@ public class MonitoringStream : Abstractions.Stream
     public MonitoringStream(
         Guid userId,
         string connectionId,
-        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombinations> miningCombinations,
+        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> miningCombinations,
         IEnumerable<RigDetails> rigs,
         IUserRigsObserverAggregator userRigsObserverAggregator)
     {

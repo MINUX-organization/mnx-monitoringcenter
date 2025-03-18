@@ -1,7 +1,9 @@
-﻿
-namespace MNX.MonitoringCenter.Management.Contracts;
+﻿namespace MNX.MonitoringCenter.Management.Contracts;
 
-public class MiningCombinations
+/// <summary>
+/// Комбинация майнинга (полётный лист + майнер + монета)
+/// </summary>
+public class MiningCombination
 {
     public string? FlightSheet { get; init; }
 
