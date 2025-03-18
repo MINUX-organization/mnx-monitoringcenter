@@ -53,7 +53,7 @@ public class SetOverclockingFromPresetCommandHandler :
     public async Task<Result<Guid[]>> Handle(SetOverclockingFromPresetCommand request,
                                            CancellationToken cancellationToken)
     {
-        var deviceToProcess = new List<MiningDeviceInfo>(request.DeviceIds.Length);
+        var devicesToProcess = new List<MiningDeviceInfo>(request.DeviceIds.Length);
 
         var errors = new List<string>();
 
@@ -85,21 +85,27 @@ public class SetOverclockingFromPresetCommandHandler :
                 continue;
             }
 
-            deviceToProcess.Add(device);
+            if (device.Name != preset.DeviceName)
+            {
+                errors.Add($"");
+                continue;
+            }
+
+            devicesToProcess.Add(device);
         }
 
-        if (deviceToProcess.Count == 0)
+        if (devicesToProcess.Count == 0)
         {
             return Result<Guid[]>.Invalid(errors);
         }
 
         await _miningDeviceRepository.SetPreset(request.PresetId,
                                                 cancellationToken,
-                                                deviceToProcess.Select(d => d.Id).ToArray());
+                                                devicesToProcess.Select(d => d.Id).ToArray());
 
-        await SendOverclockingToRigs(preset.Overclocking!, deviceToProcess, request.UserId);
+        await SendOverclockingToRigs(preset.Overclocking!, devicesToProcess, request.UserId);
 
-        return Result<Guid[]>.Success(deviceToProcess.Select(x => x.Id).ToArray());
+        return Result<Guid[]>.Success(devicesToProcess.Select(x => x.Id).ToArray());
     }
 
     /// <summary>

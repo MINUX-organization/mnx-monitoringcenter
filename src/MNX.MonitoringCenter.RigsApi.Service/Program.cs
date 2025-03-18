@@ -57,10 +57,10 @@ internal class Program
         services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    // <ÍÅ ÏÅÐÅÑÒÀÂËßÒÜ>
+                    // <ÐÐ• ÐŸÐ•Ð Ð•Ð¡Ð¢ÐÐ’Ð›Ð¯Ð¢Ð¬>
                     options.JsonSerializerOptions.Converters.Add(new EnumFlagsConverter());
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    // </ÍÅ ÏÅÐÅÑÒÀÂËßÒÜ>
+                    // </ÐÐ• ÐŸÐ•Ð Ð•Ð¡Ð¢ÐÐ’Ð›Ð¯Ð¢Ð¬>
 
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                     options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
@@ -114,7 +114,7 @@ internal class Program
                                                   .Where(a => !a.IsDynamic)
                                                   .SelectMany(a => a.GetTypes());
 
-            // Swashbuckle ðàáîòàåò òîëüêî ñ êëàññàìè, êàê ñ áàçîâûìè òèïàìè, è íå ðàáîòàåò ñ èíòåðôåéñàìè
+            // Swashbuckle ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
             opts.SelectSubTypesUsing(baseType =>
             {
                 if (baseType.IsInterface)

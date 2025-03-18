@@ -47,7 +47,7 @@ public class EditPresetCommandHandler :
         if (preset is null)
         {
             return Result<PresetModel>
-                .Invalid("Preset with this Id wasn`t found");
+                .Invalid($"Preset with id equaled {request.Id} wasn`t found");
         }
 
         var devices = await _miningDeviceRepository.GetAvailableByPresetId(request.Id, request.UserId);
