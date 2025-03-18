@@ -71,39 +71,40 @@ public class MiningDeviceRepository : IMiningDeviceRepository
             device.PresetId = presetId;
         }
 
-        var presetsToRemove = await _context.Presets
-            .Where(x => !x.IsVisible && _context.MiningDevices
-                .All(d => d.PresetId != x.Id))
-            .ToListAsync();
-
-        if (presetsToRemove.Any())
-        {
-            var overclockingIds = presetsToRemove
-                .Select(x => x.OverclockingId).ToList();
-
-            var overclockings = await _context.Overclocking
-                .Where(x => overclockingIds.Contains(x.Id))
-                .ToListAsync();
-
-            _context.Overclocking.RemoveRange(overclockings);
-            _context.Presets.RemoveRange(presetsToRemove);
-        }
-
         await _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
-    public async Task SetOverclocking(IOverclocking overclocking, params Guid[] devicesIds)
+    public async Task SetOverclocking(Guid devicesId, IOverclocking overclocking)
     {
-        // todo: как удалять ненужный разгон?
         var dto = _mapper.Map<OverclockingDto>(overclocking);
 
-        await _context.Overclocking.AddAsync(dto);
-        await _context.SaveChangesAsync();
+        var device = await _context.MiningDevices
+            .FirstOrDefaultAsync(x => x.Id == devicesId);
 
-        await _context.MiningDevices
-                .Where(device => devicesIds.Contains(device.Id))
-                .ExecuteUpdateAsync(x => x.SetProperty(device => device.PresetId, d => overclocking.Id));
+        if (device != null)
+        {
+            var invisiblePreset = await _context.Presets
+                .FirstOrDefaultAsync(
+                    x => x.Name == device.Id.ToString() &&
+                    !x.IsVisible);
+
+            if (invisiblePreset != null)
+            {
+                var overclockingToUpdate = await _context.Overclocking
+                    .FirstOrDefaultAsync(x => x.Id == invisiblePreset.OverclockingId);
+
+                if (overclockingToUpdate != null)
+                {
+                    _context.Overclocking.Add(dto);
+                    _context.Overclocking.Remove(overclockingToUpdate);
+                    invisiblePreset.OverclockingId = dto.Id;
+                    device.PresetId = invisiblePreset.Id;
+                }
+            }
+        }
+
+        await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>

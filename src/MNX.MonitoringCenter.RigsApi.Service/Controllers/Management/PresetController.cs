@@ -146,8 +146,8 @@ public class PresetController : ControllerBase
     /// <summary>
     /// Применить пресет на устройство.
     /// </summary>
-    /// <param name="deviceId"> Идентификатор устройства. </param>
     /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <param name="deviceIds"> Идентификаторы устройств. </param>
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно. </response>
     /// <response code="400">
@@ -156,12 +156,11 @@ public class PresetController : ControllerBase
     [HttpPost("{presetId:Guid}/apply")]
     [ProducesResponseType(typeof(Guid), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> SetOverclockingFromPreset(Guid deviceId,
-                                                               Guid presetId)
+    public async Task<IActionResult> SetOverclockingFromPreset(Guid presetId, params Guid[] deviceIds)
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(
-            new SetOverclockingFromPresetCommand(userId, presetId, deviceId));
+            new SetOverclockingFromPresetCommand(userId, presetId, deviceIds));
         return result.ToActionResult();
     }
 }

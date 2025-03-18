@@ -156,7 +156,9 @@ public class PresetRepository : IPresetRepository
             foreach (var device in devices)
             {
                 var invisiblePreset = invisiblePresets
-                    .FirstOrDefault(x => x.Name == device.Id.ToString());
+                    .FirstOrDefault(
+                        x => x.Name == device.Id.ToString() &&
+                        !x.IsVisible);
 
                 if (invisiblePreset is null) continue;
 

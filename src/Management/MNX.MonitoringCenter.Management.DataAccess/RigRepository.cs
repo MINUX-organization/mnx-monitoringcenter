@@ -136,7 +136,7 @@ public class RigRepository : IRigRepository
                 dbDevice.OwnerId = device.OwnerId;
                 dbDevice.FlightSheetId = device.FlightSheetId;
                 dbDevice.FlightSheetIsConfirm = device.FlightSheetIsConfirm;
-                dbDevice.Preset.Name = preset.Name;
+                dbDevice.Preset!.Name = preset!.Name;
                 dbDevice.Preset.DeviceName = preset.DeviceName;
                 dbDevice.Preset.OverclockingId = preset.OverclockingId;
                 dbDevice.Preset.Overclocking = preset.Overclocking;
@@ -147,14 +147,14 @@ public class RigRepository : IRigRepository
             }
             else
             {
-                await AddOverclocking(preset!);
+                await AddPresetWithOverclocking(preset!);
 
                 await context.MiningDevices.AddAsync(device);
                 await context.SaveChangesAsync();
             }
         }
 
-        async Task AddOverclocking(Core.Overclocking.Preset preset)
+        async Task AddPresetWithOverclocking(Core.Overclocking.Preset preset)
         {
             var overclocking = _mapper.Map<OverclockingDto>(preset.Overclocking);
             await context.Overclocking.AddAsync(overclocking);

@@ -7,6 +7,7 @@ using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
+using System.Transactions;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
 
@@ -87,7 +88,7 @@ public class SetOverclockingFromPresetCommandHandler :
 
             if (device.Name != preset.DeviceName)
             {
-                errors.Add($"");
+                errors.Add($"Incorrect device name of preset with id equaled {preset.Id}");
                 continue;
             }
 
@@ -99,11 +100,16 @@ public class SetOverclockingFromPresetCommandHandler :
             return Result<Guid[]>.Invalid(errors);
         }
 
-        await _miningDeviceRepository.SetPreset(request.PresetId,
-                                                cancellationToken,
-                                                devicesToProcess.Select(d => d.Id).ToArray());
+        using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+        {
+            await _miningDeviceRepository.SetPreset(request.PresetId,
+                                                    cancellationToken,
+                                                    devicesToProcess.Select(d => d.Id).ToArray());
 
-        await SendOverclockingToRigs(preset.Overclocking!, devicesToProcess, request.UserId);
+            await SendOverclockingToRigs(preset.Overclocking!, devicesToProcess, request.UserId);
+
+            transaction.Complete();
+        }
 
         return Result<Guid[]>.Success(devicesToProcess.Select(x => x.Id).ToArray());
     }

@@ -85,9 +85,9 @@ public interface IMiningDeviceRepository
     Task<IOverclocking?> GetOverclocking(Guid deviceId, Guid userId);
 
     /// <summary>
-    /// Задать разгон майнинг устройствам.
+    /// Задать разгон майнинг устройству напрямую.
     /// </summary>
     /// <param name="overclocking"> Разгон. </param>
-    /// <param name="devicesIds"> Идентификаторы устройств. </param>
-    Task SetOverclocking(IOverclocking overclocking, params Guid[] devicesIds);
+    /// <param name="devicesId"> Идентификатор устройства. </param>
+    Task SetOverclocking(Guid devicesId, IOverclocking overclocking);
 }

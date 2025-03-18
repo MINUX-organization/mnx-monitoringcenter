@@ -42,7 +42,7 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
             var overclocking = _mapper.Map<Core.Overclocking.GpuOverclocking>(gpu.Overclocking);
             var preset = new Preset()
             {
-                Name = gpu.Information.Model,
+                Name = gpu.Id.ToString(),
                 DeviceName = gpu.Information.Name,
                 OverclockingId = overclocking.Id,
                 Overclocking = overclocking,
@@ -70,7 +70,7 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
             var overclocking = _mapper.Map<Core.Overclocking.CpuOverclocking>(cpu.Overclocking);
             var preset = new Preset()
             {
-                Name = cpu.Information.Model,
+                Name = cpu.Id.ToString(),
                 DeviceName = cpu.Information.Name,
                 OverclockingId = overclocking.Id,
                 Overclocking = overclocking,

@@ -85,25 +85,10 @@ public class SetOverclockingOnDeviceCommandHandler
             }
         }
 
-        var id = Guid.NewGuid();
-        var defaultPreset = new Preset
-        {
-            Id = id,
-            Name = id.ToString(),
-            DeviceName = device.Name,
-            UserId = request.UserId, 
-            OverclockingId = overclocking.Id,
-            Overclocking = overclocking,
-            IsVisible = false
-        };
-
         using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
-            await _presetRepository.Save(defaultPreset);
-
-            await _miningDeviceRepository.SetPreset(defaultPreset.Id,
-                                                    cancellationToken,
-                                                    device.Id);
+            await _miningDeviceRepository.SetOverclocking(device.Id,
+                                                          overclocking);
 
             await SendOverclockingToRigs(overclocking, device, request.UserId);
 
