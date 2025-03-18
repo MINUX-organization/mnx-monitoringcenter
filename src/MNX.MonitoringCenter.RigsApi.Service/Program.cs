@@ -114,7 +114,7 @@ internal class Program
                                                   .Where(a => !a.IsDynamic)
                                                   .SelectMany(a => a.GetTypes());
 
-            // Swashbuckle �������� ������ � ��������, ��� � �������� ������, � �� �������� � ������������
+            // Swashbuckle работает только с классами, как с базовыми типами, и не работает с интерфейсами
             opts.SelectSubTypesUsing(baseType =>
             {
                 if (baseType.IsInterface)
