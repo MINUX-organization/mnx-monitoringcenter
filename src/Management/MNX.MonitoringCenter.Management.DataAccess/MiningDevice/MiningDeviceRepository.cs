@@ -75,34 +75,27 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public async Task SetOverclocking(Guid devicesId, IOverclocking overclocking)
+    public async Task SetOverclocking(MiningDeviceInfo device, IOverclocking overclocking)
     {
+        var invisiblePreset = await _context.Presets
+            .FirstOrDefaultAsync(x => x.Name == device.Id.ToString() && !x.IsVisible);
+
+        if (invisiblePreset == null) return;
+
+        var overclockingToUpdate = await _context.Overclocking
+            .FirstOrDefaultAsync(x => x.Id == invisiblePreset.OverclockingId);
+
+        if (overclockingToUpdate != null)
+        {
+            _context.Overclocking.Remove(overclockingToUpdate);
+        }
+
         var dto = _mapper.Map<OverclockingDto>(overclocking);
 
-        var device = await _context.MiningDevices
-            .FirstOrDefaultAsync(x => x.Id == devicesId);
+        invisiblePreset.OverclockingId = dto.Id;
+        device.PresetId = invisiblePreset.Id;
 
-        if (device != null)
-        {
-            var invisiblePreset = await _context.Presets
-                .FirstOrDefaultAsync(
-                    x => x.Name == device.Id.ToString() &&
-                    !x.IsVisible);
-
-            if (invisiblePreset != null)
-            {
-                var overclockingToUpdate = await _context.Overclocking
-                    .FirstOrDefaultAsync(x => x.Id == invisiblePreset.OverclockingId);
-
-                if (overclockingToUpdate != null)
-                {
-                    _context.Overclocking.Add(dto);
-                    _context.Overclocking.Remove(overclockingToUpdate);
-                    invisiblePreset.OverclockingId = dto.Id;
-                    device.PresetId = invisiblePreset.Id;
-                }
-            }
-        }
+        _context.Overclocking.Add(dto);
 
         await _context.SaveChangesAsync();
     }

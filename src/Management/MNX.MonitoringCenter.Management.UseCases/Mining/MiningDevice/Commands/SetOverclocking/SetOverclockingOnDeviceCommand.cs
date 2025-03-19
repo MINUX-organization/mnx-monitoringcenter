@@ -87,7 +87,7 @@ public class SetOverclockingOnDeviceCommandHandler
 
         using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
         {
-            await _miningDeviceRepository.SetOverclocking(device.Id,
+            await _miningDeviceRepository.SetOverclocking(device,
                                                           overclocking);
 
             await SendOverclockingToRigs(overclocking, device, request.UserId);

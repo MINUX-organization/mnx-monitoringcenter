@@ -150,8 +150,8 @@ public class PresetRepository : IPresetRepository
         {
             var invisiblePresets = await _context.Presets
                 .Where(x => !x.IsVisible && devices
-                .Select(d => d.Id.ToString()).Contains(x.Name))
-                    .ToListAsync();
+                    .Select(d => d.Id.ToString()).Contains(x.Name))
+                        .ToListAsync();
 
             foreach (var device in devices)
             {

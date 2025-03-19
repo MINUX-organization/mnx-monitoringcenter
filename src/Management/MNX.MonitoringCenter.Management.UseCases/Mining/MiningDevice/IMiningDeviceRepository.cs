@@ -88,6 +88,6 @@ public interface IMiningDeviceRepository
     /// Задать разгон майнинг устройству напрямую.
     /// </summary>
     /// <param name="overclocking"> Разгон. </param>
-    /// <param name="devicesId"> Идентификатор устройства. </param>
-    Task SetOverclocking(Guid devicesId, IOverclocking overclocking);
+    /// <param name="device"> Майнинг-устройство. </param>
+    Task SetOverclocking(MiningDeviceInfo device, IOverclocking overclocking);
 }
