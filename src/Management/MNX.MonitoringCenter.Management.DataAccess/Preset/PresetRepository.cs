@@ -5,6 +5,7 @@ using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Preset;
 
@@ -87,7 +88,7 @@ public class PresetRepository : IPresetRepository
                 DeviceName = preset.DeviceName,
                 OverclockingId = preset.OverclockingId,
                 Overclocking = _mapper.Map<IOverclocking>(overclocking)
-            }).FirstOrDefaultAsync();
+            }).FirstOrDefaultAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -130,68 +131,10 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public async Task Remove(Guid id, Guid userId)
+    public Task Remove(Guid id, Guid userId)
     {
-        var preset = await _context.Presets.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id && x.UserId == userId && x.IsVisible);
-
-        if (preset is null) return;
-
-        var removableOverclocking = await _context.Overclocking
-            .FirstOrDefaultAsync(x => x.Id == preset.OverclockingId);
-
-        if (removableOverclocking is null) return;
-
-        var devices = await _context.MiningDevices
-            .Where(x => x.PresetId == preset.Id)
-            .ToListAsync();
-
-        if (devices.Any())
-        {
-            var invisiblePresets = await _context.Presets
-                .Where(x => !x.IsVisible && devices
-                    .Select(d => d.Id.ToString()).Contains(x.Name))
-                        .ToListAsync();
-
-            foreach (var device in devices)
-            {
-                var invisiblePreset = invisiblePresets
-                    .FirstOrDefault(
-                        x => x.Name == device.Id.ToString() &&
-                        !x.IsVisible);
-
-                if (invisiblePreset is null) continue;
-
-                var overclocking = await _context.Overclocking
-                    .FirstOrDefaultAsync(x => x.Id == invisiblePreset.OverclockingId);
-
-                if (overclocking is not null)
-                {
-                    UpdateOverclockingParams(overclocking, removableOverclocking);
-                }
-
-                device.PresetId = invisiblePreset.Id;    
-            }
-
-            
-        }
-        _context.Overclocking.Remove(removableOverclocking);
-        _context.Presets.Remove(preset);
-
-        await _context.SaveChangesAsync();
-    }
-
-    private void UpdateOverclockingParams(OverclockingDto target, OverclockingDto source)
-    {
-        target.CoreClockLock = source.CoreClockLock;
-        target.CoreClockOffset = source.CoreClockOffset;
-        target.MemoryClockLock = source.MemoryClockLock;
-        target.MemoryClockOffset = source.MemoryClockOffset;
-        target.CoreVoltage = source.CoreVoltage;
-        target.CoreVoltageOffset = source.CoreVoltageOffset;
-        target.MemoryVoltage = source.MemoryVoltage;
-        target.MemoryVoltageOffset = source.MemoryVoltageOffset;
-        target.PowerLimit = source.PowerLimit;
-        target.FanSpeed = source.FanSpeed;
+        return _context.Presets
+            .Where(x => x.Id == id && x.UserId == userId && x.IsVisible)
+            .ExecuteDeleteAsync();
     }
 }

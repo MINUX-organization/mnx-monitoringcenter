@@ -58,17 +58,17 @@ public class PresetController : ControllerBase
     /// <summary>
     /// Получить пресет по его идентификатору.
     /// </summary>
-    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <param name="id"> Идентификатор пресета. </param>
     /// <returns> Пресет. </returns>
     /// <response code="200"> Успешно. </response>
     /// <response code="400"> Пресета с переданным идентификатором не существует. </response>
-    [HttpGet("{presetId:Guid}")]
+    [HttpGet("{id:Guid}")]
     [ProducesResponseType(typeof(PresetModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> GetPresetById(Guid presetId)
+    public async Task<IActionResult> GetPresetById(Guid id)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new GetPresetByIdQuery(presetId, userId));
+        var result = await _mediator.Send(new GetPresetByIdQuery(id, userId));
         return result.ToActionResult();
     }
 
@@ -146,21 +146,21 @@ public class PresetController : ControllerBase
     /// <summary>
     /// Применить пресет на устройство.
     /// </summary>
-    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <param name="id"> Идентификатор пресета. </param>
     /// <param name="deviceIds"> Идентификаторы устройств. </param>
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно. </response>
     /// <response code="400">
     /// Майнинг устройство или пресет не найдены.
     /// </response>
-    [HttpPost("{presetId:Guid}/apply")]
+    [HttpPost("{id:Guid}/apply")]
     [ProducesResponseType(typeof(Guid), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> SetOverclockingFromPreset(Guid presetId, params Guid[] deviceIds)
+    public async Task<IActionResult> ApplyPreset(Guid id, params Guid[] deviceIds)
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(
-            new SetOverclockingFromPresetCommand(userId, presetId, deviceIds));
+            new ApplyPresetCommand(userId, id, deviceIds));
         return result.ToActionResult();
     }
 }

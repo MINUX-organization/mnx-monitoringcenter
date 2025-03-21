@@ -36,16 +36,17 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     public async Task<List<MiningDeviceInfo>> GetAvailableByPresetId(Guid presetId,
                                                                      Guid userId)
     {
-        return await _context.MiningDevices.AsNoTracking()
-            .Where(x => x.OwnerId == userId && x.PresetId == presetId)
-            .ToListAsync();
+        return await _context.MiningDevices.AsNoTracking().Where(
+            x => x.OwnerId == userId && x.PresetId == presetId).ToListAsync();
     }
 
     /// <inheritdoc/>
-    public Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken)
+    public Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id,
+                                                       Guid userId,
+                                                       CancellationToken cancellationToken)
     {
-        return _context.MiningDevices.FirstOrDefaultAsync(
-            x => x.Id == id && x.OwnerId == userId, cancellationToken);
+        return _context.MiningDevices.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == id && x.OwnerId == userId, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -82,12 +83,12 @@ public class MiningDeviceRepository : IMiningDeviceRepository
 
         if (invisiblePreset == null) return;
 
-        var overclockingToUpdate = await _context.Overclocking
+        var oldOverclocking = await _context.Overclocking
             .FirstOrDefaultAsync(x => x.Id == invisiblePreset.OverclockingId);
 
-        if (overclockingToUpdate != null)
+        if (oldOverclocking != null)
         {
-            _context.Overclocking.Remove(overclockingToUpdate);
+            _context.Overclocking.Remove(oldOverclocking);
         }
 
         var dto = _mapper.Map<OverclockingDto>(overclocking);
@@ -174,9 +175,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                    Type = device.Type,
                    FlightSheetId = device.FlightSheetId,
                    FlightSheetIsConfirm = device.FlightSheetIsConfirm,
-                   FlightSheet = _mapper.Map<FlightSheet>(flightSheet),
-                   PresetId = device.PresetId,
-                   Preset = device.Preset
+                   FlightSheet = _mapper.Map<FlightSheet>(flightSheet)
                };
     }
 }

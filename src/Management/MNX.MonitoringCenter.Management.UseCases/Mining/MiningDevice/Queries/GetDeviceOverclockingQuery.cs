@@ -16,7 +16,7 @@ public sealed record GetDeviceOverclockingQuery(Guid DeviceId, Guid UserId)
 
 
 /// <summary>
-/// Обработчик <see cref="GetAvailableMiningDevicesQuery"/>.
+/// Обработчик <see cref="GetDeviceOverclockingQuery"/>.
 /// </summary>
 public class GetDeviceOverclockingQueryHandler
     : IRequestHandler<GetDeviceOverclockingQuery, Result<IOverclockingModel>>

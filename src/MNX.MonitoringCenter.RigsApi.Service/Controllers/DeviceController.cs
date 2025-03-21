@@ -129,18 +129,18 @@ public class DeviceController : ControllerBase
     /// <param name="overclocking"> Разгон. </param>
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно. </response>
-    /// <response code="200">
+    /// <response code="400">
     /// Девайса не существует или параметры разгона являются некорректными.
     /// </response>
     [HttpPost("overclocking")]
     [ProducesResponseType(typeof(Guid[]), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> SetOverclockingOnDevice(Guid deviceId,
-                                                             IOverclockingModel overclocking)
+    public async Task<IActionResult> SetOverclocking(Guid deviceId,
+                                                     IOverclockingModel overclocking)
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(
-            new SetOverclockingOnDeviceCommand(userId, overclocking, deviceId));
+            new SetOverclockingCommand(userId, overclocking, deviceId));
         return result.ToActionResult();
     }
 }

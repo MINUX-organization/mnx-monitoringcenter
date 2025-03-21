@@ -136,11 +136,6 @@ public class RigRepository : IRigRepository
                 dbDevice.OwnerId = device.OwnerId;
                 dbDevice.FlightSheetId = device.FlightSheetId;
                 dbDevice.FlightSheetIsConfirm = device.FlightSheetIsConfirm;
-                dbDevice.Preset!.Name = preset!.Name;
-                dbDevice.Preset.DeviceName = preset.DeviceName;
-                dbDevice.Preset.OverclockingId = preset.OverclockingId;
-                dbDevice.Preset.Overclocking = preset.Overclocking;
-                dbDevice.Preset.IsVisible = preset.IsVisible;
                 dbDevice.SwitchToOnline();
 
                 await context.SaveChangesAsync();

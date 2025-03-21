@@ -9,7 +9,7 @@ CREATE TABLE monitoring_center.mining_devices
     life_cycle_status text NOT NULL DEFAULT 'Online',
     flight_sheet_id uuid,
     flight_sheet_is_confirm boolean NOT NULL DEFAULT TRUE,
-    preset_id uuid,
+    preset_id uuid NOT NULL,
 
     CONSTRAINT pk_mining_devices PRIMARY KEY (id),
 
@@ -18,7 +18,7 @@ CREATE TABLE monitoring_center.mining_devices
         ON UPDATE NO ACTION
         ON DELETE CASCADE,
 
-    CONSTRAINT fk_mining_devices_overclocking_preset_id FOREIGN KEY (preset_id)
+    CONSTRAINT fk_mining_devices_presets_id FOREIGN KEY (preset_id)
         REFERENCES monitoring_center.presets (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE CASCADE

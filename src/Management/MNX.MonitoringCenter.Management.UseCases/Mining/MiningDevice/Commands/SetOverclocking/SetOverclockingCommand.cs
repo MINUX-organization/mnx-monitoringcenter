@@ -8,7 +8,6 @@ using MNX.RigCommander.MessageQueue.Clients.Bus;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
@@ -19,19 +18,17 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.
 /// <param name="UserId"> Идентификатор пользователя. </param>
 /// <param name="Overclocking"> Разгон. </param>
 /// <param name="DeviceId"> Идентификатор майнинг устройства. </param>
-public sealed record SetOverclockingOnDeviceCommand(Guid UserId,
-                                                    IOverclockingModel Overclocking,
-                                                    Guid DeviceId)
+public sealed record SetOverclockingCommand(Guid UserId, IOverclockingModel Overclocking, Guid DeviceId)
     : IUserableValidatableCommand<Guid>;
 
 /// <summary>
-/// Обработчик <see cref="SetOverclockingOnDeviceCommand"/>.
+/// Обработчик <see cref="SetOverclockingCommand"/>.
 /// </summary>
-public class SetOverclockingOnDeviceCommandHandler
+public class SetOverclockingCommandHandler
     : SaveOverclockingBaseHandler,
-    IRequestHandler<SetOverclockingOnDeviceCommand, Result<Guid>>
+    IRequestHandler<SetOverclockingCommand, Result<Guid>>
 {
-    private readonly ILogger<SetOverclockingOnDeviceCommandHandler> _logger;
+    private readonly ILogger<SetOverclockingCommandHandler> _logger;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
@@ -39,12 +36,12 @@ public class SetOverclockingOnDeviceCommandHandler
 
     private readonly IQueueBusClient _queueClient;
 
-    public SetOverclockingOnDeviceCommandHandler(IMapper mapper,
-                                                 IMediator mediator,
-                                                 IQueueBusClient queueClient,
-                                                 ILogger<SetOverclockingOnDeviceCommandHandler> logger,
-                                                 IMiningDeviceRepository miningDeviceRepository,
-                                                 IPresetRepository presetRepository)
+    public SetOverclockingCommandHandler(IMapper mapper,
+                                         IMediator mediator,
+                                         IQueueBusClient queueClient,
+                                         ILogger<SetOverclockingCommandHandler> logger,
+                                         IMiningDeviceRepository miningDeviceRepository,
+                                         IPresetRepository presetRepository)
         : base(mapper, mediator)
     {
         _logger = logger ??
@@ -57,8 +54,8 @@ public class SetOverclockingOnDeviceCommandHandler
             throw new ArgumentNullException(nameof(queueClient));
     }
 
-    public async Task<Result<Guid>> Handle(SetOverclockingOnDeviceCommand request,
-                                       CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(SetOverclockingCommand request,
+                                           CancellationToken cancellationToken)
     {
         var device = await _miningDeviceRepository.GetActiveDeviceById(request.DeviceId, request.UserId, cancellationToken);
 
@@ -90,27 +87,12 @@ public class SetOverclockingOnDeviceCommandHandler
             await _miningDeviceRepository.SetOverclocking(device,
                                                           overclocking);
 
-            await SendOverclockingToRigs(overclocking, device, request.UserId);
+            await _mediator.Send(new SendOverclockingToRigsCommand(overclocking,
+                                                                   [device],
+                                                                   request.UserId));
 
             transaction.Complete();
         }
-
         return Result<Guid>.Success(device.Id);
-    }
-
-    /// <summary>
-    /// Отправить новый разгон на риги.
-    /// </summary>
-    /// <param name="overclocking"> Разгон. </param>
-    /// <param name="device"> Устройство. </param>
-    /// <param name="userId"> Идентификатор пользователя. </param>
-    protected async Task SendOverclockingToRigs(IOverclocking overclocking, MiningDeviceInfo device, Guid userId)
-    {
-        var rigOverclocking = _mapper.Map<Inventory.Contracts.Devices.Overclocking>(overclocking);
-
-        var command = new Agent.Commands.Overclocking.SetOverclockingCommand(
-            rigOverclocking, device.Id);
-
-        await _queueClient.Enqueue(command, [device.RigId], userId);
     }
 }

@@ -8,10 +8,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.13">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
     <PackageReference Include="MNX.Application.Bus.RabbitMQ" Version="1.0.2" />
     <PackageReference Include="MNX.Application.Consul" Version="1.0.1" />
     <PackageReference Include="MNX.Application.OpenTelemetry" Version="1.0.0" />
