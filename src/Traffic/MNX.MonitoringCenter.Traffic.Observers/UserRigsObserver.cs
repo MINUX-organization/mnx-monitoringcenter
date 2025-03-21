@@ -6,10 +6,8 @@ using MNX.MonitoringCenter.Traffic.Observers.Hardware;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
 using MNX.MonitoringCenter.Traffic.Observers.Mapping;
 using MNX.MonitoringCenter.Traffic.Observers.Mining;
-using System.Reactive.Concurrency;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Channels;
 
 namespace MNX.MonitoringCenter.Traffic.Observers;
 
@@ -61,10 +59,6 @@ public class UserRigsObserver : IUserRigsObserver
 
         _rigsIndicatorsStream = new Subject<RigDynamicIndicators>();
 
-        _serviceScope = serviceScopeFactory.CreateScope();
-        var mapper = _serviceScope.ServiceProvider.GetRequiredService<IMapper>();
-        var builder = _serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>();
-
         var groupedRigsIndicatorsStream = _rigsIndicatorsStream
             .Buffer(updateIndicatorsPeriod)
             .Where(list => list.Any())
@@ -76,10 +70,19 @@ public class UserRigsObserver : IUserRigsObserver
             });
 
         var hardwareIndicatorsStream = groupedRigsIndicatorsStream
-            .Select(mapper.Map<IEnumerable<RigDynamicHardwareIndicators>>);
+            .Select(item => {
+                _serviceScope = serviceScopeFactory.CreateScope();
+                return _serviceScope
+                .ServiceProvider
+                .GetRequiredService<IMapper>()
+                .Map<IEnumerable<RigDynamicHardwareIndicators>>(item);
+            });
 
         var miningIndicatorsStream = groupedRigsIndicatorsStream
-            .Select(builder.Build)
+            .Select(item => {
+                _serviceScope = serviceScopeFactory.CreateScope();
+                return _serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>().Build(item);
+            })
             .Concat();
 
         _hardwareIndicatorsStreamSubscription = hardwareIndicatorsStream
@@ -91,7 +94,7 @@ public class UserRigsObserver : IUserRigsObserver
 
     /// <inheritdoc/>
     public (bool IsSuccessful, int SubscriptionsCount) TrySubscribe
-        (string subscriberId, SubscriptionType subscriptionType, ChannelWriter<object> writer)
+        (string subscriberId, SubscriptionType subscriptionType, Action<object> onNext)
     {
         bool isSuccessful = false;
         var subscriptions = 0;
@@ -99,7 +102,7 @@ public class UserRigsObserver : IUserRigsObserver
         if (subscriptionType.IsHardwareSubscription())
         {
             var (IsSuccessful, SubscriptionsCount)
-                = _rigsHardwareObserver.TrySubscribe(subscriberId, subscriptionType, writer);
+                = _rigsHardwareObserver.TrySubscribe(subscriberId, subscriptionType, onNext);
 
             isSuccessful = IsSuccessful;
             subscriptions += SubscriptionsCount;
@@ -109,7 +112,7 @@ public class UserRigsObserver : IUserRigsObserver
         else if (subscriptionType.IsMiningSubscription())
         {
             var (IsSuccessful, SubscriptionsCount)
-                = _rigsMiningObserver.TrySubscribe(subscriberId, subscriptionType, writer);
+                = _rigsMiningObserver.TrySubscribe(subscriberId, subscriptionType, onNext);
 
             isSuccessful = IsSuccessful;
             subscriptions += SubscriptionsCount;

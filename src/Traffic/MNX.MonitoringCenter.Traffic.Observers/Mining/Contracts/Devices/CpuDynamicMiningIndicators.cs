@@ -10,4 +10,12 @@ public class CpuDynamicMiningIndicators : DeviceDynamicMiningIndicators
 {
     /// <inheritdoc/>
     public override DeviceType Type { get => DeviceType.CPU; }
+
+    /// <summary>
+    /// Температура.
+    /// </summary>
+    public int Temperature { get; set; }
+
+    /// <inheritdoc/>
+    public override int GetAverageTemperature() => Temperature;
 }

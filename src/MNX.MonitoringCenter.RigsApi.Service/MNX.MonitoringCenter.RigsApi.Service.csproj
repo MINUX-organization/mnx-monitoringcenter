@@ -24,6 +24,8 @@
     <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Integration\MNX.MonitoringCenter.Inventory.Integration.csproj" />
     <ProjectReference Include="..\Management\MNX.MonitoringCenter.Management.Integration\MNX.MonitoringCenter.Management.Integration.csproj" />
     <ProjectReference Include="..\Management\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.RigsApi.Contracts\MNX.MonitoringCenter.RigsApi.Contracts.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.RigsApi.UnionStreams\MNX.MonitoringCenter.RigsApi.UnionStreams.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.RigsApi.UseCases\MNX.MonitoringCenter.RigsApi.UseCases.csproj" />
     <ProjectReference Include="..\Traffic\MNX.MonitoringCenter.Traffic.Integration\MNX.MonitoringCenter.Traffic.Integration.csproj" />
   </ItemGroup>

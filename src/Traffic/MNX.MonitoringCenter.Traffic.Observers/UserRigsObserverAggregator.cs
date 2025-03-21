@@ -2,9 +2,7 @@
 using Microsoft.Extensions.Options;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using MNX.MonitoringCenter.Traffic.Observers.Mapping;
 using System.Collections.Concurrent;
-using System.Threading.Channels;
 
 namespace MNX.MonitoringCenter.Traffic.Observers;
 
@@ -48,19 +46,19 @@ public class UserRigsObserverAggregator : IUserRigsObserverAggregator
 
     /// <inheritdoc/>
     public bool TrySubscribe(Guid userId, string subscriberId,
-                             SubscriptionType subscriptionType, ChannelWriter<object> writer)
+                             SubscriptionType subscriptionType, Action<object> onNext)
     {
         IUserRigsObserver observer;
 
         try
         {
             observer = GetOrCreateObserver(userId);
-            return observer.TrySubscribe(subscriberId, subscriptionType, writer).IsSuccessful;
+            return observer.TrySubscribe(subscriberId, subscriptionType, onNext).IsSuccessful;
         }
         catch (ObjectDisposedException)
         {
             observer = GetOrCreateObserver(userId);
-            return observer.TrySubscribe(subscriberId, subscriptionType, writer).IsSuccessful;
+            return observer.TrySubscribe(subscriberId, subscriptionType, onNext).IsSuccessful;
         }
     }
 
@@ -149,7 +147,6 @@ public class UserRigsObserverAggregator : IUserRigsObserverAggregator
         if (_observers.TryRemove(userId, out var observer))
         {
             observer.Dispose();
-            // todo: отправить команду на остановку потока показателей на все риги пользователя.
         }
     }
 }

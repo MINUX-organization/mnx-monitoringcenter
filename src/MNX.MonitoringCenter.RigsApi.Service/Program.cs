@@ -19,6 +19,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
 using MNX.SecurityManagement.Authentication.Integration;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.Streams;
+using MNX.MonitoringCenter.RigsApi.UnionStreams;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
@@ -57,10 +60,10 @@ internal class Program
         services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    // <НЕ ПЕРЕСТАВЛЯТЬ>
+                    // <�� ������������>
                     options.JsonSerializerOptions.Converters.Add(new EnumFlagsConverter());
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    // </НЕ ПЕРЕСТАВЛЯТЬ>
+                    // </�� ������������>
 
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                     options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
@@ -114,7 +117,7 @@ internal class Program
                                                   .Where(a => !a.IsDynamic)
                                                   .SelectMany(a => a.GetTypes());
 
-            // Swashbuckle работает только с классами, как с базовыми типами, и не работает с интерфейсами
+            // Swashbuckle �������� ������ � ��������, ��� � �������� ������, � �� �������� � ������������
             opts.SelectSubTypesUsing(baseType =>
             {
                 if (baseType.IsInterface)
@@ -167,6 +170,8 @@ internal class Program
         services.AddInventoryModule(configuration);
         services.AddManagementModule(configuration);
         services.AddTrafficProcessing(configuration);
+
+        services.AddScoped<IUnionStreamBuilder, UnionStreamBuilder>();
 
         services.AddEasyNetQ(configuration, new Assembly[]
         {
