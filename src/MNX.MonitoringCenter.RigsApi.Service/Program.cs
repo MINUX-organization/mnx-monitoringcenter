@@ -11,6 +11,9 @@ using MNX.MonitoringCenter.Management.Integration;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
 using MNX.MonitoringCenter.RigsApi.Service.Hubs;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.Streams;
+using MNX.MonitoringCenter.RigsApi.UnionStreams;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
 using MNX.MonitoringCenter.Traffic.Controllers;
 using MNX.MonitoringCenter.Traffic.Integration;
@@ -167,6 +170,8 @@ internal class Program
         services.AddInventoryModule(configuration);
         services.AddManagementModule(configuration);
         services.AddTrafficProcessing(configuration);
+
+        services.AddScoped<IUnionStreamBuilder, UnionStreamBuilder>();
 
         services.AddEasyNetQ(configuration, new Assembly[]
         {

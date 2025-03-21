@@ -6,7 +6,6 @@ using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstractio
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Channels;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Mining;
 
@@ -16,7 +15,7 @@ namespace MNX.MonitoringCenter.Traffic.Observers.Mining;
 public class RigsMiningObserver : BaseRigsObserver<RigDynamicMiningIndicators,
                                                    IDeviceDynamicMiningIndicators,
                                                    CpuDynamicMiningIndicators,
-                                                   CpuDynamicMiningIndicators>
+                                                   GpuDynamicMiningIndicators>
 {
     /// <summary>
     /// Поток общих решений майнинга.
@@ -40,7 +39,7 @@ public class RigsMiningObserver : BaseRigsObserver<RigDynamicMiningIndicators,
 
     /// <inheritdoc/>
     public override (bool IsSuccessful, int SubscriptionsCount) TrySubscribe
-        (string subscriberId, SubscriptionType subscriptionType, ChannelWriter<object> writer)
+        (string subscriberId, SubscriptionType subscriptionType, Action<object> onNext)
     {
         var subscription = _subscriberSubscriptions.GetValueOrDefault(subscriberId);
 
@@ -53,22 +52,22 @@ public class RigsMiningObserver : BaseRigsObserver<RigDynamicMiningIndicators,
         bool isSuccessful = false;
 
         if (subscriptionType == SubscriptionType.GeneralMiningRigsIndicators)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _generalIndicatorsStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _generalIndicatorsStream);
 
         else if (subscriptionType == SubscriptionType.CpusMiningIndicators)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _cpusIndicatorsStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _cpusIndicatorsStream);
 
         else if (subscriptionType == SubscriptionType.GpusMiningIndicators)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _gpusIndicatorsStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _gpusIndicatorsStream);
 
         else if (subscriptionType == SubscriptionType.TotalShares)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _totalSharesStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _totalSharesStream);
 
         else if (subscriptionType == SubscriptionType.TotalHashRate)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _totalHashRateStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _totalHashRateStream);
 
         else if (subscriptionType == SubscriptionType.TotalCoinsStatistics)
-            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, writer, _totalCoinsStatisticsStream);
+            isSuccessful = TrySubscribeToStream(subscription, subscriptionType, onNext, _totalCoinsStatisticsStream);
 
         return new(isSuccessful, _subscriptionsCount);
     }

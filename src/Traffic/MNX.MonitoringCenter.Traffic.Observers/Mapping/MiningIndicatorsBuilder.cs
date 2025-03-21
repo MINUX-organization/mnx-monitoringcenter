@@ -73,6 +73,7 @@ public class MiningIndicatorsBuilder
 
                     var flightSheetGettingResult = await _mediator.Send(
                             new GetFlightSheetByIdQuery(device.FlightSheetId.Value, rigIndicators.UserId));
+                    
 
                     if (!TryGetValue(flightSheetGettingResult, out FlightSheetModel flightSheet))
                     {

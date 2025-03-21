@@ -55,7 +55,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.Agent.Commands", "src\Management\MNX.MonitoringCenter.Management.Agent.Commands\MNX.MonitoringCenter.Management.Agent.Commands.csproj", "{E914E562-D096-4836-89DD-9E3B4666DF7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Traffic.Contracts.SerializationTests", "tests\Traffic\MNX.MonitoringCenter.Traffic.Contracts.SerializationTests\MNX.MonitoringCenter.Traffic.Contracts.SerializationTests.csproj", "{8E926060-5BA8-4228-91DC-1AB88E3FBC4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffic.Contracts.SerializationTests", "tests\Traffic\MNX.MonitoringCenter.Traffic.Contracts.SerializationTests\MNX.MonitoringCenter.Traffic.Contracts.SerializationTests.csproj", "{8E926060-5BA8-4228-91DC-1AB88E3FBC4B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.UnionStreams", "src\MNX.MonitoringCenter.RigsApi.UnionStreams\MNX.MonitoringCenter.RigsApi.UnionStreams.csproj", "{EC733581-8769-48F5-BD32-A9321E8C4B03}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.Contracts", "src\MNX.MonitoringCenter.RigsApi.Contracts\MNX.MonitoringCenter.RigsApi.Contracts.csproj", "{9F5E6424-5FD4-47C7-A5B0-7B37A11AD2B0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +147,14 @@ Global
 		{8E926060-5BA8-4228-91DC-1AB88E3FBC4B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8E926060-5BA8-4228-91DC-1AB88E3FBC4B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8E926060-5BA8-4228-91DC-1AB88E3FBC4B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EC733581-8769-48F5-BD32-A9321E8C4B03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EC733581-8769-48F5-BD32-A9321E8C4B03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EC733581-8769-48F5-BD32-A9321E8C4B03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EC733581-8769-48F5-BD32-A9321E8C4B03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F5E6424-5FD4-47C7-A5B0-7B37A11AD2B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F5E6424-5FD4-47C7-A5B0-7B37A11AD2B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F5E6424-5FD4-47C7-A5B0-7B37A11AD2B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F5E6424-5FD4-47C7-A5B0-7B37A11AD2B0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -173,6 +185,8 @@ Global
 		{1A7D9B99-6C09-4F83-964E-0B76A60277FB} = {9FA013FC-79DD-4969-BBF5-5F547838C0B4}
 		{E914E562-D096-4836-89DD-9E3B4666DF7D} = {9C628EEF-6EAA-4451-83D8-74D9E717C558}
 		{8E926060-5BA8-4228-91DC-1AB88E3FBC4B} = {9FA013FC-79DD-4969-BBF5-5F547838C0B4}
+		{EC733581-8769-48F5-BD32-A9321E8C4B03} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{9F5E6424-5FD4-47C7-A5B0-7B37A11AD2B0} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}
