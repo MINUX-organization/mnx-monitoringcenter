@@ -16,9 +16,14 @@ public class MonitoringHub : Hub
 
     private readonly IUnionStreamBuilder _unionStreamBuilder;
 
+    private readonly ILogger<MonitoringHub> _logger;
+
     public MonitoringHub(UserAccessor userAccessor,
-                         IUnionStreamBuilder unionStreamBuilder)
+                         IUnionStreamBuilder unionStreamBuilder,
+                         ILogger<MonitoringHub> logger)
     {
+        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
         _userAccessor = userAccessor
             ?? throw new ArgumentNullException(nameof(userAccessor));
 
@@ -42,6 +47,8 @@ public class MonitoringHub : Hub
             }
         }
 
+        _logger.LogTrace("Disconnected: {ConnectionId}", Context.ConnectionId);
+
         return base.OnDisconnectedAsync(exception);
     }
 
@@ -52,13 +59,19 @@ public class MonitoringHub : Hub
     /// <returns> Поток данных. </returns>
     public async IAsyncEnumerable<object> Subscribe(StreamType streamType)
     {
-        var userId = _userAccessor.GetUserId(); 
+        var userId = _userAccessor.GetUserId();
 
-        var stream = await _unionStreamBuilder.Build(
+        _logger.LogTrace("Connected: {ConnectionId}", Context.ConnectionId);
+
+        var stream = _unionStreamBuilder.Build(
             new UnionStreamBuilderArgs(userId, Context.ConnectionId, streamType));
 
         Context.Items.Add(userId, stream);
 
-        yield return stream.StartStreaming();
+        await foreach (var response in stream.StartStreaming())
+        {
+            if (response is not null) 
+                yield return response;
+        } 
     }
 }

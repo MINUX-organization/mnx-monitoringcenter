@@ -1,6 +1,4 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.RigsApi.Contracts.Args;
+﻿using MNX.MonitoringCenter.RigsApi.Contracts.Args;
 using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 using MNX.MonitoringCenter.Traffic.Observers;
@@ -10,6 +8,11 @@ using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 using System.Reactive.Linq;
 using System.Threading.Channels;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
+using Microsoft.Extensions.DependencyInjection;
+using MediatR;
+using MNX.Application.UseCases.Mediator;
+using MNX.MonitoringCenter.Management.UseCases.Mining;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 
@@ -20,10 +23,6 @@ public class MonitoringStream : Abstractions.Stream
     private readonly Channel<object> _channel = Channel.CreateUnbounded<object>();
 
     private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
-
-    private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> _miningCombinations;
-
-    private readonly Dictionary<Guid, RigDetails> _rigs;
 
     protected override SubscriptionType[] SubscriptionTypes => new[] {
         SubscriptionType.TotalCoinsStatistics,
@@ -37,18 +36,16 @@ public class MonitoringStream : Abstractions.Stream
     public MonitoringStream(
         Guid userId,
         string connectionId,
-        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> miningCombinations,
-        IEnumerable<RigDetails> rigs,
-        IUserRigsObserverAggregator userRigsObserverAggregator)
+        IUserRigsObserverAggregator userRigsObserverAggregator,
+        IServiceScopeFactory scope)
     {
+        _serviceScopeFactory = scope;
         _userRigsObserverAggregator = userRigsObserverAggregator;
-        _miningCombinations = miningCombinations;
-        _rigs = rigs.ToDictionary(x => x.Id);
 
         _subscription = Subject
-            .GroupBy(x => x.Item1)
-            .SelectMany(group => group.Buffer(SubscriptionTypes.Length))
-            .Select(OnNewDataReceived)
+            .Buffer(TimeSpan, SubscriptionTypes.Length)
+            .Select(item => OnNewDataReceived(item, userId))
+            .Concat()
             .Subscribe(
                 response => _channel.Writer.TryWrite(response),
                 ex => _channel.Writer.TryComplete(ex),
@@ -62,30 +59,48 @@ public class MonitoringStream : Abstractions.Stream
         }
     }
 
-    private MonitoringIndicatorsStreamResponse OnNewDataReceived(IList<(SubscriptionType, object)> data)
-    {
-        var messages = data.ToDictionary(x => x.Item1, x => x.Item2);
+    /// <summary>
+    /// Обработка новых данных.
+    /// </summary>
+    /// <param name="data">Данные.</param>
+    /// <param name="userId">Идентификатор пользователя.</param>
+    /// <returns>Задача с результатом ответа.</returns>
+    private async Task<MonitoringIndicatorsStreamResponse> OnNewDataReceived(
+        IList<(SubscriptionType, object)> data,
+        Guid userId)
+    {   
+        using var scope = _serviceScopeFactory!.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+        var messages = data
+            .GroupBy(x => x.Item1)
+            .Select(x => x.Last())
+            .ToDictionary(x => x.Item1, x => x.Item2);
 
         var response = MonitoringIndicatorsStreamResponse.ConvertFrom(new MonitoringIndicatorsStreamResponseArgs(
-            (IEnumerable<CoinStatistics>)messages[SubscriptionType.TotalCoinsStatistics],
-            (SharesModel)messages[SubscriptionType.TotalShares],
-            (int)messages[SubscriptionType.TotalHashRate],
-            (int)messages[SubscriptionType.TotalPower],
-            (IEnumerable<RigDynamicMiningIndicators>)messages[SubscriptionType.GeneralMiningRigsIndicators],
-            (IEnumerable<RigDynamicHardwareIndicators>)messages[SubscriptionType.GeneralHardwareRigsIndicators],
-            _miningCombinations,
-            _rigs
+            messages.GetValueOrDefault(SubscriptionType.TotalCoinsStatistics) as IEnumerable<CoinStatistics>,
+            messages.GetValueOrDefault(SubscriptionType.TotalShares) as SharesModel,
+            int.Parse(messages.GetValueOrDefault(SubscriptionType.TotalHashRate)?.ToString() ?? "0"),
+            int.Parse(messages.GetValueOrDefault(SubscriptionType.TotalPower)?.ToString() ?? "0"),
+            messages.GetValueOrDefault(SubscriptionType.GeneralMiningRigsIndicators) 
+                as IEnumerable<RigDynamicMiningIndicators>,
+            messages.GetValueOrDefault(SubscriptionType.GeneralHardwareRigsIndicators) 
+                as IEnumerable<RigDynamicHardwareIndicators>,
+            await mediator.Send(new GetMiningCombinationsQuery(userId), default),
+            (await mediator.GetListAsync(
+                new GetRigsDetailsQuery(userId), default))
+                .ToDictionary(x => x.Id, x => x)
         ));
 
         if (response is null)
         {
-            // TODO: Реализация отправки прошлого результата.
             return new MonitoringIndicatorsStreamResponse();
         }
 
         return response;
     }
 
+    /// <inheritdoc/>
     public override async IAsyncEnumerable<object> StartStreaming()
     {
         await foreach (var response in _channel.Reader.ReadAllAsync())
@@ -94,6 +109,7 @@ public class MonitoringStream : Abstractions.Stream
         }
     }
 
+    /// <inheritdoc/>
     public override void StopStreaming(Guid userId, string connectionId)
     {
         _subscription.Dispose();

@@ -1,6 +1,8 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
-using MNX.MonitoringCenter.Management.Contracts;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using MNX.Application.UseCases.Mediator;
+using MNX.MonitoringCenter.Management.UseCases.Mining;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 using MNX.MonitoringCenter.RigsApi.Contracts.Args;
 using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
 using MNX.MonitoringCenter.Traffic.Observers;
@@ -20,12 +22,6 @@ public class DevicesStream : Abstractions.Stream
 
     private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
 
-    private readonly IAsyncEnumerable<CpuDetails> _cpuDetails;
-
-    private readonly IAsyncEnumerable<GpuDetails> _gpusDatails;
-
-    private readonly Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> _miningCombinations;
-
     protected override SubscriptionType[] SubscriptionTypes => new[] {
         SubscriptionType.CpusHardwareIndicators,
         SubscriptionType.GpusHardwareIndicators,
@@ -36,20 +32,16 @@ public class DevicesStream : Abstractions.Stream
     public DevicesStream(
         Guid userId,
         string connectionId,
-        IAsyncEnumerable<CpuDetails> cpusNames,
-        IAsyncEnumerable<GpuDetails>  gpusNames,
-        Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> miningCombinations,
-        IUserRigsObserverAggregator userRigsObserverAggregator)
+        IUserRigsObserverAggregator userRigsObserverAggregator,
+        IServiceScopeFactory scope)
     {
+        _serviceScopeFactory = scope;
         _userRigsObserverAggregator = userRigsObserverAggregator;
-        _cpuDetails = cpusNames;
-        _gpusDatails = gpusNames;
-        _miningCombinations = miningCombinations;
 
         _subscription = Subject
-            .GroupBy(x => x.Item1)
-            .SelectMany(group => group.Buffer(SubscriptionTypes.Length))
-            .Select(OnNewDataReceived)
+            .Buffer(TimeSpan, SubscriptionTypes.Length)
+            .Select(item => OnNewDataReceived(item, userId))
+            .Concat()
             .Subscribe(
                 response => _channel.Writer.TryWrite(response),
                 ex => _channel.Writer.TryComplete(ex),
@@ -63,35 +55,50 @@ public class DevicesStream : Abstractions.Stream
         }
     }
 
-    private async Task<DevicesIndicatorsStreamResponse> OnNewDataReceived(IList<(SubscriptionType, object)> data)
+    private async Task<DevicesIndicatorsStreamResponse> OnNewDataReceived(
+        IList<(SubscriptionType, object)> data,
+        Guid userId)
     {
-        var messages = data.ToDictionary(x => x.Item1, x => x.Item2);
+        using var scope = _serviceScopeFactory!.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
 
-        var cpusNames = new Dictionary<Guid, string>();
+        var messages = data
+            .GroupBy(x => x.Item1)
+            .Select(x => x.Last())
+            .ToDictionary(x => x.Item1, x => x.Item2);
+
+        var cpuNames = new Dictionary<Guid, string>();
         var gpusNames = new Dictionary<Guid, string>();
+        var miningDevices = await mediator.GetListAsync(new GetAvailableMiningDevicesQuery(userId), default);
 
-        await foreach (var cpuDetails in _cpuDetails)
+        foreach (var miningDevice in miningDevices)
         {
-            cpusNames.Add(cpuDetails.Id, cpuDetails.Information.Name);
-        }
+            if (miningDevice.Type == "CPU")
+            {
+                cpuNames.Add(miningDevice.Id, miningDevice.Name);
+            }
 
-        await foreach (var gpuDetails in _gpusDatails)
-        {
-            gpusNames.Add(gpuDetails.Id, gpuDetails.Information.Name);
+            if (miningDevice.Type == "GPU")
+            {
+                gpusNames.Add(miningDevice.Id, miningDevice.Name);
+            }
         }
 
         var response = DevicesIndicatorsStreamResponse.ConvertFrom(new DevicesIndicatorsStreamResponseArgs(
-            (IEnumerable<CpuDynamicMiningIndicators>)messages[SubscriptionType.CpusMiningIndicators],
-            (IEnumerable<CpuDynamicHardwareIndicators>)messages[SubscriptionType.CpusHardwareIndicators],
-            (IEnumerable<GpuDynamicMiningIndicators>)messages[SubscriptionType.GpusMiningIndicators],
-            (IEnumerable<GpuDynamicHardwareIndicators>)messages[SubscriptionType.GpusHardwareIndicators],
-            cpusNames,
+            messages.GetValueOrDefault(SubscriptionType.CpusMiningIndicators) 
+                as IEnumerable<CpuDynamicMiningIndicators>,
+            messages.GetValueOrDefault(SubscriptionType.CpusHardwareIndicators) 
+                as IEnumerable<CpuDynamicHardwareIndicators>,
+            messages.GetValueOrDefault(SubscriptionType.GpusMiningIndicators) 
+                as IEnumerable<GpuDynamicMiningIndicators>,
+            messages.GetValueOrDefault(SubscriptionType.GpusHardwareIndicators) 
+                as IEnumerable<GpuDynamicHardwareIndicators>,
+            cpuNames,
             gpusNames,
-            _miningCombinations));
+            await mediator.Send(new GetMiningCombinationsQuery(userId), default)));
 
         if (response is null)
         {
-            // TODO: Реализация отправки прошлого результата.
             return new DevicesIndicatorsStreamResponse();
         }
 

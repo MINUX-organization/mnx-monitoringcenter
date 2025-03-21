@@ -15,7 +15,7 @@ namespace MNX.MonitoringCenter.Traffic.Observers.Mining;
 public class RigsMiningObserver : BaseRigsObserver<RigDynamicMiningIndicators,
                                                    IDeviceDynamicMiningIndicators,
                                                    CpuDynamicMiningIndicators,
-                                                   CpuDynamicMiningIndicators>
+                                                   GpuDynamicMiningIndicators>
 {
     /// <summary>
     /// Поток общих решений майнинга.

@@ -2,10 +2,13 @@
 using MNX.MonitoringCenter.Traffic.Observers;
 using System.Reactive.Linq;
 using System.Threading.Channels;
-using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.RigsApi.Contracts.Args;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
 using MNX.MonitoringCenter.RigsApi.Contracts;
+using MediatR;
+using Microsoft.Extensions.DependencyInjection;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.Application.UseCases.Mediator;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 
@@ -17,8 +20,6 @@ public class RigsStream : Abstractions.Stream
 
     private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
 
-    private readonly Dictionary<Guid, Rig> _rigs;
-
     protected override SubscriptionType[] SubscriptionTypes => new[] {
         SubscriptionType.GeneralHardwareRigsIndicators,
     };
@@ -26,17 +27,17 @@ public class RigsStream : Abstractions.Stream
     public RigsStream(
         Guid userId,
         string connectionId,
-        List<Rig> rigs,
-        IUserRigsObserverAggregator userRigsObserverAggregator)
+        IUserRigsObserverAggregator userRigsObserverAggregator,
+        IServiceScopeFactory scope)
     {
+        _serviceScopeFactory = scope;
+
         _userRigsObserverAggregator = userRigsObserverAggregator;
 
-        _rigs = rigs.ToDictionary(x => x.Id);
-
         _subscription = Subject
-            .GroupBy(x => x.Item1)
-            .SelectMany(group => group.Buffer(SubscriptionTypes.Length))
-            .Select(OnNewDataReceived)
+            .Buffer(TimeSpan, SubscriptionTypes.Length)
+            .Select(item => OnNewDataReceived(item, userId))
+            .Concat()
             .Subscribe(
                 response => _channel.Writer.TryWrite(response),
                 ex => _channel.Writer.TryComplete(ex),
@@ -50,17 +51,24 @@ public class RigsStream : Abstractions.Stream
         }
     }
 
-    private IEnumerable<RigDynamicHardwareIndicatorsModel> OnNewDataReceived(IList<(SubscriptionType, object)> data)
+    private async Task<IEnumerable<RigDynamicHardwareIndicatorsModel>> OnNewDataReceived(
+        IList<(SubscriptionType, object)> data, Guid userId)
     {
-        var messages = data.ToDictionary(x => x.Item1, x => x.Item2);
+        using var scope = _serviceScopeFactory!.CreateScope();
+        var mediator = scope.ServiceProvider.GetRequiredService<IMediator>();
+
+        var messages = data
+            .GroupBy(x => x.Item1)
+            .Select(x => x.Last())
+            .ToDictionary(x => x.Item1, x => x.Item2);
 
         var response = RigDynamicHardwareIndicatorsModel.ConvertFrom(new RigDynamicHardwareIndicatorsModelArgs(
-            (IEnumerable<RigDynamicHardwareIndicators>)messages[SubscriptionType.GeneralHardwareRigsIndicators],
-            _rigs));
+            messages.GetValueOrDefault(SubscriptionType.GeneralHardwareRigsIndicators)
+                as IEnumerable<RigDynamicHardwareIndicators>,
+            (await mediator.GetListAsync(new GetRigsQuery(userId), default)).ToDictionary(x => x.Id, x => x)));
 
         if (response is null)
         {
-            // TODO: Реализация отправки прошлого результата.
             return new List<RigDynamicHardwareIndicatorsModel>();
         }
 

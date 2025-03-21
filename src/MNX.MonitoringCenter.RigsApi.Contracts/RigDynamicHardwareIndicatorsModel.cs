@@ -50,7 +50,7 @@ public class RigDynamicHardwareIndicatorsModel : IConverterFrom<IEnumerable<RigD
     {
         if (source is RigDynamicHardwareIndicatorsModelArgs args)
         {
-            return args.RigDynamicHardwareIndicators.Select(rig => new RigDynamicHardwareIndicatorsModel
+            return args.RigDynamicHardwareIndicators?.Select(rig => new RigDynamicHardwareIndicatorsModel
             {
                 RigId = rig.RigId,
                 RigName = args.Rigs.GetValueOrDefault(rig.RigId)?.Name,

@@ -6,13 +6,13 @@ namespace MNX.MonitoringCenter.RigsApi.Contracts.Args;
 
 public class DevicesIndicatorsStreamResponseArgs
 {
-    public IEnumerable<CpuDynamicMiningIndicators> CpuDynamicMiningIndicators { get; set; }
+    public IEnumerable<CpuDynamicMiningIndicators>? CpuDynamicMiningIndicators { get; set; }
 
-    public IEnumerable<CpuDynamicHardwareIndicators> CpuDynamicHardwareIndicators { get; set; }
+    public IEnumerable<CpuDynamicHardwareIndicators>? CpuDynamicHardwareIndicators { get; set; }
 
-    public IEnumerable<GpuDynamicMiningIndicators> GpuDynamicMiningIndicators { get; set; }
+    public IEnumerable<GpuDynamicMiningIndicators>? GpuDynamicMiningIndicators { get; set; }
 
-    public IEnumerable<GpuDynamicHardwareIndicators> GpuDynamicHardwareIndicators { get; set; }
+    public IEnumerable<GpuDynamicHardwareIndicators>? GpuDynamicHardwareIndicators { get; set; }
 
     public Dictionary<Guid, string> CpusNames { get; set; }
 
@@ -21,10 +21,10 @@ public class DevicesIndicatorsStreamResponseArgs
     public Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> MiningCombinations { get; set; }
 
     public DevicesIndicatorsStreamResponseArgs(
-        IEnumerable<CpuDynamicMiningIndicators> cpuDynamicMiningIndicators,
-        IEnumerable<CpuDynamicHardwareIndicators> cpuDynamicHardwareIndicators,
-        IEnumerable<GpuDynamicMiningIndicators> gpuDynamicMiningIndicators,
-        IEnumerable<GpuDynamicHardwareIndicators> gpuDynamicHardwareIndicators,
+        IEnumerable<CpuDynamicMiningIndicators>? cpuDynamicMiningIndicators,
+        IEnumerable<CpuDynamicHardwareIndicators>? cpuDynamicHardwareIndicators,
+        IEnumerable<GpuDynamicMiningIndicators>? gpuDynamicMiningIndicators,
+        IEnumerable<GpuDynamicHardwareIndicators>? gpuDynamicHardwareIndicators,
         Dictionary<Guid, string> cpusNames,
         Dictionary<Guid, string> gpusNames,
         Dictionary<(Guid FlightSheetId, Guid MinerId, Guid CoinId), MiningCombination> miningCombinations)

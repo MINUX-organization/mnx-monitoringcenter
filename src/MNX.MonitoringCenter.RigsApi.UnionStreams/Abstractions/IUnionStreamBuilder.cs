@@ -4,5 +4,5 @@ namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 
 public interface IUnionStreamBuilder
 {
-    public Task<Stream> Build(UnionStreamBuilderArgs streamBuilderArgs);
+    public Stream Build(UnionStreamBuilderArgs streamBuilderArgs);
 }
