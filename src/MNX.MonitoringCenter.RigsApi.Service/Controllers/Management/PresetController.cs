@@ -9,7 +9,7 @@ using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.RemovePreset;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.ApplyPreset;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 

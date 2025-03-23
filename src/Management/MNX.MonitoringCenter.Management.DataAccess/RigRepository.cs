@@ -4,6 +4,7 @@ using System.Data;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.UseCases;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
@@ -42,7 +43,7 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public async Task SetDevices(Guid rigId, List<Core.Mining.MiningDevice.MiningDevice> devices)
+    public async Task SetDevices(Guid rigId, List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)> devicesTupple)
     {
         var retryPolicy = Policy
             .Handle<Exception>()
@@ -64,36 +65,36 @@ public class RigRepository : IRigRepository
                 // берём ту часть устройств из БД, которая не пересекается со входящим набором устройств
                 // ( те устройства, которые убрали с рига )
                 // деактивируем их
-                var noActiveDevices = dbDevices.ExceptBy(devices.Select(x => x.Id), device => device.Id).ToList();
+                var noActiveDevices = dbDevices.ExceptBy(devicesTupple.Select(x => x.Devices.Id), device => device.Id).ToList();
                 noActiveDevices.ForEach(device => device.Deactivate());
 
                 // берём часть устройств из БД, которая пересекается со входящей коллекцией устройств
                 // ставим статус "в сети" для полученных устройств
-                var activeDevices = dbDevices.IntersectBy(devices.Select(x => x.Id), device => device.Id).ToList();
+                var activeDevices = dbDevices.IntersectBy(devicesTupple.Select(x => x.Devices.Id), device => device.Id).ToList();
                 activeDevices.ForEach(device => device.SwitchToOnline());
 
                 await context.SaveChangesAsync();
 
                 // берём часть из множества входящих устройств, которая не пересекается со множеством устройств из БД
                 // обновляем их, если уже существуют в базе, иначе добавляем.
-                var newDevices = devices.ExceptBy(dbDevices.Select(x => x.Id), device => device.Id)
-                                        .Select(device =>
-                                        {
-                                            var d = new MiningDeviceInfo()
-                                            {
-                                                Id = device.Id,
-                                                Manufacturer = device.Manufacturer,
-                                                Model = device.Model,
-                                                RigId = rigId,
-                                                OwnerId = device.OwnerId,
-                                                Type = device.Type,
-                                                PresetId = device.PresetId,
-                                                Preset = device.Preset
-                                            };
+                var newDevices = devicesTupple
+                    .Where(tupple => !dbDevices.Any(dbDevice => dbDevice.Id == tupple.Devices.Id))
+                    .Select(tupple =>
+                    {
+                        var device = new MiningDeviceInfo()
+                        {
+                            Id = tupple.Devices.Id,
+                            Manufacturer = tupple.Devices.Manufacturer,
+                            Model = tupple.Devices.Model,
+                            RigId = rigId,
+                            OwnerId = tupple.Devices.OwnerId,
+                            Type = tupple.Devices.Type
+                        };
 
-                                            return d;
-                                        })
-                                        .ToList();
+                        var overclocking = tupple.Overclockings;
+
+                        return (device, overclocking);
+                    }).ToList();
 
                 await AddOrUpdateDevices(newDevices, context);
                 await transaction.CommitAsync();
@@ -119,31 +120,37 @@ public class RigRepository : IRigRepository
     /// Добавить или обновить устройства.
     /// </summary>
     /// <param name="devices"> Устройства. </param>
-    private async Task AddOrUpdateDevices(List<MiningDeviceInfo> devices, Context context)
+    private async Task AddOrUpdateDevices(List<(MiningDeviceInfo Devices, IOverclocking Overclockings)> devices, Context context)
     {
         var dbDevices = (await context.MiningDevices
                                       .IgnoreQueryFilters()
-                                      .Where(device => devices.Select(x => x.Id).Contains(device.Id))
+                                      .Where(device => devices.Select(x => x.Devices.Id).Contains(device.Id))
                                       .ToListAsync())
                                       .ToHashSet();
 
-        foreach (var device in devices)
+        foreach (var (device, overclocking) in devices)
         {
-            var preset = device.Preset;
             if (dbDevices.TryGetValue(device, out MiningDeviceInfo? dbDevice))
             {
-                dbDevice.RigId = device.RigId;
+                dbDevice!.RigId = device.RigId;
                 dbDevice.OwnerId = device.OwnerId;
-                dbDevice.FlightSheetId = device.FlightSheetId;
-                dbDevice.FlightSheetIsConfirm = device.FlightSheetIsConfirm;
                 dbDevice.SwitchToOnline();
 
                 await context.SaveChangesAsync();
             }
             else
             {
-                await AddPresetWithOverclocking(preset!);
+                var preset = new Core.Overclocking.Preset()
+                {
+                    Name = device.Id.ToString(),
+                    DeviceName = device.Name,
+                    UserId = device.OwnerId!.Value,
+                    OverclockingId = overclocking.Id,
+                    Overclocking = overclocking
+                };
+                await AddPresetWithOverclocking(preset);
 
+                device.PresetId = preset.Id;
                 await context.MiningDevices.AddAsync(device);
                 await context.SaveChangesAsync();
             }
@@ -155,6 +162,6 @@ public class RigRepository : IRigRepository
             await context.Overclocking.AddAsync(overclocking);
             await context.Presets.AddAsync(preset);
             await context.SaveChangesAsync();
-        } 
+        }
     }
 }

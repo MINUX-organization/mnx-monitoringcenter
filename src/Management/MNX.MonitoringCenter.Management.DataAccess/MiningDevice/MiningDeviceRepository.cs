@@ -59,32 +59,26 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public async Task SetPreset(Guid presetId,
-                                CancellationToken cancellationToken,
-                                params Guid[] deviceIds)
+    public Task SetPreset(Guid presetId,
+                          CancellationToken cancellationToken,
+                          params Guid[] deviceIds)
     {
-        var devicesToUpdate = await _context.MiningDevices
-            .Where(x => deviceIds.Contains(x.Id))
-            .ToListAsync();
-
-        foreach (var device in devicesToUpdate)
-        {
-            device.PresetId = presetId;
-        }
-
-        await _context.SaveChangesAsync(cancellationToken);
+        return _context.MiningDevices.Where(x => deviceIds.Contains(x.Id))
+            .ExecuteUpdateAsync(x => x.SetProperty(d => d.PresetId, presetId), cancellationToken);
     }
 
     /// <inheritdoc/>
-    public async Task SetOverclocking(MiningDeviceInfo device, IOverclocking overclocking)
+    public async Task SetOverclocking(MiningDeviceInfo device,
+                                      IOverclocking overclocking,
+                                      CancellationToken cancellationToken)
     {
         var invisiblePreset = await _context.Presets
-            .FirstOrDefaultAsync(x => x.Name == device.Id.ToString() && !x.IsVisible);
+            .FirstOrDefaultAsync(x => x.Name == device.Id.ToString() && !x.IsVisible, cancellationToken);
 
         if (invisiblePreset == null) return;
 
         var oldOverclocking = await _context.Overclocking
-            .FirstOrDefaultAsync(x => x.Id == invisiblePreset.OverclockingId);
+            .FirstOrDefaultAsync(x => x.Id == invisiblePreset.OverclockingId, cancellationToken);
 
         if (oldOverclocking != null)
         {
@@ -96,9 +90,10 @@ public class MiningDeviceRepository : IMiningDeviceRepository
         invisiblePreset.OverclockingId = dto.Id;
         device.PresetId = invisiblePreset.Id;
 
-        _context.Overclocking.Add(dto);
+        _context.MiningDevices.Update(device);
+        await _context.Overclocking.AddAsync(dto, cancellationToken);
 
-        await _context.SaveChangesAsync();
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -175,7 +170,8 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                    Type = device.Type,
                    FlightSheetId = device.FlightSheetId,
                    FlightSheetIsConfirm = device.FlightSheetIsConfirm,
-                   FlightSheet = _mapper.Map<FlightSheet>(flightSheet)
+                   FlightSheet = _mapper.Map<FlightSheet>(flightSheet),
+                   PresetId = device.PresetId
                };
     }
 }

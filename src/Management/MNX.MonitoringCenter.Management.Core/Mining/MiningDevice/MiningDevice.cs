@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
@@ -16,7 +15,7 @@ public class MiningDevice : IEquatable<MiningDevice>
     /// <summary>
     /// Идентификатор владельца.
     /// </summary>
-    public Guid OwnerId { get; set; }
+    public Guid? OwnerId { get; set; }
 
     /// <summary>
     /// Тип майнинг устройства.
@@ -37,26 +36,6 @@ public class MiningDevice : IEquatable<MiningDevice>
     /// Название.
     /// </summary>
     public string Name { get => $"{Manufacturer} {Model}"; }
-
-    /// <summary>
-    /// Идентификатор пресета.
-    /// </summary>
-    public Guid PresetId { get; set; }
-
-    /// <summary>
-    /// Пресет.
-    /// </summary>
-    public Preset? Preset { get; set; }
-
-    /// <summary>
-    /// Задать разгон.
-    /// </summary>
-    /// <param name="preset"> Идентификатор пресета. </param>
-    public void SetPreset(Preset preset)
-    {
-        PresetId = preset.Id;
-        Preset = preset;
-    }
 
     /// <summary>
     /// Получение хеш кода майнинга устройства.

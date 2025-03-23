@@ -6,7 +6,7 @@ using MNX.RigCommander.MessageQueue.Clients.Bus;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
+namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 
 /// <summary>
 /// Команда отправки разгона майнинг-устройств на риги.
@@ -20,7 +20,7 @@ public record SendOverclockingToRigsCommand(IOverclocking Overclocking,
     : IUserableRequest<Result<Unit>>;
 
 /// <summary>
-/// Обработчик команлы <see cref="SendOverclockingToRigsCommand"/>.
+/// Обработчик команды <see cref="SendOverclockingToRigsCommand"/>.
 /// </summary>
 public class SendOverclockingToRigsCommandHandler : IRequestHandler<SendOverclockingToRigsCommand, Result<Unit>>
 {
@@ -38,15 +38,17 @@ public class SendOverclockingToRigsCommandHandler : IRequestHandler<SendOvercloc
 
     public async Task<Result<Unit>> Handle(SendOverclockingToRigsCommand request, CancellationToken cancellationToken)
     {
-        foreach (var rigDevices in request.Devices.GroupBy(x => x.RigId))
-        {
-            var rigOverclocking = _mapper.Map<Inventory.Contracts.Devices.Overclocking>(request.Overclocking);
+        var rigOverclocking = _mapper.Map<Inventory.Contracts.Devices.Overclocking>(request.Overclocking);
 
-            var command = new Agent.Commands.Overclocking.SetOverclockingCommand(
-                rigOverclocking, rigDevices.Select(x => x.Id).ToArray());
+        var allDeviceIds = request.Devices.Select(x => x.Id).ToArray();
 
-            await _queueClient.Enqueue(command, new Guid[] { rigDevices.Key }, request.UserId);
-        }
+        var command = new Agent.Commands.Overclocking.SetOverclockingCommand(rigOverclocking, allDeviceIds);
+
+        await _queueClient.Enqueue(command,
+                                   request.Devices.Select(x => x.RigId!.Value).Distinct().ToArray(),
+                                   request.UserId,
+                                   cancellationToken: cancellationToken);
+
         return Result<Unit>.Empty();
     }
 }

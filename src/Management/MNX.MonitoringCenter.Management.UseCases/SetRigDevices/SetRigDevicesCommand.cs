@@ -37,18 +37,11 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
 
     public async Task<Result<Unit>> Handle(SetRigDevicesCommand request, CancellationToken cancellationToken)
     {
-        var miningDevices = request.Gpus.Select(gpu =>
+        var devicesTupple = new List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)>();
+
+        devicesTupple.AddRange(request.Gpus.Select(gpu =>
         {
             var overclocking = _mapper.Map<Core.Overclocking.GpuOverclocking>(gpu.Overclocking);
-            var preset = new Preset()
-            {
-                Name = gpu.Id.ToString(),
-                DeviceName = gpu.Information.Name,
-                OverclockingId = overclocking.Id,
-                Overclocking = overclocking,
-                UserId = request.RigOwnerId,
-                IsVisible = false
-            };
 
             var device = new Core.Mining.MiningDevice.MiningDevice()
             {
@@ -56,43 +49,29 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
                 Manufacturer = gpu.Information.Manufacturer,
                 Model = gpu.Information.Model,
                 OwnerId = request.RigOwnerId,
-                Type = MiningDeviceType.GPU,
-                PresetId = preset.Id,
-                Preset = preset
+                Type = MiningDeviceType.GPU
             };
 
-            return device;
-        })
-        .ToList();
+            return (device, (IOverclocking)overclocking);
+        }));
 
-        miningDevices.AddRange(request.Cpus.Select(cpu =>
+        devicesTupple.AddRange(request.Cpus.Select(cpu =>
         {
             var overclocking = _mapper.Map<Core.Overclocking.CpuOverclocking>(cpu.Overclocking);
-            var preset = new Preset()
-            {
-                Name = cpu.Id.ToString(),
-                DeviceName = cpu.Information.Name,
-                OverclockingId = overclocking.Id,
-                Overclocking = overclocking,
-                UserId = request.RigOwnerId,
-                IsVisible = false
-            };
-
+            
             var device = new Core.Mining.MiningDevice.MiningDevice()
             {
                 Id = cpu.Id,
                 Manufacturer = cpu.Information.Manufacturer,
                 Model = cpu.Information.Model,
                 OwnerId = request.RigOwnerId,
-                Type = MiningDeviceType.CPU,
-                PresetId = preset.Id,
-                Preset = preset
+                Type = MiningDeviceType.CPU
             };
 
-            return device;
+            return (device, (IOverclocking)overclocking);
         }));
 
-        await _repository.SetDevices(request.RigId, miningDevices);
+        await _repository.SetDevices(request.RigId, devicesTupple);
 
         return Result<Unit>.Empty();
     }

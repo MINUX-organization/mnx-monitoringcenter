@@ -1,10 +1,8 @@
 ﻿using MediatR;
 using AutoMapper;
 using EasyNetQ.Logging;
-using System.Transactions;
 using MNX.Application.UseCases.Results;
 using MNX.Application.UseCases.Requests;
-using MNX.RigCommander.MessageQueue.Clients.Bus;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking;
@@ -34,11 +32,8 @@ public class SetOverclockingCommandHandler
 
     private readonly IPresetRepository _presetRepository;
 
-    private readonly IQueueBusClient _queueClient;
-
     public SetOverclockingCommandHandler(IMapper mapper,
                                          IMediator mediator,
-                                         IQueueBusClient queueClient,
                                          ILogger<SetOverclockingCommandHandler> logger,
                                          IMiningDeviceRepository miningDeviceRepository,
                                          IPresetRepository presetRepository)
@@ -50,8 +45,6 @@ public class SetOverclockingCommandHandler
             throw new ArgumentNullException(nameof(miningDeviceRepository));
         _presetRepository = presetRepository ??
             throw new ArgumentNullException(nameof(presetRepository));
-        _queueClient = queueClient ??
-            throw new ArgumentNullException(nameof(queueClient));
     }
 
     public async Task<Result<Guid>> Handle(SetOverclockingCommand request,
@@ -82,17 +75,15 @@ public class SetOverclockingCommandHandler
             }
         }
 
-        using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-        {
-            await _miningDeviceRepository.SetOverclocking(device,
-                                                          overclocking);
+        await _miningDeviceRepository.SetOverclocking(device,
+                                                      overclocking,
+                                                      cancellationToken);
 
-            await _mediator.Send(new SendOverclockingToRigsCommand(overclocking,
-                                                                   [device],
-                                                                   request.UserId));
+        await _mediator.Publish(new SendOverclockingToRigsCommand(overclocking,
+                                                               [device],
+                                                               request.UserId),
+                                                               cancellationToken);
 
-            transaction.Complete();
-        }
         return Result<Guid>.Success(device.Id);
     }
 }

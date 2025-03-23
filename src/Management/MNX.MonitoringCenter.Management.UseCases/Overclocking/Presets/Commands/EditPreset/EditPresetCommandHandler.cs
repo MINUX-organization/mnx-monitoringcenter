@@ -80,7 +80,7 @@ public class EditPresetCommandHandler :
         {
             await _presetRepository.Update(newPreset);
 
-            await _mediator.Send(new SendOverclockingToRigsCommand(newPreset.Overclocking!,
+            await _mediator.Publish(new SendOverclockingToRigsCommand(newPreset.Overclocking!,
                                                                    devices,
                                                                    request.UserId));
         }

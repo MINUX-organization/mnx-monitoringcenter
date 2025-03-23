@@ -1,14 +1,11 @@
 ﻿using MediatR;
 using AutoMapper;
-using System.Transactions;
 using MNX.Application.UseCases.Results;
 using MNX.Application.UseCases.Requests;
-using MNX.RigCommander.MessageQueue.Clients.Bus;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
+namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.ApplyPreset;
 
 /// <summary>
 /// Команда на установку разгона на майнинг устройство через пресет.
@@ -31,21 +28,16 @@ public class ApplyPresetCommandHandler :
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    private readonly IQueueBusClient _queueClient;
-
     public ApplyPresetCommandHandler(IPresetRepository repository,
                                      IMediator mediator,
                                      IMapper mapper,
-                                     IQueueBusClient queueClient,
                                      IMiningDeviceRepository miningDeviceRepository)
-        : base (mapper, mediator)
+        : base(mapper, mediator)
     {
         _presetRepository = repository ??
             throw new ArgumentNullException(nameof(repository));
         _miningDeviceRepository = miningDeviceRepository ??
             throw new ArgumentNullException(nameof(miningDeviceRepository));
-        _queueClient = queueClient ??
-            throw new ArgumentNullException(nameof(queueClient));
     }
 
     public async Task<Result<Guid[]>> Handle(ApplyPresetCommand request,
@@ -97,18 +89,15 @@ public class ApplyPresetCommandHandler :
             return Result<Guid[]>.Invalid(errors);
         }
 
-        using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-        {
-            await _miningDeviceRepository.SetPreset(request.PresetId,
-                                                    cancellationToken,
-                                                    devicesToProcess.Select(d => d.Id).ToArray());
+        await _miningDeviceRepository.SetPreset(request.PresetId,
+                                                cancellationToken,
+                                                devicesToProcess.Select(d => d.Id).ToArray());
 
-            await _mediator.Send(new SendOverclockingToRigsCommand(preset.Overclocking!,
-                                                                   devicesToProcess,
-                                                                   request.UserId));
+        await _mediator.Publish(new SendOverclockingToRigsCommand(preset.Overclocking!,
+                                                               devicesToProcess,
+                                                               request.UserId),
+                                                               cancellationToken);
 
-            transaction.Complete();
-        }
         return Result<Guid[]>.Success(devicesToProcess.Select(x => x.Id).ToArray());
     }
 }

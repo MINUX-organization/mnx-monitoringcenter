@@ -1,15 +1,15 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
-using MNX.MonitoringCenter.Management.Contracts.Overclocking;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
+using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 

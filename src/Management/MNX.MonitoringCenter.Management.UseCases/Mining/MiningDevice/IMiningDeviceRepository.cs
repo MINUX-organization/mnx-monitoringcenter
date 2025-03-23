@@ -89,5 +89,6 @@ public interface IMiningDeviceRepository
     /// </summary>
     /// <param name="overclocking"> Разгон. </param>
     /// <param name="device"> Майнинг-устройство. </param>
-    Task SetOverclocking(MiningDeviceInfo device, IOverclocking overclocking);
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task SetOverclocking(MiningDeviceInfo device, IOverclocking overclocking, CancellationToken cancellationToken);
 }

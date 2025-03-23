@@ -35,6 +35,7 @@
 
 -- CREATING FUNCTIONS
 \ir 'functions/get_gpu_driver_version.sql'
+\ir 'functions/handle_preset_delete.sql'
 
 -- DATA INSERT
 \ir 'data_tables/algorithms.sql'
