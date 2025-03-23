@@ -1,8 +1,6 @@
-﻿using AutoMapper;
-using MNX.MonitoringCenter.Management.Contracts;
+﻿using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.RigsApi.Contracts.Abstractions;
 using MNX.MonitoringCenter.RigsApi.Contracts.Args;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 
 namespace MNX.MonitoringCenter.RigsApi.Contracts.FlightSheet;
@@ -42,6 +40,11 @@ public class FlightSheetStatisticsModel : IConverterFrom<FlightSheetStatisticsMo
             }
 
             (Guid flightSheetId, Guid minerId, List<CoinStatistics> coinStatistics) = args.FlightSheetStatistics;
+
+            if (coinStatistics.Count == 0)
+            {
+                return null;
+            }
 
             var miningCombinationsKey = (flightSheetId, minerId, coinStatistics.First().CoinId);
             var (flightSheetName, minerName, _) = args.MiningCombinations
