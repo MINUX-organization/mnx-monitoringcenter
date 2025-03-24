@@ -1,12 +1,10 @@
 ﻿using MediatR;
 using AutoMapper;
-using MNX.Application.UseCases.Results;
-using MNX.Application.UseCases.Requests;
 using MNX.RigCommander.MessageQueue.Clients.Bus;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
+namespace MNX.MonitoringCenter.Management.UseCases.Overclocking;
 
 /// <summary>
 /// Команда отправки разгона майнинг-устройств на риги.
@@ -14,21 +12,20 @@ namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 /// <param name="Overclocking"> Разгон. </param>
 /// <param name="Devices"> Список майнинг-устройств. </param>
 /// <param name="UserId"> Идентификатор пользователя. </param>
-public record SendOverclockingToRigsCommand(IOverclocking Overclocking,
-                                            List<MiningDeviceInfo> Devices,
-                                            Guid UserId)
-    : IUserableRequest<Result<Unit>>;
+public record SendOverclockingToRigsEvent(IOverclocking Overclocking,
+                                          List<MiningDeviceInfo> Devices,
+                                          Guid UserId) : INotification;
 
 /// <summary>
-/// Обработчик команды <see cref="SendOverclockingToRigsCommand"/>.
+/// Обработчик команды <see cref="SendOverclockingToRigsEvent"/>.
 /// </summary>
-public class SendOverclockingToRigsCommandHandler : IRequestHandler<SendOverclockingToRigsCommand, Result<Unit>>
+public class SendOverclockingToRigsEventHandler : INotificationHandler<SendOverclockingToRigsEvent>
 {
     private readonly IMapper _mapper;
 
     private readonly IQueueBusClient _queueClient;
 
-    public SendOverclockingToRigsCommandHandler(IMapper mapper, IQueueBusClient queueClient)
+    public SendOverclockingToRigsEventHandler(IMapper mapper, IQueueBusClient queueClient)
     {
         _mapper = mapper ??
             throw new ArgumentNullException(nameof(mapper));
@@ -36,7 +33,7 @@ public class SendOverclockingToRigsCommandHandler : IRequestHandler<SendOvercloc
             throw new ArgumentNullException(nameof(queueClient));
     }
 
-    public async Task<Result<Unit>> Handle(SendOverclockingToRigsCommand request, CancellationToken cancellationToken)
+    public Task Handle(SendOverclockingToRigsEvent request, CancellationToken cancellationToken)
     {
         var rigOverclocking = _mapper.Map<Inventory.Contracts.Devices.Overclocking>(request.Overclocking);
 
@@ -44,11 +41,9 @@ public class SendOverclockingToRigsCommandHandler : IRequestHandler<SendOvercloc
 
         var command = new Agent.Commands.Overclocking.SetOverclockingCommand(rigOverclocking, allDeviceIds);
 
-        await _queueClient.Enqueue(command,
-                                   request.Devices.Select(x => x.RigId!.Value).Distinct().ToArray(),
-                                   request.UserId,
-                                   cancellationToken: cancellationToken);
-
-        return Result<Unit>.Empty();
+        return _queueClient.Enqueue(command,
+                                    request.Devices.Select(x => x.RigId!.Value).Distinct().ToArray(),
+                                    request.UserId,
+                                    cancellationToken: cancellationToken);
     }
 }

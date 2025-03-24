@@ -93,7 +93,7 @@ public class ApplyPresetCommandHandler :
                                                 cancellationToken,
                                                 devicesToProcess.Select(d => d.Id).ToArray());
 
-        await _mediator.Publish(new SendOverclockingToRigsCommand(preset.Overclocking!,
+        await _mediator.Publish(new SendOverclockingToRigsEvent(preset.Overclocking!,
                                                                devicesToProcess,
                                                                request.UserId),
                                                                cancellationToken);

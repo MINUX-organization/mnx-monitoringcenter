@@ -79,7 +79,7 @@ public class SetOverclockingCommandHandler
                                                       overclocking,
                                                       cancellationToken);
 
-        await _mediator.Publish(new SendOverclockingToRigsCommand(overclocking,
+        await _mediator.Publish(new SendOverclockingToRigsEvent(overclocking,
                                                                [device],
                                                                request.UserId),
                                                                cancellationToken);
