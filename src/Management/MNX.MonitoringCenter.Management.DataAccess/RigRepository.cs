@@ -36,14 +36,14 @@ public class RigRepository : IRigRepository
     /// <inheritdoc/>
     public Task<bool> Exists(Guid id, Guid userId)
     {
-        var context = _contextFactory.CreateDbContext();
+        using var context = _contextFactory.CreateDbContext();
         return context.MiningDevices
                       .AsNoTracking()
                       .AnyAsync(x => x.RigId == id && x.OwnerId == userId);
     }
 
     /// <inheritdoc/>
-    public async Task SetDevices(Guid rigId, List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)> devicesTupple)
+    public async Task SetDevices(Guid rigId, List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)> devicesTuple)
     {
         var retryPolicy = Policy
             .Handle<Exception>()
@@ -51,7 +51,7 @@ public class RigRepository : IRigRepository
 
         await retryPolicy.ExecuteAsync(async () =>
         {
-            var context = _contextFactory.CreateDbContext();
+            using var context = _contextFactory.CreateDbContext();
             using var transaction = context.Database.BeginTransaction(IsolationLevel.RepeatableRead);
 
             try
@@ -65,33 +65,33 @@ public class RigRepository : IRigRepository
                 // берём ту часть устройств из БД, которая не пересекается со входящим набором устройств
                 // ( те устройства, которые убрали с рига )
                 // деактивируем их
-                var noActiveDevices = dbDevices.ExceptBy(devicesTupple.Select(x => x.Devices.Id), device => device.Id).ToList();
+                var noActiveDevices = dbDevices.ExceptBy(devicesTuple.Select(x => x.Devices.Id), device => device.Id).ToList();
                 noActiveDevices.ForEach(device => device.Deactivate());
 
                 // берём часть устройств из БД, которая пересекается со входящей коллекцией устройств
                 // ставим статус "в сети" для полученных устройств
-                var activeDevices = dbDevices.IntersectBy(devicesTupple.Select(x => x.Devices.Id), device => device.Id).ToList();
+                var activeDevices = dbDevices.IntersectBy(devicesTuple.Select(x => x.Devices.Id), device => device.Id).ToList();
                 activeDevices.ForEach(device => device.SwitchToOnline());
 
                 await context.SaveChangesAsync();
 
                 // берём часть из множества входящих устройств, которая не пересекается со множеством устройств из БД
                 // обновляем их, если уже существуют в базе, иначе добавляем.
-                var newDevices = devicesTupple
-                    .Where(tupple => !dbDevices.Any(dbDevice => dbDevice.Id == tupple.Devices.Id))
-                    .Select(tupple =>
+                var newDevices = devicesTuple
+                    .Where(tuple => !dbDevices.Any(dbDevice => dbDevice.Id == tuple.Devices.Id))
+                    .Select(tuple =>
                     {
                         var device = new MiningDeviceInfo()
                         {
-                            Id = tupple.Devices.Id,
-                            Manufacturer = tupple.Devices.Manufacturer,
-                            Model = tupple.Devices.Model,
+                            Id = tuple.Devices.Id,
+                            Manufacturer = tuple.Devices.Manufacturer,
+                            Model = tuple.Devices.Model,
                             RigId = rigId,
-                            OwnerId = tupple.Devices.OwnerId,
-                            Type = tupple.Devices.Type
+                            OwnerId = tuple.Devices.OwnerId,
+                            Type = tuple.Devices.Type
                         };
 
-                        var overclocking = tupple.Overclockings;
+                        var overclocking = tuple.Overclockings;
 
                         return (device, overclocking);
                     }).ToList();
@@ -111,7 +111,7 @@ public class RigRepository : IRigRepository
     /// <inheritdoc/>
     public Task SwitchToOffline(Guid rigId)
     {
-        var context = _contextFactory.CreateDbContext();
+        using var context = _contextFactory.CreateDbContext();
         return context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
             x.SetProperty(device => device.LifeCycleStatus, d => MiningDeviceLifeCycleStatus.Offline));
     }

@@ -19,8 +19,8 @@ public interface IRigRepository
     /// Установить устройства на риг.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
-    /// <param name="devicesTupple"> Кортеж майнинг-устройств с их разгноном. </param>
-    Task SetDevices(Guid rigId, List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)> devicesTupple);
+    /// <param name="devicesTuple"> Кортеж майнинг-устройств с их разгноном. </param>
+    Task SetDevices(Guid rigId, List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)> devicesTuple);
 
     /// <summary>
     /// Перевести в состояние "оффлайн"
