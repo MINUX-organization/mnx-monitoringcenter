@@ -5,6 +5,7 @@ using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
 
 namespace MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 
@@ -36,8 +37,12 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
 
     public async Task<Result<Unit>> Handle(SetRigDevicesCommand request, CancellationToken cancellationToken)
     {
-        var miningDevices = request.Gpus.Select(gpu =>
+        var devicesTupple = new List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)>();
+
+        devicesTupple.AddRange(request.Gpus.Select(gpu =>
         {
+            var overclocking = _mapper.Map<Core.Overclocking.GpuOverclocking>(gpu.Overclocking);
+
             var device = new Core.Mining.MiningDevice.MiningDevice()
             {
                 Id = gpu.Id,
@@ -47,14 +52,13 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
                 Type = MiningDeviceType.GPU
             };
 
-            device.SetOverclocking(_mapper.Map<Core.Overclocking.GpuOverclocking>(gpu.Overclocking));
+            return (device, (IOverclocking)overclocking);
+        }));
 
-            return device;
-        })
-        .ToList();
-
-        miningDevices.AddRange(request.Cpus.Select(cpu =>
+        devicesTupple.AddRange(request.Cpus.Select(cpu =>
         {
+            var overclocking = _mapper.Map<Core.Overclocking.CpuOverclocking>(cpu.Overclocking);
+            
             var device = new Core.Mining.MiningDevice.MiningDevice()
             {
                 Id = cpu.Id,
@@ -64,12 +68,10 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
                 Type = MiningDeviceType.CPU
             };
 
-            device.SetOverclocking(_mapper.Map<Core.Overclocking.CpuOverclocking>(cpu.Overclocking));
-
-            return device;
+            return (device, (IOverclocking)overclocking);
         }));
 
-        await _repository.SetDevices(request.RigId, miningDevices);
+        await _repository.SetDevices(request.RigId, devicesTupple);
 
         return Result<Unit>.Empty();
     }

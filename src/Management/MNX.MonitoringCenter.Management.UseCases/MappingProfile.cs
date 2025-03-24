@@ -79,7 +79,7 @@ public class MappingProfile : Profile
             Id = info.Id,
             Manufacturer = info.Manufacturer,
             Model = info.Model,
-            RigId = info.RigId,
+            RigId = info.RigId!.Value,
             Type = info.Type.ToString(),
             FlightSheetId = info.FlightSheetId,
             FlightSheetName = info.FlightSheet != null ? info.FlightSheet.Name : null,

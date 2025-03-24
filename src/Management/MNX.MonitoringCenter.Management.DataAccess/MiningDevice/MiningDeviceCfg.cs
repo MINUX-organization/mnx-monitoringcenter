@@ -16,9 +16,10 @@ internal class MiningDeviceCfg : IEntityTypeConfiguration<MiningDeviceInfo>
         builder.HasIndex(x => x.RigId);
         builder.HasIndex(x => x.OwnerId);
 
-        builder.HasOne<GpuOverclocking>()
+        builder.HasOne<Core.Overclocking.Preset>()
                .WithMany()
-               .HasForeignKey(x => x.OverclockingId);
+               .HasForeignKey(x => x.PresetId)
+               .IsRequired(false);
 
         builder.HasQueryFilter(x => x.LifeCycleStatus != MiningDeviceLifeCycleStatus.Inactive);
 
@@ -26,6 +27,6 @@ internal class MiningDeviceCfg : IEntityTypeConfiguration<MiningDeviceInfo>
         builder.Property(x => x.LifeCycleStatus).HasConversion<string>();
 
         builder.Ignore(x => x.FlightSheet);
-        builder.Ignore(x => x.Overclocking);
+        builder.Ignore(x => x.Preset);
     }
 }

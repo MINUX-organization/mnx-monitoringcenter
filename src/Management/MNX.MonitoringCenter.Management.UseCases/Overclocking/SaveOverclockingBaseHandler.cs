@@ -1,7 +1,8 @@
 ﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking;
 
@@ -10,11 +11,17 @@ namespace MNX.MonitoringCenter.Management.UseCases.Overclocking;
 /// </summary>
 public abstract class SaveOverclockingBaseHandler
 {
+    protected readonly IMapper _mapper;
+
     protected readonly IMediator _mediator;
 
-    public SaveOverclockingBaseHandler(IMediator mediator)
+    public SaveOverclockingBaseHandler(IMapper mapper,
+                                       IMediator mediator)
     {
-        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _mapper = mapper ??
+            throw new ArgumentNullException(nameof(mapper));
+        _mediator = mediator ??
+            throw new ArgumentNullException(nameof(mediator));
     }
 
     /// <summary>
