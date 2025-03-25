@@ -26,6 +26,11 @@ public class MiningCoinConfigModel
     public required int PoolPort { get; set; }
 
     /// <summary>
+    /// Признак шифрования по протоколу Tls.
+    /// </summary>
+    public required bool Tls { get; set; }
+
+    /// <summary>
     /// Пароль пула.
     /// </summary>
     public string? PoolPassword { get; set; }

@@ -11,6 +11,11 @@ public class Pool : IEquatable<Pool>
     public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
+    /// Признак шифрования по протоколу TLS.
+    /// </summary>
+    public bool Tls { get; }
+
+    /// <summary>
     /// Домен
     /// </summary>
     public required string Domain { get; set; }
@@ -59,12 +64,16 @@ public class Pool : IEquatable<Pool>
             return true;
         }
 
-        return Domain == other.Domain && Port == other.Port;
+        return Domain == other.Domain &&
+               Port == other.Port &&
+               Tls == other.Tls;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Domain, Port);
+        return HashCode.Combine(Domain,
+                                Port,
+                                Tls);
     }
 }
