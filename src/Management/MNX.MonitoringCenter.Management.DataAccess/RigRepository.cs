@@ -126,7 +126,7 @@ public class RigRepository : IRigRepository
     {
         return _context.MiningDevices
             .Where(md => md.OwnerId == userId)
-            .Select(md => md.RigId)
+            .Select(md => md.RigId!.Value)
             .Distinct()
             .AsAsyncEnumerable();
     }
