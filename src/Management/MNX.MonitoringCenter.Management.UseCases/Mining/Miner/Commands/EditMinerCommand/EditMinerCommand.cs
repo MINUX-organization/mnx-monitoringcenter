@@ -6,6 +6,8 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.EditMinerCommand;
 
+using Miner = Core.Mining.Miner.Miner;
+
 /// <summary>
 /// Команда редактирования майнера.
 /// </summary>
@@ -31,6 +33,8 @@ public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<
 
     public async Task<Result<Unit>> Handle(EditMinerCommand request, CancellationToken cancellationToken)
     {
+        var model = request.Model;
+
         if (!await _minerRepository.Exists(request.MinerId, cancellationToken))
         {
             return Result<Unit>.Invalid($"Miner with id equaled {request.MinerId} was not found");
@@ -38,13 +42,23 @@ public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<
 
         var miner = await _minerRepository.GetMinerById(request.MinerId, cancellationToken);
 
-        if (await _minerRepository.Exists(request.MinerId, request.UserId, request.Model.Name, cancellationToken))
+        if (await _minerRepository.Exists(request.MinerId, request.UserId, model.Name, cancellationToken))
         {
-            return Result<Unit>.Conflict($"Miner with name {request.Model.Name} already exists");
+            return Result<Unit>.Conflict($"Miner with name {model.Name} already exists");
         }
 
-        _mapper.Map(miner, request.Model);
-        await _minerRepository.Edit(miner!, cancellationToken);
+        var newMiner = new Miner()
+        {
+            Id = request.MinerId,
+            OwnerId = request.UserId,
+            Name = model.Name,
+            Version = model.Version,
+            InstallationUrl = model.InstallationUrl,
+            SupportedDevices = model.SupportedDevices,
+            PoolTemplate = model.PoolTemplate,
+            WalletWorkerTemplate = model.WalletWorkerTemplate,
+        };
+        await _minerRepository.Edit(newMiner, cancellationToken);
         return Result<Unit>.Empty();
     }
 }

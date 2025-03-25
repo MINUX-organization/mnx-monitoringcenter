@@ -13,17 +13,13 @@ public record MinerInputModel(
 
 public class MinerInputModelValidator : AbstractValidator<MinerInputModel>
 {
-    public MinerInputModelValidator()
-    {
-    }
+    public MinerInputModelValidator() { }
 
     public MinerInputModelValidator(IMinerRepository minerRepository, Guid userId)
     {
         RuleFor(model => model.Name)
             .NotEmpty()
-            .Matches(@"^[a-zA-Z0-9\-_./ ]+$")
-            .MustAsync(async (minerName, cancellationToken) =>
-                !await minerRepository.Exists(userId, minerName, cancellationToken));
+            .Matches(@"^[a-zA-Z0-9\-_./ ]+$");
 
         RuleFor(model => model.Version)
             .NotEmpty()
