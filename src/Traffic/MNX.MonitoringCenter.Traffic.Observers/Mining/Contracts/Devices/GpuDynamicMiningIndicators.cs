@@ -10,4 +10,20 @@ public class GpuDynamicMiningIndicators : DeviceDynamicMiningIndicators
 {
     /// <inheritdoc/>
     public override DeviceType Type { get => DeviceType.GPU; }
+
+    /// <summary>
+    /// Температура памяти.
+    /// </summary>
+    public int MemoryTemperature { get; set; }
+
+    /// <summary>
+    /// Температура ядра.
+    /// </summary>
+    public int CoreTemperature { get; set; }
+
+    /// <inheritdoc/>
+    public override int GetAverageTemperature()
+    {
+        return (MemoryTemperature + CoreTemperature) / 2;
+    }
 }

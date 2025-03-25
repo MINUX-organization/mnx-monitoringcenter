@@ -1,14 +1,15 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
+using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.RemovePreset;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.ApplyPreset;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -45,7 +46,7 @@ public class PresetController : ControllerBase
     /// </remarks>
     /// <param name="gpuName"> Название GPU </param>
     /// <returns> Список пресетов </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<PresetModel>), 200)]
     public IAsyncEnumerable<PresetModel> GetPresets(string? gpuName)
@@ -55,10 +56,27 @@ public class PresetController : ControllerBase
     }
 
     /// <summary>
+    /// Получить пресет по его идентификатору.
+    /// </summary>
+    /// <param name="id"> Идентификатор пресета. </param>
+    /// <returns> Пресет. </returns>
+    /// <response code="200"> Успешно. </response>
+    /// <response code="400"> Пресета с переданным идентификатором не существует. </response>
+    [HttpGet("{id:Guid}")]
+    [ProducesResponseType(typeof(PresetModel), 200)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> GetPresetById(Guid id)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new GetPresetByIdQuery(id, userId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
     /// Получить список пресетов, сгруппированных по названию видеокарт.
     /// </summary>
     /// <returns> Список сгруппированных пресетов. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("gpu_groups")]
     [ProducesResponseType(typeof(IAsyncEnumerable<PresetGroup>), 200)]
     public IAsyncEnumerable<PresetGroup> GetPresetsGroupedByGpuName()
@@ -72,7 +90,7 @@ public class PresetController : ControllerBase
     /// </summary>
     /// <param name="model"> Входная модель пресета </param>
     /// <returns> Результат выполнения команды </returns>
-    /// <response code="201"> Успешно </response>
+    /// <response code="201"> Успешно. </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не была найдена GPU с указанным названием
     /// </response>
@@ -94,7 +112,7 @@ public class PresetController : ControllerBase
     /// <param name="id"> Уникальный идентификатор </param>
     /// <param name="model"> Входная модель пресета </param>
     /// <returns> Результат выполнения команды </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id.
     /// </response>
@@ -115,13 +133,34 @@ public class PresetController : ControllerBase
     /// </summary>
     /// <param name="id"> Уникальный идентификатор </param>
     /// <returns> Результат выполнения команды </returns>
-    /// <response code="204"> Успешно </response>
+    /// <response code="204"> Успешно. </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
     public async Task<IActionResult> Remove(Guid id)
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new RemovePresetCommand(id, userId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Применить пресет на устройство.
+    /// </summary>
+    /// <param name="id"> Идентификатор пресета. </param>
+    /// <param name="deviceIds"> Идентификаторы устройств. </param>
+    /// <returns> Результат выполнения запроса. </returns>
+    /// <response code="200"> Успешно. </response>
+    /// <response code="400">
+    /// Майнинг устройство или пресет не найдены.
+    /// </response>
+    [HttpPost("{id:Guid}/apply")]
+    [ProducesResponseType(typeof(Guid), 200)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> ApplyPreset(Guid id, params Guid[] deviceIds)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(
+            new ApplyPresetCommand(userId, id, deviceIds));
         return result.ToActionResult();
     }
 }

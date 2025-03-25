@@ -79,8 +79,9 @@ public class MappingProfile : Profile
             Id = info.Id,
             Manufacturer = info.Manufacturer,
             Model = info.Model,
-            RigId = info.RigId,
+            RigId = info.RigId!.Value,
             Type = info.Type.ToString(),
+            FlightSheetId = info.FlightSheetId,
             FlightSheetName = info.FlightSheet != null ? info.FlightSheet.Name : null,
             FlightSheetIsConfirm = info.FlightSheetIsConfirm,
             MinerName = info.FlightSheet != null
@@ -123,6 +124,7 @@ public class MappingProfile : Profile
         // pools
 
         CreateMap<Pool, PoolModel>()
+            .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Cryptocurrency!.Id))
             .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.Cryptocurrency!.FullName));
 
         CreateMap<AddPoolCommand, Pool>()
@@ -172,6 +174,7 @@ public class MappingProfile : Profile
         // wallets
 
         CreateMap<Wallet, WalletModel>()
+            .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Cryptocurrency!.Id))
             .ForMember(destination => destination.Cryptocurrency, options => options.MapFrom(source => source.Cryptocurrency!.FullName));
 
         CreateMap<AddWalletCommand, Wallet>()

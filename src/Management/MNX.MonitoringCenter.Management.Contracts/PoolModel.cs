@@ -26,6 +26,11 @@ public class PoolModel
     public int Port { get; set; }
 
     /// <summary>
+    /// Идентификатор криптовалюты.
+    /// </summary>
+    public Guid CryptocurrencyId { get; set; }
+
+    /// <summary>
     /// Полное название криптовалюты
     /// </summary>
     public required string Cryptocurrency { get; set; }

@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
 
@@ -11,16 +10,11 @@ public sealed record GetAvailableAlgorithmsQuery : IStreamRequest<Core.Mining.Al
     /// <summary>
     /// Спецификация.
     /// </summary>
-    public Specification Specification { get; }
+    public Guid UserId { get; }
 
     public GetAvailableAlgorithmsQuery(Guid userId)
     {
-        Specification = new Specification(userId);
-    }
-
-    public GetAvailableAlgorithmsQuery(Guid userId, string filterString, object[] filterParameters)
-    {
-        Specification = new Specification(userId, filterString, filterParameters);
+        UserId = userId;
     }
 }
 
@@ -36,8 +30,9 @@ public class GetAvailableAlgorithmsQueryHandler : IStreamRequestHandler<GetAvail
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public IAsyncEnumerable<Core.Mining.Algorithm> Handle(GetAvailableAlgorithmsQuery request, CancellationToken cancellationToken)
+    public IAsyncEnumerable<Core.Mining.Algorithm> Handle(GetAvailableAlgorithmsQuery request,
+                                                                CancellationToken cancellationToken)
     {
-        return _repository.GetNamesOfAvailableAlgorithms(request.Specification);
+        return _repository.GetAvailable(request.UserId);
     }
 }

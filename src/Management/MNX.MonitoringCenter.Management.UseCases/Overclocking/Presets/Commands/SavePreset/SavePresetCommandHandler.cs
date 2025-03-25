@@ -14,8 +14,6 @@ public class SavePresetCommandHandler :
     SaveOverclockingBaseHandler,
     IRequestHandler<SavePresetCommand, Result<PresetModel>>
 {
-    private readonly IMapper _mapper;
-
     private readonly IPresetRepository _presetRepository;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
@@ -24,10 +22,8 @@ public class SavePresetCommandHandler :
                                     IMediator mediator,
                                     IPresetRepository presetRepository,
                                     IMiningDeviceRepository miningDeviceRepository)
-        : base(mediator)
+        : base(mapper, mediator)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-
         _presetRepository = presetRepository
             ?? throw new ArgumentNullException(nameof(presetRepository));
 
@@ -48,6 +44,7 @@ public class SavePresetCommandHandler :
         }
 
         var preset = _mapper.Map<Preset>(request);
+        preset.IsVisible = true;
 
         var overclockingValidationResult = await IsValidOverclocking(request.Model.DeviceName!,
                                                                      preset.Overclocking!,

@@ -1,8 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Algorithm;
+
+using Algorithm = Core.Mining.Algorithm;
 
 /// <summary>
 /// Реализация <see cref="IAlgorithmRepository"/>.
@@ -17,18 +18,65 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Core.Mining.Algorithm> GetNamesOfAvailableAlgorithms(Specification specification)
+    public IAsyncEnumerable<Algorithm> GetAvailable(Guid userId)
     {
-        return _context.Algorithms.Filter(specification)
-                                  .AsNoTracking()
-                                  .AsAsyncEnumerable();
+        return _context.Algorithms.Available(userId)
+            .AsNoTracking()
+            .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
-    public Task<Core.Mining.Algorithm?> GetById(Guid id, CancellationToken cancellationToken = default)
+    public Task<Algorithm?> GetById(Guid id,
+                                    Guid userId,
+                                    CancellationToken cancellationToken = default)
+    {
+        return _context.Algorithms.Available(userId)
+            .AsNoTracking().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<bool> Exists(Guid userId,
+                             string name,
+                             CancellationToken cancellationToken)
+    {
+        return _context.Algorithms.AsNoTracking().Available(userId)
+                .AnyAsync(x => x.Name == name, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<bool> Exists(Guid algorithmId,
+                                   string name,
+                                   Guid userId,
+                                   CancellationToken cancellationToken)
+    {
+        return _context.Algorithms.AsNoTracking()
+            .Available(userId)
+            .Where(x => x.Id != algorithmId)
+            .AnyAsync(x => x.Name == name, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task AddAsync(Algorithm algorithm)
+    {
+        await _context.Algorithms.AddAsync(algorithm);
+        await _context.SaveChangesAsync();
+    }
+
+    /// <inheritdoc/>
+    public Task Remove(Guid id, Guid userId)
     {
         return _context.Algorithms
-                       .AsNoTracking()
-                       .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .Where(x => x.Id == id && x.UserId == userId)
+            .ExecuteDeleteAsync();
+    }
+
+    /// <inheritdoc/>
+    public Task EditAlgorithmName(Guid algorithmId,
+                                  Guid userId,
+                                  string newName)
+    {
+        return _context.Algorithms
+            .Where(x => x.Id == algorithmId && x.UserId == userId)
+                .ExecuteUpdateAsync(x => x.SetProperty(a => a.Name, newName));
     }
 }

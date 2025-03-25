@@ -14,10 +14,10 @@ public interface IUserRigsObserverAggregator : IDisposable
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="subscriberId"> Идентификатор подписчика. </param>
     /// <param name="subscriptionType"> Тип подписки. </param>
-    /// <param name="writer"> Писатель в канал. </param>
+    /// <param name="onNext"> Обработчик показателей </param>
     /// <returns> Признак успешности подписки. </returns>
     bool TrySubscribe(Guid userId, string subscriberId,
-                      SubscriptionType subscriptionType, ChannelWriter<object> writer);
+                      SubscriptionType subscriptionType, Action<object> onNext);
 
     /// <summary>
     /// Отписаться от потока показателей.
