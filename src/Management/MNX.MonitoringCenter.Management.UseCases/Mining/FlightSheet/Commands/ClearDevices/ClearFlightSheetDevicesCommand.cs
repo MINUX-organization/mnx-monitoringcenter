@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using MNX.Application.UseCases.Requests;
 using MNX.Application.UseCases.Results;
+using MNX.Application.UseCases.Requests;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.ClearDevices;
 

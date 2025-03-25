@@ -1,9 +1,9 @@
 ﻿using MediatR;
-using MNX.Application.UseCases.CommandValidation;
 using MNX.Application.UseCases.Results;
+using MNX.Application.UseCases.CommandValidation;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
-using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Events;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Events;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.ApplyFlightSheet;

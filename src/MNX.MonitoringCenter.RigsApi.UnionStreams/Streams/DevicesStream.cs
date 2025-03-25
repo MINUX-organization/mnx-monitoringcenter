@@ -1,16 +1,16 @@
 ﻿using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using MNX.Application.UseCases.Mediator;
-using MNX.MonitoringCenter.Management.UseCases.Mining;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
-using MNX.MonitoringCenter.RigsApi.Contracts.Args;
-using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
-using MNX.MonitoringCenter.Traffic.Observers;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
-using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices;
 using System.Reactive.Linq;
 using System.Threading.Channels;
+using MNX.Application.UseCases.Mediator;
+using MNX.MonitoringCenter.Traffic.Observers;
+using Microsoft.Extensions.DependencyInjection;
+using MNX.MonitoringCenter.RigsApi.Contracts.Args;
+using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
+using MNX.MonitoringCenter.Management.UseCases.Mining;
+using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 

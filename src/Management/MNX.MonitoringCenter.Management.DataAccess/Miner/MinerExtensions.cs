@@ -1,6 +1,6 @@
 ﻿using System.Linq.Dynamic.Core;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.UseCases;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
 

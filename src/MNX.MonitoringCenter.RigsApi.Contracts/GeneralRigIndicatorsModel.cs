@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
-using MNX.MonitoringCenter.RigsApi.Contracts.FlightSheet;
+﻿using MNX.MonitoringCenter.RigsApi.Contracts.FlightSheet;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
 
 namespace MNX.MonitoringCenter.RigsApi.Contracts;

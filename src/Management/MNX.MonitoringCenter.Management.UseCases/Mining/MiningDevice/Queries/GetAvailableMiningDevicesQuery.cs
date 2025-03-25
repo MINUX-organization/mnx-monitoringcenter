@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
+using AutoMapper;
+using System.Runtime.CompilerServices;
 using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
-using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 

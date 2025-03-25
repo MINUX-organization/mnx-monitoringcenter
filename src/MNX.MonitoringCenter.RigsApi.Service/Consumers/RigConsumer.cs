@@ -1,13 +1,13 @@
-﻿using EasyNetQ.AutoSubscribe;
-using MediatR;
+﻿using MediatR;
+using EasyNetQ.AutoSubscribe;
+using MNX.RigCommander.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Management.UseCases;
+using MNX.SecurityManagement.Authentication.Contracts;
+using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
-using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
-using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
-using MNX.RigCommander.Contracts;
-using MNX.SecurityManagement.Authentication.Contracts;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 

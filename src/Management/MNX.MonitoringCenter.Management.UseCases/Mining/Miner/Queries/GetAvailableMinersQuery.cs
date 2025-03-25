@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
+﻿using MediatR;
 using AutoMapper;
-using MediatR;
+using System.Runtime.CompilerServices;
 using MNX.MonitoringCenter.Management.Contracts.Miner;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Queries;
@@ -20,7 +20,9 @@ public sealed record GetAvailableMinersQuery : IStreamRequest<MinerModel>
         Specification = new Specification(userId);
     }
 
-    public GetAvailableMinersQuery(Guid userId, string filterString, object[] filterParameters)
+    public GetAvailableMinersQuery(Guid userId,
+                                   string filterString,
+                                   object[] filterParameters)
     {
         Specification = new Specification(userId, filterString, filterParameters);
     }

@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using System.Collections.Concurrent;
 
 namespace MNX.MonitoringCenter.Traffic.Observers;
 

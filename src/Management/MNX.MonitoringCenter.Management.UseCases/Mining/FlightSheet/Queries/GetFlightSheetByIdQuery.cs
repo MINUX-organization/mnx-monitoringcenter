@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 
@@ -33,7 +33,7 @@ public class GetFLightSheetByIdQueryHandler : IRequestHandler<GetFlightSheetById
 
         if (flightSheet is null)
         {
-            return Result<FlightSheetModel>.Invalid("Flight sheet was not found!");
+            return Result<FlightSheetModel>.Invalid($"Flight sheet with id equaled {request.Id} was not found!");
         }
 
         return Result<FlightSheetModel>.Success(_mapper.Map<FlightSheetModel>(flightSheet));

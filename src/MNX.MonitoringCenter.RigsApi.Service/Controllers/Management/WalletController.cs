@@ -1,19 +1,19 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
+using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.AddWallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.EditWallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.RemoveWallet;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Queries;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
 /// <summary>
-/// Контроллер, предоставляющий Rest API для доступа к криптокошелькам
+/// Контроллер, предоставляющий Rest API для доступа к криптокошелькам.
 /// </summary>
 [Route("api/wallets")]
 [ApiController]
@@ -37,10 +37,10 @@ public class WalletController : ControllerBase
     }
 
     /// <summary>
-    /// Получить список всех криптокошельков
+    /// Получить список всех криптокошельков.
     /// </summary>
-    /// <returns> Список криптокошельков </returns>
-    /// <response code="200"> Успешно </response>
+    /// <returns> Список криптокошельков. </returns>
+    /// <response code="200"> Успешно. </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<WalletModel>), 200)]
     public IAsyncEnumerable<WalletModel> GetAll()
@@ -50,15 +50,15 @@ public class WalletController : ControllerBase
     }
 
     /// <summary>
-    /// Добавить кошелёк
+    /// Добавить кошелёк.
     /// </summary>
-    /// <param name="model"> Входная модель кошелька </param>
-    /// <returns> Результат выполнения операции </returns>
-    /// <response code="201"> Успешно </response>
+    /// <param name="model"> Входная модель кошелька. </param>
+    /// <returns> Результат выполнения операции. </returns>
+    /// <response code="201"> Успешно. </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не была найдена монета с указанным названием
+    /// Переданные параметры не прошли валидацию или не была найдена монета с указанным названием.
     /// </response>
-    /// <response code="409"> Кошелёк уже существует </response>
+    /// <response code="409"> Кошелёк уже существует. </response>
     [HttpPost]
     [ProducesResponseType(typeof(WalletModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
@@ -71,16 +71,16 @@ public class WalletController : ControllerBase
     }
 
     /// <summary>
-    /// Редактировать кошелёк
+    /// Редактировать кошелёк.
     /// </summary>
-    /// <param name="id"> Уникальный идентификатор </param>
-    /// <param name="model"> Входная модель кошелька </param>
-    /// <returns> Результат выполнения операции </returns>
-    /// <response code="200"> Успешно </response>
+    /// <param name="id"> Уникальный идентификатор. </param>
+    /// <param name="model"> Входная модель кошелька. </param>
+    /// <returns> Результат выполнения операции. </returns>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не был найден кошелёк с переданным id
+    /// Переданные параметры не прошли валидацию или не был найден кошелёк с переданным id.
     /// </response>
-    /// <response code="409"> Кошелёк уже существует </response>
+    /// <response code="409"> Кошелёк уже существует. </response>
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(typeof(WalletModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
@@ -93,11 +93,11 @@ public class WalletController : ControllerBase
     }
 
     /// <summary>
-    /// Удалить кошелёк
+    /// Удалить кошелёк.
     /// </summary>
-    /// <param name="id"> Уникальный идентификатор </param>
-    /// <returns> Результат выполнения операции </returns>
-    /// <response code="204"> Успешно </response>
+    /// <param name="id"> Уникальный идентификатор. </param>
+    /// <returns> Результат выполнения операции. </returns>
+    /// <response code="204"> Успешно. </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
     public async Task<IActionResult> Delete(Guid id)

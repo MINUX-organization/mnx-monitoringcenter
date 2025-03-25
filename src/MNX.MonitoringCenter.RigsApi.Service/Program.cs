@@ -8,6 +8,7 @@ using System.Text.Encodings.Web;
 using MNX.Application.Bus.RabbitMQ;
 using MNX.Application.OpenTelemetry;
 using System.Text.Json.Serialization;
+using MNX.MonitoringCenter.RigsApi.Streams;
 using MNX.Application.OpenTelemetry.Metrics;
 using MNX.Application.OpenTelemetry.Tracing;
 using MNX.MonitoringCenter.Traffic.Controllers;
@@ -19,8 +20,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
 using MNX.SecurityManagement.Authentication.Integration;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.RigsApi.Streams;
-using MNX.MonitoringCenter.RigsApi.UnionStreams;
 using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
@@ -60,10 +59,10 @@ internal class Program
         services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    // <�� ������������>
+                    // <НЕ ПЕРЕСТАВЛЯТЬ>
                     options.JsonSerializerOptions.Converters.Add(new EnumFlagsConverter());
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    // </�� ������������>
+                    // </НЕ ПЕРЕСТАВЛЯТЬ>
 
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                     options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);
@@ -117,7 +116,7 @@ internal class Program
                                                   .Where(a => !a.IsDynamic)
                                                   .SelectMany(a => a.GetTypes());
 
-            // Swashbuckle �������� ������ � ��������, ��� � �������� ������, � �� �������� � ������������
+            // Swashbuckle работает только с классами, как с базовыми типами, и не работает с интерфейсами
             opts.SelectSubTypesUsing(baseType =>
             {
                 if (baseType.IsInterface)

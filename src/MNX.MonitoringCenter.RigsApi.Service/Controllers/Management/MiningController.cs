@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
+using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.UseCases.Mining;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
@@ -29,8 +29,8 @@ public class MiningController : ControllerBase
     /// Запустить майнинг.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
-    /// <response code="204"> Успешно </response>
-    /// <response code="400"> Риг не найден </response>
+    /// <response code="204"> Успешно. </response>
+    /// <response code="400"> Риг не найден. </response>
     /// <returns> Результат запуска майнинга. </returns>
     [HttpPost("{rigId:Guid}/mining/start")]
     [ProducesResponseType(204)]
@@ -45,8 +45,8 @@ public class MiningController : ControllerBase
     /// Остановить майнинг.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
-    /// <response code="204"> Успешно </response>
-    /// <response code="400"> Риг не найден </response>
+    /// <response code="204"> Успешно. </response>
+    /// <response code="400"> Риг не найден. </response>
     /// <returns> Результат остановки майнинга. </returns>
     [HttpPost("{rigId:Guid}/mining/stop")]
     [ProducesResponseType(204)]

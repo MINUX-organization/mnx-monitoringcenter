@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+﻿using System.Text.Json.Serialization;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Text.Json.Serialization;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models.MiningConfig;
 

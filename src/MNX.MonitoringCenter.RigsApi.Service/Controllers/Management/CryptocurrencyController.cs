@@ -1,18 +1,18 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
+using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.RemoveCryptocurrency;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Queries;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
 /// <summary>
-/// Контроллер, предоставляющий Rest API для работы с криптовалютой
+/// Контроллер, предоставляющий Rest API для работы с криптовалютой.
 /// </summary>
 [Route("api/cryptocurrencies")]
 [ApiController]
@@ -36,10 +36,10 @@ public class CryptocurrencyController : ControllerBase
     }
 
     /// <summary>
-    /// Получить список всех криптовалют
+    /// Получить список всех криптовалют.
     /// </summary>
-    /// <returns> Список криптовалют </returns>
-    /// <response code="200"> Успешно </response>
+    /// <returns> Список криптовалют. </returns>
+    /// <response code="200"> Успешно. </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<CryptocurrencyModel>), 200)]
     public IAsyncEnumerable<CryptocurrencyModel> GetAll()
@@ -49,12 +49,12 @@ public class CryptocurrencyController : ControllerBase
     }
 
     /// <summary>
-    /// Добавить криптовалюту
+    /// Добавить криптовалюту.
     /// </summary>
-    /// <param name="model"> Входная модель криптовалюты </param>
-    /// <response code="201"> Успешно </response>
+    /// <param name="model"> Входная модель криптовалюты. </param>
+    /// <response code="201"> Успешно. </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не был найден алгоритм с указанным названием
+    /// Переданные параметры не прошли валидацию или не был найден алгоритм с указанным названием.
     /// </response>
     [HttpPost]
     [ProducesResponseType(typeof(CryptocurrencyModel), 201)]
@@ -67,10 +67,10 @@ public class CryptocurrencyController : ControllerBase
     }
 
     /// <summary>
-    /// Удалить криптовалюту
+    /// Удалить криптовалюту.
     /// </summary>
-    /// <param name="id"> Идентификатор криптовалюты </param>
-    /// <response code="204"> Успешно </response>
+    /// <param name="id"> Идентификатор криптовалюты. </param>
+    /// <response code="204"> Успешно. </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
     public async Task<IActionResult> Delete(Guid id)

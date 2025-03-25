@@ -1,13 +1,13 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
+using AutoMapper;
 using Microsoft.Extensions.Logging;
 using MNX.Application.UseCases.Results;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus;
-using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Mapping;
 

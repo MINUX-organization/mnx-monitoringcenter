@@ -1,5 +1,4 @@
-﻿
-namespace MNX.MonitoringCenter.Management.Core.Overclocking;
+﻿namespace MNX.MonitoringCenter.Management.Core.Overclocking;
 
 /// <summary>
 /// Разгон процессора.

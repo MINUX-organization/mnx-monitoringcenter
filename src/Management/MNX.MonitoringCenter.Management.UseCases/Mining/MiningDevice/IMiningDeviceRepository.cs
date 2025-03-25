@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
-using MNX.MonitoringCenter.Management.Core.Overclocking;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 
@@ -89,5 +89,7 @@ public interface IMiningDeviceRepository
     /// <param name="overclocking"> Разгон. </param>
     /// <param name="device"> Майнинг-устройство. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    Task SetOverclocking(MiningDeviceInfo device, IOverclocking overclocking, CancellationToken cancellationToken);
+    Task SetOverclocking(MiningDeviceInfo device,
+                         IOverclocking overclocking,
+                         CancellationToken cancellationToken);
 }

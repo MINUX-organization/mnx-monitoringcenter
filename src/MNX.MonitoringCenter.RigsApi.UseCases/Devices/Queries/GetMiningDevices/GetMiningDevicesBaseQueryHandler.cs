@@ -1,11 +1,11 @@
 ﻿using MediatR;
-using MNX.Application.UseCases.Mediator;
+using System.Runtime.CompilerServices;
 using MNX.Application.UseCases.Requests;
+using MNX.Application.UseCases.Mediator;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
-using System.Runtime.CompilerServices;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 
 namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices;
 

@@ -1,8 +1,8 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
+using AutoMapper;
+using MNX.RigCommander.MessageQueue.Clients.Bus;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models;
-using MNX.RigCommander.MessageQueue.Clients.Bus;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Events;
 

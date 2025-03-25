@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
-using MNX.MonitoringCenter.Management.Contracts.Miner;
+﻿using MNX.MonitoringCenter.Management.Contracts.Miner;
+using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
 
 namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 

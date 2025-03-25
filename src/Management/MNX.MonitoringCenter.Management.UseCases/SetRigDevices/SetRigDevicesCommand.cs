@@ -1,11 +1,11 @@
-﻿using AutoMapper;
-using MediatR;
-using MNX.Application.UseCases.CommandValidation;
+﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.Application.UseCases.CommandValidation;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 
@@ -16,7 +16,10 @@ namespace MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 /// <param name="RigOwnerId"> Идентификатор владельца рига. </param>
 /// <param name="Gpus"> Список видеокарт. </param>
 /// <param name="Cpus"> Список процессоров. </param>
-public sealed record SetRigDevicesCommand(Guid RigId, Guid RigOwnerId, List<Gpu> Gpus, List<Cpu> Cpus)
+public sealed record SetRigDevicesCommand(Guid RigId,
+                                          Guid RigOwnerId,
+                                          List<Gpu> Gpus,
+                                          List<Cpu> Cpus)
     : IValidatableCommand<Unit>;
 
 

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.RemovePool;
 

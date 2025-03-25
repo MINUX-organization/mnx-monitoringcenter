@@ -5,7 +5,6 @@ using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 

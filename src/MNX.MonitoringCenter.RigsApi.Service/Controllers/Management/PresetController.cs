@@ -8,13 +8,13 @@ using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.ApplyPreset;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.RemovePreset;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
 /// <summary>
-/// Предоставляет REST API для работы с пресетами
+/// Предоставляет REST API для работы с пресетами.
 /// </summary>
 [Route("api/presets")]
 [ApiController]
@@ -38,14 +38,14 @@ public class PresetController : ControllerBase
     }
 
     /// <summary>
-    /// Получить список пресетов
+    /// Получить список пресетов.
     /// </summary>
     /// <remarks>
     /// Если указано название GPU, возвращается список всех пресетов для данной серии видеокарт,
     /// иначе возвращаются все существующие пресеты.
     /// </remarks>
-    /// <param name="gpuName"> Название GPU </param>
-    /// <returns> Список пресетов </returns>
+    /// <param name="gpuName"> Название GPU. </param>
+    /// <returns> Список пресетов. </returns>
     /// <response code="200"> Успешно. </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<PresetModel>), 200)]
@@ -86,13 +86,13 @@ public class PresetController : ControllerBase
     }
 
     /// <summary>
-    /// Сохранить пресет
+    /// Сохранить пресет.
     /// </summary>
-    /// <param name="model"> Входная модель пресета </param>
-    /// <returns> Результат выполнения команды </returns>
+    /// <param name="model"> Входная модель пресета. </param>
+    /// <returns> Результат выполнения команды. </returns>
     /// <response code="201"> Успешно. </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не была найдена GPU с указанным названием
+    /// Переданные параметры не прошли валидацию или не была найдена GPU с указанным названием.
     /// </response>
     /// <response code="409"> Пресет с переданным именем уже существует. </response>
     [HttpPost]
@@ -107,11 +107,11 @@ public class PresetController : ControllerBase
     }
 
     /// <summary>
-    /// Редактировать пресет
+    /// Редактировать пресет.
     /// </summary>
-    /// <param name="id"> Уникальный идентификатор </param>
-    /// <param name="model"> Входная модель пресета </param>
-    /// <returns> Результат выполнения команды </returns>
+    /// <param name="id"> Уникальный идентификатор. </param>
+    /// <param name="model"> Входная модель пресета. </param>
+    /// <returns> Результат выполнения команды. </returns>
     /// <response code="200"> Успешно. </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id.
@@ -129,10 +129,10 @@ public class PresetController : ControllerBase
     }
 
     /// <summary>
-    /// Удалить пресет
+    /// Удалить пресет.
     /// </summary>
-    /// <param name="id"> Уникальный идентификатор </param>
-    /// <returns> Результат выполнения команды </returns>
+    /// <param name="id"> Уникальный идентификатор. </param>
+    /// <returns> Результат выполнения команды. </returns>
     /// <response code="204"> Успешно. </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]

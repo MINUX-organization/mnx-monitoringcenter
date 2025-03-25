@@ -1,14 +1,14 @@
-﻿using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using MNX.MonitoringCenter.Traffic.Observers;
+﻿using MediatR;
 using System.Reactive.Linq;
 using System.Threading.Channels;
-using MNX.MonitoringCenter.RigsApi.Contracts.Args;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
-using MNX.MonitoringCenter.RigsApi.Contracts;
-using MediatR;
-using Microsoft.Extensions.DependencyInjection;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.Application.UseCases.Mediator;
+using MNX.MonitoringCenter.RigsApi.Contracts;
+using MNX.MonitoringCenter.Traffic.Observers;
+using Microsoft.Extensions.DependencyInjection;
+using MNX.MonitoringCenter.RigsApi.Contracts.Args;
+using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 

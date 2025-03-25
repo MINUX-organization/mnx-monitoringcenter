@@ -1,5 +1,5 @@
-﻿using Swashbuckle.AspNetCore.Annotations;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
 

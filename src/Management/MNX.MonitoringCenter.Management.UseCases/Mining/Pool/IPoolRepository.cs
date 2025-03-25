@@ -21,7 +21,9 @@ public interface IPoolRepository
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Пул </returns>
-    Task<Pool?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task<Pool?> GetAvailableById(Guid id,
+                                 Guid userId,
+                                 CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существование пула
@@ -31,9 +33,13 @@ public interface IPoolRepository
     /// <param name="port"> Порт </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns>
-    /// <see langword="true"/>, если пул существует (оба параметра совпали), иначе <see langword="false"/>
+    /// <see langword="true"/>, если пул существует
+    /// (оба параметра совпали), иначе <see langword="false"/>
     /// </returns>
-    Task<bool> Exists(Guid userId, string domain, int port, CancellationToken cancellationToken);
+    Task<bool> Exists(Guid userId,
+                      string domain,
+                      int port,
+                      CancellationToken cancellationToken);
 
     /// <summary>
     /// Добавить пул

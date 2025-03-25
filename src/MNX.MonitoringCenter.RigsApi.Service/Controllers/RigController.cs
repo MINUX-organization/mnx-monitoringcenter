@@ -1,22 +1,22 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
+using Microsoft.AspNetCore.Authorization;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
-using MNX.MonitoringCenter.Management.UseCases;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
@@ -60,7 +60,7 @@ public class RigController : ControllerBase
     /// Получить обобщённые количественные данные.
     /// </summary>
     /// <returns> Результат получения обобщённых количественных данных. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("total_data")]
     [ProducesResponseType(typeof(ModelWithCountDevices), 200)]
     public async Task<IActionResult> GetSummarizedQuantitativeData()
@@ -71,11 +71,11 @@ public class RigController : ControllerBase
     }
 
     /// <summary>
-    /// Получить кол-во устройств ( видеокарты, процессоры, диски )
+    /// Получить кол-во устройств ( видеокарты, процессоры, диски ).
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Кол-во устройств на риге. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("{rigId:Guid}/devices/count")]
     [ProducesResponseType(typeof(ModelWithCountDevices), 200)]
     public async Task<IActionResult> GetDevicesCount(Guid rigId)
@@ -90,7 +90,7 @@ public class RigController : ControllerBase
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("{rigId:Guid}/cpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<CpuDetails>), 200)]
     public IAsyncEnumerable<CpuDetails> GetCpus(Guid rigId)
@@ -104,7 +104,7 @@ public class RigController : ControllerBase
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400"> Запрашиваемые данные не были найдены. </response>
     [HttpGet("{rigId:Guid}/drives")]
     [ProducesResponseType(typeof(List<Drive>), 200)]
@@ -117,11 +117,11 @@ public class RigController : ControllerBase
     }
 
     /// <summary>
-    /// Получить информацию о видеокартах рига
+    /// Получить информацию о видеокартах рига.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("{rigId:Guid}/gpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<GpuDetails>), 200)]
     public IAsyncEnumerable<GpuDetails> GetGpus(Guid rigId)
@@ -131,11 +131,11 @@ public class RigController : ControllerBase
     }
 
     /// <summary>
-    /// Получить информацию о материнской плате рига
+    /// Получить информацию о материнской плате рига.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400"> Запрашиваемые данные не были найдены. </response>
     [HttpGet("{rigId:Guid}/motherboard")]
     [ProducesResponseType(typeof(Motherboard), 200)]
@@ -148,11 +148,11 @@ public class RigController : ControllerBase
     }
 
     /// <summary>
-    /// Получить информацию об интернет соединении рига
+    /// Получить информацию об интернет соединении рига.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400"> Запрашиваемые данные не были найдены. </response>
     [HttpGet("{rigId:Guid}/network_adapters")]
     [ProducesResponseType(typeof(List<NetworkAdapter>), 200)]
@@ -165,11 +165,11 @@ public class RigController : ControllerBase
     }
 
     /// <summary>
-    /// Получить информацию о программном обеспечении рига
+    /// Получить информацию о программном обеспечении рига.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400"> Запрашиваемые данные не были найдены. </response>
     [HttpGet("{rigId:Guid}/software")]
     [ProducesResponseType(typeof(SoftwareInventory), 200)]
@@ -185,8 +185,8 @@ public class RigController : ControllerBase
     /// Выключить риг.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
-    /// <response code="204"> Успешно </response>
-    /// <response code="400"> Риг не найден </response>
+    /// <response code="204"> Успешно. </response>
+    /// <response code="400"> Риг не найден. </response>
     /// <returns> Результат выключения. </returns>
     [HttpPost("{rigId:Guid}/power_off")]
     [ProducesResponseType(204)]
@@ -202,8 +202,8 @@ public class RigController : ControllerBase
     /// Перезагрузить риг.
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
-    /// <response code="204"> Успешно </response>
-    /// <response code="400"> Риг не найден </response>
+    /// <response code="204"> Успешно. </response>
+    /// <response code="400"> Риг не найден. </response>
     /// <returns> Результат выключения. </returns>
     [HttpPost("{rigId:Guid}/reboot")]
     [ProducesResponseType(204)]

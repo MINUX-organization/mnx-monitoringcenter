@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
-using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
+﻿using MediatR;
+using AutoMapper;
 using System.Runtime.CompilerServices;
+using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Queries;
 

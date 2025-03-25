@@ -1,18 +1,18 @@
-﻿using MNX.MonitoringCenter.RigsApi.Contracts.Args;
-using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
-using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
-using MNX.MonitoringCenter.Traffic.Observers;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
-using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
+﻿using MediatR;
 using System.Reactive.Linq;
 using System.Threading.Channels;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
-using Microsoft.Extensions.DependencyInjection;
-using MediatR;
 using MNX.Application.UseCases.Mediator;
+using MNX.MonitoringCenter.Traffic.Observers;
+using Microsoft.Extensions.DependencyInjection;
+using MNX.MonitoringCenter.RigsApi.Contracts.Args;
+using MNX.MonitoringCenter.RigsApi.Contracts.Streams;
 using MNX.MonitoringCenter.Management.UseCases.Mining;
+using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 
@@ -62,9 +62,9 @@ public class MonitoringStream : Abstractions.Stream
     /// <summary>
     /// Обработка новых данных.
     /// </summary>
-    /// <param name="data">Данные.</param>
-    /// <param name="userId">Идентификатор пользователя.</param>
-    /// <returns>Задача с результатом ответа.</returns>
+    /// <param name="data"> Данные. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Задача с результатом ответа. </returns>
     private async Task<MonitoringIndicatorsStreamResponse> OnNewDataReceived(
         IList<(SubscriptionType, object)> data,
         Guid userId)

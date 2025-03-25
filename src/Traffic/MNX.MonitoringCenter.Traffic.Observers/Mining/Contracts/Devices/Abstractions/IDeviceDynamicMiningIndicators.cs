@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+﻿using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstractions;

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 using MNX.MonitoringCenter.RigsApi.UnionStreams.Args;
 using MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 
 namespace MNX.MonitoringCenter.RigsApi.Streams;
 

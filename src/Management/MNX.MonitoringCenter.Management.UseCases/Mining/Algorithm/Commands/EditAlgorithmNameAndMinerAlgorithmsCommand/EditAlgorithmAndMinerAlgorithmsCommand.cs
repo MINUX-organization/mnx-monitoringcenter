@@ -1,5 +1,4 @@
-﻿using MediatR;
-using MNX.Application.UseCases.CommandValidation;
+﻿using MNX.Application.UseCases.CommandValidation;
 using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameAndMinerAlgorithmsCommand;
