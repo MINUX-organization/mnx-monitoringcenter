@@ -31,7 +31,7 @@ public interface IMinerRepository
     Task<bool> Exists(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Проверить существование майнера по userId и minerId.
+    /// Проверить существование майнера по идентификатору пользователя и наименованию майнера.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="minerName"> Имя майнера. </param>
@@ -40,10 +40,21 @@ public interface IMinerRepository
     Task<bool> Exists(Guid userId, string minerName, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Создать майнер.
+    /// Проверить существование майнера по идентификатору пользователя и наименованию майнера,
+    /// исключая майнер с идентификатором, равным minerId.
+    /// </summary>
+    /// <param name="minerId"> Идентификатор майнера. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="minerName"> Наименование майнера.</param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Признак существования майнера. </returns>
+    Task<bool> Exists(Guid minerId, Guid userId, string minerName, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Добавить майнер.
     /// </summary>
     /// <param name="miner"> Майнер. </param>
-    /// <param name="cancellationToken"> Токен отмены.</param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     Task Add(Miner miner, CancellationToken cancellationToken);
 
     /// <summary>

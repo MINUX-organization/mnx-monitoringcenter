@@ -1,11 +1,11 @@
-﻿using AutoMapper;
-using MediatR;
-using MNX.Application.UseCases.Requests;
+﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.Agent.Commands.Mining;
-using MNX.MonitoringCenter.Management.Contracts.Miner;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
+using MNX.Application.UseCases.Requests;
 using MNX.RigCommander.MessageQueue.Clients.Bus;
+using MNX.MonitoringCenter.Management.Contracts.Miner;
+using MNX.MonitoringCenter.Management.Agent.Commands.Mining;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateCustomMinerCommand;
 
@@ -14,14 +14,14 @@ using Miner = Core.Mining.Miner.Miner;
 public sealed record CreateCustomMinerCommand(MinerInputModel Model, Guid UserId)
     : IUserableValidatableCommand<MinerModel>;
 
-public class CreateMinerCommandHandler : IRequestHandler<CreateCustomMinerCommand, Result<MinerModel>>
+public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMinerCommand, Result<MinerModel>>
 {
     private readonly IMinerRepository _minerRepository;
     private readonly IMapper _mapper;
     private readonly IQueueBusClient _bus;
     private readonly IRigRepository _rigRepository;
 
-    public CreateMinerCommandHandler(
+    public CreateCustomMinerCommandHandler(
         IMinerRepository minerRepository, 
         IMapper mapper, 
         IQueueBusClient bus,
@@ -35,22 +35,36 @@ public class CreateMinerCommandHandler : IRequestHandler<CreateCustomMinerComman
 
     public async Task<Result<MinerModel>> Handle(CreateCustomMinerCommand request, CancellationToken cancellationToken)
     {
-        var miner = _mapper.Map<Miner>(request.Model);
-        miner.OwnerId = request.UserId;
+        var model = request.Model;
+        if (await _minerRepository.Exists(request.UserId, model.Name, cancellationToken))
+        {
+            return Result<MinerModel>.Conflict($"Miner with name {model.Name} already exists");
+        }
+
+        var miner = new Miner()
+        {
+            Name = model.Name,
+            Version = model.Version,
+            InstallationUrl = model.InstallationUrl,
+            SupportedDevices = model.SupportedDevices,
+            PoolTemplate = model.PoolTemplate,
+            WalletWorkerTemplate = model.WalletWorkerTemplate,
+            OwnerId = request.UserId
+        };
+        
         await _minerRepository.Add(miner, cancellationToken);
 
         var rigIds = await _rigRepository
             .GetOwnedRigs(request.UserId)
             .ToArrayAsync(cancellationToken);
 
-        await _bus.Enqueue(
-            new InstallCustomMinerCommand(
+        await _bus.Enqueue(new InstallCustomMinerCommand(
                 miner.Name,
                 request.UserId,
                 miner.Version,
-                miner.InstallationUrl!,
-                miner.PoolTemplate!,
-                miner.WalletWorkerTemplate!),
+                miner.InstallationUrl,
+                miner.PoolTemplate,
+                miner.WalletWorkerTemplate),
             rigIds,
             request.UserId,
             cancellationToken: cancellationToken

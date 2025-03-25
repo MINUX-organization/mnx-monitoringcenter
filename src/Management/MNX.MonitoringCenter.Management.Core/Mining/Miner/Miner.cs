@@ -12,7 +12,7 @@ public class Miner : IEquatable<Miner>
     /// <summary>
     /// Идентификатор.
     /// </summary>
-    public Guid Id { get; set; } = Guid.NewGuid();
+    public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
     /// Название.
@@ -48,7 +48,7 @@ public class Miner : IEquatable<Miner>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid? OwnerId { get; set; }
+    public Guid? OwnerId { get; init; }
 
     /// <summary>
     /// Ссылка на архив, откуда скачивать майнер.

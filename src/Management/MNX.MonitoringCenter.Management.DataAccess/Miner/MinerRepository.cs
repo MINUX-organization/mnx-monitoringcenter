@@ -55,6 +55,16 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
+    public Task<bool> Exists(Guid minerId, Guid userId, string minerName, CancellationToken cancellationToken)
+    {
+        return _context.Miners.AsNoTracking()
+                       .AnyAsync(x => x.OwnerId == userId &&
+                                 x.Name == minerName &&
+                                 x.Id != minerId,
+                                 cancellationToken);
+    }
+
+    /// <inheritdoc/>
     public Task Add(Miner miner, CancellationToken cancellationToken)
     {
         _context.Miners.Add(miner);
