@@ -1,15 +1,15 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
-using MNX.MonitoringCenter.Management.Contracts.Overclocking;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
+using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
@@ -50,10 +50,10 @@ public class DeviceController : ControllerBase
     }
 
     /// <summary>
-    /// Получить уникальный названия зарегистрированных видеокарт.
+    /// Получить уникальные названия зарегистрированных видеокарт.
     /// </summary>
     /// <returns> Уникальный названия видеокарт. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("gpus/unique_names")]
     [ProducesResponseType(typeof(IAsyncEnumerable<string>), 200)]
     public IAsyncEnumerable<string> GetGpuUniqueNames()
@@ -67,12 +67,28 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <param name="gpuName"> Название видеокарты. </param>
     /// <returns> Ограничения. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     [HttpGet("gpus/{gpuName}/restrictions")]
     [ProducesResponseType(typeof(GpuRestrictions), 200)]
     public async Task<IActionResult> GetGpuRestrictions(string gpuName)
     {
         var result = await _mediator.Send(new GetGpuRestrictionsQuery(gpuName));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Получить ограничения видеокарты по её идентификатору.
+    /// </summary>
+    /// <param name="gpuId"> Идентификатор видеокарты. </param>
+    /// <returns> Ограничения. </returns>
+    /// <response code="200"> Успешно. </response>
+    /// <response code="400"> Майнинг устройство не найдено. </response>
+    [HttpGet("gpus/{gpuId:guid}/restrictions")]
+    [ProducesResponseType(typeof(GpuRestrictions), 200)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> GetGpuRestrictionsById(Guid gpuId)
+    {
+        var result = await _mediator.Send(new GetGpuRestrictionsByIdQuery(gpuId));
         return result.ToActionResult();
     }
 
@@ -93,7 +109,7 @@ public class DeviceController : ControllerBase
     /// </summary>
     /// <param name="deviceId"> Идентификатор майнинг устройства. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400"> Майнинг устройство не найдено. </response>
     [HttpGet("overclocking")]
     [ProducesResponseType(typeof(IOverclockingModel), 200)]
@@ -101,23 +117,30 @@ public class DeviceController : ControllerBase
     public async Task<IActionResult> GetOverclocking(Guid deviceId)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new GetDeviceOverclockingQuery(deviceId, userId));
+        var result = await _mediator.Send(
+            new GetDeviceOverclockingQuery(deviceId, userId));
         return result.ToActionResult();
     }
 
     /// <summary>
-    /// Задать разгон устройству.
+    /// Задать разгон устройству напрямую.
     /// </summary>
     /// <param name="deviceId"> Идентификатор устройства. </param>
     /// <param name="overclocking"> Разгон. </param>
     /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно </response>
+    /// <response code="200"> Успешно. </response>
+    /// <response code="400">
+    /// Девайса не существует или параметры разгона являются некорректными.
+    /// </response>
     [HttpPost("overclocking")]
     [ProducesResponseType(typeof(Guid[]), 200)]
-    public async Task<IActionResult> SetOverclocking(Guid deviceId, IOverclockingModel overclocking)
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> SetOverclocking(Guid deviceId,
+                                                     IOverclockingModel overclocking)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new SetOverclockingCommand(userId, overclocking, deviceId));
+        var result = await _mediator.Send(
+            new SetOverclockingCommand(userId, overclocking, deviceId));
         return result.ToActionResult();
     }
 }

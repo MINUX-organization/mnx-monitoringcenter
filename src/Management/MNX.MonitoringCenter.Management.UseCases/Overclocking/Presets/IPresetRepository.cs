@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 
@@ -52,12 +52,19 @@ public interface IPresetRepository
     /// <summary>
     /// Обновить пресет
     /// </summary>
-    /// <param name="preset"> Пресет </param>
+    /// <param name="preset"> Пресет. </param>
     Task Update(Preset preset);
 
     /// <summary>
     /// Удалить пресет
     /// </summary>
+    /// <remarks>
+    /// Перед удалением сущности пресета вызывается триггер,
+    /// который переключает связанные с удаляемым пресетом
+    /// майнинг-устройства на их базовые пресеты, обновление разгона
+    /// данных пресетов на актуальный (тот, который был на удаляемом
+    /// пресете) и удаление разгона, привязанного к удаляемому пресету.
+    /// </remarks>
     /// <param name="id"> Идентификатор пресета. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
     Task Remove(Guid id, Guid userId);

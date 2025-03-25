@@ -10,30 +10,25 @@ public class RigDynamicIndicators
     /// <summary>
     /// Уникальный идентификатор рига.
     /// </summary>
-    public Guid RigId { get; init; }
+    public Guid RigId { get; set; }
 
     /// <summary>
     /// Уникальный идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; init; }
+    public Guid UserId { get; set; }
 
     /// <summary>
     /// Дата и время отправки.
     /// </summary>
-    public DateTime SendingDateTime { get; init; } = DateTime.Now;
+    public DateTime SendingDateTime { get; set; } = DateTime.Now;
 
     /// <summary>
-    /// Время работы рига с момента последнего включения.
+    /// Время работы рига в секундах с момента последнего включения.
     /// </summary>
-    public DateTime BootedUpTime { get; init; }
-
-    /// <summary>
-    /// Время майнинга с момента последнего включения.
-    /// </summary>
-    public DateTime MiningUpTime { get; init; }
+    public int BootedUpTimeInSeconds { get; set; }
 
     /// <summary>
     /// Динамические показатели устройств.
     /// </summary>
-    public List<IDeviceDynamicIndicators> Devices { get; init; } = new(0);
+    public List<IDeviceDynamicIndicators> Devices { get; set; } = new(0);
 }

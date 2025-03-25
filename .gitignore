@@ -403,3 +403,6 @@ FodyWeavers.xsd
 *.db
 /src/Management/MNX.MonitoringCenter.Management.Service/Properties/launchSettings.json
 /src/Monitoring/MNX.MonitoringCenter.Monitoring.Service/Properties/launchSettings.json
+/src/Management/MNX.MonitoringCenter.Management.DataAccess/Migrations/20250313064807_Init_2.cs
+/src/Management/MNX.MonitoringCenter.Management.DataAccess/Migrations/20250313064807_Init_2.Designer.cs
+/src/Management/MNX.MonitoringCenter.Management.DataAccess/Migrations/ContextModelSnapshot.cs

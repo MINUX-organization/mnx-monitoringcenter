@@ -10,5 +10,5 @@ public interface IDeviceDynamicHardwareIndicators : IDeviceIndicators
     /// <summary>
     /// Мощность.
     /// </summary>
-    int Power { get; init; }
+    int Power { get; set; }
 }

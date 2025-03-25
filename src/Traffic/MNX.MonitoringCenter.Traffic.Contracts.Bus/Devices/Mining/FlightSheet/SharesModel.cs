@@ -8,12 +8,12 @@ public class SharesModel
     /// <summary>
     /// Принятые решения.
     /// </summary>
-    public int Accepted { get; init; }
+    public int Accepted { get; set; }
 
     /// <summary>
     /// Отклонённые решения.
     /// </summary>
-    public int Rejected { get; init; }
+    public int Rejected { get; set; }
 
     /// <summary>
     /// Оператор сложения решений.

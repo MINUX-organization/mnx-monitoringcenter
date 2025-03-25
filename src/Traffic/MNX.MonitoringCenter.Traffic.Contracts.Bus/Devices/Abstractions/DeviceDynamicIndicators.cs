@@ -6,7 +6,7 @@
 public abstract class DeviceDynamicIndicators : IDeviceDynamicIndicators
 {
     /// <inheritdoc/>
-    public Guid DeviceId { get; init; }
+    public Guid DeviceId { get; set; }
 
     /// <inheritdoc/>
     public abstract DeviceType Type { get; }
@@ -14,5 +14,5 @@ public abstract class DeviceDynamicIndicators : IDeviceDynamicIndicators
     /// <summary>
     /// Мощность.
     /// </summary>
-    public int Power { get; init; }
+    public int Power { get; set; }
 }

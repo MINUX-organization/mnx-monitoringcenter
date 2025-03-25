@@ -21,6 +21,11 @@ public class WalletModel
     public required string Address { get; set; }
 
     /// <summary>
+    /// Идентификатор криптовалюты.
+    /// </summary>
+    public Guid CryptocurrencyId { get; set; }
+
+    /// <summary>
     /// Полное название криптовалюты
     /// </summary>
     public required string Cryptocurrency { get; set; }

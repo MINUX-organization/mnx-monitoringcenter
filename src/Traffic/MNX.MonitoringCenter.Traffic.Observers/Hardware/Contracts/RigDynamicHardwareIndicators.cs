@@ -1,4 +1,4 @@
-﻿ using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
+﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Network;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
@@ -17,9 +17,9 @@ public class RigDynamicHardwareIndicators : IRigIndicators<IDeviceDynamicHardwar
     public Guid RigId { get; init; }
 
     /// <summary>
-    /// Время работы рига с момента последнего включения.
+    /// Время работы рига в секундах с момента последнего включения.
     /// </summary>
-    public DateTime BootedUpTime { get; init; }
+    public int BootedUpTimeInSeconds { get; init; }
 
     /// <summary>
     /// Общая мощность.

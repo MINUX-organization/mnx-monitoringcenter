@@ -2,8 +2,8 @@ name: monitoring_center
 services:
 
     rigs_api:
-        container_name: rigs_api
-        image: rigs_api
+        container_name: rigs-api
+        image: rigs-api
         build:
             context: .
             dockerfile: ./src/MNX.MonitoringCenter.RigsApi.Service/Dockerfile
@@ -14,7 +14,7 @@ services:
              - "8001:8080"
         environment:
              - applicationUrl=http://77.37.200.24:8001
-             - ServiceName=rigs_api
+             - ServiceName=rigs-api
              - ConsulUri=http://77.37.200.24:8500
 
     monitoring_center_db:

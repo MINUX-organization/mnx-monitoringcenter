@@ -44,7 +44,7 @@ public record GetFlightSheetSupportedDevicesQuery
 
 
 /// <summary>
-/// Обработчик <see cref="GetAvailableMiningDevicesQuery"/>.
+/// Обработчик <see cref="GetFlightSheetSupportedDevicesQuery"/>.
 /// </summary>
 public class GetFlightSheetSupportedDevicesQueryHandler
     : IStreamRequestHandler<GetFlightSheetSupportedDevicesQuery, MiningDeviceModel>

@@ -53,6 +53,13 @@ public interface IGpuRepository
     Task<GpuRestrictions?> GetGpusRestrictions(string gpuName);
 
     /// <summary>
+    /// Получение ограничений по идентификатору видеокарты.
+    /// </summary>
+    /// <param name="gpuId"> Идентификатор видеокарты. </param>
+    /// <returns> Ограничения. </returns>
+    Task<GpuRestrictions?> GetGpusRestrictionsById(Guid gpuId);
+
+    /// <summary>
     /// Получить кол-во видеокарт по спецификации.
     /// </summary>
     /// <param name="specification"> Спецификация. </param>

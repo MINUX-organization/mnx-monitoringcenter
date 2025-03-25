@@ -16,7 +16,7 @@ public interface IRigsIndicatorsObserver<TRigsIndicators> : IDisposable
     /// <param name="writer"> Писатель в канал. </param>
     /// <returns> Признак успешности подписки и число подписок. </returns>
     (bool IsSuccessful, int SubscriptionsCount) TrySubscribe(
-        string subscriberId, SubscriptionType subscriptionType, ChannelWriter<object> writer);
+        string subscriberId, SubscriptionType subscriptionType, Action<object> onNext);
 
     /// <summary>
     /// Отписаться от потока показателей.

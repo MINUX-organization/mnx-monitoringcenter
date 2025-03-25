@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
@@ -10,7 +11,7 @@ public class MiningDeviceInfo : MiningDevice
     /// <summary>
     /// Идентификатор рига.
     /// </summary>
-    public Guid RigId { get; set; }
+    public Guid? RigId { get; set; }
 
     /// <summary>
     /// Признак активности устройства ( в данных момент установлен на риге ).
@@ -49,6 +50,16 @@ public class MiningDeviceInfo : MiningDevice
     public FlightSheet.FlightSheet? FlightSheet { get; set; }
 
     /// <summary>
+    /// Идентификатор пресета.
+    /// </summary>
+    public Guid PresetId { get; set; }
+
+    /// <summary>
+    /// Пресет.
+    /// </summary>
+    public Preset? Preset { get; set; }
+
+    /// <summary>
     /// Деактивировать.
     /// </summary>
     public void Deactivate()
@@ -57,6 +68,8 @@ public class MiningDeviceInfo : MiningDevice
             throw new ApplicationException("It is not possible to switch from the \"online\" state to the \"inactive\" state.");
 
         _lifeCycleStatus = MiningDeviceLifeCycleStatus.Inactive;
+        RigId = null;
+        OwnerId = null;
     }
 
     /// <summary>

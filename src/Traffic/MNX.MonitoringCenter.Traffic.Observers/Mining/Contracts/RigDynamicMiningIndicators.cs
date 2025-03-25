@@ -1,6 +1,7 @@
 ﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining.FlightSheet;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.FlightSheet;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts;
 
@@ -15,9 +16,18 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     public Guid RigId { get; init; }
 
     /// <summary>
-    /// Время майнинга с момента последнего включения.
+    /// Время майнинга в секундах с момента последнего включения.
     /// </summary>
-    public DateTime MiningUpTime { get; init; }
+    private int? _miningUpTimeInSeconds;
+    public int MiningUpTimeInSeconds
+    {
+        get => _miningUpTimeInSeconds ??= Devices.Max(x => x.MiningUpTimeInSeconds);
+    }
+
+    /// <summary>
+    /// Время работы рига с момента последнего включения.
+    /// </summary>
+    public DateTime BootedUpTime { get; init; }
 
     /// <summary>
     /// Общее кол-во решений.
@@ -25,25 +35,22 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     private SharesModel? _totalShares;
     public SharesModel TotalShares
     {
-        get
+        get => _totalShares ??= new SharesModel()
         {
-            return _totalShares ??= new SharesModel()
+            Accepted = Devices.Sum(x =>
             {
-                Accepted = Devices.Sum(x =>
-                {
-                    return x.FlightSheet is not null
-                        ? x.FlightSheet.Coins.Sum(coin => coin.Shares.Accepted)
-                        : 0;
-                }),
+                return x.FlightSheet is not null
+                    ? x.FlightSheet.Coins.Sum(coin => coin.Shares.Accepted)
+                    : 0;
+            }),
 
-                Rejected = Devices.Sum(x =>
-                {
-                    return x.FlightSheet is not null
-                        ? x.FlightSheet.Coins.Sum(coin => coin.Shares.Rejected)
-                        : 0;
-                })
-            };
-        }
+            Rejected = Devices.Sum(x =>
+            {
+                return x.FlightSheet is not null
+                    ? x.FlightSheet.Coins.Sum(coin => coin.Shares.Rejected)
+                    : 0;
+            })
+        };
     }
 
     /// <summary>
@@ -52,30 +59,27 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
     private int? _totalHashRate;
     public int TotalHashRate
     {
-        get
+        get => _totalHashRate ??= Devices.Sum(device =>
         {
-            return _totalHashRate ??= Devices.Sum(device =>
+            if (device.FlightSheet is not null)
             {
-                if (device.FlightSheet is not null)
-                {
-                    return device.FlightSheet.Coins.Sum(coin => coin.HashRate);
-                }
-                return 0;
-            });
-        }
+                return device.FlightSheet.Coins.Sum(coin => coin.HashRate);
+            }
+            return 0;
+        });
     }
 
     /// <summary>
     /// Получить обобщённую статистику по монетам.
     /// </summary>
-    private List<CoinStatistics>? _totalCoinsStatistics;
-    public List<CoinStatistics> TotalCoinStatistics
+    private List<RigCoinStatistics>? _totalCoinsStatistics;
+    public List<RigCoinStatistics> TotalCoinStatistics
     {
         get
         {
             if (_totalCoinsStatistics is null)
             {
-                var coinsStatistics = new Dictionary<Guid, CoinStatistics>(); // ключ - идентификатор монеты
+                var coinsStatistics = new Dictionary<Guid, RigCoinStatistics>(); // ключ - идентификатор монеты
 
                 foreach (var device in Devices)
                 {
@@ -86,20 +90,22 @@ public class RigDynamicMiningIndicators : IRigIndicators<IDeviceDynamicMiningInd
 
                     foreach (var coin in device.FlightSheet.Coins)
                     {
-                        var newCoinStatistics = new CoinStatistics()
-                        {
-                            CoinId = coin.CoinId,
-                            HashRate = coin.HashRate,
-                            Shares = coin.Shares
-                        };
-
-                        if (coinsStatistics.TryGetValue(coin.CoinId, out CoinStatistics? statistics))
+                        if (coinsStatistics.TryGetValue(coin.CoinId, out RigCoinStatistics? statistics))
                         {
                             statistics.HashRate += coin.HashRate;
                             statistics.Shares += coin.Shares;
                         }
                         else
                         {
+                            var newCoinStatistics = new RigCoinStatistics()
+                            {
+                                CoinId = coin.CoinId,
+                                MinerId = device.FlightSheet.MinerId,
+                                FlightSheetId = device.FlightSheet.Id,
+                                HashRate = coin.HashRate,
+                                Shares = coin.Shares
+                            };
+
                             coinsStatistics.Add(coin.CoinId, newCoinStatistics);
                         }
                     }
