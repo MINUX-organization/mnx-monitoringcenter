@@ -4,8 +4,8 @@ using MNX.Application.UseCases.Results;
 using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.RemoveCryptocurrency;
 
@@ -71,8 +71,12 @@ public class CryptocurrencyController : ControllerBase
     /// </summary>
     /// <param name="id"> Идентификатор криптовалюты. </param>
     /// <response code="204"> Успешно. </response>
+    /// <response code="400">
+    /// Доменная криптовалюта не может быть удалена.
+    /// </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = _userAccessor.GetUserId();
