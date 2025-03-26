@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.RemovePool;
 
 /// <summary>
-/// Обработчик команды удаления пула
+/// Обработчик команды удаления пула.
 /// </summary>
 public class RemovePoolCommandHandler : IRequestHandler<RemovePoolCommand, Result<Unit>>
 {
@@ -18,6 +17,14 @@ public class RemovePoolCommandHandler : IRequestHandler<RemovePoolCommand, Resul
 
     public async Task<Result<Unit>> Handle(RemovePoolCommand request, CancellationToken cancellationToken)
     {
+        var pool = await _repository.GetAvailableById(request.Id, request.UserId, cancellationToken);
+
+        if (pool is null)
+            return Result<Unit>.Empty();
+
+        if (pool.IsDomain())
+            return Result<Unit>.Invalid("Domain pool cannot be deleted");
+
         await _repository.Remove(request.Id, request.UserId);
         return Result<Unit>.Empty();
     }

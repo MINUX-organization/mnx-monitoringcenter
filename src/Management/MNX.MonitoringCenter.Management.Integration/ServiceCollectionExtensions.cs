@@ -26,6 +26,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
+using Microsoft.EntityFrameworkCore;
 
 namespace MNX.MonitoringCenter.Management.Integration;
 
@@ -54,7 +55,9 @@ public static class ServiceCollectionExtensions
             typeof(ApplyWorkerSettingsCommand).Assembly
         ));
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
-        services.AddDataContext<Context>(configuration);
+        //services.AddDataContext<Context>(configuration);
+
+        services.AddDbContextFactory<Context>(cfg => cfg.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IRigRepository, RigRepository>();
         services.AddScoped<IAlgorithmRepository, AlgorithmRepository>();
