@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
+using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.AddCryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.RemoveCryptocurrency;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Queries;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
