@@ -55,9 +55,7 @@ public static class ServiceCollectionExtensions
             typeof(ApplyWorkerSettingsCommand).Assembly
         ));
         services.AddValidationPipelines(typeof(SavePresetValidator).Assembly);
-        //services.AddDataContext<Context>(configuration);
-
-        services.AddDbContextFactory<Context>(cfg => cfg.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+        services.AddDataContext<Context>(configuration);
 
         services.AddScoped<IRigRepository, RigRepository>();
         services.AddScoped<IAlgorithmRepository, AlgorithmRepository>();
