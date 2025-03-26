@@ -54,7 +54,8 @@ public class CryptocurrencyController : ControllerBase
     /// <param name="model"> Входная модель криптовалюты. </param>
     /// <response code="201"> Успешно. </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не был найден алгоритм с указанным названием.
+    /// Переданные параметры не прошли валидацию или
+    /// не был найден алгоритм с указанным названием.
     /// </response>
     [HttpPost]
     [ProducesResponseType(typeof(CryptocurrencyModel), 201)]
