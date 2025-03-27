@@ -31,7 +31,7 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER monitoring_center.preset_delete_trigger
+CREATE TRIGGER preset_delete_trigger
 BEFORE DELETE ON monitoring_center.presets
 FOR EACH ROW
-EXECUTE FUNCTION handle_preset_delete();
+EXECUTE FUNCTION monitoring_center.handle_preset_delete();

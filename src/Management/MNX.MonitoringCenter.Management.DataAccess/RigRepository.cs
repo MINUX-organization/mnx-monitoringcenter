@@ -34,10 +34,10 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(Guid id, Guid userId)
+    public async Task<bool> Exists(Guid id, Guid userId)
     {
         using var context = _contextFactory.CreateDbContext();
-        return context.MiningDevices
+        return await context.MiningDevices
                       .AsNoTracking()
                       .AnyAsync(x => x.RigId == id && x.OwnerId == userId);
     }
@@ -109,10 +109,10 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public Task SwitchToOffline(Guid rigId)
+    public async Task SwitchToOffline(Guid rigId)
     {
         using var context = _contextFactory.CreateDbContext();
-        return context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
+        await context.MiningDevices.Where(device => device.RigId == rigId).ExecuteUpdateAsync(x =>
             x.SetProperty(device => device.LifeCycleStatus, d => MiningDeviceLifeCycleStatus.Offline));
     }
 

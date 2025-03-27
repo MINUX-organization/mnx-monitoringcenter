@@ -4,7 +4,7 @@ CREATE TABLE monitoring_center.algorithms
     name text NOT NULL,
     user_id uuid NULL,
 
-    CONSTRAINT pk_algorithms PRIMARY KEY (id)
+    CONSTRAINT pk_algorithms PRIMARY KEY (id),
 
     CONSTRAINT unique_name_user_id UNIQUE (name, user_id)
 );
@@ -15,4 +15,4 @@ CREATE UNIQUE INDEX ix_algorithms_name
 
 COMMENT ON TABLE monitoring_center.algorithms IS 'Алгоритмы';
 
-COMMENT ON COLUMN monitoring_center.algorithms.userId IS 'Если имеет значение null, значит алгоритм доменный';
+COMMENT ON COLUMN monitoring_center.algorithms.user_id IS 'Если имеет значение null, значит алгоритм доменный';
