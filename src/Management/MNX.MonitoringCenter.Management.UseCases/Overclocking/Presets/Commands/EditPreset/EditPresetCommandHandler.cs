@@ -1,11 +1,9 @@
 ﻿using MediatR;
 using AutoMapper;
-using System.Transactions;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 
@@ -36,8 +34,8 @@ public class EditPresetCommandHandler :
                                                   CancellationToken cancellationToken)
     {
         var preset = await _presetRepository.GetAvailableById(request.Id,
-                                                        request.UserId,
-                                                        cancellationToken);
+                                                              request.UserId,
+                                                              cancellationToken);
 
         if (preset is null)
         {
@@ -48,10 +46,7 @@ public class EditPresetCommandHandler :
         var devices = await _miningDeviceRepository
             .GetAvailableByPresetId(request.Id, request.UserId);
 
-        var newPreset = _mapper.Map<Preset>(request);
-        newPreset.OverclockingId = preset.OverclockingId;
-        newPreset.DeviceName = preset.DeviceName;
-        newPreset.IsVisible = true;
+        var newPreset = Map(preset, request);
 
         var overclockingValidationResult = await IsValidOverclocking(
             preset.DeviceName, newPreset.Overclocking!, cancellationToken);
@@ -69,21 +64,38 @@ public class EditPresetCommandHandler :
 
         if (preset.Name != newPreset.Name &&
             await _presetRepository.Exists(request.UserId,
-                                     request.Model.Name,
-                                     cancellationToken))
+                                           request.Model.Name,
+                                           cancellationToken))
         {
             return Result<PresetModel>.Conflict(
                 $"Preset with name equaled {request.Model.Name} already exists");
         }
 
-        using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
-        {
-            await _presetRepository.Update(newPreset);
+        await _presetRepository.Update(newPreset);
 
-            await _mediator.Publish(new SendOverclockingToRigsEvent(newPreset.Overclocking!,
-                                                                   devices,
-                                                                   request.UserId));
-        }
+        await _mediator.Publish(new SendOverclockingToRigsEvent(newPreset.Overclocking!,
+                                                                devices,
+                                                                request.UserId));
+
         return Result<PresetModel>.Success(_mapper.Map<PresetModel>(newPreset));
+    }
+
+    private Preset Map(Preset preset, EditPresetCommand command)
+    {
+        var newPreset = new Preset()
+        {
+            Id = command.Id,
+            Name = command.Model.Name,
+            DeviceName = preset.DeviceName,
+            UserId = command.UserId,
+            OverclockingId = preset.OverclockingId,
+            IsVisible = true,
+        };
+
+        var overclocking = preset.Overclocking;
+        _mapper.Map(command.Model.Overclocking, overclocking);
+        newPreset.Overclocking = overclocking;
+
+        return newPreset;
     }
 }

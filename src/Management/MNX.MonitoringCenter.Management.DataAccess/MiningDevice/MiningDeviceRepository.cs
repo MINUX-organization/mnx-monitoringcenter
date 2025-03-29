@@ -72,28 +72,37 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                                       IOverclocking overclocking,
                                       CancellationToken cancellationToken)
     {
-        var invisiblePreset = await _context.Presets
-            .FirstOrDefaultAsync(x => x.Name == device.Id.ToString() && !x.IsVisible, cancellationToken);
+        var preset = await _context.Presets.AsNoTracking()
+            .Where(x => x.Id == device.PresetId).FirstAsync(cancellationToken);
 
-        if (invisiblePreset == null) return;
+        var overclockingDto = _mapper.Map<OverclockingDto>(overclocking);
 
-        var oldOverclocking = await _context.Overclocking
-            .FirstOrDefaultAsync(x => x.Id == invisiblePreset.OverclockingId, cancellationToken);
-
-        if (oldOverclocking != null)
+        if (preset!.IsVisible)
         {
-            _context.Overclocking.Remove(oldOverclocking);
+            var invisiblePreset = await _context.Presets.AsNoTracking()
+                .Where(x => x.Name == device.Id.ToString() && !x.IsVisible)
+                .FirstAsync(cancellationToken);
+
+            var overclockingToUpdate = await _context.Overclocking
+                .Where(x => x.Id == invisiblePreset.OverclockingId)
+                .FirstAsync(cancellationToken);
+
+            _mapper.Map(overclockingDto, overclockingToUpdate);
+
+            _context.Overclocking.Update(overclockingToUpdate);
+        }
+        else
+        {
+            var overclockingToUpdate = await _context.Overclocking.AsNoTracking()
+                .Where(x => x.Id == preset.OverclockingId)
+                .FirstAsync(cancellationToken);
+
+            _mapper.Map(overclockingDto, overclockingToUpdate);
+
+            _context.Overclocking.Update(overclockingToUpdate);
         }
 
-        var dto = _mapper.Map<OverclockingDto>(overclocking);
-
-        invisiblePreset.OverclockingId = dto.Id;
-        device.PresetId = invisiblePreset.Id;
-
-        _context.MiningDevices.Update(device);
-        await _context.Overclocking.AddAsync(dto, cancellationToken);
-
-        await _context.SaveChangesAsync(cancellationToken);
+        await _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
