@@ -9,7 +9,7 @@ CREATE TABLE monitoring_center.mining_devices
     life_cycle_status text NOT NULL DEFAULT 'Online',
     flight_sheet_id uuid,
     flight_sheet_is_confirm boolean NOT NULL DEFAULT TRUE,
-    preset_id uuid NOT NULL,
+    preset_id uuid,
 
     CONSTRAINT pk_mining_devices PRIMARY KEY (id),
 

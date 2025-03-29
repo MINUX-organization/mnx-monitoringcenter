@@ -52,7 +52,7 @@ public class MiningDeviceInfo : MiningDevice
     /// <summary>
     /// Идентификатор пресета.
     /// </summary>
-    public Guid PresetId { get; set; }
+    public Guid? PresetId { get; set; }
 
     /// <summary>
     /// Пресет.
