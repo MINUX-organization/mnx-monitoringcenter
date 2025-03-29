@@ -1,19 +1,19 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
+using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.RemovePool;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Queries;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
 /// <summary>
-/// Контроллер предоставляющий Rest API для работы с пулами
+/// Контроллер предоставляющий Rest API для работы с пулами.
 /// </summary>
 [Route("api/pools")]
 [ApiController]
@@ -37,10 +37,10 @@ public class PoolController : ControllerBase
     }
 
     /// <summary>
-    /// Получить список всех пулов
+    /// Получить список всех пулов.
     /// </summary>
-    /// <returns> Список пулов </returns>
-    /// <response code="200"> Успешно </response>
+    /// <returns> Список пулов. </returns>
+    /// <response code="200"> Успешно. </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<PoolModel>), 200)]
     public IAsyncEnumerable<PoolModel> GetAll()
@@ -50,15 +50,15 @@ public class PoolController : ControllerBase
     }
 
     /// <summary>
-    /// Добавить пул
+    /// Добавить пул.
     /// </summary>
-    /// <param name="model"> Входная модель пула </param>
-    /// <returns> Результат выполнения операции </returns>
-    /// <response code="201"> Успешно </response>
+    /// <param name="model"> Входная модель пула. </param>
+    /// <returns> Результат выполнения операции. </returns>
+    /// <response code="201"> Успешно. </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не была найдена монета с указанным названием
+    /// Переданные параметры не прошли валидацию или не была найдена монета с указанным названием.
     /// </response>
-    /// <response code="409"> Пул уже существует </response>
+    /// <response code="409"> Пул уже существует. </response>
     [HttpPost]
     [ProducesResponseType(typeof(PoolModel), 201)]
     [ProducesResponseType(typeof(List<string>), 400)]
@@ -71,16 +71,17 @@ public class PoolController : ControllerBase
     }
 
     /// <summary>
-    /// Редактировать пул
+    /// Редактировать пул.
     /// </summary>
-    /// <param name="id"> Уникальный идентификатор </param>
-    /// <param name="model"> Входная модель пула </param>
-    /// <returns> Результат выполнения операции </returns>
-    /// <response code="200"> Успешно </response>
+    /// <param name="id"> Уникальный идентификатор. </param>
+    /// <param name="model"> Входная модель пула. </param>
+    /// <returns> Результат выполнения операции. </returns>
+    /// <response code="200"> Успешно. </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден пул с переданным id
+    /// или попытка редактирования доменного пула.
     /// </response>
-    /// <response code="409"> Пул уже существует </response>
+    /// <response code="409"> Пул уже существует. </response>
     [HttpPut("{id:Guid}")]
     [ProducesResponseType(typeof(PoolModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
@@ -93,13 +94,17 @@ public class PoolController : ControllerBase
     }
 
     /// <summary>
-    /// Удалить пул
+    /// Удалить пул.
     /// </summary>
-    /// <param name="id"> Уникальный идентификатор </param>
-    /// <returns> Результат выполнения операции </returns>
-    /// <response code="204"> Успешно </response>
+    /// <param name="id"> Уникальный идентификатор. </param>
+    /// <returns> Результат выполнения операции. </returns>
+    /// <response code="204"> Успешно. </response>
+    /// <response code="400">
+    /// Доменный пул не может быть удален.
+    /// </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = _userAccessor.GetUserId();

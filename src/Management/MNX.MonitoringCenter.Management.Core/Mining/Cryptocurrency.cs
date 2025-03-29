@@ -33,7 +33,24 @@ public class Cryptocurrency : IEquatable<Cryptocurrency>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; init; }
+    /// <remarks>
+    /// Если значение идентификатора пользователя null,
+    /// значит криптовалюта является доменной.
+    /// </remarks>
+    public Guid? UserId { get; init; }
+
+    /// <summary>
+    /// Получить булевый признак того,
+    /// является ли криптовалюта доменной.
+    /// </summary>
+    /// <returns>
+    /// <see langword="true"/>, если криптовалюта
+    /// является доменной, иначе - <see langword="false"/>.
+    /// </returns>
+    public bool IsDomain()
+    {
+        return UserId is null;
+    }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

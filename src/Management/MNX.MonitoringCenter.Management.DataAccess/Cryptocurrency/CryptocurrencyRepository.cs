@@ -22,7 +22,7 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     public IAsyncEnumerable<Cryptocurrency> GetAllAvailable(Specification specification)
     {
         return _context.Cryptocurrencies.AsNoTrackingWithIdentityResolution()
-                                        .Where(x => x.UserId == specification.UserId)
+                                        .Where(x => x.UserId == specification.UserId || x.UserId == null)
                                         .Filter(specification)
                                         .Include(x => x.Algorithm)
                                         .AsAsyncEnumerable();
@@ -32,7 +32,7 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     public Task<Cryptocurrency?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return _context.Cryptocurrencies.AsNoTrackingWithIdentityResolution()
-                                        .Where(x => x.UserId == userId)
+                                        .Where(x => x.UserId == userId || x.UserId == null)
                                         .Include(x => x.Algorithm)
                                         .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
@@ -42,7 +42,7 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     {
         return _context.Cryptocurrencies
                             .AsNoTracking()
-                            .Where(x => x.UserId == userId)
+                            .Where(x => x.UserId == userId || x.UserId == null)
                             .AnyAsync(x => x.FullName.Equals(fullName) || x.ShortName.Equals(shortName), cancellationToken);
     }
 
