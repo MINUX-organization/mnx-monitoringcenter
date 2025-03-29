@@ -22,7 +22,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
 
     public MiningDeviceRepository(Context context, IMapper mapper)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
@@ -78,29 +78,9 @@ public class MiningDeviceRepository : IMiningDeviceRepository
         var overclockingDto = _mapper.Map<OverclockingDto>(overclocking);
 
         if (preset!.IsVisible)
-        {
-            var invisiblePreset = await _context.Presets.AsNoTracking()
-                .Where(x => x.Name == device.Id.ToString() && !x.IsVisible)
-                .FirstAsync(cancellationToken);
-
-            var overclockingToUpdate = await _context.Overclocking
-                .Where(x => x.Id == invisiblePreset.OverclockingId)
-                .FirstAsync(cancellationToken);
-
-            _mapper.Map(overclockingDto, overclockingToUpdate);
-
-            _context.Overclocking.Update(overclockingToUpdate);
-        }
-        else
-        {
-            var overclockingToUpdate = await _context.Overclocking.AsNoTracking()
-                .Where(x => x.Id == preset.OverclockingId)
-                .FirstAsync(cancellationToken);
-
-            _mapper.Map(overclockingDto, overclockingToUpdate);
-
-            _context.Overclocking.Update(overclockingToUpdate);
-        }
+            await SetOverclockingThrowVisiblePreset(device, overclockingDto, cancellationToken);
+        else if (!preset.IsVisible)
+            await SetOverclockingThrowInvisiblePreset(preset.OverclockingId, overclockingDto, cancellationToken);
 
         await _context.SaveChangesAsync();
     }
@@ -146,6 +126,50 @@ public class MiningDeviceRepository : IMiningDeviceRepository
 
         var clock = await query.FirstOrDefaultAsync();
         return _mapper.Map<IOverclocking>(clock);
+    }
+
+    /// <summary>
+    /// Задать разгон через невидимый для пользователя пресет.
+    /// </summary>
+    /// <param name="overclockingId"> Идентификатор разгона. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns></returns>
+    private async Task SetOverclockingThrowInvisiblePreset(Guid overclockingId, OverclockingDto overclocking, CancellationToken cancellationToken)
+    {
+        var overclockingToUpdate = await _context.Overclocking
+            .AsNoTracking()
+            .Where(x => x.Id == overclockingId)
+            .FirstAsync(cancellationToken);
+
+        _mapper.Map(overclocking, overclockingToUpdate);
+        _context.Overclocking.Update(overclockingToUpdate);
+    }
+
+    /// <summary>
+    /// Задать разгон через пользовательский пресет.
+    /// </summary>
+    /// <param name="device"> Майнинг-устройство. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns></returns>
+    private async Task SetOverclockingThrowVisiblePreset(MiningDeviceInfo device, OverclockingDto overclocking, CancellationToken cancellationToken)
+    {
+        var invisiblePreset = await _context.Presets
+            .AsNoTracking()
+            .Where(x => x.Name == device.Id.ToString() && !x.IsVisible)
+            .FirstAsync(cancellationToken);
+
+        var overclockingToUpdate = await _context.Overclocking
+            .AsNoTracking()
+            .Where(x => x.Id == invisiblePreset.OverclockingId)
+            .FirstAsync(cancellationToken);
+
+        _mapper.Map(overclocking, overclockingToUpdate);
+
+        device.PresetId = invisiblePreset.Id;
+        _context.MiningDevices.Update(device);
+        _context.Overclocking.Update(overclockingToUpdate);
     }
 
     /// <summary>

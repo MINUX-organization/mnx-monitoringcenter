@@ -80,6 +80,12 @@ public class EditPresetCommandHandler :
         return Result<PresetModel>.Success(_mapper.Map<PresetModel>(newPreset));
     }
 
+    /// <summary>
+    /// Пользовательский маппер пресета для команды редактирования.
+    /// </summary>
+    /// <param name="preset"> Пресет. </param>
+    /// <param name="command"> Команда. </param>
+    /// <returns></returns>
     private Preset Map(Preset preset, EditPresetCommand command)
     {
         var newPreset = new Preset()
@@ -92,7 +98,7 @@ public class EditPresetCommandHandler :
             IsVisible = true,
         };
 
-        var overclocking = preset.Overclocking;
+        var overclocking = (IOverclocking)preset.Overclocking!.Clone();
         _mapper.Map(command.Model.Overclocking, overclocking);
         newPreset.Overclocking = overclocking;
 

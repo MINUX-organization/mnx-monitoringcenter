@@ -6,6 +6,7 @@ using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.RemovePreset;
@@ -83,6 +84,20 @@ public class PresetController : ControllerBase
     {
         var userId = _userAccessor.GetUserId();
         return _mediator.CreateStream(new GetPresetsGroupedByGpuNameQuery(userId));
+    }
+
+    /// <summary>
+    /// Получить список поддерживаемых майнинг-устройств.
+    /// </summary>
+    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <returns>
+    /// Список майнинг устройств, сгруппированных по ригу и по типу.
+    /// </returns>
+    [HttpGet("{presetId:Guid}/devices/supported")]
+    public IAsyncEnumerable<Group<Group<MiningDevice>>> GetSupportedMiningDevices(Guid presetId)
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetPresetSupportedMiningDevicesQuery(userId, presetId));
     }
 
     /// <summary>

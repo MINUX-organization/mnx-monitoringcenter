@@ -25,22 +25,27 @@ BEGIN
         UPDATE monitoring_center.mining_devices
         SET preset_id = new_preset_id
         WHERE id = mining_device_id;
-    END LOOP;
 
-    UPDATE monitoring_center.overclocking AS target
-    SET 
-        core_clock_lock = source.core_clock_lock,
-        core_clock_offset = source.core_clock_offset,
-        memory_clock_lock = source.memory_clock_lock,
-        memory_clock_offset = source.memory_clock_offset,
-        core_voltage = source.core_voltage,
-        core_voltage_offset = source.core_voltage_offset,
-        memory_voltage = source.memory_voltage,
-        memory_voltage_offset = source.memory_voltage_offset,
-        power_limit = source.power_limit,
-        fan_speed = source.fan_speed
-    FROM monitoring_center.overclocking AS source
-    WHERE target.id = new_overclocking_id AND source.id = OLD.overclocking_id;
+        SELECT p.overclocking_id
+        INTO new_overclocking_id
+        FROM monitoring_center.presets p
+        WHERE p.id = new_preset_id;
+
+        UPDATE monitoring_center.overclocking AS target
+        SET 
+            core_clock_lock = source.core_clock_lock,
+            core_clock_offset = source.core_clock_offset,
+            memory_clock_lock = source.memory_clock_lock,
+            memory_clock_offset = source.memory_clock_offset,
+            core_voltage = source.core_voltage,
+            core_voltage_offset = source.core_voltage_offset,
+            memory_voltage = source.memory_voltage,
+            memory_voltage_offset = source.memory_voltage_offset,
+            power_limit = source.power_limit,
+            fan_speed = source.fan_speed
+        FROM monitoring_center.overclocking AS source
+        WHERE target.id = new_overclocking_id AND source.id = OLD.overclocking_id;
+    END LOOP;
 
     RETURN OLD;
 END;

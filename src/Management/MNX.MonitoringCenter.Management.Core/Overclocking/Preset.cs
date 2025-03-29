@@ -48,6 +48,20 @@ public class Preset : IEquatable<Preset>
     /// </remarks>
     public bool IsVisible { get; set; } = false;
 
+    /// <summary>
+    /// Получить признак поддержки устройства.
+    /// </summary>
+    /// <param name="deviceName">
+    /// Полное наименование устройства.
+    /// </param>
+    /// <returns>
+    /// Признак поддержки устройства.
+    /// </returns>
+    public bool IsDeviceSupport(string deviceName)
+    {
+        return DeviceName == deviceName;
+    }
+
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {

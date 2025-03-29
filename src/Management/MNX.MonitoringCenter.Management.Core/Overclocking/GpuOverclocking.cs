@@ -1,9 +1,9 @@
 ﻿namespace MNX.MonitoringCenter.Management.Core.Overclocking;
 
 /// <summary>
-/// Модель с разгоном
+/// Модель с разгоном.
 /// </summary>
-public class GpuOverclocking : IOverclocking, IEquatable<GpuOverclocking>
+public class GpuOverclocking : IOverclocking, IEquatable<GpuOverclocking>, ICloneable
 {
     /// <inheritdoc/>
     public Guid Id { get; init; } = Guid.NewGuid();
@@ -63,6 +63,25 @@ public class GpuOverclocking : IOverclocking, IEquatable<GpuOverclocking>
     /// Скорость вентилятора
     /// </summary>
     public int FanSpeed { get; set; }
+
+    /// <inheritdoc/>
+    public object Clone()
+    {
+        return new GpuOverclocking()
+        {
+            Id = this.Id,
+            CoreClockLock = this.CoreClockLock,
+            CoreClockOffset = this.CoreClockOffset,
+            MemoryClockLock = this.MemoryClockLock,
+            MemoryClockOffset = this.MemoryClockOffset,
+            CoreVoltage = this.CoreVoltage,
+            CoreVoltageOffset = this.CoreVoltageOffset,
+            MemoryVoltage = this.MemoryVoltage,
+            MemoryVoltageOffset = this.MemoryVoltageOffset,
+            PowerLimit = this.PowerLimit,
+            FanSpeed = this.FanSpeed
+        };
+    }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

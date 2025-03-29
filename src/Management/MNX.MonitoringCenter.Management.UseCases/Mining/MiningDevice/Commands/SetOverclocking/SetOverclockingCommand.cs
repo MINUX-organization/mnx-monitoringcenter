@@ -65,7 +65,7 @@ public class SetOverclockingCommandHandler
         var overclocking = _mapper.Map<IOverclocking>(request.Overclocking);
 
         var overclockingValidationResult =
-                await IsValidOverclocking(device.Name, overclocking, cancellationToken);
+                await IsValidOverclockingByGpuId(device.Id, overclocking, cancellationToken);
 
         if (!overclockingValidationResult.IsSuccess)
         {
