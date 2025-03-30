@@ -86,7 +86,8 @@ public class MappingProfile : Profile
             FlightSheetIsConfirm = info.FlightSheetIsConfirm,
             MinerName = info.FlightSheet != null
                             ? info.FlightSheet.Targets.First(x => x.DeviceType == info.Type).Miner!.Name
-                            : null
+                            : null,
+            IsOnline = info.IsOnline 
         });
 
         CreateMap<DeviceFLightSheet, WorkerSettings>().ConstructUsing((x, c) => new WorkerSettings()

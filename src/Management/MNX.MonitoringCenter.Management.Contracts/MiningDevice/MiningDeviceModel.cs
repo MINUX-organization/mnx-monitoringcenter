@@ -57,4 +57,9 @@ public class MiningDeviceModel
     /// Название майнера.
     /// </summary>
     public string? MinerName { get; init; }
+
+    /// <summary>
+    /// Признак нахождения устройства в сети.
+    /// </summary>
+    public bool IsOnline { get; init; }
 }

@@ -63,7 +63,8 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
                 RigName = inventoryGpu.RigName,
                 DriverVersion = inventoryGpu.DriverVersion,
                 FlightSheetName = gpu.FlightSheetName,
-                MinerName = gpu.MinerName
+                MinerName = gpu.MinerName,
+                IsOnline = gpu.IsOnline
             };
         }
     }
