@@ -11,6 +11,8 @@ using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.Sav
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.RemovePreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.ApplyPreset;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices.GetFlightSheetDevices;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices.GetPresetDevices;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -101,6 +103,19 @@ public class PresetController : ControllerBase
     }
 
     /// <summary>
+    /// Получить список майнинг устройств, к котором применён пресет.
+    /// </summary>
+    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <returns> Список майнинг устройств, сгруппированных по ригу и по типу. </returns>
+    [HttpGet("{presetId:Guid}/devices")]
+    [ProducesResponseType(typeof(IAsyncEnumerable<Group<Group<MiningDevice>>>), 200)]
+    public IAsyncEnumerable<Group<Group<MiningDevice>>> GetDevicesByPresetId(Guid presetId)
+    {
+        var userId = _userAccessor.GetUserId();
+        return _mediator.CreateStream(new GetPresetMiningDevicesQuery(userId, presetId));
+    }
+
+    /// <summary>
     /// Сохранить пресет
     /// </summary>
     /// <param name="model"> Входная модель пресета </param>
@@ -118,6 +133,27 @@ public class PresetController : ControllerBase
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new SavePresetCommand(userId, model));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Применить пресет на устройство.
+    /// </summary>
+    /// <param name="id"> Идентификатор пресета. </param>
+    /// <param name="deviceIds"> Идентификаторы устройств. </param>
+    /// <returns> Результат выполнения запроса. </returns>
+    /// <response code="200"> Успешно. </response>
+    /// <response code="400">
+    /// Майнинг устройство или пресет не найдены.
+    /// </response>
+    [HttpPost("{id:Guid}/apply")]
+    [ProducesResponseType(typeof(Guid), 200)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    public async Task<IActionResult> ApplyPreset(Guid id, params Guid[] deviceIds)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(
+            new ApplyPresetCommand(userId, id, deviceIds));
         return result.ToActionResult();
     }
 
@@ -155,27 +191,6 @@ public class PresetController : ControllerBase
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new RemovePresetCommand(id, userId));
-        return result.ToActionResult();
-    }
-
-    /// <summary>
-    /// Применить пресет на устройство.
-    /// </summary>
-    /// <param name="id"> Идентификатор пресета. </param>
-    /// <param name="deviceIds"> Идентификаторы устройств. </param>
-    /// <returns> Результат выполнения запроса. </returns>
-    /// <response code="200"> Успешно. </response>
-    /// <response code="400">
-    /// Майнинг устройство или пресет не найдены.
-    /// </response>
-    [HttpPost("{id:Guid}/apply")]
-    [ProducesResponseType(typeof(Guid), 200)]
-    [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> ApplyPreset(Guid id, params Guid[] deviceIds)
-    {
-        var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(
-            new ApplyPresetCommand(userId, id, deviceIds));
         return result.ToActionResult();
     }
 }

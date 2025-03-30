@@ -11,7 +11,6 @@ namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices
 public sealed record GetFlightSheetMiningDevicesQuery(Guid UserId, Guid FlightSheetId)
     : IStreamRequest<Group<Group<MiningDevice>>>;
 
-
 /// <summary>
 /// Обработчик <see cref="GetFlightSheetMiningDevicesQuery"/>.
 /// </summary>

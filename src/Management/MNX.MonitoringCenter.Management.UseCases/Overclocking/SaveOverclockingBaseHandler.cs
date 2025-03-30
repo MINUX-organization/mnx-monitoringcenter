@@ -3,6 +3,7 @@ using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking;
 
@@ -25,68 +26,36 @@ public abstract class SaveOverclockingBaseHandler
     }
 
     /// <summary>
-    /// Получить признак валидности разгона.
+    /// Проверка валидности разгона по имени видеокарты или идентификатору.
     /// </summary>
-    /// <param name="gpuName"> Название видеокарты. </param>
-    /// <param name="overclocking"> Разгон. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> Результат валидации. </returns>
-    protected async Task<Result<Unit>> IsValidOverclocking(string gpuName,
-                                                           IOverclocking overclocking,
-                                                           CancellationToken cancellationToken)
+    protected async Task<Result<Unit>> ValidateOverclocking<T>(T gpuIdentifier, IOverclocking overclocking, CancellationToken cancellationToken)
     {
-        if (overclocking.TargetDeviceType == OverclockingTargetDeviceType.GPU)
+        if (overclocking.TargetDeviceType != OverclockingTargetDeviceType.GPU)
         {
-            return await IsValidOverclocking(gpuName, (GpuOverclocking)overclocking, cancellationToken);
+            return Result<Unit>.Error("Target device type is not supported");
         }
 
-        return Result<Unit>.Error("Target device type is not supported");
-    }
-
-    /// <summary>
-    /// Получить признак валидности разгона по идентификатору видеокарты.
-    /// </summary>
-    /// <param name="gpuId"> Идентификатор видеокарты. </param>
-    /// <param name="overclocking"> Разгон. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> Результат валидации. </returns>
-    protected async Task<Result<Unit>> IsValidOverclockingByGpuId(Guid gpuId,
-                                                                  IOverclocking overclocking,
-                                                                  CancellationToken cancellationToken)
-    {
-        if (overclocking.TargetDeviceType == OverclockingTargetDeviceType.GPU)
-        {
-            return await IsValidOverclocking(gpuId, (GpuOverclocking)overclocking, cancellationToken);
-        }
-
-        return Result<Unit>.Error("Target device type is not supported");
-    }
-
-    private async Task<Result<Unit>> IsValidOverclocking(Guid gpuId,
-                                                         GpuOverclocking overclocking,
-                                                         CancellationToken cancellationToken)
-    {
-        var restrictions = await _mediator.Send(new GetGpuRestrictionsByIdQuery(gpuId), cancellationToken);
+        var restrictions = await GetRestrictionsByGpuIdentifier(gpuIdentifier, cancellationToken);
         var validator = new GpuOverclockingValidator(restrictions.GetValue());
-
-        var validationResult = await validator.ValidateAsync(overclocking, cancellationToken);
+        var validationResult = await validator.ValidateAsync((GpuOverclocking)overclocking, cancellationToken);
 
         return validationResult.IsValid
                 ? Result<Unit>.Empty()
                 : Result<Unit>.Invalid(validationResult.Errors.Select(x => x.ErrorMessage).ToArray());
     }
 
-    private async Task<Result<Unit>> IsValidOverclocking(string gpuName,
-                                                         GpuOverclocking overclocking,
-                                                         CancellationToken cancellationToken)
+    private async Task<Result<GpuRestrictions>> GetRestrictionsByGpuIdentifier<T>(T gpuIdentifier, CancellationToken cancellationToken)
     {
-        var restrictions = await _mediator.Send(new GetGpuRestrictionsQuery(gpuName), cancellationToken);
-        var validator = new GpuOverclockingValidator(restrictions.GetValue());
+        if (gpuIdentifier is Guid gpuId)
+        {
+            return await _mediator.Send(new GetGpuRestrictionsByIdQuery(gpuId), cancellationToken);
+        }
 
-        var validationResult = await validator.ValidateAsync(overclocking, cancellationToken);
+        if (gpuIdentifier is string gpuName)
+        {
+            return await _mediator.Send(new GetGpuRestrictionsQuery(gpuName), cancellationToken);
+        }
 
-        return validationResult.IsValid
-                ? Result<Unit>.Empty()
-                : Result<Unit>.Invalid(validationResult.Errors.Select(x => x.ErrorMessage).ToArray());
+        throw new ArgumentException("Invalid GPU identifier type");
     }
 }

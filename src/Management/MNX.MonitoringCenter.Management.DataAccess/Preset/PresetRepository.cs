@@ -112,12 +112,12 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public async Task Update(Preset preset)
+    public Task Update(Preset preset)
     {
         var overclocking = _mapper.Map<OverclockingDto>(preset.Overclocking);
         _context.Overclocking.Update(overclocking);
         _context.Presets.Update(preset);
-        await _context.SaveChangesAsync();
+        return _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
