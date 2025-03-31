@@ -1,15 +1,14 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
 
 using Pool = Core.Mining.Pool;
 
 /// <summary>
-/// Обработчик команды обновления пула
+/// Обработчик команды <see cref="EditPoolCommand"/>.
 /// </summary>
 public class EditPoolCommandHandler : IRequestHandler<EditPoolCommand, Result<PoolModel>>
 {
@@ -29,14 +28,13 @@ public class EditPoolCommandHandler : IRequestHandler<EditPoolCommand, Result<Po
         var pool = await _poolRepository.GetAvailableById(request.Id, request.UserId, cancellationToken);
 
         if (pool is null)
-        {
-            return Result<PoolModel>.Invalid("Pool with this id wasn`t found");
-        }
+            return Result<PoolModel>.Invalid($"Pool with id equaled {request.Id} wasn`t found");
+
+        if (pool.IsDomain())
+            return Result<PoolModel>.Invalid("Domain pools cannot be edited");
 
         if (pool.CryptocurrencyId != request.Model.CryptocurrencyId)
-        {
             return Result<PoolModel>.Invalid("You cannot change the cryptocurrency");
-        }
 
         var newPool = _mapper.Map<Pool>(request);
 

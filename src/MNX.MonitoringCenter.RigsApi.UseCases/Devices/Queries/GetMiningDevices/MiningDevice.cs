@@ -57,4 +57,9 @@ public class MiningDevice
     /// Идентификатор шины PCI.
     /// </summary>
     public string? PciBus { get; set; }
+
+    /// <summary>
+    /// Признак нахождения устройства в сети.
+    /// </summary>
+    public bool IsOnline { get; init; }
 }

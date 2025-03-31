@@ -47,4 +47,9 @@ public class GetGpusQueryResponse
     /// Название майнера.
     /// </summary>
     public string? MinerName { get; init; }
+
+    /// <summary>
+    /// Признак нахождения карты в сети.
+    /// </summary>
+    public bool IsOnline { get; init; }
 }

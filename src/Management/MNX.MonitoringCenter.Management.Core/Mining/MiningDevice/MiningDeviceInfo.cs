@@ -14,11 +14,11 @@ public class MiningDeviceInfo : MiningDevice
     public Guid? RigId { get; set; }
 
     /// <summary>
-    /// Признак активности устройства ( в данных момент установлен на риге ).
+    /// Признак нахождения устройства в сети.
     /// </summary>
-    public bool IsActive
+    public bool IsOnline
     {
-        get => LifeCycleStatus != MiningDeviceLifeCycleStatus.Inactive;
+        get => _lifeCycleStatus == MiningDeviceLifeCycleStatus.Online;
     }
 
     /// <summary>

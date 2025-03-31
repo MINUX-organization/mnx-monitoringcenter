@@ -1,16 +1,15 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
+using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
 
 using Pool = Core.Mining.Pool;
 
 /// <summary>
-/// Обработчик команды добавления пула
+/// Обработчик команды <see cref="AddPoolCommand"/>.
 /// </summary>
 public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<PoolModel>>
 {
@@ -24,14 +23,21 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Pool
                                  ICryptocurrencyRepository cryptocurrencyRepository,
                                  IMapper mapper)
     {
-        _poolRepository = poolRepository ?? throw new ArgumentNullException(nameof(poolRepository));
-        _cryptocurrencyRepository = cryptocurrencyRepository ?? throw new ArgumentNullException(nameof(cryptocurrencyRepository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _poolRepository = poolRepository ??
+            throw new ArgumentNullException(nameof(poolRepository));
+        _cryptocurrencyRepository = cryptocurrencyRepository ??
+            throw new ArgumentNullException(nameof(cryptocurrencyRepository));
+        _mapper = mapper ??
+            throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<PoolModel>> Handle(AddPoolCommand request, CancellationToken cancellationToken)
+    public async Task<Result<PoolModel>> Handle(AddPoolCommand request,
+                                                CancellationToken cancellationToken)
     {
-        if (await _poolRepository.Exists(request.UserId, request.Model.Domain, request.Model.Port, cancellationToken))
+        if (await _poolRepository.Exists(request.UserId,
+                                         request.Model.Domain,
+                                         request.Model.Port,
+                                         cancellationToken))
         {
             return Result<PoolModel>.Conflict("Pool already exists");
         }
@@ -41,7 +47,8 @@ public class AddPoolCommandHandler : IRequestHandler<AddPoolCommand, Result<Pool
 
         if (cryptocurrency is null)
         {
-            return Result<PoolModel>.Invalid("Cryptocurrency wasn't found");
+            return Result<PoolModel>
+                .Invalid($"Cryptocurrency with id equaled {request.Model.CryptocurrencyId} wasn't found");
         }
 
         var pool = _mapper.Map<Pool>(request);

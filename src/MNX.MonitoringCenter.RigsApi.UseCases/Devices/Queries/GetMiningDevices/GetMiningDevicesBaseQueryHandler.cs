@@ -76,6 +76,7 @@ public abstract class GetMiningDevicesBaseQueryHandler
             PresetName = model.PresetName,
             FlightSheetIsConfirm = model.FlightSheetIsConfirm,
             MinerName = model.MinerName,
+            IsOnline = model.IsOnline
         };
 
         if (device.Type == "GPU")

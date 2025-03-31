@@ -42,4 +42,9 @@ public class GetCpusQueryResponse
     /// Название майнера.
     /// </summary>
     public string? MinerName { get; init; }
+
+    /// <summary>
+    /// Признак нахождения процессора в сети.
+    /// </summary>
+    public bool IsOnline { get; init; }
 }

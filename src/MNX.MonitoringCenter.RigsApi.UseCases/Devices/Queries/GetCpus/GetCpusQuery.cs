@@ -62,7 +62,8 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
                 RigName = inventoryCpu.RigName,
                 FlightSheetName = cpu.FlightSheetName,
                 PresetName = cpu.PresetName,
-                MinerName = cpu.MinerName
+                MinerName = cpu.MinerName,
+                IsOnline = cpu.IsOnline
             };
         }
     }
