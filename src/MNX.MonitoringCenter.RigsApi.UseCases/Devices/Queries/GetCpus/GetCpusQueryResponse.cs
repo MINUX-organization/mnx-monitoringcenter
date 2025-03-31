@@ -34,6 +34,11 @@ public class GetCpusQueryResponse
     public string? FlightSheetName { get; init; }
 
     /// <summary>
+    /// Наименование пресета.
+    /// </summary>
+    public string? PresetName { get; init; }
+
+    /// <summary>
     /// Название майнера.
     /// </summary>
     public string? MinerName { get; init; }
