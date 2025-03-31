@@ -26,6 +26,19 @@ public interface IMiningDeviceRepository
                                                         Guid userId);
 
     /// <summary>
+    /// Получить майнинг-устройство по идентификатору.
+    /// </summary>
+    /// <remarks>
+    /// !!! ВНИМАНИЕ: НЕБЕЗОПАСНО С ТОЧКИ ЗРЕНИЯ БЕЗОПАСНОСТИ ПОЛЬЗОВАТЕЛЬСКИХ ДАННЫХ В БД.
+    /// ДАННЫЙ МЕТОД ЯВЛЯЕТСЯ ЧАСТЬЮ КОСТЫЛЯ И ДОЛЖЕН БЫТЬ УДАЛЕН СРАЗУ, КАК ДАННЫЙ КОСТЫТЬ
+    /// ПЕРЕСТАНЕТ БЫТЬ ЧАСТЬЮ СИСТЕМЫ !!!
+    /// </remarks>
+    /// <param name="id"> Идентификатор устройства. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Майнинг-устройство. </returns>
+    public Task<MiningDeviceInfo> GetById(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Получить активное майнинг устройство по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор. </param>

@@ -43,6 +43,12 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
+    public Task<MiningDeviceInfo> GetById(Guid id, CancellationToken cancellationToken)
+    {
+        return _context.MiningDevices.AsNoTracking().Where(x => x.Id == id).FirstAsync();
+    }
+
+    /// <inheritdoc/>
     public Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id,
                                                        Guid userId,
                                                        CancellationToken cancellationToken)
