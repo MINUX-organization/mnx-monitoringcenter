@@ -64,7 +64,7 @@ public class MonitoringHub : Hub
         {
             if (response is not null) 
                 yield return response;
-        } 
+        }
     }
 
     /// <summary>

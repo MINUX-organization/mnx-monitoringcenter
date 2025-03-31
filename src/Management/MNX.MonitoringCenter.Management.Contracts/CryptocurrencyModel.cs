@@ -8,17 +8,17 @@ namespace MNX.MonitoringCenter.Management.Contracts;
 public class CryptocurrencyModel
 {
     /// <summary>
-    /// Идентификатор
+    /// Идентификатор.
     /// </summary>
     public Guid Id { get; set; }
 
     /// <summary>
-    /// Короткое название
+    /// Короткое название.
     /// </summary>
     public required string ShortName { get; set; }
 
     /// <summary>
-    /// Полное название
+    /// Полное название.
     /// </summary>
     public required string FullName { get; set; }
     

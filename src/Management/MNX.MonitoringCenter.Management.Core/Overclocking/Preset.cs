@@ -35,6 +35,33 @@ public class Preset : IEquatable<Preset>
     /// </summary>
     public Guid UserId { get; init; }
 
+    /// <summary>
+    /// Признак видимости пресета.
+    /// </summary>
+    /// <remarks>
+    /// Если false, то данный пресет существует,
+    /// как невидимый для пользователя пресет.
+    /// Со стороны пользователя происходит работа
+    /// разгона напрямую с майнинг-девайсом.
+    /// В противном случае подразумевается, что
+    /// пользователь работает с разгоном через пресет.
+    /// </remarks>
+    public bool IsVisible { get; set; } = false;
+
+    /// <summary>
+    /// Получить признак поддержки устройства.
+    /// </summary>
+    /// <param name="deviceName">
+    /// Полное наименование устройства.
+    /// </param>
+    /// <returns>
+    /// Признак поддержки устройства.
+    /// </returns>
+    public bool IsDeviceSupport(string deviceName)
+    {
+        return DeviceName == deviceName;
+    }
+
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {

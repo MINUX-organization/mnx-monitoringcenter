@@ -79,14 +79,16 @@ public class MappingProfile : Profile
             Id = info.Id,
             Manufacturer = info.Manufacturer,
             Model = info.Model,
-            RigId = info.RigId,
+            RigId = info.RigId!.Value,
             Type = info.Type.ToString(),
             FlightSheetId = info.FlightSheetId,
             FlightSheetName = info.FlightSheet != null ? info.FlightSheet.Name : null,
+            PresetName = info.Preset != null ? info.Preset.Name : null,
             FlightSheetIsConfirm = info.FlightSheetIsConfirm,
             MinerName = info.FlightSheet != null
                             ? info.FlightSheet.Targets.First(x => x.DeviceType == info.Type).Miner!.Name
-                            : null
+                            : null,
+            IsOnline = info.IsOnline 
         });
 
         CreateMap<DeviceFLightSheet, WorkerSettings>().ConstructUsing((x, c) => new WorkerSettings()
@@ -130,12 +132,14 @@ public class MappingProfile : Profile
         CreateMap<AddPoolCommand, Pool>()
             .ForMember(destination => destination.Port, options => options.MapFrom(source => source.Model.Port))
             .ForMember(destination => destination.Domain, options => options.MapFrom(source => source.Model.Domain))
-            .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId));
+            .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId))
+            .ForMember(destination => destination.Tls, options => options.MapFrom(source => source.Model.Tls));
 
         CreateMap<EditPoolCommand, Pool>()
             .ForMember(destination => destination.Domain, options => options.MapFrom(source => source.Model.Domain))
             .ForMember(destination => destination.Port, options => options.MapFrom(source => source.Model.Port))
-            .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId));
+            .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId))
+            .ForMember(destination => destination.Tls, options => options.MapFrom(source => source.Model.Tls));
 
         // presets
 

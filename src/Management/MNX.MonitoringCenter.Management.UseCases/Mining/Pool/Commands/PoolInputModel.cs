@@ -6,6 +6,11 @@
 public class PoolInputModel
 {
     /// <summary>
+    /// Признак шифрования по протоколу TLS.
+    /// </summary>
+    public bool Tls { get; set; }
+
+    /// <summary>
     /// Домен
     /// </summary>
     public string Domain { get; }
@@ -20,8 +25,9 @@ public class PoolInputModel
     /// </summary>
     public Guid CryptocurrencyId { get; }
 
-    public PoolInputModel(string domain, int port, Guid cryptocurrencyId)
+    public PoolInputModel(bool tls, string domain, int port, Guid cryptocurrencyId)
     {
+        Tls = tls;
         Domain = domain;
         Port = port;
         CryptocurrencyId = cryptocurrencyId;

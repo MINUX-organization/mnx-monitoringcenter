@@ -36,6 +36,11 @@ public class MiningDevice
     public string? FlightSheetName { get; init; }
 
     /// <summary>
+    /// Наименование пресета.
+    /// </summary>
+    public string? PresetName { get; init; }
+
+    /// <summary>
     /// Признак подтверждения текущего значения полётного листа.
     /// </summary>
     /// <returns>
@@ -52,4 +57,9 @@ public class MiningDevice
     /// Идентификатор шины PCI.
     /// </summary>
     public string? PciBus { get; set; }
+
+    /// <summary>
+    /// Признак нахождения устройства в сети.
+    /// </summary>
+    public bool IsOnline { get; init; }
 }

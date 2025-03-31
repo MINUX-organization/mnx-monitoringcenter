@@ -3,7 +3,7 @@
 /// <summary>
 /// Разгон.
 /// </summary>
-public interface IOverclocking
+public interface IOverclocking : ICloneable
 {
     /// <summary>
     /// Идентификатор.

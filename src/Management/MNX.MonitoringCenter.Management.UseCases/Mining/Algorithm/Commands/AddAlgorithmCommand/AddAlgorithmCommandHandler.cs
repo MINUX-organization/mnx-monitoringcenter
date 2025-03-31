@@ -26,7 +26,7 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
     }
 
     public async Task<Result<Algorithm>> Handle(AddAlgorithmCommand request,
-                                                      CancellationToken cancellationToken)
+                                                CancellationToken cancellationToken)
     {
         var model = request.Model;
         var bindings = model.Bindings;
@@ -36,7 +36,7 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
                                               cancellationToken))
         {
             return Result<Algorithm>
-                .Conflict("An Algorithm with that name already exists");
+                .Conflict($"Algorithm with name {model.FullName} already exists");
         }
 
         var algorithm = new Algorithm 

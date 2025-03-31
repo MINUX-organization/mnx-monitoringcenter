@@ -236,4 +236,4 @@ insert into monitoring_center.algorithms(name) values
 ('YespowerUrx'),
 ('Zhash (Equihash 144,5)'),
 ('Quai (ProgPow)'),
-('Ziliqa (ZIL)')
+('Ziliqa (ZIL)');

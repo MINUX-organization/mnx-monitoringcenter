@@ -9,6 +9,11 @@ public class PoolModel
     /// Уникальный идентификатор
     /// </summary>
     public Guid Id { get; set; }
+    
+    /// <summary>
+    /// Признак шифрования по протоколу TLS.
+    /// </summary>
+    public bool Tls { get; set; }
 
     /// <summary>
     /// Домен

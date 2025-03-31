@@ -15,7 +15,7 @@ public record GetFlightSheetSupportedMiningDevicesQuery(Guid UserId, Guid Flight
 
 
 /// <summary>
-/// Обработчик <see cref="GetAvailableMiningDevicesQuery"/>.
+/// Обработчик <see cref="GetFlightSheetSupportedMiningDevicesQuery"/>.
 /// </summary>
 public class GetFlightSheetSupportedMiningDevicesQueryHandler : 
     GetMiningDevicesBaseQueryHandler,

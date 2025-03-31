@@ -17,13 +17,37 @@ public interface IMiningDeviceRepository
     IAsyncEnumerable<MiningDeviceInfo> GetAvailable(Specification specification);
 
     /// <summary>
+    /// Получить список устройств, с привязкой к конкретному пресету.
+    /// </summary>
+    /// <param name="presetId">Идентификатор пресета. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <returns> Коллекцию объектов <see cref="MiningDeviceInfo"/>. </returns>
+    Task<List<MiningDeviceInfo>> GetAvailableByPresetId(Guid presetId,
+                                                        Guid userId);
+
+    /// <summary>
+    /// Получить майнинг-устройство по идентификатору.
+    /// </summary>
+    /// <remarks>
+    /// !!! ВНИМАНИЕ: НЕБЕЗОПАСНО С ТОЧКИ ЗРЕНИЯ БЕЗОПАСНОСТИ ПОЛЬЗОВАТЕЛЬСКИХ ДАННЫХ В БД.
+    /// ДАННЫЙ МЕТОД ЯВЛЯЕТСЯ ЧАСТЬЮ КОСТЫЛЯ И ДОЛЖЕН БЫТЬ УДАЛЕН СРАЗУ, КАК ДАННЫЙ КОСТЫТЬ
+    /// ПЕРЕСТАНЕТ БЫТЬ ЧАСТЬЮ СИСТЕМЫ !!!
+    /// </remarks>
+    /// <param name="id"> Идентификатор устройства. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Майнинг-устройство. </returns>
+    public Task<MiningDeviceInfo> GetById(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
     /// Получить активное майнинг устройство по идентификатору.
     /// </summary>
     /// <param name="id"> Идентификатор. </param>
     /// <param name="userId"> идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Майнинг устройство. </returns>
-    Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id,
+                                                Guid userId,
+                                                CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существования устройства с переданным названием.
@@ -31,8 +55,20 @@ public interface IMiningDeviceRepository
     /// <param name="name"> Название. </param>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> <see langword="true"/>, если существует, иначе <see langword="false"/>. </returns>
+    /// <returns>
+    /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
+    /// </returns>
     Task<bool> Exists(string name, Guid userId, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Выполнить обновление пресета с разгоном на устройстве.
+    /// </summary>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <param name="deviceIds"> Идентификаторы устройств. </param>
+    Task SetPreset(Guid presetId,
+                   CancellationToken cancellationToken,
+                   params Guid[] deviceIds);
 
     /// <summary>
     /// Установить полётный лист на устройства.
@@ -62,9 +98,10 @@ public interface IMiningDeviceRepository
     Task<IOverclocking?> GetOverclocking(Guid deviceId, Guid userId);
 
     /// <summary>
-    /// Задать разгон майнинг устройствам.
+    /// Задать разгон майнинг устройству напрямую.
     /// </summary>
     /// <param name="overclocking"> Разгон. </param>
-    /// <param name="devicesIds"> Идентификаторы устройств. </param>
-    Task SetOverclocking(IOverclocking overclocking, params Guid[] devicesIds);
+    /// <param name="device"> Майнинг-устройство. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task SetOverclocking(MiningDeviceInfo device, IOverclocking overclocking, CancellationToken cancellationToken);
 }

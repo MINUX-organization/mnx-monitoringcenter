@@ -13,7 +13,9 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 public record GetFlightSheetSupportedDevicesQuery
     : IUserableStreamRequest<MiningDeviceModel>
 {
-    /// <inheritdoc/>
+    /// <summary>
+    /// Пользовательский идентификатор.
+    /// </summary>
     public Guid UserId { get => Specification.UserId; }
 
     /// <summary>
@@ -44,7 +46,7 @@ public record GetFlightSheetSupportedDevicesQuery
 
 
 /// <summary>
-/// Обработчик <see cref="GetAvailableMiningDevicesQuery"/>.
+/// Обработчик <see cref="GetFlightSheetSupportedDevicesQuery"/>.
 /// </summary>
 public class GetFlightSheetSupportedDevicesQueryHandler
     : IStreamRequestHandler<GetFlightSheetSupportedDevicesQuery, MiningDeviceModel>

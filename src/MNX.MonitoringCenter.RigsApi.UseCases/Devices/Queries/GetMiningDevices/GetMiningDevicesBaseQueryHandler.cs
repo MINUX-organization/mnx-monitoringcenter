@@ -73,8 +73,10 @@ public abstract class GetMiningDevicesBaseQueryHandler
             Type = model.Type,
             RigName = rigs.First(rig => rig.Id == model.RigId).Name,
             FlightSheetName = model.FlightSheetName,
+            PresetName = model.PresetName,
             FlightSheetIsConfirm = model.FlightSheetIsConfirm,
             MinerName = model.MinerName,
+            IsOnline = model.IsOnline
         };
 
         if (device.Type == "GPU")

@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
+using System.Data;
 using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
-using MNX.MonitoringCenter.Management.UseCases;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
-using System.Data;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
@@ -22,7 +22,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
 
     public MiningDeviceRepository(Context context, IMapper mapper)
     {
-        _context = context;
+        _context = context ?? throw new ArgumentNullException(nameof(context));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
@@ -33,10 +33,28 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     }
 
     /// <inheritdoc/>
-    public Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id, Guid userId, CancellationToken cancellationToken)
+    public async Task<List<MiningDeviceInfo>> GetAvailableByPresetId(Guid presetId,
+                                                                     Guid userId)
+    {
+        return await _context.MiningDevices
+            .AsNoTracking()
+            .Where(x => x.OwnerId == userId && x.PresetId == presetId)
+            .ToListAsync();
+    }
+
+    /// <inheritdoc/>
+    public Task<MiningDeviceInfo> GetById(Guid id, CancellationToken cancellationToken)
+    {
+        return _context.MiningDevices.AsNoTracking().Where(x => x.Id == id).FirstAsync();
+    }
+
+    /// <inheritdoc/>
+    public Task<MiningDeviceInfo?> GetActiveDeviceById(Guid id,
+                                                       Guid userId,
+                                                       CancellationToken cancellationToken)
     {
         return _context.MiningDevices.AsNoTracking()
-                                     .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+            .FirstOrDefaultAsync(x => x.Id == id && x.OwnerId == userId, cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -46,6 +64,33 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                        .AsNoTracking()
                        .Where(device => device.OwnerId == userId)
                        .AnyAsync(device => (device.Manufacturer + ' ' + device.Model) == name, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task SetPreset(Guid presetId,
+                          CancellationToken cancellationToken,
+                          params Guid[] deviceIds)
+    {
+        return _context.MiningDevices.Where(x => deviceIds.Contains(x.Id))
+            .ExecuteUpdateAsync(x => x.SetProperty(d => d.PresetId, presetId), cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public async Task SetOverclocking(MiningDeviceInfo device,
+                                      IOverclocking overclocking,
+                                      CancellationToken cancellationToken)
+    {
+        var preset = await _context.Presets.AsNoTracking()
+            .Where(x => x.Id == device.PresetId).FirstAsync(cancellationToken);
+
+        var overclockingDto = _mapper.Map<OverclockingDto>(overclocking);
+
+        if (preset!.IsVisible)
+            await SetOverclockingFromVisiblePreset(device, overclockingDto, cancellationToken);
+        else
+            await UpdateOverclocking(preset.OverclockingId, overclockingDto, cancellationToken);
+
+        await _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
@@ -77,31 +122,58 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     /// <inheritdoc/>
     public async Task<IOverclocking?> GetOverclocking(Guid deviceId, Guid userId)
     {
-        var query = from device in _context.MiningDevices.AsNoTrackingWithIdentityResolution()
-                                                         .Available(new Specification(userId))
-                                                         .Where(device => device.Id == deviceId)
-
-                    join overclocking in _context.Overclocking.AsNoTracking() 
-                        on device.OverclockingId equals overclocking.Id
-
+        var query = from device in _context.MiningDevices
+                    .AsNoTrackingWithIdentityResolution()
+                    .Available(new Specification(userId))
+                    .Where(x => x.Id == deviceId)
+                    join preset in _context.Presets.AsNoTracking()
+                        on device.PresetId equals preset.Id
+                    join overclocking in _context.Overclocking.AsNoTracking()
+                        on preset.OverclockingId equals overclocking.Id
                     select overclocking;
 
         var clock = await query.FirstOrDefaultAsync();
         return _mapper.Map<IOverclocking>(clock);
     }
 
-    /// <inheritdoc/>
-    public async Task SetOverclocking(IOverclocking overclocking, params Guid[] devicesIds)
+    /// <summary>
+    /// Редактировать разгон.
+    /// </summary>
+    /// <param name="overclockingId"> Идентификатор разгона. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    private async Task UpdateOverclocking(Guid overclockingId,
+                                          OverclockingDto overclocking,
+                                          CancellationToken cancellationToken)
     {
-        // todo: как удалять ненужный разгон?
-        var dto = _mapper.Map<OverclockingDto>(overclocking);
+        var overclockingToUpdate = await _context.Overclocking
+            .AsNoTracking()
+            .Where(x => x.Id == overclockingId)
+            .FirstAsync(cancellationToken);
 
-        await _context.Overclocking.AddAsync(dto);
-        await _context.SaveChangesAsync();
+        _mapper.Map(overclocking, overclockingToUpdate);
+        _context.Overclocking.Update(overclockingToUpdate);
+    }
 
-        await _context.MiningDevices
-                .Where(device => devicesIds.Contains(device.Id))
-                .ExecuteUpdateAsync(x => x.SetProperty(device => device.OverclockingId, d => overclocking.Id));
+    /// <summary>
+    /// Задать разгон из пользовательского пресета.
+    /// </summary>
+    /// <param name="device"> Майнинг-устройство. </param>
+    /// <param name="overclocking"> Разгон. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    private async Task SetOverclockingFromVisiblePreset(MiningDeviceInfo device,
+                                                        OverclockingDto overclocking,
+                                                        CancellationToken cancellationToken)
+    {
+        var invisiblePreset = await _context.Presets
+            .AsNoTracking()
+            .Where(x => x.Name == device.Id.ToString() && !x.IsVisible)
+            .FirstAsync(cancellationToken);
+
+        await UpdateOverclocking(invisiblePreset.OverclockingId, overclocking, cancellationToken);
+
+        device.PresetId = invisiblePreset.Id;
+        _context.MiningDevices.Update(device);
     }
 
     /// <summary>
@@ -111,11 +183,12 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     /// <returns> Запрос списка устройств. </returns>
     private IQueryable<MiningDeviceInfo> GetDevicesQuery(Specification specification)
     {
-        return from device in _context.MiningDevices.AsNoTrackingWithIdentityResolution()
+        return from device in _context.MiningDevices.AsNoTracking()
                                                     .Available(specification)
                                                     .Filter(specification)
 
-               join flightSheet in _context.FlightSheets.AsNoTrackingWithIdentityResolution()
+               // Присоединение полетных листов.
+               join flightSheet in _context.FlightSheets.AsNoTracking()
                                                         .Include(x => x.Targets)
                                                             .ThenInclude(target => target.Miner)
                                                         .Include(x => x.Targets)
@@ -124,6 +197,16 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                on device.FlightSheetId equals flightSheet.Id into flightSheets
 
                from flightSheet in flightSheets.DefaultIfEmpty()
+
+
+               // Присоединение пресетов.
+               join preset in _context.Presets.AsNoTracking()
+                                          .Where(p => p.IsVisible)
+
+               on device.PresetId equals preset.Id into presets
+
+               from preset in presets.DefaultIfEmpty()
+
                select new MiningDeviceInfo()
                {
                    Id = device.Id,
@@ -136,7 +219,8 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                    FlightSheetId = device.FlightSheetId,
                    FlightSheetIsConfirm = device.FlightSheetIsConfirm,
                    FlightSheet = _mapper.Map<FlightSheet>(flightSheet),
-                   OverclockingId = device.OverclockingId
+                   PresetId = device.PresetId,
+                   Preset = preset
                };
     }
 }

@@ -46,6 +46,11 @@ public class MiningDeviceModel
     public string? FlightSheetName { get; init; }
 
     /// <summary>
+    /// Наименование пресета.
+    /// </summary>
+    public string? PresetName { get; init; }
+
+    /// <summary>
     /// Признак подтверждения текущего значения полётного листа.
     /// </summary>
     /// <returns>
@@ -57,4 +62,9 @@ public class MiningDeviceModel
     /// Название майнера.
     /// </summary>
     public string? MinerName { get; init; }
+
+    /// <summary>
+    /// Признак нахождения устройства в сети.
+    /// </summary>
+    public bool IsOnline { get; init; }
 }

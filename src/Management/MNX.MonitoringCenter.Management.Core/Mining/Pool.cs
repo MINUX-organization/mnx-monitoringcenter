@@ -1,39 +1,61 @@
 ﻿namespace MNX.MonitoringCenter.Management.Core.Mining;
 
 /// <summary>
-/// Пул
+/// Пул.
 /// </summary>
 public class Pool : IEquatable<Pool>
 {
     /// <summary>
-    /// Уникальный идентификатор
+    /// Уникальный идентификатор.
     /// </summary>
     public Guid Id { get; init; } = Guid.NewGuid();
 
     /// <summary>
-    /// Домен
+    /// Признак шифрования по протоколу TLS.
+    /// </summary>
+    public bool Tls { get; }
+
+    /// <summary>
+    /// Домен.
     /// </summary>
     public required string Domain { get; set; }
 
     /// <summary>
-    /// Порт
+    /// Порт.
     /// </summary>
     public int Port { get; set; }
 
     /// <summary>
-    /// Идентификатор криптовалюты
+    /// Идентификатор криптовалюты.
     /// </summary>
     public Guid CryptocurrencyId { get; set; }
 
     /// <summary>
-    /// Криптовалюта
+    /// Криптовалюта.
     /// </summary>
     public Cryptocurrency? Cryptocurrency { get; set; }
 
     /// <summary>
-    /// Идентификатор пользователя
+    /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; init; }
+    /// <remarks>
+    /// Если имеет значение NULL, значит пул является доменным.
+    /// </remarks>
+    public Guid? UserId { get; init; }
+
+    /// <summary>
+    /// Признак принадлежности пула
+    /// к доменным пулам.
+    /// </summary>
+    /// <returns>
+    /// <see langword="true"/>,
+    /// если пул доменный,
+    /// иначе - <see langword="false"/>.
+    /// </returns>
+    public bool IsDomain()
+    {
+        return UserId is null;
+    }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)
@@ -59,12 +81,16 @@ public class Pool : IEquatable<Pool>
             return true;
         }
 
-        return Domain == other.Domain && Port == other.Port;
+        return Domain == other.Domain &&
+               Port == other.Port &&
+               Tls == other.Tls;
     }
 
     /// <inheritdoc/>
     public override int GetHashCode()
     {
-        return HashCode.Combine(Domain, Port);
+        return HashCode.Combine(Domain,
+                                Port,
+                                Tls);
     }
 }
