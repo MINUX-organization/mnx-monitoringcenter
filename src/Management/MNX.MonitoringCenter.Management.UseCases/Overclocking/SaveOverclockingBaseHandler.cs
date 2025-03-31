@@ -28,14 +28,16 @@ public abstract class SaveOverclockingBaseHandler
     /// <summary>
     /// Проверка валидности разгона по имени видеокарты или идентификатору.
     /// </summary>
-    protected async Task<Result<Unit>> ValidateOverclocking<T>(T gpuIdentifier, IOverclocking overclocking, CancellationToken cancellationToken)
+    protected async Task<Result<Unit>> ValidateOverclocking<T>(T gpuIdentifier,
+                                                               IOverclocking overclocking,
+                                                               CancellationToken cancellationToken)
     {
         if (overclocking.TargetDeviceType != OverclockingTargetDeviceType.GPU)
         {
             return Result<Unit>.Error("Target device type is not supported");
         }
 
-        var restrictions = await GetRestrictionsByGpuIdentifier(gpuIdentifier, cancellationToken);
+        var restrictions = await GetRestrictionsByGpuIdentifier(gpuIdentifier!.ToString()!, cancellationToken);
         var validator = new GpuOverclockingValidator(restrictions.GetValue());
         var validationResult = await validator.ValidateAsync((GpuOverclocking)overclocking, cancellationToken);
 
@@ -44,16 +46,16 @@ public abstract class SaveOverclockingBaseHandler
                 : Result<Unit>.Invalid(validationResult.Errors.Select(x => x.ErrorMessage).ToArray());
     }
 
-    private async Task<Result<GpuRestrictions>> GetRestrictionsByGpuIdentifier<T>(T gpuIdentifier, CancellationToken cancellationToken)
+    private async Task<Result<GpuRestrictions>>
+        GetRestrictionsByGpuIdentifier(string gpuIdentifier, CancellationToken cancellationToken)
     {
-        if (gpuIdentifier is Guid gpuId)
+        if (Guid.TryParse(gpuIdentifier, out Guid id))
         {
-            return await _mediator.Send(new GetGpuRestrictionsByIdQuery(gpuId), cancellationToken);
+            return await _mediator.Send(new GetGpuRestrictionsByIdQuery(id), cancellationToken);
         }
-
-        if (gpuIdentifier is string gpuName)
+        else
         {
-            return await _mediator.Send(new GetGpuRestrictionsQuery(gpuName), cancellationToken);
+            return await _mediator.Send(new GetGpuRestrictionsQuery(gpuIdentifier), cancellationToken);
         }
 
         throw new ArgumentException("Invalid GPU identifier type");
