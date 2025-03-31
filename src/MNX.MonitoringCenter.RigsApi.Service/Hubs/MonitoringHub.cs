@@ -37,15 +37,7 @@ public class MonitoringHub : Hub
     /// <param name="exception"> Возникшее исключение. </param>
     public override Task OnDisconnectedAsync(Exception? exception)
     {
-        var userId = _userAccessor.GetUserId();
-        
-        if (Context.Items.TryGetValue(userId, out var stream))
-        {
-            if (stream is UnionStreams.Abstractions.Stream s)
-            {
-                s.StopStreaming(userId, Context.ConnectionId);
-            }
-        }
+        Unsubscribe();
 
         _logger.LogTrace("Disconnected: {ConnectionId}", Context.ConnectionId);
 
@@ -61,7 +53,7 @@ public class MonitoringHub : Hub
     {
         var userId = _userAccessor.GetUserId();
 
-        _logger.LogTrace("Connected: {ConnectionId}", Context.ConnectionId);
+        _logger.LogTrace("Connected: {userId}, Type: {streamType}", userId, streamType);
 
         var stream = _unionStreamBuilder.Build(
             new UnionStreamBuilderArgs(userId, Context.ConnectionId, streamType));
@@ -73,5 +65,25 @@ public class MonitoringHub : Hub
             if (response is not null) 
                 yield return response;
         } 
+    }
+
+    /// <summary>
+    /// Отписаться от потока показателей.
+    /// </summary>
+    public void Unsubscribe() 
+    {
+        var userId = _userAccessor.GetUserId();
+
+        if (Context.Items.TryGetValue(userId, out var stream))
+        {
+            if (stream is UnionStreams.Abstractions.Stream s)
+            {
+                s.StopStreaming(userId, Context.ConnectionId);
+            }
+        }
+
+        Context.Items.Remove(userId);
+
+        _logger.LogTrace("Unsubscribed: {userId}", userId);
     }
 }
