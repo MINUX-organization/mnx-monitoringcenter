@@ -1,6 +1,4 @@
-﻿using System.Threading.Channels;
-
-namespace MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+﻿namespace MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 
 /// <summary>
 /// Интерфейс наблюдателя за показателями ригов.

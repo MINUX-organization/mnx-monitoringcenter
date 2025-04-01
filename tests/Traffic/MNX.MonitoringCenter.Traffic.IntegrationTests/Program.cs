@@ -104,7 +104,7 @@ internal class Program
 
     private static async Task StartConnectionAsync()
     {
-        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6ImQzNjY4M2YyLTE3MjgtNGUyOS1iMDNkLTIzOTkxMWI0OWQ1ZCIsIkNsaWVudFR5cGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Im1pbnV4IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRGVmYXVsdFVzZXIiLCJleHAiOjE3NDEyNzAyODAsImlzcyI6InNlY3VyaXR5IiwiYXVkIjoiVXNlciJ9.Y1x6mIX0mLuFhM5Sje6HthC0m-T6b3y5mexAea0AxcU";
+        var token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1laWRlbnRpZmllciI6IjU5OTI5NzU4LTE0ZDEtNDNiNS1hODBjLTdlODRiZmM0NTE0NSIsIkNsaWVudFR5cGUiOiJVc2VyIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbmFtZSI6Im1pbnV4IiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiRGVmYXVsdFVzZXIiLCJleHAiOjE3NDM0OTY0NjgsImlzcyI6InNlY3VyaXR5IiwiYXVkIjoiVXNlciJ9.OawE5IzBj-Z6WE0T1m7BaagUcPlXZo46CtzOgxWKG_w";
         var connection = new HubConnectionBuilder()
             .WithUrl($"http://localhost:9000/hubs/monitoring?access_token={token}")
             .Build();
@@ -120,6 +120,22 @@ internal class Program
             _ = Task.Run(async () =>
             {
                 await foreach (var item in stream1)
+                {
+                    Console.WriteLine($"Total Power: {item}");
+                }
+            });
+
+            await Task.Delay(4000);
+
+            await connection.SendAsync("Unsubscribe");
+
+            await Task.Delay(4000);
+
+            var stream2 = connection.StreamAsync<int>("Subscribe", SubStream.Monitoring);
+
+            _ = Task.Run(async () =>
+            {
+                await foreach (var item in stream2)
                 {
                     Console.WriteLine($"Total Power: {item}");
                 }
