@@ -73,17 +73,21 @@ public class MonitoringHub : Hub
     public void Unsubscribe() 
     {
         var userId = _userAccessor.GetUserId();
-
-        if (Context.Items.TryGetValue(userId, out var stream))
+        
+        try
         {
-            if (stream is UnionStreams.Abstractions.Stream s)
+            if (Context.Items.TryGetValue(userId, out var stream))
             {
-                s.StopStreaming(userId, Context.ConnectionId);
+                if (stream is UnionStreams.Abstractions.Stream s)
+                {
+                    s.StopStreaming(userId, Context.ConnectionId);
+                }
             }
         }
-
-        Context.Items.Remove(userId);
-
-        _logger.LogTrace("Unsubscribed: {userId}", userId);
+        finally
+        {
+            Context.Items.Remove(userId);
+            _logger.LogTrace("Unsubscribed: {userId}", userId);
+        }
     }
 }
