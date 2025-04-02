@@ -9,9 +9,8 @@ public class ConfirmFlightSheetCommandValidator : AbstractValidator<ConfirmFligh
 {
     public ConfirmFlightSheetCommandValidator()
     {
-        RuleFor(x => x.MiningDevices)
+        RuleFor(x => x.SuccessfullyMiningDevicesIds)
             .NotNull()
-            .NotEmpty()
             .WithMessage("Mining devices are required");
     }
 }

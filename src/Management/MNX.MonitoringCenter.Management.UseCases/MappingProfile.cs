@@ -84,7 +84,7 @@ public class MappingProfile : Profile
             FlightSheetId = info.FlightSheetId,
             FlightSheetName = info.FlightSheet != null ? info.FlightSheet.Name : null,
             PresetName = info.Preset != null ? info.Preset.Name : null,
-            FlightSheetIsConfirm = info.FlightSheetIsConfirm,
+            FlightSheetConfirmationState = info.FlightSheetConfirmationState,
             MinerName = info.FlightSheet != null
                             ? info.FlightSheet.Targets.First(x => x.DeviceType == info.Type).Miner!.Name
                             : null,

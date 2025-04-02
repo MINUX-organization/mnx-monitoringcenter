@@ -61,17 +61,17 @@ public class PresetController : ControllerBase
     /// <summary>
     /// Получить пресет по его идентификатору.
     /// </summary>
-    /// <param name="id"> Идентификатор пресета. </param>
+    /// <param name="presetId"> Идентификатор пресета. </param>
     /// <returns> Пресет. </returns>
     /// <response code="200"> Успешно. </response>
     /// <response code="400"> Пресета с переданным идентификатором не существует. </response>
-    [HttpGet("{id:Guid}")]
+    [HttpGet("{presetId:Guid}")]
     [ProducesResponseType(typeof(PresetModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> GetPresetById(Guid id)
+    public async Task<IActionResult> GetPresetById(Guid presetId)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new GetPresetByIdQuery(id, userId));
+        var result = await _mediator.Send(new GetPresetByIdQuery(presetId, userId));
         return result.ToActionResult();
     }
 
@@ -139,58 +139,58 @@ public class PresetController : ControllerBase
     /// <summary>
     /// Применить пресет на устройство.
     /// </summary>
-    /// <param name="id"> Идентификатор пресета. </param>
+    /// <param name="presetId"> Идентификатор пресета. </param>
     /// <param name="deviceIds"> Идентификаторы устройств. </param>
     /// <returns> Результат выполнения запроса. </returns>
     /// <response code="200"> Успешно. </response>
     /// <response code="400">
     /// Майнинг устройство или пресет не найдены.
     /// </response>
-    [HttpPost("{id:Guid}/apply")]
+    [HttpPost("{presetId:Guid}/apply")]
     [ProducesResponseType(typeof(Guid), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
-    public async Task<IActionResult> ApplyPreset(Guid id, params Guid[] deviceIds)
+    public async Task<IActionResult> ApplyPreset(Guid presetId, params Guid[] deviceIds)
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(
-            new ApplyPresetCommand(userId, id, deviceIds));
+            new ApplyPresetCommand(userId, presetId, deviceIds));
         return result.ToActionResult();
     }
 
     /// <summary>
     /// Редактировать пресет
     /// </summary>
-    /// <param name="id"> Уникальный идентификатор </param>
-    /// <param name="model"> Входная модель пресета </param>
-    /// <returns> Результат выполнения команды </returns>
+    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <param name="model"> Входная модель пресета. </param>
+    /// <returns> Результат выполнения команды. </returns>
     /// <response code="200"> Успешно. </response>
     /// <response code="400">
     /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id.
     /// </response>
     /// <response code="409"> Пресет с переданным именем уже существует. </response>
-    [HttpPatch("{id:Guid}")]
+    [HttpPatch("{presetId:Guid}")]
     [ProducesResponseType(typeof(PresetModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     [ProducesResponseType(typeof(List<string>), 409)]
-    public async Task<IActionResult> Edit(Guid id, EditPresetModel model)
+    public async Task<IActionResult> Edit(Guid presetId, EditPresetModel model)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new EditPresetCommand(id, model, userId));
+        var result = await _mediator.Send(new EditPresetCommand(presetId, model, userId));
         return result.ToActionResult();
     }
 
     /// <summary>
-    /// Удалить пресет
+    /// Удалить пресет.
     /// </summary>
-    /// <param name="id"> Уникальный идентификатор </param>
-    /// <returns> Результат выполнения команды </returns>
+    /// <param name="presetId"> Идентификатор пресета. </param>
+    /// <returns> Результат выполнения команды. </returns>
     /// <response code="204"> Успешно. </response>
-    [HttpDelete("{id:Guid}")]
+    [HttpDelete("{presetId:Guid}")]
     [ProducesResponseType(204)]
-    public async Task<IActionResult> Remove(Guid id)
+    public async Task<IActionResult> Remove(Guid presetId)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new RemovePresetCommand(id, userId));
+        var result = await _mediator.Send(new RemovePresetCommand(presetId, userId));
         return result.ToActionResult();
     }
 }

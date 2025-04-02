@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Contracts.MiningDevice;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+
+namespace MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 
 /// <summary>
 /// Модуль майнинга устройства.
@@ -54,9 +56,11 @@ public class MiningDeviceModel
     /// Признак подтверждения текущего значения полётного листа.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/>, если  значение подтверждено ригом, иначе <see langword="false"/>.
+    /// <see langword="Unconfirmed"/>, если  значение не подтверждено ригом,
+    /// <see langword="Successfully"/>, если значение подтверждено ригом,
+    /// <see langword="Error"/>, если произошла ошибка при подтверждении..
     /// </returns>
-    public bool FlightSheetIsConfirm { get; init; }
+    public FlightSheetConfirmationState FlightSheetConfirmationState { get; init; }
 
     /// <summary>
     /// Название майнера.

@@ -74,7 +74,7 @@ public abstract class GetMiningDevicesBaseQueryHandler
             RigName = rigs.First(rig => rig.Id == model.RigId).Name,
             FlightSheetName = model.FlightSheetName,
             PresetName = model.PresetName,
-            FlightSheetIsConfirm = model.FlightSheetIsConfirm,
+            FlightSheetConfirmationState = model.FlightSheetConfirmationState,
             MinerName = model.MinerName,
             IsOnline = model.IsOnline
         };
