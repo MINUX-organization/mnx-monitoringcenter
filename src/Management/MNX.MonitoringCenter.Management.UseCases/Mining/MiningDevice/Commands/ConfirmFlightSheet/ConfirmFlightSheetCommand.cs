@@ -41,7 +41,10 @@ public class ConfirmFlightSheetCommandHandler : IRequestHandler<ConfirmFlightShe
     public async Task<Result<Unit>> Handle(ConfirmFlightSheetCommand request,
                                            CancellationToken cancellationToken)
     {
-        await _miningDeviceRepository.ConfirmFlightSheet(request.SuccessfullyMiningDevicesIds);
+        if (request.SuccessfullyMiningDevicesIds.Length != 0)
+        {
+            await _miningDeviceRepository.ConfirmFlightSheet(request.SuccessfullyMiningDevicesIds);
+        }
 
         if (request.UnsuccessfullyMiningDevicesIds.Length != 0)
         {
@@ -53,9 +56,11 @@ public class ConfirmFlightSheetCommandHandler : IRequestHandler<ConfirmFlightShe
                                                                cancellationToken);
         var userId = someDevice.OwnerId;
 
+        if (userId == null)
+            return Result<Unit>.Error("Entity content error in the database");
+
         var devicesChangedStateEvent = new MiningDeviceStateChangedEvent(userId.ToString()!);
-        await _mediator.Publish(devicesChangedStateEvent,
-                                cancellationToken);
+        await _mediator.Publish(devicesChangedStateEvent, cancellationToken);
 
         return Result<Unit>.Empty();
     }

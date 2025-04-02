@@ -91,7 +91,7 @@ public interface IMiningDeviceRepository
 
     /// <summary>
     /// Задать статус подтверждения полетного листа
-    /// на майнинг-устройстве как <see langword="Error"/>.
+    /// на майнинг-устройстве как <see cref="FlightSheetConfirmationState.Error"/>.
     /// </summary>
     /// <param name="devicesIds"> Идентификаторы устройств. </param>
     Task SetFlightSheetConfirmationStateToError(Guid[] devicesIds);
