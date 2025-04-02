@@ -26,7 +26,6 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
-using Microsoft.EntityFrameworkCore;
 
 namespace MNX.MonitoringCenter.Management.Integration;
 

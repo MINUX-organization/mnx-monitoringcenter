@@ -40,9 +40,12 @@ public class MiningDeviceInfo : MiningDevice
     /// Признак подтверждения текущего значения полётного листа.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/>, если  значение подтверждено ригом, иначе <see langword="false"/>.
+    /// <see cref="FlightSheetConfirmationState.Unconfirmed"/>, если  значение не подтверждено ригом,
+    /// <see cref="FlightSheetConfirmationState.Successfully"/>, если значение подтверждено ригом,
+    /// <see cref="FlightSheetConfirmationState.Error"/>, если произошла ошибка при подтверждении.
     /// </returns>
-    public bool FlightSheetIsConfirm { get; set; } = true;
+    public FlightSheetConfirmationState FlightSheetConfirmationState { get; set; }
+        = FlightSheetConfirmationState.Unconfirmed;
 
     /// <summary>
     /// Полётный лист.

@@ -19,6 +19,7 @@ using MNX.MonitoringCenter.Management.Integration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
 using MNX.SecurityManagement.Authentication.Integration;
+using MNX.MonitoringCenter.RigsApi.Service.EventHandlers;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 using MNX.MonitoringCenter.RigsApi.Service.Hubs.Notification;
@@ -179,7 +180,11 @@ internal class Program
             typeof(RigConsumer).Assembly
         });
 
-        services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(GetGpusQuery).Assembly));
+        services.AddMediatR(x =>
+        {
+            x.RegisterServicesFromAssembly(typeof(GetGpusQuery).Assembly);
+            x.RegisterServicesFromAssembly(typeof(MiningDeviceStateChangedEventHandler).Assembly);
+        });
 
         services.AddSignalR();
 

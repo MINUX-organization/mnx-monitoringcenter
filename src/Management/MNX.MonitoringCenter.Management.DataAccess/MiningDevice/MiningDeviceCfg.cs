@@ -24,6 +24,7 @@ internal class MiningDeviceCfg : IEntityTypeConfiguration<MiningDeviceInfo>
 
         builder.Property(x => x.Type).HasConversion<string>();
         builder.Property(x => x.LifeCycleStatus).HasConversion<string>();
+        builder.Property(x => x.FlightSheetConfirmationState).HasConversion<string>();
 
         builder.Ignore(x => x.FlightSheet);
         builder.Ignore(x => x.Preset);

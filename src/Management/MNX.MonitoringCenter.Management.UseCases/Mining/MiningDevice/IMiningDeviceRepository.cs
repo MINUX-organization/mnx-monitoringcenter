@@ -90,6 +90,13 @@ public interface IMiningDeviceRepository
     Task ConfirmFlightSheet(Guid[] devicesIds);
 
     /// <summary>
+    /// Задать статус подтверждения полетного листа
+    /// на майнинг-устройстве как <see cref="FlightSheetConfirmationState.Error"/>.
+    /// </summary>
+    /// <param name="devicesIds"> Идентификаторы устройств. </param>
+    Task SetFlightSheetConfirmationStateToError(Guid[] devicesIds);
+
+    /// <summary>
     /// Получить разгон майнинг устройства.
     /// </summary>
     /// <param name="deviceId"> Идентификатор устройства. </param>
