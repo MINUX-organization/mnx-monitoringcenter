@@ -57,7 +57,7 @@ public class ConfirmFlightSheetCommandHandler : IRequestHandler<ConfirmFlightShe
         var userId = someDevice.OwnerId;
 
         if (userId == null)
-            return Result<Unit>.Error("Entity content error in the database");
+            return Result<Unit>.Empty();
 
         var devicesChangedStateEvent = new MiningDeviceStateChangedEvent(userId.ToString()!);
         await _mediator.Publish(devicesChangedStateEvent, cancellationToken);
