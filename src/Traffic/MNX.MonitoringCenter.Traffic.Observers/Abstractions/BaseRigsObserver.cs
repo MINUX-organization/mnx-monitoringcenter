@@ -2,7 +2,6 @@
 using System.Collections.Concurrent;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
-using System.Threading.Channels;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 

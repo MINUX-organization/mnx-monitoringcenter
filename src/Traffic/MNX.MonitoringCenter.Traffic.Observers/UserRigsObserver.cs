@@ -173,8 +173,13 @@ public class UserRigsObserver : IUserRigsObserver
             {
                 _hardwareIndicatorsStreamSubscription.Dispose();
                 _miningIndicatorsStreamSubscription.Dispose();
+
+                _rigsIndicatorsStream.Wait();
+
+                _rigsIndicatorsStream.Dispose();
                 _rigsHardwareObserver.Dispose();
                 _rigsMiningObserver.Dispose();
+
                 _serviceScope.Dispose();
             }
 
