@@ -7,10 +7,17 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.
 /// <summary>
 /// Подтвердить полётный лист на майнинг устройствах.
 /// </summary>
-/// <param name="MiningDevices"> Идентификаторы майнинг устройств. </param>
-public sealed record ConfirmFlightSheetCommand(Guid[] MiningDevices)
+/// <param name="SuccessfullyMiningDevicesIds">
+/// Идентификаторы майнинг устройств, на которые
+/// было подтверждено применение полетного листа.
+/// </param>
+/// <param name="SuccessfullyMiningDevicesIds">
+/// Идентификаторы майнинг устройств, на которые
+/// не было подтверждено применение полетного листа.
+/// </param>
+public sealed record ConfirmFlightSheetCommand(Guid[] SuccessfullyMiningDevicesIds,
+                                               Guid[] UnsuccessfullyMiningDevicesIds)
     : IValidatableCommand<Unit>;
-
 
 /// <summary>
 /// Обработчик <see cref="ConfirmFlightSheetCommand"/>.
@@ -34,16 +41,26 @@ public class ConfirmFlightSheetCommandHandler : IRequestHandler<ConfirmFlightShe
     public async Task<Result<Unit>> Handle(ConfirmFlightSheetCommand request,
                                            CancellationToken cancellationToken)
     {
-        if (request.MiningDevices.Length == 0)
-            return Result<Unit>.Empty();
+        if (request.SuccessfullyMiningDevicesIds.Length != 0)
+        {
+            await _miningDeviceRepository.ConfirmFlightSheet(request.SuccessfullyMiningDevicesIds);
+        }
 
-        await _miningDeviceRepository.ConfirmFlightSheet(request.MiningDevices);
+        if (request.UnsuccessfullyMiningDevicesIds.Length != 0)
+        {
+            await _miningDeviceRepository
+                .SetFlightSheetConfirmationStateToError(request.UnsuccessfullyMiningDevicesIds);
+        }
 
-        var someDevice = await _miningDeviceRepository.GetById(request.MiningDevices[0],
+        var someDevice = await _miningDeviceRepository.GetById(request.SuccessfullyMiningDevicesIds[0],
                                                                cancellationToken);
         var userId = someDevice.OwnerId;
 
-        await _mediator.Publish(new MiningDeviceStateChangedEvent(userId.ToString()!), cancellationToken);
+        if (userId == null)
+            return Result<Unit>.Empty();
+
+        var devicesChangedStateEvent = new MiningDeviceStateChangedEvent(userId.ToString()!);
+        await _mediator.Publish(devicesChangedStateEvent, cancellationToken);
 
         return Result<Unit>.Empty();
     }

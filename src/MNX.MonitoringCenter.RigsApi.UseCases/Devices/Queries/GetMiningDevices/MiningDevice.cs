@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+
+namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices;
 
 /// <summary>
 /// Майнинг устройство.
@@ -44,9 +46,11 @@ public class MiningDevice
     /// Признак подтверждения текущего значения полётного листа.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/>, если  значение подтверждено ригом, иначе <see langword="false"/>.
+    /// <see cref="FlightSheetConfirmationState.Unconfirmed"/>, если  значение не подтверждено ригом,
+    /// <see cref="FlightSheetConfirmationState.Successfully"/>, если значение подтверждено ригом,
+    /// <see cref="FlightSheetConfirmationState.Error"/>, если произошла ошибка при подтверждении.
     /// </returns>
-    public bool FlightSheetIsConfirm { get; init; }
+    public FlightSheetConfirmationState FlightSheetConfirmationState { get; init; }
 
     /// <summary>
     /// Название майнера.

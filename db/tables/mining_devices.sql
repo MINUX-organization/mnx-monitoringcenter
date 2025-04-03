@@ -8,7 +8,9 @@ CREATE TABLE monitoring_center.mining_devices
     type text NOT NULL CHECK ( type in ('CPU', 'GPU') ),
     life_cycle_status text NOT NULL DEFAULT 'Online',
     flight_sheet_id uuid,
-    flight_sheet_is_confirm boolean NOT NULL DEFAULT TRUE,
+    flight_sheet_confirmation_state text NOT NULL
+        DEFAULT 'Unconfirmed'
+        check( flight_sheet_confirmation_state in ('Successfully', 'Unconfirmed', 'Error') ),
     preset_id uuid,
 
     CONSTRAINT pk_mining_devices PRIMARY KEY (id),

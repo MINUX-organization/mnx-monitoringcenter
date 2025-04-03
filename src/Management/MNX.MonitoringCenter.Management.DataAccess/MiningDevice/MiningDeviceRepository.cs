@@ -6,6 +6,7 @@ using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 
@@ -99,7 +100,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
         return _context.MiningDevices
                 .Where(device => devicesIds.Contains(device.Id))
                 .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetId, d => flightSheetId)
-                                          .SetProperty(device => device.FlightSheetIsConfirm, d => false));
+                                          .SetProperty(device => device.FlightSheetConfirmationState, d => FlightSheetConfirmationState.Unconfirmed));
     }
 
     /// <inheritdoc/>
@@ -108,7 +109,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
         return _context.MiningDevices
                 .Where(device => devicesIds.Contains(device.Id))
                 .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetId, d => null)
-                                          .SetProperty(device => device.FlightSheetIsConfirm, d => false));
+                                          .SetProperty(device => device.FlightSheetConfirmationState, d => FlightSheetConfirmationState.Unconfirmed));
     }
 
     /// <inheritdoc/>
@@ -116,7 +117,15 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     {
         return _context.MiningDevices
                 .Where(device => devicesIds.Contains(device.Id))
-                .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetIsConfirm, d => true));
+                .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetConfirmationState, d => FlightSheetConfirmationState.Successfully));
+    }
+
+    /// <inheritdoc/>
+    public Task SetFlightSheetConfirmationStateToError(Guid[] devicesIds)
+    {
+        return _context.MiningDevices
+            .Where(device => devicesIds.Contains(device.Id))
+            .ExecuteUpdateAsync(x => x.SetProperty(device => device.FlightSheetConfirmationState, d => FlightSheetConfirmationState.Error));
     }
 
     /// <inheritdoc/>
@@ -217,7 +226,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                    LifeCycleStatus = device.LifeCycleStatus,
                    Type = device.Type,
                    FlightSheetId = device.FlightSheetId,
-                   FlightSheetIsConfirm = device.FlightSheetIsConfirm,
+                   FlightSheetConfirmationState = device.FlightSheetConfirmationState,
                    FlightSheet = _mapper.Map<FlightSheet>(flightSheet),
                    PresetId = device.PresetId,
                    Preset = preset
