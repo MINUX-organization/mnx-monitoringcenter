@@ -9,9 +9,10 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Command
 using Cryptocurrency = Core.Mining.Cryptocurrency;
 
 /// <summary>
-/// Обработчик команды добавления криптовалюты
+/// Обработчик команды <see cref="AddCryptocurrencyCommand"/>.
 /// </summary>
-public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrencyCommand, Result<CryptocurrencyModel>>
+public class AddCryptocurrencyCommandHandler :
+    IRequestHandler<AddCryptocurrencyCommand, Result<CryptocurrencyModel>>
 {
     private readonly ICryptocurrencyRepository _cryptocurrencyRepository;
 
@@ -23,16 +24,23 @@ public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrency
                                            IAlgorithmRepository algorithmRepository,
                                            IMapper mapper)
     {
-        _cryptocurrencyRepository = cryptocurrencyRepository ?? throw new ArgumentNullException(nameof(cryptocurrencyRepository));
-        _algorithmRepository = algorithmRepository ?? throw new ArgumentNullException(nameof(algorithmRepository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _cryptocurrencyRepository = cryptocurrencyRepository ??
+            throw new ArgumentNullException(nameof(cryptocurrencyRepository));
+        _algorithmRepository = algorithmRepository ??
+            throw new ArgumentNullException(nameof(algorithmRepository));
+        _mapper = mapper ??
+            throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<CryptocurrencyModel>> Handle(AddCryptocurrencyCommand request, CancellationToken cancellationToken)
+    public async Task<Result<CryptocurrencyModel>> Handle(AddCryptocurrencyCommand request,
+                                                          CancellationToken cancellationToken)
     {
         var model = request.Model;
 
-        if (await _cryptocurrencyRepository.Exists(request.UserId, request.Model.FullName, request.Model.ShortName, cancellationToken))
+        if (await _cryptocurrencyRepository.Exists(request.UserId,
+                                                   request.Model.FullName,
+                                                   request.Model.ShortName,
+                                                   cancellationToken))
         {
             return Result<CryptocurrencyModel>.Conflict("Cryptocurrency already exists");
         }
@@ -43,13 +51,15 @@ public class AddCryptocurrencyCommandHandler : IRequestHandler<AddCryptocurrency
 
         if (algorithm is null)
         {
-            return Result<CryptocurrencyModel>.Invalid("Algorithm wasn't found");
+            return Result<CryptocurrencyModel>
+                .Invalid($"Algorithm with id equaled {model.AlgorithmId} wasn't found");
         }
 
         var cryptocurrency = _mapper.Map<Cryptocurrency>(request);
         await _cryptocurrencyRepository.Add(cryptocurrency);
         cryptocurrency.Algorithm = algorithm;
 
-        return Result<CryptocurrencyModel>.SuccessfullyCreated(_mapper.Map<CryptocurrencyModel>(cryptocurrency));
+        return Result<CryptocurrencyModel>
+            .SuccessfullyCreated(_mapper.Map<CryptocurrencyModel>(cryptocurrency));
     }
 }

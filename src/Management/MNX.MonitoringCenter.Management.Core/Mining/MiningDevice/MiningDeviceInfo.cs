@@ -14,11 +14,11 @@ public class MiningDeviceInfo : MiningDevice
     public Guid? RigId { get; set; }
 
     /// <summary>
-    /// Признак активности устройства ( в данных момент установлен на риге ).
+    /// Признак нахождения устройства в сети.
     /// </summary>
-    public bool IsActive
+    public bool IsOnline
     {
-        get => LifeCycleStatus != MiningDeviceLifeCycleStatus.Inactive;
+        get => _lifeCycleStatus == MiningDeviceLifeCycleStatus.Online;
     }
 
     /// <summary>
@@ -40,9 +40,12 @@ public class MiningDeviceInfo : MiningDevice
     /// Признак подтверждения текущего значения полётного листа.
     /// </summary>
     /// <returns>
-    /// <see langword="true"/>, если  значение подтверждено ригом, иначе <see langword="false"/>.
+    /// <see cref="FlightSheetConfirmationState.Unconfirmed"/>, если  значение не подтверждено ригом,
+    /// <see cref="FlightSheetConfirmationState.Successfully"/>, если значение подтверждено ригом,
+    /// <see cref="FlightSheetConfirmationState.Error"/>, если произошла ошибка при подтверждении.
     /// </returns>
-    public bool FlightSheetIsConfirm { get; set; } = true;
+    public FlightSheetConfirmationState FlightSheetConfirmationState { get; set; }
+        = FlightSheetConfirmationState.Unconfirmed;
 
     /// <summary>
     /// Полётный лист.
@@ -52,7 +55,7 @@ public class MiningDeviceInfo : MiningDevice
     /// <summary>
     /// Идентификатор пресета.
     /// </summary>
-    public Guid PresetId { get; set; }
+    public Guid? PresetId { get; set; }
 
     /// <summary>
     /// Пресет.

@@ -26,19 +26,26 @@ public sealed record SetRigDevicesCommand(Guid RigId,
 /// <summary>
 /// Обработчик <see cref="SetRigDevicesCommand"/>.
 /// </summary>
-public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand, Result<Unit>>
+public class SetRigsDevicesCommandHandler
+    : IRequestHandler<SetRigDevicesCommand, Result<Unit>>
 {
     private readonly IMapper _mapper;
 
+    private readonly IMediator _mediator;
+
     private readonly IRigRepository _repository;
 
-    public SetRigsDevicesCommandHandler(IMapper mapper, IRigRepository repository)
+    public SetRigsDevicesCommandHandler(IMapper mapper,
+                                        IMediator mediator,
+                                        IRigRepository repository)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<Result<Unit>> Handle(SetRigDevicesCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(SetRigDevicesCommand request,
+                                           CancellationToken cancellationToken)
     {
         var devicesTupple = new List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)>();
 
@@ -75,6 +82,8 @@ public class SetRigsDevicesCommandHandler : IRequestHandler<SetRigDevicesCommand
         }));
 
         await _repository.SetDevices(request.RigId, devicesTupple);
+
+        await _mediator.Publish(new MiningDeviceStateChangedEvent(request.RigOwnerId.ToString()));
 
         return Result<Unit>.Empty();
     }

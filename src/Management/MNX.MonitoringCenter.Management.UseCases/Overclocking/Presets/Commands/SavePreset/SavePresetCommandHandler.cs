@@ -46,9 +46,9 @@ public class SavePresetCommandHandler :
         var preset = _mapper.Map<Preset>(request);
         preset.IsVisible = true;
 
-        var overclockingValidationResult = await IsValidOverclocking(request.Model.DeviceName!,
-                                                                     preset.Overclocking!,
-                                                                     cancellationToken);
+        var overclockingValidationResult = await ValidateOverclocking(
+            request.Model.DeviceName!, preset.Overclocking!, cancellationToken);
+
         if (!overclockingValidationResult.IsSuccess)
         {
             return Result<PresetModel>.Invalid(overclockingValidationResult.Errors ?? new string[] { });

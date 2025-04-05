@@ -21,13 +21,13 @@ public record FlightSheetAppliedToRigEvent(
 /// <summary>
 /// Обработчик <see cref="FlightSheetAppliedToRigEvent"/>.
 /// </summary>
-public class FlightSheetAppliedToRigEventHandlerEventHandler : INotificationHandler<FlightSheetAppliedToRigEvent>
+public class FlightSheetAppliedToRigEventHandler : INotificationHandler<FlightSheetAppliedToRigEvent>
 {
     private readonly IMapper _mapper;
 
     private readonly IQueueBusClient _queueClient;
 
-    public FlightSheetAppliedToRigEventHandlerEventHandler(IMapper mapper, IQueueBusClient queueClient)
+    public FlightSheetAppliedToRigEventHandler(IMapper mapper, IQueueBusClient queueClient)
     {
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
         _queueClient = queueClient ?? throw new ArgumentNullException(nameof(queueClient));

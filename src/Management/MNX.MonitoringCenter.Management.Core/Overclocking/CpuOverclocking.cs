@@ -23,4 +23,15 @@ public class CpuOverclocking : IOverclocking
     /// Напряжение.
     /// </summary>
     public int CoreVoltage { get; set; }
+
+    /// <inheritdoc/>
+    public object Clone()
+    {
+        return new CpuOverclocking()
+        {
+            Id = this.Id,
+            CoreClockLock = this.CoreClockLock,
+            CoreVoltage = this.CoreVoltage
+        };
+    }
 }

@@ -54,7 +54,8 @@ public class CryptocurrencyController : ControllerBase
     /// <param name="model"> Входная модель криптовалюты. </param>
     /// <response code="201"> Успешно. </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не был найден алгоритм с указанным названием.
+    /// Переданные параметры не прошли валидацию или
+    /// не был найден алгоритм с указанным названием.
     /// </response>
     [HttpPost]
     [ProducesResponseType(typeof(CryptocurrencyModel), 201)]
@@ -71,8 +72,12 @@ public class CryptocurrencyController : ControllerBase
     /// </summary>
     /// <param name="id"> Идентификатор криптовалюты. </param>
     /// <response code="204"> Успешно. </response>
+    /// <response code="400">
+    /// Доменная криптовалюта не может быть удалена.
+    /// </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = _userAccessor.GetUserId();

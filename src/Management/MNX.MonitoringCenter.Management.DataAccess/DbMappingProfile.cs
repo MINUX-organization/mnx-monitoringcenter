@@ -36,6 +36,9 @@ public class DbMappingProfile : Profile
             .ForMember(dest => dest.AdditionalArguments, opt => opt.MapFrom(x => x.MiningConfig.AdditionalArguments))
             .ForMember(dest => dest.ConfigFileContent, opt => opt.MapFrom(x => x.MiningConfig.ConfigFileContent));
 
+        CreateMap<OverclockingDto, OverclockingDto>()
+            .ForMember(dest => dest.Id, opt => opt.Ignore())
+            .ForMember(dest => dest.TargetDeviceType, opt => opt.Ignore());
         CreateMap<IOverclocking, OverclockingDto>()
             .Include<GpuOverclocking, OverclockingDto>()
             .Include<CpuOverclocking, OverclockingDto>();

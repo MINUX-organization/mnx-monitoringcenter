@@ -114,7 +114,6 @@ public class UserRigsObserverAggregator : IUserRigsObserverAggregator
     /// <param name="userId"> Идентификатор пользователя. </param>
     private IUserRigsObserver GetOrCreateObserver(Guid userId)
     {
-        // todo: отправить команду на запуск потока показателей на все риги пользователя.
         return _observers.GetOrAdd(userId,
             _ => new UserRigsObserver(_serviceScopeFactory, _updateDynamicIndicatorsPeriod));
     }

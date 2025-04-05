@@ -77,8 +77,14 @@ public class RigsHardwareObserver : BaseRigsObserver<RigDynamicHardwareIndicator
                     }
                 }
 
+                _generalIndicatorsStream.Wait();
+                _totalPowerStream.Wait();
+                _cpusIndicatorsStream.Wait();
+                _gpusIndicatorsStream.Wait();
+
                 _generalIndicatorsStream.Dispose();
                 _totalPowerStream.Dispose();
+
                 _indicatorsCounter.Dispose();
             }
 

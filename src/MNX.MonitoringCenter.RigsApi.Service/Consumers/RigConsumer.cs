@@ -86,7 +86,10 @@ public class RigConsumer :
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(ApplyWorkerSettingsCommandResult message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Send(new ConfirmFlightSheetCommand(message.SuccessfullyWorkersIds.ToArray()), cancellationToken);
+        var confirmFlightSheetCommand = new ConfirmFlightSheetCommand(message.SuccessfullyWorkersIds.ToArray(),
+                                                                      message.UnsuccessfullyWorkersIds.ToArray());
+
+        return _mediator.Send(confirmFlightSheetCommand, cancellationToken);
     }
 }
 

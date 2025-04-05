@@ -14,15 +14,19 @@ public record RigDisconnectedEvent(Guid RigId) : INotification;
 /// </summary>
 public class RigDisconnectedEventHandler : INotificationHandler<RigDisconnectedEvent>
 {
+    private IMediator _mediator;
+
     private readonly IRigRepository _repository;
 
-    public RigDisconnectedEventHandler(IRigRepository repository)
+    public RigDisconnectedEventHandler(IMediator mediator, IRigRepository repository)
     {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public Task Handle(RigDisconnectedEvent notification, CancellationToken cancellationToken)
+    public async Task Handle(RigDisconnectedEvent notification, CancellationToken cancellationToken)
     {
-        return _repository.SwitchToOffline(notification.RigId);
+        await _mediator.Publish(new MiningDeviceStateChangedEvent(notification.RigId.ToString()));
+        await _repository.SwitchToOffline(notification.RigId);
     }
 }

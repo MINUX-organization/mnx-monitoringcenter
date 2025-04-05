@@ -99,6 +99,11 @@ public class RigsMiningObserver : BaseRigsObserver<RigDynamicMiningIndicators,
                     }
                 }
 
+                _generalIndicatorsStream.Wait();
+                _totalCoinsStatisticsStream.Wait();
+                _totalHashRateStream.Wait();
+                _totalSharesStream.Wait();
+
                 _generalIndicatorsStream.Dispose();
                 _totalSharesStream.Dispose();
                 _totalHashRateStream.Dispose();

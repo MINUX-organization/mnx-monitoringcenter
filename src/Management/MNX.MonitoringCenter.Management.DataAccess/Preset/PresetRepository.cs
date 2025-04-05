@@ -71,12 +71,12 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public Task<Preset?> GetAvailableById(Guid id,
-                                          Guid userId,
-                                          CancellationToken cancellationToken)
+    public Task<Preset?> GetById(Guid id,
+                                 Guid userId,
+                                 CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
-            .Where(x => x.Id == id && x.UserId == userId && x.IsVisible)
+            .Where(x => x.Id == id && x.UserId == userId)
             .Join(_context.Overclocking.AsNoTracking(),
             preset => preset.OverclockingId,
             overclocking => overclocking.Id,
@@ -86,7 +86,8 @@ public class PresetRepository : IPresetRepository
                 Name = preset.Name,
                 DeviceName = preset.DeviceName,
                 OverclockingId = preset.OverclockingId,
-                Overclocking = _mapper.Map<IOverclocking>(overclocking)
+                Overclocking = _mapper.Map<IOverclocking>(overclocking),
+                UserId = preset.UserId
             }).FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -112,28 +113,33 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public async Task Update(Preset preset)
+    public Task Update(Preset preset)
     {
-        var oldOverclocking = await _context.Overclocking
-            .FirstOrDefaultAsync(x => x.Id == preset.OverclockingId);
-        if (oldOverclocking != null)
-        {
-            _context.Overclocking.Remove(oldOverclocking);
-        }
-
         var overclocking = _mapper.Map<OverclockingDto>(preset.Overclocking);
-        await _context.Overclocking.AddAsync(overclocking);
-
-        preset.OverclockingId = overclocking.Id;
+        _context.Overclocking.Update(overclocking);
         _context.Presets.Update(preset);
-        await _context.SaveChangesAsync();
+        return _context.SaveChangesAsync();
     }
 
     /// <inheritdoc/>
-    public Task Remove(Guid id, Guid userId)
+    public async Task Remove(Guid id, Guid userId)
     {
-        return _context.Presets
+        var removablePreset = await _context.Presets.AsNoTracking()
             .Where(x => x.Id == id && x.UserId == userId && x.IsVisible)
+            .FirstOrDefaultAsync();
+
+        if (removablePreset == null) return;
+
+        var overclockingId = removablePreset.OverclockingId;
+
+        await _context.Presets
+            .AsNoTracking()
+            .Where(x => x.Id == id && x.UserId == userId && x.IsVisible)
+            .ExecuteDeleteAsync();
+
+        await _context.Overclocking
+            .AsNoTracking()
+            .Where(x => x.Id == overclockingId)
             .ExecuteDeleteAsync();
     }
 }

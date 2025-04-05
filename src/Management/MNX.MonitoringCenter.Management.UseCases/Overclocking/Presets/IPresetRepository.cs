@@ -4,23 +4,23 @@ using MNX.MonitoringCenter.Management.Core.Overclocking;
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 
 /// <summary>
-/// Интерфейс репозитория для доступа к пресетам
+/// Интерфейс репозитория для доступа к пресетам.
 /// </summary>
 public interface IPresetRepository
 {
     /// <summary>
-    /// Получить пресет по идентификатору
+    /// Получить пресет по идентификатору.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
-    /// <param name="id">  Уникальный идентификатор</param>
+    /// <param name="id">  Уникальный идентификатор. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> Пресет </returns>
-    Task<Preset?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken);
+    /// <returns> Пресет. </returns>
+    Task<Preset?> GetById(Guid id, Guid userId, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Получить список пресетов
+    /// Получить список пресетов.
     /// </summary>
-    /// <param name="gpuName"> Название GPU </param>
+    /// <param name="gpuName"> Название GPU. </param>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Пресеты </returns>
     IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, Specification specification);
@@ -35,22 +35,22 @@ public interface IPresetRepository
         Expression<Func<Preset, string>> expression, Specification specification);
 
     /// <summary>
-    /// Проверить наличие пресета по названию
+    /// Проверить наличие пресета по названию.
     /// </summary>
-    /// <param name="userId"> Идентификатор пользователя </param>
-    /// <param name="name"> Название пресета </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="name"> Название пресета. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> <see langword="true"/>, если пресет существует, иначе <see langword="false"/> </returns>
+    /// <returns> <see langword="true"/>, если пресет существует, иначе <see langword="false"/>. </returns>
     Task<bool> Exists(Guid userId, string name, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Сохранить пресет для выбранной 
+    /// Сохранить пресет.
     /// </summary>
     /// <param name="preset"> Пресет </param>
     Task Save(Preset preset);
 
     /// <summary>
-    /// Обновить пресет
+    /// Обновить пресет.
     /// </summary>
     /// <param name="preset"> Пресет. </param>
     Task Update(Preset preset);

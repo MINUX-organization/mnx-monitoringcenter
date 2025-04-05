@@ -47,9 +47,9 @@ public class ApplyPresetCommandHandler :
 
         var errors = new List<string>();
 
-        var preset = await _presetRepository.GetAvailableById(request.PresetId,
-                                                              request.UserId,
-                                                              cancellationToken);
+        var preset = await _presetRepository.GetById(request.PresetId,
+                                                     request.UserId,
+                                                     cancellationToken);
 
         if (preset is null)
         {

@@ -54,24 +54,24 @@ public class SetOverclockingCommandHandler
 
         if (device is null)
         {
-            return Result<Guid>.Error($"Mining device with id equaled {request.DeviceId} was not found");
+            return Result<Guid>.Invalid($"Mining device with id equaled {request.DeviceId} was not found");
         }
 
         if (device.Type.ToString() != request.Overclocking.TargetDeviceType.ToString())
         {
-            return Result<Guid>.Error($"Device with type of {device.Type} is not supported this overclocking");
+            return Result<Guid>.Invalid($"Device with type of {device.Type} is not supported this overclocking");
         }
 
         var overclocking = _mapper.Map<IOverclocking>(request.Overclocking);
 
         var overclockingValidationResult =
-                await IsValidOverclocking(device.Name, overclocking, cancellationToken);
+                await ValidateOverclocking(device.Id, overclocking, cancellationToken);
 
         if (!overclockingValidationResult.IsSuccess)
         {
             if (overclockingValidationResult.Errors is not null)
             {
-                return Result<Guid>.Error(overclockingValidationResult.Errors);
+                return Result<Guid>.Invalid(overclockingValidationResult.Errors);
             }
         }
 

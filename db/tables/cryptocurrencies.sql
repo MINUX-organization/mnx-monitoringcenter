@@ -4,7 +4,7 @@ CREATE TABLE monitoring_center.cryptocurrencies
     short_name text NOT NULL,
     full_name text NOT NULL,
     algorithm_id uuid NOT NULL,
-    user_id uuid NOT NULL,
+    user_id uuid NULL,
 
     CONSTRAINT pk_cryptocurrencies PRIMARY KEY (id),
 

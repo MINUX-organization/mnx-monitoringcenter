@@ -78,7 +78,8 @@ public class PoolController : ControllerBase
     /// <returns> Результат выполнения операции. </returns>
     /// <response code="200"> Успешно. </response>
     /// <response code="400">
-    /// Переданные параметры не прошли валидацию или не был найден пул с переданным id.
+    /// Переданные параметры не прошли валидацию или не был найден пул с переданным id
+    /// или попытка редактирования доменного пула.
     /// </response>
     /// <response code="409"> Пул уже существует. </response>
     [HttpPut("{id:Guid}")]
@@ -98,8 +99,12 @@ public class PoolController : ControllerBase
     /// <param name="id"> Уникальный идентификатор. </param>
     /// <returns> Результат выполнения операции. </returns>
     /// <response code="204"> Успешно. </response>
+    /// <response code="400">
+    /// Доменный пул не может быть удален.
+    /// </response>
     [HttpDelete("{id:Guid}")]
     [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Delete(Guid id)
     {
         var userId = _userAccessor.GetUserId();
