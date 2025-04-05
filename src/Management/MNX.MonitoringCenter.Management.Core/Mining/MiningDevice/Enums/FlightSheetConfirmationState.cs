@@ -6,14 +6,14 @@
 public enum FlightSheetConfirmationState
 {
     /// <summary>
-    /// Успешное применение настроек полетного листа.
-    /// </summary>
-    Successfully,
-
-    /// <summary>
     /// Не подтверждено применение настроек полетного листа.
     /// </summary>
     Unconfirmed,
+
+    /// <summary>
+    /// Успешное применение настроек полетного листа.
+    /// </summary>
+    Successfully,
 
     /// <summary>
     /// Ошибка применения настроек полетного листа.

@@ -71,12 +71,12 @@ public class PresetRepository : IPresetRepository
     }
 
     /// <inheritdoc/>
-    public Task<Preset?> GetAvailableById(Guid id,
-                                          Guid userId,
-                                          CancellationToken cancellationToken)
+    public Task<Preset?> GetById(Guid id,
+                                 Guid userId,
+                                 CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
-            .Where(x => x.Id == id && x.UserId == userId && x.IsVisible)
+            .Where(x => x.Id == id && x.UserId == userId)
             .Join(_context.Overclocking.AsNoTracking(),
             preset => preset.OverclockingId,
             overclocking => overclocking.Id,
@@ -86,7 +86,8 @@ public class PresetRepository : IPresetRepository
                 Name = preset.Name,
                 DeviceName = preset.DeviceName,
                 OverclockingId = preset.OverclockingId,
-                Overclocking = _mapper.Map<IOverclocking>(overclocking)
+                Overclocking = _mapper.Map<IOverclocking>(overclocking),
+                UserId = preset.UserId
             }).FirstOrDefaultAsync(cancellationToken);
     }
 

@@ -30,7 +30,7 @@ public class GetPresetByIdQueryHandler : IRequestHandler<GetPresetByIdQuery, Res
 
     public async Task<Result<PresetModel>> Handle(GetPresetByIdQuery request, CancellationToken cancellationToken)
     {
-        var preset = await _repository.GetAvailableById(request.PresetId, request.UserId, cancellationToken);
+        var preset = await _repository.GetById(request.PresetId, request.UserId, cancellationToken);
         if (preset is null)
         {
             return Result<PresetModel>.Invalid($"Preset with id equaled {request.PresetId} was not found");

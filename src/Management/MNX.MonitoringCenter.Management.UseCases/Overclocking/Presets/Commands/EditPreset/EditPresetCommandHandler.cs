@@ -33,9 +33,9 @@ public class EditPresetCommandHandler :
     public async Task<Result<PresetModel>> Handle(EditPresetCommand request,
                                                   CancellationToken cancellationToken)
     {
-        var preset = await _presetRepository.GetAvailableById(request.Id,
-                                                              request.UserId,
-                                                              cancellationToken);
+        var preset = await _presetRepository.GetById(request.Id,
+                                                     request.UserId,
+                                                     cancellationToken);
 
         if (preset is null)
         {

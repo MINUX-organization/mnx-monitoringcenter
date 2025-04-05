@@ -88,7 +88,8 @@ public class RigRepository : IRigRepository
                             Model = tuple.Devices.Model,
                             RigId = rigId,
                             OwnerId = tuple.Devices.OwnerId,
-                            Type = tuple.Devices.Type
+                            Type = tuple.Devices.Type,
+                            FlightSheetConfirmationState = FlightSheetConfirmationState.Successfully
                         };
 
                         var overclocking = tuple.Overclockings;
@@ -132,10 +133,18 @@ public class RigRepository : IRigRepository
         {
             if (dbDevices.TryGetValue(device, out MiningDeviceInfo? dbDevice))
             {
+                // По соглашению, для invisiblePreset наименование равно идентификатору девайса, к которому привязан пресет.
+                var invisiblePreset = await context.Presets.FirstAsync(x => x.Name == device.Id.ToString());
+                invisiblePreset.OverclockingId = overclocking.Id;
+
                 dbDevice!.RigId = device.RigId;
                 dbDevice.OwnerId = device.OwnerId;
+                dbDevice.FlightSheetId = device.FlightSheetId;
+                dbDevice.FlightSheetConfirmationState = device.FlightSheetConfirmationState;
+                dbDevice.PresetId = invisiblePreset.Id;
                 dbDevice.SwitchToOnline();
 
+                await AddOverclocking(overclocking);
                 await context.SaveChangesAsync();
             }
             else
@@ -148,20 +157,21 @@ public class RigRepository : IRigRepository
                     OverclockingId = overclocking.Id,
                     Overclocking = overclocking
                 };
-                await AddPresetWithOverclocking(preset);
+                await AddOverclocking(preset.Overclocking);
+                await context.Presets.AddAsync(preset);
+                await context.SaveChangesAsync();
 
                 device.PresetId = preset.Id;
+                device.Preset = preset;
                 await context.MiningDevices.AddAsync(device);
                 await context.SaveChangesAsync();
             }
         }
 
-        async Task AddPresetWithOverclocking(Core.Overclocking.Preset preset)
+        async Task AddOverclocking(IOverclocking overclocking)
         {
-            var overclocking = _mapper.Map<OverclockingDto>(preset.Overclocking);
-            await context.Overclocking.AddAsync(overclocking);
-            await context.Presets.AddAsync(preset);
-            await context.SaveChangesAsync();
+            var overclockingDto = _mapper.Map<OverclockingDto>(overclocking);
+            await context.Overclocking.AddAsync(overclockingDto);
         }
     }
 }
