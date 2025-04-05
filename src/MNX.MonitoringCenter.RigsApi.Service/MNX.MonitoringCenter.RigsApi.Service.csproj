@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MNX.Application.Bus.RabbitMQ" Version="1.0.2" />
+    <PackageReference Include="MNX.Application.Bus.RabbitMQ.Agent" Version="1.0.5" />
     <PackageReference Include="MNX.Application.Consul" Version="1.0.1" />
     <PackageReference Include="MNX.Application.OpenTelemetry" Version="1.0.0" />
     <PackageReference Include="MNX.RigCommander.Contracts" Version="1.0.5" />
