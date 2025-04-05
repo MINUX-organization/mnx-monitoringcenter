@@ -63,7 +63,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsAp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RigsApi", "RigsApi", "{0B788845-9795-4316-881A-7D19D0FC9E8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.RigsApi.RigConsumer_Client", "tests\RigsApi\ApplyFlightSheetSettingsPublisher\MNX.MonitoringCenter.RigsApi.RigConsumer_Client.csproj", "{82B60409-D210-4059-A222-5CD94D34DDD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.RigConsumer_Client", "tests\RigsApi\ApplyFlightSheetSettingsPublisher\MNX.MonitoringCenter.RigsApi.RigConsumer_Client.csproj", "{82B60409-D210-4059-A222-5CD94D34DDD3}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management", "Management", "{F319355F-F759-4FA1-AB86-0932221B37C6}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.UseCases.IntegrationTests", "tests\Management\MNX.MonitoringCenter.Management.UseCases.IntegrationTests\MNX.MonitoringCenter.Management.UseCases.IntegrationTests.csproj", "{88914A5D-5EDF-4E49-870A-5AFAC23E13C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -163,6 +167,10 @@ Global
 		{82B60409-D210-4059-A222-5CD94D34DDD3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82B60409-D210-4059-A222-5CD94D34DDD3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82B60409-D210-4059-A222-5CD94D34DDD3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88914A5D-5EDF-4E49-870A-5AFAC23E13C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88914A5D-5EDF-4E49-870A-5AFAC23E13C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88914A5D-5EDF-4E49-870A-5AFAC23E13C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88914A5D-5EDF-4E49-870A-5AFAC23E13C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -197,6 +205,8 @@ Global
 		{9F5E6424-5FD4-47C7-A5B0-7B37A11AD2B0} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
 		{0B788845-9795-4316-881A-7D19D0FC9E8E} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
 		{82B60409-D210-4059-A222-5CD94D34DDD3} = {0B788845-9795-4316-881A-7D19D0FC9E8E}
+		{F319355F-F759-4FA1-AB86-0932221B37C6} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
+		{88914A5D-5EDF-4E49-870A-5AFAC23E13C7} = {F319355F-F759-4FA1-AB86-0932221B37C6}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}

@@ -158,6 +158,8 @@ public class RigRepository : IRigRepository
                     Overclocking = overclocking
                 };
                 await AddOverclocking(preset.Overclocking);
+                await context.Presets.AddAsync(preset);
+                await context.SaveChangesAsync();
 
                 device.PresetId = preset.Id;
                 device.Preset = preset;
@@ -165,14 +167,6 @@ public class RigRepository : IRigRepository
                 await context.SaveChangesAsync();
             }
         }
-
-        //async Task AddPresetWithOverclocking(Core.Overclocking.Preset preset)
-        //{
-        //    var overclocking = _mapper.Map<OverclockingDto>(preset.Overclocking);
-        //    await context.Overclocking.AddAsync(overclocking);
-        //    await context.Presets.AddAsync(preset);
-        //    await context.SaveChangesAsync();
-        //}
 
         async Task AddOverclocking(IOverclocking overclocking)
         {

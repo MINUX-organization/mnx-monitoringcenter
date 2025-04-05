@@ -72,7 +72,7 @@ public class GetPresetSupportedDevicesQueryHandler :
                                                             [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         var preset = await _presetRepository
-            .GetAvailableById(request.PresetId, request.UserId, cancellationToken);
+            .GetById(request.PresetId, request.UserId, cancellationToken);
 
         if (preset is not null)
         {
