@@ -8,7 +8,6 @@ using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
@@ -135,11 +134,8 @@ public class RigRepository : IRigRepository
             if (dbDevices.TryGetValue(device, out MiningDeviceInfo? dbDevice))
             {
                 // По соглашению, для invisiblePreset наименование равно идентификатору девайса, к которому привязан пресет.
-                var invisiblePreset = await context.Presets.FirstOrDefaultAsync(x => x.Name == device.Id.ToString());
-                if (invisiblePreset != null)
-                    invisiblePreset.OverclockingId = overclocking.Id;
-                else
-                    invisiblePreset = CreateInvisiblePreset(device, overclocking);
+                var invisiblePreset = await context.Presets.FirstAsync(x => x.Name == device.Id.ToString());
+                invisiblePreset.OverclockingId = overclocking.Id;
 
                 dbDevice!.RigId = device.RigId;
                 dbDevice.OwnerId = device.OwnerId;
@@ -153,8 +149,15 @@ public class RigRepository : IRigRepository
             }
             else
             {
-                var preset = CreateInvisiblePreset(device, overclocking);
-                await AddOverclocking(overclocking);
+                var preset = new Core.Overclocking.Preset()
+                {
+                    Name = device.Id.ToString(),
+                    DeviceName = device.Name,
+                    UserId = device.OwnerId!.Value,
+                    OverclockingId = overclocking.Id,
+                    Overclocking = overclocking
+                };
+                await AddOverclocking(preset.Overclocking);
                 await context.Presets.AddAsync(preset);
                 await context.SaveChangesAsync();
 
@@ -169,18 +172,6 @@ public class RigRepository : IRigRepository
         {
             var overclockingDto = _mapper.Map<OverclockingDto>(overclocking);
             await context.Overclocking.AddAsync(overclockingDto);
-        }
-
-        Core.Overclocking.Preset CreateInvisiblePreset(MiningDeviceInfo device, IOverclocking overclocking)
-        {
-            return new Core.Overclocking.Preset()
-            {
-                Name = device.Id.ToString(),
-                DeviceName = device.Name,
-                UserId = device.OwnerId!.Value,
-                OverclockingId = overclocking.Id,
-                Overclocking = overclocking
-            };
         }
     }
 }
