@@ -1,1 +1,1 @@
-INSERT INTO monitoring_center.version_info(version) VALUES ('0.0.1');
+INSERT INTO monitoring_center.version_info(version) VALUES ('1.0.0');
