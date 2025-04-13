@@ -46,11 +46,6 @@ public class UserRigsObserver : IUserRigsObserver
     /// </summary>
     private RigsMiningObserver _rigsMiningObserver;
 
-    /// <summary>
-    /// Скоп сервисов.
-    /// </summary>
-    private IServiceScope _serviceScope;
-
     public UserRigsObserver(IServiceScopeFactory serviceScopeFactory,
                             TimeSpan updateIndicatorsPeriod)
     {
@@ -69,21 +64,20 @@ public class UserRigsObserver : IUserRigsObserver
                            .ToList();
             });
 
-        var hardwareIndicatorsStream = groupedRigsIndicatorsStream
-            .Select(item => {
-                _serviceScope = serviceScopeFactory.CreateScope();
-                return _serviceScope
-                .ServiceProvider
-                .GetRequiredService<IMapper>()
-                .Map<IEnumerable<RigDynamicHardwareIndicators>>(item);
-            });
+        var hardwareIndicatorsStream = groupedRigsIndicatorsStream.Select(item =>
+        {
+            using var serviceScope = serviceScopeFactory.CreateScope();
+            var mapper = serviceScope.ServiceProvider.GetRequiredService<IMapper>();
+            return mapper.Map<IEnumerable<RigDynamicHardwareIndicators>>(item);
+        });
 
-        var miningIndicatorsStream = groupedRigsIndicatorsStream
-            .Select(item => {
-                _serviceScope = serviceScopeFactory.CreateScope();
-                return _serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>().Build(item);
-            })
-            .Concat();
+        var miningIndicatorsStream = groupedRigsIndicatorsStream.Select(item =>
+        {
+            using var serviceScope = serviceScopeFactory.CreateScope();
+            var builder = serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>();
+            return builder.Build(item);
+        })
+        .Concat();
 
         _hardwareIndicatorsStreamSubscription = hardwareIndicatorsStream
             .Subscribe(list => _rigsHardwareObserver.SetIndicators(list));
@@ -179,8 +173,6 @@ public class UserRigsObserver : IUserRigsObserver
                 _rigsIndicatorsStream.Dispose();
                 _rigsHardwareObserver.Dispose();
                 _rigsMiningObserver.Dispose();
-
-                _serviceScope.Dispose();
             }
 
             _rigsIndicatorsStream = null!;
@@ -188,7 +180,6 @@ public class UserRigsObserver : IUserRigsObserver
             _miningIndicatorsStreamSubscription = null!;
             _rigsHardwareObserver = null!;
             _rigsMiningObserver = null!;
-            _serviceScope = null!;
 
             _disposedValue = true;
         }
