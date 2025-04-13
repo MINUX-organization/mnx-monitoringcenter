@@ -6,7 +6,6 @@ using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
 using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
@@ -16,7 +15,6 @@ namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 /// </summary>
 [AgentMessageConsumer]
 public class AgentMsgConsumer :
-    //IConsume<RigDynamicIndicators>,
     IConsumeAsync<RigInventoryMsg>,
     IConsumeAsync<ApplyWorkerSettingsCommandResult>
 {
@@ -32,16 +30,6 @@ public class AgentMsgConsumer :
         _userRigsObserverAggregator = userRigsObserverAggregator
             ?? throw new ArgumentNullException(nameof(userRigsObserverAggregator));
     }
-
-    /*/// <summary>
-    /// Потребить сообщение с динамическими показателями рига.
-    /// </summary>
-    /// <param name="message"> Сообщение. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    public void Consume(RigDynamicIndicators message, CancellationToken cancellationToken = default)
-    {
-        _userRigsObserverAggregator.SetIndicators(message.UserId, message);
-    }*/
 
     /// <summary>
     /// Получить сообщение с инвентаризацией.
