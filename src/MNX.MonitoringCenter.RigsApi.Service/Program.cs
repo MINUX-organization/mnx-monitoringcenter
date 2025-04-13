@@ -177,6 +177,8 @@ internal class Program
             typeof(AgentLifeCycleMsgConsumer).Assembly
         });
 
+        services.AddHostedService<RigDynamicIndicatorsConsumer>();
+
         services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(GetGpusQuery).Assembly));
 
         services.AddSignalR();

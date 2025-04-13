@@ -16,7 +16,7 @@ namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 /// </summary>
 [AgentMessageConsumer]
 public class AgentMsgConsumer :
-    IConsume<RigDynamicIndicators>,
+    //IConsume<RigDynamicIndicators>,
     IConsumeAsync<RigInventoryMsg>,
     IConsumeAsync<ApplyWorkerSettingsCommandResult>
 {
@@ -33,7 +33,7 @@ public class AgentMsgConsumer :
             ?? throw new ArgumentNullException(nameof(userRigsObserverAggregator));
     }
 
-    /// <summary>
+    /*/// <summary>
     /// Потребить сообщение с динамическими показателями рига.
     /// </summary>
     /// <param name="message"> Сообщение. </param>
@@ -41,7 +41,7 @@ public class AgentMsgConsumer :
     public void Consume(RigDynamicIndicators message, CancellationToken cancellationToken = default)
     {
         _userRigsObserverAggregator.SetIndicators(message.UserId, message);
-    }
+    }*/
 
     /// <summary>
     /// Получить сообщение с инвентаризацией.
