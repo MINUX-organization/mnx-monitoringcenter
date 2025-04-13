@@ -116,6 +116,7 @@ public partial class InventoryRepository : IGpuRepository
     {
         return _context.Gpu
             .AsNoTracking()
+            .OrderBy(x => x.Id)
             .Where(x => x.Id == gpuId)
             .Select(x => x.Restrictions)
             .LastOrDefaultAsync();
