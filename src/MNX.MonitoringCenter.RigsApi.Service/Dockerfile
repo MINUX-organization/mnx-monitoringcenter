@@ -1,11 +1,10 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 
 ARG nuget_server
-ENV env_nuget_server=$nuget_server
 
 WORKDIR /src
 COPY . .
-RUN dotnet nuget add source ${env_nuget_server} -n Minux
+RUN dotnet nuget add source ${nuget_server} -n Minux
 RUN dotnet restore "src/MNX.MonitoringCenter.RigsApi.Service/MNX.MonitoringCenter.RigsApi.Service.csproj"
 RUN dotnet publish "src/MNX.MonitoringCenter.RigsApi.Service/MNX.MonitoringCenter.RigsApi.Service.csproj" -c Release -o /publish
 
