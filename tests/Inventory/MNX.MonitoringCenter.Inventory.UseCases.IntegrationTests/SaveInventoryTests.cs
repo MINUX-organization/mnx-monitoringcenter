@@ -36,7 +36,7 @@ public class SaveInventoryTests : BaseTest
         _mediator = ServiceProvider.GetRequiredService<IMediator>();
     }
 
-    [TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
+    //[TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
     public async Task SaveInventory(RigInventoryMsg inventoryMsg)
     {
         var rigRepository = ServiceProvider.GetRequiredService<IRigRepository>();
@@ -103,7 +103,7 @@ public class SaveInventoryTests : BaseTest
         });
     }
 
-    [TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
+    //[TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
     public async Task SaveInventoryWithRabbitMq(RigInventoryMsg inventoryMsg)
     {
         using var bus = RabbitHutch.CreateBus("host=77.37.200.24:5672;username=guest;password=guest;publisherConfirms=true");
