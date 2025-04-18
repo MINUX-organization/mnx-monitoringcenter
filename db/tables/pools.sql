@@ -1,6 +1,6 @@
 CREATE TABLE monitoring_center.pools
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     tls boolean NOT NULL DEFAULT False,
     domain text NOT NULL,
     port integer NOT NULL,

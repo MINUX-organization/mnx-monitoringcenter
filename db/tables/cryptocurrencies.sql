@@ -1,6 +1,6 @@
 CREATE TABLE monitoring_center.cryptocurrencies
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     short_name text NOT NULL,
     full_name text NOT NULL,
     algorithm_id uuid NOT NULL,
