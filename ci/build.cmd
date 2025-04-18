@@ -32,7 +32,7 @@ if "%NEW_VERSION%"=="" (
 
 :: 1. Start Docker Compose...
 echo Starting Docker Compose...
-docker compose build --no-cacheа
+docker compose build --no-cache
 docker compose up -d
 
 :: 2. Tag Docker image MODULE
