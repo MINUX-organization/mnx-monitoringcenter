@@ -71,19 +71,23 @@ public class UserRigsObserver : IUserRigsObserver
             return mapper.Map<IEnumerable<RigDynamicHardwareIndicators>>(item);
         });
 
-        var miningIndicatorsStream = groupedRigsIndicatorsStream.Select(item =>
         {
             using var serviceScope = serviceScopeFactory.CreateScope();
-            var builder = serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>();
-            return builder.Build(item);
-        })
-        .Concat();
+
+            var miningIndicatorsStream = groupedRigsIndicatorsStream.Select(item =>
+            {
+                var builder = serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>();
+                return builder.Build(item);
+            })
+            .Concat();
+
+            _miningIndicatorsStreamSubscription = miningIndicatorsStream
+                .Subscribe(list => _rigsMiningObserver.SetIndicators(list));
+        }
 
         _hardwareIndicatorsStreamSubscription = hardwareIndicatorsStream
             .Subscribe(list => _rigsHardwareObserver.SetIndicators(list));
 
-        _miningIndicatorsStreamSubscription = miningIndicatorsStream
-            .Subscribe(list => _rigsMiningObserver.SetIndicators(list));
     }
 
     /// <inheritdoc/>
