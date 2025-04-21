@@ -1,5 +1,6 @@
 @echo off
 SET host=77.37.200.24:5554
+SET NUGET-SERVER-API-KEY=x8tldAV12zf2yqfJyiNHocWU4c89JC9A
 
 cd /d %~dp0\..
 
@@ -32,6 +33,6 @@ if exist %projectPath%\bin\Release (
     pause
 )
 
-dotnet nuget push -s http://%host%/v3/index.json -k NUGET-SERVER-API-KEY --skip-duplicate %csprojFile:~0,-8%.%version%.nupkg
+dotnet nuget push -s http://%host%/v3/index.json -k %NUGET-SERVER-API-KEY% --skip-duplicate %csprojFile:~0,-8%.%version%.nupkg
 endlocal
 goto :eof
