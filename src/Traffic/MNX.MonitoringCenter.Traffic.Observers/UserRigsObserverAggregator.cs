@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
+using System.Collections.Concurrent;
+using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using System.Collections.Concurrent;
 
 namespace MNX.MonitoringCenter.Traffic.Observers;
 
@@ -31,17 +31,17 @@ public class UserRigsObserverAggregator : IUserRigsObserverAggregator
     private ConcurrentDictionary<Guid, IUserRigsObserver> _observers = new();
 
     /// <summary>
-    /// Период обновления динамических показателей в секундах.
+    /// Настройки для динамических показателей.
     /// </summary>
-    private readonly TimeSpan _updateDynamicIndicatorsPeriod;
+    private readonly IOptionsMonitor<DynamicIndicatorsOptions> _dynamicIndicatorsMonitor;
 
     public UserRigsObserverAggregator(IServiceScopeFactory serviceScopeFactory,
-                                      IOptions<DynamicIndicatorsOptions> options)
+                                      IOptionsMonitor<DynamicIndicatorsOptions> options)
     {
         _serviceScopeFactory = serviceScopeFactory
             ?? throw new ArgumentNullException(nameof(serviceScopeFactory));
 
-        _updateDynamicIndicatorsPeriod = TimeSpan.FromSeconds(options.Value.UpdatePeriodInSeconds);
+        _dynamicIndicatorsMonitor = options;
     }
 
     /// <inheritdoc/>
@@ -115,7 +115,7 @@ public class UserRigsObserverAggregator : IUserRigsObserverAggregator
     private IUserRigsObserver GetOrCreateObserver(Guid userId)
     {
         return _observers.GetOrAdd(userId,
-            _ => new UserRigsObserver(_serviceScopeFactory, _updateDynamicIndicatorsPeriod));
+            _ => new UserRigsObserver(_serviceScopeFactory, _dynamicIndicatorsMonitor));
     }
 
     /// <summary>

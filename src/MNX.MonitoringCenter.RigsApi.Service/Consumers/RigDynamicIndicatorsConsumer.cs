@@ -42,7 +42,7 @@ public class RigDynamicIndicatorsConsumer : IHostedService
 
         var queue = _bus.QueueDeclare(QUEUE_NAME, configs =>
         {
-            //configs.AsAutoDelete(true);
+            configs.AsAutoDelete(true);
             configs.WithMaxLength(10_000);
         },
         cancellationToken);
