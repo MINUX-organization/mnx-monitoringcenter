@@ -8,5 +8,10 @@ public class DynamicIndicatorsOptions
     /// <summary>
     /// Период обновления показателей в секундах.
     /// </summary>
-    public int UpdatePeriodInSeconds { get; set; } = 2;
+    public int Interval { get; set; } = 2;
+
+    /// <summary>
+    /// Время ожидания.
+    /// </summary>
+    public int TimeOut { get; set; } = 10;
 }

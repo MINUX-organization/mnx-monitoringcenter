@@ -44,7 +44,7 @@ insert into monitoring_center.cryptocurrencies(short_name, full_name, algorithm_
 -- ========== Meowpow ==========
 ('MEWC',  'MeowCoin',         (SELECT id FROM monitoring_center.algorithms WHERE name = 'Meowpow')),
 
--- ========== Cuckatoo32 ==========
+-- ========== CuckaToo32 ==========
 ('GRIN',  'Grin',             (SELECT id FROM monitoring_center.algorithms WHERE name = 'CuckaToo32')),
 
 -- ========== FiroPow ==========

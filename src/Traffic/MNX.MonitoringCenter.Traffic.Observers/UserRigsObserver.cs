@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
-using MNX.MonitoringCenter.Traffic.Observers.Mapping;
-using MNX.MonitoringCenter.Traffic.Observers.Mining;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Microsoft.Extensions.DependencyInjection;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus;
+using MNX.MonitoringCenter.Traffic.Observers.Mining;
+using MNX.MonitoringCenter.Traffic.Observers.Mapping;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware;
+using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
+using Microsoft.Extensions.Options;
 
 namespace MNX.MonitoringCenter.Traffic.Observers;
 
@@ -47,22 +48,38 @@ public class UserRigsObserver : IUserRigsObserver
     private RigsMiningObserver _rigsMiningObserver;
 
     public UserRigsObserver(IServiceScopeFactory serviceScopeFactory,
-                            TimeSpan updateIndicatorsPeriod)
+                            IOptionsMonitor<DynamicIndicatorsOptions> optionsMonitor)
     {
         _rigsHardwareObserver = new();
         _rigsMiningObserver = new();
 
         _rigsIndicatorsStream = new Subject<RigDynamicIndicators>();
 
-        var groupedRigsIndicatorsStream = _rigsIndicatorsStream
-            .Buffer(updateIndicatorsPeriod)
-            .Where(list => list.Any())
-            .Select(list =>
+        var configChanges = Observable.Create<DynamicIndicatorsOptions>(observer =>
+        {
+            observer.OnNext(optionsMonitor.CurrentValue);
+            return optionsMonitor.OnChange(config => observer.OnNext(config));
+        });
+
+        var groupedRigsIndicatorsStream = configChanges
+            .Select(config =>
             {
-                return list.GroupBy(x => x.RigId)
-                           .Select(g => g.OrderByDescending(d => d.SendingDateTime).First())
-                           .ToList();
-            });
+                var period = TimeSpan.FromSeconds(config.Interval);
+                return Observable.Interval(period).StartWith(0);
+            })
+            .Switch()
+            .Publish(trigger =>
+                _rigsIndicatorsStream.Window(trigger)
+                .SelectMany(window =>
+                {
+                    return window.ToList().Select(list =>
+                    {
+                        return list.GroupBy(x => x.RigId)
+                                   .Select(g => g.OrderByDescending(d => d.SendingDateTime).First())
+                                   .ToList();
+                    });
+                })
+            );
 
         var hardwareIndicatorsStream = groupedRigsIndicatorsStream.Select(item =>
         {
@@ -71,23 +88,18 @@ public class UserRigsObserver : IUserRigsObserver
             return mapper.Map<IEnumerable<RigDynamicHardwareIndicators>>(item);
         });
 
+        var miningIndicatorsStream = groupedRigsIndicatorsStream.SelectMany(async item =>
         {
             using var serviceScope = serviceScopeFactory.CreateScope();
+            var builder = serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>();
+            return await builder.Build(item);
+        });
 
-            var miningIndicatorsStream = groupedRigsIndicatorsStream.Select(item =>
-            {
-                var builder = serviceScope.ServiceProvider.GetRequiredService<MiningIndicatorsBuilder>();
-                return builder.Build(item);
-            })
-            .Concat();
-
-            _miningIndicatorsStreamSubscription = miningIndicatorsStream
-                .Subscribe(list => _rigsMiningObserver.SetIndicators(list));
-        }
-
+        _miningIndicatorsStreamSubscription = miningIndicatorsStream
+            .Subscribe(list => _rigsMiningObserver.SetIndicators(list));
+        
         _hardwareIndicatorsStreamSubscription = hardwareIndicatorsStream
             .Subscribe(list => _rigsHardwareObserver.SetIndicators(list));
-
     }
 
     /// <inheritdoc/>
