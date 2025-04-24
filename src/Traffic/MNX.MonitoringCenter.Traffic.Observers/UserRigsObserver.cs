@@ -9,7 +9,6 @@ using MNX.MonitoringCenter.Traffic.Observers.Hardware;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
 using Microsoft.Extensions.Options;
-using System.Reactive.Threading.Tasks;
 
 namespace MNX.MonitoringCenter.Traffic.Observers;
 
@@ -99,10 +98,8 @@ public class UserRigsObserver : IUserRigsObserver
         _miningIndicatorsStreamSubscription = miningIndicatorsStream
             .Subscribe(list => _rigsMiningObserver.SetIndicators(list));
         
-
         _hardwareIndicatorsStreamSubscription = hardwareIndicatorsStream
             .Subscribe(list => _rigsHardwareObserver.SetIndicators(list));
-
     }
 
     /// <inheritdoc/>
