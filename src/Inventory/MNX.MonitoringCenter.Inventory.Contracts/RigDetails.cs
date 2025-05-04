@@ -25,17 +25,17 @@ public class RigDetails
     /// <summary>
     /// Mac адрес.
     /// </summary>
-    public required string Mac {  get; init; }
+    public string? Mac {  get; init; }
 
     /// <summary>
     /// Глобальный IP адрес.
     /// </summary>
-    public required string GlobalIP { get; init; }
+    public string? GlobalIP { get; init; }
 
     /// <summary>
     /// Локальный IP адрес.
     /// </summary>
-    public required string LocalIP { get; init; }
+    public string? LocalIP { get; init; }
 
     /// <summary>
     /// Программное обеспечение.

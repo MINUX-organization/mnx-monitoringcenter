@@ -16,17 +16,17 @@ public class GetGpusQueryResponse
     /// <summary>
     /// PCI.
     /// </summary>
-    public required Pci Pci { get; init; }
+    public Pci? Pci { get; init; }
 
     /// <summary>
     /// Информация.
     /// </summary>
-    public required GpuInformation Information { get; init; }
+    public GpuInformation? Information { get; init; }
 
     /// <summary>
     /// Название рига.
     /// </summary>
-    public required string RigName { get; init; }
+    public string? RigName { get; init; }
 
     /// <summary>
     /// Версия драйвера для работы с видеокартой.

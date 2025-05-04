@@ -52,14 +52,14 @@ public class GetCpusQueryHandler : IStreamRequestHandler<GetCpusQuery, GetCpusQu
             // Берём последний CPU, так как он из последней инвентаризации.
             // Если риг выключили, то у него будет последняя актуальная инвентаризация,
             // пока его не включат, даже если CPU уже перенесли на другой риг.
-            var inventoryCpu = inventoryCpus.Last(x => x.Id == cpu.Id);
+            var inventoryCpu = inventoryCpus.LastOrDefault(x => x.Id == cpu.Id);
 
             yield return new GetCpusQueryResponse()
             {
                 Id = cpu.Id,
-                Pci = inventoryCpu.Pci,
-                Information = inventoryCpu.Information,
-                RigName = inventoryCpu.RigName,
+                Pci = inventoryCpu?.Pci,
+                Information = inventoryCpu?.Information,
+                RigName = inventoryCpu?.RigName,
                 FlightSheetName = cpu.FlightSheetName,
                 PresetName = cpu.PresetName,
                 MinerName = cpu.MinerName,

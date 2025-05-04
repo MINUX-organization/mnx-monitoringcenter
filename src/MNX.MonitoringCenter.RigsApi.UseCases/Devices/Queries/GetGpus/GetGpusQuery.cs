@@ -53,15 +53,15 @@ public class GetGpusQueryHandler : IStreamRequestHandler<GetGpusQuery, GetGpusQu
             // Берём последнюю карту, так как она из последней инвентаризации.
             // Если риг выключили, то у него будет последняя актуальная инвентаризация,
             // пока его не включат, даже если карты уже перенесли на другой риг.
-            var inventoryGpu = inventoryGpus.Last(x => x.Id == gpu.Id);
+            var inventoryGpu = inventoryGpus.LastOrDefault(x => x.Id == gpu.Id);
 
             yield return new GetGpusQueryResponse()
             {
                 Id = gpu.Id,
-                Pci = inventoryGpu.Pci,
-                Information = inventoryGpu.Information,
-                RigName = inventoryGpu.RigName,
-                DriverVersion = inventoryGpu.DriverVersion,
+                Pci = inventoryGpu?.Pci,
+                Information = inventoryGpu?.Information,
+                RigName = inventoryGpu?.RigName,
+                DriverVersion = inventoryGpu?.DriverVersion,
                 FlightSheetName = gpu.FlightSheetName,
                 PresetName = gpu.PresetName,
                 MinerName = gpu.MinerName,

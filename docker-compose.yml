@@ -9,7 +9,7 @@ services:
             context: .
             dockerfile: ./src/MNX.MonitoringCenter.RigsApi.Service/Dockerfile
             args:
-                - nuget_server=http://77.37.200.24:5554/v3/index.json
+                - nuget_server=http://77.37.200.24:8931/v3/index.json
         restart: unless-stopped
         ports:
              - "7101:8080"

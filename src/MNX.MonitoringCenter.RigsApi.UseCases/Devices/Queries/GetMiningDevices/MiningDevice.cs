@@ -25,7 +25,7 @@ public class MiningDevice
     /// <summary>
     /// Название рига.
     /// </summary>
-    public required string RigName { get; init; }
+    public string? RigName { get; init; }
 
     /// <summary>
     /// Тип майнинг устройства.
