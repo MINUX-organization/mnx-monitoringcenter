@@ -43,10 +43,10 @@ public class GetAvailableMinersQueryHandler : IStreamRequestHandler<GetAvailable
     }
 
     public async IAsyncEnumerable<MinerModel> Handle(GetAvailableMinersQuery request,
-        [EnumeratorCancellation] CancellationToken cancellationToken)
+                                                     [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        await foreach (var miner in _repository.GetAvailableMiners(request.Specification)
-                           .WithCancellation(cancellationToken))
+        var miners = _repository.GetAvailableMiners(request.Specification);
+        await foreach (var miner in miners.WithCancellation(cancellationToken))
         {
             yield return _mapper.Map<MinerModel>(miner);
         }

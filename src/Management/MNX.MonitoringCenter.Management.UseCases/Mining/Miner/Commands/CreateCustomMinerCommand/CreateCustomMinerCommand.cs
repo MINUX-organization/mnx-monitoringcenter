@@ -21,11 +21,10 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
     private readonly IQueueBusClient _bus;
     private readonly IRigRepository _rigRepository;
 
-    public CreateCustomMinerCommandHandler(
-        IMinerRepository minerRepository, 
-        IMapper mapper, 
-        IQueueBusClient bus,
-        IRigRepository rigRepository)
+    public CreateCustomMinerCommandHandler(IMinerRepository minerRepository, 
+                                           IMapper mapper, 
+                                           IQueueBusClient bus,
+                                           IRigRepository rigRepository)
     {
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
