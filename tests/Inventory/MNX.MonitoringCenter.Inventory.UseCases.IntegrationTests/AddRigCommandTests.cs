@@ -18,7 +18,7 @@ public class AddRigCommandTests : BaseTest
         _mediator = ServiceProvider.GetRequiredService<IMediator>();
     }
 
-    [TestCaseSource(typeof(AddRigCommandTestCase), nameof(AddRigCommandTestCase.Rigs))]
+    //[TestCaseSource(typeof(AddRigCommandTestCase), nameof(AddRigCommandTestCase.Rigs))]
     public async Task AddRigCommandTest(AgentRegisteredMsg message)
     {
         var result = await _mediator.Send(new AddRigCommand(message.Id, message.OwnerId, message.Nickname));

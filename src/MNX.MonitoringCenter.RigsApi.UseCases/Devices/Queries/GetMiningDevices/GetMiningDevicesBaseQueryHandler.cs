@@ -71,7 +71,7 @@ public abstract class GetMiningDevicesBaseQueryHandler
             Manufacturer = model.Manufacturer,
             Model = model.Model,
             Type = model.Type,
-            RigName = rigs.First(rig => rig.Id == model.RigId).Name,
+            RigName = rigs.FirstOrDefault(rig => rig.Id == model.RigId)?.Name,
             FlightSheetName = model.FlightSheetName,
             PresetName = model.PresetName,
             FlightSheetConfirmationState = model.FlightSheetConfirmationState,
@@ -82,7 +82,7 @@ public abstract class GetMiningDevicesBaseQueryHandler
         if (device.Type == "GPU")
         {
             var inventoryGpus = await GetInventoryGpus(userId, cancellationToken);
-            device.PciBus = inventoryGpus.Last(x => x.Id == device.Id).Pci.Bus;
+            device.PciBus = inventoryGpus.LastOrDefault(x => x.Id == device.Id)?.Pci.Bus;
         }
 
         return device;

@@ -51,9 +51,9 @@ public class RigRepository : IRigRepository
                 Id = rig.Id,
                 OwnerId = rig.OwnerId,
                 Name = rig.Name,
-                Mac = rig.CurrentInventory!.NetworkAdapters.First().Information.Mac,
-                GlobalIP = rig.CurrentInventory!.NetworkAdapters.First().GlobalIP!,
-                LocalIP = rig.CurrentInventory!.NetworkAdapters.First().LocalIP!,
+                Mac = rig.CurrentInventory!.NetworkAdapters.FirstOrDefault()?.Information.Mac,
+                GlobalIP = rig.CurrentInventory!.NetworkAdapters.FirstOrDefault()?.GlobalIP!,
+                LocalIP = rig.CurrentInventory!.NetworkAdapters.FirstOrDefault()?.LocalIP!,
                 Software = _mapper.Map<SoftwareInventory>(rig.CurrentInventory!.Software),
                 CountDevices = new ModelWithCountDevices()
                 {

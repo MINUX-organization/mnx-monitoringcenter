@@ -39,8 +39,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffi
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffic.Observers", "src\Traffic\MNX.MonitoringCenter.Traffic.Observers\MNX.MonitoringCenter.Traffic.Observers.csproj", "{53A63ABC-5A84-4278-B1AD-9B516813C844}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffic.Controllers", "src\Traffic\MNX.MonitoringCenter.Traffic.Controllers\MNX.MonitoringCenter.Traffic.Controllers.csproj", "{67AE83E8-A17A-4EAD-84ED-9D05A7AD8A9D}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Traffic.Integration", "src\Traffic\MNX.MonitoringCenter.Traffic.Integration\MNX.MonitoringCenter.Traffic.Integration.csproj", "{018969AC-0932-4ECE-873C-AFA8E9FE0405}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Inventory.Contracts.Requests", "src\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj", "{5D7E35A9-BCD9-4FB4-8EDB-8C2865BE1142}"
@@ -63,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsAp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RigsApi", "RigsApi", "{0B788845-9795-4316-881A-7D19D0FC9E8E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.RigConsumer_Client", "tests\RigsApi\ApplyFlightSheetSettingsPublisher\MNX.MonitoringCenter.RigsApi.RigConsumer_Client.csproj", "{82B60409-D210-4059-A222-5CD94D34DDD3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.RigsApi.RigConsumer_Client", "tests\RigsApi\ApplyFlightSheetSettingsPublisher\MNX.MonitoringCenter.RigsApi.RigConsumer_Client.csproj", "{82B60409-D210-4059-A222-5CD94D34DDD3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management", "Management", "{F319355F-F759-4FA1-AB86-0932221B37C6}"
 EndProject
@@ -123,10 +121,6 @@ Global
 		{53A63ABC-5A84-4278-B1AD-9B516813C844}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{53A63ABC-5A84-4278-B1AD-9B516813C844}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{53A63ABC-5A84-4278-B1AD-9B516813C844}.Release|Any CPU.Build.0 = Release|Any CPU
-		{67AE83E8-A17A-4EAD-84ED-9D05A7AD8A9D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{67AE83E8-A17A-4EAD-84ED-9D05A7AD8A9D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{67AE83E8-A17A-4EAD-84ED-9D05A7AD8A9D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{67AE83E8-A17A-4EAD-84ED-9D05A7AD8A9D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{018969AC-0932-4ECE-873C-AFA8E9FE0405}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{018969AC-0932-4ECE-873C-AFA8E9FE0405}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{018969AC-0932-4ECE-873C-AFA8E9FE0405}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -192,7 +186,6 @@ Global
 		{E2CFFD40-3E21-4015-AC1D-D208285408D0} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
 		{13192450-A4C7-40C3-9922-8C91F9705B80} = {E2CFFD40-3E21-4015-AC1D-D208285408D0}
 		{53A63ABC-5A84-4278-B1AD-9B516813C844} = {E2CFFD40-3E21-4015-AC1D-D208285408D0}
-		{67AE83E8-A17A-4EAD-84ED-9D05A7AD8A9D} = {E2CFFD40-3E21-4015-AC1D-D208285408D0}
 		{018969AC-0932-4ECE-873C-AFA8E9FE0405} = {E2CFFD40-3E21-4015-AC1D-D208285408D0}
 		{5D7E35A9-BCD9-4FB4-8EDB-8C2865BE1142} = {87F9E337-4D37-415A-9BC2-43FB5AC423A9}
 		{EA567803-31A8-49E4-85A8-17B3B53BB474} = {9C628EEF-6EAA-4451-83D8-74D9E717C558}

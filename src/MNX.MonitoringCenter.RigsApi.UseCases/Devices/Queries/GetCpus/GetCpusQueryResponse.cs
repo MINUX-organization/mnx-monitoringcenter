@@ -16,17 +16,17 @@ public class GetCpusQueryResponse
     /// <summary>
     /// PCI.
     /// </summary>
-    public required Pci Pci { get; init; }
+    public Pci? Pci { get; init; }
 
     /// <summary>
     /// Информация.
     /// </summary>
-    public required CpuInformation Information { get; init; }
+    public CpuInformation? Information { get; init; }
 
     /// <summary>
     /// Название рига.
     /// </summary>
-    public required string RigName { get; init; }
+    public string? RigName { get; init; }
 
     /// <summary>
     /// Название полётного листа.

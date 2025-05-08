@@ -100,7 +100,7 @@ public partial class InventoryRepository : IGpuRepository
             return Task.FromResult<GpuRestrictions?>(null);
         }
 
-        var manufacturer = gpuName.ToLower().Split().First();
+        var manufacturer = gpuName.ToLower().Split().FirstOrDefault() ?? string.Empty;
         var model = string.Join(" ", gpuName.ToLower().Split().Skip(1));
 
         return _context.Gpu
@@ -116,9 +116,10 @@ public partial class InventoryRepository : IGpuRepository
     {
         return _context.Gpu
             .AsNoTracking()
+            .OrderBy(x => x.Id)
             .Where(x => x.Id == gpuId)
             .Select(x => x.Restrictions)
-            .FirstOrDefaultAsync();
+            .LastOrDefaultAsync();
     }
 
     /// <inheritdoc/>

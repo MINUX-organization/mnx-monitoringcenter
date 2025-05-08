@@ -41,19 +41,24 @@ public class ConfirmFlightSheetCommandHandler : IRequestHandler<ConfirmFlightShe
     public async Task<Result<Unit>> Handle(ConfirmFlightSheetCommand request,
                                            CancellationToken cancellationToken)
     {
+        var deviceId = Guid.Empty;
         if (request.SuccessfullyMiningDevicesIds.Length != 0)
         {
             await _miningDeviceRepository.ConfirmFlightSheet(request.SuccessfullyMiningDevicesIds);
+            deviceId = request.SuccessfullyMiningDevicesIds[0];
         }
 
         if (request.UnsuccessfullyMiningDevicesIds.Length != 0)
         {
             await _miningDeviceRepository
                 .SetFlightSheetConfirmationStateToError(request.UnsuccessfullyMiningDevicesIds);
+            deviceId = request.UnsuccessfullyMiningDevicesIds[0];
         }
 
-        var someDevice = await _miningDeviceRepository.GetById(request.SuccessfullyMiningDevicesIds[0],
-                                                               cancellationToken);
+        if (deviceId == Guid.Empty)
+            return Result<Unit>.Empty();
+
+        var someDevice = await _miningDeviceRepository.GetById(deviceId, cancellationToken);
         var userId = someDevice.OwnerId;
 
         if (userId == null)

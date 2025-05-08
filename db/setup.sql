@@ -42,4 +42,6 @@
 \ir 'data_tables/algorithms.sql'
 \ir 'data_tables/miners.sql'
 \ir 'data_tables/miner_algorithms.sql'
+\ir 'data_tables/cryptocurrencies.sql'
+\ir 'data_tables/pools.sql'
 \ir 'data_tables/version_info.sql'

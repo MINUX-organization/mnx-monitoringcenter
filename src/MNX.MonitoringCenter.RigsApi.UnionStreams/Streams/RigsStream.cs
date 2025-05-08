@@ -9,6 +9,8 @@ using MNX.MonitoringCenter.RigsApi.Contracts.Args;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
+using MNX.Application.UseCases.Mediator;
+using Microsoft.Extensions.Options;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 
@@ -28,21 +30,40 @@ public class RigsStream : Abstractions.Stream
         Guid userId,
         string connectionId,
         IUserRigsObserverAggregator userRigsObserverAggregator,
-        IServiceScopeFactory scope)
+        IServiceScopeFactory scope,
+        IOptionsMonitor<DynamicIndicatorsOptions> optionsMonitor)
     {
         _serviceScopeFactory = scope;
 
         _userRigsObserverAggregator = userRigsObserverAggregator;
 
-        _subscription = Subject
-            .Buffer(TimeSpan, SubscriptionTypes.Length)
-            .Select(item => OnNewDataReceived(item, userId))
-            .Concat()
-            .Subscribe(
-                response => _channel.Writer.TryWrite(response),
-                ex => _channel.Writer.TryComplete(ex),
-                () => _channel.Writer.TryComplete()
+        var configChanges = Observable.Create<DynamicIndicatorsOptions>(observer =>
+        {
+            observer.OnNext(optionsMonitor.CurrentValue);
+            return optionsMonitor.OnChange(config => observer.OnNext(config));
+        });
+
+        var dynamicBufferedStream = configChanges
+            .Select(config =>
+            {
+                var period = TimeSpan.FromSeconds(config.TimeOut);
+                return Observable.Interval(period).StartWith(0);
+            })
+            .Switch()
+            .Publish(trigger =>
+                Subject.Window(trigger)
+                    .SelectMany(window =>
+                    {
+                        return window.Take(SubscriptionTypes.Length).ToList();
+                    })
+                    .Select(list => OnNewDataReceived(list, userId))
+                    .Concat()
             );
+
+        _subscription = dynamicBufferedStream.Subscribe(
+            response => _channel.Writer.TryWrite(response),
+            ex => _channel.Writer.TryComplete(ex),
+            () => _channel.Writer.TryComplete());
 
         foreach (var subscriptionType in SubscriptionTypes)
         {

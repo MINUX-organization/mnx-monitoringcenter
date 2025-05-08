@@ -32,28 +32,39 @@ if "%NEW_VERSION%"=="" (
 
 :: 1. Start Docker Compose...
 echo Starting Docker Compose...
+docker compose build --no-cache
 docker compose up -d
 
-:: 2. Tag Docker image
+:: 2. Tag Docker image MODULE
 echo Tagging Docker image with version %NEW_VERSION%...
-docker tag rigs-api 77.37.200.24:5000/rigs-api:%NEW_VERSION%-dev
+docker tag 77.37.200.24:5000/rigs-api 77.37.200.24:5000/rigs-api:%NEW_VERSION%-dev
 
-:: 3. Tag Docker latest
+:: 3. Tag Docker latest DB
 echo Tagging Docker image with version latest..
-docker tag rigs-api 77.37.200.24:5000/rigs-api:latest
+docker tag 77.37.200.24:5000/monitoring-center-db 77.37.200.24:5000/monitoring-center-db:%NEW_VERSION%-dev
 
-:: 4. Push Docker image
+:: 4. Push Docker image MODULE
 echo Pushing Docker image with version %NEW_VERSION%...
 docker push 77.37.200.24:5000/rigs-api:%NEW_VERSION%-dev
 
-:: 5. Push Docker latest
+:: 5. Push Docker latest MODULE
 echo Pushing Docker image with version latest
 docker push 77.37.200.24:5000/rigs-api:latest
 
-echo Script completed!
+:: 6. Push Docker image DB
+echo Pushing Docker image with version %NEW_VERSION%...
+docker push 77.37.200.24:5000/monitoring-center-db:%NEW_VERSION%-dev
 
-echo %MAJOR% > %VERSION_FILE%
-echo %MINOR% >> %VERSION_FILE%
-echo %PATCH% >> %VERSION_FILE%
+:: 7. Push Docker latest DB
+echo Pushing Docker image with version latest
+docker push 77.37.200.24:5000/monitoring-center-db:latest
+
+(
+    echo %MAJOR%
+    echo %MINOR%
+    echo %PATCH%
+) > %VERSION_FILE%
+
+echo Script completed!
 
 pause
