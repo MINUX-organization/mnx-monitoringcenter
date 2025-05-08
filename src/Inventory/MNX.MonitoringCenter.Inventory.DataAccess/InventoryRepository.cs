@@ -71,7 +71,7 @@ public partial class InventoryRepository
     /// <param name="startPeriod"> Начало периода. </param>
     /// <param name="endPeriod"> Конец периода. </param>
     /// <returns> Инвентаризация. </returns>
-    private IQueryable<RigInventory.RigInventory> GetInventorySliceForAPeriod(InventorySpecification specification,
+    private IQueryable<Rigs.RigInventory> GetInventorySliceForAPeriod(InventorySpecification specification,
                                                                               DateTimeOffset startPeriod,
                                                                               DateTimeOffset endPeriod)
     {
@@ -83,7 +83,7 @@ public partial class InventoryRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Инвентаризация. </returns>
-    private IQueryable<RigInventory.RigInventory> GetInventoryBySpecification(InventorySpecification specification)
+    private IQueryable<Rigs.RigInventory> GetInventoryBySpecification(InventorySpecification specification)
     {
         return _context.RigInventory.AsNoTrackingWithIdentityResolution()
                                     .Include(inventory => inventory.Rig)
@@ -91,10 +91,10 @@ public partial class InventoryRepository
                                     .Actualize(specification);
     }
 
-    private RigInventory.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
+    private Rigs.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
                                                    RigInventoryModel inventory)
     {
-        return new RigInventory.RigInventory()
+        return new Rigs.RigInventory()
         {
             RigId = rigId,
             CreatedDateTime = createdDate,

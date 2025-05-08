@@ -1,12 +1,12 @@
-﻿using EasyNetQ.AutoSubscribe;
-using MediatR;
+﻿using MediatR;
+using EasyNetQ.AutoSubscribe;
 using MNX.Application.Bus.RabbitMQ.Agent;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
-using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 

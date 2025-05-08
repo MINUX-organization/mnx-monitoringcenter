@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using System.Reactive.Linq;
 using System.Threading.Channels;
+using Microsoft.Extensions.Options;
 using MNX.Application.UseCases.Mediator;
 using MNX.MonitoringCenter.RigsApi.Contracts;
 using MNX.MonitoringCenter.Traffic.Observers;
@@ -9,8 +10,6 @@ using MNX.MonitoringCenter.RigsApi.Contracts.Args;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
-using MNX.Application.UseCases.Mediator;
-using Microsoft.Extensions.Options;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Streams;
 

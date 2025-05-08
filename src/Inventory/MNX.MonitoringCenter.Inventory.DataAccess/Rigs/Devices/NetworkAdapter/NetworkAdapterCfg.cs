@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.NetworkAdapter;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.NetworkAdapter;
 
 /// <summary>
 /// Конфигурация для таблицы с сетевыми адаптерами.

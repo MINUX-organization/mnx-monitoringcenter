@@ -4,7 +4,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpuInfo;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
-using MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;

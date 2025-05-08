@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Gpu;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
 
 /// <summary>
 /// Конфигурация таблицы с видеокартами.

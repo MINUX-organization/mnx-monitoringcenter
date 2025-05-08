@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using System.Reactive.Linq;
 using System.Threading.Channels;
+using Microsoft.Extensions.Options;
 using MNX.Application.UseCases.Mediator;
 using MNX.MonitoringCenter.Traffic.Observers;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,12 +34,11 @@ public class MonitoringStream : Abstractions.Stream
         SubscriptionType.GeneralHardwareRigsIndicators,
     };
 
-    public MonitoringStream(
-        Guid userId,
-        string connectionId,
-        IUserRigsObserverAggregator userRigsObserverAggregator,
-        IServiceScopeFactory scope,
-        IOptionsMonitor<DynamicIndicatorsOptions> optionsMonitor)
+    public MonitoringStream(Guid userId,
+                            string connectionId,
+                            IUserRigsObserverAggregator userRigsObserverAggregator,
+                            IServiceScopeFactory scope,
+                            IOptionsMonitor<DynamicIndicatorsOptions> optionsMonitor)
     {
         _serviceScopeFactory = scope;
         _userRigsObserverAggregator = userRigsObserverAggregator;

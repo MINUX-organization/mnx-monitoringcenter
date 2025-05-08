@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
 /// <summary>
 /// Конфигурация для таблицы с инвентаризацией ригов.

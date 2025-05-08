@@ -1,9 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 using System.Text.Json;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Software;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 
 /// <summary>
 /// Конфигурация для таблицы с инвентаризацией программного обеспечения.

@@ -3,10 +3,9 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
 /// <summary>
 /// Инвентаризация рига.
@@ -71,7 +70,7 @@ public class RigInventory : IEquatable<RigInventory>
     /// <summary>
     /// Программное обеспечение.
     /// </summary>
-    public required SoftwareInventoryDto Software { get; set; } 
+    public required SoftwareInventoryDto Software { get; set; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)
