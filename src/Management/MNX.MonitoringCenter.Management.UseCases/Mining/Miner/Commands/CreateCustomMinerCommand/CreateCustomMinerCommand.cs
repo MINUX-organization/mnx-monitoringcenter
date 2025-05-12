@@ -11,9 +11,17 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateC
 
 using Miner = Core.Mining.Miner.Miner;
 
+/// <summary>
+/// Команда создания пользовательского майнера.
+/// </summary>
+/// <param name="Model"> Модель ввода данных кастомного майнера. </param>
+/// <param name="UserId"> Идентификатор пользователя. </param>
 public sealed record CreateCustomMinerCommand(MinerInputModel Model, Guid UserId)
     : IUserableValidatableCommand<MinerModel>;
 
+/// <summary>
+/// Обработчик команды <see cref="CreateCustomMinerCommand"/>.
+/// </summary>
 public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMinerCommand, Result<MinerModel>>
 {
     private readonly IMinerRepository _minerRepository;
@@ -48,6 +56,7 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
             SupportedDevices = model.SupportedDevices,
             PoolTemplate = model.PoolTemplate,
             WalletWorkerTemplate = model.WalletWorkerTemplate,
+            MiningMode = model.MiningMode,
             OwnerId = request.UserId
         };
         
@@ -59,7 +68,6 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
 
         await _bus.Enqueue(new InstallCustomMinerCommand(
                 miner.Name,
-                request.UserId,
                 miner.Version,
                 miner.InstallationUrl,
                 miner.PoolTemplate,

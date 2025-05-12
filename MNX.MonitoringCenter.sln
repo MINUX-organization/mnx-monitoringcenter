@@ -61,7 +61,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsAp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "RigsApi", "RigsApi", "{0B788845-9795-4316-881A-7D19D0FC9E8E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.RigsApi.RigConsumer_Client", "tests\RigsApi\ApplyFlightSheetSettingsPublisher\MNX.MonitoringCenter.RigsApi.RigConsumer_Client.csproj", "{82B60409-D210-4059-A222-5CD94D34DDD3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.RigConsumer_Client", "tests\RigsApi\ApplyFlightSheetSettingsPublisher\MNX.MonitoringCenter.RigsApi.RigConsumer_Client.csproj", "{82B60409-D210-4059-A222-5CD94D34DDD3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management", "Management", "{F319355F-F759-4FA1-AB86-0932221B37C6}"
 EndProject

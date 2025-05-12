@@ -25,11 +25,6 @@ public class Miner : IEquatable<Miner>
     public required string Version { get; init; }
 
     /// <summary>
-    /// Тип майнера.
-    /// </summary>
-    public MinerTypeEnum Type { get; init; }
-
-    /// <summary>
     /// Поддерживаемые комбинации типа устройств и производителя.
     /// </summary>
     public DeviceTypeManufacturerCombination SupportedDevices { get; set; }
@@ -45,9 +40,13 @@ public class Miner : IEquatable<Miner>
     public List<MinerAlgorithm> SupportedAlgorithms { get; init; } = [];
 
     #region Only for custom miners
+
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
+    /// <remarks>
+    /// Если имеет значение NULL, майнер является доменным.
+    /// </remarks>
     public Guid? OwnerId { get; init; }
 
     /// <summary>
@@ -65,6 +64,15 @@ public class Miner : IEquatable<Miner>
     /// </summary>
     public string? WalletWorkerTemplate { get; set; }
     #endregion
+
+    /// <summary>
+    /// Проверить, является ли майнер доменным.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsDomain()
+    {
+        return OwnerId is null;
+    }
 
     /// <summary>
     /// Получить признак поддержки майнером переданной конфигурации.

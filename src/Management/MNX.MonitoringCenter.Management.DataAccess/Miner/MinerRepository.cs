@@ -25,7 +25,6 @@ public class MinerRepository : IMinerRepository
                        .AsNoTrackingWithIdentityResolution()
                        .Include(miner => miner.SupportedAlgorithms)
                        .Filter(specification)
-                       .OrderBy(miner => miner.Type)
                        .AsAsyncEnumerable();
     }
 
@@ -50,14 +49,15 @@ public class MinerRepository : IMinerRepository
     public Task<bool> Exists(Guid id, CancellationToken cancellationToken)
     {
         return _context.Miners
-            .AsNoTracking()
-            .AnyAsync(x => x.Id == id, cancellationToken);
+                       .AsNoTracking()
+                       .AnyAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
     public Task<bool> Exists(Guid minerId, Guid userId, string minerName, CancellationToken cancellationToken)
     {
-        return _context.Miners.AsNoTracking()
+        return _context.Miners
+                       .AsNoTracking()
                        .AnyAsync(x => x.OwnerId == userId &&
                                  x.Name == minerName &&
                                  x.Id != minerId,

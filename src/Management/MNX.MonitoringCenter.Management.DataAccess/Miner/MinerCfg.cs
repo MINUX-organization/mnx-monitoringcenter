@@ -14,8 +14,5 @@ internal class MinerCfg : IEntityTypeConfiguration<Core.Mining.Miner.Miner>
 
         builder.Property(x => x.MiningMode)
             .HasConversion<string>();
-
-        builder.Property(x => x.Type)
-            .HasConversion<string>();
     }
 }

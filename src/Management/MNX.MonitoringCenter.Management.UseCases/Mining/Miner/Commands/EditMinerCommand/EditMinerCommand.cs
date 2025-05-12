@@ -13,7 +13,7 @@ using Miner = Core.Mining.Miner.Miner;
 /// </summary>
 /// <param name="Model"> Модель ввода майнера. </param>
 /// <param name="MinerId"> Идентификатор майнера. </param>
-/// <param name="UserId"> ИДентификатор пользователя. </param>
+/// <param name="UserId"> Идентификатор пользователя. </param>
 public sealed record EditMinerCommand(MinerInputModel Model, Guid MinerId, Guid UserId)
     : IUserableValidatableCommand<Unit>;
 
@@ -39,9 +39,7 @@ public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<
         {
             return Result<Unit>.Invalid($"Miner with id equaled {request.MinerId} was not found");
         }
-
-        var miner = await _minerRepository.GetMinerById(request.MinerId, cancellationToken);
-
+        
         if (await _minerRepository.Exists(request.MinerId, request.UserId, model.Name, cancellationToken))
         {
             return Result<Unit>.Conflict($"Miner with name {model.Name} already exists");

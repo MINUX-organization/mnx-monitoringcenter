@@ -1,5 +1,4 @@
-﻿using AutoMapper;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Management.UseCases.Mapping;
 
 namespace MNX.MonitoringCenter.Management.Integration;
@@ -16,8 +15,8 @@ public static class MappingProfileExtensions
     /// <returns> Коллекция сервисов. </returns>
     public static IServiceCollection AddUseCaseMappingProfile(this IServiceCollection services)
     {
-        services.AddAutoMapper(cfg => cfg.AddProfiles(new List<Profile>()
-        {
+        services.AddAutoMapper(cfg => cfg.AddProfiles(
+        [
             new CryptocurrencyMappingProfile(),
             new FlightSheetMappingProfile(),
             new MinerMappingProfile(),
@@ -27,7 +26,7 @@ public static class MappingProfileExtensions
             new PoolMappingProfile(),
             new PresetMappingProfile(),
             new WalletMappingProfile()
-        }));
+        ]));
 
         return services;
     }

@@ -3,8 +3,16 @@ using MNX.Application.UseCases.Results;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.DeleteMinerCommand;
 
+/// <summary>
+/// Команда удаления пользовательского майнера.
+/// </summary>
+/// <param name="MinerId"> Идентификатор майнера. </param>
+/// <param name="UserId"> Идентификатор пользователя. </param>
 public record DeleteMinerCommand(Guid MinerId, Guid UserId) : IRequest<Result<Unit>>;
 
+/// <summary>
+/// Обработчик команды <see cref="DeleteMinerCommand"/>.
+/// </summary>
 public class DeleteMinerCommandHandler : IRequestHandler<DeleteMinerCommand, Result<Unit>>
 {
     private readonly IMinerRepository _minerRepository;
@@ -16,6 +24,14 @@ public class DeleteMinerCommandHandler : IRequestHandler<DeleteMinerCommand, Res
 
     public async Task<Result<Unit>> Handle(DeleteMinerCommand request, CancellationToken cancellationToken)
     {
+        var miner = await _minerRepository.GetMinerById(request.MinerId, cancellationToken);
+
+        if (miner is null)
+            return Result<Unit>.Empty();
+
+        if (miner.IsDomain())
+            return Result<Unit>.Invalid("Domain miners cannot be deleted");
+
         await _minerRepository.Remove(request.MinerId, request.UserId, cancellationToken);
         return Result<Unit>.Empty();
     }
