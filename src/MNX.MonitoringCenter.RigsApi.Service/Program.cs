@@ -9,6 +9,7 @@ using MNX.MonitoringCenter.Inventory.Integration;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Integration;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
+using MNX.MonitoringCenter.RigsApi.Service.EventHandlers;
 using MNX.MonitoringCenter.RigsApi.Service.Hubs;
 using MNX.MonitoringCenter.RigsApi.Service.Hubs.Notification;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
@@ -179,7 +180,10 @@ internal class Program
 
         services.AddHostedService<RigDynamicIndicatorsConsumer>();
 
-        services.AddMediatR(x => x.RegisterServicesFromAssembly(typeof(GetGpusQuery).Assembly));
+        services.AddMediatR(x => x.RegisterServicesFromAssemblies(
+            typeof(GetGpusQuery).Assembly,
+            typeof(RigInventorySavedEventHandler).Assembly
+            ));
 
         services.AddSignalR();
 
