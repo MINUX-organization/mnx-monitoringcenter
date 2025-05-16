@@ -30,7 +30,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<MiningDeviceInfo> GetAvailable(Specification specification)
     {
-        return GetDevicesQuery(specification).AsNoTrackingWithIdentityResolution().AsAsyncEnumerable();
+        return GetDevicesQuery(specification).AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>

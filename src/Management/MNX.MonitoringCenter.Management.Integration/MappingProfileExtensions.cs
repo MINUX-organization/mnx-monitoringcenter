@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using MNX.MonitoringCenter.Management.DataAccess;
 using MNX.MonitoringCenter.Management.UseCases.Mapping;
 
 namespace MNX.MonitoringCenter.Management.Integration;
@@ -25,7 +26,8 @@ public static class MappingProfileExtensions
             new OverclockingMappingProfile(),
             new PoolMappingProfile(),
             new PresetMappingProfile(),
-            new WalletMappingProfile()
+            new WalletMappingProfile(),
+            new DbMappingProfile()
         ]));
 
         return services;

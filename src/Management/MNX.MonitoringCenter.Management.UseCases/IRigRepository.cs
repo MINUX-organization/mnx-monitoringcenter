@@ -34,5 +34,5 @@ public interface IRigRepository
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <returns> Список идентификаторов ригов. </returns>
-    IAsyncEnumerable<Guid> GetOwnedRigs(Guid userId);
+    IAsyncEnumerable<Guid> GetRigsByUserId(Guid userId);
 }

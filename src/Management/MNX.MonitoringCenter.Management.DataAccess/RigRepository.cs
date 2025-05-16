@@ -22,12 +22,9 @@ public class RigRepository : IRigRepository
 
     private readonly IDbContextFactory<Context> _contextFactory;
 
-    private readonly Context _context;
-
     public RigRepository(IMapper mapper,
                          ILogger<RigRepository> logger,
-                         IDbContextFactory<Context> contextFactory,
-                         Context context)
+                         IDbContextFactory<Context> contextFactory)
     {
         _mapper = mapper
             ?? throw new ArgumentNullException(nameof(mapper));
@@ -35,8 +32,6 @@ public class RigRepository : IRigRepository
             ?? throw new ArgumentNullException(nameof(logger));
         _contextFactory = contextFactory
             ?? throw new ArgumentNullException(nameof(contextFactory));
-        _context = context
-            ?? throw new ArgumentNullException(nameof(context));
     }
 
     /// <inheritdoc/>
@@ -124,12 +119,12 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Guid> GetOwnedRigs(Guid userId)
+    public IAsyncEnumerable<Guid> GetRigsByUserId(Guid userId)
     {
-        return _context.MiningDevices
+        using var context = _contextFactory.CreateDbContext();
+        return context.MiningDevices
             .Where(md => md.OwnerId == userId)
             .Select(md => md.RigId!.Value)
-            .Distinct()
             .AsAsyncEnumerable();
     }
 

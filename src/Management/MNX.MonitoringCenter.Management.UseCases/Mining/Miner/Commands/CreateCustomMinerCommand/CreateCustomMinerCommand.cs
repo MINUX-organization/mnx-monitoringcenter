@@ -63,7 +63,7 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
         await _minerRepository.Add(miner, cancellationToken);
 
         var rigIds = await _rigRepository
-            .GetOwnedRigs(request.UserId)
+            .GetRigsByUserId(request.UserId)
             .ToArrayAsync(cancellationToken);
 
         await _bus.Enqueue(new InstallCustomMinerCommand(

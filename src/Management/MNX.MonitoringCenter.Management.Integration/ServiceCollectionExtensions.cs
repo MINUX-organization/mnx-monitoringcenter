@@ -42,7 +42,6 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddManagementModule(this IServiceCollection services,
                                                          IConfiguration configuration)
     {
-        services.AddAutoMapper(typeof(DbMappingProfile));
         services.AddUseCaseMappingProfile();
 
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(
