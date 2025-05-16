@@ -1,5 +1,11 @@
 ﻿using FluentValidation;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.CpuModelValidation;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.GpuModelValidation;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.DriveModelValidation;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.NetworkAdapterValidation;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 
@@ -37,19 +43,27 @@ public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInvento
                     {
                         RuleFor(x => x.Message.Inventory.Cpus)
                             .NotEmpty()
-                            .WithMessage(x => "Cpus inventory is required");
+                            .WithMessage(x => "Cpus inventory is required")
+                            .ForEach(x => x.SetValidator(new CpuModelValidator()));
 
                         RuleFor(x => x.Message.Inventory.Drives)
                             .NotEmpty()
-                            .WithMessage(x => "Drives inventory is required");
+                            .WithMessage(x => "Drives inventory is required")
+                            .ForEach(x => x.SetValidator(new DriveModelValidator()));
 
                         RuleFor(x => x.Message.Inventory.Gpus)
                             .NotEmpty()
-                            .WithMessage(x => "Gpus inventory is required");
+                            .WithMessage(x => "Gpus inventory is required")
+                            .ForEach(x => x.SetValidator(new GpuModelValidator()));
 
                         RuleFor(x => x.Message.Inventory.NetworkAdapters)
                             .NotEmpty()
-                            .WithMessage(x => "Network adapters inventory is required");
+                            .WithMessage(x => "Network adapters inventory is required")
+                            .Must(x => x.Any(adapter =>
+                                !string.IsNullOrEmpty(adapter.GlobalIP) &&
+                                !string.IsNullOrEmpty(adapter.LocalIP)))
+                            .WithMessage($"At least one {nameof(NetworkAdapter)} must have whole IPs (local and global)")
+                            .ForEach(x => x.SetValidator(new NetworkAdaperModelValidator()));
 
                         RuleFor(x => x.Message.Inventory.Motherboard)
                             .NotNull()
@@ -58,7 +72,11 @@ public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInvento
                         RuleFor(x => x.Message.Inventory.Software)
                             .NotNull()
                             .WithMessage(x => "Software inventory is required");
+
+                        RuleFor(x => x.Message.Inventory)
+                            .SetValidator(new RigInventoryModelValidator());
                     });
+
             });
     }
 }

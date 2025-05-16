@@ -9,10 +9,13 @@ namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 /// </summary>
 public class SaveRigInventoryCommandHandler : IRequestHandler<SaveRigInventoryCommand, Result<Unit>>
 {
+    private readonly IMediator _mediator;
+
     private readonly IRigRepository _repository;
 
-    public SaveRigInventoryCommandHandler(IRigRepository repository)
+    public SaveRigInventoryCommandHandler(IMediator mediator, IRigRepository repository)
     {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
@@ -20,6 +23,8 @@ public class SaveRigInventoryCommandHandler : IRequestHandler<SaveRigInventoryCo
     {
         await _repository.SaveInventory(request.Message.RigId, request.Message.CreatedDateTime,
                                         request.Message.Inventory, cancellationToken);
+
+        await _mediator.Publish(new RigInventorySavedEvent(request.Message), cancellationToken);
 
         return Result<Unit>.Empty();
     }

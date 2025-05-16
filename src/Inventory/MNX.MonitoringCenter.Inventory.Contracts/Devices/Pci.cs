@@ -16,5 +16,5 @@ public record Pci
     /// <summary>
     /// BUS.
     /// </summary>
-    public string Bus { get; init; }
+    public required string Bus { get; init; }
 }
