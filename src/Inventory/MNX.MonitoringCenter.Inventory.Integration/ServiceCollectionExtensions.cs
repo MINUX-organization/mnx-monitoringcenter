@@ -33,7 +33,11 @@ public static class ServiceCollectionExtensions
             typeof(GetRigsDetailsQuery).Assembly,
             typeof(SaveRigInventoryCommandHandler).Assembly
             ));
-        services.AddValidationPipelines(typeof(SaveRigInventoryCommandHandler).Assembly);
+
+        services.AddValidationPipelines(
+            typeof(SaveRigInventoryCommandHandler).Assembly,
+            typeof(SaveRigInventoryCommand).Assembly
+            );
 
         services.AddDataContext<Context>(configuration);
 

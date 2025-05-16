@@ -38,14 +38,7 @@ public class AgentMsgConsumer :
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(RigInventoryMsg message, CancellationToken cancellationToken = default)
     {
-        return Task.WhenAll(
-
-            _mediator.Send(new SaveRigInventoryCommand(message), cancellationToken),
-
-            _mediator.Send(new SetRigDevicesCommand(message.RigId, message.RigOwnerId,
-                                                    message.Inventory.Gpus, message.Inventory.Cpus),
-                cancellationToken)
-        );
+        return _mediator.Send(new SaveRigInventoryCommand(message), cancellationToken);
     }
 
     /// <summary>

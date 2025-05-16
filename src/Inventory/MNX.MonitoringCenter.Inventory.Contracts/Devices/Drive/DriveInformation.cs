@@ -11,12 +11,12 @@ public record DriveInformation
     /// <summary>
     /// Производитель.
     /// </summary>
-    public required string? Manufacturer { get; init; }
+    public string? Manufacturer { get; init; }
 
     /// <summary>
     /// Модель.
     /// </summary>
-    public required string? Model { get; init; }
+    public string? Model { get; init; }
 
     /// <summary>
     /// Полное название.

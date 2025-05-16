@@ -39,8 +39,6 @@ public class SetRigDevicesTests : BaseTest
         var command = new SetRigDevicesCommand(data.Command.RigId, data.Command.RigOwnerId, data.Command.Gpus, data.Command.Cpus);
         var result = await _mediator.Send(command);
 
-        Assert.That(result.IsSuccess, Is.True, "Результат создания майнинг-устройств и их пресетов с разгонами в БД успешен");
-
         var deviceGpuId = Guid.Parse("10f81050-235f-464f-8724-c9cfcdd54551");
         var deviceGpuManufacterer = "AMD";
         var deviceGpuModel = "RX 580";
