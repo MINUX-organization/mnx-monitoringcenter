@@ -7,6 +7,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.EditMinerCommand;
 
 using Miner = Core.Mining.Miner.Miner;
+using MinerTypeEnum = Core.Mining.Miner.Enums.MinerTypeEnum;
 
 /// <summary>
 /// Команда редактирования майнера.
@@ -51,13 +52,15 @@ public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<
         var newMiner = new Miner()
         {
             Id = request.MinerId,
-            OwnerId = request.UserId,
             Name = newModel.Name,
             Version = newModel.Version,
+            Type = MinerTypeEnum.Custom,
             InstallationUrl = newModel.InstallationUrl,
             SupportedDevices = newModel.SupportedDevices,
             PoolTemplate = newModel.PoolTemplate,
             WalletWorkerTemplate = newModel.WalletWorkerTemplate,
+            MiningMode = newModel.MiningMode,
+            OwnerId = request.UserId
         };
         await _minerRepository.Edit(newMiner, cancellationToken);
         return Result<Unit>.Empty();

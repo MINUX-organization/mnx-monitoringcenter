@@ -25,6 +25,7 @@ public class MinerRepository : IMinerRepository
                        .AsNoTrackingWithIdentityResolution()
                        .Include(miner => miner.SupportedAlgorithms)
                        .Filter(specification)
+                       .OrderBy(miner => miner.Type)
                        .AsAsyncEnumerable();
     }
 

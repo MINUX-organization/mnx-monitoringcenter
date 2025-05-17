@@ -5,6 +5,7 @@ using MNX.Application.UseCases.Requests;
 using MNX.RigCommander.MessageQueue.Clients.Bus;
 using MNX.MonitoringCenter.Management.Contracts.Miner;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateCustomMinerCommand;
@@ -52,6 +53,7 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
         {
             Name = model.Name,
             Version = model.Version,
+            Type = MinerTypeEnum.Custom,
             InstallationUrl = model.InstallationUrl,
             SupportedDevices = model.SupportedDevices,
             PoolTemplate = model.PoolTemplate,
@@ -63,8 +65,7 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
         await _minerRepository.Add(miner, cancellationToken);
 
         var rigIds = await _rigRepository
-            .GetRigsByUserId(request.UserId)
-            .ToArrayAsync(cancellationToken);
+            .GetRigsByUserId(request.UserId, cancellationToken);
 
         await _bus.Enqueue(new InstallCustomMinerCommand(
                 miner.Name,

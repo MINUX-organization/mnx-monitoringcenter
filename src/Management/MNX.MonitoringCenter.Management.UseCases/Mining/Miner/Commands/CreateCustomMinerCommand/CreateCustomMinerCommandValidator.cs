@@ -8,11 +8,11 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateC
 /// </summary>
 public class CreateCustomMinerCommandValidator : AbstractValidator<CreateCustomMinerCommand>
 {
-    public CreateCustomMinerCommandValidator(IMinerRepository minerRepository)
+    public CreateCustomMinerCommandValidator()
     {
         RuleFor(x => x.Model)
             .NotNull()
             .WithMessage("Miner data is required!")
-            .SetValidator(cmd => new MinerInputModelValidator(minerRepository, cmd.UserId));
+            .SetValidator(cmd => new MinerInputModelValidator());
     }
 }

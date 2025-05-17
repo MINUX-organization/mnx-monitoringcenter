@@ -119,13 +119,13 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Guid> GetRigsByUserId(Guid userId)
+    public async Task<Guid[]> GetRigsByUserId(Guid userId, CancellationToken cancellationToken)
     {
         using var context = _contextFactory.CreateDbContext();
-        return context.MiningDevices
+        return await context.MiningDevices
             .Where(md => md.OwnerId == userId)
             .Select(md => md.RigId!.Value)
-            .AsAsyncEnumerable();
+            .ToArrayAsync(cancellationToken);
     }
 
     /// <summary>

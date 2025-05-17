@@ -25,6 +25,11 @@ public class Miner : IEquatable<Miner>
     public required string Version { get; init; }
 
     /// <summary>
+    /// Тип майнера.
+    /// </summary>
+    public MinerTypeEnum Type { get; init; } = MinerTypeEnum.Custom;
+
+    /// <summary>
     /// Поддерживаемые комбинации типа устройств и производителя.
     /// </summary>
     public DeviceTypeManufacturerCombination SupportedDevices { get; set; }

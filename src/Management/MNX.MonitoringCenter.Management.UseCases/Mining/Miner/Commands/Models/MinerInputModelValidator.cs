@@ -8,7 +8,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 /// </summary>
 public class MinerInputModelValidator : AbstractValidator<MinerInputModel>
 {
-    public MinerInputModelValidator(IMinerRepository minerRepository, Guid userId)
+    public MinerInputModelValidator()
     {
         RuleFor(model => model.Name)
             .NotEmpty()

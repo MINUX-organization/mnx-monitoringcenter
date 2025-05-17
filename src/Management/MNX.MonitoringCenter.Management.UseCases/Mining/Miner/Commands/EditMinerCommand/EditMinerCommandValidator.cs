@@ -8,11 +8,11 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.EditMin
 /// </summary>
 public class EditMinerCommandValidator : AbstractValidator<EditMinerCommand>
 {
-    public EditMinerCommandValidator(IMinerRepository minerRepository)
+    public EditMinerCommandValidator()
     {
         RuleFor(x => x.Model)
             .NotNull()
             .WithMessage("Miner data is required!")
-            .SetValidator(cmd => new MinerInputModelValidator(minerRepository, cmd.UserId));
+            .SetValidator(cmd => new MinerInputModelValidator());
     }
 }

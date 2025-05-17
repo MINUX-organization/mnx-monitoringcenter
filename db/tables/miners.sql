@@ -3,6 +3,7 @@ CREATE TABLE monitoring_center.miners
     id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name text NOT NULL,
     version text NOT NULL,
+    type text CHECK ( type in ('Integrated', 'Custom') ) NOT NULL DEFAULT 'Custom',
     supported_devices int NOT NULL,
     mining_mode text CHECK ( mining_mode in ('Single', 'Dual', 'Triple') ) NOT NULL DEFAULT 'Single',
     owner_id uuid,

@@ -33,6 +33,7 @@ public interface IRigRepository
     /// Получить список ригов пользователя.
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Список идентификаторов ригов. </returns>
-    IAsyncEnumerable<Guid> GetRigsByUserId(Guid userId);
+    Task<Guid[]> GetRigsByUserId(Guid userId, CancellationToken cancellationToken);
 }
