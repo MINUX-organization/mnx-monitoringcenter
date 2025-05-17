@@ -49,9 +49,6 @@ public class Miner : IEquatable<Miner>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    /// <remarks>
-    /// Если имеет значение NULL, майнер является доменным.
-    /// </remarks>
     public Guid? OwnerId { get; init; }
 
     /// <summary>
