@@ -24,12 +24,10 @@ public sealed record EditMinerCommand(MinerInputModel Model, Guid MinerId, Guid 
 public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<Unit>>
 {
     private readonly IMinerRepository _minerRepository;
-    private readonly IMapper _mapper;
 
-    public EditMinerCommandHandler(IMinerRepository minerRepository, IMapper mapper)
+    public EditMinerCommandHandler(IMinerRepository minerRepository)
     {
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     public async Task<Result<Unit>> Handle(EditMinerCommand request, CancellationToken cancellationToken)

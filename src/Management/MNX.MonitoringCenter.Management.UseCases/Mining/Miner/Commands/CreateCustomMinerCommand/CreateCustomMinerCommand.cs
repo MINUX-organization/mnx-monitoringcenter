@@ -27,7 +27,6 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
 {
     private readonly IMinerRepository _minerRepository;
     private readonly IMapper _mapper;
-    private readonly IQueueBusClient _bus;
     private readonly IRigRepository _rigRepository;
 
     public CreateCustomMinerCommandHandler(IMinerRepository minerRepository, 
@@ -37,7 +36,6 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
     {
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _bus = bus ?? throw new ArgumentNullException(nameof(bus));
         _rigRepository = rigRepository ?? throw new ArgumentNullException(nameof(rigRepository));
     }
 
@@ -67,16 +65,6 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
         var rigIds = await _rigRepository
             .GetRigsByUserId(request.UserId, cancellationToken);
 
-        await _bus.Enqueue(new InstallCustomMinerCommand(
-                miner.Name,
-                miner.Version,
-                miner.InstallationUrl,
-                miner.PoolTemplate,
-                miner.WalletWorkerTemplate),
-            rigIds,
-            request.UserId,
-            cancellationToken: cancellationToken
-        );
         return Result<MinerModel>.SuccessfullyCreated(_mapper.Map<MinerModel>(miner));
     }
 }
