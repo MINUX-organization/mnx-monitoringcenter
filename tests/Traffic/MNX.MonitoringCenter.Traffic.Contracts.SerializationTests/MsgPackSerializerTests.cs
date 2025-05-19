@@ -2,14 +2,14 @@ using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Abstractions;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Network;
-using MNX.RigCommander.Serializers;
-using MNX.RigCommander.Serializers.MsgPack;
+using MNX.Application.Serializers;
+using MNX.Application.Serializers.MsgPack;
 
 namespace MNX.MonitoringCenter.Traffic.Contracts.SerializationTests;
 
 public class MsgPackSerializersTests
 {
-    private readonly IMessageTypeSerializer _serializer = new MsgPackSerializer();
+    private readonly IMessageSerializer _serializer = new MsgPackSerializer();
 
     [TestCaseSource(typeof(SerializeTestCases), nameof(SerializeTestCases.PolymorphModels))]
     public void SerializePolymorphismTest(IDeviceDynamicIndicators model)
