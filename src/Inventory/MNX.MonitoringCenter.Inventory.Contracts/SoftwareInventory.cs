@@ -43,7 +43,7 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     /// <summary>
     /// Версия Агента.
     /// </summary>
-    public string? AgentVersion { get; init; }
+    public required string AgentVersion { get; init; }
 
     /// <summary>
     /// Версия менеджера аппаратного обеспечения.
@@ -56,7 +56,7 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     /// <remarks>
     /// Ключ - название майнера. Значение - версия майнера.
     /// </remarks>
-    public Dictionary<string, string> Miners { get; init; } = new(0);
+    public Dictionary<string, string[]> Miners { get; init; } = [];
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

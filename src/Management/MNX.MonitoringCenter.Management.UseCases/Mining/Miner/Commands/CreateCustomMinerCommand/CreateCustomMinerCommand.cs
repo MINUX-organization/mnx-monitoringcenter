@@ -4,7 +4,6 @@ using MNX.Application.UseCases.Results;
 using MNX.Application.UseCases.Requests;
 using MNX.RigCommander.MessageQueue.Clients.Bus;
 using MNX.MonitoringCenter.Management.Contracts.Miner;
-using MNX.MonitoringCenter.Management.Agent.Commands.Mining;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
@@ -27,16 +26,12 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
 {
     private readonly IMinerRepository _minerRepository;
     private readonly IMapper _mapper;
-    private readonly IRigRepository _rigRepository;
 
     public CreateCustomMinerCommandHandler(IMinerRepository minerRepository, 
-                                           IMapper mapper, 
-                                           IQueueBusClient bus,
-                                           IRigRepository rigRepository)
+                                           IMapper mapper)
     {
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _rigRepository = rigRepository ?? throw new ArgumentNullException(nameof(rigRepository));
     }
 
     public async Task<Result<MinerModel>> Handle(CreateCustomMinerCommand request, CancellationToken cancellationToken)
@@ -61,9 +56,6 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
         };
         
         await _minerRepository.Add(miner, cancellationToken);
-
-        var rigIds = await _rigRepository
-            .GetRigsByUserId(request.UserId, cancellationToken);
 
         return Result<MinerModel>.SuccessfullyCreated(_mapper.Map<MinerModel>(miner));
     }

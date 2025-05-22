@@ -25,6 +25,11 @@ public class Miner : IEquatable<Miner>
     public required string Version { get; init; }
 
     /// <summary>
+    /// Ссылка на архив, откуда скачивать майнер.
+    /// </summary>
+    public required string InstallationUrl { get; set; }
+
+    /// <summary>
     /// Тип майнера.
     /// </summary>
     public MinerTypeEnum Type { get; init; } = MinerTypeEnum.Custom;
@@ -50,11 +55,6 @@ public class Miner : IEquatable<Miner>
     /// Идентификатор пользователя.
     /// </summary>
     public Guid? OwnerId { get; init; }
-
-    /// <summary>
-    /// Ссылка на архив, откуда скачивать майнер.
-    /// </summary>
-    public string? InstallationUrl { get; set; }
 
     /// <summary>
     /// Шаблон, как подставлять пул в строку для запуска майнера.

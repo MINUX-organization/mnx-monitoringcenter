@@ -25,6 +25,9 @@ public class MiningDeviceMappingProfile : Profile
             FlightSheetConfirmationState = info.FlightSheetConfirmationState,
             MinerName = info.FlightSheet != null
                             ? info.FlightSheet.Targets.First(x => x.DeviceType == info.Type).Miner!.Name
+                            : null,
+            MinerVersion = info.FlightSheet != null
+                            ? info.FlightSheet.Targets.First(x => x.DeviceType == info.Type).Miner!.Name
                             : null
         });
 

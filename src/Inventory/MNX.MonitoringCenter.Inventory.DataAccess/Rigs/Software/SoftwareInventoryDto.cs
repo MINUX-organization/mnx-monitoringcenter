@@ -51,7 +51,7 @@ public class SoftwareInventoryDto
     /// <summary>
     /// Версия Агента.
     /// </summary>
-    public string? AgentVersion { get; init; }
+    public required string AgentVersion { get; init; }
 
     /// <summary>
     /// Версия менеджера аппаратного обеспечения.
@@ -62,7 +62,7 @@ public class SoftwareInventoryDto
     /// Майнеры.
     /// </summary>
     /// <remarks>
-    /// Ключ - название майнера. Значение - версия майнера.
+    /// Ключ - название майнера. Значение - массив версий майнера.
     /// </remarks>
-    public Dictionary<string, string> Miners { get; init; } = new(0);
+    public Dictionary<string, string[]> Miners { get; init; } = [];
 }

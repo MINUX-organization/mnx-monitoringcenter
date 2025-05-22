@@ -16,6 +16,6 @@ internal class SoftwareCfg : IEntityTypeConfiguration<SoftwareInventoryDto>
         builder.Property(x => x.Miners)
                .HasConversion(
                     x => JsonSerializer.Serialize(x, (JsonSerializerOptions)null!),
-                    x => JsonSerializer.Deserialize<Dictionary<string, string>>(x, (JsonSerializerOptions)null!)!);
+                    x => JsonSerializer.Deserialize<Dictionary<string, string[]>>(x, (JsonSerializerOptions)null!)!);
     }
 }

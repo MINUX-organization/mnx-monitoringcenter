@@ -75,6 +75,27 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
+    public Task<Guid[]> GetRigIdsByMinerCoincidence(string minerName,
+                                                    string minerVersion,
+                                                    Guid userId,
+                                                    CancellationToken cancellationToken)
+    {
+        var targetMiner = new KeyValuePair<string, string>(minerName, minerVersion);
+        return _inventoryRepository.GetMatchingRigIdsQuery(targetMiner, userId, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<Guid[]> GetRigIdsWithoutMiner(Guid[] rigIds,
+                                              Guid userId,
+                                              string minerName,
+                                              string minerVersion,
+                                              CancellationToken cancellationToken)
+    {
+        var targetMiner = new KeyValuePair<string, string>(minerName, minerVersion);
+        return _inventoryRepository.GetRigIdsWithoutMiner(rigIds, userId, targetMiner, cancellationToken);
+    }
+
+    /// <inheritdoc/>
     public Task<bool> Exists(Guid rigId, CancellationToken cancellationToken)
     {
         return _inventoryRepository.Exists(rigId, cancellationToken);

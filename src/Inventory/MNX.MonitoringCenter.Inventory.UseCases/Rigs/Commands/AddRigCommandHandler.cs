@@ -3,7 +3,7 @@ using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases;
+namespace MNX.MonitoringCenter.Inventory.UseCases.Rigs.Commands;
 
 /// <summary>
 /// Обработчик <see cref="AddRigCommand"/>.

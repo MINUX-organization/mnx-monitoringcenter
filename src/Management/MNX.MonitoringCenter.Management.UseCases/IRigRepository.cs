@@ -28,12 +28,4 @@ public interface IRigRepository
     /// </summary>
     /// <param name="rigId"> Идентификатор рига. </param>
     Task SwitchToOffline(Guid rigId);
-
-    /// <summary>
-    /// Получить список ригов пользователя.
-    /// </summary>
-    /// <param name="userId"> Идентификатор пользователя. </param>
-    /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns> Список идентификаторов ригов. </returns>
-    Task<Guid[]> GetRigsByUserId(Guid userId, CancellationToken cancellationToken);
 }

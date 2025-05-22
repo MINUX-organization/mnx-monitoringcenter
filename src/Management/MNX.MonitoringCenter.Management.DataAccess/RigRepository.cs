@@ -118,16 +118,6 @@ public class RigRepository : IRigRepository
             x.SetProperty(device => device.LifeCycleStatus, d => MiningDeviceLifeCycleStatus.Offline));
     }
 
-    /// <inheritdoc/>
-    public async Task<Guid[]> GetRigsByUserId(Guid userId, CancellationToken cancellationToken)
-    {
-        using var context = _contextFactory.CreateDbContext();
-        return await context.MiningDevices
-            .Where(md => md.OwnerId == userId)
-            .Select(md => md.RigId!.Value)
-            .ToArrayAsync(cancellationToken);
-    }
-
     /// <summary>
     /// Добавить или обновить устройства.
     /// </summary>

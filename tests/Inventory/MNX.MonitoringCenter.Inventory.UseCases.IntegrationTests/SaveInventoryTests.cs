@@ -12,7 +12,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Inventory.UseCases;
+using MNX.MonitoringCenter.Inventory.IntegrationTests;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
@@ -22,7 +22,7 @@ using MNX.MonitoringCenter.Inventory.UseCases.Software;
 using MNX.RigCommander.Contracts;
 using NUnit.Framework;
 
-namespace MNX.MonitoringCenter.Inventory.IntegrationTests;
+namespace MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests;
 
 public class SaveInventoryTests : BaseTest
 {
@@ -62,7 +62,7 @@ public class SaveInventoryTests : BaseTest
         var driveRepository = ServiceProvider.GetRequiredService<IDriveRepository>();
         var drives = await driveRepository
             .GetDrives(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId), default);
-        
+
 
         var gpuRepository = ServiceProvider.GetRequiredService<IGpuRepository>();
         var gpus = gpuRepository.GetGpus(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId))
@@ -327,13 +327,13 @@ public class SaveInventoryTests : BaseTest
                             Pcies = new()
                             {
                                 new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
+                                new MotherboardPci() { Id = 1, Bus = "01.00:0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "02.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "03.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "04.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "05.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "06.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "07.00:0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -349,8 +349,8 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "lolMiner", "1.0.0" },
-                                { "rigel", "1.0.0" }
+                                { "lolMiner", ["1.0.0"] },
+                                { "rigel", ["1.0.0"] }
                             }
                         }
                     }
@@ -561,13 +561,13 @@ public class SaveInventoryTests : BaseTest
                             Pcies = new()
                             {
                                 new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
+                                new MotherboardPci() { Id = 1, Bus = "01:00.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "02:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "03:03.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "04:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "05:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "06:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "07:00.0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -583,8 +583,8 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "lolMiner", "1.0.0" },
-                                { "rigel", "1.0.0" }
+                                { "lolMiner", ["1.0.0"] },
+                                { "rigel", ["1.0.0"] }
                             }
                         }
                     }
@@ -795,13 +795,13 @@ public class SaveInventoryTests : BaseTest
                             Pcies = new()
                             {
                                 new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
+                                new MotherboardPci() { Id = 1, Bus = "01.00:0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "02.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "03.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "04.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "05.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "06.00:0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "07.00:0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -817,8 +817,8 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "lolMiner", "1.0.0" },
-                                { "rigel", "1.0.0" }
+                                { "lolMiner", ["1.0.0"] },
+                                { "rigel", ["1.0.0"] }
                             }
                         }
                     }

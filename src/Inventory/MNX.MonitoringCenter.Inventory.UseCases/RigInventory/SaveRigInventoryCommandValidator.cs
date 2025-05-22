@@ -6,6 +6,7 @@ using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidatio
 using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.GpuModelValidation;
 using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.DriveModelValidation;
 using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.NetworkAdapterValidation;
+using MNX.MonitoringCenter.Inventory.Contracts;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 
@@ -71,7 +72,13 @@ public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInvento
 
                         RuleFor(x => x.Message.Inventory.Software)
                             .NotNull()
-                            .WithMessage(x => "Software inventory is required");
+                            .WithMessage(x => "Software inventory is required")
+                            .DependentRules(() =>
+                            {
+                                RuleFor(x => x.Message.Inventory.Software.AgentVersion)
+                                    .Must(value => !string.IsNullOrEmpty(value))
+                                        .WithMessage($"{nameof(SoftwareInventory.AgentVersion)} is required");
+                            });
 
                         RuleFor(x => x.Message.Inventory)
                             .SetValidator(new RigInventoryModelValidator());

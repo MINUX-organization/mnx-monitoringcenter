@@ -1,7 +1,9 @@
 ﻿using MediatR;
-using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.Application.UseCases.Requests;
+using MNX.RigCommander.MessageQueue.Clients.Bus;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Management.Agent.Commands.Mining;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.EditMinerCommand;
@@ -23,10 +25,16 @@ public sealed record EditMinerCommand(MinerInputModel Model, Guid MinerId, Guid 
 /// </summary>
 public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<Unit>>
 {
+    private readonly IMediator _mediator;
+
+    private readonly IQueueBusClient _bus;
+
     private readonly IMinerRepository _minerRepository;
 
-    public EditMinerCommandHandler(IMinerRepository minerRepository)
+    public EditMinerCommandHandler(IMediator mediator, IQueueBusClient bus, IMinerRepository minerRepository)
     {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+        _bus = bus ?? throw new ArgumentNullException(nameof(bus));
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
     }
 
@@ -61,6 +69,24 @@ public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<
             OwnerId = request.UserId
         };
         await _minerRepository.Edit(newMiner, cancellationToken);
+
+        var rigIds = await _mediator.Send(new GetRigsIdsByMinerCoincidenceQuery(
+            model.Name,
+            model.Version,
+            request.UserId), cancellationToken);
+
+        await _bus.Enqueue(new InstallMinerCommand(
+                newMiner.Name,
+                newMiner.Version,
+                newMiner.InstallationUrl,
+                newMiner.PoolTemplate,
+                newMiner.WalletWorkerTemplate,
+                newMiner.Type.ToString()),
+            rigIds,
+            request.UserId,
+            cancellationToken: cancellationToken
+        );
+
         return Result<Unit>.Empty();
     }
 }
