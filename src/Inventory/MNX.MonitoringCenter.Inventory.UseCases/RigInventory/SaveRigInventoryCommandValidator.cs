@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation;
@@ -6,7 +7,7 @@ using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidatio
 using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.GpuModelValidation;
 using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.DriveModelValidation;
 using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.NetworkAdapterValidation;
-using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValidation.SoftwareInventoryValidation;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 
@@ -78,6 +79,11 @@ public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInvento
                                 RuleFor(x => x.Message.Inventory.Software.AgentVersion)
                                     .Must(value => !string.IsNullOrEmpty(value))
                                         .WithMessage($"{nameof(SoftwareInventory.AgentVersion)} is required");
+
+                                RuleFor(x => x.Message.Inventory.Software.Miners)
+                                    .NotNull()
+                                        .WithMessage($"{nameof(SoftwareInventory.Miners)} is required")
+                                    .ForEach(x => x.SetValidator(new MinerInventoryModelValidator()));
                             });
 
                         RuleFor(x => x.Message.Inventory)

@@ -31,6 +31,7 @@
 \ir 'tables/motherboard_pci.sql'
 \ir 'tables/network_adapter.sql'
 \ir 'tables/software_inventory.sql'
+\ir 'tables/miners_inventory.sql'
 
 \ir 'tables/version_info.sql'
 

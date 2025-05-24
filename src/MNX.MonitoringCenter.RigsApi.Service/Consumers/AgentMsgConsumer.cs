@@ -4,7 +4,6 @@ using MNX.Application.Bus.RabbitMQ.Agent;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
 

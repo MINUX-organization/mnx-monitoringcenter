@@ -10,7 +10,6 @@ CREATE TABLE monitoring_center.software_inventory
     cuda_version text,
     agent_version text,
     hardware_manager_version text,
-    miners text,
     rig_inventory_id bigint NOT NULL,
 
     CONSTRAINT pk_software_inventory PRIMARY KEY (rig_inventory_id, id),

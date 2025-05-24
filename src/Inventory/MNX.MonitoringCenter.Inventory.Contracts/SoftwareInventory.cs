@@ -53,10 +53,7 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     /// <summary>
     /// Майнеры.
     /// </summary>
-    /// <remarks>
-    /// Ключ - название майнера. Значение - версия майнера.
-    /// </remarks>
-    public Dictionary<string, string[]> Miners { get; init; } = [];
+    public List<MinerInventory> Miners { get; init; } = [];
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)
@@ -92,7 +89,7 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
 
         foreach (var miner in Miners)
         {
-            minersHash = HashCode.Combine(miner.Key, miner.Value);
+            minersHash = HashCode.Combine(miner.Name, miner.Version);
         }
 
         return HashCode.Combine(MinuxVersion, LinuxVersion, AmdGpuDriverVersion, NvidiaGpuDriverVersion,

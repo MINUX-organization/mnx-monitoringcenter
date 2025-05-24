@@ -29,24 +29,19 @@ public partial class InventoryRepository
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Массив идентификаторов ригов. </returns>
-    internal async Task<Guid[]> GetMatchingRigIdsQuery(KeyValuePair<string, string> miner,
-                                                       Guid userId,
-                                                       CancellationToken cancellationToken)
+    internal Task<Guid[]> GetMatchingRigIdsQuery(KeyValuePair<string, string> miner,
+                                                 Guid userId,
+                                                 CancellationToken cancellationToken)
     {
-        var rigs = await _context.Rigs
-            .Where(x => x.OwnerId == userId)
-            .Include(x => x.Inventories.Where(y => y.IsCurrent))
-                .ThenInclude(y => y.Software)
-            .ToListAsync(cancellationToken);
-
-        return rigs
-            .Where(x => x.Inventories.Any(y =>
-                y.Software.Miners != null &&
-                y.Software.Miners.TryGetValue(miner.Key, out var values) &&
-                values != null &&
-                values.Contains(miner.Value)))
-            .Select(x => x.Id)
-            .ToArray();
+        return _context.Rigs
+            .Where(rig => rig.OwnerId == userId &&
+                rig.Inventories.Any(inventory =>
+                    inventory.IsCurrent &&
+                    inventory.Software.Miners.Any(minerDto =>
+                        minerDto.Name == miner.Key &&
+                        minerDto.Version == miner.Value)))
+            .Select(rig => rig.Id)
+            .ToArrayAsync(cancellationToken);
     }
 
     /// <summary>
@@ -57,25 +52,19 @@ public partial class InventoryRepository
     /// <param name="miner"> Пара: ключ-значение наименования и версии майнера. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Массив идентификаторов ригов, на которых не установлен майнер. </returns>
-    internal async Task<Guid[]> GetRigIdsWithoutMiner(Guid[] rigIds,
-                                                      Guid userId,
-                                                      KeyValuePair<string, string> miner,
-                                                      CancellationToken cancellationToken)
+    internal Task<Guid[]> GetRigIdsWithoutMiner(Guid[] rigIds,
+                                                Guid userId,
+                                                KeyValuePair<string, string> miner,
+                                                CancellationToken cancellationToken)
     {
-        var rigs = await _context.Rigs
+        return _context.Rigs
             .Where(rig => rigIds.Contains(rig.Id) && rig.OwnerId == userId)
-            .Include(rig => rig.Inventories.Where(inventory => inventory.IsCurrent))
-                .ThenInclude(inventory => inventory.Software)
-            .ToListAsync(cancellationToken);
-
-        return rigs
-            .Where(rig => rig.Inventories
-                .All(inventory =>
-                    inventory.Software.Miners == null ||
-                    !inventory.Software.Miners.TryGetValue(miner.Key, out var versions) ||
-                    versions == null || !versions.Contains(miner.Value)))
+            .Where(rig => !rig.Inventories
+                .Where(inventory => inventory.IsCurrent)
+                .SelectMany(inventory => inventory.Software.Miners)
+                .Any(minerDto => minerDto.Name == miner.Key && minerDto.Version == miner.Value))
             .Select(rig => rig.Id)
-            .ToArray();
+            .ToArrayAsync(cancellationToken);
     }
 
     /// <summary>

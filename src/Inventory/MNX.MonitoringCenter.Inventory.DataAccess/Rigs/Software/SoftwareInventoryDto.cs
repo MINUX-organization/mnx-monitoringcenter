@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using MNX.MonitoringCenter.Inventory.Contracts;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 
@@ -61,8 +62,5 @@ public class SoftwareInventoryDto
     /// <summary>
     /// Майнеры.
     /// </summary>
-    /// <remarks>
-    /// Ключ - название майнера. Значение - массив версий майнера.
-    /// </remarks>
-    public Dictionary<string, string[]> Miners { get; init; } = [];
+    public List<MinerInventory> Miners { get; init; } = [];
 }
