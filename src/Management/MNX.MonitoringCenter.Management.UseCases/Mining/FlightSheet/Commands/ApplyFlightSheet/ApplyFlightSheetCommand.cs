@@ -181,7 +181,6 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="deviceType"> Тип девайса для обработки. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    /// <returns></returns>
     private async Task ProcessCheckoutRigs(List<MiningDeviceModel> devices,
                                            List<FlightSheetTarget> targets,
                                            Guid userId,
