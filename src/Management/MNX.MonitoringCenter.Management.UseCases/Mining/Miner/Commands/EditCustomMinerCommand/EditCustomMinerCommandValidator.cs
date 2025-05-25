@@ -4,11 +4,11 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.EditMinerCommand;
 
 /// <summary>
-/// Валидатор параметров сущности <see cref="EditMinerCommand"/>.
+/// Валидатор параметров сущности <see cref="EditCustomMinerCommand"/>.
 /// </summary>
-public class EditMinerCommandValidator : AbstractValidator<EditMinerCommand>
+public class EditCustomMinerCommandValidator : AbstractValidator<EditCustomMinerCommand>
 {
-    public EditMinerCommandValidator()
+    public EditCustomMinerCommandValidator()
     {
         RuleFor(x => x.Model)
             .NotNull()

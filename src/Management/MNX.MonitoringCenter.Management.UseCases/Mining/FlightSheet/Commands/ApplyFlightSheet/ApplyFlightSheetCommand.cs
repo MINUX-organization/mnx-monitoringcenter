@@ -70,13 +70,12 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
         await _miningDeviceRepository.RemoveFlightSheet(DevicesIdsToDisapply.Select(x => x.Id).ToArray());
         await _miningDeviceRepository.SetFlightSheet(DevicesIdsToApply.Select(x => x.Id).ToArray(), request.FlightSheetId);
 
+        await InstallTargetMinersCommand(DevicesIdsToApply, flightSheet.Targets, request.UserId, cancellationToken);
+
         await SendMessagesToRigs(request.UserId, flightSheet, DevicesIdsToApply, DevicesIdsToDisapply, cancellationToken);
 
         var resultDevices = DevicesIdsToApply.ToList();
         resultDevices.AddRange(CurrentDevices);
-
-        await InstallTargetMinersCommand(DevicesIdsToApply, flightSheet.Targets, request.UserId, cancellationToken);
-
         return Result<IEnumerable<Guid>>.Success(resultDevices.Select(x => x.Id));
     }
 
@@ -152,7 +151,7 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
     }
     
     /// <summary>
-    /// Произвести поиск ригов, у которых отсутствует майнер
+    /// Произвести поиск ригов, у которых отсутствует майнер,
     /// и отправить команду на установку майнеров на риги.
     /// </summary>
     /// <param name="appliedDevices">

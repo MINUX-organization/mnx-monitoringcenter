@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
@@ -6,14 +7,14 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 /// <summary>
 /// Конфигурация для таблицы с инвентаризацией майнеров.
 /// </summary>
-internal class MinerCfg : IEntityTypeConfiguration<Contracts.MinerInventory>
+internal class MinerCfg : IEntityTypeConfiguration<MinerInventory>
 {
-    public void Configure(EntityTypeBuilder<Contracts.MinerInventory> builder)
+    public void Configure(EntityTypeBuilder<MinerInventory> builder)
     {
-        builder.HasOne<SoftwareInventoryDto>()
+        builder.HasOne<SoftwareInventory>()
             .WithMany(x => x.Miners)
-            .HasForeignKey("software_id", "rig_inventory_id")
-            .HasPrincipalKey("Id", "RigInventoryId");
+            .HasForeignKey("rig_inventory_id")
+            .HasPrincipalKey("RigInventoryId");
 
         builder.HasIndex(miner => miner.Name);
     }

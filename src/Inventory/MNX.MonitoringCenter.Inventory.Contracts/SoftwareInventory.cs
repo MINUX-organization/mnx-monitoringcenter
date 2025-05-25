@@ -3,7 +3,7 @@
 /// <summary>
 /// Инвентаризация программного обеспечения.
 /// </summary>
-public class SoftwareInventory : IEquatable<SoftwareInventory>
+public class SoftwareInventory
 {
     /// <summary>
     /// Версия Minux.
@@ -54,45 +54,4 @@ public class SoftwareInventory : IEquatable<SoftwareInventory>
     /// Майнеры.
     /// </summary>
     public List<MinerInventory> Miners { get; init; } = [];
-
-    /// <inheritdoc/>
-    public override bool Equals(object? obj)
-    {
-        if (obj is SoftwareInventory software)
-        {
-            return Equals(software);
-        }
-
-        return false;
-    }
-
-    /// <inheritdoc/>
-    public bool Equals(SoftwareInventory? other)
-    {
-        if (other == null) return false;
-
-        if (ReferenceEquals(this, other)) return true;
-
-        return MinuxVersion == other.MinuxVersion &&
-               LinuxVersion == other.LinuxVersion &&
-               AmdGpuDriverVersion == other.AmdGpuDriverVersion &&
-               NvidiaGpuDriverVersion == other.NvidiaGpuDriverVersion &&
-               IntelGpuDriverVersion == other.IntelGpuDriverVersion &&
-               OpenCLVersion == other.OpenCLVersion &&
-               CudaVersion == other.CudaVersion &&
-               Miners.SequenceEqual(other.Miners);
-    }
-
-    public override int GetHashCode()
-    {
-        var minersHash = 0;
-
-        foreach (var miner in Miners)
-        {
-            minersHash = HashCode.Combine(miner.Name, miner.Version);
-        }
-
-        return HashCode.Combine(MinuxVersion, LinuxVersion, AmdGpuDriverVersion, NvidiaGpuDriverVersion,
-                                IntelGpuDriverVersion, OpenCLVersion, CudaVersion) + minersHash;
-    }
 }

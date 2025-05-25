@@ -77,7 +77,7 @@ public class MinerController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 409)]
     public async Task<IActionResult> UpdateCustom(MinerInputModel model, Guid minerId)
     {
-        var result = await _mediator.Send(new EditMinerCommand(model, minerId, _accessor.GetUserId()));
+        var result = await _mediator.Send(new EditCustomMinerCommand(model, minerId, _accessor.GetUserId()));
         return result.ToActionResult();
     }
 
@@ -90,7 +90,7 @@ public class MinerController : ControllerBase
     [ProducesResponseType(204)]
     public async Task<IActionResult> DeleteCustom(Guid minerId)
     {
-        var result = await _mediator.Send(new DeleteMinerCommand(minerId, _accessor.GetUserId()));
+        var result = await _mediator.Send(new DeleteCustomMinerCommand(minerId, _accessor.GetUserId()));
         return result.ToActionResult();
     }
 }

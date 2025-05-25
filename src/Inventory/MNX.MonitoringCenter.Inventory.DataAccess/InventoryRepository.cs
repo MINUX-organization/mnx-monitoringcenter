@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -103,7 +102,7 @@ public partial class InventoryRepository
             Gpus = inventory.Gpus,
             NetworkAdapters = inventory.NetworkAdapters,
             Motherboard = inventory.Motherboard,
-            Software = _mapper.Map<SoftwareInventoryDto>(inventory.Software)
+            Software = inventory.Software
         };
     }
 }

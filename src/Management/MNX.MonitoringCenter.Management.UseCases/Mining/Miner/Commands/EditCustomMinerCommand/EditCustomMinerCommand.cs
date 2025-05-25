@@ -17,13 +17,13 @@ using MinerTypeEnum = Core.Mining.Miner.Enums.MinerTypeEnum;
 /// <param name="Model"> Модель ввода майнера. </param>
 /// <param name="MinerId"> Идентификатор майнера. </param>
 /// <param name="UserId"> Идентификатор пользователя. </param>
-public sealed record EditMinerCommand(MinerInputModel Model, Guid MinerId, Guid UserId)
+public sealed record EditCustomMinerCommand(MinerInputModel Model, Guid MinerId, Guid UserId)
     : IUserableValidatableCommand<Unit>;
 
 /// <summary>
-/// Обработчик команды <see cref="EditMinerCommand"/>.
+/// Обработчик команды <see cref="EditCustomMinerCommand"/>.
 /// </summary>
-public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<Unit>>
+public class EditMinerCommandHandler : IRequestHandler<EditCustomMinerCommand, Result<Unit>>
 {
     private readonly IMediator _mediator;
 
@@ -38,7 +38,7 @@ public class EditMinerCommandHandler : IRequestHandler<EditMinerCommand, Result<
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
     }
 
-    public async Task<Result<Unit>> Handle(EditMinerCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(EditCustomMinerCommand request, CancellationToken cancellationToken)
     {
         var newModel = request.Model;
 

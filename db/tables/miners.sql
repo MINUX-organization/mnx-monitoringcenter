@@ -7,7 +7,7 @@ CREATE TABLE monitoring_center.miners
     supported_devices int NOT NULL,
     mining_mode text CHECK ( mining_mode in ('Single', 'Dual', 'Triple') ) NOT NULL DEFAULT 'Single',
     owner_id uuid,
-    installation_url text,
+    installation_url text NOT NULL,
     pool_template text,
     wallet_worker_template text,
 

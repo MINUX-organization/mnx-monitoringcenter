@@ -8,12 +8,12 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.DeleteM
 /// </summary>
 /// <param name="MinerId"> Идентификатор майнера. </param>
 /// <param name="UserId"> Идентификатор пользователя. </param>
-public record DeleteMinerCommand(Guid MinerId, Guid UserId) : IRequest<Result<Unit>>;
+public record DeleteCustomMinerCommand(Guid MinerId, Guid UserId) : IRequest<Result<Unit>>;
 
 /// <summary>
-/// Обработчик команды <see cref="DeleteMinerCommand"/>.
+/// Обработчик команды <see cref="DeleteCustomMinerCommand"/>.
 /// </summary>
-public class DeleteMinerCommandHandler : IRequestHandler<DeleteMinerCommand, Result<Unit>>
+public class DeleteMinerCommandHandler : IRequestHandler<DeleteCustomMinerCommand, Result<Unit>>
 {
     private readonly IMinerRepository _minerRepository;
 
@@ -22,7 +22,7 @@ public class DeleteMinerCommandHandler : IRequestHandler<DeleteMinerCommand, Res
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
     }
 
-    public async Task<Result<Unit>> Handle(DeleteMinerCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Unit>> Handle(DeleteCustomMinerCommand request, CancellationToken cancellationToken)
     {
         var miner = await _minerRepository.GetMinerById(request.MinerId, cancellationToken);
 

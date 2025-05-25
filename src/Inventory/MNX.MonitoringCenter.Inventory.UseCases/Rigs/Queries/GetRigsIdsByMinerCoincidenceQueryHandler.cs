@@ -16,10 +16,10 @@ public class GetRigsIdsByMinerCoincidenceQueryHandler
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
-    public async Task<Guid[]> Handle(GetRigsIdsByMinerCoincidenceQuery request,
+    public Task<Guid[]> Handle(GetRigsIdsByMinerCoincidenceQuery request,
                                      CancellationToken cancellationToken)
     {
-        return await _repository.GetRigIdsByMinerCoincidence(
+        return _repository.GetRigIdsByMinerCoincidence(
             request.MinerName, request.MinerVersion, request.UserId, cancellationToken);
     }
 }
