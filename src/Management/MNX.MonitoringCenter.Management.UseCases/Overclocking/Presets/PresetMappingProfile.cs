@@ -4,7 +4,7 @@ using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping;
+namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 
 /// <summary>
 /// Профиль маппинга для сущностей, связанных с сущностью <see cref="Preset"/>.

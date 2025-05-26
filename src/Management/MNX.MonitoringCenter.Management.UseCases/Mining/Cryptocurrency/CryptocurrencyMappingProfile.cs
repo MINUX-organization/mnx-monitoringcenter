@@ -1,9 +1,10 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.Core.Mining;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.AddCryptocurrency;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
+
+using Cryptocurrency = Core.Mining.Cryptocurrency;
 
 /// <summary>
 /// Профиль маппинга для сущностей, связанных с сущностью <see cref="Cryptocurrency"/>.

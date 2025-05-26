@@ -41,9 +41,12 @@ public abstract class BaseTest
 
         services.AddMediatR(x => x.RegisterServicesFromAssemblies(
             typeof(GetRigsDetailsQuery).Assembly,
-            typeof(SaveRigInventoryCommand).Assembly
+            typeof(SaveRigInventoryCommandHandler).Assembly
             ));
-        services.AddValidationPipelines(typeof(SaveRigInventoryCommandValidator).Assembly);
+        services.AddValidationPipelines(
+            typeof(SaveRigInventoryCommandHandler).Assembly,
+            typeof(SaveRigInventoryCommand).Assembly
+            );
 
         services.AddScoped<ICpuRepository, InventoryRepository>()
                 .AddScoped<IDriveRepository, InventoryRepository>()

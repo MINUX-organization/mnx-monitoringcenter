@@ -59,10 +59,11 @@ public partial class InventoryRepository
     {
         return _context.Rigs
             .Where(rig => rigIds.Contains(rig.Id) && rig.OwnerId == userId)
-            .Where(rig => !rig.Inventories
-                .Where(inventory => inventory.IsCurrent)
-                .SelectMany(inventory => inventory.Software.Miners)
-                .Any(minerDto => minerDto.Name == miner.Key && minerDto.Version == miner.Value))
+            .Where(rig => !rig.Inventories.Any(inventory =>
+                inventory.IsCurrent &&
+                inventory.Software.Miners.Any(minerDto =>
+                    minerDto.Name == miner.Key &&
+                    minerDto.Version == miner.Value)))
             .Select(rig => rig.Id)
             .ToArrayAsync(cancellationToken);
     }

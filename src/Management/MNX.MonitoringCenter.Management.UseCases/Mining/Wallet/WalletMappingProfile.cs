@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.Core.Mining;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.AddWallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.EditWallet;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
+
+using Wallet = Core.Mining.Wallet;
 
 /// <summary>
 /// Профиль маппинга для сущностей, связанных с сущностью <see cref="Wallet"/>.

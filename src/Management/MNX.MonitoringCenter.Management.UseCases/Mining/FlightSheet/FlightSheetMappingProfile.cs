@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
-using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
+
+using FlightSheet = Core.Mining.FlightSheet.FlightSheet;
 
 /// <summary>
 /// Профиль маппинга для сущностей, связанных с сущностью <see cref="FlightSheet"/>.
@@ -61,7 +62,7 @@ public class FlightSheetMappingProfile : Profile
     }
 
     private static void SetAlgorithmName(
-        List<Agent.Commands.Mining.ApplySettings.Models.MiningCoinConfigModel> miningCoinConfigs,
+        List<MiningCoinConfigModel> miningCoinConfigs,
         FlightSheetTarget flightSheetTarget)
     {
         for (int i = 0; i < miningCoinConfigs.Count; i++)

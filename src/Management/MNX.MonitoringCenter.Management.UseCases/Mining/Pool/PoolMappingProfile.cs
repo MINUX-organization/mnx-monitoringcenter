@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Management.Core.Mining;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
+
+using Pool = Core.Mining.Pool;
 
 /// <summary>
 /// Профиль маппинга для сущностей, связанных с сущностью <see cref="Pool"/>.

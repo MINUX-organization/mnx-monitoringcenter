@@ -2,7 +2,7 @@
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping;
+namespace MNX.MonitoringCenter.Management.UseCases.Overclocking;
 
 using Overclocking = Inventory.Contracts.Devices.Overclocking;
 

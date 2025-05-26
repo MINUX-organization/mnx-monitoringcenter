@@ -1,6 +1,13 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Management.DataAccess;
-using MNX.MonitoringCenter.Management.UseCases.Mapping;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
 
 namespace MNX.MonitoringCenter.Management.Integration;
 

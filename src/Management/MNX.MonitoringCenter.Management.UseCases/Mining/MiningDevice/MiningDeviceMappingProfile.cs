@@ -4,7 +4,7 @@ using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 
 /// <summary>
 /// Профиль маппинга для сущностей, связанных с сущностью <see cref="Miner"/>.

@@ -12,12 +12,9 @@ public partial class InventoryRepository
 {
     private readonly Context _context;
 
-    private readonly IMapper _mapper;
-
-    public InventoryRepository(Context context, IMapper mapper)
+    public InventoryRepository(Context context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <summary>

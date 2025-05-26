@@ -3,7 +3,7 @@ using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models.MiningConfig;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping;
+namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 
 /// <summary>
 /// Профиль маппинга для сущностей, связанных с конфигами.
