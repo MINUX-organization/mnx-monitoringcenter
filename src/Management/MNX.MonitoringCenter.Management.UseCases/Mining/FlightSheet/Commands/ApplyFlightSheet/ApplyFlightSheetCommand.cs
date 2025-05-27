@@ -203,7 +203,7 @@ public class ApplyFlightSheetCommandHandler : IRequestHandler<ApplyFlightSheetCo
                 targetMiner.InstallationUrl,
                 targetMiner.PoolTemplate,
                 targetMiner.WalletWorkerTemplate,
-                targetMiner.Type),
+                targetMiner.Type.ToMinerTypeContract()),
             rigIdsForDevicesType,
             userId,
             cancellationToken: cancellationToken

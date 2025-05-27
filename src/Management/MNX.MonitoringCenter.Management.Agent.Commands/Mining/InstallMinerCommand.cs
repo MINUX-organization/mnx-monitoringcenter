@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.CommandValidation;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 
 namespace MNX.MonitoringCenter.Management.Agent.Commands.Mining;
 
@@ -20,5 +19,5 @@ public sealed record InstallMinerCommand(
     string InstallationUrl,
     string? PoolTemplate,
     string? WalletWorkerTemplate,
-    MinerTypeEnum MinerType)
+    MinerTypeEnumModel MinerType)
     : IValidatableCommand<Unit>;
