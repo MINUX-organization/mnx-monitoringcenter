@@ -41,7 +41,7 @@ public class MinerModel
     /// <summary>
     /// Ссылка установки майнера.
     /// </summary>
-    public string? InstallationUrl { get; set; }
+    public required string InstallationUrl { get; set; }
 
     /// <summary>
     /// Шаблон блока пула.

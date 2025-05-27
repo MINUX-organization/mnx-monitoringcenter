@@ -81,7 +81,7 @@ public class EditMinerCommandHandler : IRequestHandler<EditCustomMinerCommand, R
                 newMiner.InstallationUrl,
                 newMiner.PoolTemplate,
                 newMiner.WalletWorkerTemplate,
-                newMiner.Type.ToString()),
+                newMiner.Type),
             rigIds,
             request.UserId,
             cancellationToken: cancellationToken
