@@ -13,6 +13,15 @@ public class CryptocurrencyModel
     public Guid Id { get; set; }
 
     /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    /// <remarks>
+    /// Если null, то сущность является доменной,
+    /// иначе - пользовательской.
+    /// </remarks>
+    public Guid? UserId { get; set; }
+
+    /// <summary>
     /// Короткое название.
     /// </summary>
     public required string ShortName { get; set; }

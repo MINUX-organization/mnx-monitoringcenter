@@ -26,7 +26,7 @@ public class RigDisconnectedEventHandler : INotificationHandler<RigDisconnectedE
 
     public async Task Handle(RigDisconnectedEvent notification, CancellationToken cancellationToken)
     {
-        await _mediator.Publish(new MiningDeviceStateChangedEvent(notification.RigId.ToString()));
         await _repository.SwitchToOffline(notification.RigId);
+        await _mediator.Publish(new MiningDeviceStateChangedEvent(notification.RigId.ToString()), cancellationToken);
     }
 }

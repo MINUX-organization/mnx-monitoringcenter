@@ -9,7 +9,16 @@ public class PoolModel
     /// Уникальный идентификатор
     /// </summary>
     public Guid Id { get; set; }
-    
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    /// <remarks>
+    /// Если null, то сущность является доменной,
+    /// иначе - пользовательской.
+    /// </remarks>
+    public Guid UserId { get; set; }
+
     /// <summary>
     /// Признак шифрования по протоколу TLS.
     /// </summary>

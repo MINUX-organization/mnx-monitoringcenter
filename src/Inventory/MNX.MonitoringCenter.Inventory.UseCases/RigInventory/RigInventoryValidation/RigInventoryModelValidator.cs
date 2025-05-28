@@ -36,6 +36,6 @@ public class RigInventoryModelValidator : AbstractValidator<RigInventoryModel>
         bool isGpu00Present = model.Gpus.Any(gpu => gpu.Pci?.Bus == "00:00.0");
         if (isGpu00Present || !isCpu00Present) return false;
 
-        return occupiedBuses.SequenceEqual(deviceBuses);
+        return occupiedBuses.SetEquals(deviceBuses);
     }
 }
