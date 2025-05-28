@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus;
 using MNX.MonitoringCenter.Traffic.Observers.Mining;
@@ -8,7 +9,6 @@ using MNX.MonitoringCenter.Traffic.Observers.Mapping;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
-using Microsoft.Extensions.Options;
 
 namespace MNX.MonitoringCenter.Traffic.Observers;
 

@@ -1,5 +1,6 @@
 \set ON_ERROR_STOP 1
 \set ECHO all
+\encoding UTF8
 
 -- CREATING SCHEMA
 \ir 'schemas/monitoring_center.sql'
@@ -30,6 +31,7 @@
 \ir 'tables/motherboard_pci.sql'
 \ir 'tables/network_adapter.sql'
 \ir 'tables/software_inventory.sql'
+\ir 'tables/miners_inventory.sql'
 
 \ir 'tables/version_info.sql'
 

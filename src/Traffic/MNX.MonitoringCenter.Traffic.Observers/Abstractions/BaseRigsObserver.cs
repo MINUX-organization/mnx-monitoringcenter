@@ -1,7 +1,7 @@
-﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
-using System.Collections.Concurrent;
-using System.Reactive.Linq;
+﻿using System.Reactive.Linq;
 using System.Reactive.Subjects;
+using System.Collections.Concurrent;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 

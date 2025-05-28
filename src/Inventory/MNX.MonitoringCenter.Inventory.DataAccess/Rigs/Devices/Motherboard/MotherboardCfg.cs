@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory.Devices.Motherboard;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Motherboard;
 
 /// <summary>
 /// Конфигурация для таблицы с материнскими платами.

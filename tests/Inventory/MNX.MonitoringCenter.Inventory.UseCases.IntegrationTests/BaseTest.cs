@@ -1,20 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
+﻿using NUnit.Framework;
 using MNX.Application.UseCases.DI;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Inventory.DataAccess;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
-using MNX.MonitoringCenter.Inventory.UseCases;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.UseCases.Software;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
-using MNX.MonitoringCenter.Inventory.UseCases.Software;
-using NUnit.Framework;
 
-namespace MNX.MonitoringCenter.Inventory.IntegrationTests;
+namespace MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests;
 
 public abstract class BaseTest
 {
@@ -42,9 +41,12 @@ public abstract class BaseTest
 
         services.AddMediatR(x => x.RegisterServicesFromAssemblies(
             typeof(GetRigsDetailsQuery).Assembly,
-            typeof(SaveRigInventoryCommand).Assembly
+            typeof(SaveRigInventoryCommandHandler).Assembly
             ));
-        services.AddValidationPipelines(typeof(SaveRigInventoryCommandValidator).Assembly);
+        services.AddValidationPipelines(
+            typeof(SaveRigInventoryCommandHandler).Assembly,
+            typeof(SaveRigInventoryCommand).Assembly
+            );
 
         services.AddScoped<ICpuRepository, InventoryRepository>()
                 .AddScoped<IDriveRepository, InventoryRepository>()

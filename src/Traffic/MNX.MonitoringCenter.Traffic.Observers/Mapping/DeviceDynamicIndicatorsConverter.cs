@@ -1,12 +1,10 @@
 ﻿using AutoMapper;
 using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Abstractions;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Mining;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Network;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices.Abstractions;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices.Abstractions;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Mapping;
 

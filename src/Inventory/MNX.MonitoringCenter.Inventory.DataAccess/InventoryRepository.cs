@@ -1,8 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
-using AutoMapper;
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -13,12 +12,9 @@ public partial class InventoryRepository
 {
     private readonly Context _context;
 
-    private readonly IMapper _mapper;
-
-    public InventoryRepository(Context context, IMapper mapper)
+    public InventoryRepository(Context context)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <summary>
@@ -71,7 +67,7 @@ public partial class InventoryRepository
     /// <param name="startPeriod"> Начало периода. </param>
     /// <param name="endPeriod"> Конец периода. </param>
     /// <returns> Инвентаризация. </returns>
-    private IQueryable<RigInventory.RigInventory> GetInventorySliceForAPeriod(InventorySpecification specification,
+    private IQueryable<Rigs.RigInventory> GetInventorySliceForAPeriod(InventorySpecification specification,
                                                                               DateTimeOffset startPeriod,
                                                                               DateTimeOffset endPeriod)
     {
@@ -83,7 +79,7 @@ public partial class InventoryRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Инвентаризация. </returns>
-    private IQueryable<RigInventory.RigInventory> GetInventoryBySpecification(InventorySpecification specification)
+    private IQueryable<Rigs.RigInventory> GetInventoryBySpecification(InventorySpecification specification)
     {
         return _context.RigInventory.AsNoTrackingWithIdentityResolution()
                                     .Include(inventory => inventory.Rig)
@@ -91,10 +87,10 @@ public partial class InventoryRepository
                                     .Actualize(specification);
     }
 
-    private RigInventory.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
+    private Rigs.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
                                                    RigInventoryModel inventory)
     {
-        return new RigInventory.RigInventory()
+        return new Rigs.RigInventory()
         {
             RigId = rigId,
             CreatedDateTime = createdDate,
@@ -103,7 +99,7 @@ public partial class InventoryRepository
             Gpus = inventory.Gpus,
             NetworkAdapters = inventory.NetworkAdapters,
             Motherboard = inventory.Motherboard,
-            Software = _mapper.Map<SoftwareInventoryDto>(inventory.Software)
+            Software = inventory.Software
         };
     }
 }

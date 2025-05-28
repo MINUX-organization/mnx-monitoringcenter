@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking;
 

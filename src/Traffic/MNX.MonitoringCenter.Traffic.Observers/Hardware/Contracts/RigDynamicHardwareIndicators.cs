@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Network;
 using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices.Network;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices.Abstractions;
 

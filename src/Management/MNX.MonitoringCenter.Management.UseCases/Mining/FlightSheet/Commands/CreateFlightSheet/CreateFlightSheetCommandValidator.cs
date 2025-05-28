@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using FluentValidation;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.CreateFlightSheet;

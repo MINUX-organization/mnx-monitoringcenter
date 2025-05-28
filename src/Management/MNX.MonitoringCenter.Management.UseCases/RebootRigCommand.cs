@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using MNX.Application.UseCases.CommandValidation;
 using MNX.Application.UseCases.Results;
 using MNX.RigCommander.MessageQueue.Clients.Bus;
+using MNX.Application.UseCases.CommandValidation;
 
 namespace MNX.MonitoringCenter.Management.UseCases;
 

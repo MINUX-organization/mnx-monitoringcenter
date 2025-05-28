@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Software;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.RigInventory;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
 /// <summary>
 /// Конфигурация для таблицы с инвентаризацией ригов.
@@ -18,7 +18,7 @@ internal class RigInventoryCfg : IEntityTypeConfiguration<RigInventory>
 
         builder.HasOne(x => x.Software)
                .WithOne()
-               .HasForeignKey<SoftwareInventoryDto>("RigInventoryId");
+               .HasForeignKey<SoftwareInventory>("RigInventoryId");
 
         builder.HasOne(x => x.Rig)
                .WithMany(x => x.Inventories)

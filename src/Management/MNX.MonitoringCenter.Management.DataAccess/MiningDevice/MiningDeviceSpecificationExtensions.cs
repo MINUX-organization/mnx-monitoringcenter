@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
+﻿using System.Linq.Dynamic.Core;
 using MNX.MonitoringCenter.Management.UseCases;
-using System.Linq.Dynamic.Core;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 

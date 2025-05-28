@@ -1,9 +1,9 @@
-﻿using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+﻿using System.Reactive.Linq;
+using System.Reactive.Subjects;
+using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
 using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices.Abstractions;
-using System.Reactive.Linq;
-using System.Reactive.Subjects;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Hardware;
 

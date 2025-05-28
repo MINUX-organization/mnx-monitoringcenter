@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
 using MNX.MonitoringCenter.Traffic.Observers.Mining.Contracts.Devices;
+using MNX.MonitoringCenter.Traffic.Observers.Hardware.Contracts.Devices;
 
 namespace MNX.MonitoringCenter.RigsApi.Contracts.Args;
 

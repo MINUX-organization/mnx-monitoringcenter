@@ -26,9 +26,10 @@ public class RigRepository : IRigRepository
                          ILogger<RigRepository> logger,
                          IDbContextFactory<Context> contextFactory)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _logger = logger ?? throw new ArgumentNullException(nameof(logger));
-
+        _mapper = mapper
+            ?? throw new ArgumentNullException(nameof(mapper));
+        _logger = logger
+            ?? throw new ArgumentNullException(nameof(logger));
         _contextFactory = contextFactory
             ?? throw new ArgumentNullException(nameof(contextFactory));
     }

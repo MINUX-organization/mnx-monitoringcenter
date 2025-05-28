@@ -3,6 +3,7 @@ using MNX.Application.UseCases.DI;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Management.DataAccess;
+using MNX.MonitoringCenter.Management.Integration;
 using MNX.MonitoringCenter.Management.DataAccess.Preset;
 using MNX.MonitoringCenter.Management.DataAccess.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
@@ -30,9 +31,9 @@ public abstract class BaseTest
 
         var services = new ServiceCollection();
 
+        services.AddUseCaseMappingProfile();
         services.AddAutoMapper(cfg => cfg.AddProfiles(new List<Profile>()
         {
-            new MappingProfile(),
             new DbMappingProfile()
         }));
 

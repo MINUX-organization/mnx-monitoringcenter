@@ -23,10 +23,52 @@ public interface IMinerRepository
     Task<Miner?> GetMinerById(Guid id, CancellationToken cancellationToken);
 
     /// <summary>
-    /// Получить майнер по идентификатору.
+    /// Проверить существование майнера по id.
     /// </summary>
     /// <param name="id"> Идентификатор. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Признак существования майнера. </returns>
     Task<bool> Exists(Guid id, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверить существование майнера по идентификатору пользователя и наименованию майнера.
+    /// </summary>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="minerName"> Имя майнера. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Признак существования майнера. </returns>
+    Task<bool> Exists(Guid userId, string minerName, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Проверить существование майнера по идентификатору пользователя и наименованию майнера,
+    /// исключая майнер с идентификатором, равным minerId.
+    /// </summary>
+    /// <param name="minerId"> Идентификатор майнера. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="minerName"> Наименование майнера.</param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Признак существования майнера. </returns>
+    Task<bool> Exists(Guid minerId, Guid userId, string minerName, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Добавить майнер.
+    /// </summary>
+    /// <param name="miner"> Майнер. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task Add(Miner miner, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Редактировать майнер.
+    /// </summary>
+    /// <param name="miner"></param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task Edit(Miner miner, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Удалить майнер.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <param name="userId"></param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    Task Remove(Guid id, Guid userId, CancellationToken cancellationToken);
 }

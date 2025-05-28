@@ -1,11 +1,11 @@
 ﻿using AutoMapper;
-using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
-using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
-using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
+using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
+using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 

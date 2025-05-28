@@ -1,8 +1,7 @@
-﻿using AutoMapper;
-using MediatR;
-using MNX.MonitoringCenter.Management.Contracts.Presets;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
+﻿using MediatR;
+using AutoMapper;
 using System.Runtime.CompilerServices;
+using MNX.MonitoringCenter.Management.Contracts.Presets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 

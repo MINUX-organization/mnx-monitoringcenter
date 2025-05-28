@@ -1,10 +1,9 @@
 ﻿using MediatR;
+using NUnit.Framework;
 using Microsoft.Extensions.DependencyInjection;
+using MNX.SecurityManagement.Authentication.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Inventory.IntegrationTests;
-using MNX.SecurityManagement.Authentication.Contracts;
-using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests;
 

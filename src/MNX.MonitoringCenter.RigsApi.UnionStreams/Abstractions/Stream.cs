@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System.Reactive.Subjects;
 using MNX.MonitoringCenter.Traffic.Observers;
-using System.Reactive.Subjects;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 
@@ -30,13 +30,13 @@ public abstract class Stream
     /// <summary>
     /// Запуск потока.
     /// </summary>
-    /// <returns>Поток данных.</returns>
+    /// <returns> Поток данных. </returns>
     public abstract IAsyncEnumerable<object> StartStreaming();
 
     /// <summary>
     /// Остановка потока.
     /// </summary>
-    /// <param name="userId">Идентификатор пользователя.</param>
-    /// <param name="connectionId">Идентификатор соединения.</param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="connectionId"> Идентификатор соединения. </param>
     public abstract void StopStreaming(Guid userId, string connectionId);
 }

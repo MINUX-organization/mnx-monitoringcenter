@@ -1,5 +1,4 @@
 ﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus;
-using System.Threading.Channels;
 
 namespace MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 

@@ -12,7 +12,7 @@ internal static class InventoryQueryableExtensions
     /// </summary>
     /// <param name="inventory"> Запрашиваемый список записей инвентаризации. </param>
     /// <returns> Запрашиваемый список записей инвентаризации. </returns>
-    internal static IQueryable<RigInventory.RigInventory> Actualize(this IQueryable<RigInventory.RigInventory> inventory,
+    internal static IQueryable<Rigs.RigInventory> Actualize(this IQueryable<Rigs.RigInventory> inventory,
                                                                     InventorySpecification specification)
     {
         if (specification.IsActuality)
@@ -30,7 +30,7 @@ internal static class InventoryQueryableExtensions
     /// <param name="start"> Начало периода. </param>
     /// <param name="end"> Конец периода. </param>
     /// <returns> Инвентаризация. </returns>
-    internal static IQueryable<RigInventory.RigInventory> GetForAPeriod(this IQueryable<RigInventory.RigInventory> inventory,
+    internal static IQueryable<Rigs.RigInventory> GetForAPeriod(this IQueryable<Rigs.RigInventory> inventory,
                                                                         DateTimeOffset start,
                                                                         DateTimeOffset end)
     {

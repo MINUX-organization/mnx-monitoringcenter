@@ -21,7 +21,9 @@ public interface IWalletRepository
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Кошелёк </returns>
-    Task<Wallet?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken);
+    Task<Wallet?> GetAvailableById(Guid id,
+                                   Guid userId,
+                                   CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существования кошелька c переданным названием.
@@ -32,7 +34,9 @@ public interface IWalletRepository
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    Task<bool> ExistsWithName(Guid userId, string name, CancellationToken cancellationToken);
+    Task<bool> ExistsWithName(Guid userId,
+                              string name,
+                              CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существования кошелька с переданным адресом.
@@ -43,7 +47,9 @@ public interface IWalletRepository
     /// <returns>
     /// <see langword="true"/>, если существует, иначе <see langword="false"/>.
     /// </returns>
-    Task<bool> ExistsWithAddress(Guid userId, string address, CancellationToken cancellationToken);
+    Task<bool> ExistsWithAddress(Guid userId,
+                                 string address,
+                                 CancellationToken cancellationToken);
 
     /// <summary>
     /// Добавить кошелёк

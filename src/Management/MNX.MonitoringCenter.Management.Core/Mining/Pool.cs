@@ -13,7 +13,7 @@ public class Pool : IEquatable<Pool>
     /// <summary>
     /// Признак шифрования по протоколу TLS.
     /// </summary>
-    public bool Tls { get; }
+    public bool Tls { get; set; }
 
     /// <summary>
     /// Домен.

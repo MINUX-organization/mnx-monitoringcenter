@@ -68,6 +68,11 @@ public class MiningDeviceModel
     public string? MinerName { get; init; }
 
     /// <summary>
+    /// Версия майнера.
+    /// </summary>
+    public string? MinerVersion { get; init; }
+
+    /// <summary>
     /// Признак нахождения устройства в сети.
     /// </summary>
     public bool IsOnline { get; init; }

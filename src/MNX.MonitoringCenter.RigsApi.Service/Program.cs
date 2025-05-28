@@ -60,10 +60,10 @@ internal class Program
         services.AddControllers()
                 .AddJsonOptions(options =>
                 {
-                    // <НЕ ИСПРАВЛЯТЬ>
+                    // <НЕ ПЕРЕСТАВЛЯТЬ>
                     options.JsonSerializerOptions.Converters.Add(new EnumFlagsConverter());
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                    // </НЕ ИСПРАВЛЯТЬ>
+                    // </НЕ ПЕРЕСТАВЛЯТЬ>
 
                     options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
                     options.JsonSerializerOptions.Encoder = JavaScriptEncoder.Create(UnicodeRanges.BasicLatin, UnicodeRanges.Cyrillic);

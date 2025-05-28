@@ -25,19 +25,56 @@ public class Miner : IEquatable<Miner>
     public required string Version { get; init; }
 
     /// <summary>
-    /// Поддерживаемые алгоритмы.
+    /// Ссылка на архив, откуда скачивать майнер.
     /// </summary>
-    public List<MinerAlgorithm> SupportedAlgorithms { get; init; } = new(0);
+    public required string InstallationUrl { get; set; }
+
+    /// <summary>
+    /// Тип майнера.
+    /// </summary>
+    public MinerTypeEnum Type { get; init; } = MinerTypeEnum.Custom;
 
     /// <summary>
     /// Поддерживаемые комбинации типа устройств и производителя.
     /// </summary>
-    public DeviceTypeManufacturerCombination SupportedDevices { get; init; }
+    public DeviceTypeManufacturerCombination SupportedDevices { get; set; }
 
     /// <summary>
     /// Режим майнинга монет.
     /// </summary>
     public MiningModeEnum MiningMode { get; init; } = MiningModeEnum.Single;
+
+    /// <summary>
+    /// Поддерживаемые алгоритмы.
+    /// </summary>
+    public List<MinerAlgorithm> SupportedAlgorithms { get; init; } = [];
+
+    #region Only for custom miners
+
+    /// <summary>
+    /// Идентификатор пользователя.
+    /// </summary>
+    public Guid? OwnerId { get; init; }
+
+    /// <summary>
+    /// Шаблон, как подставлять пул в строку для запуска майнера.
+    /// </summary>
+    public string? PoolTemplate { get; set; }
+
+    /// <summary>
+    /// Шаблон, как подставлять кошелек и имя воркера для запуска майнера.
+    /// </summary>
+    public string? WalletWorkerTemplate { get; set; }
+    #endregion
+
+    /// <summary>
+    /// Проверить, является ли майнер доменным.
+    /// </summary>
+    /// <returns></returns>
+    public bool IsDomain()
+    {
+        return OwnerId is null;
+    }
 
     /// <summary>
     /// Получить признак поддержки майнером переданной конфигурации.
@@ -60,8 +97,8 @@ public class Miner : IEquatable<Miner>
             return false;
         }
 
-        if (!SupportedAlgorithms.Any(x 
-            => config.CoinConfigs.Any(y => x.AlgorithmId == y.Pool!.Cryptocurrency!.AlgorithmId)))
+        if (!SupportedAlgorithms.Any(x
+                => config.CoinConfigs.Any(y => x.AlgorithmId == y.Pool!.Cryptocurrency!.AlgorithmId)))
         {
             e.Add("Algorithm is not supported by miner.");
             errors = e;

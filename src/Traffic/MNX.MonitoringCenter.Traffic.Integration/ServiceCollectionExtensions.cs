@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Traffic.Observers;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Traffic.Observers.Mapping;
+using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 
 namespace MNX.MonitoringCenter.Traffic.Integration;
 

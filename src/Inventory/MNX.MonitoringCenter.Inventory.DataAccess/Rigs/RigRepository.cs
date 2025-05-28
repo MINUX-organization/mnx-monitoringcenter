@@ -12,14 +12,11 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 /// </summary>
 public class RigRepository : IRigRepository
 {
-    private readonly IMapper _mapper;
-
     private readonly InventoryRepository _inventoryRepository;
 
-    public RigRepository(Context context, IMapper mapper)
+    public RigRepository(Context context)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
-        _inventoryRepository = new InventoryRepository(context, mapper);
+        _inventoryRepository = new InventoryRepository(context);
     }
 
     /// <inheritdoc/>
@@ -29,6 +26,9 @@ public class RigRepository : IRigRepository
 
                             .Include(rig => rig.Inventories.Where(x => x.IsCurrent))
                                 .ThenInclude(inventory => inventory.Software)
+
+                            .Include(rig => rig.Inventories.Where(x => x.IsCurrent))
+                                .ThenInclude(inventory => inventory.Software.Miners)
 
                             .Include(rig => rig.Inventories.Where(x => x.IsCurrent))
                                 .ThenInclude(inventory => inventory.Cpus)
@@ -54,7 +54,7 @@ public class RigRepository : IRigRepository
                 Mac = rig.CurrentInventory!.NetworkAdapters.FirstOrDefault()?.Information.Mac,
                 GlobalIP = rig.CurrentInventory!.NetworkAdapters.FirstOrDefault()?.GlobalIP!,
                 LocalIP = rig.CurrentInventory!.NetworkAdapters.FirstOrDefault()?.LocalIP!,
-                Software = _mapper.Map<SoftwareInventory>(rig.CurrentInventory!.Software),
+                Software = rig.CurrentInventory!.Software,
                 CountDevices = new ModelWithCountDevices()
                 {
                     TotalCpusCountGroupedByManufacturer = rig.CurrentInventory.Cpus
@@ -72,6 +72,27 @@ public class RigRepository : IRigRepository
 
         // todo: поддержка GroupBy для сложных типов присутствует в EF 9. Это должно помочь не загружать лишних данных.
         //       https://learn.microsoft.com/ru-ru/ef/core/what-is-new/ef-core-9.0/whatsnew#complex-types-groupby-and-executeupdate-support
+    }
+
+    /// <inheritdoc/>
+    public Task<Guid[]> GetRigIdsByMinerCoincidence(string minerName,
+                                                    string minerVersion,
+                                                    Guid userId,
+                                                    CancellationToken cancellationToken)
+    {
+        var targetMiner = new KeyValuePair<string, string>(minerName, minerVersion);
+        return _inventoryRepository.GetMatchingRigIdsQuery(targetMiner, userId, cancellationToken);
+    }
+
+    /// <inheritdoc/>
+    public Task<Guid[]> GetRigIdsWithoutMiner(Guid[] rigIds,
+                                              Guid userId,
+                                              string minerName,
+                                              string minerVersion,
+                                              CancellationToken cancellationToken)
+    {
+        var targetMiner = new KeyValuePair<string, string>(minerName, minerVersion);
+        return _inventoryRepository.GetRigIdsWithoutMiner(rigIds, userId, targetMiner, cancellationToken);
     }
 
     /// <inheritdoc/>

@@ -1,5 +1,5 @@
-﻿using MNX.Application.UseCases.CommandValidation;
-using MNX.MonitoringCenter.Inventory.Contracts;
+﻿using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.Application.UseCases.CommandValidation;
 
 namespace MNX.MonitoringCenter.Management.Agent.Commands;
 

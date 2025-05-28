@@ -1,9 +1,9 @@
-﻿using EasyNetQ.AutoSubscribe;
-using MediatR;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Management.UseCases;
+﻿using MediatR;
+using EasyNetQ.AutoSubscribe;
 using MNX.RigCommander.Contracts;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.SecurityManagement.Authentication.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 

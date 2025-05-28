@@ -1,34 +1,33 @@
-﻿using EasyNetQ;
-using MediatR;
+﻿using MediatR;
+using EasyNetQ;
+using NUnit.Framework;
+using MNX.RigCommander.Contracts;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices;
+using MNX.MonitoringCenter.Inventory.UseCases.Software;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Inventory.UseCases;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Motherboard;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.UseCases.Software;
-using MNX.RigCommander.Contracts;
-using NUnit.Framework;
 
-namespace MNX.MonitoringCenter.Inventory.IntegrationTests;
+namespace MNX.MonitoringCenter.Inventory.UseCases.IntegrationTests;
 
 public class SaveInventoryTests : BaseTest
 {
     private IMediator _mediator;
 
-    private readonly static Guid OWNER_ID = Guid.Parse("0b8e36f9-bf02-4c88-97f8-cb5a81715000");
+    private readonly static Guid OWNER_ID = Guid.Parse("070c225b-03fd-40d7-93fd-8a5488582682");
 
     [SetUp]
     public void SetUp()
@@ -36,7 +35,7 @@ public class SaveInventoryTests : BaseTest
         _mediator = ServiceProvider.GetRequiredService<IMediator>();
     }
 
-    //[TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
+    [TestCaseSource(typeof(SaveCommandTestCase), nameof(SaveCommandTestCase.InventoryMessages))]
     public async Task SaveInventory(RigInventoryMsg inventoryMsg)
     {
         var rigRepository = ServiceProvider.GetRequiredService<IRigRepository>();
@@ -44,7 +43,7 @@ public class SaveInventoryTests : BaseTest
         {
             Id = inventoryMsg.RigId,
             OwnerId = OWNER_ID,
-            Name = "Minux"
+            Name = "Minux_Test"
         },
         default);
 
@@ -62,7 +61,7 @@ public class SaveInventoryTests : BaseTest
         var driveRepository = ServiceProvider.GetRequiredService<IDriveRepository>();
         var drives = await driveRepository
             .GetDrives(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId), default);
-        
+
 
         var gpuRepository = ServiceProvider.GetRequiredService<IGpuRepository>();
         var gpus = gpuRepository.GetGpus(new DeviceSpecification(OWNER_ID, inventoryMsg.RigId))
@@ -201,7 +200,7 @@ public class SaveInventoryTests : BaseTest
                             new Gpu()
                             {
                                 Id = gpuRig1Id,
-                                Pci = new Pci() { Id = 1, Bus = "00:01.0" },
+                                Pci = new Pci() { Id = 1, Bus = "01:00.0" },
                                 Information = new GpuInformation()
                                 {
                                     Manufacturer = "AMD",
@@ -327,13 +326,13 @@ public class SaveInventoryTests : BaseTest
                             Pcies = new()
                             {
                                 new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
+                                new MotherboardPci() { Id = 1, Bus = "01:00.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "02:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "03:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "04:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "05:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "06:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "07:00.0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -349,8 +348,16 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "lolMiner", "1.0.0" },
-                                { "rigel", "1.0.0" }
+                                new MinerInventory()
+                                {
+                                    Name = "xmrig",
+                                    Version = "6.22.2"
+                                },
+                                new MinerInventory()
+                                {
+                                    Name = "rigel",
+                                    Version = "1.21.3"
+                                }
                             }
                         }
                     }
@@ -435,7 +442,7 @@ public class SaveInventoryTests : BaseTest
                             new Gpu()
                             {
                                 Id = gpuRig1Id,
-                                Pci = new Pci() { Id = 1, Bus = "00:01.0" },
+                                Pci = new Pci() { Id = 1, Bus = "01:00.0" },
                                 Information = new GpuInformation()
                                 {
                                     Manufacturer = "AMD",
@@ -561,13 +568,13 @@ public class SaveInventoryTests : BaseTest
                             Pcies = new()
                             {
                                 new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
+                                new MotherboardPci() { Id = 1, Bus = "01:00.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "02:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "03:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "04:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "05:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "06:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "07:00.0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -583,8 +590,16 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "lolMiner", "1.0.0" },
-                                { "rigel", "1.0.0" }
+                                new MinerInventory()
+                                {
+                                    Name = "xmrig",
+                                    Version = "6.22.2"
+                                },
+                                new MinerInventory()
+                                {
+                                    Name = "rigel",
+                                    Version = "1.21.3"
+                                }
                             }
                         }
                     }
@@ -669,7 +684,7 @@ public class SaveInventoryTests : BaseTest
                             new Gpu()
                             {
                                 Id = gpuRig2Id,
-                                Pci = new Pci() { Id = 1, Bus = "00:01.0" },
+                                Pci = new Pci() { Id = 1, Bus = "01:00.0" },
                                 Information = new GpuInformation()
                                 {
                                     Manufacturer = "Nvidia",
@@ -795,13 +810,13 @@ public class SaveInventoryTests : BaseTest
                             Pcies = new()
                             {
                                 new MotherboardPci() { Id = 0, Bus = "00:00.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 1, Bus = "00:01.0", IsInstalled = true },
-                                new MotherboardPci() { Id = 2, Bus = "00:02.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 3, Bus = "00:03.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 4, Bus = "00:04.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 5, Bus = "00:05.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 6, Bus = "00:06.0", IsInstalled = false },
-                                new MotherboardPci() { Id = 7, Bus = "00:07.0", IsInstalled = false }
+                                new MotherboardPci() { Id = 1, Bus = "01:00.0", IsInstalled = true },
+                                new MotherboardPci() { Id = 2, Bus = "02:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 3, Bus = "03:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 4, Bus = "04:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 5, Bus = "05:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 6, Bus = "06:00.0", IsInstalled = false },
+                                new MotherboardPci() { Id = 7, Bus = "07:00.0", IsInstalled = false }
                             }
                         },
                         Software = new SoftwareInventory()
@@ -817,8 +832,16 @@ public class SaveInventoryTests : BaseTest
                             HardwareManagerVersion = "1.0.0",
                             Miners = new()
                             {
-                                { "lolMiner", "1.0.0" },
-                                { "rigel", "1.0.0" }
+                                new MinerInventory()
+                                {
+                                    Name = "xmrig",
+                                    Version = "6.22.2"
+                                },
+                                new MinerInventory()
+                                {
+                                    Name = "rigel",
+                                    Version = "1.21.3"
+                                }
                             }
                         }
                     }

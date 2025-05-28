@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts;
+﻿using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 
 namespace MNX.MonitoringCenter.Inventory.UseCases;
 
@@ -14,6 +14,34 @@ public interface IRigRepository
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Асинхронный поток ригов. </returns>
     IAsyncEnumerable<RigDetails> GetRigs(InventorySpecification specification);
+
+    /// <summary>
+    /// Получить список идентификаторов ригов по совпадению установленных майнеров.
+    /// </summary>
+    /// <param name="minerName"> Наименование майнера. </param>
+    /// <param name="minerVersion"> Версия майнера. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Массив идентификаторов ригов с совпадающими майнерами. </returns>
+    Task<Guid[]> GetRigIdsByMinerCoincidence(string minerName,
+                                             string minerVersion,
+                                             Guid userId,
+                                             CancellationToken cancellationToken);
+
+    /// <summary>
+    /// Получить список идентификаторов ригов, у которых нет заданного майнера.
+    /// </summary>
+    /// <param name="rigIds"> Идентификаторы ригов. </param>
+    /// <param name="userId"> ИДентификатор пользователя. </param>
+    /// <param name="minerName"> Наименование майнера. </param>
+    /// <param name="minerVersion"> Версия майнера. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    /// <returns> Массив идентификаторов ригов без майнера. </returns>
+    Task<Guid[]> GetRigIdsWithoutMiner(Guid[] rigIds,
+                                       Guid userId,
+                                       string minerName,
+                                       string minerVersion,
+                                       CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить признак существования рига.

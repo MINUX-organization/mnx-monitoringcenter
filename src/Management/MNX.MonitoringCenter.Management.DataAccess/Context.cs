@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto;
 using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
-using MNX.MonitoringCenter.Management.DataAccess.Overclocking;
-using System.Reflection;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 

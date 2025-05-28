@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices;
+﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 
 namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
 

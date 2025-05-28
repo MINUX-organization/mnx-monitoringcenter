@@ -1,6 +1,6 @@
 ﻿using MediatR;
-using MNX.MonitoringCenter.Management.Agent.Commands;
 using MNX.RigCommander.MessageQueue.Clients.Bus;
+using MNX.MonitoringCenter.Management.Agent.Commands;
 
 namespace MNX.MonitoringCenter.Management.UseCases;
 

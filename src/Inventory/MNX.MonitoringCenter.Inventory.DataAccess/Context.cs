@@ -19,7 +19,7 @@ public class Context : DbContext
     /// <summary>
     /// Записи инвентаризаций.
     /// </summary>
-    internal DbSet<RigInventory.RigInventory> RigInventory { get; set; }
+    internal DbSet<Rigs.RigInventory> RigInventory { get; set; }
 
     /// <summary>
     /// Видеокарты.

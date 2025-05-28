@@ -23,12 +23,12 @@ public class RigDto
     /// <summary>
     /// Список инвентаризаций.
     /// </summary>
-    public List<RigInventory.RigInventory> Inventories { get; init; } = new(0);
+    public List<RigInventory> Inventories { get; init; } = new(0);
 
     /// <summary>
     /// Текущая инвентаризация.
     /// </summary>
-    public RigInventory.RigInventory? CurrentInventory
+    public RigInventory? CurrentInventory
     {
         get => Inventories.FirstOrDefault(x => x.IsCurrent);
     }

@@ -3,7 +3,7 @@ using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using System.Runtime.CompilerServices;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases;
+namespace MNX.MonitoringCenter.Inventory.UseCases.Rigs.Queries;
 
 /// <summary>
 /// Обработчик <see cref="GetRigsQuery"/>.

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using MNX.Application.UseCases.Results;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.RemoveWallet;
 

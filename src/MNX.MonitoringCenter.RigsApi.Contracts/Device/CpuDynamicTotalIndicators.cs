@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.RigsApi.Contracts.Device.Abstractions;
-using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
+﻿using MNX.MonitoringCenter.Traffic.Contracts.Bus.Devices;
+using MNX.MonitoringCenter.RigsApi.Contracts.Device.Abstractions;
 
 namespace MNX.MonitoringCenter.RigsApi.Contracts.Device;
 
