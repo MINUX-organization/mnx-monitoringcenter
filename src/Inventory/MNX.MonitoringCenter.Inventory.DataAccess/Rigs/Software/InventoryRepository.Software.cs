@@ -15,7 +15,7 @@ public partial class InventoryRepository : ISoftwareRepository
     {
         return GetInventoryBySpecification(new InventorySpecification(userId, rigId))
                                  .Include(x => x.Software)
-                                 .Include(x => x.Software.Miners)
+                                    .ThenInclude(x => x.Miners)
                                  .Select(x => x.Software)
                                  .FirstOrDefaultAsync(cancellationToken);
     }
