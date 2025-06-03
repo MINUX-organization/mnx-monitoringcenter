@@ -44,21 +44,23 @@ public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInvento
                     .DependentRules(() =>
                     {
                         RuleFor(x => x.Message.Inventory.Cpus)
+                            .NotNull()
                             .NotEmpty()
                             .WithMessage(x => "Cpus inventory is required")
                             .ForEach(x => x.SetValidator(new CpuModelValidator()));
 
                         RuleFor(x => x.Message.Inventory.Drives)
-                            .NotEmpty()
-                            .WithMessage(x => "Drives inventory is required")
+                            .NotNull()
+                            .WithMessage(x => "Drives must not be null")
                             .ForEach(x => x.SetValidator(new DriveModelValidator()));
 
                         RuleFor(x => x.Message.Inventory.Gpus)
-                            .NotEmpty()
-                            .WithMessage(x => "Gpus inventory is required")
+                            .NotNull()
+                            .WithMessage(x => "Gpus must not be null")
                             .ForEach(x => x.SetValidator(new GpuModelValidator()));
 
                         RuleFor(x => x.Message.Inventory.NetworkAdapters)
+                            .NotNull()
                             .NotEmpty()
                             .WithMessage(x => "Network adapters inventory is required")
                             .Must(x => x.Any(adapter =>

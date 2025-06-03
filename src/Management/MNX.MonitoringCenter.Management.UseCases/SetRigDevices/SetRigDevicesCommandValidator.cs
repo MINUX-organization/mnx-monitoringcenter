@@ -20,11 +20,12 @@ public class SetRigDevicesCommandValidator : AbstractValidator<SetRigDevicesComm
             .WithMessage("Rig owner id is required");
 
         RuleFor(x => x.Gpus)
-            .NotEmpty()
-                .WithMessage($"{nameof(SetRigDevicesCommand.Gpus)} is required")
+            .NotNull()
+                .WithMessage($"{nameof(SetRigDevicesCommand.Gpus)} must not be null")
             .ForEach(x => x.SetValidator(new GpuModelValidator()));
 
         RuleFor(x => x.Cpus)
+            .NotNull()
             .NotEmpty()
                 .WithMessage($"{nameof(SetRigDevicesCommand.Cpus)} is required")
             .ForEach(x => x.SetValidator(new CpuModelValidator()));
