@@ -40,7 +40,7 @@ public class MinerModel
     /// Если null, то сущность является интегрированной,
     /// иначе - пользовательской.
     /// </remarks>
-    public Guid? UserId { get; set; }
+    public Guid? OwnerId { get; set; }
 
     /// <summary>
     /// Ссылка установки майнера.

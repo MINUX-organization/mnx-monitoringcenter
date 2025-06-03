@@ -1,7 +1,7 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Extensions;
 
 using Gpu = Contracts.Devices.Gpu.Gpu;
 

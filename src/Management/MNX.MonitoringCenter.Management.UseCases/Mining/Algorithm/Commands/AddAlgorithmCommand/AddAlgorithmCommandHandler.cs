@@ -42,7 +42,7 @@ public class AddAlgorithmCommandHandler : IRequestHandler<AddAlgorithmCommand, R
         var algorithm = new Algorithm 
         {
             Name = model.FullName,
-            UserId = request.UserId
+            OwnerId = request.UserId
         };
         
         using (var transaction = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))

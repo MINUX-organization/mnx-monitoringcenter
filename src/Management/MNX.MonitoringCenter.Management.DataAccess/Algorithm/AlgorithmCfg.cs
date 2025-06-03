@@ -12,6 +12,6 @@ internal class AlgorithmCfg : IEntityTypeConfiguration<Algorithm>
 {
     public void Configure(EntityTypeBuilder<Algorithm> builder)
     {
-        builder.HasIndex(x => new { x.UserId, x.Name }).IsUnique();
+        builder.HasIndex(x => new { x.OwnerId, x.Name }).IsUnique();
     }
 }

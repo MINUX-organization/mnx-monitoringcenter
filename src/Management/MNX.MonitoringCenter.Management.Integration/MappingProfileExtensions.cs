@@ -12,7 +12,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
 namespace MNX.MonitoringCenter.Management.Integration;
 
 /// <summary>
-/// Расширение <see cref="IServiceCollection"/> для интеграции модуля управления.
+/// Расширение <see cref="IServiceCollection"/> для интеграции профилей мапперов.
 /// </summary>
 public static class MappingProfileExtensions
 {

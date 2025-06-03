@@ -1,12 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
+namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Enums;
 
 /// <summary>
 /// Поддерживаемые производители видеокарт.
 /// </summary>
 [JsonConverter(typeof(JsonStringEnumConverter))]
-public enum SupportedGpuManufacturer
+public enum SupportedGpuManufacturerEnum
 {
     AMD,
 

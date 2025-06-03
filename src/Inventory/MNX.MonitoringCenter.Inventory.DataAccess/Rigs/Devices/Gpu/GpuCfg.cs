@@ -6,11 +6,16 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
 /// <summary>
 /// Конфигурация таблицы с видеокартами.
 /// </summary>
-internal class GpuCfg : IEntityTypeConfiguration<Contracts.Devices.Gpu.Gpu>
+internal class GpuCfg : IEntityTypeConfiguration<GpuInventoryDto>
 {
-    public void Configure(EntityTypeBuilder<Contracts.Devices.Gpu.Gpu> builder)
+    public void Configure(EntityTypeBuilder<GpuInventoryDto> builder)
     {
-        builder.HasKey("RigInventoryId", "Id");
+        builder.HasKey(x => new { x.RigInventoryId, x.Id });
+
+        builder.HasOne<RigInventory>()
+            .WithMany(x => x.Gpus)
+            .HasForeignKey(x => x.RigInventoryId)
+            .HasPrincipalKey(x => x.Id);
 
         builder.ComplexProperty(e => e.Pci);
 

@@ -48,7 +48,7 @@ public class EditMinerCommandHandler : IRequestHandler<EditCustomMinerCommand, R
         {
             return Result<Unit>.Invalid($"Miner with id equaled {request.MinerId} was not found");
         }
-        
+
         if ((newModel.Name != model.Name || newModel.Version != model.Version) &&
             await _minerRepository.Exists(request.MinerId, request.UserId, newModel.Name, cancellationToken))
         {
@@ -70,10 +70,45 @@ public class EditMinerCommandHandler : IRequestHandler<EditCustomMinerCommand, R
         };
         await _minerRepository.Edit(newMiner, cancellationToken);
 
+        if (HasRelevantMinerChanges(newMiner, model))
+        {
+            await SendInstallCommand(newMiner, model, request.UserId, cancellationToken);
+        }
+
+        return Result<Unit>.Empty();
+    }
+
+    /// <summary>
+    /// Получить признак изменения параметров майнера.
+    /// </summary>
+    /// <param name="newMiner"> Новый майнер. </param>
+    /// <param name="oldMiner"> Старый майнер. </param>
+    /// <returns> Признак дифференциации майнеров. </returns>
+    private bool HasRelevantMinerChanges(Miner newMiner, Miner oldMiner)
+    {
+        return newMiner.Name != oldMiner.Name ||
+            newMiner.Version != oldMiner.Version ||
+            newMiner.InstallationUrl != oldMiner.InstallationUrl ||
+            newMiner.PoolTemplate != oldMiner.PoolTemplate ||
+            newMiner.WalletWorkerTemplate != oldMiner.WalletWorkerTemplate;
+    }
+
+    /// <summary>
+    /// Отправить команду на инсталляцию майнера агенту.
+    /// </summary>
+    /// <param name="newMiner"> Новый майнер. </param>
+    /// <param name="oldMiner"> Старый майнер. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    private async Task SendInstallCommand(Miner newMiner,
+                                          Miner oldMiner,
+                                          Guid userId,
+                                          CancellationToken cancellationToken)
+    {
         var rigIds = await _mediator.Send(new GetRigsIdsByMinerCoincidenceQuery(
-            model.Name,
-            model.Version,
-            request.UserId), cancellationToken);
+            oldMiner.Name,
+            oldMiner.Version,
+            userId), cancellationToken);
 
         await _bus.Enqueue(new InstallMinerCommand(
                 newMiner.Name,
@@ -83,10 +118,8 @@ public class EditMinerCommandHandler : IRequestHandler<EditCustomMinerCommand, R
                 newMiner.WalletWorkerTemplate,
                 newMiner.Type.ToMinerTypeContract()),
             rigIds,
-            request.UserId,
+            userId,
             cancellationToken: cancellationToken
         );
-
-        return Result<Unit>.Empty();
     }
 }
