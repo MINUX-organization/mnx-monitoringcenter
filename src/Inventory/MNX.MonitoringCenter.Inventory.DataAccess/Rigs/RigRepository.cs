@@ -1,9 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.UseCases;
+using MNX.MonitoringCenter.Inventory.Contracts;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
@@ -14,9 +14,9 @@ public class RigRepository : IRigRepository
 {
     private readonly InventoryRepository _inventoryRepository;
 
-    public RigRepository(Context context)
+    public RigRepository(Context context, IMapper mapper)
     {
-        _inventoryRepository = new InventoryRepository(context);
+        _inventoryRepository = new InventoryRepository(context, mapper);
     }
 
     /// <inheritdoc/>

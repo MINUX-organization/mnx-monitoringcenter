@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
 
@@ -10,11 +11,18 @@ public sealed record GetAvailableAlgorithmsQuery : IStreamRequest<Core.Mining.Al
     /// <summary>
     /// Спецификация.
     /// </summary>
-    public Guid UserId { get; }
+    public Specification Specification { get; }
 
     public GetAvailableAlgorithmsQuery(Guid userId)
     {
-        UserId = userId;
+        Specification = new Specification(userId);
+    }
+
+    public GetAvailableAlgorithmsQuery(Guid userId,
+                                       string filterString,
+                                       object[] filterParameters)
+    {
+        Specification = new Specification(userId, filterString, filterParameters);
     }
 }
 
@@ -23,16 +31,16 @@ public sealed record GetAvailableAlgorithmsQuery : IStreamRequest<Core.Mining.Al
 /// </summary>
 public class GetAvailableAlgorithmsQueryHandler : IStreamRequestHandler<GetAvailableAlgorithmsQuery, Core.Mining.Algorithm>
 {
-    private readonly IAlgorithmRepository _repository;
+    private readonly IAlgorithmRepository _algorithmRepository;
 
     public GetAvailableAlgorithmsQueryHandler(IAlgorithmRepository repository)
     {
-        _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+        _algorithmRepository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
     public IAsyncEnumerable<Core.Mining.Algorithm> Handle(GetAvailableAlgorithmsQuery request,
-                                                                CancellationToken cancellationToken)
+                                                          CancellationToken cancellationToken)
     {
-        return _repository.GetAvailable(request.UserId);
+        return _algorithmRepository.GetAvailable(request.Specification);
     }
 }

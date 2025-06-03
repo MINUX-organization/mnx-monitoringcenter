@@ -10,9 +10,9 @@ public interface IAlgorithmRepository
     /// <summary>
     /// Получить доступные алгоритмы.
     /// </summary>
-    /// <param name="userId"> Идентификатор пользователя. </param>
+    /// <param name="specification"> Спецификация. </param>
     /// <returns> Список алгоритмов. </returns>
-    IAsyncEnumerable<Algorithm> GetAvailable(Guid userId);
+    IAsyncEnumerable<Algorithm> GetAvailable(Specification specification);
 
     /// <summary>
     /// Получить алгоритм по идентификатору.
@@ -77,7 +77,7 @@ public interface IAlgorithmRepository
     /// Редактировать имя алгоритма.
     /// </summary>
     /// <param name="algorithmId"> Идентификатор алгоритма. </param>
-    /// <param name="algorithmId"> Идентификатор пользователя. </param>
+    /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="newName"> Новое имя алгоритма. </param>
     Task EditAlgorithmName(Guid algorithmId, Guid userId, string newName);
 }

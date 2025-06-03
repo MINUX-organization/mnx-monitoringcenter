@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -12,9 +13,12 @@ public partial class InventoryRepository
 {
     private readonly Context _context;
 
-    public InventoryRepository(Context context)
+    private readonly IMapper _mapper;
+
+    public InventoryRepository(Context context, IMapper mapper)
     {
         _context = context ?? throw new ArgumentNullException(nameof(context));
+        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
     /// <summary>
@@ -96,7 +100,7 @@ public partial class InventoryRepository
             CreatedDateTime = createdDate,
             Cpus = inventory.Cpus,
             Drives = inventory.Drives,
-            Gpus = inventory.Gpus,
+            Gpus = _mapper.Map<List<GpuInventoryDto>>(inventory.Gpus),
             NetworkAdapters = inventory.NetworkAdapters,
             Motherboard = inventory.Motherboard,
             Software = inventory.Software

@@ -29,6 +29,8 @@ public static class ServiceCollectionExtensions
     /// <returns> DI. </returns>
     public static IServiceCollection AddInventoryModule(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddInventoryMappingProfile();
+
         services.AddMediatR(x => x.RegisterServicesFromAssemblies(
             typeof(GetRigsDetailsQuery).Assembly,
             typeof(SaveRigInventoryCommandHandler).Assembly

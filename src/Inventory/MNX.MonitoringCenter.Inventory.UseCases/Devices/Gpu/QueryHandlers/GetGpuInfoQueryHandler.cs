@@ -2,7 +2,7 @@
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpuInfo;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
+namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu.QueryHandlers;
 
 /// <summary>
 /// Обработчик <see cref="GetGpuInfoQuery"/>.

@@ -16,7 +16,7 @@ public class Algorithm : IEquatable<Algorithm>
     /// <remarks>
     /// Если имеет значение NULL, значит алгоритм является доменным.
     /// </remarks>
-    public Guid? UserId { get; init; }
+    public Guid? OwnerId { get; init; }
 
     /// <summary>
     /// Название.
@@ -34,7 +34,7 @@ public class Algorithm : IEquatable<Algorithm>
     /// </returns>
     public bool IsDomain()
     {
-        return UserId is null;
+        return OwnerId is null;
     }
 
     /// <inheritdoc/>

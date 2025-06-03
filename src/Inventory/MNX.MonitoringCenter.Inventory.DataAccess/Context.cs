@@ -1,8 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
+﻿using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
-using System.Reflection;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Enums;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -24,7 +24,7 @@ public class Context : DbContext
     /// <summary>
     /// Видеокарты.
     /// </summary>
-    internal DbSet<Gpu> Gpu { get; set; }
+    internal DbSet<GpuInventoryDto> Gpu { get; set; }
 
     public Context(DbContextOptions<Context> options) : base(options) { }
 
@@ -44,13 +44,13 @@ public class Context : DbContext
                                               string nvidiaDriverVersion,
                                               string gpuManufacturer)
     {
-        if (Enum.TryParse<SupportedGpuManufacturer>(gpuManufacturer, out var manufacturer))
+        if (Enum.TryParse<SupportedGpuManufacturerEnum>(gpuManufacturer, out var manufacturer))
         {
             return manufacturer switch
             {
-                SupportedGpuManufacturer.AMD => amdDriverVersion,
-                SupportedGpuManufacturer.Intel => intelDriverVersion,
-                SupportedGpuManufacturer.Nvidia => nvidiaDriverVersion,
+                SupportedGpuManufacturerEnum.AMD => amdDriverVersion,
+                SupportedGpuManufacturerEnum.Intel => intelDriverVersion,
+                SupportedGpuManufacturerEnum.Nvidia => nvidiaDriverVersion,
                 _ => null
             };
         }

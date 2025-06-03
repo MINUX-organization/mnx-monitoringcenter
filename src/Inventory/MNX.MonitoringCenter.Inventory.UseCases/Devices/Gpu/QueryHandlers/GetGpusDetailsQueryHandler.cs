@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
 
-namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
+namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu.QueryHandlers;
 
 /// <summary>
 /// Обработчик <see cref="GetGpusDetailsQuery"/>.

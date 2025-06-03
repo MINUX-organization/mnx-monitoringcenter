@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Extensions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpuInfo;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
+using AutoMapper.QueryableExtensions;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -39,14 +40,18 @@ public partial class InventoryRepository : IGpuRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<List<Gpu>> GetGpusSliceForAPeriod(DeviceSpecification specification,
-                                                              DateTimeOffset startPeriod,
-                                                              DateTimeOffset endPeriod)
+    public async IAsyncEnumerable<List<Gpu>> GetGpusSliceForAPeriod(DeviceSpecification specification,
+                                                                    DateTimeOffset startPeriod,
+                                                                    DateTimeOffset endPeriod)
     {
-        return GetInventorySliceForAPeriod(specification.InventorySpecification, startPeriod, endPeriod)
-                                 .Include(x => x.Gpus)
-                                 .Select(x => x.Gpus)
-                                 .AsAsyncEnumerable();
+        var inventories = GetInventorySliceForAPeriod(specification.InventorySpecification, startPeriod, endPeriod)
+                          .Include(x => x.Gpus)
+                          .AsAsyncEnumerable();
+
+        await foreach (var inventory in inventories)
+        {
+            yield return _mapper.Map<List<Gpu>>(inventory.Gpus);
+        }
     }
 
     /// <inheritdoc/>
@@ -116,7 +121,7 @@ public partial class InventoryRepository : IGpuRepository
     {
         return _context.Gpu
             .AsNoTracking()
-            .OrderBy(x => x.Id)
+            .OrderBy(x => x.RigInventoryId)
             .Where(x => x.Id == gpuId)
             .Select(x => x.Restrictions)
             .LastOrDefaultAsync();

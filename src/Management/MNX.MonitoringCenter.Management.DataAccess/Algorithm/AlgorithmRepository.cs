@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Algorithm;
@@ -18,10 +19,13 @@ public class AlgorithmRepository : IAlgorithmRepository
     }
 
     /// <inheritdoc/>
-    public IAsyncEnumerable<Algorithm> GetAvailable(Guid userId)
+    public IAsyncEnumerable<Algorithm> GetAvailable(Specification specification)
     {
-        return _context.Algorithms.Available(userId)
+        return _context.Algorithms
             .AsNoTracking()
+            .Available(specification)
+            .OrderBy(e => e.OwnerId == null)
+            .ThenBy(e => e.OwnerId)
             .AsAsyncEnumerable();
     }
 
@@ -45,9 +49,9 @@ public class AlgorithmRepository : IAlgorithmRepository
 
     /// <inheritdoc/>
     public Task<bool> Exists(Guid algorithmId,
-                                   string name,
+                             string name,
                                    Guid userId,
-                                   CancellationToken cancellationToken)
+                             CancellationToken cancellationToken)
     {
         return _context.Algorithms.AsNoTracking()
             .Available(userId)
@@ -66,7 +70,7 @@ public class AlgorithmRepository : IAlgorithmRepository
     public Task Remove(Guid id, Guid userId)
     {
         return _context.Algorithms
-            .Where(x => x.Id == id && x.UserId == userId)
+            .Where(x => x.Id == id && x.OwnerId == userId)
             .ExecuteDeleteAsync();
     }
 
@@ -76,7 +80,7 @@ public class AlgorithmRepository : IAlgorithmRepository
                                   string newName)
     {
         return _context.Algorithms
-            .Where(x => x.Id == algorithmId && x.UserId == userId)
+            .Where(x => x.Id == algorithmId && x.OwnerId == userId)
                 .ExecuteUpdateAsync(x => x.SetProperty(a => a.Name, newName));
     }
 }
