@@ -7,6 +7,7 @@ using MNX.Application.Serializers.MsgPack;
 
 namespace MNX.MonitoringCenter.Traffic.Contracts.SerializationTests;
 
+[Category("Active")]
 public class MsgPackSerializersTests
 {
     private readonly IMessageSerializer _serializer = new MsgPackSerializer();
