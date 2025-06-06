@@ -22,7 +22,7 @@ public class RigInventoryModelValidator : AbstractValidator<RigInventoryModel>
         var occupiedBuses = model.Motherboard.Pcies
             .Where(slot => slot.IsInstalled)
             .Select(slot => slot.Bus)
-            .ToHashSet();
+            .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
         var deviceBuses = model.Cpus
             .Where(cpu => cpu.Pci != null)
@@ -30,7 +30,7 @@ public class RigInventoryModelValidator : AbstractValidator<RigInventoryModel>
             .Concat(model.Gpus
                 .Where(gpu => gpu.Pci != null)
                 .Select(gpu => gpu.Pci.Bus))
-            .ToHashSet();
+            .ToHashSet(StringComparer.InvariantCultureIgnoreCase);
 
         bool isCpu00Present = model.Cpus.Any(cpu => cpu.Pci?.Bus == "00:00.0");
         bool isGpu00Present = model.Gpus.Any(gpu => gpu.Pci?.Bus == "00:00.0");
