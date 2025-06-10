@@ -25,6 +25,7 @@ public class WalletRepository : IWalletRepository
         return _context.Wallets.Include(x => x.Cryptocurrency)
                                .Where(x => x.UserId == specification.UserId)
                                .Filter(specification)
+                               .Sort()
                                .AsNoTrackingWithIdentityResolution()
                                .AsAsyncEnumerable();
     }

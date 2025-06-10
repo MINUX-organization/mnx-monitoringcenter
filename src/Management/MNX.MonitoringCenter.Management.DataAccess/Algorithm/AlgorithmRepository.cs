@@ -24,8 +24,7 @@ public class AlgorithmRepository : IAlgorithmRepository
         return _context.Algorithms
             .AsNoTracking()
             .Available(specification)
-            .OrderBy(e => e.OwnerId == null)
-            .ThenBy(e => e.OwnerId)
+            .Sort()
             .AsAsyncEnumerable();
     }
 
@@ -50,7 +49,7 @@ public class AlgorithmRepository : IAlgorithmRepository
     /// <inheritdoc/>
     public Task<bool> Exists(Guid algorithmId,
                              string name,
-                                   Guid userId,
+                             Guid userId,
                              CancellationToken cancellationToken)
     {
         return _context.Algorithms.AsNoTracking()

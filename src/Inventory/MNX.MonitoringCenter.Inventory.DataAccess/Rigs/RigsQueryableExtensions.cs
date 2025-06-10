@@ -40,4 +40,15 @@ internal static class RigsQueryableExtensions
 
         return rigs;
     }
+
+    /// <summary>
+    /// Сортировать сущности по алфавиту.
+    /// </summary>
+    /// <param name="entities"> Сущности. </param>
+    /// <returns> Сортированные сущности. </returns>
+    internal static IQueryable<RigDto> Sort(
+        this IQueryable<RigDto> entities)
+    {
+        return entities.OrderBy(x => x.Name);
+    }
 }

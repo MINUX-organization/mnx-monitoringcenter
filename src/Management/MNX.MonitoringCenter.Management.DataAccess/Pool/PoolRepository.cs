@@ -22,8 +22,9 @@ public class PoolRepository : IPoolRepository
     public IAsyncEnumerable<Pool> GetAllAvailable(Specification specification)
     {
         return _context.Pools.Include(x => x.Cryptocurrency)
-                             .Where(x => x.UserId == specification.UserId || x.UserId == null)
+                             .Available(specification)
                              .Filter(specification)
+                             .Sort()
                              .AsNoTrackingWithIdentityResolution()
                              .AsAsyncEnumerable();
     }
@@ -34,7 +35,7 @@ public class PoolRepository : IPoolRepository
         return _context.Pools.Include(x => x.Cryptocurrency)
                                 .ThenInclude(c => c!.Algorithm)
                              .AsNoTrackingWithIdentityResolution()
-                             .Where(x => x.UserId == userId || x.UserId == null)
+                             .Available(userId)
                              .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
@@ -42,7 +43,7 @@ public class PoolRepository : IPoolRepository
     public Task<bool> Exists(Guid userId, string domain, int port, CancellationToken cancellationToken)
     {
         return _context.Pools.AsNoTracking()
-                             .Where(x => x.UserId == userId || x.UserId == null)
+                             .Available(userId)
                              .AnyAsync(x => x.Domain == domain && x.Port == port, cancellationToken);
     }
 

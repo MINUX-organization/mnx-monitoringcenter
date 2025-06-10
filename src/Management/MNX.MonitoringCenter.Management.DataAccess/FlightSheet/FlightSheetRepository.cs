@@ -30,6 +30,7 @@ public class FlightSheetRepository : IFlightSheetRepository
         return GetFlightSheets(specification.UserId)
             .Filter(specification)
             .ProjectTo<FlightSheet>(_mapper.ConfigurationProvider)
+            .Sort()
             .AsAsyncEnumerable();
     }
 

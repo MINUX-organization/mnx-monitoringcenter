@@ -7,9 +7,9 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Miner;
 using Miner = Core.Mining.Miner.Miner;
 
 /// <summary>
-/// Класс с расширениями функций <see cref="MinerRepository"/>.
+/// Расширения функций <see cref="MinerRepository"/>.
 /// </summary>
-internal static class MinerExtensions
+internal static class MinerQueryExtensions
 {
     /// <summary>
     /// Фильтровать сущности по спецификации.
@@ -26,10 +26,22 @@ internal static class MinerExtensions
         if (!string.IsNullOrWhiteSpace(specification.FilterString) &&
             specification.FilterParameters is not null)
         {
-            return entities
-                .Where(specification.FilterString, specification.FilterParameters);
+            return entities.Where(specification.FilterString,
+                                  specification.FilterParameters);
         }
 
         return entities;
+    }
+
+    /// <summary>
+    /// Сортировать сущности по идентификатору пользователя и алфавиту.
+    /// </summary>
+    /// <param name="entities"> Сущности. </param>
+    /// <returns> Сортированные сущности. </returns>
+    internal static IQueryable<Miner> Sort(this IQueryable<Miner> entities)
+    {
+        return entities.OrderBy(x => x.Type)
+                       .ThenBy(x => x.Name)
+                       .ThenByDescending(x => x.Version);
     }
 }

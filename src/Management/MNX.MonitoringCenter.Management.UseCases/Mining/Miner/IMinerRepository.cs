@@ -35,9 +35,10 @@ public interface IMinerRepository
     /// </summary>
     /// <param name="userId"> Идентификатор пользователя. </param>
     /// <param name="minerName"> Имя майнера. </param>
+    /// <param name="minerVersion"> Версия майнера. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Признак существования майнера. </returns>
-    Task<bool> Exists(Guid userId, string minerName, CancellationToken cancellationToken);
+    Task<bool> Exists(Guid userId, string minerName, string minerVersion, CancellationToken cancellationToken);
 
     /// <summary>
     /// Проверить существование майнера по идентификатору пользователя и наименованию майнера,

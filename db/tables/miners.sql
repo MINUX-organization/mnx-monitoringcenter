@@ -11,7 +11,9 @@ CREATE TABLE monitoring_center.miners
     pool_template text,
     wallet_worker_template text,
 
-    CONSTRAINT pk_miners PRIMARY KEY (id)
+    CONSTRAINT pk_miners PRIMARY KEY (id),
+
+    CONSTRAINT unique_name_version_user_id UNIQUE (name, version, owner_id)
 );
 
 CREATE INDEX ix_miners_name

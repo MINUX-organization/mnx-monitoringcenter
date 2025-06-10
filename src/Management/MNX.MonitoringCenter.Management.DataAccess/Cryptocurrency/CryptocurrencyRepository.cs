@@ -22,8 +22,9 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     public IAsyncEnumerable<Cryptocurrency> GetAllAvailable(Specification specification)
     {
         return _context.Cryptocurrencies.AsNoTrackingWithIdentityResolution()
-                                        .Where(x => x.UserId == specification.UserId || x.UserId == null)
+                                        .Available(specification.UserId)
                                         .Filter(specification)
+                                        .Sort()
                                         .Include(x => x.Algorithm)
                                         .AsAsyncEnumerable();
     }
@@ -32,18 +33,22 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     public Task<Cryptocurrency?> GetAvailableById(Guid id, Guid userId, CancellationToken cancellationToken)
     {
         return _context.Cryptocurrencies.AsNoTrackingWithIdentityResolution()
-                                        .Where(x => x.UserId == userId || x.UserId == null)
+                                        .Available(userId)
                                         .Include(x => x.Algorithm)
                                         .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(Guid userId, string fullName, string shortName, CancellationToken cancellationToken)
+    public Task<bool> Exists(Guid userId,
+                             string fullName,
+                             string shortName,
+                             CancellationToken cancellationToken)
     {
         return _context.Cryptocurrencies
                             .AsNoTracking()
-                            .Where(x => x.UserId == userId || x.UserId == null)
-                            .AnyAsync(x => x.FullName.Equals(fullName) || x.ShortName.Equals(shortName), cancellationToken);
+                            .Available(userId)
+                            .AnyAsync(x => x.FullName.Equals(fullName) ||
+                                           x.ShortName.Equals(shortName), cancellationToken);
     }
 
     /// <inheritdoc/>

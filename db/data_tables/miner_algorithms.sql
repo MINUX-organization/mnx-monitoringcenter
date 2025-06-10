@@ -30,6 +30,54 @@ $$ language plpgsql;
 
 insert into monitoring_center.miner_algorithms(miner_id, algorithm_id, name)
 
+select monitoring_center.get_miner_id('rigel', '1.22.1'), f.algorithm_id, f.name from
+(
+    SELECT monitoring_center.get_algorithm_id('Ethash (Ethereum)') algorithm_id, 'ethash' name UNION ALL
+    SELECT monitoring_center.get_algorithm_id('EtcHash'), 'etchash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Blake3 (Alephium)'), 'alephium' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Abelian'), 'abelian' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Autolykos2'), 'autolykos2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Ethash-B3'), 'ethashb3' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('FishHash'), 'fishhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Karlsenhash'), 'karlsenhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('KarlsenhashV2'), 'karlsenhashv2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Kawpow'), 'kawpow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('NexaPow'), 'nexapow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Octopus'), 'octopus' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('HeavyHash-Pyrin (Pyrin, Pyrinhash)'), 'pyrinhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Quai (ProgPow)'), 'quai' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Gram'), 'sha256ton' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Ton'), 'sha256ton' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Radiant (SHA-512-256D)'), 'sha512256d' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('XelisHash (Xel)'), 'xelishash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('XelisHashV2 (Xel)'), 'xelishashv2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Ziliqa (ZIL)'), 'zil'
+) f union all
+
+select monitoring_center.get_miner_id('rigel', '1.22.0'), f.algorithm_id, f.name from
+(
+    SELECT monitoring_center.get_algorithm_id('Ethash (Ethereum)') algorithm_id, 'ethash' name UNION ALL
+    SELECT monitoring_center.get_algorithm_id('EtcHash'), 'etchash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Blake3 (Alephium)'), 'alephium' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Abelian'), 'abelian' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Autolykos2'), 'autolykos2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Ethash-B3'), 'ethashb3' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('FishHash'), 'fishhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Karlsenhash'), 'karlsenhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('KarlsenhashV2'), 'karlsenhashv2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Kawpow'), 'kawpow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('NexaPow'), 'nexapow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Octopus'), 'octopus' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('HeavyHash-Pyrin (Pyrin, Pyrinhash)'), 'pyrinhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Quai (ProgPow)'), 'quai' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Gram'), 'sha256ton' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Ton'), 'sha256ton' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Radiant (SHA-512-256D)'), 'sha512256d' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('XelisHash (Xel)'), 'xelishash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('XelisHashV2 (Xel)'), 'xelishashv2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Ziliqa (ZIL)'), 'zil'
+) f union all
+
 select monitoring_center.get_miner_id('rigel', '1.21.3'), f.algorithm_id, f.name from
 (
     SELECT monitoring_center.get_algorithm_id('Ethash (Ethereum)') algorithm_id, 'ethash' name UNION ALL
@@ -456,6 +504,81 @@ select monitoring_center.get_miner_id('teamredminer', '0.10.20'), f.algorithm_id
     SELECT monitoring_center.get_algorithm_id('CryptoNight Conceal (CCX)'), 'cn_conceal' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Chukwa (Argon2id-Chuckwa)'), 'trtl_chukwa' UNION ALL
     SELECT monitoring_center.get_algorithm_id('Chukwa2'), 'trtl_chukwa2'
+) f union all
+
+select monitoring_center.get_miner_id('SRBMiner-MULTI', '2.9.0'), f.algorithm_id, f.name from
+(
+    SELECT monitoring_center.get_algorithm_id('Ethash (Ethereum)') algorithm_id, 'ethash' name UNION ALL
+    SELECT monitoring_center.get_algorithm_id('EtcHash'), 'etchash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Argon2d-16000'), 'argon2d_16000' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Argon2d-Dyn (Dynamic)'), 'argon2d_dynamic' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Chukwa (Argon2id-Chuckwa)'), 'argon2id_chukwa' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Chukwa2'), 'argon2id_chukwa2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Aurum'), 'aurum' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Autolykos2'), 'autolykos2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Decred (Blake3)'), 'blake3_decred' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('CpuPower'), 'cpupower' UNION ALL
+    select monitoring_center.get_algorithm_id('CryptoNight Conceal (CCX)'), 'cryptonight_ccx' union all
+    SELECT monitoring_center.get_algorithm_id('CryptoNight GPU'), 'cryptonight_gpu' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('CryptoNight Turtle'), 'cryptonight_turtle' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('CryptoNight UPX'), 'cryptoonight_upx' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Curvehash'), 'curvehash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Ethash-B3'), 'ethashb3' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('EvrProgPow'), 'evrprogpow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('FiroPow'), 'firopow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('FishHash'), 'fishhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('GhostRider (Raptoreum)'), 'ghostrider' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('HeavyHash'), 'heavyhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('KarlsenhashV2'), 'karlsenhashv2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Kawpow'), 'kawpow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Lyra2REv2 (WebChain)'), 'lyra2v2_webchain' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Meowpow'), 'meowpow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Mike'), 'mike' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('MinotaurX'), 'minotaurx' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Panthera'), 'panthera' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Quai (ProgPow)'), 'progpow_quai' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('ProgPowSERO (SERO)'), 'progpow_sero' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('ProgPowVeil'), 'progpow_veil' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomArq'), 'randomarq' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomEpic'), 'randomepic' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomSCASH'), 'randomscash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomSFX'), 'randomsfx' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomTuske'), 'randomtuske' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomX'), 'randomx' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomYADA'), 'randomyada' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('SHA256DT'), 'sha256dt' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Verthash'), 'verthash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Verushash'), 'verushash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('XelisHash (Xel)'), 'xelishash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('XelisHashV2 (Xel)'), 'xelishashv2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Kaspa (KHeavyHash)'), 'kaspa' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('HeavyHash-Pyrin (Pyrin, Pyrinhash)'), 'pyrinhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Radiant (SHA-512-256D)'), 'sha512_256d_radiant' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Blake (2b)'), 'blake2b' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Blake (2s)'), 'blake2s' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Blake3 (Alephium)'), 'blake3_alephium' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('IronFish (Blake3)'), 'blake3_ironfish' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('CryptoNight Talleo'), 'cryptonight_talleo' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Keccak'), 'keccak' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Memehash'), 'memehash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Memehash (ApepePow)'), 'memehash_apepepow' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('PufferFish2BMB'), 'pufferfish2bmb' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomHash2'), 'randomhash2' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomNEVO'), 'randomnevo' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomKEVA'), 'randomkeva' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('RandomGRAFT'), 'randomgrft' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('SHA3d'), 'sha3d' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Ubqhash'), 'ubqhash' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Yescrypt'), 'yescrypt' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('YescryptR8'), 'yescryptr8' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('YescryptR16'), 'yescryptr16' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('YescryptR32'), 'yescryptr32' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Yespower'), 'yespower' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('Yespower2B'), 'yespower2b' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('YespowerSugar'), 'yespowersugar' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('YespowerUrx'), 'yespowerurx' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('YespowerLtncg'), 'yespowerltncg' UNION ALL
+    SELECT monitoring_center.get_algorithm_id('YespowerR16'), 'yespowerr16'
 ) f union all
 
 select monitoring_center.get_miner_id('SRBMiner-MULTI', '2.8.8'), f.algorithm_id, f.name from

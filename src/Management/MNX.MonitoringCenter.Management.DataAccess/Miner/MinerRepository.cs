@@ -25,7 +25,7 @@ public class MinerRepository : IMinerRepository
                        .AsNoTrackingWithIdentityResolution()
                        .Include(miner => miner.SupportedAlgorithms)
                        .Filter(specification)
-                       .OrderBy(miner => miner.Type)
+                       .Sort()
                        .AsAsyncEnumerable();
     }
 
@@ -39,11 +39,17 @@ public class MinerRepository : IMinerRepository
     }
 
     /// <inheritdoc/>
-    public Task<bool> Exists(Guid userId, string minerName, CancellationToken cancellationToken)
+    public Task<bool> Exists(Guid userId,
+                             string minerName,
+                             string minerVersion,
+                             CancellationToken cancellationToken)
     {
         return _context.Miners
                        .AsNoTracking()
-                       .AnyAsync(x => x.OwnerId == userId && x.Name == minerName, cancellationToken);
+                       .AnyAsync(x => x.OwnerId == userId &&
+                                      x.Name == minerName &&
+                                      x.Version == minerVersion,
+                       cancellationToken);
     }
 
     /// <inheritdoc/>
