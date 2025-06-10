@@ -1,12 +1,12 @@
 ﻿namespace MNX.MonitoringCenter.Management.Contracts;
 
 /// <summary>
-/// Модель для пула
+/// Модель для пула.
 /// </summary>
 public class PoolModel
 {
     /// <summary>
-    /// Уникальный идентификатор
+    /// Уникальный идентификатор.
     /// </summary>
     public Guid Id { get; set; }
 
@@ -17,7 +17,7 @@ public class PoolModel
     /// Если null, то сущность является доменной,
     /// иначе - пользовательской.
     /// </remarks>
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     /// <summary>
     /// Признак шифрования по протоколу TLS.
@@ -25,12 +25,12 @@ public class PoolModel
     public bool Tls { get; set; }
 
     /// <summary>
-    /// Домен
+    /// Домен.
     /// </summary>
     public required string Domain { get; set; }
 
     /// <summary>
-    /// Порт
+    /// Порт.
     /// </summary>
     public int Port { get; set; }
 
@@ -40,7 +40,7 @@ public class PoolModel
     public Guid CryptocurrencyId { get; set; }
 
     /// <summary>
-    /// Полное название криптовалюты
+    /// Полное название криптовалюты.
     /// </summary>
     public required string Cryptocurrency { get; set; }
 }

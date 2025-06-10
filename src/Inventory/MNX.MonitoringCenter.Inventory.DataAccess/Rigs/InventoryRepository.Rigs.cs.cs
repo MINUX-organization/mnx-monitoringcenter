@@ -19,7 +19,8 @@ public partial class InventoryRepository
     {
         return _context.Rigs.AsNoTrackingWithIdentityResolution()
                             .Available(specification)
-                            .Filter(specification);
+                            .Filter(specification)
+                            .Sort();
     }
 
     /// <summary>

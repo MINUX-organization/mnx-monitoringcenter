@@ -31,7 +31,7 @@ public class MinerModel
     /// <summary>
     /// Список алгоритмов.
     /// </summary>
-    public List<MinerAlgorithmModel> Algorithms { get; set; } = [];
+    public List<MinerAlgorithmModel> SupportedAlgorithms { get; set; } = [];
 
     /// <summary>
     /// Идентификатор пользователя.

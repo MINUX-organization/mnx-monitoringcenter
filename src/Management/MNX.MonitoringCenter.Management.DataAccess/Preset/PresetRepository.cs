@@ -31,6 +31,7 @@ public class PresetRepository : IPresetRepository
         var presets = from preset in _context.Presets.AsNoTrackingWithIdentityResolution()
                                                      .Where(x => x.UserId == specification.UserId && x.IsVisible)
                                                      .Filter(specification)
+                                                     .Sort()
                       join overclocking in _context.Overclocking.AsNoTracking()
                         on preset.OverclockingId equals overclocking.Id
                       select new Preset()

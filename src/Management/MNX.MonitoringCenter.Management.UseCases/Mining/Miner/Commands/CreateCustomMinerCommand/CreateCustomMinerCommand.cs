@@ -1,8 +1,7 @@
-﻿using MediatR;
-using AutoMapper;
-using MNX.Application.UseCases.Results;
+﻿using AutoMapper;
+using MediatR;
 using MNX.Application.UseCases.Requests;
-using MNX.RigCommander.MessageQueue.Clients.Bus;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Miner;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
@@ -34,12 +33,17 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
         _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
     }
 
-    public async Task<Result<MinerModel>> Handle(CreateCustomMinerCommand request, CancellationToken cancellationToken)
+    public async Task<Result<MinerModel>> Handle(CreateCustomMinerCommand request,
+                                                 CancellationToken cancellationToken)
     {
         var model = request.Model;
-        if (await _minerRepository.Exists(request.UserId, model.Name, cancellationToken))
+        if (await _minerRepository.Exists(request.UserId,
+                                          model.Name,
+                                          model.Version,
+                                          cancellationToken))
         {
-            return Result<MinerModel>.Conflict($"Miner with name {model.Name} already exists");
+            return Result<MinerModel>.Conflict(
+                $"Miner with name {model.Name} and version {model.Version} already exists");
         }
 
         var miner = new Miner()
