@@ -1,9 +1,10 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using Microsoft.AspNetCore.Authorization;
-using MNX.MonitoringCenter.Management.UseCases.Mining;
+using MNX.MonitoringCenter.RigsApi.Core.ValueObjects;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.UseCases.RigState.Mining;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -37,7 +38,7 @@ public class MiningController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Start(Guid rigId)
     {
-        var result = await _mediator.Send(new StartMiningCommand(rigId, _userId));
+        var result = await _mediator.Send(new InitiateStartMiningCommand(new RigId(rigId), _userId));
         return result.ToActionResult();
     }
 
@@ -53,7 +54,7 @@ public class MiningController : ControllerBase
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> Stop(Guid rigId)
     {
-        var result = await _mediator.Send(new StopMiningCommand(rigId, _userId));
+        var result = await _mediator.Send(new InitiateStopMiningCommand(new RigId(rigId), _userId));
         return result.ToActionResult();
     }
 }

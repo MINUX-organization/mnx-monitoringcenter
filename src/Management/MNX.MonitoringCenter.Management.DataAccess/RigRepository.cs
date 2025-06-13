@@ -35,15 +35,6 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public async Task<bool> Exists(Guid id, Guid userId)
-    {
-        using var context = _contextFactory.CreateDbContext();
-        return await context.MiningDevices
-                      .AsNoTracking()
-                      .AnyAsync(x => x.RigId == id && x.OwnerId == userId);
-    }
-
-    /// <inheritdoc/>
     public async Task SetDevices(Guid rigId, List<(Core.Mining.MiningDevice.MiningDevice Devices, IOverclocking Overclockings)> devicesTuple)
     {
         var retryPolicy = Policy

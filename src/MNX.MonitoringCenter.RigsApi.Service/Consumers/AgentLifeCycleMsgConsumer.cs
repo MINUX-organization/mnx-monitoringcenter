@@ -1,9 +1,10 @@
-﻿using MediatR;
-using EasyNetQ.AutoSubscribe;
+﻿using EasyNetQ.AutoSubscribe;
+using MediatR;
+using MNX.MonitoringCenter.RigsApi.Core.ValueObjects;
+using MNX.MonitoringCenter.RigsApi.UseCases;
+using MNX.MonitoringCenter.RigsApi.UseCases.RigState.Power;
 using MNX.RigCommander.Contracts;
-using MNX.MonitoringCenter.Management.UseCases;
 using MNX.SecurityManagement.Authentication.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 
@@ -17,6 +18,7 @@ public class AgentLifeCycleMsgConsumer :
 {
     private readonly IMediator _mediator;
 
+    ///
     public AgentLifeCycleMsgConsumer(IMediator mediator)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
@@ -29,7 +31,8 @@ public class AgentLifeCycleMsgConsumer :
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(AgentRegisteredMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Send(new AddRigCommand(message.Id, message.OwnerId, message.Nickname), cancellationToken);
+        var command = new AddRigCommand(new RigId(message.Id), message.OwnerId, message.Nickname);
+        return _mediator.Send(command, cancellationToken);
     }
 
     /// <summary>
@@ -39,7 +42,7 @@ public class AgentLifeCycleMsgConsumer :
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(AgentConnectedMsg message, CancellationToken cancellationToken = default)
     {
-        return _mediator.Publish(new RigConnectedEvent(message.AgentId), cancellationToken);
+        return _mediator.Send(new TurnOnCommand(new RigId(message.AgentId)), cancellationToken);
     }
 
     /// <summary>
@@ -49,10 +52,7 @@ public class AgentLifeCycleMsgConsumer :
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(AgentDisconnectedMsg message, CancellationToken cancellationToken = default)
     {
-        return Task.WhenAll(
-            _mediator.Publish(new Management.UseCases.RigDisconnectedEvent(message.AgentId), cancellationToken),
-            _mediator.Publish(new Inventory.UseCases.RigDisconnectedEvent(message.AgentId), cancellationToken)
-        );
+        return _mediator.Send(new PowerOffCommand(new RigId(message.AgentId)), cancellationToken);
     }
 }
 

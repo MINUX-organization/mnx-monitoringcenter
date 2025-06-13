@@ -1,11 +1,10 @@
 ﻿using MediatR;
-using System.Runtime.CompilerServices;
-using MNX.Application.UseCases.Requests;
 using MNX.Application.UseCases.Mediator;
-using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
-using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
+using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
+using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
+using MNX.MonitoringCenter.RigsApi.UseCases.GetRigs;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices;
 
@@ -18,7 +17,7 @@ public abstract class GetMiningDevicesBaseQueryHandler
 
     private List<GpuDetails>? _inventoryGpus;
 
-    private HashSet<Rig>? _rigs;
+    private HashSet<RigModel>? _rigs;
 
     public GetMiningDevicesBaseQueryHandler(IMediator mediator)
     {
@@ -94,7 +93,7 @@ public abstract class GetMiningDevicesBaseQueryHandler
             await _mediator.GetListAsync(new GetGpusDetailsQuery(userId), cancellationToken);
     }
 
-    private async Task<HashSet<Rig>> GetRigs(Guid userId, CancellationToken cancellationToken)
+    private async Task<HashSet<RigModel>> GetRigs(Guid userId, CancellationToken cancellationToken)
     {
         return _rigs ??= await _mediator.GetHashSetAsync(new GetRigsQuery(userId), cancellationToken);
     }

@@ -6,7 +6,7 @@ namespace MNX.MonitoringCenter.Inventory.Integration;
 /// <summary>
 /// Расширение <see cref="IServiceCollection"/> для интеграции профилей мапперов.
 /// </summary>
-internal static class MappingProfileExtensions
+public static class MappingProfileExtensions
 {
     /// <summary>
     /// Добавить профили маппинга.
