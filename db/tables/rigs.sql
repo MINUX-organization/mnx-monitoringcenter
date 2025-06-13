@@ -3,6 +3,12 @@ CREATE TABLE monitoring_center.rigs
     id uuid NOT NULL,
     owner_id uuid NOT NULL,
     name text NOT NULL,
+    current_inventory_id uuid,
+    is_online boolean NOT NULL DEFAULT FALSE,
+    life_cycle_status text NOT NULL
+        CHECK ( life_cycle_status in ('Disable', 'AwaitsEnable', 'Enable', 'AwaitsDisable') ),
+    mining_life_cycle_status text NOT NULL
+        CHECK ( mining_life_cycle_status in ('Disable', 'AwaitsEnable', 'Enable', 'AwaitsDisable') )
 
     CONSTRAINT pk_rigs PRIMARY KEY (id)
 );

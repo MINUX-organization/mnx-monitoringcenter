@@ -1,11 +1,13 @@
-﻿using MediatR;
-using EasyNetQ.AutoSubscribe;
+﻿using EasyNetQ.AutoSubscribe;
+using MediatR;
 using MNX.Application.Bus.RabbitMQ.Agent;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.Traffic.Observers.Abstractions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Management.Agent.Commands.Mining;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
+using MNX.MonitoringCenter.RigsApi.Core.ValueObjects;
+using MNX.MonitoringCenter.RigsApi.UseCases.RigState.Mining;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 
@@ -15,19 +17,16 @@ namespace MNX.MonitoringCenter.RigsApi.Service.Consumers;
 [AgentMessageConsumer]
 public class AgentMsgConsumer :
     IConsumeAsync<RigInventoryMsg>,
+    IConsumeAsync<StartMiningCommandResult>,
+    IConsumeAsync<StopMiningCommandResult>,
     IConsumeAsync<ApplyWorkerSettingsCommandResult>
 {
     private readonly IMediator _mediator;
 
-    private readonly IUserRigsObserverAggregator _userRigsObserverAggregator;
-
     ///
-    public AgentMsgConsumer(IMediator mediator, IUserRigsObserverAggregator userRigsObserverAggregator)
+    public AgentMsgConsumer(IMediator mediator)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-
-        _userRigsObserverAggregator = userRigsObserverAggregator
-            ?? throw new ArgumentNullException(nameof(userRigsObserverAggregator));
     }
 
     /// <summary>
@@ -38,6 +37,30 @@ public class AgentMsgConsumer :
     public Task ConsumeAsync(RigInventoryMsg message, CancellationToken cancellationToken = default)
     {
         return _mediator.Send(new SaveRigInventoryCommand(message), cancellationToken);
+    }
+
+    /// <summary>
+    /// Получить сообщение с результатом запуска майнинга на риге.
+    /// </summary>
+    /// <param name="message"> Сообщение. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public Task ConsumeAsync(StartMiningCommandResult message, CancellationToken cancellationToken = default)
+    {
+        return message.IsSuccess
+            ? _mediator.Send(new UseCases.RigState.Mining.StartMiningCommand(new RigId(message.RigId)), cancellationToken)
+            : _mediator.Send(new TerminateStartMiningCommand(new RigId(message.RigId)), cancellationToken);
+    }
+
+    /// <summary>
+    /// Получить сообщение с результатом остановки майнинга на риге.
+    /// </summary>
+    /// <param name="message"> Сообщение. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
+    public Task ConsumeAsync(StopMiningCommandResult message, CancellationToken cancellationToken = default)
+    {
+        return message.IsSuccess
+            ? _mediator.Send(new UseCases.RigState.Mining.StopMiningCommand(new RigId(message.RigId)), cancellationToken)
+            : _mediator.Send(new TerminateStopMiningCommand(new RigId(message.RigId)), cancellationToken);
     }
 
     /// <summary>

@@ -1,22 +1,23 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using Microsoft.AspNetCore.Authorization;
-using MNX.MonitoringCenter.Management.UseCases;
 using MNX.MonitoringCenter.Inventory.Contracts;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
-using MNX.MonitoringCenter.Inventory.Contracts.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.CountDevices;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Cpu.GetCpusDetails;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Drive;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
+using MNX.MonitoringCenter.RigsApi.Core.ValueObjects;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.UseCases.GetRigs;
+using MNX.MonitoringCenter.RigsApi.UseCases.RigState.Power;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
@@ -49,11 +50,11 @@ public class RigController : ControllerBase
     /// </summary>
     /// <returns> Асинхронный поток ригов. </returns>
     [HttpGet]
-    [ProducesResponseType(typeof(IAsyncEnumerable<RigDetails>), 200)]
-    public IAsyncEnumerable<RigDetails> GetList()
+    [ProducesResponseType(typeof(IAsyncEnumerable<RigModel>), 200)]
+    public IAsyncEnumerable<RigModel> GetList()
     {
         var userId = _userAccessor.GetUserId();
-        return _mediator.CreateStream(new GetRigsDetailsQuery(userId));
+        return _mediator.CreateStream(new GetRigsQuery(userId));
     }
 
     /// <summary>
@@ -194,7 +195,7 @@ public class RigController : ControllerBase
     public async Task<IActionResult> PowerOff(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new PowerOffRigCommand(rigId, userId));
+        var result = await _mediator.Send(new InitiatePowerOffCommand(new RigId(rigId), userId));
         return result.ToActionResult();
     }
 
@@ -211,7 +212,7 @@ public class RigController : ControllerBase
     public async Task<IActionResult> Reboot(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
-        var result = await _mediator.Send(new RebootRigCommand(rigId, userId));
+        var result = await _mediator.Send(new InitiateRebootCommand(new RigId(rigId), userId));
         return result.ToActionResult();
     }
 }

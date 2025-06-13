@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Inventory\MNX.MonitoringCenter.Inventory.Contracts.Requests\MNX.MonitoringCenter.Inventory.Contracts.Requests.csproj" />
     <ProjectReference Include="..\Management\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.RigsApi.GrainWrapper\MNX.MonitoringCenter.RigsApi.GrainWrapper.csproj" />
   </ItemGroup>
 
 </Project>
