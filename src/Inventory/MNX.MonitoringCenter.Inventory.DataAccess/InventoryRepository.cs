@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
+using System.Linq;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -28,7 +29,7 @@ public partial class InventoryRepository
     /// <param name="createdDate"> Дата и время создания инвентаризации. </param>
     /// <param name="inventory"> Результат инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    internal async Task Save(Guid rigId, DateTimeOffset createdDate,
+    internal async Task<long> Save(Guid rigId, DateTimeOffset createdDate,
                              RigInventoryModel inventory, CancellationToken cancellationToken)
     {
         var newInventory = MapInventory(rigId, createdDate, inventory);
@@ -44,6 +45,8 @@ public partial class InventoryRepository
 
         await _context.RigInventory.AddAsync(newInventory, cancellationToken);
         await _context.SaveChangesAsync(cancellationToken);
+
+        return newInventory.Id;
     }
 
     /// <summary>
@@ -72,8 +75,8 @@ public partial class InventoryRepository
     /// <param name="endPeriod"> Конец периода. </param>
     /// <returns> Инвентаризация. </returns>
     private IQueryable<Rigs.RigInventory> GetInventorySliceForAPeriod(InventorySpecification specification,
-                                                                              DateTimeOffset startPeriod,
-                                                                              DateTimeOffset endPeriod)
+                                                                      DateTimeOffset startPeriod,
+                                                                      DateTimeOffset endPeriod)
     {
         return GetInventoryBySpecification(specification).GetForAPeriod(startPeriod, endPeriod);
     }
@@ -91,8 +94,9 @@ public partial class InventoryRepository
                                     .Actualize(specification);
     }
 
-    private Rigs.RigInventory MapInventory(Guid rigId, DateTimeOffset createdDate, 
-                                                   RigInventoryModel inventory)
+    private Rigs.RigInventory MapInventory(Guid rigId,
+                                           DateTimeOffset createdDate, 
+                                           RigInventoryModel inventory)
     {
         return new Rigs.RigInventory()
         {

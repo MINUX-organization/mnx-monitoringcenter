@@ -1,8 +1,11 @@
 ﻿using MediatR;
 using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
+using MNX.MonitoringCenter.RigsApi.UseCases.RigState;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.EventHandlers;
+
+using RigId = Core.ValueObjects.RigId;
 
 /// <summary>
 /// Обработчик события <see cref="RigInventorySavedEvent"/>.
@@ -21,9 +24,16 @@ public class RigInventorySavedEventHandler : INotificationHandler<RigInventorySa
         var message = notification.Message;
         var inventory = message.Inventory;
 
-        return _mediator.Send(new SetRigDevicesCommand(message.RigId,
-                                                       message.RigOwnerId,
-                                                       inventory.Gpus,
-                                                       inventory.Cpus), cancellationToken);
+        var setRigDevicesCommand = new SetRigDevicesCommand(message.RigId,
+                                                            message.RigOwnerId,
+                                                            inventory.Gpus,
+                                                            inventory.Cpus);
+
+        var setInventoryCommand = new SetInventoryCommand(new RigId(message.RigId), notification.RigInventoryId);
+
+        return Task.WhenAll(
+            _mediator.Send(setRigDevicesCommand, cancellationToken),
+            _mediator.Send(setInventoryCommand, cancellationToken)
+        );
     }
 }

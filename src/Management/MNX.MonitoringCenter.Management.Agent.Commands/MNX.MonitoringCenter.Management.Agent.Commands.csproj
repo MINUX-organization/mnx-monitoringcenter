@@ -9,7 +9,7 @@
     <Authors>Zakharov</Authors>
     <Description>Содержит команды, отправляемые на Агент.</Description>
     <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
-	<Version>1.0.8</Version>
+	<Version>1.0.9</Version>
     <IncludeSymbols>True</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <RepositoryUrl>https://github.com/MINUX-organization/MNX.MonitoringCenter.git</RepositoryUrl>

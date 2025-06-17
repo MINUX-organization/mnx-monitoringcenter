@@ -22,7 +22,7 @@ public interface IRigGrain
     /// </summary>
     /// <param name="inventoryId"> Идентификатор инвентаризации. </param>
     /// <returns> Результат действия над ригом. </returns>
-    Task<RigGrainActionResult> SetInventory(Guid inventoryId);
+    Task<RigGrainActionResult> SetInventory(long inventoryId);
 
     /// <summary>
     /// Инициировать включение.

@@ -26,7 +26,7 @@ public class RigModel
     /// <summary>
     /// Идентификатор текущей инвентаризации.
     /// </summary>
-    public Guid? CurrentInventoryId { get; init; }
+    public long? CurrentInventoryId { get; init; }
 
     /// <summary>
     /// Признак нахождения "В сети".

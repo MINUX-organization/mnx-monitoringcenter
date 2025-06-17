@@ -34,7 +34,7 @@ public class Rig
     /// <summary>
     /// Идентификатор текущей инвентаризации.
     /// </summary>
-    public Guid? CurrentInventoryId { get; private set; }
+    public long? CurrentInventoryId { get; private set; }
 
     /// <summary>
     /// Признак нахождения "В сети".
@@ -56,14 +56,14 @@ public class Rig
         Id = id;
         OwnerId = ownerId;
         Name = name;
-        CurrentInventoryId = Guid.Empty;
+        CurrentInventoryId = null;
         IsOnline = false;
 
         _lifeCycleStateMachine = RigLifeCycleStateMachine.CreateStateMachine(RigLifeCycleStatus.Disable);
         _miningStateMachine = MiningLifeCycleStateMachine.CreateStateMachine(MiningLifeCycleStatus.Disable);
     }
 
-    public Rig(RigId id, Guid ownerId, string name, Guid? currentInventoryId, bool isOnline,
+    public Rig(RigId id, Guid ownerId, string name, long? currentInventoryId, bool isOnline,
                RigLifeCycleStatus lifeCycleStatus, MiningLifeCycleStatus miningLifeCycleStatus)
     {
         Id = id;
@@ -81,10 +81,10 @@ public class Rig
     /// </summary>
     /// <param name="inventoryId"> Идентификатор инвентаризации. </param>
     /// <returns> Доменные события. </returns>
-    public BaseDomainEvent[] SetInventory(Guid inventoryId)
+    public BaseDomainEvent[] SetInventory(long? inventoryId)
     {
-        if (inventoryId == Guid.Empty)
-            throw new ArgumentException("Inventory id couldn't be empty", nameof(inventoryId));
+        if (inventoryId == null || inventoryId <= 0)
+            throw new ArgumentException("Inventory id couldn't be null or negative", nameof(inventoryId));
 
         CurrentInventoryId = inventoryId;
         return Array.Empty<BaseDomainEvent>();
@@ -132,7 +132,7 @@ public class Rig
     public BaseDomainEvent[] PowerOff()
     {
         _lifeCycleStateMachine = _lifeCycleStateMachine.PowerOff();
-        _miningStateMachine = _miningStateMachine.Stop();
+        _miningStateMachine = _miningStateMachine.EnsureStopping();
         IsOnline = false;
 
         return new BaseDomainEvent[] { new RigPoweredOffEvent(Id) };
@@ -209,7 +209,7 @@ public class Rig
     /// <returns> Доменные события. </returns>
     public BaseDomainEvent[] StopMining()
     {
-        _miningStateMachine = _miningStateMachine.InitiateStop();
+        _miningStateMachine = _miningStateMachine.Stop();
         return new BaseDomainEvent[] { new MiningStoppedEvent(Id) };
     }
     #endregion

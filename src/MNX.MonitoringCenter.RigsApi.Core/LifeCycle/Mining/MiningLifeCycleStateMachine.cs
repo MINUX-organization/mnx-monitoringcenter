@@ -75,6 +75,12 @@ public abstract class MiningLifeCycleStateMachine
     /// <exception cref="LifeCycleException"> Операция недоступна. </exception>
     public virtual MiningLifeCycleStateMachine Stop()
         => throw new LifeCycleException("Остановка майнинга недоступна.", Status.ToString());
+
+    /// <summary>
+    /// Обеспечить остановку.
+    /// </summary>
+    /// <returns> Машина состояний. </returns>
+    public abstract MiningLifeCycleStateMachine EnsureStopping();
 }
 
 /// <summary>
@@ -90,6 +96,9 @@ file class MiningDisabled : MiningLifeCycleStateMachine
 
     /// <inheritdoc/>
     public override MiningLifeCycleStateMachine Start() => new MiningEnabled();
+
+    /// <inheritdoc/>
+    public override MiningLifeCycleStateMachine EnsureStopping() => this;
 }
 
 /// <summary>
@@ -105,6 +114,9 @@ file class MiningAwaitsEnable : MiningLifeCycleStateMachine
 
     /// <inheritdoc/>
     public override MiningLifeCycleStateMachine TerminateStart() => new MiningDisabled();
+
+    /// <inheritdoc/>
+    public override MiningLifeCycleStateMachine EnsureStopping() => new MiningDisabled();
 }
 
 /// <summary>
@@ -120,6 +132,9 @@ file class MiningEnabled : MiningLifeCycleStateMachine
 
     /// <inheritdoc/>
     public override MiningLifeCycleStateMachine Stop() => new MiningDisabled();
+
+    /// <inheritdoc/>
+    public override MiningLifeCycleStateMachine EnsureStopping() => new MiningDisabled();
 }
 
 /// <summary>
@@ -134,4 +149,7 @@ file class MiningAwaitsDisable : MiningLifeCycleStateMachine
     public override MiningLifeCycleStateMachine Stop() => new MiningDisabled();
 
     public override MiningLifeCycleStateMachine TerminateStop() => new MiningEnabled();
+
+    /// <inheritdoc/>
+    public override MiningLifeCycleStateMachine EnsureStopping() => new MiningDisabled();
 }
