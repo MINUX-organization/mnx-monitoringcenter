@@ -33,7 +33,7 @@ public class RigGrain : IRigGrain
     }
 
     /// <inheritdoc/>
-    public Task<RigGrainActionResult> SetInventory(Guid inventoryId)
+    public Task<RigGrainActionResult> SetInventory(long inventoryId)
         => ChangeAndPersist(() => _rig.SetInventory(inventoryId));
 
     /// <inheritdoc/>

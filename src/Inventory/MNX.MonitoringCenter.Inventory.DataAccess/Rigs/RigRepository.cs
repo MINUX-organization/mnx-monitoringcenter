@@ -108,8 +108,8 @@ public class RigRepository : IRigRepository
     }
 
     /// <inheritdoc/>
-    public Task SaveInventory(Guid rigId, DateTimeOffset createdDate,
-                              RigInventoryModel inventory, CancellationToken cancellationToken)
+    public Task<long> SaveInventory(Guid rigId, DateTimeOffset createdDate,
+                                    RigInventoryModel inventory, CancellationToken cancellationToken)
     {
         return _inventoryRepository.Save(rigId, createdDate, inventory, cancellationToken);
     }

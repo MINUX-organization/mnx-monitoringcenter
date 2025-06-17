@@ -21,10 +21,10 @@ public class SaveRigInventoryCommandHandler : IRequestHandler<SaveRigInventoryCo
 
     public async Task<Result<Unit>> Handle(SaveRigInventoryCommand request, CancellationToken cancellationToken)
     {
-        await _repository.SaveInventory(request.Message.RigId, request.Message.CreatedDateTime,
+        var inventoryId = await _repository.SaveInventory(request.Message.RigId, request.Message.CreatedDateTime,
                                         request.Message.Inventory, cancellationToken);
 
-        await _mediator.Publish(new RigInventorySavedEvent(request.Message), cancellationToken);
+        await _mediator.Publish(new RigInventorySavedEvent(request.Message, inventoryId), cancellationToken);
 
         return Result<Unit>.Empty();
     }

@@ -12,7 +12,7 @@ namespace MNX.MonitoringCenter.RigsApi.UseCases.RigState;
 /// </summary>
 /// <param name="RigId"> Идентификатор рига. </param>
 /// <param name="InventoryId"> Идентификатор инвентаризации. </param>
-public record SetInventoryCommand(RigId RigId, Guid InventoryId) : IValidatableCommand<Unit>;
+public record SetInventoryCommand(RigId RigId, long InventoryId) : IValidatableCommand<Unit>;
 
 
 /// <summary>

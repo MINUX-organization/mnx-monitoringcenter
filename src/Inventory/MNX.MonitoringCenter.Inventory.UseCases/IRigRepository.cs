@@ -67,8 +67,9 @@ public interface IRigRepository
     /// <param name="createdDate"> Дата проведения инвентаризации. </param>
     /// <param name="inventory"> Результат инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
-    Task SaveInventory(Guid rigId, DateTimeOffset createdDate,
-                       RigInventoryModel inventory, CancellationToken cancellationToken);
+    /// <returns> Идентификатор инвентаризации. </returns>
+    Task<long> SaveInventory(Guid rigId, DateTimeOffset createdDate,
+                             RigInventoryModel inventory, CancellationToken cancellationToken);
 
     /// <summary>
     /// Установить дату и время окончания действия инвентаризации.
