@@ -1,7 +1,5 @@
 FROM mcr.microsoft.com/dotnet/sdk:8.0 as build
 
-ARG PACKAGES_DIR
-
 WORKDIR /src
 
 COPY ./nuget.config .
@@ -11,15 +9,6 @@ COPY MNX.MonitoringCenter.sln .
 
 RUN dotnet restore MNX.MonitoringCenter.sln
 RUN dotnet publish MNX.MonitoringCenter.sln -c Release -o /publish
-RUN dotnet pack MNX.MonitoringCenter.sln -c Release --output ${PACKAGES_DIR}
-
-
-
-FROM scratch as packages
-
-ARG PACKAGES_DIR
-
-COPY --from=build ${PACKAGES_DIR} /
 
 
 
