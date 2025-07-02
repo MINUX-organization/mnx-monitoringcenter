@@ -14,26 +14,29 @@ public class RigInventorySavedEventHandler : INotificationHandler<RigInventorySa
 {
     private readonly IMediator _mediator;
 
+    ///
     public RigInventorySavedEventHandler(IMediator mediator)
     {
         _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
     }
 
+    ///
     public Task Handle(RigInventorySavedEvent notification, CancellationToken cancellationToken)
     {
         var message = notification.Message;
         var inventory = message.Inventory;
+
+        var setInventoryCommand = new SetInventoryCommand(new RigId(message.RigId), notification.RigInventoryId);
 
         var setRigDevicesCommand = new SetRigDevicesCommand(message.RigId,
                                                             message.RigOwnerId,
                                                             inventory.Gpus,
                                                             inventory.Cpus);
 
-        var setInventoryCommand = new SetInventoryCommand(new RigId(message.RigId), notification.RigInventoryId);
 
         return Task.WhenAll(
-            _mediator.Send(setRigDevicesCommand, cancellationToken),
-            _mediator.Send(setInventoryCommand, cancellationToken)
+            _mediator.Send(setInventoryCommand, cancellationToken),
+            _mediator.Send(setRigDevicesCommand, cancellationToken)
         );
     }
 }

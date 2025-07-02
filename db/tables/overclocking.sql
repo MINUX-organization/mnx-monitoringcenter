@@ -1,7 +1,7 @@
 CREATE TABLE monitoring_center.overclocking
 (
     id uuid NOT NULL,
-    target_device_type text NOT NULL check( target_device_type in ('CPU', 'GPU') ),
+    target_device_type text NOT NULL check( target_device_type in ('CPU', 'NvidiaGPU', 'AmdGPU') ),
 
     core_clock_lock integer,
     core_clock_offset integer,
@@ -13,6 +13,14 @@ CREATE TABLE monitoring_center.overclocking
     memory_voltage_offset integer,
     power_limit integer,
     fan_speed integer,
+    core_clock_state integer,
+    memory_clock_state integer,
+    memory_controller_voltage integer,
+    soc_frequency integer,
+    soc_voltage integer,
+    memory_tweak text,
+    enhanced_overclock boolean,
+    alternative_down_voltage boolean,
 
     CONSTRAINT pk_overclocking PRIMARY KEY (id)
 );

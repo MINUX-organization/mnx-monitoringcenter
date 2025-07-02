@@ -21,7 +21,7 @@ public class FlightSheet : IEquatable<FlightSheet>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; set; }
+    public Guid OwnerId { get; set; }
 
     /// <summary>
     /// Таргеты.
@@ -103,7 +103,7 @@ public class FlightSheet : IEquatable<FlightSheet>
         if (ReferenceEquals(this, other)) return true;
 
         return Name == other.Name &&
-               UserId == other.UserId &&
+               OwnerId == other.OwnerId &&
                Targets.SequenceEqual(other.Targets);
     }
 
@@ -117,6 +117,6 @@ public class FlightSheet : IEquatable<FlightSheet>
             targetsHash += target.GetHashCode();
         }
 
-        return HashCode.Combine(Name, UserId, targetsHash);
+        return HashCode.Combine(Name, OwnerId, targetsHash);
     }
 }

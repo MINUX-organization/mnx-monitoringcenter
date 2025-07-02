@@ -4,7 +4,7 @@ CREATE TABLE monitoring_center.cryptocurrencies
     short_name text NOT NULL,
     full_name text NOT NULL,
     algorithm_id uuid NOT NULL,
-    user_id uuid NULL,
+    owner_id uuid NULL,
 
     CONSTRAINT pk_cryptocurrencies PRIMARY KEY (id),
 
@@ -18,8 +18,8 @@ CREATE INDEX ix_cryptocurrencies_algorithm_id
     ON monitoring_center.cryptocurrencies USING btree
     (algorithm_id ASC NULLS LAST);
 
-CREATE INDEX ix_cryptocurrencies_user_id
+CREATE INDEX ix_cryptocurrencies_owner_id
     ON monitoring_center.cryptocurrencies USING btree
-    (user_id ASC NULLS LAST);
+    (owner_id ASC NULLS LAST);
 
 COMMENT ON TABLE monitoring_center.cryptocurrencies IS 'Криптовалюта';

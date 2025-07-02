@@ -145,7 +145,7 @@ public class RigRepository : IRigRepository
                 {
                     Name = device.Id.ToString(),
                     DeviceName = device.Name,
-                    UserId = device.OwnerId!.Value,
+                    OwnerId = device.OwnerId!.Value,
                     OverclockingId = overclocking.Id,
                     Overclocking = overclocking
                 };

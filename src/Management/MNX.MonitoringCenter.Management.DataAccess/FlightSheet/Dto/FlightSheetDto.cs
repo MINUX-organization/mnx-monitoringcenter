@@ -20,7 +20,7 @@ internal class FlightSheetDto
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; set; }
+    public Guid OwnerId { get; set; }
 
     /// <summary>
     /// Таргеты.

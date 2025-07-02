@@ -62,7 +62,7 @@ public class CryptocurrencyRepository : ICryptocurrencyRepository
     public Task Remove(Guid id, Guid userId)
     {
         return _context.Cryptocurrencies
-            .Where(x => x.Id == id && x.UserId == userId)
+            .Where(x => x.Id == id && x.OwnerId == userId)
             .ExecuteDeleteAsync();
     }
 }

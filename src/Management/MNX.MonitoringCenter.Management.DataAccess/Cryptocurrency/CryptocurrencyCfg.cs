@@ -10,7 +10,7 @@ internal class CryptocurrencyCfg : IEntityTypeConfiguration<Core.Mining.Cryptocu
 {
     public void Configure(EntityTypeBuilder<Core.Mining.Cryptocurrency> builder)
     {
-        builder.HasIndex(x => x.UserId);
+        builder.HasIndex(x => x.OwnerId);
         builder.HasIndex(x => x.ShortName);
         builder.HasIndex(x => x.FullName);
     }

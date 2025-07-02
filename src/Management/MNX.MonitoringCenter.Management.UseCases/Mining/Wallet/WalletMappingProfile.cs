@@ -21,7 +21,8 @@ public class WalletMappingProfile : Profile
         CreateMap<AddWalletCommand, Wallet>()
             .ForMember(destination => destination.Name, options => options.MapFrom(source => source.Model.Name))
             .ForMember(destination => destination.Address, options => options.MapFrom(source => source.Model.Address))
-            .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId));
+            .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId))
+            .ForMember(destination => destination.OwnerId, options => options.MapFrom(source => source.UserId));
 
         CreateMap<EditWalletCommand, Wallet>()
             .ForMember(destination => destination.Name, options => options.MapFrom(source => source.Model.Name))

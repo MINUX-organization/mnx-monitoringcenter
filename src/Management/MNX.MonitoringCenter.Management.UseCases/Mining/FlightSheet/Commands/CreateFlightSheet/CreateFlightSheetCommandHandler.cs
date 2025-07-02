@@ -27,7 +27,7 @@ public class CreateFlightSheetCommandHandler :
                                            CancellationToken cancellationToken)
     {
         var flightSheet = _mapper.Map<Core.Mining.FlightSheet.FlightSheet>(request.Model);
-        flightSheet.UserId = request.UserId;
+        flightSheet.OwnerId = request.UserId;
 
         if (await _flightSheetRepository.ExistsAvailable(flightSheet.Name, request.UserId, cancellationToken))
         {

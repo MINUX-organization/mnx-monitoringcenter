@@ -1,18 +1,21 @@
-﻿using MNX.Application.Data.EF.DI;
-using MNX.Application.UseCases.DI;
-using Microsoft.Extensions.Configuration;
-using MNX.MonitoringCenter.Inventory.UseCases;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MNX.Application.Data.EF.DI;
+using MNX.Application.UseCases.DI;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
 using MNX.MonitoringCenter.Inventory.DataAccess;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
-using MNX.MonitoringCenter.Inventory.UseCases.Software;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Mapping;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Mapping.Converters;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Mapping.Resolvers;
+using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Cpu;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
-using MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Drive;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.UseCases.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
+using MNX.MonitoringCenter.Inventory.UseCases.Software;
 
 namespace MNX.MonitoringCenter.Inventory.Integration;
 
@@ -29,17 +32,21 @@ public static class ServiceCollectionExtensions
     /// <returns> DI. </returns>
     public static IServiceCollection AddInventoryModule(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddInventoryMappingProfile();
+        services.AddTransient<GpuRestrictionsConverter>();
+        services.AddTransient<GpuRestrictionsResolver>();
+        services.AddTransient<GpuOverclockingResolver>();
+        services.AddAutoMapper(cfg => cfg.AddProfile(new GpuMappingProfile()));
 
         services.AddMediatR(x => x.RegisterServicesFromAssemblies(
             typeof(GetRigsDetailsQuery).Assembly,
             typeof(SaveRigInventoryCommandHandler).Assembly
-            ));
+            )
+        );
 
         services.AddValidationPipelines(
             typeof(SaveRigInventoryCommandHandler).Assembly,
             typeof(SaveRigInventoryCommand).Assembly
-            );
+        );
 
         services.AddDataContext<Context>(configuration);
 

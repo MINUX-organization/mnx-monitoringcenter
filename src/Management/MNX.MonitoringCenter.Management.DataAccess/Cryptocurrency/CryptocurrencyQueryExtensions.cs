@@ -18,7 +18,7 @@ internal static class CryptocurrencyQueryExtensions
     internal static IQueryable<Cryptocurrency> Available(
         this IQueryable<Cryptocurrency> entities, Specification specification)
     {
-        return entities.Where(x => x.UserId == specification.UserId || x.UserId == null);
+        return entities.Where(x => x.OwnerId == specification.UserId || x.OwnerId == null);
     }
 
     /// <summary>
@@ -30,7 +30,7 @@ internal static class CryptocurrencyQueryExtensions
     internal static IQueryable<Cryptocurrency> Available(
         this IQueryable<Cryptocurrency> entities, Guid userId)
     {
-        return entities.Where(x => x.UserId == userId || x.UserId == null);
+        return entities.Where(x => x.OwnerId == userId || x.OwnerId == null);
     }
 
     /// <summary>
@@ -41,8 +41,8 @@ internal static class CryptocurrencyQueryExtensions
     internal static IQueryable<Cryptocurrency> Sort(
         this IQueryable<Cryptocurrency> entities)
     {
-        return entities.OrderBy(x => x.UserId == null)
-                             .ThenBy(x => x.UserId)
+        return entities.OrderBy(x => x.OwnerId == null)
+                             .ThenBy(x => x.OwnerId)
                              .ThenBy(x => x.FullName);
     }
 }

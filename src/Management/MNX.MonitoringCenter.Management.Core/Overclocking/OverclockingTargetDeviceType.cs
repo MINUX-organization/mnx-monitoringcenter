@@ -14,7 +14,17 @@ public enum OverclockingTargetDeviceType
     CPU,
 
     /// <summary>
-    /// Видеокарта.
+    /// Видеокарта AMD.
     /// </summary>
-    GPU
+    AmdGPU,
+
+    /// <summary>
+    /// Видеокарта Nvidia.
+    /// </summary>
+    NvidiaGPU,
+
+    /// <summary>
+    /// Видеокарта Intel.
+    /// </summary>
+    IntelGPU,
 }

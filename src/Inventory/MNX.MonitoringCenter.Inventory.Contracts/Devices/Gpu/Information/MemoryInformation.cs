@@ -1,11 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-
-namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
+﻿namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
 
 /// <summary>
 /// Информация о памяти.
 /// </summary>
-[ComplexType]
 public record MemoryInformation
 {
     /// <summary>
