@@ -1,4 +1,5 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Information;
+using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Overclocking;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;

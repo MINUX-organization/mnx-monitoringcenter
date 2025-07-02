@@ -65,7 +65,7 @@ public class PoolRepository : IPoolRepository
     public Task Remove(Guid id, Guid userId)
     {
         return _context.Pools
-            .Where(x => x.Id == id && x.UserId == userId)
+            .Where(x => x.Id == id && x.OwnerId == userId)
             .ExecuteDeleteAsync();
     }
 }

@@ -9,6 +9,14 @@ using MNX.MonitoringCenter.Management.DataAccess.FlightSheet.Dto.Target;
 
 namespace MNX.MonitoringCenter.Management.DataAccess;
 
+using AmdGpuOverclockingCore = Core.Overclocking.Gpu.AmdGpuOverclocking;
+
+using NvidiaGpuOverclockingCore = Core.Overclocking.Gpu.NvidiaGpuOverclocking;
+
+using IntelGpuOverclockingCore = Core.Overclocking.Gpu.IntelGpuOverclocking;
+
+using CpuOverclockingCore = CpuOverclocking;
+
 /// <summary>
 /// Конфигурация маппера.
 /// </summary>
@@ -36,18 +44,34 @@ public class DbMappingProfile : Profile
             .ForMember(dest => dest.AdditionalArguments, opt => opt.MapFrom(x => x.MiningConfig.AdditionalArguments))
             .ForMember(dest => dest.ConfigFileContent, opt => opt.MapFrom(x => x.MiningConfig.ConfigFileContent));
 
+
+        // Overclocking
+
+        // Db to db
         CreateMap<OverclockingDto, OverclockingDto>()
             .ForMember(dest => dest.Id, opt => opt.Ignore())
             .ForMember(dest => dest.TargetDeviceType, opt => opt.Ignore());
-        CreateMap<IOverclocking, OverclockingDto>()
-            .Include<GpuOverclocking, OverclockingDto>()
-            .Include<CpuOverclocking, OverclockingDto>();
-        CreateMap<GpuOverclocking, OverclockingDto>();
-        CreateMap<CpuOverclocking, OverclockingDto>();
 
-        CreateMap<OverclockingDto, IOverclocking>().ConvertUsing(new OverclockingConverter());
-        CreateMap<OverclockingDto, CpuOverclocking>();
-        CreateMap<OverclockingDto, GpuOverclocking>();
+
+        // Core to db
+        CreateMap<IOverclocking, OverclockingDto>()
+            .Include<AmdGpuOverclockingCore, OverclockingDto>()
+            .Include<NvidiaGpuOverclockingCore, OverclockingDto>()
+            .Include<IntelGpuOverclockingCore, OverclockingDto>()
+            .Include<CpuOverclockingCore, OverclockingDto>();
+
+        CreateMap<AmdGpuOverclockingCore, OverclockingDto>();
+        CreateMap<NvidiaGpuOverclockingCore, OverclockingDto>();
+        CreateMap<IntelGpuOverclockingCore, OverclockingDto>();
+        CreateMap<CpuOverclockingCore, OverclockingDto>();
+
+
+        // Db to core
+        CreateMap<OverclockingDto, IOverclocking>().ConvertUsing(new OverclockingDtoConverter());
+        CreateMap<OverclockingDto, CpuOverclockingCore>();
+        CreateMap<OverclockingDto, AmdGpuOverclockingCore>();
+        CreateMap<OverclockingDto, NvidiaGpuOverclockingCore>();
+        CreateMap<OverclockingDto, IntelGpuOverclockingCore>();
     }
 
     private class FlightSheetTargetConverter : ITypeConverter<FlightSheetTarget, BaseFlightSheetTargetDto>
@@ -67,20 +91,18 @@ public class DbMappingProfile : Profile
         }
     }
 
-    private class OverclockingConverter : ITypeConverter<OverclockingDto, IOverclocking>
+    private class OverclockingDtoConverter : ITypeConverter<OverclockingDto, IOverclocking>
     {
         public IOverclocking Convert(OverclockingDto source, IOverclocking destination, ResolutionContext context)
         {
-            if (source.TargetDeviceType == OverclockingTargetDeviceType.CPU)
+            return source.TargetDeviceType switch
             {
-                return context.Mapper.Map<CpuOverclocking>(source);
-            }
-            else if (source.TargetDeviceType == OverclockingTargetDeviceType.GPU)
-            {
-                return context.Mapper.Map<GpuOverclocking>(source);
-            }
-
-            throw new NotSupportedException("Target device type is not supported!");
+                OverclockingTargetDeviceType.CPU => context.Mapper.Map<CpuOverclockingCore>(source),
+                OverclockingTargetDeviceType.AmdGPU => context.Mapper.Map<AmdGpuOverclockingCore>(source),
+                OverclockingTargetDeviceType.NvidiaGPU => context.Mapper.Map<NvidiaGpuOverclockingCore>(source),
+                OverclockingTargetDeviceType.IntelGPU => context.Mapper.Map<IntelGpuOverclockingCore>(source),
+                _ => throw new NotSupportedException("Target device type is not supported!")
+            };
         }
     }
 }

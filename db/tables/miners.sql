@@ -13,7 +13,7 @@ CREATE TABLE monitoring_center.miners
 
     CONSTRAINT pk_miners PRIMARY KEY (id),
 
-    CONSTRAINT unique_name_version_user_id UNIQUE (name, version, owner_id)
+    CONSTRAINT unique_name_version_owner_id UNIQUE (name, version, owner_id)
 );
 
 CREATE INDEX ix_miners_name

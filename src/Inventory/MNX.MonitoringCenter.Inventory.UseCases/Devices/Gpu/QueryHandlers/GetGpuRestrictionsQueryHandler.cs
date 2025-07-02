@@ -6,17 +6,19 @@ using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
 namespace MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu.QueryHandlers;
 
 /// <summary>
-/// Обработчик <see cref="GetGpuRestrictionsQuery"/>.
+/// Обработчик запроса <see cref="GetGpuRestrictionsQuery"/>.
 /// </summary>
 public class GetGpuRestrictionsQueryHandler : IRequestHandler<GetGpuRestrictionsQuery, Result<GpuRestrictions>>
 {
     private readonly IGpuRepository _repository;
 
+    ///
     public GetGpuRestrictionsQueryHandler(IGpuRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
+    ///
     public async Task<Result<GpuRestrictions>> Handle(GetGpuRestrictionsQuery request, CancellationToken cancellationToken)
     {
         var restrictions = await _repository.GetGpusRestrictions(request.GpuName);

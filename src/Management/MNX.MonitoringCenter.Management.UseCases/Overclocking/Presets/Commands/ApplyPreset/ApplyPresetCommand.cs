@@ -69,7 +69,7 @@ public class ApplyPresetCommandHandler :
                 continue;
             }
 
-            if (device.Type.ToString() != preset.Overclocking!.TargetDeviceType.ToString())
+            if (device.GetOverclockingType().ToString() != preset.Overclocking!.TargetDeviceType.ToString())
             {
                 errors.Add($"Device with type of {device.Type} is not supported this overclocking");
                 continue;

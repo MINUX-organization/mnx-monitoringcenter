@@ -8,7 +8,7 @@ CREATE TABLE monitoring_center.rigs
     life_cycle_status text NOT NULL
         CHECK ( life_cycle_status in ('Disable', 'AwaitsEnable', 'Enable', 'AwaitsDisable') ) DEFAULT 'Disable',
     mining_life_cycle_status text NOT NULL
-        CHECK ( mining_life_cycle_status in ('Disable', 'AwaitsEnable', 'Enable', 'AwaitsDisable') ) DEFAULT 'Disable'
+        CHECK ( mining_life_cycle_status in ('Disable', 'AwaitsEnable', 'Enable', 'AwaitsDisable') ) DEFAULT 'Disable',
 
     CONSTRAINT pk_rigs PRIMARY KEY (id)
 );

@@ -9,6 +9,7 @@ namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValid
 /// </summary>
 public class PciModelValidator : AbstractValidator<Pci>
 {
+    ///
     public PciModelValidator()
     {
         RuleFor(model => model.Bus)

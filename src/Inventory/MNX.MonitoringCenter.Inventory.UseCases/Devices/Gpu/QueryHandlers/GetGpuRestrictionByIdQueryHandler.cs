@@ -12,11 +12,13 @@ public class GetGpuRestrictionsByIdQueryHandler : IRequestHandler<GetGpuRestrict
 {
     private readonly IGpuRepository _repository;
 
+    ///
     public GetGpuRestrictionsByIdQueryHandler(IGpuRepository repository)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
+    ///
     public async Task<Result<GpuRestrictions>> Handle(GetGpuRestrictionsByIdQuery request, CancellationToken cancellationToken)
     {
         var restrictions = await _repository.GetGpusRestrictionsById(request.GpuId);

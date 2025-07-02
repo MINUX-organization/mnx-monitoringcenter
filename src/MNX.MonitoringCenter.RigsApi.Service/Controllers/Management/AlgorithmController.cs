@@ -107,7 +107,7 @@ public class AlgorithmController : ControllerBase
     /// <response code="409"> 
     /// Алгоритм с таким наименованием уже существует.
     /// </response>
-    [HttpPatch("{id:Guid}")]
+    [HttpPut("{id:Guid}")]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     [ProducesResponseType(typeof(List<string>), 409)]

@@ -17,7 +17,7 @@ public class PoolModel
     /// Если null, то сущность является доменной,
     /// иначе - пользовательской.
     /// </remarks>
-    public Guid? UserId { get; set; }
+    public Guid? OwnerId { get; set; }
 
     /// <summary>
     /// Признак шифрования по протоколу TLS.

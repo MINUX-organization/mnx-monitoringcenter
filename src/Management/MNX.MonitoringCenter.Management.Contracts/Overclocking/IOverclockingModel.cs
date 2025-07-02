@@ -7,10 +7,14 @@ namespace MNX.MonitoringCenter.Management.Contracts.Overclocking;
 /// <summary>
 /// Интерфейс модели разгона.
 /// </summary>
-[JsonDerivedType(typeof(GpuOverclockingModel), typeDiscriminator: "GPU")]
+[JsonDerivedType(typeof(AmdGpuOverclockingModel), typeDiscriminator: "AmdGPU")]
+[JsonDerivedType(typeof(NvidiaGpuOverclockingModel), typeDiscriminator: "NvidiaGPU")]
+[JsonDerivedType(typeof(IntelGpuOverclockingModel), typeDiscriminator: "IntelGPU")]
 [JsonDerivedType(typeof(CpuOverclockingModel), typeDiscriminator: "CPU")]
 
-[SwaggerSubType(typeof(GpuOverclockingModel), DiscriminatorValue = "GPU")]
+[SwaggerSubType(typeof(AmdGpuOverclockingModel), DiscriminatorValue = "AmdGPU")]
+[SwaggerSubType(typeof(NvidiaGpuOverclockingModel), DiscriminatorValue = "NvidiaGPU")]
+[SwaggerSubType(typeof(IntelGpuOverclockingModel), DiscriminatorValue = "IntelGPU")]
 [SwaggerSubType(typeof(CpuOverclockingModel), DiscriminatorValue = "CPU")]
 public interface IOverclockingModel
 {

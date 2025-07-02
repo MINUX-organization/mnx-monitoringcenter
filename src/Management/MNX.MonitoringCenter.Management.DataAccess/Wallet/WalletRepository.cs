@@ -23,7 +23,7 @@ public class WalletRepository : IWalletRepository
     public IAsyncEnumerable<Wallet> GetAllAvailable(Specification specification)
     {
         return _context.Wallets.Include(x => x.Cryptocurrency)
-                               .Where(x => x.UserId == specification.UserId)
+                               .Where(x => x.OwnerId == specification.UserId)
                                .Filter(specification)
                                .Sort()
                                .AsNoTrackingWithIdentityResolution()
@@ -36,7 +36,7 @@ public class WalletRepository : IWalletRepository
         return _context.Wallets.Include(x => x.Cryptocurrency)
                                     .ThenInclude(c => c!.Algorithm)
                                .AsNoTrackingWithIdentityResolution()
-                               .Where(x => x.UserId == userId)
+                               .Where(x => x.OwnerId == userId)
                                .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
     }
 
@@ -70,7 +70,7 @@ public class WalletRepository : IWalletRepository
     public Task Remove(Guid id, Guid userId)
     {
         return _context.Wallets
-            .Where(x => x.Id == id && x.UserId == userId)
+            .Where(x => x.Id == id && x.OwnerId == userId)
             .ExecuteDeleteAsync();
     }
 
@@ -86,7 +86,7 @@ public class WalletRepository : IWalletRepository
     private Task<bool> Exists(Guid userId, Expression<Func<Wallet, bool>> expression, CancellationToken cancellationToken)
     {
         return _context.Wallets.AsNoTracking()
-                               .Where(x => x.UserId == userId)
+                               .Where(x => x.OwnerId == userId)
                                .AnyAsync(expression, cancellationToken);
     }
 }

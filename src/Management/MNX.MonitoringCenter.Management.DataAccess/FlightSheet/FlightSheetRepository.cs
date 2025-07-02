@@ -47,7 +47,7 @@ public class FlightSheetRepository : IFlightSheetRepository
     public Task<bool> ExistsAvailable(string name, Guid userId, CancellationToken cancellationToken)
     {
         return _context.FlightSheets.AsNoTracking()
-                                    .Where(x => x.UserId == userId)
+                                    .Where(x => x.OwnerId == userId)
                                     .AnyAsync(x => x.Name == name, cancellationToken);
     }
 
@@ -72,7 +72,7 @@ public class FlightSheetRepository : IFlightSheetRepository
         var dto = _mapper.Map<FlightSheetDto>(flightSheet);
 
         var oldFlightSheet = await _context.FlightSheets
-                                        .Where(x => x.UserId == dto.UserId)
+                                        .Where(x => x.OwnerId == dto.OwnerId)
                                         .Include(x => x.Targets)
                                         .FirstAsync(x => x.Id == dto.Id);
 
@@ -86,7 +86,7 @@ public class FlightSheetRepository : IFlightSheetRepository
     public Task Remove(Guid id, Guid userId)
     {
         return _context.FlightSheets
-            .Where(x => x.Id == id && x.UserId == userId)
+            .Where(x => x.Id == id && x.OwnerId == userId)
             .ExecuteDeleteAsync();
     }
 
@@ -99,7 +99,7 @@ public class FlightSheetRepository : IFlightSheetRepository
     {
         return _context.FlightSheets.AsNoTrackingWithIdentityResolution()
                                     .AsSplitQuery()
-                                    .Where(x => x.UserId == userId)
+                                    .Where(x => x.OwnerId == userId)
                                     .Include(x => x.Targets)
                                         .ThenInclude(target => target.Miner)
                                             .ThenInclude(miner => miner!.SupportedAlgorithms)

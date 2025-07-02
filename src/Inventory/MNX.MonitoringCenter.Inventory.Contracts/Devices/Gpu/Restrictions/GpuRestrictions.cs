@@ -1,35 +1,32 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using MessagePack;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 
 /// <summary>
-/// Ограничения видеокарты.
+/// Ограничения параметров видеокарт.
 /// </summary>
-[ComplexType]
-public record GpuRestrictions
+[Union(0, typeof(NvidiaGpuRestrictions))]
+[Union(1, typeof(AmdGpuRestrictions))]
+[Union(2, typeof(IntelGpuRestrictions))]
+public abstract record GpuRestrictions : Devices.Restrictions
 {
     /// <summary>
-    /// Мощность.
+    /// Ограничения мощности.
     /// </summary>
-    public required RangeValue Power { get; init; }
+    public required IntegerTypeRestrictions Power { get; init; }
 
     /// <summary>
-    /// Скорость вентилятора.
+    /// Ограничения скорости вентилятора.
     /// </summary>
-    public required RangeValue FanSpeed { get; init; }
+    public required IntegerTypeRestrictions FanSpeed { get; init; }
 
     /// <summary>
-    /// Температура.
+    /// Ограничения температуры процессора.
     /// </summary>
-    public required GpuTemperatureRestrictions Temperature { get; init; }
-
+    public required IntegerTypeRestrictions TemperatureCore { get; init; }
+    
     /// <summary>
-    /// Напряжение.
+    /// Ограничения температуры памяти.
     /// </summary>
-    public required GpuVoltageRestrictions Voltage { get; init; }
-
-    /// <summary>
-    /// Разгон.
-    /// </summary>
-    public required GpuClockRestrictions Clock { get; init; }
-}
+    public required IntegerTypeRestrictions TemperatureMemory { get; init; }
+};

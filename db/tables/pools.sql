@@ -5,7 +5,7 @@ CREATE TABLE monitoring_center.pools
     domain text NOT NULL,
     port integer NOT NULL,
     cryptocurrency_id uuid NOT NULL,
-    user_id uuid NULL,
+    owner_id uuid NULL,
 
     CONSTRAINT pk_pools PRIMARY KEY (id),
 
@@ -19,8 +19,8 @@ CREATE INDEX ix_pools_cryptocurrency_id
     ON monitoring_center.pools USING btree
     (cryptocurrency_id ASC NULLS LAST);
 
-CREATE INDEX ix_pools_user_id
+CREATE INDEX ix_pools_owner_id
     ON monitoring_center.pools USING btree
-    (user_id ASC NULLS LAST);
+    (owner_id ASC NULLS LAST);
 
 COMMENT ON TABLE monitoring_center.pools IS 'Пулы';

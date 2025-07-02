@@ -57,7 +57,7 @@ public class SetOverclockingCommandHandler
             return Result<Guid>.Invalid($"Mining device with id equaled {request.DeviceId} was not found");
         }
 
-        if (device.Type.ToString() != request.Overclocking.TargetDeviceType.ToString())
+        if (device.GetOverclockingType().ToString() != request.Overclocking.TargetDeviceType.ToString())
         {
             return Result<Guid>.Invalid($"Device with type of {device.Type} is not supported this overclocking");
         }

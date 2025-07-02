@@ -23,6 +23,7 @@ public static class MappingProfileExtensions
     /// <returns> Коллекция сервисов. </returns>
     public static IServiceCollection AddUseCaseMappingProfile(this IServiceCollection services)
     {
+        services.AddTransient<OverclockingMappingProfile.OverclockingModelConverter>();
         services.AddAutoMapper(cfg => cfg.AddProfiles(
         [
             new CryptocurrencyMappingProfile(),

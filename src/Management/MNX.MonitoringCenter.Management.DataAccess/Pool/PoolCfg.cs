@@ -10,7 +10,7 @@ internal class PoolCfg : IEntityTypeConfiguration<Core.Mining.Pool>
 {
     public void Configure(EntityTypeBuilder<Core.Mining.Pool> builder)
     {
-        builder.HasIndex(x => x.UserId);
+        builder.HasIndex(x => x.OwnerId);
         builder.HasIndex(x => new { x.Domain, x.Port });
     }
 }

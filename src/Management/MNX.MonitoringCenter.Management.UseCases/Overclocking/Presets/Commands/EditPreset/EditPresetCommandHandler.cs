@@ -93,7 +93,7 @@ public class EditPresetCommandHandler :
             Id = command.Id,
             Name = command.Model.Name,
             DeviceName = preset.DeviceName,
-            UserId = command.UserId,
+            OwnerId = command.UserId,
             OverclockingId = preset.OverclockingId,
             IsVisible = true,
         };

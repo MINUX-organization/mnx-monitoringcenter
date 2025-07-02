@@ -16,7 +16,8 @@ public class CryptocurrencyMappingProfile : Profile
         CreateMap<AddCryptocurrencyCommand, Cryptocurrency>()
             .ForMember(destination => destination.ShortName, options => options.MapFrom(source => source.Model.ShortName))
             .ForMember(destination => destination.FullName, options => options.MapFrom(source => source.Model.FullName))
-            .ForMember(destination => destination.AlgorithmId, options => options.MapFrom(source => source.Model.AlgorithmId));
+            .ForMember(destination => destination.AlgorithmId, options => options.MapFrom(source => source.Model.AlgorithmId))
+            .ForMember(destination => destination.OwnerId, options => options.MapFrom(source => source.UserId));
 
         CreateMap<Cryptocurrency, CryptocurrencyModel>();
     }

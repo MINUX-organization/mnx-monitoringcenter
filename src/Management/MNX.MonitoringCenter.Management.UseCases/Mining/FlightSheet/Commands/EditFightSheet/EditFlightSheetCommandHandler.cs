@@ -33,7 +33,7 @@ public class EditFlightSheetCommandHandler : IRequestHandler<EditFlightSheetComm
 
         var newFlightSheet = _mapper.Map<Core.Mining.FlightSheet.FlightSheet>(request.Model);
         newFlightSheet.Id = request.Id;
-        newFlightSheet.UserId = request.UserId;
+        newFlightSheet.OwnerId = request.UserId;
         newFlightSheet.Targets.ForEach(x => x.FlightSheetId = newFlightSheet.Id);
 
         if (flightSheet.Name != newFlightSheet.Name &&
