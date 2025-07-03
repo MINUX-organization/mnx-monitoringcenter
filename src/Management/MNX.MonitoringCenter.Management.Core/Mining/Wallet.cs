@@ -33,7 +33,7 @@ public class Wallet : IEquatable<Wallet>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; init; }
+    public Guid OwnerId { get; init; }
 
     /// <inheritdoc/>
     public override bool Equals(object? obj)

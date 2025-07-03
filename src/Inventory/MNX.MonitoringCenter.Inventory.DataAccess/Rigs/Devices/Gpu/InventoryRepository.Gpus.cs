@@ -1,12 +1,14 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
+﻿using AutoMapper.QueryableExtensions;
+using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Extensions;
+using MNX.MonitoringCenter.Inventory.Contracts.Requests;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpuInfo;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
-using AutoMapper.QueryableExtensions;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Entities;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Extensions;
+using MNX.MonitoringCenter.Inventory.UseCases.Devices.Gpu;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -16,27 +18,18 @@ namespace MNX.MonitoringCenter.Inventory.DataAccess;
 public partial class InventoryRepository : IGpuRepository
 {
     /// <inheritdoc/>
-    public IAsyncEnumerable<GpuDetails> GetGpus(DeviceSpecification specification)
+    public async IAsyncEnumerable<GpuDetails> GetGpus(DeviceSpecification specification,
+                                                      [EnumeratorCancellation] CancellationToken cancellationToken)
     {
-        return GetInventoryBySpecification(specification.InventorySpecification)
-                                 .Include(inventory => inventory.Gpus)
-                                 .Include(inventory => inventory.Software)
-                                 .SelectMany(inventory => inventory.Gpus.Select(gpu => new GpuDetails()
-                                 {
-                                     Id = gpu.Id,
-                                     RigName = inventory.Rig!.Name,
-                                     Information = gpu.Information,
-                                     Pci = gpu.Pci,
-                                     Restrictions = gpu.Restrictions,
-                                     Overclocking = gpu.Overclocking,
-                                     DriverVersion = Context
-                                        .GetGpuDriverVersion(inventory.Software.AmdGpuDriverVersion,
-                                                             inventory.Software.IntelGpuDriverVersion,
-                                                             inventory.Software.NvidiaGpuDriverVersion,
-                                                             gpu.Information.Manufacturer)
-                                 })) 
-                                 .Filter(specification)
-                                 .AsAsyncEnumerable();
+        var query = from inventory in GetInventoryBySpecification(specification.InventorySpecification)
+                    join gpuView in _context.GpuViews.AsNoTracking()
+                         on inventory.Id equals gpuView.RigInventoryId
+                    select gpuView;
+
+        await foreach (var gpu in query.AsAsyncEnumerable().WithCancellation(cancellationToken))
+        {
+            yield return _mapper.Map<GpuDetails>(gpu);
+        }
     }
 
     /// <inheritdoc/>
@@ -82,17 +75,8 @@ public partial class InventoryRepository : IGpuRepository
     {
         return GetInventoryBySpecification(new InventorySpecification(userId))
             .Include(inventory => inventory.Gpus)
-            .SelectMany(inventory => inventory.Gpus.Select(gpu => new GpuInfo()
-            {
-                Id = gpu.Id,
-                Manufacturer = gpu.Information.Manufacturer,
-                Model = gpu.Information.Model,
-                SerialNumber = gpu.Information.SerialNumber,
-                Vendor = gpu.Information.Vendor,
-                BiosVersion = gpu.Information.BiosVersion,
-                Technology = gpu.Information.Technology,
-                Memory = gpu.Information.Memory
-            }))
+            .SelectMany(inventory => inventory.Gpus)
+            .ProjectTo<GpuInfo>(_mapper.ConfigurationProvider)
             .FirstOrDefaultAsync(gpu => gpu.Id == gpuId);
             
     }
@@ -108,22 +92,22 @@ public partial class InventoryRepository : IGpuRepository
         var manufacturer = gpuName.ToLower().Split().FirstOrDefault() ?? string.Empty;
         var model = string.Join(" ", gpuName.ToLower().Split().Skip(1));
 
-        return _context.Gpu
+        return _context.GpuRestrictionsView
             .AsNoTracking()
-            .Where(x => x.Information.Manufacturer.ToLower().Equals(manufacturer) &&
-                         x.Information.Model.ToLower().Equals(model))
-            .Select(x => x.Restrictions)
+            .Where(x => x.Manufacturer.ToLower().Equals(manufacturer) &&
+                         x.Model.ToLower().Equals(model))
+            .OrderBy(x => x.RigInventoryId)
+            .Select(x => _mapper.Map<GpuRestrictions>(x))
             .FirstOrDefaultAsync();
     }
 
     /// <inheritdoc/>
     public Task<GpuRestrictions?> GetGpusRestrictionsById(Guid gpuId)
     {
-        return _context.Gpu
-            .AsNoTracking()
-            .OrderBy(x => x.RigInventoryId)
+        return _context.GpuRestrictionsView.AsNoTracking()
             .Where(x => x.Id == gpuId)
-            .Select(x => x.Restrictions)
+            .OrderBy(x => x.RigInventoryId)
+            .Select(x => _mapper.Map<GpuRestrictions>(x))
             .LastOrDefaultAsync();
     }
 
@@ -137,8 +121,8 @@ public partial class InventoryRepository : IGpuRepository
     public Task<Dictionary<string, int>> GetGpusCountGroupedByManufacturer(DeviceSpecification specification,
                                                                            CancellationToken cancellationToken)
     {
-        return GetGpusList(specification).GroupBy(x => x.Information.Manufacturer)
-                                     .ToDictionaryAsync(x => x.Key.ToLower(), y => y.Count(), cancellationToken);
+        return GetGpusList(specification).GroupBy(x => x.Information.Manufacturer.ToLower())
+                                                .ToDictionaryAsync(x => x.Key, y => y.Count(), cancellationToken);
     }
 
     /// <summary>
@@ -146,11 +130,10 @@ public partial class InventoryRepository : IGpuRepository
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Список видеокарт. </returns>
-    private IQueryable<Gpu> GetGpusList(DeviceSpecification specification)
+    private IQueryable<GpuInventory> GetGpusList(DeviceSpecification specification)
     {
         return GetInventoryBySpecification(specification.InventorySpecification)
-                                 .Include(x => x.Gpus)
-                                 .SelectMany(x => x.Gpus)
+                                 .SelectMany(x => x.Gpus.OfType<GpuInventory>())
                                  .Filter(specification);
     }
 }

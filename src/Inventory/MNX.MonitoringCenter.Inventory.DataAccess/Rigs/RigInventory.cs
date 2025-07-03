@@ -1,9 +1,9 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Drive;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.NetworkAdapter;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Entities;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
 
@@ -55,7 +55,7 @@ public class RigInventory : IEquatable<RigInventory>
     /// <summary>
     /// Видеокарты.
     /// </summary>
-    public List<GpuInventoryDto> Gpus { get; set; } = new();
+    public List<GpuInventory> Gpus { get; set; } = new();
 
     /// <summary>
     /// Сетевые адаптеры.

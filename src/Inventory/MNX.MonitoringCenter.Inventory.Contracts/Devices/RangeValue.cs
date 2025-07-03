@@ -5,6 +5,7 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Devices;
 /// <summary>
 /// Минимальные и максимальные значения.
 /// </summary>
+[Obsolete("Данный класс является устаревшим. Предлагается использовать IntegerTypeRestrictions")]
 [ComplexType]
 public record RangeValue
 {
@@ -21,7 +22,7 @@ public record RangeValue
     /// <summary>
     /// Можно ли изменять.
     /// </summary>
-    public bool IsWritable { get; init; }
+    public bool? IsWritable { get; init; }
 
     /// <summary>
     /// Значение по умолчанию.

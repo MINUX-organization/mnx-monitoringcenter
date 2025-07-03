@@ -29,7 +29,7 @@ public class PresetRepository : IPresetRepository
     public IAsyncEnumerable<Preset> GetAllAvailable(string? gpuName, Specification specification)
     {
         var presets = from preset in _context.Presets.AsNoTrackingWithIdentityResolution()
-                                                     .Where(x => x.UserId == specification.UserId && x.IsVisible)
+                                                     .Where(x => x.OwnerId == specification.UserId && x.IsVisible)
                                                      .Filter(specification)
                                                      .Sort()
                       join overclocking in _context.Overclocking.AsNoTracking()
@@ -37,7 +37,7 @@ public class PresetRepository : IPresetRepository
                       select new Preset()
                       {
                           Id = preset.Id,
-                          UserId = preset.UserId,
+                          OwnerId = preset.OwnerId,
                           Name = preset.Name,
                           DeviceName = preset.DeviceName,
                           OverclockingId = overclocking.Id,
@@ -54,14 +54,14 @@ public class PresetRepository : IPresetRepository
                                                                       Specification specification)
     {
         var presets = from preset in _context.Presets.AsNoTrackingWithIdentityResolution()
-                                                     .Where(x => x.UserId == specification.UserId && x.IsVisible)
+                                                     .Where(x => x.OwnerId == specification.UserId && x.IsVisible)
                                                      .Filter(specification)
                       join overclocking in _context.Overclocking.AsNoTracking()
                         on preset.OverclockingId equals overclocking.Id
                       select new Preset()
                       {
                           Id = preset.Id,
-                          UserId = preset.UserId,
+                          OwnerId = preset.OwnerId,
                           Name = preset.Name,
                           DeviceName = preset.DeviceName,
                           OverclockingId = overclocking.Id,
@@ -77,7 +77,7 @@ public class PresetRepository : IPresetRepository
                                  CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
-            .Where(x => x.Id == id && x.UserId == userId)
+            .Where(x => x.Id == id && x.OwnerId == userId)
             .Join(_context.Overclocking.AsNoTracking(),
             preset => preset.OverclockingId,
             overclocking => overclocking.Id,
@@ -88,7 +88,7 @@ public class PresetRepository : IPresetRepository
                 DeviceName = preset.DeviceName,
                 OverclockingId = preset.OverclockingId,
                 Overclocking = _mapper.Map<IOverclocking>(overclocking),
-                UserId = preset.UserId
+                OwnerId = preset.OwnerId
             }).FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -98,7 +98,7 @@ public class PresetRepository : IPresetRepository
                              CancellationToken cancellationToken)
     {
         return _context.Presets.AsNoTracking()
-            .Where(x => x.UserId == userId && x.IsVisible)
+            .Where(x => x.OwnerId == userId && x.IsVisible)
             .AnyAsync(x => x.Name.Equals(name), cancellationToken);
     }
 
@@ -126,7 +126,7 @@ public class PresetRepository : IPresetRepository
     public async Task Remove(Guid id, Guid userId)
     {
         var removablePreset = await _context.Presets.AsNoTracking()
-            .Where(x => x.Id == id && x.UserId == userId && x.IsVisible)
+            .Where(x => x.Id == id && x.OwnerId == userId && x.IsVisible)
             .FirstOrDefaultAsync();
 
         if (removablePreset == null) return;
@@ -135,7 +135,7 @@ public class PresetRepository : IPresetRepository
 
         await _context.Presets
             .AsNoTracking()
-            .Where(x => x.Id == id && x.UserId == userId && x.IsVisible)
+            .Where(x => x.Id == id && x.OwnerId == userId && x.IsVisible)
             .ExecuteDeleteAsync();
 
         await _context.Overclocking

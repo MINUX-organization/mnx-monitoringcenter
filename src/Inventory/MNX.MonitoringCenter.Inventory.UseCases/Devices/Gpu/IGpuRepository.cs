@@ -16,8 +16,9 @@ public interface IGpuRepository
     /// Получить список видеокарт.
     /// </summary>
     /// <param name="specification"> Спецификация. </param>
+    /// <param name="cancellationToken"> Токен отмены. </param>
     /// <returns> Список видеокарт. </returns>
-    IAsyncEnumerable<GpuDetails> GetGpus(DeviceSpecification specification);
+    IAsyncEnumerable<GpuDetails> GetGpus(DeviceSpecification specification, CancellationToken cancellationToken);
 
     /// <summary>
     /// Получить срез инвентаризации видеокарт за указанный период.

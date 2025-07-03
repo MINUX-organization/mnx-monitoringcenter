@@ -33,7 +33,7 @@ public class Preset : IEquatable<Preset>
     /// <summary>
     /// Идентификатор пользователя.
     /// </summary>
-    public Guid UserId { get; init; }
+    public Guid OwnerId { get; init; }
 
     /// <summary>
     /// Признак видимости пресета.

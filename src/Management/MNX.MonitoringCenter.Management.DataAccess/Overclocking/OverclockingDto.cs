@@ -7,6 +7,8 @@ namespace MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 /// </summary>
 public class OverclockingDto
 {
+    #region General
+
     /// <summary>
     /// Идентификатор.
     /// </summary>
@@ -18,24 +20,19 @@ public class OverclockingDto
     public OverclockingTargetDeviceType TargetDeviceType { get; init; }
 
     /// <summary>
+    /// Ограничение мощности.
+    /// </summary>
+    public int? PowerLimit { get; set; }
+
+    /// <summary>
+    /// Скорость вентилятора.
+    /// </summary>
+    public int? FanSpeed { get; set; }
+
+    /// <summary>
     /// Фиксированная частота ядра.
     /// </summary>
     public int? CoreClockLock { get; set; }
-
-    /// <summary>
-    /// Смещение частоты ядра.
-    /// </summary>
-    public int? CoreClockOffset { get; set; }
-
-    /// <summary>
-    /// Фиксированная частота памяти.
-    /// </summary>
-    public int? MemoryClockLock { get; set; }
-
-    /// <summary>
-    /// Смещение частоты памяти.
-    /// </summary>
-    public int? MemoryClockOffset { get; set; }
 
     /// <summary>
     /// Напряжение на ядре.
@@ -53,17 +50,72 @@ public class OverclockingDto
     public int? MemoryVoltage { get; set; }
 
     /// <summary>
+    /// Фиксированная частота памяти.
+    /// </summary>
+    public int? MemoryClockLock { get; set; }
+
+    #endregion
+
+    #region Nvidia
+
+    /// <summary>
+    /// Смещение частоты ядра.
+    /// </summary>
+    public int? CoreClockOffset { get; set; }
+
+    /// <summary>
+    /// Смещение частоты памяти.
+    /// </summary>
+    public int? MemoryClockOffset { get; set; }
+
+    /// <summary>
     /// Смещение напряжения памяти.
     /// </summary>
     public int? MemoryVoltageOffset { get; set; }
 
-    /// <summary>
-    /// Ограничение мощности.
-    /// </summary>
-    public int? PowerLimit { get; set; }
+    #endregion
+
+    #region Amd
 
     /// <summary>
-    /// Скорость вентилятора.
+    /// Уровни частоты ядра.
     /// </summary>
-    public int? FanSpeed { get; set; }
+    public int? CoreClockState { get; set; }
+
+    /// <summary>
+    /// P-состояния памяти: частотные режимы в зависимости от нагрузки.
+    /// </summary>
+    public int? MemoryClockState { get; set; }
+
+    /// <summary>
+    /// Напряжение контроллера памяти.
+    /// </summary>
+    public int? MemoryControllerVoltage { get; set; }
+
+    /// <summary>
+    /// Частота SoC (системной части GPU).
+    /// </summary>
+    public int? SocFrequency { get; set; }
+
+    /// <summary>
+    /// Напряжение SoC.
+    /// </summary>
+    public int? SocVoltage { get; set; }
+
+    /// <summary>
+    /// Настройки памяти.
+    /// </summary>
+    public string? MemoryTweak { get; set; }
+
+    /// <summary>
+    /// Автоматический разгон.
+    /// </summary>
+    public bool? EnhancedOverclock { get; set; }
+
+    /// <summary>
+    /// Альтернативное снижение напряжения.
+    /// </summary>
+    public bool? AlternativeDownVoltage { get; set; }
+
+    #endregion
 }

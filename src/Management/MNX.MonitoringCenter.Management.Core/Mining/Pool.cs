@@ -41,7 +41,7 @@ public class Pool : IEquatable<Pool>
     /// <remarks>
     /// Если имеет значение NULL, значит пул является доменным.
     /// </remarks>
-    public Guid? UserId { get; init; }
+    public Guid? OwnerId { get; init; }
 
     /// <summary>
     /// Признак принадлежности пула
@@ -54,7 +54,7 @@ public class Pool : IEquatable<Pool>
     /// </returns>
     public bool IsDomain()
     {
-        return UserId is null;
+        return OwnerId is null;
     }
 
     /// <inheritdoc/>

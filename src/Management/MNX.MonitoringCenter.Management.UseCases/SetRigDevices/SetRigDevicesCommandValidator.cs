@@ -9,6 +9,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
 /// </summary>
 public class SetRigDevicesCommandValidator : AbstractValidator<SetRigDevicesCommand>
 {
+    ///
     public SetRigDevicesCommandValidator()
     {
         RuleFor(x => x.RigId)

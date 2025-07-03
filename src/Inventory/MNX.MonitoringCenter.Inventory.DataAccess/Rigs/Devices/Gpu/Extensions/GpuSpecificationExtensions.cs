@@ -1,9 +1,7 @@
 ﻿using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu.GetGpusDetails;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Entities;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Extensions;
-
-using Gpu = Contracts.Devices.Gpu.Gpu;
 
 /// <summary>
 /// Расширения для <see cref="IQueryable{Gpu}"/>, для обработки спецификации.
@@ -16,25 +14,13 @@ internal static class GpuSpecificationExtensions
     /// <param name="gpus"> Запрашиваемый список видеокарт. </param>
     /// <param name="specification"> Спецификация. </param>
     /// <returns> Запрашиваемый список видеокарт. </returns>
-    internal static IQueryable<Gpu> Filter(this IQueryable<Gpu> gpus, DeviceSpecification specification)
+    internal static IQueryable<GpuInventory> Filter(this IQueryable<GpuInventory> gpus, DeviceSpecification specification)
     {
-        return gpus.Filter<Gpu>(specification);
-
-    }
-
-    /// <summary>
-    /// Фильтровать.
-    /// </summary>
-    /// <param name="gpus"> Запрашиваемый список видеокарт. </param>
-    /// <param name="specification"> Спецификация. </param>
-    /// <returns> Запрашиваемый список видеокарт. </returns>
-    internal static IQueryable<GpuDetails> Filter(this IQueryable<GpuDetails> gpus, DeviceSpecification specification)
-    {
-        return gpus.Filter<GpuDetails>(specification);
+        return gpus.Filter<GpuInventory>(specification);
     }
 
     private static IQueryable<TGpu> Filter<TGpu>(this IQueryable<TGpu> gpus, DeviceSpecification specification)
-        where TGpu : Gpu
+        where TGpu : GpuInventory
     {
         if (specification.Models != null)
         {

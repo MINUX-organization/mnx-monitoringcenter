@@ -167,7 +167,7 @@ public class PresetController : ControllerBase
     /// Переданные параметры не прошли валидацию или не был найден пресет с переданным id.
     /// </response>
     /// <response code="409"> Пресет с переданным именем уже существует. </response>
-    [HttpPatch("{presetId:Guid}")]
+    [HttpPut("{presetId:Guid}")]
     [ProducesResponseType(typeof(PresetModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     [ProducesResponseType(typeof(List<string>), 409)]

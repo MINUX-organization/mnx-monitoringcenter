@@ -1,15 +1,15 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using Microsoft.AspNetCore.Authorization;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.Management.Contracts.Overclocking;
-using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
-using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
-using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
+using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
+using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
@@ -69,7 +69,7 @@ public class DeviceController : ControllerBase
     /// <returns> Ограничения. </returns>
     /// <response code="200"> Успешно. </response>
     [HttpGet("gpus/{gpuName}/restrictions")]
-    [ProducesResponseType(typeof(GpuRestrictions), 200)]
+    [ProducesResponseType(typeof(NvidiaGpuRestrictions), 200)]
     public async Task<IActionResult> GetGpuRestrictions(string gpuName)
     {
         var result = await _mediator.Send(new GetGpuRestrictionsQuery(gpuName));
@@ -84,7 +84,7 @@ public class DeviceController : ControllerBase
     /// <response code="200"> Успешно. </response>
     /// <response code="400"> Майнинг устройство не найдено. </response>
     [HttpGet("gpus/{gpuId:guid}/restrictions")]
-    [ProducesResponseType(typeof(GpuRestrictions), 200)]
+    [ProducesResponseType(typeof(NvidiaGpuRestrictions), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
     public async Task<IActionResult> GetGpuRestrictionsById(Guid gpuId)
     {

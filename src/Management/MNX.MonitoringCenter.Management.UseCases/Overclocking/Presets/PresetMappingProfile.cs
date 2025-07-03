@@ -25,6 +25,7 @@ public class PresetMappingProfile : Profile
             .ForMember(destination => destination.Name, options => options.MapFrom(source => source.Model.Name))
             .ForMember(destination => destination.DeviceName, options => options.MapFrom(source => source.Model.DeviceName))
             .ForMember(destination => destination.Overclocking, options => options.MapFrom(source => source.Model.Overclocking))
+            .ForMember(destination => destination.OwnerId, options => options.MapFrom(source => source.UserId))
             .AfterMap((command, preset) => preset.OverclockingId = preset.Overclocking!.Id);
     }
 }

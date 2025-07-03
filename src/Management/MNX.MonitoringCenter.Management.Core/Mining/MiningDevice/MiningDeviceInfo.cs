@@ -93,4 +93,28 @@ public class MiningDeviceInfo : MiningDevice
 
         _lifeCycleStatus = MiningDeviceLifeCycleStatus.Offline;
     }
+
+    /// <summary>
+    /// Получить тип разгона девайса.
+    /// </summary>
+    /// <returns> Тип разгона девайса. </returns>
+    /// <exception cref="NotSupportedException"> Не поддерживаемый тип разгона. </exception>
+    public OverclockingTargetDeviceType GetOverclockingType()
+    {
+        if (Enum.TryParse<MiningDeviceManufacturer>(Manufacturer, ignoreCase: true, out var result))
+        {
+            return (result, Type) switch
+            {
+                (MiningDeviceManufacturer.Nvidia, MiningDeviceType.GPU) => OverclockingTargetDeviceType.NvidiaGPU,
+                (MiningDeviceManufacturer.AMD, MiningDeviceType.GPU) => OverclockingTargetDeviceType.AmdGPU,
+                (MiningDeviceManufacturer.Intel, MiningDeviceType.GPU) => OverclockingTargetDeviceType.IntelGPU,
+                (MiningDeviceManufacturer.Intel, MiningDeviceType.CPU) => OverclockingTargetDeviceType.CPU,
+                _ => throw new NotSupportedException($"Unsupported device type: {result}")
+            };
+        }
+        else
+        {
+            throw new NotSupportedException($"Unsupported device type: {result}");
+        }
+    }
 }

@@ -2,8 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.Contracts;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
-using System.Linq;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Entities;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -30,7 +29,7 @@ public partial class InventoryRepository
     /// <param name="inventory"> Результат инвентаризации. </param>
     /// <param name="cancellationToken"> Токен отмены. </param>
     internal async Task<long> Save(Guid rigId, DateTimeOffset createdDate,
-                             RigInventoryModel inventory, CancellationToken cancellationToken)
+                                   RigInventoryModel inventory, CancellationToken cancellationToken)
     {
         var newInventory = MapInventory(rigId, createdDate, inventory);
 
@@ -88,7 +87,7 @@ public partial class InventoryRepository
     /// <returns> Инвентаризация. </returns>
     private IQueryable<Rigs.RigInventory> GetInventoryBySpecification(InventorySpecification specification)
     {
-        return _context.RigInventory.AsNoTrackingWithIdentityResolution()
+        return _context.RigInventory.AsNoTracking()
                                     .Include(inventory => inventory.Rig)
                                     .Where(inventory => GetRigsBySpecification(specification).Contains(inventory.Rig))
                                     .Actualize(specification);
@@ -104,7 +103,7 @@ public partial class InventoryRepository
             CreatedDateTime = createdDate,
             Cpus = inventory.Cpus,
             Drives = inventory.Drives,
-            Gpus = _mapper.Map<List<GpuInventoryDto>>(inventory.Gpus),
+            Gpus = _mapper.Map<List<GpuInventory>>(inventory.Gpus),
             NetworkAdapters = inventory.NetworkAdapters,
             Motherboard = inventory.Motherboard,
             Software = inventory.Software

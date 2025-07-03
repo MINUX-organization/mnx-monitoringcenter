@@ -1,8 +1,8 @@
 ﻿using System.Reflection;
 using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Inventory.DataAccess.Rigs;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu;
-using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Enums;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Entities;
+using MNX.MonitoringCenter.Inventory.DataAccess.Rigs.Devices.Gpu.Views;
 
 namespace MNX.MonitoringCenter.Inventory.DataAccess;
 
@@ -24,46 +24,26 @@ public class Context : DbContext
     /// <summary>
     /// Видеокарты.
     /// </summary>
-    internal DbSet<GpuInventoryDto> Gpu { get; set; }
-
-    public Context(DbContextOptions<Context> options) : base(options) { }
+    internal DbSet<GpuInventory> Gpu { get; set; }
 
     /// <summary>
-    /// Получить версию драйвера для видеокарт переданного производителя.
+    /// Нематериализованное представление инвентаризации видеокарт с
+    /// наименованием ригов и версиями драйверов.
     /// </summary>
-    /// <param name="amdDriverVersion"> Версия AMD драйвера. </param>
-    /// <param name="intelDriverVersion"> Версия Intel драйвера. </param>
-    /// <param name="nvidiaDriverVersion"> Версия Nvidia драйвера. </param>
-    /// <param name="gpuManufacturer"> Производитель видеокарты. </param>
-    /// <returns>
-    /// Если производитель видеокарты поддерживается системой, то вернётся версия драйвера для видеокарт этого производителя,
-    /// иначе вернётся <see langword="null"/>.
-    /// </returns>
-    public static string? GetGpuDriverVersion(string amdDriverVersion,
-                                              string intelDriverVersion,
-                                              string nvidiaDriverVersion,
-                                              string gpuManufacturer)
-    {
-        if (Enum.TryParse<SupportedGpuManufacturerEnum>(gpuManufacturer, out var manufacturer))
-        {
-            return manufacturer switch
-            {
-                SupportedGpuManufacturerEnum.AMD => amdDriverVersion,
-                SupportedGpuManufacturerEnum.Intel => intelDriverVersion,
-                SupportedGpuManufacturerEnum.Nvidia => nvidiaDriverVersion,
-                _ => null
-            };
-        }
+    internal DbSet<GpuInventoryView> GpuViews { get; set; } 
+    
+    /// <summary>
+    /// Нематериализованное представление инвентаризации ограничений видеокарт
+    /// с идентификатором инвентаризации рига и производителем видеокарты.
+    /// </summary>
+    internal DbSet<GpuRestrictionsView> GpuRestrictionsView { get; set; }
 
-        return null;
-    }
+    ///
+    public Context(DbContextOptions<Context> options) : base(options) { }
 
     /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-
-        modelBuilder.HasDbFunction(typeof(Context).GetMethod(nameof(GetGpuDriverVersion))!)
-                    .HasName("get_gpu_driver_version");
     }
 }

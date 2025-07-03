@@ -22,7 +22,8 @@ public class PoolMappingProfile : Profile
             .ForMember(destination => destination.Port, options => options.MapFrom(source => source.Model.Port))
             .ForMember(destination => destination.Domain, options => options.MapFrom(source => source.Model.Domain))
             .ForMember(destination => destination.CryptocurrencyId, options => options.MapFrom(source => source.Model.CryptocurrencyId))
-            .ForMember(destination => destination.Tls, options => options.MapFrom(source => source.Model.Tls));
+            .ForMember(destination => destination.Tls, options => options.MapFrom(source => source.Model.Tls))
+            .ForMember(destination => destination.OwnerId, options => options.MapFrom(source => source.UserId));
 
         CreateMap<EditPoolCommand, Pool>()
             .ForMember(destination => destination.Domain, options => options.MapFrom(source => source.Model.Domain))

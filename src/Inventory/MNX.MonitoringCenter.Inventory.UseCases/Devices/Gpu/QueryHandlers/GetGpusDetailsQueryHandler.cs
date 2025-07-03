@@ -17,6 +17,6 @@ public class GetGpusDetailsQueryHandler : IStreamRequestHandler<GetGpusDetailsQu
 
     public IAsyncEnumerable<GpuDetails> Handle(GetGpusDetailsQuery request, CancellationToken cancellationToken)
     {
-        return _gpuRepository.GetGpus(request.Specification);
+        return _gpuRepository.GetGpus(request.Specification, cancellationToken);
     }
 }

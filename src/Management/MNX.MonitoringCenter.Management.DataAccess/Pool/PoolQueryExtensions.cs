@@ -19,7 +19,7 @@ internal static class PoolQueryExtensions
     internal static IQueryable<Pool> Available(
         this IQueryable<Pool> entities, Specification specification)
     {
-        return entities.Where(x => x.UserId == specification.UserId || x.UserId == null);
+        return entities.Where(x => x.OwnerId == specification.UserId || x.OwnerId == null);
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ internal static class PoolQueryExtensions
     internal static IQueryable<Pool> Available(
         this IQueryable<Pool> entities, Guid userId)
     {
-        return entities.Where(x => x.UserId == userId || x.UserId == null);
+        return entities.Where(x => x.OwnerId == userId || x.OwnerId == null);
     }
 
     /// <summary>
@@ -42,8 +42,8 @@ internal static class PoolQueryExtensions
     internal static IQueryable<Pool> Sort(
         this IQueryable<Pool> entities)
     {
-        return entities.OrderBy(x => x.UserId == null)
-                       .ThenBy(x => x.UserId)
+        return entities.OrderBy(x => x.OwnerId == null)
+                       .ThenBy(x => x.OwnerId)
                        .ThenBy(x => x.Tls == false);
     }
 }
