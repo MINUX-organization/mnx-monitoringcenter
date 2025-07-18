@@ -11,6 +11,11 @@ namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 public abstract record GpuRestrictions : Devices.Restrictions
 {
     /// <summary>
+    /// Тип целевой видеокарты.
+    /// </summary>
+    public virtual TargetGpuType TargetGpuType { get; }
+
+    /// <summary>
     /// Ограничения мощности.
     /// </summary>
     public required IntegerTypeRestrictions Power { get; init; }

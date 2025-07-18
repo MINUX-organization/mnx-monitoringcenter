@@ -7,4 +7,11 @@
 /// На данный момент не реализуется,
 /// так как нет поддержки видеокарт данной модели.
 /// </remarks>
-public record IntelGpuRestrictions : GpuRestrictions { }
+public record IntelGpuRestrictions : GpuRestrictions
+{
+    /// <inheritdoc/>
+    public override TargetGpuType TargetGpuType
+    {
+        get => TargetGpuType.Intel;
+    }
+}
