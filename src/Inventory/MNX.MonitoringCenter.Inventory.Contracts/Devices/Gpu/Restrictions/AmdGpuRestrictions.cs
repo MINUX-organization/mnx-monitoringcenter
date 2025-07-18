@@ -5,6 +5,12 @@
 /// </summary>
 public record AmdGpuRestrictions : GpuRestrictions
 {
+    /// <inheritdoc/>
+    public override TargetGpuType TargetGpuType
+    {
+        get => TargetGpuType.Amd;
+    }
+
     /// <summary>
     /// Ограничения фиксации частоты ядра. 
     /// </summary>

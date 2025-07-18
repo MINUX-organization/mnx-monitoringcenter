@@ -5,6 +5,12 @@
 /// </summary>
 public record NvidiaGpuRestrictions : GpuRestrictions
 {
+    /// <inheritdoc/>
+    public override TargetGpuType TargetGpuType
+    {
+        get => TargetGpuType.Nvidia;
+    }
+
     /// <summary>
     /// Ограничения фиксации частоты процессора.
     /// </summary>
