@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.DataAccess\MNX.MonitoringCenter.Management.DataAccess.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.Management.Mapping\MNX.MonitoringCenter.Management.UseCases.Mapping.csproj" />
     <ProjectReference Include="..\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj" />
   </ItemGroup>
 

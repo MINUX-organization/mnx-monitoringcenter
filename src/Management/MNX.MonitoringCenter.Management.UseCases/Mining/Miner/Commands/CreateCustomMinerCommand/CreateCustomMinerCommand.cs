@@ -1,14 +1,10 @@
-﻿using AutoMapper;
-using MediatR;
+﻿using MediatR;
 using MNX.Application.UseCases.Requests;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Miner;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateCustomMinerCommand;
-
-using Miner = Core.Mining.Miner.Miner;
 
 /// <summary>
 /// Команда создания пользовательского майнера.
@@ -24,15 +20,17 @@ public sealed record CreateCustomMinerCommand(MinerInputModel Model, Guid UserId
 public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMinerCommand, Result<MinerModel>>
 {
     private readonly IMinerRepository _minerRepository;
-    private readonly IMapper _mapper;
+    private readonly IMinerMapper _minerMapper;
 
-    public CreateCustomMinerCommandHandler(IMinerRepository minerRepository, 
-                                           IMapper mapper)
+    ///
+    public CreateCustomMinerCommandHandler(IMinerRepository minerRepository,
+                                           IMinerMapper minerMapper)
     {
         _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _minerMapper = minerMapper ?? throw new ArgumentNullException(nameof(minerMapper));
     }
 
+    ///
     public async Task<Result<MinerModel>> Handle(CreateCustomMinerCommand request,
                                                  CancellationToken cancellationToken)
     {
@@ -46,21 +44,10 @@ public class CreateCustomMinerCommandHandler : IRequestHandler<CreateCustomMiner
                 $"Miner with name {model.Name} and version {model.Version} already exists");
         }
 
-        var miner = new Miner()
-        {
-            Name = model.Name,
-            Version = model.Version,
-            Type = MinerTypeEnum.Custom,
-            InstallationUrl = model.InstallationUrl,
-            SupportedDevices = model.SupportedDevices,
-            PoolTemplate = model.PoolTemplate,
-            WalletWorkerTemplate = model.WalletWorkerTemplate,
-            MiningMode = model.MiningMode,
-            OwnerId = request.UserId
-        };
-        
+        var miner = _minerMapper.MapToCoreEntity(model, request.UserId);
+
         await _minerRepository.Add(miner, cancellationToken);
 
-        return Result<MinerModel>.SuccessfullyCreated(_mapper.Map<MinerModel>(miner));
+        return Result<MinerModel>.SuccessfullyCreated(_minerMapper.MapToModel(miner));
     }
 }

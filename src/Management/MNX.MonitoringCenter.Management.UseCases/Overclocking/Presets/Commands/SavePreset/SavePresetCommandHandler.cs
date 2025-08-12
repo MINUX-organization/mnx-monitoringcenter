@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
-using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
@@ -14,16 +12,22 @@ public class SavePresetCommandHandler :
     SaveOverclockingBaseHandler,
     IRequestHandler<SavePresetCommand, Result<PresetModel>>
 {
+    private readonly IPresetMapper _presetMapper;
+
     private readonly IPresetRepository _presetRepository;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    public SavePresetCommandHandler(IMapper mapper,
-                                    IMediator mediator,
+    ///
+    public SavePresetCommandHandler(IMediator mediator,
+                                    IPresetMapper presetMapper,
                                     IPresetRepository presetRepository,
                                     IMiningDeviceRepository miningDeviceRepository)
-        : base(mapper, mediator)
+        : base(mediator)
     {
+        _presetMapper = presetMapper ??
+            throw new ArgumentNullException(nameof(presetMapper));
+
         _presetRepository = presetRepository
             ?? throw new ArgumentNullException(nameof(presetRepository));
 
@@ -31,6 +35,7 @@ public class SavePresetCommandHandler :
             ?? throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
+    ///
     public async Task<Result<PresetModel>> Handle(SavePresetCommand request, CancellationToken cancellationToken)
     {
         if (await _presetRepository.Exists(request.UserId, request.Model.Name, cancellationToken))
@@ -43,8 +48,7 @@ public class SavePresetCommandHandler :
             return Result<PresetModel>.Invalid("Invalid mining device name.");
         }
 
-        var preset = _mapper.Map<Preset>(request);
-        preset.IsVisible = true;
+        var preset = _presetMapper.MapToCoreEntity(request.Model, request.UserId);
 
         var overclockingValidationResult = await ValidateOverclocking(
             request.Model.DeviceName!, preset.Overclocking!, cancellationToken);
@@ -56,6 +60,6 @@ public class SavePresetCommandHandler :
 
         await _presetRepository.Save(preset);
 
-        return Result<PresetModel>.SuccessfullyCreated(_mapper.Map<PresetModel>(preset));
+        return Result<PresetModel>.SuccessfullyCreated(_presetMapper.MapToModel(preset));
     }
 }

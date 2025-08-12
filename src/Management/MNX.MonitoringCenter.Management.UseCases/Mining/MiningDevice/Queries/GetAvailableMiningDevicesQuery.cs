@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 
@@ -19,11 +18,13 @@ public sealed class GetAvailableMiningDevicesQuery : IUserableStreamRequest<Mini
     /// </summary>
     public Specification Specification { get; }
 
+    ///
     public GetAvailableMiningDevicesQuery(Guid userId)
     {
         Specification = new Specification(userId);
     }
 
+    ///
     public GetAvailableMiningDevicesQuery(Guid userId,
                                           string filterString,
                                           object[] filterParameters)
@@ -39,19 +40,21 @@ public sealed class GetAvailableMiningDevicesQuery : IUserableStreamRequest<Mini
 public class GetAvailableMiningDevicesQueryHandler
     : IStreamRequestHandler<GetAvailableMiningDevicesQuery, MiningDeviceModel>
 {
-    private readonly IMapper _mapper;
+    private readonly IMiningDeviceMapper _miningDeviceMapper;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    public GetAvailableMiningDevicesQueryHandler(IMapper mapper,
+    ///
+    public GetAvailableMiningDevicesQueryHandler(IMiningDeviceMapper miningDeviceMapper,
                                                  IMiningDeviceRepository miningDeviceRepository)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _miningDeviceMapper = miningDeviceMapper ?? throw new ArgumentNullException(nameof(miningDeviceMapper));
 
         _miningDeviceRepository = miningDeviceRepository
             ?? throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
+    ///
     public async IAsyncEnumerable<MiningDeviceModel> Handle(GetAvailableMiningDevicesQuery request,
                                                            [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -59,7 +62,7 @@ public class GetAvailableMiningDevicesQueryHandler
 
         await foreach (var device in devices.WithCancellation(cancellationToken))
         {
-            yield return _mapper.Map<MiningDeviceModel>(device);
+            yield return _miningDeviceMapper.MapToModel(device);
         }
     }
 }

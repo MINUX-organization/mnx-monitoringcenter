@@ -1,9 +1,8 @@
 ﻿using MediatR;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 
@@ -28,12 +27,14 @@ public record GetPresetSupportedDevicesQuery : IUserableStreamRequest<MiningDevi
     /// </summary>
     public Specification Specification { get; init; }
 
+    ///
     public GetPresetSupportedDevicesQuery(Guid userId, Guid presetId)
     {
         PresetId = presetId;
         Specification = new Specification(userId);
     }
 
+    ///
     public GetPresetSupportedDevicesQuery(Guid userId,
                                           Guid presetId,
                                           string filterString,
@@ -50,24 +51,26 @@ public record GetPresetSupportedDevicesQuery : IUserableStreamRequest<MiningDevi
 public class GetPresetSupportedDevicesQueryHandler :
     IStreamRequestHandler<GetPresetSupportedDevicesQuery, MiningDeviceModel>
 {
-    private readonly IMapper _mapper;
+    private readonly IMiningDeviceMapper _miningDeviceMapper;
 
     private readonly IPresetRepository _presetRepository;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    public GetPresetSupportedDevicesQueryHandler(IMapper mapper,
+    ///
+    public GetPresetSupportedDevicesQueryHandler(IMiningDeviceMapper miningDeviceMapper,
                                                  IPresetRepository presetRepository,
                                                  IMiningDeviceRepository miningDeviceRepository)
     {
-        _mapper = mapper ??
-            throw new ArgumentNullException(nameof(mapper));
+        _miningDeviceMapper = miningDeviceMapper ??
+            throw new ArgumentNullException(nameof(miningDeviceMapper));
         _presetRepository = presetRepository ??
             throw new ArgumentNullException(nameof(presetRepository));
         _miningDeviceRepository = miningDeviceRepository ??
-            throw new ArgumentNullException(nameof(_miningDeviceRepository));
+            throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
+    ///
     public async IAsyncEnumerable<MiningDeviceModel> Handle(GetPresetSupportedDevicesQuery request,
                                                             [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -82,7 +85,7 @@ public class GetPresetSupportedDevicesQueryHandler :
             {
                 if (preset.IsDeviceSupport(device.Name))
                 {
-                    yield return _mapper.Map<MiningDeviceModel>(device);
+                    yield return _miningDeviceMapper.MapToModel(device);
                 }
             }
         }

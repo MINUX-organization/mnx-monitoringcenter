@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using AutoMapper;
-using MNX.RigCommander.MessageQueue.Clients.Bus;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
-using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models;
+using MNX.RigCommander.MessageQueue.Clients.Bus;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Events;
 
@@ -23,20 +21,22 @@ public record FlightSheetAppliedToRigEvent(
 /// </summary>
 public class FlightSheetAppliedToRigEventHandler : INotificationHandler<FlightSheetAppliedToRigEvent>
 {
-    private readonly IMapper _mapper;
+    private readonly IAgentCommandsMapper _agentCommandsMapper;
 
     private readonly IQueueBusClient _queueClient;
 
-    public FlightSheetAppliedToRigEventHandler(IMapper mapper, IQueueBusClient queueClient)
+    ///
+    public FlightSheetAppliedToRigEventHandler(IAgentCommandsMapper agentCommandsMapper, IQueueBusClient queueClient)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _agentCommandsMapper = agentCommandsMapper ?? throw new ArgumentNullException(nameof(agentCommandsMapper));
         _queueClient = queueClient ?? throw new ArgumentNullException(nameof(queueClient));
     }
 
+    ///
     public Task Handle(FlightSheetAppliedToRigEvent notification, CancellationToken cancellationToken)
     {
         var message = new ApplyWorkerSettingsCommand(
-            _mapper.Map<List<WorkerSettings>>(notification.DeviceFlightSheets));
+            _agentCommandsMapper.MapToWorkerSettings(notification.DeviceFlightSheets));
 
         return _queueClient.Enqueue(
             message, new Guid[] { notification.RigId }, notification.UserId, null, null, cancellationToken);

@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Core.Overclocking;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
+
+namespace MNX.MonitoringCenter.Management.Core.Overclocking;
 
 /// <summary>
 /// Разгон.

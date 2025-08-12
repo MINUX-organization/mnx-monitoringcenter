@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Queries;
 
@@ -15,11 +14,13 @@ public sealed record GetFlightSheetsQuery : IStreamRequest<FlightSheetModel>
     /// </summary>
     public Specification Specification { get; }
 
+    ///
     public GetFlightSheetsQuery(Guid userId)
     {
         Specification = new Specification(userId);
     }
 
+    ///
     public GetFlightSheetsQuery(Guid userId, string filterString, object[] filterParameters)
     {
         Specification = new Specification(userId, filterString, filterParameters);
@@ -31,16 +32,18 @@ public sealed record GetFlightSheetsQuery : IStreamRequest<FlightSheetModel>
 /// </summary>
 public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheetsQuery, FlightSheetModel>
 {
-    private readonly IMapper _mapper;
+    private readonly IFlightSheetMapper _flightSheetMapper;
 
     private readonly IFlightSheetRepository _repository;
 
-    public GetFlightSheetsQueryHandler(IMapper mapper, IFlightSheetRepository repository)
+    ///
+    public GetFlightSheetsQueryHandler(IFlightSheetMapper flightSheetMapper, IFlightSheetRepository repository)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _flightSheetMapper = flightSheetMapper ?? throw new ArgumentNullException(nameof(flightSheetMapper));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
+    ///
     public async IAsyncEnumerable<FlightSheetModel> Handle(GetFlightSheetsQuery request,
                                                           [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -48,7 +51,7 @@ public class GetFlightSheetsQueryHandler : IStreamRequestHandler<GetFlightSheets
 
         await foreach (var flightSheet in flightSheets.WithCancellation(cancellationToken))
         {
-            yield return _mapper.Map<FlightSheetModel>(flightSheet);
+            yield return _flightSheetMapper.MapToModel(flightSheet);
         }
     }
 }

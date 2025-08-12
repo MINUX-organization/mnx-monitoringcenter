@@ -41,10 +41,26 @@ BEGIN
             core_voltage_offset = source.core_voltage_offset,
             memory_voltage = source.memory_voltage,
             memory_voltage_offset = source.memory_voltage_offset,
-            power_limit = source.power_limit,
-            fan_speed = source.fan_speed
+            power_limit = source.power_limit
         FROM monitoring_center.overclocking AS source
         WHERE target.id = new_overclocking_id AND source.id = OLD.overclocking_id;
+
+        UPDATE monitoring_center.fan_overclocking AS target
+        SET
+            type = source.type,
+            target_speed = source.target_speed,
+            min_target_speed = source.min_target_speed,
+            max_target_speed = source.max_target_speed,
+            target_core_temperature = source.target_core_temperature,
+            target_memory_temperature = source.target_memory_temperature,
+            target_points = source.target_points
+		FROM monitoring_center.overclocking AS tgt_ov,
+			 monitoring_center.overclocking AS src_ov,
+			 monitoring_center.fan_overclocking AS source
+		WHERE tgt_ov.id = new_overclocking_id
+		  AND src_ov.id = OLD.overclocking_id
+		  AND target.id = tgt_ov.fan_overclocking_id
+		  AND source.id = src_ov.fan_overclocking_id;
     END LOOP;
 
     RETURN OLD;

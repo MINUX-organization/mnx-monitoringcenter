@@ -1,7 +1,6 @@
-﻿using AutoMapper;
-using FluentValidation;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
+﻿using FluentValidation;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.CreateFlightSheet;
@@ -11,7 +10,8 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.C
 /// </summary>
 public class CreateFlightSheetCommandValidator : AbstractValidator<CreateFlightSheetCommand>
 {
-    public CreateFlightSheetCommandValidator(IMapper mapper,
+    ///
+    public CreateFlightSheetCommandValidator(IMiningConfigMapper mapper,
                                              IMinerRepository minerRepository,
                                              IWalletRepository walletRepository,
                                              IPoolRepository poolRepository)

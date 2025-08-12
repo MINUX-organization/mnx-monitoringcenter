@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
+
+namespace MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
 
 /// <summary>
 /// Разгон разгона видеокарт модели Intel.

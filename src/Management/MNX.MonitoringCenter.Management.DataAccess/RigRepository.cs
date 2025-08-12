@@ -164,6 +164,7 @@ public class RigRepository : IRigRepository
         {
             var overclockingDto = _mapper.Map<OverclockingDto>(overclocking);
             await context.Overclocking.AddAsync(overclockingDto);
+            await context.SaveChangesAsync();
         }
     }
 }

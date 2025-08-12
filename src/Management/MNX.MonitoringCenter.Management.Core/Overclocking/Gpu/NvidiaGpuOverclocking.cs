@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
+
+namespace MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
 
 /// <summary>
 /// Модель разгона видеокарты модели Nvidia.
@@ -22,7 +24,7 @@ public class NvidiaGpuOverclocking : IOverclocking, IEquatable<NvidiaGpuOvercloc
     /// <summary>
     /// Скорость вентилятора
     /// </summary>
-    public int FanSpeed { get; set; }
+    public required IFanOverclocking FanOverclocking { get; set; }
 
     /// <summary>
     /// Фиксированная частота ядра
@@ -79,7 +81,7 @@ public class NvidiaGpuOverclocking : IOverclocking, IEquatable<NvidiaGpuOvercloc
             MemoryVoltage = MemoryVoltage,
             MemoryVoltageOffset = MemoryVoltageOffset,
             PowerLimit = PowerLimit,
-            FanSpeed = FanSpeed
+            FanOverclocking = FanOverclocking
         };
     }
 
@@ -116,7 +118,7 @@ public class NvidiaGpuOverclocking : IOverclocking, IEquatable<NvidiaGpuOvercloc
                MemoryVoltage == other.MemoryVoltage &&
                MemoryVoltageOffset == other.MemoryVoltageOffset &&
                PowerLimit == other.PowerLimit &&
-               FanSpeed == other.FanSpeed;
+               FanOverclocking.Equals(other.FanOverclocking);
     }
 
     /// <inheritdoc/>
@@ -133,7 +135,7 @@ public class NvidiaGpuOverclocking : IOverclocking, IEquatable<NvidiaGpuOvercloc
         hash.Add(MemoryVoltage);
         hash.Add(MemoryVoltageOffset);
         hash.Add(PowerLimit);
-        hash.Add(FanSpeed);
+        hash.Add(FanOverclocking.GetHashCode());
 
         return hash.ToHashCode();
     }

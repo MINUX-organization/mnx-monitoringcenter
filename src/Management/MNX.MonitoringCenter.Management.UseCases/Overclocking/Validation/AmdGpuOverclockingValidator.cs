@@ -18,8 +18,7 @@ public class AmdGpuOverclockingValidator : OverclockingValidatorBase<AmdGpuOverc
         AddRangeValidatorRule(x => x.PowerLimit,
             nameof(AmdGpuOverclocking.PowerLimit), rest.Power.Minimal, rest.Power.Maximal);
 
-        AddRangeValidatorRule(x => x.FanSpeed,
-            nameof(AmdGpuOverclocking.FanSpeed), rest.FanSpeed.Minimal, rest.FanSpeed.Maximal);
+        // TODO: Добавить SetValidator для параметра FanSpeed.
 
         AddRangeValidatorRule(x => x.CoreClockLock,
             nameof(AmdGpuOverclocking.CoreClockLock), rest.ClockCoreLock.Minimal, rest.ClockCoreLock.Maximal);

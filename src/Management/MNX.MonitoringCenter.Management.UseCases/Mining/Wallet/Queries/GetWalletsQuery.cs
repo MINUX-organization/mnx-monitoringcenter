@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using MNX.MonitoringCenter.Management.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Queries;
 
@@ -15,11 +14,13 @@ public sealed record GetWalletsQuery : IStreamRequest<WalletModel>
     /// </summary>
     public Specification Specification { get; }
 
+    ///
     public GetWalletsQuery(Guid userId)
     {
         Specification = new Specification(userId);
     }
 
+    ///
     public GetWalletsQuery(Guid userId, string filterString, object[] filterParameters)
     {
         Specification = new Specification(userId, filterString, filterParameters);
@@ -33,14 +34,16 @@ public class GetWalletsQueryHandler : IStreamRequestHandler<GetWalletsQuery, Wal
 {
     private readonly IWalletRepository _repository;
 
-    private readonly IMapper _mapper;
+    private readonly IWalletMapper _walletMapper;
 
-    public GetWalletsQueryHandler(IWalletRepository repository, IMapper mapper)
+    ///
+    public GetWalletsQueryHandler(IWalletRepository repository, IWalletMapper walletMapper)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _walletMapper = walletMapper ?? throw new ArgumentNullException(nameof(walletMapper));
     }
 
+    ///
     public async IAsyncEnumerable<WalletModel> Handle(GetWalletsQuery request,
                                                      [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -48,7 +51,7 @@ public class GetWalletsQueryHandler : IStreamRequestHandler<GetWalletsQuery, Wal
 
         await foreach (var wallet in wallets.WithCancellation(cancellationToken))
         {
-            yield return _mapper.Map<WalletModel>(wallet);
+            yield return _walletMapper.MapToModel(wallet);
         }
     }
 }

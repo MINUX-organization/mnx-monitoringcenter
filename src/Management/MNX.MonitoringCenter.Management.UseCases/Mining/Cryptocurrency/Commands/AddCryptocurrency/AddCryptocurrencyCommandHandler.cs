@@ -1,12 +1,9 @@
 ﻿using MediatR;
-using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands.AddCryptocurrency;
-
-using Cryptocurrency = Core.Mining.Cryptocurrency;
 
 /// <summary>
 /// Обработчик команды <see cref="AddCryptocurrencyCommand"/>.
@@ -18,20 +15,22 @@ public class AddCryptocurrencyCommandHandler :
 
     private readonly IAlgorithmRepository _algorithmRepository;
 
-    private readonly IMapper _mapper;
+    private readonly ICryptocurrencyMapper _cryptocurrencyMapper;
 
+    ///
     public AddCryptocurrencyCommandHandler(ICryptocurrencyRepository cryptocurrencyRepository,
                                            IAlgorithmRepository algorithmRepository,
-                                           IMapper mapper)
+                                           ICryptocurrencyMapper cryptocurrencyMapper)
     {
         _cryptocurrencyRepository = cryptocurrencyRepository ??
             throw new ArgumentNullException(nameof(cryptocurrencyRepository));
         _algorithmRepository = algorithmRepository ??
             throw new ArgumentNullException(nameof(algorithmRepository));
-        _mapper = mapper ??
-            throw new ArgumentNullException(nameof(mapper));
+        _cryptocurrencyMapper = cryptocurrencyMapper ??
+            throw new ArgumentNullException(nameof(cryptocurrencyMapper));
     }
 
+    ///
     public async Task<Result<CryptocurrencyModel>> Handle(AddCryptocurrencyCommand request,
                                                           CancellationToken cancellationToken)
     {
@@ -55,11 +54,11 @@ public class AddCryptocurrencyCommandHandler :
                 .Invalid($"Algorithm with id equaled {model.AlgorithmId} wasn't found");
         }
 
-        var cryptocurrency = _mapper.Map<Cryptocurrency>(request);
+        var cryptocurrency = _cryptocurrencyMapper.MapToCoreEntity(request.Model, request.UserId);
         await _cryptocurrencyRepository.Add(cryptocurrency);
         cryptocurrency.Algorithm = algorithm;
 
         return Result<CryptocurrencyModel>
-            .SuccessfullyCreated(_mapper.Map<CryptocurrencyModel>(cryptocurrency));
+            .SuccessfullyCreated(_cryptocurrencyMapper.MapToModel(cryptocurrency));
     }
 }

@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using AutoMapper;
-using MNX.Application.UseCases.Results;
 using MNX.Application.UseCases.Requests;
+using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
@@ -20,14 +19,16 @@ public class GetPresetByIdQueryHandler : IRequestHandler<GetPresetByIdQuery, Res
 {
     private readonly IPresetRepository _repository;
 
-    private readonly IMapper _mapper;
+    private readonly IPresetMapper _presetMapper;
 
-    public GetPresetByIdQueryHandler(IPresetRepository repository, IMapper mapper)
+    ///
+    public GetPresetByIdQueryHandler(IPresetRepository repository, IPresetMapper presetMapper)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _presetMapper = presetMapper ?? throw new ArgumentNullException(nameof(presetMapper));
     }
 
+    ///
     public async Task<Result<PresetModel>> Handle(GetPresetByIdQuery request, CancellationToken cancellationToken)
     {
         var preset = await _repository.GetById(request.PresetId, request.UserId, cancellationToken);
@@ -35,6 +36,6 @@ public class GetPresetByIdQueryHandler : IRequestHandler<GetPresetByIdQuery, Res
         {
             return Result<PresetModel>.Invalid($"Preset with id equaled {request.PresetId} was not found");
         }
-        return Result<PresetModel>.Success(_mapper.Map<PresetModel>(preset));
+        return Result<PresetModel>.Success(_presetMapper.MapToModel(preset));
     }
 }

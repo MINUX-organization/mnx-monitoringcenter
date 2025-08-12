@@ -1,11 +1,10 @@
-﻿using AutoMapper;
-using FluentValidation;
+﻿using FluentValidation;
 using FluentValidation.Validators;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands;
 
@@ -14,8 +13,9 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands;
 /// </summary>
 internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputModel>
 {
+    ///
     public FlightSheetModelValidator(Guid userId,
-                                     IMapper mapper,
+                                     IMiningConfigMapper miningConfigMapper,
                                      IMinerRepository minerRepository,
                                      IWalletRepository walletRepository,
                                      IPoolRepository poolRepository)
@@ -34,7 +34,7 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
             .NotNull()
                 .WithMessage("Target is cannot nullable!")
             .SetAsyncValidator(new FlightSheetTargetModelValidator(userId,
-                                                                   mapper,
+                                                                   miningConfigMapper,
                                                                    minerRepository,
                                                                    walletRepository,
                                                                    poolRepository));
@@ -45,7 +45,7 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
     {
         private readonly Guid _userId;
 
-        private readonly IMapper _mapper;
+        private readonly IMiningConfigMapper _miningConfigMapper;
 
         private readonly IMinerRepository _minerRepository;
 
@@ -57,13 +57,13 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
         public string Name { get => nameof(FlightSheetTargetModelValidator); }
 
         public FlightSheetTargetModelValidator(Guid userId,
-                                               IMapper mapper,
+                                               IMiningConfigMapper miningConfigMapper,
                                                IMinerRepository minerRepository,
                                                IWalletRepository walletRepository,
                                                IPoolRepository poolRepository)
         {
             _userId = userId;
-            _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _miningConfigMapper = miningConfigMapper ?? throw new ArgumentNullException(nameof(miningConfigMapper));
             _minerRepository = minerRepository ?? throw new ArgumentNullException(nameof(minerRepository));
             _walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
             _poolRepository = poolRepository ?? throw new ArgumentNullException(nameof(poolRepository));
@@ -88,7 +88,7 @@ internal class FlightSheetModelValidator : AbstractValidator<FlightSheetInputMod
                 return false;
             }
 
-            var miningConfig = _mapper.Map<BaseMiningConfig>(value.MiningConfig);
+            var miningConfig = _miningConfigMapper.MapToCoreEntity(value.MiningConfig);
             if (!await ValidateMiningConfig(miningConfig, context))
             {
                 return false;

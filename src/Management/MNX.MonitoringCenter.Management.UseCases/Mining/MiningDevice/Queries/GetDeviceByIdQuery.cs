@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 
@@ -18,16 +17,18 @@ public sealed record GetDeviceByIdQuery(Guid Id, Guid UserId) : IRequest<Result<
 /// </summary>
 public class GetDeviceByIdQueryHandler : IRequestHandler<GetDeviceByIdQuery, Result<MiningDeviceModel>>
 {
-    private readonly IMapper _mapper;
+    private readonly IMiningDeviceMapper _miningDeviceMapper;
 
     private readonly IMiningDeviceRepository _repository;
 
-    public GetDeviceByIdQueryHandler(IMapper mapper, IMiningDeviceRepository repository)
+    ///
+    public GetDeviceByIdQueryHandler(IMiningDeviceMapper miningDeviceMapper, IMiningDeviceRepository repository)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _miningDeviceMapper = miningDeviceMapper ?? throw new ArgumentNullException(nameof(miningDeviceMapper));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
+    ///
     public async Task<Result<MiningDeviceModel>> Handle(GetDeviceByIdQuery request, CancellationToken cancellationToken)
     {
         var device = await _repository.GetActiveDeviceById(request.Id, request.UserId, cancellationToken);
@@ -37,6 +38,6 @@ public class GetDeviceByIdQueryHandler : IRequestHandler<GetDeviceByIdQuery, Res
             return Result<MiningDeviceModel>.Invalid("Mining device wasn't found");
         }
 
-        return Result<MiningDeviceModel>.Success(_mapper.Map<MiningDeviceModel>(device));
+        return Result<MiningDeviceModel>.Success(_miningDeviceMapper.MapToModel(device));
     }
 }

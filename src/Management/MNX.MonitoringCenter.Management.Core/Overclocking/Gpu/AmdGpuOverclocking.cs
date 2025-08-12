@@ -1,4 +1,5 @@
-﻿
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
+
 namespace MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
 
 /// <summary>
@@ -21,9 +22,9 @@ public class AmdGpuOverclocking : IOverclocking, IEquatable<AmdGpuOverclocking>
     public int PowerLimit { get; set; }
 
     /// <summary>
-    /// Скорость вентилятора
+    /// Разгон вентилятора
     /// </summary>
-    public int FanSpeed { get; set; }
+    public required IFanOverclocking FanOverclocking { get; set; }
 
     /// <summary>
     /// Блокировка частоты ядра.
@@ -110,7 +111,7 @@ public class AmdGpuOverclocking : IOverclocking, IEquatable<AmdGpuOverclocking>
             SocFrequency = SocFrequency,
             SocVoltage = SocVoltage,
             PowerLimit = PowerLimit,
-            FanSpeed = FanSpeed
+            FanOverclocking = FanOverclocking
         };
     }
 
@@ -152,7 +153,7 @@ public class AmdGpuOverclocking : IOverclocking, IEquatable<AmdGpuOverclocking>
                SocFrequency == other.SocFrequency &&
                SocVoltage == other.SocVoltage &&
                PowerLimit == other.PowerLimit &&
-               FanSpeed == other.FanSpeed;
+               FanOverclocking.Equals(other.FanOverclocking);
     }
 
     /// <inheritdoc/>
@@ -174,7 +175,7 @@ public class AmdGpuOverclocking : IOverclocking, IEquatable<AmdGpuOverclocking>
         hash.Add(SocFrequency);
         hash.Add(SocVoltage);
         hash.Add(PowerLimit);
-        hash.Add(FanSpeed);
+        hash.Add(FanOverclocking.GetHashCode());
 
         return hash.ToHashCode();
     }

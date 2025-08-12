@@ -32,7 +32,7 @@ public class PresetRepository : IPresetRepository
                                                      .Where(x => x.OwnerId == specification.UserId && x.IsVisible)
                                                      .Filter(specification)
                                                      .Sort()
-                      join overclocking in _context.Overclocking.AsNoTracking()
+                      join overclocking in _context.Overclocking.AsNoTracking().Include(x => x.FanOverclocking)
                         on preset.OverclockingId equals overclocking.Id
                       select new Preset()
                       {
@@ -56,7 +56,7 @@ public class PresetRepository : IPresetRepository
         var presets = from preset in _context.Presets.AsNoTrackingWithIdentityResolution()
                                                      .Where(x => x.OwnerId == specification.UserId && x.IsVisible)
                                                      .Filter(specification)
-                      join overclocking in _context.Overclocking.AsNoTracking()
+                      join overclocking in _context.Overclocking.AsNoTracking().Include(x => x.FanOverclocking)
                         on preset.OverclockingId equals overclocking.Id
                       select new Preset()
                       {
@@ -78,7 +78,7 @@ public class PresetRepository : IPresetRepository
     {
         return _context.Presets.AsNoTracking()
             .Where(x => x.Id == id && x.OwnerId == userId)
-            .Join(_context.Overclocking.AsNoTracking(),
+            .Join(_context.Overclocking.AsNoTracking().Include(x => x.FanOverclocking),
             preset => preset.OverclockingId,
             overclocking => overclocking.Id,
             (preset, overclocking) => new Preset
@@ -88,7 +88,8 @@ public class PresetRepository : IPresetRepository
                 DeviceName = preset.DeviceName,
                 OverclockingId = preset.OverclockingId,
                 Overclocking = _mapper.Map<IOverclocking>(overclocking),
-                OwnerId = preset.OwnerId
+                OwnerId = preset.OwnerId,
+                IsVisible = preset.IsVisible,
             }).FirstOrDefaultAsync(cancellationToken);
     }
 
@@ -105,12 +106,17 @@ public class PresetRepository : IPresetRepository
     /// <inheritdoc/>
     public async Task Save(Preset preset)
     {
+        await using var transaction = await _context.Database.BeginTransactionAsync();
+
         var overclocking = _mapper.
             Map<OverclockingDto>(preset.Overclocking);
         await _context.Overclocking.AddAsync(overclocking);
+        await _context.SaveChangesAsync();
 
         await _context.Presets.AddAsync(preset);
         await _context.SaveChangesAsync();
+
+        await transaction.CommitAsync();
     }
 
     /// <inheritdoc/>
@@ -133,13 +139,11 @@ public class PresetRepository : IPresetRepository
 
         var overclockingId = removablePreset.OverclockingId;
 
-        await _context.Presets
-            .AsNoTracking()
+        await _context.Presets.AsNoTracking()
             .Where(x => x.Id == id && x.OwnerId == userId && x.IsVisible)
             .ExecuteDeleteAsync();
 
-        await _context.Overclocking
-            .AsNoTracking()
+        await _context.Overclocking.AsNoTracking()
             .Where(x => x.Id == overclockingId)
             .ExecuteDeleteAsync();
     }
