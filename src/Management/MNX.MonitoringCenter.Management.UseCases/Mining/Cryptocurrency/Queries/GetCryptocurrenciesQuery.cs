@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using AutoMapper;
 using System.Runtime.CompilerServices;
 using MNX.MonitoringCenter.Management.Contracts;
 
@@ -15,11 +14,13 @@ public sealed record GetCryptocurrenciesQuery : IStreamRequest<CryptocurrencyMod
     /// </summary>
     public Specification Specification { get; }
 
+    ///
     public GetCryptocurrenciesQuery(Guid userId)
     {
         Specification = new Specification(userId);
     }
 
+    ///
     public GetCryptocurrenciesQuery(Guid userId, string filterString, object[] filterParameters)
     {
         Specification = new Specification(userId, filterString, filterParameters);
@@ -33,14 +34,16 @@ public class GetCryptocurrenciesQueryHandler : IStreamRequestHandler<GetCryptocu
 {
     private readonly ICryptocurrencyRepository _repository;
 
-    private readonly IMapper _mapper;
+    private readonly ICryptocurrencyMapper _cryptocurrencyMapper;
 
-    public GetCryptocurrenciesQueryHandler(ICryptocurrencyRepository repository, IMapper mapper)
+    ///
+    public GetCryptocurrenciesQueryHandler(ICryptocurrencyRepository repository, ICryptocurrencyMapper cryptocurrencyMapper)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _cryptocurrencyMapper = cryptocurrencyMapper ?? throw new ArgumentNullException(nameof(cryptocurrencyMapper));
     }
 
+    ///
     public async IAsyncEnumerable<CryptocurrencyModel> Handle(GetCryptocurrenciesQuery request,
                                                              [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -48,7 +51,7 @@ public class GetCryptocurrenciesQueryHandler : IStreamRequestHandler<GetCryptocu
 
         await foreach (var cryptocurrency in cryptocurrencies.WithCancellation(cancellationToken))
         {
-            yield return _mapper.Map<CryptocurrencyModel>(cryptocurrency);
+            yield return _cryptocurrencyMapper.MapToModel(cryptocurrency);
         }
     }
 }

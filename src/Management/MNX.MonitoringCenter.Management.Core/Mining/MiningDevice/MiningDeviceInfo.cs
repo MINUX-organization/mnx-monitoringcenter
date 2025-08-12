@@ -1,5 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
 
 namespace MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 

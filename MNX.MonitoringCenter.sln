@@ -65,6 +65,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsAp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.RigsApi.DataAccess.Tests", "tests\RigsApi\MNX.MonitoringCenter.RigsApi.DataAccess.Tests\MNX.MonitoringCenter.RigsApi.DataAccess.Tests.csproj", "{A4AB0DA0-8426-46F7-AB7B-CB373A2880D3}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.UseCases.Mapping", "src\Management\MNX.MonitoringCenter.Management.Mapping\MNX.MonitoringCenter.Management.UseCases.Mapping.csproj", "{B65FC74B-C7E0-4D54-93A2-18CAEC95A1D7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -167,6 +169,10 @@ Global
 		{A4AB0DA0-8426-46F7-AB7B-CB373A2880D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4AB0DA0-8426-46F7-AB7B-CB373A2880D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4AB0DA0-8426-46F7-AB7B-CB373A2880D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B65FC74B-C7E0-4D54-93A2-18CAEC95A1D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B65FC74B-C7E0-4D54-93A2-18CAEC95A1D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B65FC74B-C7E0-4D54-93A2-18CAEC95A1D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B65FC74B-C7E0-4D54-93A2-18CAEC95A1D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -201,6 +207,7 @@ Global
 		{863C2748-C44E-4C7E-BF1F-157A7063C6B8} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
 		{964F8443-26AE-4195-89B7-7A1BD4A4E60E} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
 		{A4AB0DA0-8426-46F7-AB7B-CB373A2880D3} = {0B788845-9795-4316-881A-7D19D0FC9E8E}
+		{B65FC74B-C7E0-4D54-93A2-18CAEC95A1D7} = {9C628EEF-6EAA-4451-83D8-74D9E717C558}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}

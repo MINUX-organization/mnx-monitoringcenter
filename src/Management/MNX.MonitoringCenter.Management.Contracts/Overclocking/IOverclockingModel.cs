@@ -1,6 +1,8 @@
-﻿using System.Text.Json.Serialization;
+﻿using MNX.MonitoringCenter.Management.Contracts.Overclocking.Cpu;
+using MNX.MonitoringCenter.Management.Contracts.Overclocking.Gpu;
+using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
 using Swashbuckle.AspNetCore.Annotations;
-using MNX.MonitoringCenter.Management.Core.Overclocking;
+using System.Text.Json.Serialization;
 
 namespace MNX.MonitoringCenter.Management.Contracts.Overclocking;
 

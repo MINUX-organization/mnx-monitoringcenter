@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Overclocking;
 
@@ -25,9 +25,14 @@ public class OverclockingDto
     public int? PowerLimit { get; set; }
 
     /// <summary>
-    /// Скорость вентилятора.
+    /// Разгон вентилятора.
     /// </summary>
-    public int? FanSpeed { get; set; }
+    public FanOverclockingDto? FanOverclocking { get; set; }
+
+    /// <summary>
+    /// Внешний ключ к экземпляру <see cref="FanOverclockingDto"/>.
+    /// </summary>
+    public Guid? FanOverclockingId { get; set; }
 
     /// <summary>
     /// Фиксированная частота ядра.

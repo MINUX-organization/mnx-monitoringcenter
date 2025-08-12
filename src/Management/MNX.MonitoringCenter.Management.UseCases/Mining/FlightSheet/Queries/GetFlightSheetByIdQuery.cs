@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 
@@ -17,16 +16,18 @@ public sealed record GetFlightSheetByIdQuery(Guid Id, Guid UserId) : IRequest<Re
 /// </summary>
 public class GetFLightSheetByIdQueryHandler : IRequestHandler<GetFlightSheetByIdQuery, Result<FlightSheetModel>>
 {
-    private readonly IMapper _mapper;
+    private readonly IFlightSheetMapper _flightSheetMapper;
 
     private readonly IFlightSheetRepository _repository;
 
-    public GetFLightSheetByIdQueryHandler(IMapper mapper, IFlightSheetRepository repository)
+    ///
+    public GetFLightSheetByIdQueryHandler(IFlightSheetMapper flightSheetMapper, IFlightSheetRepository repository)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _flightSheetMapper = flightSheetMapper ?? throw new ArgumentNullException(nameof(flightSheetMapper));
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
     }
 
+    ///
     public async Task<Result<FlightSheetModel>> Handle(GetFlightSheetByIdQuery request, CancellationToken cancellationToken)
     {
         var flightSheet = await _repository.GetAvailableById(request.Id, request.UserId, cancellationToken);
@@ -36,6 +37,6 @@ public class GetFLightSheetByIdQueryHandler : IRequestHandler<GetFlightSheetById
             return Result<FlightSheetModel>.Invalid($"Flight sheet with id equaled {request.Id} was not found!");
         }
 
-        return Result<FlightSheetModel>.Success(_mapper.Map<FlightSheetModel>(flightSheet));
+        return Result<FlightSheetModel>.Success(_flightSheetMapper.MapToModel(flightSheet));
     }
 }

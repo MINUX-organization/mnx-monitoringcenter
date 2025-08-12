@@ -1,12 +1,8 @@
 ﻿using MediatR;
-using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.EditWallet;
-
-using Wallet = Core.Mining.Wallet;
-
 /// <summary>
 /// Обработчик команды редактирования кошелька
 /// </summary>
@@ -14,14 +10,16 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
 {
     private readonly IWalletRepository _walletRepository;
 
-    private readonly IMapper _mapper;
+    private readonly IWalletMapper _walletMapper;
 
-    public EditWalletCommandHandler(IWalletRepository walletRepository, IMapper mapper)
+    ///
+    public EditWalletCommandHandler(IWalletRepository walletRepository, IWalletMapper walletMapper)
     {
         _walletRepository = walletRepository ?? throw new ArgumentNullException(nameof(walletRepository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _walletMapper = walletMapper ?? throw new ArgumentNullException(nameof(walletMapper));
     }
 
+    ///
     public async Task<Result<WalletModel>> Handle(EditWalletCommand request, CancellationToken cancellationToken)
     {
         var wallet = await _walletRepository.GetAvailableById(request.Id, request.UserId, cancellationToken);
@@ -36,11 +34,11 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
             return Result<WalletModel>.Invalid("You cannot change the cryptocurrency");
         }
 
-        var newWallet = _mapper.Map<Wallet>(request);
+        var newWallet = _walletMapper.MapToCoreEntity(request);
 
         if (wallet.Equals(newWallet))
         {
-            return Result<WalletModel>.Success(_mapper.Map<WalletModel>(wallet));
+            return Result<WalletModel>.Success(_walletMapper.MapToModel(wallet));
         }
 
         if (wallet.Name != newWallet.Name &&
@@ -49,15 +47,9 @@ public class EditWalletCommandHandler : IRequestHandler<EditWalletCommand, Resul
             return Result<WalletModel>.Conflict($"Wallet with name is equaled {newWallet.Name} already exists");
         }
 
-        //if (wallet.Address != newWallet.Address &&
-        //    await _walletRepository.ExistsWithAddress(request.UserId, newWallet.Address, cancellationToken))
-        //{
-        //    return Result<WalletModel>.Conflict($"Wallet with address is equaled {newWallet.Address} already exists");
-        //}
-
         await _walletRepository.Update(newWallet);
         newWallet.Cryptocurrency = wallet.Cryptocurrency;
 
-        return Result<WalletModel>.Success(_mapper.Map<WalletModel>(newWallet));
+        return Result<WalletModel>.Success(_walletMapper.MapToModel(newWallet));
     }
 }

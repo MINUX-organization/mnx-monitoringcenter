@@ -15,14 +15,15 @@ public class PresetInputModel
     /// <summary>
     /// Название майнинг устройства.
     /// </summary>
-    public string? DeviceName { get; }
+    public string DeviceName { get; }
 
     /// <summary>
     /// Модель разгона
     /// </summary>
     public IOverclockingModel Overclocking { get; }
 
-    public PresetInputModel(string name, string? deviceName, IOverclockingModel overclocking)
+    ///
+    public PresetInputModel(string name, string deviceName, IOverclockingModel overclocking)
     {
         Name = name;
         DeviceName = deviceName;

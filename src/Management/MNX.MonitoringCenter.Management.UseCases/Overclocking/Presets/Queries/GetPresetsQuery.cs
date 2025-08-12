@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 
@@ -20,12 +19,14 @@ public sealed record GetPresetsQuery : IStreamRequest<PresetModel>
     /// </summary>
     public Specification Specification { get; }
 
+    ///
     public GetPresetsQuery(string? gpuName, Guid userId)
     {
         GpuName = gpuName;
         Specification = new Specification(userId);
     }
 
+    ///
     public GetPresetsQuery(string? gpuName, Guid userId, string filterString, object[] filterParameters)
     {
         GpuName = gpuName;
@@ -40,14 +41,16 @@ public class GetPresetsQueryHandler : IStreamRequestHandler<GetPresetsQuery, Pre
 {
     private readonly IPresetRepository _repository;
 
-    private readonly IMapper _mapper;
+    private readonly IPresetMapper _presetMapper;
 
-    public GetPresetsQueryHandler(IPresetRepository repository, IMapper mapper)
+    ///
+    public GetPresetsQueryHandler(IPresetRepository repository, IPresetMapper presetMapper)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _presetMapper = presetMapper ?? throw new ArgumentNullException(nameof(presetMapper));
     }
 
+    ///
     public async IAsyncEnumerable<PresetModel> Handle(GetPresetsQuery request,
                                                      [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -55,7 +58,7 @@ public class GetPresetsQueryHandler : IStreamRequestHandler<GetPresetsQuery, Pre
 
         await foreach (var preset in presets.WithCancellation(cancellationToken))
         {
-            yield return _mapper.Map<PresetModel>(preset);
+            yield return _presetMapper.MapToModel(preset);
         }
     }
 }

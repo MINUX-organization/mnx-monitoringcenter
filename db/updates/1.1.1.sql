@@ -276,8 +276,6 @@ BEGIN
 
     ALTER INDEX monitoring_center.ix_flight_sheets_user_id RENAME TO ix_flight_sheets_owner_id;
 
-    ALTER INDEX monitoring_center.unique_name_version_user_id RENAME TO unique_name_version_owner_id;
-
     ALTER TABLE monitoring_center.presets
     RENAME COLUMN user_id TO owner_id;
 

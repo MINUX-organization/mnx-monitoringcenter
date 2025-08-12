@@ -137,7 +137,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
                     .Where(x => x.Id == deviceId)
                     join preset in _context.Presets.AsNoTracking()
                         on device.PresetId equals preset.Id
-                    join overclocking in _context.Overclocking.AsNoTracking()
+                    join overclocking in _context.Overclocking.AsNoTracking().Include(x => x.FanOverclocking)
                         on preset.OverclockingId equals overclocking.Id
                     select overclocking;
 
@@ -158,6 +158,7 @@ public class MiningDeviceRepository : IMiningDeviceRepository
         var overclockingToUpdate = await _context.Overclocking
             .AsNoTracking()
             .Where(x => x.Id == overclockingId)
+            .Include(x => x.FanOverclocking)
             .FirstAsync(cancellationToken);
 
         _mapper.Map(overclocking, overclockingToUpdate);

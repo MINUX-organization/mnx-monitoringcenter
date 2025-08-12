@@ -1,9 +1,8 @@
 ﻿using MediatR;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 
@@ -28,12 +27,14 @@ public record GetFlightSheetSupportedDevicesQuery
     /// </summary>
     public Specification Specification { get; init; }
 
+    ///
     public GetFlightSheetSupportedDevicesQuery(Guid userId, Guid flightSheetId)
     {
         FlightSheetId = flightSheetId;
         Specification = new Specification(userId);
     }
 
+    ///
     public GetFlightSheetSupportedDevicesQuery(Guid userId,
                                                Guid flightSheetId,
                                                string filterString,
@@ -51,17 +52,18 @@ public record GetFlightSheetSupportedDevicesQuery
 public class GetFlightSheetSupportedDevicesQueryHandler
     : IStreamRequestHandler<GetFlightSheetSupportedDevicesQuery, MiningDeviceModel>
 {
-    private readonly IMapper _mapper;
+    private readonly IMiningDeviceMapper _miningDeviceMapper;
 
     private readonly IFlightSheetRepository _flightSheetRepository;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    public GetFlightSheetSupportedDevicesQueryHandler(IMapper mapper,
+    ///
+    public GetFlightSheetSupportedDevicesQueryHandler(IMiningDeviceMapper miningDeviceMapper,
                                                       IFlightSheetRepository flightSheetRepository,
                                                       IMiningDeviceRepository miningDeviceRepository)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _miningDeviceMapper = miningDeviceMapper ?? throw new ArgumentNullException(nameof(miningDeviceMapper));
 
         _flightSheetRepository = flightSheetRepository
             ?? throw new ArgumentNullException(nameof(flightSheetRepository));
@@ -70,6 +72,7 @@ public class GetFlightSheetSupportedDevicesQueryHandler
             ?? throw new ArgumentNullException(nameof(miningDeviceRepository));
     }
 
+    ///
     public async IAsyncEnumerable<MiningDeviceModel> Handle(GetFlightSheetSupportedDevicesQuery request,
                                                            [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -84,7 +87,7 @@ public class GetFlightSheetSupportedDevicesQueryHandler
             {
                 if (flightSheet.IsDeviceSupport(device))
                 {
-                    yield return _mapper.Map<MiningDeviceModel>(device);
+                    yield return _miningDeviceMapper.MapToModel(device);
                 }
             }
         }

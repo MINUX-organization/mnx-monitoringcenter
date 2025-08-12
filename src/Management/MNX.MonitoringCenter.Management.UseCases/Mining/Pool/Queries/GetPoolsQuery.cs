@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using MNX.MonitoringCenter.Management.Contracts;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Queries;
 
@@ -15,11 +14,13 @@ public sealed record GetPoolsQuery : IStreamRequest<PoolModel>
     /// </summary>
     public Specification Specification { get; }
 
+    ///
     public GetPoolsQuery(Guid userId)
     {
         Specification = new Specification(userId);
     }
 
+    ///
     public GetPoolsQuery(Guid userId, string filterString, object[] filterParameters)
     {
         Specification = new Specification(userId, filterString, filterParameters);
@@ -33,14 +34,16 @@ public class GetPoolsQueryHandler : IStreamRequestHandler<GetPoolsQuery, PoolMod
 {
     private readonly IPoolRepository _repository;
 
-    private readonly IMapper _mapper;
+    private readonly IPoolMapper _poolMapper;
 
-    public GetPoolsQueryHandler(IPoolRepository repository, IMapper mapper)
+    ///
+    public GetPoolsQueryHandler(IPoolRepository repository, IPoolMapper poolMapper)
     {
         _repository = repository ?? throw new ArgumentNullException(nameof(repository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _poolMapper = poolMapper ?? throw new ArgumentNullException(nameof(poolMapper));
     }
 
+    ///
     public async IAsyncEnumerable<PoolModel> Handle(GetPoolsQuery request,
                                                    [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -48,7 +51,7 @@ public class GetPoolsQueryHandler : IStreamRequestHandler<GetPoolsQuery, PoolMod
 
         await foreach (var pool in pools.WithCancellation(cancellationToken))
         {
-            yield return _mapper.Map<PoolModel>(pool);
+            yield return _poolMapper.MapToModel(pool);
         }
     }
 }

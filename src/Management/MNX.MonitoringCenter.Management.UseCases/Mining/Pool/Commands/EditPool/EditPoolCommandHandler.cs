@@ -1,12 +1,8 @@
 ﻿using MediatR;
-using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Management.Contracts;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
-
-using Pool = Core.Mining.Pool;
-
 /// <summary>
 /// Обработчик команды <see cref="EditPoolCommand"/>.
 /// </summary>
@@ -14,15 +10,17 @@ public class EditPoolCommandHandler : IRequestHandler<EditPoolCommand, Result<Po
 {
     private readonly IPoolRepository _poolRepository;
 
-    private readonly IMapper _mapper;
+    private readonly IPoolMapper _poolMapper;
 
+    ///
     public EditPoolCommandHandler(IPoolRepository poolRepository,
-                                    IMapper mapper)
+                                  IPoolMapper poolMapper)
     {
         _poolRepository = poolRepository ?? throw new ArgumentNullException(nameof(poolRepository));
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _poolMapper = poolMapper ?? throw new ArgumentNullException(nameof(poolMapper));
     }
 
+    ///
     public async Task<Result<PoolModel>> Handle(EditPoolCommand request, CancellationToken cancellationToken)
     {
         var pool = await _poolRepository.GetAvailableById(request.Id, request.UserId, cancellationToken);
@@ -36,11 +34,11 @@ public class EditPoolCommandHandler : IRequestHandler<EditPoolCommand, Result<Po
         if (pool.CryptocurrencyId != request.Model.CryptocurrencyId)
             return Result<PoolModel>.Invalid("You cannot change the cryptocurrency");
 
-        var newPool = _mapper.Map<Pool>(request);
+        var newPool = _poolMapper.MapToCoreEntity(request);
 
         if (pool.Equals(newPool))
         {
-            return Result<PoolModel>.Success(_mapper.Map<PoolModel>(pool));
+            return Result<PoolModel>.Success(_poolMapper.MapToModel(pool));
         }
 
         if ((newPool.Domain != pool.Domain || newPool.Port != pool.Port) &&
@@ -52,6 +50,6 @@ public class EditPoolCommandHandler : IRequestHandler<EditPoolCommand, Result<Po
         await _poolRepository.Update(newPool);
         newPool.Cryptocurrency = pool.Cryptocurrency;
 
-        return Result<PoolModel>.Success(_mapper.Map<PoolModel>(newPool));
+        return Result<PoolModel>.Success(_poolMapper.MapToModel(newPool));
     }
 }

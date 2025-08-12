@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using AutoMapper;
 using MNX.Application.UseCases.Results;
 using MNX.Application.UseCases.Requests;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
@@ -21,19 +20,19 @@ public sealed record ApplyPresetCommand(Guid UserId, Guid PresetId, params Guid[
 /// Обработчик <see cref="ApplyPresetCommand"/>.
 /// </summary>
 public class ApplyPresetCommandHandler :
-    SaveOverclockingBaseHandler,
     IRequestHandler<ApplyPresetCommand, Result<Guid[]>>
 {
+    private readonly IMediator _mediator;
+
     private readonly IPresetRepository _presetRepository;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    public ApplyPresetCommandHandler(IPresetRepository repository,
-                                     IMediator mediator,
-                                     IMapper mapper,
+    public ApplyPresetCommandHandler(IMediator mediator,
+                                     IPresetRepository repository,
                                      IMiningDeviceRepository miningDeviceRepository)
-        : base(mapper, mediator)
     {
+        _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         _presetRepository = repository ??
             throw new ArgumentNullException(nameof(repository));
         _miningDeviceRepository = miningDeviceRepository ??
@@ -94,9 +93,9 @@ public class ApplyPresetCommandHandler :
                                                 devicesToProcess.Select(d => d.Id).ToArray());
 
         await _mediator.Publish(new SendOverclockingToRigsEvent(preset.Overclocking!,
-                                                               devicesToProcess,
-                                                               request.UserId),
-                                                               cancellationToken);
+                                                                devicesToProcess,
+                                                                request.UserId),
+                                                                cancellationToken);
 
         return Result<Guid[]>.Success(devicesToProcess.Select(x => x.Id).ToArray());
     }

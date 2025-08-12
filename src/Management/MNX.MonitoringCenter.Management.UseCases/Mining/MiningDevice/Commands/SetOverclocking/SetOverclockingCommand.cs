@@ -1,11 +1,9 @@
 ﻿using MediatR;
-using AutoMapper;
-using EasyNetQ.Logging;
-using MNX.Application.UseCases.Results;
 using MNX.Application.UseCases.Requests;
+using MNX.Application.UseCases.Results;
+using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking;
-using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.SetOverclocking;
@@ -22,31 +20,28 @@ public sealed record SetOverclockingCommand(Guid UserId, IOverclockingModel Over
 /// <summary>
 /// Обработчик <see cref="SetOverclockingCommand"/>.
 /// </summary>
-public class SetOverclockingCommandHandler
-    : SaveOverclockingBaseHandler,
+public class SetOverclockingCommandHandler :
+    SaveOverclockingBaseHandler,
     IRequestHandler<SetOverclockingCommand, Result<Guid>>
 {
-    private readonly ILogger<SetOverclockingCommandHandler> _logger;
+    private readonly IOverclockingModelMapper<IOverclockingModel, IOverclocking> _overclockingMapper;
 
     private readonly IMiningDeviceRepository _miningDeviceRepository;
 
-    private readonly IPresetRepository _presetRepository;
-
-    public SetOverclockingCommandHandler(IMapper mapper,
-                                         IMediator mediator,
-                                         ILogger<SetOverclockingCommandHandler> logger,
+    ///
+    public SetOverclockingCommandHandler(IMediator mediator,
                                          IMiningDeviceRepository miningDeviceRepository,
-                                         IPresetRepository presetRepository)
-        : base(mapper, mediator)
+                                         IPresetRepository presetRepository,
+                                         IOverclockingModelMapper<IOverclockingModel, IOverclocking> overclockingMapper)
+        : base(mediator)
     {
-        _logger = logger ??
-            throw new ArgumentNullException(nameof(logger));
         _miningDeviceRepository = miningDeviceRepository ??
             throw new ArgumentNullException(nameof(miningDeviceRepository));
-        _presetRepository = presetRepository ??
-            throw new ArgumentNullException(nameof(presetRepository));
+        _overclockingMapper = overclockingMapper ??
+            throw new ArgumentNullException(nameof(overclockingMapper));
     }
 
+    ///
     public async Task<Result<Guid>> Handle(SetOverclockingCommand request,
                                            CancellationToken cancellationToken)
     {
@@ -62,7 +57,7 @@ public class SetOverclockingCommandHandler
             return Result<Guid>.Invalid($"Device with type of {device.Type} is not supported this overclocking");
         }
 
-        var overclocking = _mapper.Map<IOverclocking>(request.Overclocking);
+        var overclocking = _overclockingMapper.MapToCoreEntity(request.Overclocking);
 
         var overclockingValidationResult =
                 await ValidateOverclocking(device.Id, overclocking, cancellationToken);

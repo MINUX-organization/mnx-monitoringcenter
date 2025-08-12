@@ -1,10 +1,10 @@
-﻿using AutoMapper;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using MediatR;
 using MNX.Application.UseCases.Results;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.Gpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Validation;
 
@@ -15,16 +15,11 @@ namespace MNX.MonitoringCenter.Management.UseCases.Overclocking;
 /// </summary>
 public abstract class SaveOverclockingBaseHandler
 {
-    protected readonly IMapper _mapper;
-
     protected readonly IMediator _mediator;
 
     ///
-    public SaveOverclockingBaseHandler(IMapper mapper,
-                                       IMediator mediator)
+    public SaveOverclockingBaseHandler(IMediator mediator)
     {
-        _mapper = mapper ??
-            throw new ArgumentNullException(nameof(mapper));
         _mediator = mediator ??
             throw new ArgumentNullException(nameof(mediator));
     }
@@ -49,9 +44,9 @@ public abstract class SaveOverclockingBaseHandler
                 : Result<Unit>.Invalid(validationResult.Errors.Select(x => x.ErrorMessage).ToArray());
     }
 
-    private async Task<ValidationResult> ValidateOverclocking(IOverclocking overclocking,
-                                                              GpuRestrictions restrictions,
-                                                              CancellationToken cancellationToken)
+    private static async Task<ValidationResult> ValidateOverclocking(IOverclocking overclocking,
+                                                                     GpuRestrictions restrictions,
+                                                                     CancellationToken cancellationToken)
     {
         switch (overclocking)
         {

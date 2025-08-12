@@ -1,10 +1,14 @@
 ﻿using MediatR;
-using AutoMapper;
-using MNX.RigCommander.MessageQueue.Clients.Bus;
-using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Management.Agent.Commands.Overclocking;
+using MNX.MonitoringCenter.Management.Agent.Commands.Overclocking.Fan;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
+using MNX.MonitoringCenter.Management.UseCases.SetRigDevices;
+using MNX.RigCommander.MessageQueue.Clients.Bus;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking;
+
+using OverclockingInventory = Inventory.Contracts.Devices.Overclocking;
 
 /// <summary>
 /// Команда отправки разгона майнинг-устройств на риги.
@@ -21,25 +25,34 @@ public record SendOverclockingToRigsEvent(IOverclocking Overclocking,
 /// </summary>
 public class SendOverclockingToRigsEventHandler : INotificationHandler<SendOverclockingToRigsEvent>
 {
-    private readonly IMapper _mapper;
+    private readonly IOverclockingToFanOverclockingAgentMapper<IOverclocking, FanOverclocking> _overclockingToFanOverclockingAgentMapper;
+
+    private readonly IOverclockingInventoryMapper<OverclockingInventory, IOverclocking> _inventoryOverclockingMapper;
 
     private readonly IQueueBusClient _queueClient;
 
-    public SendOverclockingToRigsEventHandler(IMapper mapper, IQueueBusClient queueClient)
+    ///
+    public SendOverclockingToRigsEventHandler(IOverclockingToFanOverclockingAgentMapper<IOverclocking, FanOverclocking> overclockingToFanOverclockingAgentMapper,
+                                              IOverclockingInventoryMapper<OverclockingInventory, IOverclocking> inventoryOverclockingMapper,
+                                              IQueueBusClient queueClient)
     {
-        _mapper = mapper ??
-            throw new ArgumentNullException(nameof(mapper));
+        _overclockingToFanOverclockingAgentMapper = overclockingToFanOverclockingAgentMapper ??
+            throw new ArgumentNullException(nameof(overclockingToFanOverclockingAgentMapper));
+        _inventoryOverclockingMapper = inventoryOverclockingMapper ??
+            throw new ArgumentNullException(nameof(inventoryOverclockingMapper));
         _queueClient = queueClient ??
             throw new ArgumentNullException(nameof(queueClient));
     }
 
+    ///
     public Task Handle(SendOverclockingToRigsEvent request, CancellationToken cancellationToken)
     {
-        var rigOverclocking = _mapper.Map<Inventory.Contracts.Devices.Overclocking>(request.Overclocking);
+        var rigOverclocking = _inventoryOverclockingMapper.MapToModel(request.Overclocking);
+        var fanOverclocking = _overclockingToFanOverclockingAgentMapper.MapToFanOverclockingModel(request.Overclocking);
 
         var allDeviceIds = request.Devices.Select(x => x.Id).ToArray();
 
-        var command = new Agent.Commands.Overclocking.SetOverclockingCommand(rigOverclocking, allDeviceIds);
+        var command = new SetOverclockingCommand(rigOverclocking, fanOverclocking, allDeviceIds);
 
         return _queueClient.Enqueue(command,
                                     request.Devices.Select(x => x.RigId!.Value).Distinct().ToArray(),

@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using AutoMapper;
-using System.Runtime.CompilerServices;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
+using System.Runtime.CompilerServices;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 
@@ -15,11 +14,13 @@ public sealed record GetPresetsGroupedByGpuNameQuery : IStreamRequest<PresetGrou
     /// </summary>
     public Specification Specification { get; }
 
+    ///
     public GetPresetsGroupedByGpuNameQuery(Guid userId)
     {
         Specification = new Specification(userId);
     }
 
+    ///
     public GetPresetsGroupedByGpuNameQuery(Guid userId, string filterString, object[] filterParameters)
     {
         Specification = new Specification(userId, filterString, filterParameters);
@@ -32,16 +33,18 @@ public sealed record GetPresetsGroupedByGpuNameQuery : IStreamRequest<PresetGrou
 public class GetPresetsGroupedByGpuNameQueryHandler
     : IStreamRequestHandler<GetPresetsGroupedByGpuNameQuery, PresetGroup>
 {
-    private readonly IMapper _mapper;
+    private readonly IPresetMapper _presetMapper;
 
     private readonly IPresetRepository _presetRepository;
 
-    public GetPresetsGroupedByGpuNameQueryHandler(IMapper mapper, IPresetRepository presetRepository)
+    ///
+    public GetPresetsGroupedByGpuNameQueryHandler(IPresetMapper presetMapper, IPresetRepository presetRepository)
     {
-        _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        _presetMapper = presetMapper ?? throw new ArgumentNullException(nameof(presetMapper));
         _presetRepository = presetRepository ?? throw new ArgumentNullException(nameof(presetRepository));
     }
 
+    ///
     public async IAsyncEnumerable<PresetGroup> Handle(GetPresetsGroupedByGpuNameQuery request,
                                                      [EnumeratorCancellation] CancellationToken cancellationToken)
     {
@@ -52,7 +55,7 @@ public class GetPresetsGroupedByGpuNameQueryHandler
             yield return new PresetGroup()
             {
                 Name = group.Key,
-                Presets = _mapper.Map<List<PresetModel>>(group.ToList())
+                Presets = _presetMapper.MapToCoreEntitiesList(group.ToList())
             };
         }
     }
