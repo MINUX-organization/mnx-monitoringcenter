@@ -28,8 +28,8 @@ services:
         environment:
             - ASPNETCORE_URLS=http://+:80
         env_file:
-            - ./${COMMON_ENV_FILE}
-            - ./${PROJECT_ENV_FILE}
+            - ${COMMON_ENV_FILE}
+            - ${PROJECT_ENV_FILE}
         networks:
             - minux_network
         depends_on:
