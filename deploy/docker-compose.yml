@@ -1,11 +1,11 @@
 services:
 
     monitoring-center-db:
-        container_name: ${DB_SERVICE_NAME}
+        container_name: ${DBServiceName}
         image: ${DB_REGISTRY_IMAGE}
         restart: always
         ports:
-            - "127.0.0.1:6101:5432"
+            - "${DB_BIND_ADDRESS}:5432"
         environment:
             - POSTGRES_DB=${POSTGRES_DB}
             - POSTGRES_USER=${POSTGRES_USER}
@@ -22,7 +22,7 @@ services:
             start_period: 10s
 
     rigs-api:
-        container_name: ${SERVICE_NAME}
+        container_name: ${ServiceName}
         image: ${APP_REGISTRY_IMAGE}
         restart: always
         environment:
