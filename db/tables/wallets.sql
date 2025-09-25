@@ -4,7 +4,7 @@ CREATE TABLE monitoring_center.wallets
     name text NOT NULL,
     address text NOT NULL,
     cryptocurrency_id uuid NOT NULL,
-    owner_id uuid NOT NULL,
+    user_id uuid NOT NULL,
 
     CONSTRAINT pk_wallets PRIMARY KEY (id),
 
@@ -18,8 +18,8 @@ CREATE INDEX ix_wallets_cryptocurrency_id
     ON monitoring_center.wallets USING btree
     (cryptocurrency_id ASC NULLS LAST);
 
-CREATE INDEX ix_wallets_owner_id
+CREATE INDEX ix_wallets_user_id
     ON monitoring_center.wallets USING btree
-    (owner_id ASC NULLS LAST);
+    (user_id ASC NULLS LAST);
 
 COMMENT ON TABLE monitoring_center.wallets IS 'Кошельки';

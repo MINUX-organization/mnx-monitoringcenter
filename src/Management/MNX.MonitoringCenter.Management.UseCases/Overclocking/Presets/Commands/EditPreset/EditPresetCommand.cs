@@ -4,12 +4,12 @@ using MNX.MonitoringCenter.Management.Contracts.Presets;
 namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 
 /// <summary>
-/// Команда редактирования пресета
+/// Команда редактирования пресета.
 /// </summary>
 public class EditPresetCommand : IUserableValidatableCommand<PresetModel>
 {
     /// <summary>
-    /// Уникальный идентификатор
+    /// Уникальный идентификатор.
     /// </summary>
     public Guid Id { get; }
 
@@ -23,6 +23,7 @@ public class EditPresetCommand : IUserableValidatableCommand<PresetModel>
     /// </summary>
     public Guid UserId { get; }
 
+    ///
     public EditPresetCommand(Guid id, EditPresetModel model, Guid userId)
     {
         Id = id;

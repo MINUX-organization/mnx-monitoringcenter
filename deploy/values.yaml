@@ -1,0 +1,38 @@
+pullSecrets:
+  - name: gitlab-registry-secret
+
+common:
+  required:
+    POSTGRES_DB: monitoring_center
+    POSTGRES_USER: minux_admin
+    POSTGRES_PASSWORD: t6y12_!hgx2
+
+app:
+  name: rigs-api
+  replicaCount: 1
+
+  required:
+    ASPNETCORE_URLS: http://+:80
+    ServiceName: rigs-api
+    ApplicationUrl: http://rigs-api-service.minux-stage-services.svc.cluster.local:80
+    ConsulUri: http://consul-service.minux-stage-infra.svc.cluster.local:8500
+    SecretKey: LDktKdoQak3Pk0cnXxCltA-LDktKdoQak3Pk0cnXxCltA
+    ServiceUserOptions__Password: minux_admin
+    LoginOptions__Password: minux_admin
+    RabbitMQConnection: host=rabbitmq-service.minux-stage-infra.svc.cluster.local:5672;username=guest;password=guest;publisherConfirms=true
+    ConnectionStrings__Npgsql: host=monitoring-center-db-service;database=monitoring_center;username=minux_admin;password=t6y12_!hgx2;SearchPath=monitoring_center;
+
+  consulSendConfig:
+    enabled: true
+    data:
+      DynamicIndicatorsOptions:
+        Interval: 2
+        TimeOut: 10
+
+db:
+  name: monitoring-center-db
+  serviceName: monitoring-center-db-service
+
+  storage:
+    className: "openebs-hostpath"
+    size: "20Gi"

@@ -39,10 +39,6 @@
 \ir 'functions/get_gpu_driver_version.sql'
 \ir 'functions/handle_preset_delete.sql'
 
--- CREATING VIEWS
-\ir 'views/gpu_info_view.sql'
-\ir 'views/gpu_restrictions_view.sql'
-
 -- DATA INSERT
 \ir 'data_tables/algorithms.sql'
 \ir 'data_tables/miners.sql'
