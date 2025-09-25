@@ -7,6 +7,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands
 /// </summary>
 public class EditPresetValidator : AbstractValidator<EditPresetCommand>
 {
+    ///
     public EditPresetValidator()
     {
         RuleFor(x => x.Model)

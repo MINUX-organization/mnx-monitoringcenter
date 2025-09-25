@@ -4,7 +4,7 @@ CREATE TABLE monitoring_center.presets
     name text NOT NULL,
     device_name text NOT NULL,
     overclocking_id uuid NOT NULL,
-    owner_id uuid NOT NULL,
+    user_id uuid NOT NULL,
     is_visible boolean NOT NULL,
 
     CONSTRAINT pk_presets PRIMARY KEY (id),
@@ -19,8 +19,8 @@ CREATE INDEX ix_presets_overclocking_id
     ON monitoring_center.presets USING btree
     (overclocking_id ASC NULLS LAST);
 
-CREATE INDEX ix_presets_owner_id
+CREATE INDEX ix_presets_user_id
     ON monitoring_center.presets USING btree
-    (owner_id ASC NULLS LAST);
+    (user_id ASC NULLS LAST);
 
 COMMENT ON TABLE monitoring_center.presets IS 'Пресеты';

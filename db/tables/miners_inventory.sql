@@ -1,6 +1,6 @@
 CREATE TABLE monitoring_center.miners_inventory
 (
-    id uuid NOT NULL,
+    id uuid NOT NULL DEFAULT uuid_generate_v4(),
     name text NOT NULL,
     version text NOT NULL,
     rig_inventory_id bigint NOT NULL,

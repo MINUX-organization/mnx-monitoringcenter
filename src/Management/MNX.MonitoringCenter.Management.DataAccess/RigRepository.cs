@@ -125,6 +125,8 @@ public class RigRepository : IRigRepository
         {
             if (dbDevices.TryGetValue(device, out MiningDeviceInfo? dbDevice))
             {
+                await AddOverclocking(overclocking);
+
                 // По соглашению, для invisiblePreset наименование равно идентификатору девайса, к которому привязан пресет.
                 var invisiblePreset = await context.Presets.FirstAsync(x => x.Name == device.Id.ToString());
                 invisiblePreset.OverclockingId = overclocking.Id;
@@ -136,7 +138,6 @@ public class RigRepository : IRigRepository
                 dbDevice.PresetId = invisiblePreset.Id;
                 dbDevice.SwitchToOnline();
 
-                await AddOverclocking(overclocking);
                 await context.SaveChangesAsync();
             }
             else

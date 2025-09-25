@@ -27,9 +27,11 @@ public class MiningDeviceMapper : IMiningDeviceMapper
             RigId = model.RigId!.Value,
             FlightSheetId = model.FlightSheetId,
             FlightSheetName = model.FlightSheet?.Name,
+            PresetName = model.Preset?.Name,
             FlightSheetConfirmationState = model.FlightSheetConfirmationState,
             MinerName = minerName,
             MinerVersion = minerVersion,
+            IsOnline = model.IsOnline,
         };
     }
 }

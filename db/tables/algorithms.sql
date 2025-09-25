@@ -6,10 +6,10 @@ CREATE TABLE monitoring_center.algorithms
 
     CONSTRAINT pk_algorithms PRIMARY KEY (id),
 
-    CONSTRAINT unique_name_owner_id UNIQUE (name, owner_id)
+    CONSTRAINT unique_name_user_id UNIQUE (name, owner_id)
 );
 
-CREATE UNIQUE INDEX ix_algorithms_owner_id_name
+CREATE UNIQUE INDEX ix_algorithms_name
     ON monitoring_center.algorithms USING btree
     (owner_id ASC NULLS LAST, name ASC NULLS LAST);
 
