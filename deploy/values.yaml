@@ -1,17 +1,11 @@
 pullSecrets:
   - name: gitlab-registry-secret
 
-common:
-  required:
-    POSTGRES_DB: monitoring_center
-    POSTGRES_USER: minux_admin
-    POSTGRES_PASSWORD: t6y12_!hgx2
-
 app:
   name: rigs-api
   replicaCount: 1
 
-  required:
+  env:
     ASPNETCORE_URLS: http://+:80
     ServiceName: rigs-api
     ApplicationUrl: http://rigs-api-service.minux-stage-services.svc.cluster.local:80
@@ -23,7 +17,7 @@ app:
     ConnectionStrings__Npgsql: host=monitoring-center-db-service;database=monitoring_center;username=minux_admin;password=t6y12_!hgx2;SearchPath=monitoring_center;
 
   consulSendConfig:
-    enabled: true
+    enabled: false
     data:
       DynamicIndicatorsOptions:
         Interval: 2
@@ -32,6 +26,15 @@ app:
 db:
   name: monitoring-center-db
   serviceName: monitoring-center-db-service
+
+  env:
+    POSTGRES_DB: monitoring_center
+    POSTGRES_USER: minux_admin
+    POSTGRES_PASSWORD: t6y12_!hgx2
+
+  migrations: 
+    enabled: true
+    versionTableDB: monitoring_center.version_info
 
   storage:
     className: "openebs-hostpath"

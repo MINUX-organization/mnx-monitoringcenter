@@ -1,33 +1,39 @@
+variables:
+  DOCKER_TLS_CERTDIR: ""
+  DOCKER_DRIVER: overlay2
+  DOCKER_HOST: tcp://docker:2375
+  RELEASE_NAME: monitoring-center
+
+stages: [build, test, pack, export, push, deploy]
+
 include:
   - project: 'minux-organization/infrastructure-cicd'
-    ref: v2.0
-    file: '/Templates/dotnet/app.yml'
-  - project: 'minux-organization/infrastructure-cicd'
-    ref: v2.0
-    file: '/Templates/dotnet/db.yml'
-  - project: 'minux-organization/infrastructure-cicd'
-    ref: v2.0
-    file: '/Templates/dotnet/cleanup.yml'
-  - project: 'minux-organization/infrastructure-cicd'
-    ref: v2.0
-    file: '/Templates/dotnet/defaults.yml'
-  - project: 'minux-organization/infrastructure-cicd'
-    ref: v2.0
-    file: '/Templates/dotnet/stages.yml'
-  - project: 'minux-organization/infrastructure-cicd'
-    ref: v2.0
-    file: '/Templates/dotnet/templates.yml'
-  - project: 'minux-organization/infrastructure-cicd'
-    ref: v2.0
-    file: '/Templates/dotnet/variables.yml'
-  - project: 'minux-organization/infrastructure-cicd'
-    ref: v2.0
-    file: '/Templates/dotnet/workflow.yml'
-
-variables:
-  DB_ENABLED: "true"
-  PACKAGES_ENABLED: "true"
-  APP_PUSH_ENABLED: "true"
-  APP_ACTIVE_TESTS_ENABLED: "true"
-  APP_ALL_TESTS_ENABLED: "false"
-  DEPLOY_HELM_RELEASE_NAME: monitoring-center
+    ref: 3.0.0
+    file: '/templates/workflow.yml'
+  - component: $CI_SERVER_FQDN/minux-organization/infrastructure-cicd/build-and-push-component@3.0.0
+    inputs:
+      registry_image: ${APP_REGISTRY_IMAGE}
+      job_prefix: "app"
+      dockerfile_path: "Dockerfile"
+      build_context: "."
+      registry_push_enabled: true
+      generate_nuget_config_enabled: true
+  - component: $CI_SERVER_FQDN/minux-organization/infrastructure-cicd/build-and-push-component@3.0.0
+    inputs:
+      registry_image: ${DB_REGISTRY_IMAGE}
+      job_prefix: "db"
+      dockerfile_path: "db/Dockerfile"
+      build_context: "db/"
+      registry_push_enabled: true
+  - component: $CI_SERVER_FQDN/minux-organization/infrastructure-cicd/dotnet-nuget-pack-component@3.0.0
+    inputs:
+      generate_nuget_config_enabled: true
+  - component: $CI_SERVER_FQDN/minux-organization/infrastructure-cicd/dotnet-nuget-push-component@3.0.0
+  - component: $CI_SERVER_FQDN/minux-organization/infrastructure-cicd/dotnet-test-component@3.0.0
+  - component: $CI_SERVER_FQDN/minux-organization/infrastructure-cicd/dotnet-test-export-component@3.0.0
+  - component: $CI_SERVER_FQDN/minux-organization/infrastructure-cicd/helm-deploy-component@3.0.0
+    inputs:
+      chart_name: "dotnet"
+      app_registry_image: ${APP_REGISTRY_IMAGE}
+      deploy_extra_args: --set db.image.full=${DB_REGISTRY_IMAGE}
+      release_name: ${RELEASE_NAME}
