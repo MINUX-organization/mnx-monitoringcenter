@@ -16,6 +16,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Devices.NetworkAdap
 using MNX.MonitoringCenter.Inventory.Contracts.Requests.Rigs.Software;
 using MNX.MonitoringCenter.RigsApi.Core.ValueObjects;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.UseCases;
 using MNX.MonitoringCenter.RigsApi.UseCases.GetRigs;
 using MNX.MonitoringCenter.RigsApi.UseCases.RigState.Power;
 
@@ -213,6 +214,45 @@ public class RigController : ControllerBase
     {
         var userId = _userAccessor.GetUserId();
         var result = await _mediator.Send(new InitiateRebootCommand(new RigId(rigId), userId));
+        return result.ToActionResult();
+    }
+
+    /// <summary>
+    /// Переименовать риг.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига для переименования. </param>
+    /// <param name="newName"> Новое имя рига. </param>
+    /// <response code="204"> Риг успешно переименован. </response>
+    /// <response code="400"> Риг не найден или не доступен для текущего пользователю. </response>
+    /// <response code="422"> Произошла ошибка при попытке переименовать риг. </response>
+    /// <returns> Результат переименования. </returns>
+    [HttpPatch("{rigId:Guid}/rename")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    [ProducesResponseType(typeof(List<string>), 422)]
+    public async Task<IActionResult> Rename(Guid rigId, [FromQuery] string newName)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new RenameRigCommand(new  RigId(rigId), userId,  newName));
+        return result.ToActionResult();
+    }
+    
+    /// <summary>
+    /// Вывести риг из строя.
+    /// </summary>
+    /// <param name="rigId"> Идентификатор рига для вывода из строя.</param>
+    /// <response code="204"> Риг успешно выведен из строя или уже был выведен из строя. </response>
+    /// <response code="400"> Риг не найден или не доступен для текущего пользователю. </response>
+    /// <response code="422"> Произошла ошибка при попытке вывести риг из строя. </response>
+    /// <returns> Результат вывода из строя. </returns>
+    [HttpDelete("{rigId:Guid}")]
+    [ProducesResponseType(204)]
+    [ProducesResponseType(typeof(List<string>), 400)]
+    [ProducesResponseType(typeof(List<string>), 422)]
+    public async Task<IActionResult> Decommission(Guid rigId)
+    {
+        var userId = _userAccessor.GetUserId();
+        var result = await _mediator.Send(new DecommissionRigCommand(new RigId(rigId), userId));
         return result.ToActionResult();
     }
 }
