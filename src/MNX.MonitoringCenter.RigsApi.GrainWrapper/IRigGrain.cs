@@ -16,6 +16,11 @@ public interface IRigGrain
     /// Идентификатор владельца рига.
     /// </summary>
     Guid OwnerId { get; }
+    
+    /// <summary>
+    /// Выведен ли риг из строя.
+    /// </summary>
+    bool IsDecommissioned { get; }
 
     /// <summary>
     /// Задать инвентаризацию.
@@ -94,4 +99,17 @@ public interface IRigGrain
     /// </summary>
     /// <returns> Результат действия над ригом. </returns>
     Task<RigGrainActionResult> StopMining();
+    
+    /// <summary>
+    /// Переименовать риг.
+    /// </summary>
+    /// <param name="newName"> Новое имя рига. </param>
+    /// <returns> Результат действия над ригом. </returns>
+    Task<RigGrainActionResult> Rename(string newName);
+    
+    /// <summary>
+    /// Вывести риг из строя.
+    /// </summary>
+    /// <returns> Результат действия над ригом. </returns>
+    Task<RigGrainActionResult> Decommission();
 }

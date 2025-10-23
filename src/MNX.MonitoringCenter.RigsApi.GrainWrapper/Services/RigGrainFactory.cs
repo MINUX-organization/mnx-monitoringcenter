@@ -20,11 +20,8 @@ public class RigGrainFactory : IRigGrainFactory
     {
         var rig = await _rigRepository.GetById(rigId, cancellationToken);
 
-        if (rig != null)
-        {
-            return new RigGrain(rig, _rigRepository);
-        }
-
-        return null;
+        return rig is not null 
+            ? new RigGrain(rig, _rigRepository) 
+            : null;
     }
 }

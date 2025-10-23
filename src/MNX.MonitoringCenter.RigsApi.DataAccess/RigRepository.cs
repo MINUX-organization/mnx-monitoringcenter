@@ -20,72 +20,35 @@ public class RigRepository : IRigRepository
     /// <inheritdoc/>
     public IAsyncEnumerable<Rig> GetAvailable(Guid userId)
     {
-        return _context.Rigs.AsNoTracking()
-                            .Where(rig => rig.OwnerId == userId)
-                            .Select(dto => new Rig(
-                                new RigId(dto.Id),
-                                dto.OwnerId,
-                                dto.Name,
-                                dto.CurrentInventoryId,
-                                dto.IsOnline,
-                                dto.LifeCycleStatus,
-                                dto.MiningLifeCycleStatus
-                             ))
-                            .AsAsyncEnumerable();
+        return _context.Rigs
+            .AsNoTracking()
+            .Where(rig => rig.OwnerId == userId)
+            .Where(rig => !rig.IsDecommissioned)
+            .Select(dto => dto.ToDomain())
+            .AsAsyncEnumerable();
     }
 
     /// <inheritdoc/>
     public async Task<Rig?> GetById(RigId id, CancellationToken cancellationToken = default)
     {
-        var dto = await _context.Rigs.AsNoTracking()
+        var dto = await _context.Rigs
+            .AsNoTracking()
             .FirstOrDefaultAsync(rig => rig.Id == id, cancellationToken);
 
-        if (dto is null)
-            return null;
-
-        return new Rig(new RigId(dto.Id),
-                       dto.OwnerId,
-                       dto.Name,
-                       dto.CurrentInventoryId,
-                       dto.IsOnline,
-                       dto.LifeCycleStatus,
-                       dto.MiningLifeCycleStatus
-        );
+        return dto?.ToDomain();
     }
 
     /// <inheritdoc/>
     public Task Add(Rig rig, CancellationToken cancellationToken = default)
     {
-        var dto = new RigDto()
-        {
-            Id = rig.Id,
-            OwnerId = rig.OwnerId,
-            Name = rig.Name,
-            CurrentInventoryId = rig.CurrentInventoryId,
-            IsOnline = rig.IsOnline,
-            LifeCycleStatus = rig.LifeCycleStatus,
-            MiningLifeCycleStatus = rig.MiningLifeCycleStatus
-        };
-
-        _context.Rigs.Add(dto);
+        _context.Rigs.Add(RigDto.FromDomain(rig));
         return _context.SaveChangesAsync(cancellationToken);
     }
 
     /// <inheritdoc/>
     public Task Update(Rig rig, CancellationToken cancellationToken = default)
     {
-        var dto = new RigDto()
-        {
-            Id = rig.Id,
-            OwnerId = rig.OwnerId,
-            Name = rig.Name,
-            CurrentInventoryId = rig.CurrentInventoryId,
-            IsOnline = rig.IsOnline,
-            LifeCycleStatus = rig.LifeCycleStatus,
-            MiningLifeCycleStatus = rig.MiningLifeCycleStatus
-        };
-
-        _context.Update(dto);
+        _context.Update(RigDto.FromDomain(rig));
         return _context.SaveChangesAsync(cancellationToken);
     }
 }

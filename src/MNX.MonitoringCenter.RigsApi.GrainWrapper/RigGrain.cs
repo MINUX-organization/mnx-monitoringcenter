@@ -15,15 +15,14 @@ public class RigGrain : IRigGrain
 
     private readonly IRigRepository _rigRepository;
 
-    /// <summary>
-    /// Идентификатор рига.
-    /// </summary>
-    public RigId RigId { get => _rig.Id; }
+    /// <inheritdoc/>
+    public RigId RigId => _rig.Id;
 
-    /// <summary>
-    /// Идентификатор владельца рига.
-    /// </summary>
-    public Guid OwnerId { get => _rig.OwnerId; }
+    /// <inheritdoc/>
+    public Guid OwnerId => _rig.OwnerId;
+
+    /// <inheritdoc/>
+    public bool IsDecommissioned => _rig.IsDecommissioned;
 
     ///
     public RigGrain(Rig rig, IRigRepository rigRepository)
@@ -80,7 +79,15 @@ public class RigGrain : IRigGrain
     public Task<RigGrainActionResult> StopMining()
         => ChangeAndPersist(_rig.StopMining);
 
-    /// <summary>
+    /// <inheritdoc/>
+    public Task<RigGrainActionResult> Rename(string newName)
+        => ChangeAndPersist(() => _rig.Rename(newName));
+
+    /// <inheritdoc/>
+    public Task<RigGrainActionResult> Decommission()
+        => ChangeAndPersist(_rig.Decommission);
+    
+    /// <summary>`
     /// Изменить и сохранить.
     /// </summary>
     /// <param name="action"> Действие. </param>
