@@ -2,8 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using MNX.Application.Bus.RabbitMQ.Agent.Extensions;
 using MNX.Application.Consul;
-using MNX.Application.Data.EF.DI;
 using MNX.Application.CustomMiddlewares;
+using MNX.Application.Data.EF.DI;
 using MNX.Application.OpenTelemetry;
 using MNX.Application.OpenTelemetry.Metrics;
 using MNX.Application.OpenTelemetry.Tracing;
@@ -22,6 +22,7 @@ using MNX.MonitoringCenter.RigsApi.UnionStreams.Abstractions;
 using MNX.MonitoringCenter.RigsApi.UseCases;
 using MNX.MonitoringCenter.Traffic.Integration;
 using MNX.SecurityManagement.Authentication.Integration;
+using MNX.SecurityManagement.Licensing.Integration.Extensions;
 using NLog;
 using NLog.Web;
 using System.Reflection;
@@ -217,6 +218,7 @@ internal class Program
 
         app.UseAuthentication();
         app.UseAuthorization();
+        app.UseLicensing();
 
         app.MapHealthChecks("/health").AllowAnonymous();
         app.MapGet(string.Empty, async ctx => await ctx.Response.WriteAsync(appName)).AllowAnonymous();

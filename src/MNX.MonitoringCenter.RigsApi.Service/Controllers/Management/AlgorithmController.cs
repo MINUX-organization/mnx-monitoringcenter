@@ -1,15 +1,16 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using Microsoft.AspNetCore.Authorization;
-using MNX.MonitoringCenter.Management.Core.Mining;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries.GetAlgorithmById;
+using MNX.MonitoringCenter.Management.Core.Mining;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.AddAlgorithmCommand;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.DeleteAlgorithmCommand;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Commands.EditAlgorithmNameAndMinerAlgorithmsCommand;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm.Queries.GetAlgorithmById;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.SecurityManagement.Licensing.Integration;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -46,6 +47,7 @@ public class AlgorithmController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("available")]
     [ProducesResponseType(typeof(IAsyncEnumerable<Algorithm>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<Algorithm> GetAvailable()
     {
         return _mediator.CreateStream(
@@ -63,6 +65,7 @@ public class AlgorithmController : ControllerBase
     [HttpGet("{id:Guid}")]
     [ProducesResponseType(typeof(AlgorithmBindingModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetById(Guid id)
     {
         var result = await _mediator.Send(

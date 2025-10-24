@@ -1,17 +1,18 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands;
-using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
-using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.ApplyPreset;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.EditPreset;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.RemovePreset;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands.SavePreset;
+using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Queries;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetMiningDevices.GetPresetDevices;
+using MNX.SecurityManagement.Licensing.Integration;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -51,6 +52,7 @@ public class PresetController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<PresetModel>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<PresetModel> GetPresets(string? gpuName)
     {
         var userId = _userAccessor.GetUserId();
@@ -67,6 +69,7 @@ public class PresetController : ControllerBase
     [HttpGet("{presetId:Guid}")]
     [ProducesResponseType(typeof(PresetModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetPresetById(Guid presetId)
     {
         var userId = _userAccessor.GetUserId();
@@ -81,6 +84,7 @@ public class PresetController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("gpu_groups")]
     [ProducesResponseType(typeof(IAsyncEnumerable<PresetGroup>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<PresetGroup> GetPresetsGroupedByGpuName()
     {
         var userId = _userAccessor.GetUserId();
@@ -95,6 +99,7 @@ public class PresetController : ControllerBase
     /// Список майнинг устройств, сгруппированных по ригу и по типу.
     /// </returns>
     [HttpGet("{presetId:Guid}/devices/supported")]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<Group<Group<MiningDevice>>> GetSupportedMiningDevices(Guid presetId)
     {
         var userId = _userAccessor.GetUserId();
@@ -108,6 +113,7 @@ public class PresetController : ControllerBase
     /// <returns> Список майнинг устройств, сгруппированных по ригу и по типу. </returns>
     [HttpGet("{presetId:Guid}/devices")]
     [ProducesResponseType(typeof(IAsyncEnumerable<Group<Group<MiningDevice>>>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<Group<Group<MiningDevice>>> GetDevicesByPresetId(Guid presetId)
     {
         var userId = _userAccessor.GetUserId();
