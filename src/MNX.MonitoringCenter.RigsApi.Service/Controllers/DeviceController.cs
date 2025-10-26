@@ -10,6 +10,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Queries;
 using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetCpus;
 using MNX.MonitoringCenter.RigsApi.UseCases.Devices.Queries.GetGpus;
+using MNX.SecurityManagement.Licensing.Integration;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
@@ -43,6 +44,7 @@ public class DeviceController : ControllerBase
     /// <returns> Асинхронный поток видеокарт. </returns>
     [HttpGet("gpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<GetGpusQueryResponse>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<GetGpusQueryResponse> GetGpus()
     {
         var userId = _userAccessor.GetUserId();
@@ -56,6 +58,7 @@ public class DeviceController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("gpus/unique_names")]
     [ProducesResponseType(typeof(IAsyncEnumerable<string>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<string> GetGpuUniqueNames()
     {
         var userId = _userAccessor.GetUserId();
@@ -70,6 +73,7 @@ public class DeviceController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("gpus/{gpuName}/restrictions")]
     [ProducesResponseType(typeof(NvidiaGpuRestrictions), 200)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetGpuRestrictions(string gpuName)
     {
         var result = await _mediator.Send(new GetGpuRestrictionsQuery(gpuName));
@@ -86,6 +90,7 @@ public class DeviceController : ControllerBase
     [HttpGet("gpus/{gpuId:guid}/restrictions")]
     [ProducesResponseType(typeof(NvidiaGpuRestrictions), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetGpuRestrictionsById(Guid gpuId)
     {
         var result = await _mediator.Send(new GetGpuRestrictionsByIdQuery(gpuId));
@@ -98,6 +103,7 @@ public class DeviceController : ControllerBase
     /// <returns> Асинхронный поток процессоров. </returns>
     [HttpGet("cpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<GetCpusQueryResponse>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<GetCpusQueryResponse> GetСpus()
     {
         var userId = _userAccessor.GetUserId();
@@ -114,6 +120,7 @@ public class DeviceController : ControllerBase
     [HttpGet("overclocking")]
     [ProducesResponseType(typeof(IOverclockingModel), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetOverclocking(Guid deviceId)
     {
         var userId = _userAccessor.GetUserId();

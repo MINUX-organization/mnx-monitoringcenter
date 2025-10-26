@@ -19,6 +19,7 @@ using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
 using MNX.MonitoringCenter.RigsApi.UseCases;
 using MNX.MonitoringCenter.RigsApi.UseCases.GetRigs;
 using MNX.MonitoringCenter.RigsApi.UseCases.RigState.Power;
+using MNX.SecurityManagement.Licensing.Integration;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers;
 
@@ -52,6 +53,7 @@ public class RigController : ControllerBase
     /// <returns> Асинхронный поток ригов. </returns>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<RigModel>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<RigModel> GetList()
     {
         var userId = _userAccessor.GetUserId();
@@ -65,6 +67,7 @@ public class RigController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("total_data")]
     [ProducesResponseType(typeof(ModelWithCountDevices), 200)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetSummarizedQuantitativeData()
     {
         var userId = _userAccessor.GetUserId();
@@ -80,6 +83,7 @@ public class RigController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("{rigId:Guid}/devices/count")]
     [ProducesResponseType(typeof(ModelWithCountDevices), 200)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetDevicesCount(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
@@ -95,6 +99,7 @@ public class RigController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("{rigId:Guid}/cpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<CpuDetails>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<CpuDetails> GetCpus(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
@@ -111,6 +116,7 @@ public class RigController : ControllerBase
     [HttpGet("{rigId:Guid}/drives")]
     [ProducesResponseType(typeof(List<Drive>), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetDrives(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
@@ -126,6 +132,7 @@ public class RigController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("{rigId:Guid}/gpus")]
     [ProducesResponseType(typeof(IAsyncEnumerable<GpuDetails>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<GpuDetails> GetGpus(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
@@ -142,6 +149,7 @@ public class RigController : ControllerBase
     [HttpGet("{rigId:Guid}/motherboard")]
     [ProducesResponseType(typeof(Motherboard), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetMotherboard(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
@@ -159,6 +167,7 @@ public class RigController : ControllerBase
     [HttpGet("{rigId:Guid}/network_adapters")]
     [ProducesResponseType(typeof(List<NetworkAdapter>), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetNetworkAdapters(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();
@@ -176,6 +185,7 @@ public class RigController : ControllerBase
     [HttpGet("{rigId:Guid}/software")]
     [ProducesResponseType(typeof(SoftwareInventory), 200)]
     [ProducesResponseType(typeof(List<string>), 400)]
+    [WithoutLicenseChecking]
     public async Task<IActionResult> GetSoftware(Guid rigId)
     {
         var userId = _userAccessor.GetUserId();

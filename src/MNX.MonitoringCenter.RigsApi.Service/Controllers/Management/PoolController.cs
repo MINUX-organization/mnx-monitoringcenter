@@ -1,14 +1,15 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.RemovePool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Queries;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.SecurityManagement.Licensing.Integration;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -43,6 +44,7 @@ public class PoolController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<PoolModel>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<PoolModel> GetAll()
     {
         var userId = _userAccessor.GetUserId();

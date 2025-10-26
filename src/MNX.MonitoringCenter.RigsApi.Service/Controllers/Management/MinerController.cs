@@ -1,14 +1,15 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts.Miner;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Queries;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.EditMinerCommand;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.DeleteMinerCommand;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.CreateCustomMinerCommand;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.DeleteMinerCommand;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.EditMinerCommand;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Queries;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.SecurityManagement.Licensing.Integration;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -43,6 +44,7 @@ public class MinerController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet("available")]
     [ProducesResponseType(typeof(IAsyncEnumerable<MinerModel>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<MinerModel> GetAvailable()
     {
         return _mediator.CreateStream(new GetAvailableMinersQuery(_accessor.GetUserId()));

@@ -1,14 +1,15 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using MNX.Application.UseCases.Results;
-using Microsoft.AspNetCore.Authorization;
 using MNX.MonitoringCenter.Management.Contracts;
-using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Queries;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.AddWallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.EditWallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.RemoveWallet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Queries;
+using MNX.MonitoringCenter.RigsApi.Service.Infrastructure;
+using MNX.SecurityManagement.Licensing.Integration;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Controllers.Management;
 
@@ -43,6 +44,7 @@ public class WalletController : ControllerBase
     /// <response code="200"> Успешно. </response>
     [HttpGet]
     [ProducesResponseType(typeof(IAsyncEnumerable<WalletModel>), 200)]
+    [WithoutLicenseChecking]
     public IAsyncEnumerable<WalletModel> GetAll()
     {
         var userId = _userAccessor.GetUserId();
