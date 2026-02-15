@@ -8,7 +8,7 @@ namespace MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Events;
 public interface IAgentCommandsMapper
 {
     /// <summary>
-    /// Преобразовать коллекцию сущносей <see cref="DeviceFLightSheet"/> в коллекцию <see cref="WorkerSettings"/>.
+    /// Преобразовать коллекцию сущностей <see cref="DeviceFLightSheet"/> в коллекцию <see cref="WorkerSettings"/>.
     /// </summary>
     /// <param name="models"> Модель данных. </param>
     /// <returns> Новая коллекция <see cref="WorkerSettings"/>. </returns>
