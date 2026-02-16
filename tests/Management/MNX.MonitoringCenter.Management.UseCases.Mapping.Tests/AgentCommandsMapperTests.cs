@@ -40,7 +40,6 @@ public sealed class AgentCommandsMapperTests
     public void MapToWorkerSettings_ValidFlightSheetList_ReturnsWorkerSettings(List<DeviceFLightSheet> data)
     {
         // Arrange
-
         // Act
         var mappedData = _agentCommandsMapper.MapToWorkerSettings(data);
 
@@ -71,7 +70,7 @@ public sealed class AgentCommandsMapperTests
         }
     }
 
-    private static void AssertCoinConfigs(IList<MiningCoinConfig> expected, IList<MiningCoinConfigModel> checking)
+    private static void AssertCoinConfigs(List<MiningCoinConfig> expected, List<MiningCoinConfigModel> checking)
     {
         Assert.That(checking, Has.Count.EqualTo(expected.Count));
 
@@ -92,7 +91,6 @@ public sealed class AgentCommandsMapperTests
 
     private class MappingTestCases
     {
-
         public static IEnumerable<List<DeviceFLightSheet>> DevicesTestData
         {
             get
@@ -100,13 +98,16 @@ public sealed class AgentCommandsMapperTests
                 var flightSheet1Id = Guid.Parse("11111111-1111-1111-1111-111111111111");
                 var flightSheet2Id = Guid.Parse("22222222-2222-2222-2222-222222222222");
                 var flightSheet3Id = Guid.Parse("33333333-3333-3333-3333-333333333333");
-                var rigId = Guid.Parse("44444444-4444-4444-4444-444444444444");
-                var minerId = Guid.Parse("55555555-5555-5555-5555-555555555555");
-                var poolId = Guid.Parse("66666666-6666-6666-6666-666666666666");
-                var walletId = Guid.Parse("77777777-7777-7777-7777-777777777777");
-                var userId = Guid.Parse("88888888-8888-8888-8888-888888888888");
-                var algorithmId = Guid.Parse("99999999-9999-9999-9999-999999999999");
-                var cryptocurrencyId = Guid.Parse("00000000-0000-0000-0000-000000000000");
+                var guids = new DomainGuids()
+                {
+                    CryptocurrencyId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
+                    RigId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
+                    MinerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
+                    PoolId = Guid.Parse("66666666-6666-6666-6666-666666666666"),
+                    WalletId = Guid.Parse("77777777-7777-7777-7777-777777777777"),
+                    UserId = Guid.Parse("88888888-8888-8888-8888-888888888888"),
+                    AlgorithmId = Guid.Parse("99999999-9999-9999-9999-999999999999"),
+                };
 
                 yield return new List<DeviceFLightSheet>()
                 {
@@ -116,7 +117,7 @@ public sealed class AgentCommandsMapperTests
                             Id = Guid.Parse("01010101-0101-0101-0101-010101010101"),
                             Manufacturer = "AMD",
                             Model = "RX 6700 XT",
-                            RigId = rigId,
+                            RigId = guids.RigId,
                             Type = "GPU",
                             FlightSheetId = flightSheet1Id,
                             FlightSheetName = "FlightSheet1",
@@ -141,21 +142,13 @@ public sealed class AgentCommandsMapperTests
                                         ConfigFileContent = "Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}",
                                         CoinConfigs =
                                         [
-                                            new MiningCoinConfig()
-                                            {
-                                                Id = Guid.Parse("11100111-1011-1011-1011-111000000111"),
-                                                PoolId = poolId,
-                                                Pool = CreatePool(poolId, userId, cryptocurrencyId, algorithmId),
-                                                PoolPassword = "123456",
-                                                WalletId = walletId,
-                                                Wallet = CreateWallet(walletId, userId, cryptocurrencyId, algorithmId)
-                                            }
+                                            CreateMiningConfig(guids, 1, 1)
                                         ]
                                     },
-                                    MinerId = minerId,
+                                    MinerId = guids.MinerId,
                                     Miner = new Miner()
                                     {
-                                        Id = minerId,
+                                        Id = guids.MinerId,
                                         Name = "Miner",
                                         Version = "1.0.1",
                                         InstallationUrl = "www.install.com",
@@ -172,15 +165,15 @@ public sealed class AgentCommandsMapperTests
                         new MiningDeviceModel()
                         {
                             Id = Guid.Parse("02020202-0202-0202-0202-020202020202"),
-                            Manufacturer = "AMD",
-                            Model = "RX 6600 XT",
-                            RigId = rigId,
+                            Manufacturer = "Nvidia",
+                            Model = "RTX 4060 ti",
+                            RigId = guids.RigId,
                             Type = "GPU",
                             FlightSheetId = flightSheet2Id,
                             FlightSheetName = "FlightSheet2",
                             PresetName = "Preset2",
-                            FlightSheetConfirmationState = FlightSheetConfirmationState.Unconfirmed,
-                            MinerName = "Miner2",
+                            FlightSheetConfirmationState = FlightSheetConfirmationState.Successfully,
+                            MinerName = "Miner",
                             MinerVersion = "1.0.2"
                         },
                         new FlightSheet()
@@ -199,36 +192,20 @@ public sealed class AgentCommandsMapperTests
                                         ConfigFileContent = "Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}",
                                         CoinConfigs =
                                         [
-                                            new MiningCoinConfig()
-                                            {
-                                                Id = Guid.Parse("11100222-1022-1022-1022-111000000222"),
-                                                PoolId = poolId,
-                                                Pool = CreatePool(poolId, userId, cryptocurrencyId, algorithmId),
-                                                PoolPassword = "123456",
-                                                WalletId = walletId,
-                                                Wallet = CreateWallet(walletId, userId, cryptocurrencyId, algorithmId)
-                                            },
-                                            new MiningCoinConfig()
-                                            {
-                                                Id = Guid.Parse("22200222-2022-2022-2022-222000000222"),
-                                                PoolId = poolId,
-                                                Pool = CreatePool(poolId, userId, cryptocurrencyId, algorithmId),
-                                                PoolPassword = "654321",
-                                                WalletId = walletId,
-                                                Wallet = CreateWallet(walletId, userId, cryptocurrencyId, algorithmId)
-                                            }
+                                            CreateMiningConfig(guids, 1, 2),
+                                            CreateMiningConfig(guids, 2, 2)
                                         ]
                                     },
-                                    MinerId = minerId,
+                                    MinerId = guids.MinerId,
                                     Miner = new Miner()
                                     {
-                                        Id = minerId,
+                                        Id = guids.MinerId,
                                         Name = "Miner",
-                                        Version = "1.0.1",
+                                        Version = "1.0.2",
                                         InstallationUrl = "www.install.com",
                                         Type = MinerTypeEnum.Custom,
-                                        SupportedDevices = DeviceTypeManufacturerCombination.AmdGpu,
-                                        MiningMode = MiningModeEnum.Single,
+                                        SupportedDevices = DeviceTypeManufacturerCombination.NvidiaGpu,
+                                        MiningMode = MiningModeEnum.Dual,
                                         SupportedAlgorithms = []
                                     }
                                 }
@@ -239,15 +216,15 @@ public sealed class AgentCommandsMapperTests
                         new MiningDeviceModel()
                         {
                             Id = Guid.Parse("03030303-0303-0303-0303-030303030303"),
-                            Manufacturer = "AMD",
-                            Model = "RX 580",
-                            RigId = rigId,
-                            Type = "GPU",
+                            Manufacturer = "Intel",
+                            Model = "Core i9-149000K",
+                            RigId = guids.RigId,
+                            Type = "CPU",
                             FlightSheetId = flightSheet3Id,
                             FlightSheetName = "FlightSheet3",
-                            PresetName = "Preset3",
-                            FlightSheetConfirmationState = FlightSheetConfirmationState.Unconfirmed,
-                            MinerName = "Miner3",
+                            PresetName = "Preset",
+                            FlightSheetConfirmationState = FlightSheetConfirmationState.Error,
+                            MinerName = "Miner",
                             MinerVersion = "1.0.3"
                         },
                         new FlightSheet()
@@ -260,51 +237,28 @@ public sealed class AgentCommandsMapperTests
                                 {
                                     Id = Guid.Parse("30303030-3030-3030-3030-303030303030"),
                                     FlightSheetId = flightSheet3Id,
-                                    MiningConfig = new GpuMiningConfig()
+                                    MiningConfig = new CpuMiningConfig()
                                     {
                                         AdditionalArguments = "Argument1, Argument2",
                                         ConfigFileContent = "Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}",
                                         CoinConfigs =
                                         [
-                                            new MiningCoinConfig()
-                                            {
-                                                Id = Guid.Parse("11100333-1033-1033-1033-111000000333"),
-                                                PoolId = poolId,
-                                                Pool = CreatePool(poolId, userId, cryptocurrencyId, algorithmId),
-                                                PoolPassword = "123456",
-                                                WalletId = walletId,
-                                                Wallet = CreateWallet(walletId, userId, cryptocurrencyId, algorithmId)
-                                            },
-                                            new MiningCoinConfig()
-                                            {
-                                                Id = Guid.Parse("22200333-2033-2033-2033-222000000333"),
-                                                PoolId = poolId,
-                                                Pool = CreatePool(poolId, userId, cryptocurrencyId, algorithmId),
-                                                PoolPassword = "654321",
-                                                WalletId = walletId,
-                                                Wallet = CreateWallet(walletId, userId, cryptocurrencyId, algorithmId)
-                                            },
-                                            new MiningCoinConfig()
-                                            {
-                                                Id = Guid.Parse("33300333-3033-3033-3033-333000000333"),
-                                                PoolId = poolId,
-                                                Pool = CreatePool(poolId, userId, cryptocurrencyId, algorithmId),
-                                                PoolPassword = "142536",
-                                                WalletId = walletId,
-                                                Wallet = CreateWallet(walletId, userId, cryptocurrencyId, algorithmId)
-                                            }
+                                            
+                                            CreateMiningConfig(guids, 1, 3),
+                                            CreateMiningConfig(guids, 2, 3),
+                                            CreateMiningConfig(guids, 3, 3)
                                         ]
                                     },
-                                    MinerId = minerId,
+                                    MinerId = guids.MinerId,
                                     Miner = new Miner()
                                     {
-                                        Id = minerId,
+                                        Id = guids.MinerId,
                                         Name = "Miner",
-                                        Version = "1.0.1",
+                                        Version = "1.0.3",
                                         InstallationUrl = "www.install.com",
                                         Type = MinerTypeEnum.Custom,
-                                        SupportedDevices = DeviceTypeManufacturerCombination.AmdGpu,
-                                        MiningMode = MiningModeEnum.Single,
+                                        SupportedDevices = DeviceTypeManufacturerCombination.IntelCpu,
+                                        MiningMode = MiningModeEnum.Triple,
                                         SupportedAlgorithms = []
                                     }
                                 }
@@ -315,28 +269,42 @@ public sealed class AgentCommandsMapperTests
             }
         }
 
-        private static Pool CreatePool(Guid poolId, Guid userId, Guid cryptocurrencyId, Guid algorithmId)
+        private static MiningCoinConfig CreateMiningConfig(DomainGuids guids, int index, int number)
+        {
+            return new MiningCoinConfig()
+            {
+                Id = Guid.Parse(
+                    $"{index}000000{number}-{index}00{number}-{index}00{number}-{index}00{number}-{index}0000000000{number}"),
+                PoolId = guids.PoolId,
+                Pool = CreatePool(guids),
+                PoolPassword = "654321",
+                WalletId = guids.WalletId,
+                Wallet = CreateWallet(guids)
+            };
+        }
+
+        private static Pool CreatePool(DomainGuids guids)
         {
             return new Pool()
             {
-                Id = poolId,
+                Id = guids.PoolId,
                 Domain = "www.pool_domain1",
                 Port = 5050,
                 Tls = true,
-                OwnerId = userId,
-                CryptocurrencyId = cryptocurrencyId,
+                OwnerId = guids.UserId,
+                CryptocurrencyId = guids.CryptocurrencyId,
                 Cryptocurrency = new Cryptocurrency()
                 {
-                    Id = cryptocurrencyId,
+                    Id = guids.CryptocurrencyId,
                     ShortName = "c",
                     FullName = "Cryptocurrency",
-                    OwnerId = userId,
-                    AlgorithmId = algorithmId,
+                    OwnerId = guids.UserId,
+                    AlgorithmId = guids.AlgorithmId,
                     Algorithm = new Algorithm()
                     {
-                        Id = algorithmId,
+                        Id = guids.AlgorithmId,
                         Name = "Algorithm",
-                        OwnerId = userId
+                        OwnerId = guids.UserId
                     }
                 },
 
@@ -344,30 +312,41 @@ public sealed class AgentCommandsMapperTests
 
         }
 
-        private static Wallet CreateWallet(Guid walletId, Guid userId, Guid cryptocurrencyId, Guid algorithmId)
+        private static Wallet CreateWallet(DomainGuids guids)
         {
             return new Wallet()
             {
-                Id = walletId,
+                Id = guids.WalletId,
                 Name = "Wallet1",
                 Address = "Address1",
-                CryptocurrencyId = cryptocurrencyId,
+                CryptocurrencyId = guids.CryptocurrencyId,
                 Cryptocurrency = new Cryptocurrency()
                 {
-                    Id = cryptocurrencyId,
+                    Id = guids.CryptocurrencyId,
                     ShortName = "c",
                     FullName = "Cryptocurrency",
-                    OwnerId = userId,
-                    AlgorithmId = algorithmId,
+                    OwnerId = guids.UserId,
+                    AlgorithmId = guids.AlgorithmId,
                     Algorithm = new Algorithm()
                     {
-                        Id = algorithmId,
+                        Id = guids.AlgorithmId,
                         Name = "Algorithm1",
-                        OwnerId = userId
+                        OwnerId = guids.UserId
                     }
                 },
-                OwnerId = userId
+                OwnerId = guids.UserId
             };
+        }
+
+        private readonly struct DomainGuids
+        {
+            public Guid WalletId { get; init; }
+            public Guid PoolId { get; init; }
+            public Guid UserId { get; init; }
+            public Guid CryptocurrencyId { get; init; }
+            public Guid AlgorithmId { get; init; }
+            public Guid RigId { get; init; }
+            public Guid MinerId { get; init; }
         }
     }
 }
