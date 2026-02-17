@@ -5,15 +5,17 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency.Commands;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Cryptocurrency;
 
+using Cryptocurrency = Core.Mining.Cryptocurrency;
+
 /// <summary>
 /// Реализация <see cref="ICryptocurrencyMapper"/>.
 /// </summary>
 public class CryptocurrencyMapper : ICryptocurrencyMapper
 {
     /// <inheritdoc/>
-    public Core.Mining.Cryptocurrency MapToCoreEntity(CryptocurrencyInputModel model, Guid userId)
+    public Cryptocurrency MapToCoreEntity(CryptocurrencyInputModel model, Guid userId)
     {
-        return new Core.Mining.Cryptocurrency()
+        return new Cryptocurrency()
         {
             FullName = model.FullName,
             ShortName = model.ShortName,
@@ -23,7 +25,7 @@ public class CryptocurrencyMapper : ICryptocurrencyMapper
     }
 
     /// <inheritdoc/>
-    public CryptocurrencyModel MapToModel(Core.Mining.Cryptocurrency entity)
+    public CryptocurrencyModel MapToModel(Cryptocurrency entity)
     {
         var algorithm = new Algorithm()
         {
