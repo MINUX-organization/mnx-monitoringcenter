@@ -36,7 +36,7 @@ public sealed class AgentCommandsMapperTests
         _agentCommandsMapper = new AgentCommandsMapper(_poolMapper, _walletMapper);
     }
 
-    [TestCaseSource(typeof(MappingTestCases), nameof(MappingTestCases.DevicesTestData))]
+    [TestCaseSource(typeof(DeviceFLightSheetCollectionsTestData), nameof(DeviceFLightSheetCollectionsTestData.DevicesTestData))]
     public void MapToWorkerSettings_ValidFlightSheetList_ReturnsWorkerSettings(List<DeviceFLightSheet> data)
     {
         // Arrange
@@ -89,8 +89,9 @@ public sealed class AgentCommandsMapperTests
         }
     }
 
-    private class MappingTestCases
+    private class DeviceFLightSheetCollectionsTestData
     {
+        // TODO: Для генерации тестовых данных будет полезно реализовать фабрику объектов.
         public static IEnumerable<List<DeviceFLightSheet>> DevicesTestData
         {
             get
