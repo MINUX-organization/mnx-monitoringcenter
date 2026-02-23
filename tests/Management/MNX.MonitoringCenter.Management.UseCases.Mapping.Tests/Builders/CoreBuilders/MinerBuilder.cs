@@ -2,7 +2,7 @@
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 
 using Miner = Core.Mining.Miner.Miner;
 
@@ -64,13 +64,13 @@ public class MinerBuilder
         return this;
     }
 
-    public MinerBuilder WithWalletWorkerTemplate(string walletWorkerTemplate)
+    public MinerBuilder WithWalletWorkerTemplate(string? walletWorkerTemplate)
     {
         _walletWorkerTemplate = walletWorkerTemplate;
         return this;
     }
 
-    public MinerBuilder WithPoolTemplate(string poolTemplate)
+    public MinerBuilder WithPoolTemplate(string? poolTemplate)
     {
         _poolTemplate = poolTemplate;
         return this;

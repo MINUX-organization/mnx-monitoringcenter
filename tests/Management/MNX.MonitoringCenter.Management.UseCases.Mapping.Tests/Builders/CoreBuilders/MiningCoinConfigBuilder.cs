@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 
 using Pool = Core.Mining.Pool;
 using Wallet = Core.Mining.Wallet;

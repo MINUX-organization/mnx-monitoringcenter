@@ -1,14 +1,11 @@
-﻿using MNX.MonitoringCenter.Management.UseCases.Mapping.Wallet;
+﻿using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.ContractBuilders;
+using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
+using MNX.MonitoringCenter.Management.UseCases.Mapping.Wallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.AddWallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.EditWallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;
-
-using Algorithm = Core.Mining.Algorithm;
-using Cryptocurrency = Core.Mining.Cryptocurrency;
-using Wallet = Core.Mining.Wallet;
 
 [TestFixture]
 public sealed class WalletMapperTests
@@ -27,12 +24,8 @@ public sealed class WalletMapperTests
         // Arrange
 
         var addWalletCommand = new AddWalletCommand(
-            new WalletInputModel(
-                "WalletName",
-                "WalletAddress",
-                Guid.Parse("11111111-1111-1111-1111-111111111111")
-            ),
-            Guid.Parse("00000000-0000-0000-0000-000000000001")
+            new WalletInputModelBuilder().Build(),
+            Guid.NewGuid()
         );
 
         // Act
@@ -59,13 +52,9 @@ public sealed class WalletMapperTests
         // Arrange
 
         var editWalletCommand = new EditWalletCommand(
-            Guid.Parse("00000000-0000-0000-0000-000000000001"),
-            new WalletInputModel(
-                "WalletName",
-                "WalletAddress",
-                Guid.Parse("11111111-1111-1111-1111-111111111111")
-            ),
-            Guid.Parse("22222222-2222-2222-2222-222222222222")
+            Guid.NewGuid(),
+            new WalletInputModelBuilder().Build(),
+            Guid.NewGuid()
         );
 
         // Act
@@ -90,29 +79,13 @@ public sealed class WalletMapperTests
     public void MapToModel_ValidWallet_ReturnWalletModel()
     {
         // Arrange
-
-        var wallet = new Wallet()
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-            Name = "WalletName",
-            Address = "WalletAddress",
-            OwnerId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-            CryptocurrencyId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-            Cryptocurrency = new Cryptocurrency()
-            {
-                Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                FullName = "Crypto",
-                ShortName = "Cr",
-                OwnerId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                AlgorithmId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                Algorithm = new Algorithm()
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "AlgorithmName",
-                    OwnerId = Guid.Parse("11111111-1111-1111-1111-111111111111")
-                }
-            }
-        };
+        var wallet = new WalletBuilder()
+            .WithCryptocurrency(crypto =>
+                crypto.WithOwner()
+                      .WithAlgorithm(algo =>
+                        algo.WithOwner()))
+            .Build();
+        
 
         // Act
 

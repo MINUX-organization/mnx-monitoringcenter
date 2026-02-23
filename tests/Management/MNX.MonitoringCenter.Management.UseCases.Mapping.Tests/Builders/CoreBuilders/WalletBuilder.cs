@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders;
+﻿namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 
 using Cryptocurrency = Core.Mining.Cryptocurrency;
 using Wallet = Core.Mining.Wallet;

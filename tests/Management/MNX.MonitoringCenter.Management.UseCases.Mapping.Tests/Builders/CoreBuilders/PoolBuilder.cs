@@ -1,4 +1,4 @@
-﻿namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders;
+﻿namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 
 using Cryptocurrency = Core.Mining.Cryptocurrency;
 using Pool = Core.Mining.Pool;
@@ -33,9 +33,9 @@ public class PoolBuilder
         return this;
     }
 
-    public PoolBuilder WithTls()
+    public PoolBuilder WithTls(bool tls = true)
     {
-        _tls = true;
+        _tls = tls;
         return this;
     }
 

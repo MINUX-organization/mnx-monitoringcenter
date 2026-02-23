@@ -2,13 +2,13 @@
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Miner;
+using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.ContractBuilders;
+using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Miner.Commands.Models;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;
 
 using Algorithm = Core.Mining.Miner.MinerAlgorithm;
-using Miner = Core.Mining.Miner.Miner;
 
 [TestFixture]
 public sealed class MinerMapperTests
@@ -25,16 +25,11 @@ public sealed class MinerMapperTests
     public void MapToCoreEntity_ValidMinerInputModel_ReturnMiner()
     {
         // Arrange
-        var inputModel = new MinerInputModel(
-            Name: "Miner1",
-            Version: "1.0.1",
-            InstallationUrl: "www.install.com",
-            SupportedDevices: DeviceTypeManufacturerCombination.NvidiaGpu,
-            PoolTemplate: "{template1, template2, template3}",
-            WalletWorkerTemplate: "{template4, template5, template6, template7}",
-            MiningMode: MiningModeEnum.Dual
-        );
-        var userId = Guid.Parse("00000000-0000-0000-0000-000000000001");
+        var inputModel = new MinerInputModelBuilder()
+            .WithSupportedDevices(DeviceTypeManufacturerCombination.NvidiaGpu)
+            .WithMiningMode(MiningModeEnum.Dual)
+            .Build();
+        var userId = Guid.NewGuid();
 
 
         // Act
@@ -65,40 +60,17 @@ public sealed class MinerMapperTests
     {
         // Arrange
 
-        var miner = new Miner()
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-            Name = "Miner1",
-            Version = "1.0.1",
-            InstallationUrl = "www.install.com",
-            MiningMode = MiningModeEnum.Single,
-            Type = MinerTypeEnum.Custom,
-            SupportedDevices = DeviceTypeManufacturerCombination.AmdGpu,
-            OwnerId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-            SupportedAlgorithms =
-            [
-                new Algorithm()
-                {
-                    AlgorithmId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                    Name = "Algorithm1",
-                    MinerId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                },
-                new Algorithm()
-                {
-                    AlgorithmId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "Algorithm2",
-                    MinerId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                },
-                new Algorithm()
-                {
-                    AlgorithmId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                    Name = "Algorithm3",
-                    MinerId = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-                }
-            ],
-            PoolTemplate = "{template1, template2, template3, template4}",
-            WalletWorkerTemplate = "{tempalte5, template6, template7}"
-        };
+        var minerId = Guid.NewGuid();
+
+        var miner = new MinerBuilder()
+            .WithId(minerId)
+            .WithOwner()
+            .WithPoolTemplate("{template1, template2, template3, template4}")
+            .WithWalletWorkerTemplate("{tempalte5, template6, template7}")
+            .AddAlgorithm(algo => algo.WithMinerId(minerId))
+            .AddAlgorithm(algo => algo.WithMinerId(minerId))
+            .AddAlgorithm(algo => algo.WithMinerId(minerId))
+            .Build();
 
 
         // Act

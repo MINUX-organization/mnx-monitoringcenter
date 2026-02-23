@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 
 using Cryptocurrency = Core.Mining.Cryptocurrency;
 

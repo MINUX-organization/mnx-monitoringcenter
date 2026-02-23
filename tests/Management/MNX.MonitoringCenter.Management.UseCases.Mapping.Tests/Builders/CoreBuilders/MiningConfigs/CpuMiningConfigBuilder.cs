@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.MiningConfigs;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders.MiningConfigs;
 
 public class CpuMiningConfigBuilder : MiningConfigBuilder<CpuMiningConfigBuilder, CpuMiningConfig>
 {
@@ -27,7 +27,7 @@ public class CpuMiningConfigBuilder : MiningConfigBuilder<CpuMiningConfigBuilder
             HugePages = _hugePages
         };
 
-        ApplyBasesProperties(entity);
+        ApplyBaseProperties(entity);
 
         return entity;
     }

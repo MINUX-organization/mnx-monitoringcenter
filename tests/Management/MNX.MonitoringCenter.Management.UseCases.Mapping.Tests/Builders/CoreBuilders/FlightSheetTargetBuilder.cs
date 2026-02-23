@@ -1,8 +1,8 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.MiningConfigs;
+using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders.MiningConfigs;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 
 using Miner = Core.Mining.Miner.Miner;
 

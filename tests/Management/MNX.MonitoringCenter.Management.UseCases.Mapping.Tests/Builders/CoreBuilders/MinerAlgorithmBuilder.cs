@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 
 public class MinerAlgorithmBuilder
 {

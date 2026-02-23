@@ -1,4 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.UseCases.Mapping.Pool;
+using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.ContractBuilders;
+using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
@@ -25,13 +27,10 @@ public sealed class PoolMapperTests
         // Arrange
 
         var addPoolCommand = new AddPoolCommand(
-            new PoolInputModel(
-                true,
-                "www.domain.com",
-                8080,
-                Guid.Parse("11111111-1111-1111-1111-111111111111")
-            ),
-            Guid.Parse("00000000-0000-0000-0000-000000000001")
+            new PoolInputModelBuilder()
+                .WithTls()
+                .Build(),
+            Guid.NewGuid()
         );
 
         // Act
@@ -60,14 +59,9 @@ public sealed class PoolMapperTests
         // Arrange
 
         var editPoolCommand = new EditPoolCommand(
-            Guid.Parse("00000000-0000-0000-0000-000000000001"),
-            new PoolInputModel(
-                false,
-                "www.domain.com",
-                8080,
-                Guid.Parse("22222222-2222-2222-2222-222222222222")
-            ),
-            Guid.Parse("11111111-1111-1111-1111-111111111111")
+            Guid.NewGuid(),
+            new PoolInputModelBuilder().Build(),
+            Guid.NewGuid()
         );
 
         // Act
@@ -95,33 +89,17 @@ public sealed class PoolMapperTests
     {
         // Arrange
 
-        var pool = new Pool()
-        {
-            Id = Guid.Parse("00000000-0000-0000-0000-000000000001"),
-            Domain = "www.domain.com",
-            Port = 8080,
-            CryptocurrencyId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-            OwnerId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-            Tls = true,
-            Cryptocurrency = new()
-            {
-                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                FullName = "Crypto",
-                ShortName = "Cr",
-                OwnerId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                AlgorithmId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                Algorithm = new()
-                {
-                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                    Name = "Algo",
-                    OwnerId = Guid.Parse("22222222-2222-2222-2222-222222222222")
-                }
-            }
-        };
+        var pool = new PoolBuilder()
+            .WithCryptocurrency(crypto =>
+                crypto.WithAlgorithm(algo =>
+                    algo.WithOwner()))
+            .Build();
+        
 
         // Act
 
         var mappedModel = _poolMapper.MapToModel(pool);
+
 
         // Assert
 
