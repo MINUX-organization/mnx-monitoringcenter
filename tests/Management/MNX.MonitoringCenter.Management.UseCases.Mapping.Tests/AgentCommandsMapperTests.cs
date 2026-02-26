@@ -1,10 +1,10 @@
 ﻿using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models;
-using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
-using MNX.MonitoringCenter.Management.Core.Mining;
-using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.AgentCommands;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Wallet;
@@ -15,9 +15,6 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;
 
-using Cryptocurrency = Core.Mining.Cryptocurrency;
-using FlightSheet = Core.Mining.FlightSheet.FlightSheet;
-using Miner = Core.Mining.Miner.Miner;
 using Pool = Core.Mining.Pool;
 using Wallet = Core.Mining.Wallet;
 
@@ -91,180 +88,128 @@ public sealed class AgentCommandsMapperTests
 
     private class DeviceFLightSheetCollectionsTestData
     {
-        // TODO: Для генерации тестовых данных будет полезно реализовать фабрику объектов.
         public static IEnumerable<List<DeviceFLightSheet>> DevicesTestData
         {
             get
             {
-                var flightSheet1Id = Guid.Parse("11111111-1111-1111-1111-111111111111");
-                var flightSheet2Id = Guid.Parse("22222222-2222-2222-2222-222222222222");
-                var flightSheet3Id = Guid.Parse("33333333-3333-3333-3333-333333333333");
+                var flightSheet1Id = Guid.NewGuid();
+                var flightSheet2Id = Guid.NewGuid();
+                var flightSheet3Id = Guid.NewGuid();
                 var guids = new DomainGuids()
                 {
-                    CryptocurrencyId = Guid.Parse("00000000-0000-0000-0000-000000000000"),
-                    RigId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                    MinerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                    PoolId = Guid.Parse("66666666-6666-6666-6666-666666666666"),
-                    WalletId = Guid.Parse("77777777-7777-7777-7777-777777777777"),
-                    UserId = Guid.Parse("88888888-8888-8888-8888-888888888888"),
-                    AlgorithmId = Guid.Parse("99999999-9999-9999-9999-999999999999"),
+                    CryptocurrencyId = Guid.NewGuid(),
+                    RigId = Guid.NewGuid(),
+                    MinerId = Guid.NewGuid(),
+                    PoolId = Guid.NewGuid(),
+                    WalletId = Guid.NewGuid(),
+                    UserId = Guid.NewGuid(),
+                    AlgorithmId = Guid.NewGuid(),
                 };
 
                 yield return new List<DeviceFLightSheet>()
                 {
                     new DeviceFLightSheet(
-                        new MiningDeviceModel()
-                        {
-                            Id = Guid.Parse("01010101-0101-0101-0101-010101010101"),
-                            Manufacturer = "AMD",
-                            Model = "RX 6700 XT",
-                            RigId = guids.RigId,
-                            Type = "GPU",
-                            FlightSheetId = flightSheet1Id,
-                            FlightSheetName = "FlightSheet1",
-                            PresetName = "Preset1",
-                            FlightSheetConfirmationState = FlightSheetConfirmationState.Unconfirmed,
-                            MinerName = "Miner",
-                            MinerVersion = "1.0.1"
-                        },
-                        new FlightSheet()
-                        {
-                            Id = flightSheet1Id,
-                            Name = "FlightSheet1",
-                            Targets =
-                            [
-                                new FlightSheetTarget()
-                                {
-                                    Id = Guid.Parse("10101010-1010-1010-1010-101010101010"),
-                                    FlightSheetId = flightSheet1Id,
-                                    MiningConfig = new GpuMiningConfig()
-                                    {
-                                        AdditionalArguments = "Argument1, Argument2",
-                                        ConfigFileContent = "Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}",
-                                        CoinConfigs =
-                                        [
-                                            CreateMiningConfig(guids, 1, 1)
-                                        ]
-                                    },
-                                    MinerId = guids.MinerId,
-                                    Miner = new Miner()
-                                    {
-                                        Id = guids.MinerId,
-                                        Name = "Miner",
-                                        Version = "1.0.1",
-                                        InstallationUrl = "www.install.com",
-                                        Type = MinerTypeEnum.Custom,
-                                        SupportedDevices = DeviceTypeManufacturerCombination.AmdGpu,
-                                        MiningMode = MiningModeEnum.Single,
-                                        SupportedAlgorithms = []
-                                    }
-                                }
-                            ]
-                        }
+                        new MiningDeviceModelBuilder()
+                            .WithManufacturer("AMD")
+                            .WithModel("RX 6700 XT")
+                            .WithRigId(guids.RigId)
+                            .WithType("GPU")
+                            .WithFlightSheetId(flightSheet1Id)
+                            .WithFlightSheetName("FlightSheet1")
+                            .WithFlightSheetConfirmationState(FlightSheetConfirmationState.Unconfirmed)
+                            .WithPresetName("Preset1")
+                            .WithMinerName("Miner")
+                            .WithMinerVersion("1.0.1")
+                            .Build(),
+                        new FlightSheetBuilder()
+                            .WithId(flightSheet1Id)
+                            .WithName("FlightSheet1")
+                            .AddTarget(target =>
+                                target.WithFlightSheetId(flightSheet1Id)
+                                      .WithMiningConfig(() =>
+                                      {
+                                          return new GpuMiningConfigBuilder()
+                                            .WithAdditionalArguments("Argument1, Argument2")
+                                            .WithConfigFileContent("Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}")
+                                            .AddCoinConfig(coinConfig => CreateMiningConfig(guids, 1, 1))
+                                            .Build();
+                                      })
+                                      .WithMiner(miner =>
+                                        miner.WithId(guids.MinerId)
+                                             .WithName("Miner")
+                                             .WithVersion("1.0.1")
+                                             .WithOwner(guids.UserId)
+                                             .WithSupportedDevices(DeviceTypeManufacturerCombination.AmdGpu)
+                                             .WithMiningMode(MiningModeEnum.Single)))
+                            .Build()
                     ),
                     new DeviceFLightSheet(
-                        new MiningDeviceModel()
-                        {
-                            Id = Guid.Parse("02020202-0202-0202-0202-020202020202"),
-                            Manufacturer = "Nvidia",
-                            Model = "RTX 4060 ti",
-                            RigId = guids.RigId,
-                            Type = "GPU",
-                            FlightSheetId = flightSheet2Id,
-                            FlightSheetName = "FlightSheet2",
-                            PresetName = "Preset2",
-                            FlightSheetConfirmationState = FlightSheetConfirmationState.Successfully,
-                            MinerName = "Miner",
-                            MinerVersion = "1.0.2"
-                        },
-                        new FlightSheet()
-                        {
-                            Id = flightSheet2Id,
-                            Name = "FlightSheet2",
-                            Targets =
-                            [
-                                new FlightSheetTarget()
-                                {
-                                    Id = Guid.Parse("20202020-2020-2020-2020-202020202020"),
-                                    FlightSheetId = flightSheet2Id,
-                                    MiningConfig = new GpuMiningConfig()
-                                    {
-                                        AdditionalArguments = "Argument1, Argument2",
-                                        ConfigFileContent = "Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}",
-                                        CoinConfigs =
-                                        [
-                                            CreateMiningConfig(guids, 1, 2),
-                                            CreateMiningConfig(guids, 2, 2)
-                                        ]
-                                    },
-                                    MinerId = guids.MinerId,
-                                    Miner = new Miner()
-                                    {
-                                        Id = guids.MinerId,
-                                        Name = "Miner",
-                                        Version = "1.0.2",
-                                        InstallationUrl = "www.install.com",
-                                        Type = MinerTypeEnum.Custom,
-                                        SupportedDevices = DeviceTypeManufacturerCombination.NvidiaGpu,
-                                        MiningMode = MiningModeEnum.Dual,
-                                        SupportedAlgorithms = []
-                                    }
-                                }
-                            ]
-                        }
-                    ),
+                        new MiningDeviceModelBuilder()
+                            .WithManufacturer("Nvidia")
+                            .WithModel("RTX 4060 ti")
+                            .WithRigId(guids.RigId)
+                            .WithType("GPU")
+                            .WithFlightSheetId(flightSheet2Id)
+                            .WithFlightSheetName("FlightSheet2")
+                            .WithFlightSheetConfirmationState(FlightSheetConfirmationState.Successfully)
+                            .WithPresetName("Preset2")
+                            .WithMinerName("Miner")
+                            .WithMinerVersion("1.0.2")
+                            .Build(),
+                        new FlightSheetBuilder()
+                            .WithId(flightSheet2Id)
+                            .AddTarget(target =>
+                                target.WithFlightSheetId(flightSheet2Id)
+                                      .WithMiningConfig(() =>
+                                      {
+                                          return new GpuMiningConfigBuilder()
+                                            .WithAdditionalArguments("Argument1, Argument2")
+                                            .WithConfigFileContent("Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}")
+                                            .AddCoinConfig(coinConfig => CreateMiningConfig(guids, 1, 2))
+                                            .AddCoinConfig(coinConfig => CreateMiningConfig(guids, 2, 2))
+                                            .Build();
+                                      })
+                                      .WithMiner(miner =>
+                                        miner.WithId(guids.MinerId)
+                                             .WithName("Miner")
+                                             .WithVersion("1.0.2")
+                                             .WithOwner(guids.UserId)
+                                             .WithSupportedDevices(DeviceTypeManufacturerCombination.NvidiaGpu)
+                                             .WithMiningMode(MiningModeEnum.Dual)))
+                            .Build()),
                     new DeviceFLightSheet(
-                        new MiningDeviceModel()
-                        {
-                            Id = Guid.Parse("03030303-0303-0303-0303-030303030303"),
-                            Manufacturer = "Intel",
-                            Model = "Core i9-149000K",
-                            RigId = guids.RigId,
-                            Type = "CPU",
-                            FlightSheetId = flightSheet3Id,
-                            FlightSheetName = "FlightSheet3",
-                            PresetName = "Preset",
-                            FlightSheetConfirmationState = FlightSheetConfirmationState.Error,
-                            MinerName = "Miner",
-                            MinerVersion = "1.0.3"
-                        },
-                        new FlightSheet()
-                        {
-                            Id = flightSheet3Id,
-                            Name = "FlightSheet3",
-                            Targets =
-                            [
-                                new FlightSheetTarget()
-                                {
-                                    Id = Guid.Parse("30303030-3030-3030-3030-303030303030"),
-                                    FlightSheetId = flightSheet3Id,
-                                    MiningConfig = new CpuMiningConfig()
-                                    {
-                                        AdditionalArguments = "Argument1, Argument2",
-                                        ConfigFileContent = "Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}",
-                                        CoinConfigs =
-                                        [
-                                            
-                                            CreateMiningConfig(guids, 1, 3),
-                                            CreateMiningConfig(guids, 2, 3),
-                                            CreateMiningConfig(guids, 3, 3)
-                                        ]
-                                    },
-                                    MinerId = guids.MinerId,
-                                    Miner = new Miner()
-                                    {
-                                        Id = guids.MinerId,
-                                        Name = "Miner",
-                                        Version = "1.0.3",
-                                        InstallationUrl = "www.install.com",
-                                        Type = MinerTypeEnum.Custom,
-                                        SupportedDevices = DeviceTypeManufacturerCombination.IntelCpu,
-                                        MiningMode = MiningModeEnum.Triple,
-                                        SupportedAlgorithms = []
-                                    }
-                                }
-                            ]
-                        }
+                        new MiningDeviceModelBuilder()
+                            .WithManufacturer("Intel")
+                            .WithModel("Core i9-149000K")
+                            .WithRigId(guids.RigId)
+                            .WithType("CPU")
+                            .WithFlightSheetId(flightSheet3Id)
+                            .WithFlightSheetName("FlightSheet3")
+                            .WithFlightSheetConfirmationState(FlightSheetConfirmationState.Error)
+                            .WithPresetName("Preset")
+                            .WithMinerName("Miner")
+                            .WithMinerVersion("1.0.3")
+                            .Build(),
+                        new FlightSheetBuilder()
+                            .WithId(flightSheet3Id)
+                            .AddTarget(target =>
+                                target.WithFlightSheetId(flightSheet3Id)
+                                      .WithMiner(miner =>
+                                        miner.WithId(guids.MinerId)
+                                             .WithOwner(guids.UserId)
+                                             .WithSupportedDevices(DeviceTypeManufacturerCombination.IntelCpu)
+                                             .WithMiningMode(MiningModeEnum.Triple))
+                                      .WithMiningConfig(() =>
+                                      {
+                                          return new CpuMiningConfigBuilder()
+                                            .WithAdditionalArguments("Argument1, Argument2")
+                                            .WithConfigFileContent("Config:\n{\n\tSubConfig1: 1,\n\tSubConfig2: 2\n}")
+                                            .AddCoinConfig(coinConfig => CreateMiningConfig(guids, 1, 3))
+                                            .AddCoinConfig(coinConfig => CreateMiningConfig(guids, 2, 3))
+                                            .AddCoinConfig(coinConfig => CreateMiningConfig(guids, 3, 3))
+                                            .Build();
+                                      }))
+                            .Build()
                     )
                 };
             }
@@ -272,71 +217,39 @@ public sealed class AgentCommandsMapperTests
 
         private static MiningCoinConfig CreateMiningConfig(DomainGuids guids, int index, int number)
         {
-            return new MiningCoinConfig()
-            {
-                Id = Guid.Parse(
-                    $"{index}000000{number}-{index}00{number}-{index}00{number}-{index}00{number}-{index}0000000000{number}"),
-                PoolId = guids.PoolId,
-                Pool = CreatePool(guids),
-                PoolPassword = "654321",
-                WalletId = guids.WalletId,
-                Wallet = CreateWallet(guids)
-            };
+            return new MiningCoinConfigBuilder()
+                .WithPool(pool => CreatePool(guids))
+                .WithWallet(wallet => CreateWallet(guids))
+                .WithPoolPassword("654321")
+                .Build();
         }
 
         private static Pool CreatePool(DomainGuids guids)
         {
-            return new Pool()
-            {
-                Id = guids.PoolId,
-                Domain = "www.pool_domain1",
-                Port = 5050,
-                Tls = true,
-                OwnerId = guids.UserId,
-                CryptocurrencyId = guids.CryptocurrencyId,
-                Cryptocurrency = new Cryptocurrency()
-                {
-                    Id = guids.CryptocurrencyId,
-                    ShortName = "c",
-                    FullName = "Cryptocurrency",
-                    OwnerId = guids.UserId,
-                    AlgorithmId = guids.AlgorithmId,
-                    Algorithm = new Algorithm()
-                    {
-                        Id = guids.AlgorithmId,
-                        Name = "Algorithm",
-                        OwnerId = guids.UserId
-                    }
-                },
-
-            };
-
+            return new PoolBuilder()
+                .WithId(guids.PoolId)
+                .WithTls()
+                .WithOwner(guids.UserId)
+                .WithCryptocurrency(crypto =>
+                    crypto.WithId(guids.CryptocurrencyId)
+                          .WithOwner(guids.UserId)
+                          .WithAlgorithm(algo =>
+                            algo.WithId(guids.AlgorithmId)
+                                .WithOwner(guids.UserId)))
+                .Build();
         }
 
         private static Wallet CreateWallet(DomainGuids guids)
         {
-            return new Wallet()
-            {
-                Id = guids.WalletId,
-                Name = "Wallet1",
-                Address = "Address1",
-                CryptocurrencyId = guids.CryptocurrencyId,
-                Cryptocurrency = new Cryptocurrency()
-                {
-                    Id = guids.CryptocurrencyId,
-                    ShortName = "c",
-                    FullName = "Cryptocurrency",
-                    OwnerId = guids.UserId,
-                    AlgorithmId = guids.AlgorithmId,
-                    Algorithm = new Algorithm()
-                    {
-                        Id = guids.AlgorithmId,
-                        Name = "Algorithm1",
-                        OwnerId = guids.UserId
-                    }
-                },
-                OwnerId = guids.UserId
-            };
+            return new WalletBuilder()
+                .WithId(guids.WalletId)
+                .WithCryptocurrency(crypto =>
+                    crypto.WithId(guids.CryptocurrencyId)
+                          .WithOwner(guids.UserId)
+                          .WithAlgorithm(algo =>
+                            algo.WithId(guids.AlgorithmId)
+                                .WithOwner(guids.UserId)))
+                .Build();
         }
 
         private readonly struct DomainGuids

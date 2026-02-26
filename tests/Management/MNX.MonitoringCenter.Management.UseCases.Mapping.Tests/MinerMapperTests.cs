@@ -1,9 +1,9 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts.Miner;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Miner;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.ContractBuilders;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;

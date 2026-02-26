@@ -1,10 +1,10 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningDevices;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings.Fans;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.MiningDevice;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders.MiningConfigs;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders.MiningDevices;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders.Overclockings;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders.Overclockings.Fans;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;

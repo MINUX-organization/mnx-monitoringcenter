@@ -1,4 +1,8 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
+﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
+using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.MiningConfigInputModels;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.MiningConfig;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Wallet;
@@ -6,16 +10,8 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models.MiningConfig;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
-using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;
-
-using Pool = Core.Mining.Pool;
-using Cryptocurrency = Core.Mining.Cryptocurrency;
-using Algorithm = Core.Mining.Algorithm;
-using Wallet = Core.Mining.Wallet;
-
 [TestFixture]
 public sealed class MiningConfigMapperTests
 {
@@ -189,63 +185,42 @@ public sealed class MiningConfigMapperTests
 
     private class MiningConfigMappingTestData
     {
-        // TODO: Для генерации данных можно реализовать фабрику, чтобы было более читаемо.
         public static IEnumerable<MiningConfigInputModel> CpuMiningConfigInputModels
         {
             get
             {
-                yield return new CpuMiningConfigInputModel()
-                {
-                    AdditionalArguments = "Argument1, Argument2, Argument3",
-                    ConfigFileContent = "{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3\n\t}\n}",
-                    HugePages = 3,
-                    ThreadsCount = 8,
-                    CoinConfigs =
-                    [
-                        new MiningCoinConfigInputModel()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            PoolPassword = "123456"
-                        },
-                        new MiningCoinConfigInputModel()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            PoolPassword = null
-                        },
-                        new MiningCoinConfigInputModel()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            PoolPassword = "qwertyui"
-                        }
-                    ]
-                };
-                yield return new CpuMiningConfigInputModel()
-                {
-                    AdditionalArguments = "Argument43",
-                    ConfigFileContent = null,
-                    HugePages = 4,
-                    ThreadsCount = 6,
-                    CoinConfigs =
-                    [
-                        new MiningCoinConfigInputModel()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            PoolPassword = "x"
-                        }
-                    ]
-                };
-                yield return new CpuMiningConfigInputModel()
-                {
-                    AdditionalArguments = null,
-                    ConfigFileContent = "{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}",
-                    HugePages = null,
-                    ThreadsCount = null,
-                    CoinConfigs = []
-                };
+                var poolId = Guid.NewGuid();
+                var walletId = Guid.NewGuid();
+
+                yield return new CpuMiningConfigInputModelBuilder()
+                    .WithAdditionalArguments("Argument1, Argument2, Argument3")
+                    .WithConfigFileContent("{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3\n\t}\n}")
+                    .WithHugePages(3)
+                    .WithThreadsCount(8)
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPoolPassword("123456")
+                                  .WithPoolId(poolId)
+                                  .WithWalletId(walletId))
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPoolId(poolId)
+                                  .WithWalletId(walletId))
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPoolPassword("qwertyui")
+                                  .WithPoolId(poolId)
+                                  .WithWalletId(walletId))
+                    .Build();
+                yield return new CpuMiningConfigInputModelBuilder()
+                    .WithAdditionalArguments("Argument43")
+                    .WithHugePages(4)
+                    .WithThreadsCount(6)
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPoolPassword("x")
+                                  .WithPoolId(poolId)
+                                  .WithWalletId(walletId))
+                    .Build();
+                yield return new CpuMiningConfigInputModelBuilder()
+                    .WithConfigFileContent("{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}")
+                    .Build();
             }
         }
 
@@ -253,52 +228,34 @@ public sealed class MiningConfigMapperTests
         {
             get
             {
-                yield return new GpuMiningConfigInputModel()
-                {
-                    AdditionalArguments = null,
-                    ConfigFileContent = "{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}",
-                    CoinConfigs = []
-                };
-                yield return new GpuMiningConfigInputModel()
-                {
-                    AdditionalArguments = "Argument1, Argument2, Argument3",
-                    ConfigFileContent = "{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3\n\t}\n}",
-                    CoinConfigs =
-                    [
-                        new MiningCoinConfigInputModel()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            PoolPassword = "123456"
-                        },
-                        new MiningCoinConfigInputModel()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            PoolPassword = null
-                        },
-                        new MiningCoinConfigInputModel()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            PoolPassword = "qwertyui"
-                        }
-                    ]
-                };
-                yield return new GpuMiningConfigInputModel()
-                {
-                    AdditionalArguments = "Argument43",
-                    ConfigFileContent = null,
-                    CoinConfigs =
-                    [
-                        new MiningCoinConfigInputModel()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            PoolPassword = "x"
-                        }
-                    ]
-                };
+                var poolId = Guid.NewGuid();
+                var walletId = Guid.NewGuid();
+
+                yield return new GpuMiningConfigInputModelBuilder()
+                    .WithConfigFileContent("{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}")
+                    .Build();
+                yield return new GpuMiningConfigInputModelBuilder()
+                    .WithAdditionalArguments("Argument1, Argument2, Argument3")
+                    .WithConfigFileContent("{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3\n\t}\n}")
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPoolPassword("123456")
+                                  .WithPoolId(poolId)
+                                  .WithWalletId(walletId))
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPoolId(poolId)
+                                  .WithWalletId(walletId))
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPoolPassword("qwertyui")
+                                  .WithPoolId(poolId)
+                                  .WithWalletId(walletId))
+                    .Build();
+                yield return new GpuMiningConfigInputModelBuilder()
+                    .WithAdditionalArguments("Argument43")
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPoolId(poolId)
+                                  .WithWalletId(walletId)
+                                  .WithPoolPassword("x"))
+                    .Build();
             }
         }
 
@@ -306,238 +263,99 @@ public sealed class MiningConfigMapperTests
         {
             get
             {
-                yield return new CpuMiningConfig()
-                {
-                    HugePages = 3,
-                    ThreadsCount = 5,
-                    AdditionalArguments = "Argument7",
-                    ConfigFileContent = "{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}",
-                    CoinConfigs = 
-                    [
-                        new MiningCoinConfig()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            Pool = new Pool
-                            {
-                                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                                Domain = "www.domain.com",
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                Port = 8080,
-                                Tls = true,
-                                CryptocurrencyId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                    FullName = "Crypto1",
-                                    ShortName = "C1",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                        Name = "Algo1",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                }
-                            },
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            Wallet = new Wallet
-                            {
-                                Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                                Address = "Address1",
-                                Name = "Wallet1",
-                                CryptocurrencyId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                    FullName = "Crypto1",
-                                    ShortName = "C1",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                        Name = "Algo1",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                },
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                            },
-                            PoolPassword = "123456"
-                        },
-                        new MiningCoinConfig()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-0000-1111-111111111111"),
-                            Pool = new Pool
-                            {
-                                Id = Guid.Parse("11111111-1111-0000-1111-111111111111"),
-                                Domain = "www.domain2.com",
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                Port = 8080,
-                                Tls = true,
-                                CryptocurrencyId = Guid.Parse("33333333-0000-3333-0000-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-0000-3333-0000-333333333333"),
-                                    FullName = "Crypto2",
-                                    ShortName = "C2",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                        Name = "Algo2",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                }
-                            },
-                            WalletId = Guid.Parse("22222222-0000-2222-0000-222222222222"),
-                            Wallet = new Wallet
-                            {
-                                Id = Guid.Parse("22222222-0000-2222-0000-222222222222"),
-                                Address = "Address2",
-                                Name = "Wallet2",
-                                CryptocurrencyId = Guid.Parse("33333333-0000-3333-0000-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-0000-3333-0000-333333333333"),
-                                    FullName = "Crypto2",
-                                    ShortName = "C2",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                        Name = "Algo2",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                },
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                            },
-                            PoolPassword = null
-                        },
-                        new MiningCoinConfig()
-                        {
-                            PoolId = Guid.Parse("11111111-0000-0000-0000-111111111111"),
-                            Pool = new Pool
-                            {
-                                Id = Guid.Parse("11111111-0000-0000-0000-111111111111"),
-                                Domain = "www.domain3.com",
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                Port = 8080,
-                                Tls = true,
-                                CryptocurrencyId = Guid.Parse("33333333-1111-1111-1111-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-1111-1111-1111-333333333333"),
-                                    FullName = "Crypto2",
-                                    ShortName = "C2",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                        Name = "Algo2",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                }
-                            },
-                            WalletId = Guid.Parse("22222222-1111-1111-1111-222222222222"),
-                            Wallet = new Wallet
-                            {
-                                Id = Guid.Parse("22222222-1111-1111-1111-222222222222"),
-                                Address = "Address2",
-                                Name = "Wallet2",
-                                CryptocurrencyId = Guid.Parse("33333333-1111-1111-1111-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-1111-1111-1111-333333333333"),
-                                    FullName = "Crypto2",
-                                    ShortName = "C2",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                        Name = "Algo2",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                },
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                            },
-                            PoolPassword = "qwertyui"
-                        }
-                    ]
-                };
-                yield return new CpuMiningConfig()
-                {
-                    HugePages = null,
-                    ThreadsCount = 9,
-                    AdditionalArguments = "Argument4, Argument5, Argument6",
-                    ConfigFileContent = "{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3\n\t}\n}",
-                    CoinConfigs = 
-                    [
-                        new MiningCoinConfig()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            Pool = new Pool
-                            {
-                                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                                Domain = "www.domain.com",
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                Port = 8080,
-                                Tls = true,
-                                CryptocurrencyId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                    FullName = "Crypto1",
-                                    ShortName = "C1",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                        Name = "Algo1",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                }
-                            },
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            Wallet = new Wallet
-                            {
-                                Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                                Address = "Address1",
-                                Name = "Wallet1",
-                                CryptocurrencyId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                    FullName = "Crypto1",
-                                    ShortName = "C1",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                        Name = "Algo1",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                },
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                            },
-                            PoolPassword = "123456"
-                        },
-                    ]
-                };
-                yield return new CpuMiningConfig()
-                {
-                    HugePages = null,
-                    ThreadsCount = null,
-                    AdditionalArguments = "Argument1, Argument2, Argument3",
-                    ConfigFileContent = null,
-                    CoinConfigs = []
-                };
+                var ownerId = Guid.NewGuid();
+                var cryptocurrencyId = Guid.NewGuid();
+                var algorithmId = Guid.NewGuid();
+
+                yield return new CpuMiningConfigBuilder()
+                    .WithAdditionalArguments("Argument7")
+                    .WithConfigFileContent("{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}")
+                    .WithThreads(5)
+                    .WithHugePages(3)
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPool(pool =>
+                            pool.WithTls()
+                                .WithOwner(ownerId)
+                                .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                  .WithWallet(wallet =>
+                                    wallet.WithOwnerId(ownerId)
+                                          .WithCryptocurrency(crypto =>
+                                            crypto.WithId(cryptocurrencyId)
+                                                  .WithOwner(ownerId)
+                                                  .WithAlgorithm(algo =>
+                                                    algo.WithId(algorithmId)
+                                                        .WithOwner(ownerId))))
+                                  .WithPoolPassword("123456"))
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPool(pool =>
+                            pool.WithOwner(ownerId)
+                                .WithTls()
+                                .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                  .WithWallet(wallet =>
+                                    wallet.WithOwnerId(ownerId)
+                                          .WithCryptocurrency(crypto =>
+                                            crypto.WithId(cryptocurrencyId)
+                                                  .WithOwner(ownerId)
+                                                  .WithAlgorithm(algo =>
+                                                    algo.WithId(algorithmId)
+                                                        .WithOwner(ownerId)))))
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPool(pool =>
+                            pool.WithTls()
+                                .WithOwner(ownerId)
+                                .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                  .WithWallet(wallet =>
+                            wallet.WithOwnerId(ownerId)
+                                  .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                  .WithPoolPassword("qwertyui"))
+                    .Build();
+                yield return new CpuMiningConfigBuilder()
+                    .WithAdditionalArguments("Argument4, Argument5, Argument6")
+                    .WithConfigFileContent("{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3\n\t}\n}")
+                    .WithThreads(9)
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithWallet(wallet =>
+                            wallet.WithOwnerId(ownerId)
+                                  .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                             algo.WithId(algorithmId)
+                                                 .WithOwner(ownerId))))
+                                  .WithPool(pool =>
+                                    pool.WithTls()
+                                        .WithOwner(ownerId)
+                                        .WithCryptocurrency(crypto =>
+                                            crypto.WithId(cryptocurrencyId)
+                                                  .WithOwner(ownerId)
+                                                  .WithAlgorithm(algo =>
+                                                    algo.WithId(algorithmId)
+                                                        .WithOwner(ownerId))))
+                                  .WithPoolPassword("123456"))
+                    .Build();
+                yield return new CpuMiningConfigBuilder()
+                    .WithAdditionalArguments("Argument1, Argument2, Argument3")
+                    .Build();
             }
         }
 
@@ -545,181 +363,75 @@ public sealed class MiningConfigMapperTests
         {
             get
             {
-                yield return new GpuMiningConfig()
-                {
-                    AdditionalArguments = "Argument1, Argument2, Argument3, Argument4",
-                    ConfigFileContent = "{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}",
-                    CoinConfigs =
-                    [
-                        new MiningCoinConfig()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                            Pool = new Pool
-                            {
-                                Id = Guid.Parse("11111111-1111-1111-1111-111111111111"),
-                                Domain = "www.domain.com",
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                Port = 8080,
-                                Tls = true,
-                                CryptocurrencyId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                    FullName = "Crypto1",
-                                    ShortName = "C1",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                        Name = "Algo1",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                }
-                            },
-                            WalletId = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                            Wallet = new Wallet
-                            {
-                                Id = Guid.Parse("22222222-2222-2222-2222-222222222222"),
-                                Address = "Address1",
-                                Name = "Wallet1",
-                                CryptocurrencyId = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-3333-3333-3333-333333333333"),
-                                    FullName = "Crypto1",
-                                    ShortName = "C1",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-4444-4444-4444-444444444444"),
-                                        Name = "Algo1",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                },
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                            },
-                            PoolPassword = "123456"
-                        },
-                        new MiningCoinConfig()
-                        {
-                            PoolId = Guid.Parse("11111111-0000-0000-0000-111111111111"),
-                            Pool = new Pool
-                            {
-                                Id = Guid.Parse("11111111-0000-0000-0000-111111111111"),
-                                Domain = "www.domain3.com",
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                Port = 8080,
-                                Tls = true,
-                                CryptocurrencyId = Guid.Parse("33333333-1111-1111-1111-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-1111-1111-1111-333333333333"),
-                                    FullName = "Crypto2",
-                                    ShortName = "C2",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                        Name = "Algo2",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                }
-                            },
-                            WalletId = Guid.Parse("22222222-1111-1111-1111-222222222222"),
-                            Wallet = new Wallet
-                            {
-                                Id = Guid.Parse("22222222-1111-1111-1111-222222222222"),
-                                Address = "Address2",
-                                Name = "Wallet2",
-                                CryptocurrencyId = Guid.Parse("33333333-1111-0000-1111-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-1111-0000-1111-333333333333"),
-                                    FullName = "Crypto2",
-                                    ShortName = "C2",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                        Name = "Algo2",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                },
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                            },
-                            PoolPassword = "qwertyui"
-                        },
-                    ]
-                };
-                yield return new GpuMiningConfig()
-                {
-                    AdditionalArguments = "Argument1, Argument2, Argument3, Argument4",
-                    ConfigFileContent = "{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}",
-                    CoinConfigs = 
-                    [
-                        new MiningCoinConfig()
-                        {
-                            PoolId = Guid.Parse("11111111-1111-0000-1111-111111111111"),
-                            Pool = new Pool
-                            {
-                                Id = Guid.Parse("11111111-1111-0000-1111-111111111111"),
-                                Domain = "www.domain2.com",
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                Port = 8080,
-                                Tls = true,
-                                CryptocurrencyId = Guid.Parse("33333333-0000-3333-0000-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-0000-3333-0000-333333333333"),
-                                    FullName = "Crypto2",
-                                    ShortName = "C2",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                        Name = "Algo2",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                }
-                            },
-                            WalletId = Guid.Parse("22222222-0000-2222-0000-222222222222"),
-                            Wallet = new Wallet
-                            {
-                                Id = Guid.Parse("22222222-0000-2222-0000-222222222222"),
-                                Address = "Address2",
-                                Name = "Wallet2",
-                                CryptocurrencyId = Guid.Parse("33333333-0000-3333-0000-333333333333"),
-                                Cryptocurrency = new Cryptocurrency
-                                {
-                                    Id = Guid.Parse("33333333-0000-3333-0000-333333333333"),
-                                    FullName = "Crypto2",
-                                    ShortName = "C2",
-                                    OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555"),
-                                    AlgorithmId = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                    Algorithm = new Algorithm
-                                    {
-                                        Id = Guid.Parse("44444444-0000-4444-0000-444444444444"),
-                                        Name = "Algo2",
-                                        OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                                    }
-                                },
-                                OwnerId = Guid.Parse("55555555-5555-5555-5555-555555555555")
-                            },
-                            PoolPassword = null
-                        }
-                    ]
-                };
-                yield return new GpuMiningConfig()
-                {
-                    AdditionalArguments = null,
-                    ConfigFileContent = null,
-                    CoinConfigs = []
-                };
+                var ownerId = Guid.NewGuid();
+                var cryptocurrencyId = Guid.NewGuid();
+                var algorithmId = Guid.NewGuid();
+
+                yield return new GpuMiningConfigBuilder()
+                    .WithAdditionalArguments("Argument1, Argument2, Argument3, Argument4")
+                    .WithConfigFileContent("{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}")
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPool(pool =>
+                            pool.WithTls()
+                                .WithOwner(ownerId)
+                                .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                  .WithWallet(wallet =>
+                            wallet.WithOwnerId(ownerId)
+                                  .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                  .WithPoolPassword("123456"))
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithPool(pool =>
+                            pool.WithTls()
+                                .WithOwner(ownerId)
+                                .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                .WithWallet(wallet =>
+                            wallet.WithOwnerId(ownerId)
+                                  .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                  .WithPoolPassword("qwertyui"))
+                    .Build();
+                yield return new GpuMiningConfigBuilder()
+                    .WithAdditionalArguments("Argument1, Argument2, Argument3, Argument4")
+                    .WithConfigFileContent("{\n\tcontent:\n\t{\n\t\tParam1,\n\t\tParam2,\n\t\tParam3,\n\t\tParam4,\n\t\tParam5\n\t}\n}")
+                    .AddCoinConfig(coinConfig =>
+                        coinConfig.WithWallet(wallet =>
+                            wallet.WithOwnerId(ownerId)
+                                  .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId))))
+                                  .WithPool(pool =>
+                            pool.WithTls()
+                                .WithOwner(ownerId)
+                                .WithCryptocurrency(crypto =>
+                                    crypto.WithId(cryptocurrencyId)
+                                          .WithOwner(ownerId)
+                                          .WithAlgorithm(algo =>
+                                            algo.WithId(algorithmId)
+                                                .WithOwner(ownerId)))))
+                    .Build();
+                yield return new GpuMiningConfigBuilder().Build();
             }
         }
     }

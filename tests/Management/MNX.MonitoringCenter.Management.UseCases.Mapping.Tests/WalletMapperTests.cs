@@ -1,5 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.ContractBuilders;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Wallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.AddWallet;

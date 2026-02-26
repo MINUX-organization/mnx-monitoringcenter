@@ -23,6 +23,7 @@
     <ProjectReference Include="..\..\..\src\Management\MNX.MonitoringCenter.Management.Core\MNX.MonitoringCenter.Management.Core.csproj" />
     <ProjectReference Include="..\..\..\src\Management\MNX.MonitoringCenter.Management.Mapping\MNX.MonitoringCenter.Management.UseCases.Mapping.csproj" />
     <ProjectReference Include="..\..\..\src\Management\MNX.MonitoringCenter.Management.UseCases\MNX.MonitoringCenter.Management.UseCases.csproj" />
+    <ProjectReference Include="..\MNX.MonitoringCenter.Management.Tests.Service\MNX.MonitoringCenter.Management.Tests.Service.csproj" />
   </ItemGroup>
 
   <ItemGroup>
