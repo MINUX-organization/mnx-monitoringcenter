@@ -9,10 +9,10 @@ public class MiningCoinConfigModelBuilder
     private PoolModel? _pool = null;
     private string? _poolPassword = null;
 
-    public MiningCoinConfigModelBuilder WithWallet(Action<WalletModelBuilder> configure)
+    public MiningCoinConfigModelBuilder WithWallet(Func<WalletModelBuilder, WalletModelBuilder> configure)
     {
         var builder = new WalletModelBuilder();
-        configure(builder);
+        builder = configure(builder);
         _wallet = builder.Build();
         return this;
     }

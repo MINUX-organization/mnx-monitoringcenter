@@ -15,10 +15,11 @@ public class FlightSheetInputModelBuilder
         return this;
     }
 
-    public FlightSheetInputModelBuilder AddFlightSheetTarget(Action<FlightSheetTargetInputModelBuilder> configure)
+    public FlightSheetInputModelBuilder AddFlightSheetTarget(
+        Func<FlightSheetTargetInputModelBuilder, FlightSheetTargetInputModelBuilder> configure)
     {
         var builder = new FlightSheetTargetInputModelBuilder();
-        configure(builder);
+        builder = configure(builder);
         _targets.Add(builder.Build());
         return this;
     }

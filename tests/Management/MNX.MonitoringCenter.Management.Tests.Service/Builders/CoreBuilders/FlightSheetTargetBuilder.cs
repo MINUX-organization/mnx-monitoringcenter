@@ -32,10 +32,10 @@ public class FlightSheetTargetBuilder
         return this;
     }
 
-    public FlightSheetTargetBuilder WithMiner(Action<MinerBuilder> configure)
+    public FlightSheetTargetBuilder WithMiner(Func<MinerBuilder, MinerBuilder> configure)
     {
         var builder = new MinerBuilder();
-        configure(builder);
+        builder = configure(builder);
         _miner = builder.Build();
         _minerId = _miner.Id;
         return this;
@@ -46,12 +46,11 @@ public class FlightSheetTargetBuilder
         return new FlightSheetTarget
         {
             Id = _id,
-            MiningConfig = _miningConfig ?? CreateDefaultMiningConfig(),
+            MiningConfig = _miningConfig ??
+                throw new ArgumentException("It's nessesary to initialize mining config"),
             FlightSheetId = _flightSheetId,
             MinerId = _minerId,
             Miner = _miner,
         };
     }
-
-    private BaseMiningConfig CreateDefaultMiningConfig() => new GpuMiningConfigBuilder().Build();
 }

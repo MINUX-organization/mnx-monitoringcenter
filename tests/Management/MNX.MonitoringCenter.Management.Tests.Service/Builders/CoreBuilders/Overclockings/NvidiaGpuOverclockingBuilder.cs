@@ -18,6 +18,12 @@ public class NvidiaGpuOverclockingBuilder :
     protected int _memoryVoltageOffset = 0;
     protected int _powerLimit = 0;
 
+    public NvidiaGpuOverclockingBuilder WithFanOverclocking(Func<IFanOverclocking> factory)
+    {
+        _fanOverclocking = factory();
+        return this;
+    }
+
     public NvidiaGpuOverclockingBuilder WithCoreClockLock(int coreClockLock)
     {
         _coreClockLock = coreClockLock;
@@ -72,12 +78,6 @@ public class NvidiaGpuOverclockingBuilder :
         return this;
     }
     
-    public NvidiaGpuOverclockingBuilder WithFanOverclocking(Func<IFanOverclocking> factory)
-    {
-        _fanOverclocking = factory();
-        return this;
-    }
-
     public override IOverclocking Build()
     {
         return new NvidiaGpuOverclocking

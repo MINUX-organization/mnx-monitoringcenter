@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
 
-namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.BaseMiningConfigModels;
+namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.MiningConfigModels;
 
 public class GpuMiningConfigModelBuilder :
     BaseMiningConfigModelBuilder<GpuMiningConfigModelBuilder, GpuMiningConfigModel>

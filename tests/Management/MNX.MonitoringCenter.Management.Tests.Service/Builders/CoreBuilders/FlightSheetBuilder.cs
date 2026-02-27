@@ -31,10 +31,10 @@ public class FlightSheetBuilder
         return this;
     }
 
-    public FlightSheetBuilder AddTarget(Action<FlightSheetTargetBuilder> configure)
+    public FlightSheetBuilder AddTarget(Func<FlightSheetTargetBuilder, FlightSheetTargetBuilder> configure)
     {
         var builder = new FlightSheetTargetBuilder();
-        configure(builder);
+        builder = configure(builder);
         _targets.Add(builder.Build());
         return this;
     }

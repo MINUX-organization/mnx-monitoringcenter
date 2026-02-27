@@ -1,17 +1,11 @@
 ﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Pool;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.ContractBuilders;
-using MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
-using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;
-
-using Pool = Core.Mining.Pool;
-
 [TestFixture]
 public sealed class PoolMapperTests
 {

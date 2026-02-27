@@ -15,9 +15,6 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;
 
-using Pool = Core.Mining.Pool;
-using Wallet = Core.Mining.Wallet;
-
 [TestFixture]
 public sealed class AgentCommandsMapperTests
 {
@@ -215,41 +212,29 @@ public sealed class AgentCommandsMapperTests
             }
         }
 
-        private static MiningCoinConfig CreateMiningConfig(DomainGuids guids, int index, int number)
+        private static MiningCoinConfigBuilder CreateMiningConfig(DomainGuids guids, int index, int number)
         {
-            return new MiningCoinConfigBuilder()
-                .WithPool(pool => CreatePool(guids))
-                .WithWallet(wallet => CreateWallet(guids))
-                .WithPoolPassword("654321")
-                .Build();
-        }
-
-        private static Pool CreatePool(DomainGuids guids)
-        {
-            return new PoolBuilder()
-                .WithId(guids.PoolId)
-                .WithTls()
-                .WithOwner(guids.UserId)
-                .WithCryptocurrency(crypto =>
-                    crypto.WithId(guids.CryptocurrencyId)
-                          .WithOwner(guids.UserId)
-                          .WithAlgorithm(algo =>
-                            algo.WithId(guids.AlgorithmId)
-                                .WithOwner(guids.UserId)))
-                .Build();
-        }
-
-        private static Wallet CreateWallet(DomainGuids guids)
-        {
-            return new WalletBuilder()
-                .WithId(guids.WalletId)
-                .WithCryptocurrency(crypto =>
-                    crypto.WithId(guids.CryptocurrencyId)
-                          .WithOwner(guids.UserId)
-                          .WithAlgorithm(algo =>
-                            algo.WithId(guids.AlgorithmId)
-                                .WithOwner(guids.UserId)))
-                .Build();
+            var a = new MiningCoinConfigBuilder()
+                .WithPool(pool =>
+                    pool.WithId(guids.PoolId)
+                        .WithTls()
+                        .WithOwner(guids.UserId)
+                        .WithCryptocurrency(crypto =>
+                            crypto.WithId(guids.CryptocurrencyId)
+                                  .WithOwner(guids.UserId)
+                                  .WithAlgorithm(algo =>
+                                    algo.WithId(guids.AlgorithmId)
+                                        .WithOwner(guids.UserId))))
+                .WithWallet(wallet =>
+                    wallet.WithId(guids.WalletId)
+                          .WithCryptocurrency(crypto =>
+                              crypto.WithId(guids.CryptocurrencyId)
+                                    .WithOwner(guids.UserId)
+                                    .WithAlgorithm(algo =>
+                                      algo.WithId(guids.AlgorithmId)
+                                          .WithOwner(guids.UserId))))
+                .WithPoolPassword("654321");
+            return a;
         }
 
         private readonly struct DomainGuids

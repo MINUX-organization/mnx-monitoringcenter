@@ -74,10 +74,10 @@ public class MinerBuilder
         return this;
     }
 
-    public MinerBuilder AddAlgorithm(Action<MinerAlgorithmBuilder> configure)
+    public MinerBuilder AddAlgorithm(Func<MinerAlgorithmBuilder, MinerAlgorithmBuilder> configure)
     {
         var builder = new MinerAlgorithmBuilder();
-        configure(builder);
+        builder = configure(builder);
         _supportedAlgorithms.Add(builder.Build());
         return this;
     }

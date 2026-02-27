@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
-using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
 
 namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings.Fans;
 
@@ -14,7 +13,7 @@ public class FanOverclockingWithTargetSpeedBuilder :
         return this;
     }
 
-    public override IFanOverclocking Build()
+    public override FanOverclockingWithTargetSpeed Build()
     {
         return new FanOverclockingWithTargetSpeed
         {

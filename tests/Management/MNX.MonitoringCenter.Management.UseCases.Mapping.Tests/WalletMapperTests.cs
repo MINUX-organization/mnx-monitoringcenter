@@ -44,6 +44,12 @@ public sealed class WalletMapperTests
             Assert.That(mappedWallet.Cryptocurrency, Is.Null);
             Assert.That(mappedWallet.OwnerId, Is.EqualTo(addWalletCommand.UserId));
         });
+
+        CryptocurrencyBuilder CreateCrypto()
+        {
+            return new CryptocurrencyBuilder()
+                .WithAlgorithm(algo => algo.WithName("algo1"));
+        }
     }
 
     [Test]

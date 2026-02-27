@@ -26,19 +26,19 @@ public class MiningCoinConfigBuilder
         return this;
     }
 
-    public MiningCoinConfigBuilder WithPool(Action<PoolBuilder>? configure = null)
+    public MiningCoinConfigBuilder WithPool(Func<PoolBuilder, PoolBuilder> configure)
     {
         var builder = new PoolBuilder();
-        configure?.Invoke(builder);
+        builder = configure(builder);
         _pool = builder.Build();
         _poolId = _pool.Id;
         return this;
     }
 
-    public MiningCoinConfigBuilder WithWallet(Action<WalletBuilder>? configure = null)
+    public MiningCoinConfigBuilder WithWallet(Func<WalletBuilder, WalletBuilder> configure)
     {
         var builder = new WalletBuilder();
-        configure?.Invoke(builder);
+        builder = configure(builder);
         _wallet = builder.Build();
         _walletId = _wallet.Id;
         return this;

@@ -21,7 +21,7 @@ public class CpuOverclockingBuilder :
         return this;
     }
 
-    public override IOverclocking Build()
+    public override CpuOverclocking Build()
     {
         return new CpuOverclocking()
         {

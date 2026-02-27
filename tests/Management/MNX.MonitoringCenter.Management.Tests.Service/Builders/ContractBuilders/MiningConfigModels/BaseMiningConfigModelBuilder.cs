@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
 
-namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.BaseMiningConfigModels;
+namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.MiningConfigModels;
 
 public abstract class BaseMiningConfigModelBuilder<TBuilder, TEntity>
     where TBuilder : BaseMiningConfigModelBuilder<TBuilder, TEntity>
@@ -29,10 +29,11 @@ public abstract class BaseMiningConfigModelBuilder<TBuilder, TEntity>
         return (TBuilder)this;
     }
 
-    public TBuilder AddCoinConfig(Action<MiningCoinConfigModelBuilder> configure)
+    public TBuilder AddCoinConfig(Func<MiningCoinConfigModelBuilder, MiningCoinConfigModelBuilder>? configure = null)
     {
         var builder = new MiningCoinConfigModelBuilder();
-        configure(builder);
+        if (configure is not null)
+            builder = configure(builder);
         _coinConfigs.Add(builder.Build());
         return (TBuilder)this;
     }

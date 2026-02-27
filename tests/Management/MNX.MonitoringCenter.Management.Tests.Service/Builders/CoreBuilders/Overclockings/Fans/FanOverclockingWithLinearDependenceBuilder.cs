@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
-using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
 
 namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings.Fans;
 
@@ -8,15 +7,16 @@ public class FanOverclockingWithLinearDependenceBuilder
 {
     protected List<FanGraphicPoint> _targetPoints = new(0);
 
-    public FanOverclockingWithLinearDependenceBuilder AddTargetPoint(Action<FanGraphicPointBuilder> configure)
+    public FanOverclockingWithLinearDependenceBuilder AddTargetPoint(
+        Func<FanGraphicPointBuilder, FanGraphicPointBuilder> configure)
     {
         var builder = new FanGraphicPointBuilder();
-        configure(builder);
+        builder = configure(builder);
         _targetPoints.Add(builder.Build());
         return this;
     }
 
-    public override IFanOverclocking Build()
+    public override FanOverclockingWithLinearDependence Build()
     {
         return new FanOverclockingWithLinearDependence
         {

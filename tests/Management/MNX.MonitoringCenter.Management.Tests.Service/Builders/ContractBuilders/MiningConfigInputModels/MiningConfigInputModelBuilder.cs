@@ -29,10 +29,10 @@ public abstract class MiningConfigInputModelBuilder<TBuilder, TEntity>
         return (TBuilder)this;
     }
 
-    public TBuilder AddCoinConfig(Action<MiningCoinConfigInputModelBuilder> configure)
+    public TBuilder AddCoinConfig(Func<MiningCoinConfigInputModelBuilder, MiningCoinConfigInputModelBuilder> configure)
     {
         var builder = new MiningCoinConfigInputModelBuilder();
-        configure(builder);
+        builder = configure(builder);
         _coinConfigs.Add(builder.Build());
         return (TBuilder)this;
     }

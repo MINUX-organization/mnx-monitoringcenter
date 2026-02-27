@@ -38,10 +38,10 @@ public class WalletBuilder
         return this;
     }
 
-    public WalletBuilder WithCryptocurrency(Action<CryptocurrencyBuilder>? configure = null)
+    public WalletBuilder WithCryptocurrency(Func<CryptocurrencyBuilder, CryptocurrencyBuilder> configure)
     {
         var builder = new CryptocurrencyBuilder();
-        configure?.Invoke(builder);
+        builder = configure(builder);
         _cryptocurrency = builder.Build();
         _cryptocurrencyId = _cryptocurrency.Id;
         return this;

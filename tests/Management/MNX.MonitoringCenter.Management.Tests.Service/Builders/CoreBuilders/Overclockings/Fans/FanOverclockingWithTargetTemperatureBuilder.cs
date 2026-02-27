@@ -35,7 +35,7 @@ public class FanOverclockingWithTargetTemperatureBuilder :
         return this;
     }
 
-    public override IFanOverclocking Build()
+    public override FanOverclockingWithTargetTemperature Build()
     {
         return new FanOverclockingWithTargetTemperature
         {

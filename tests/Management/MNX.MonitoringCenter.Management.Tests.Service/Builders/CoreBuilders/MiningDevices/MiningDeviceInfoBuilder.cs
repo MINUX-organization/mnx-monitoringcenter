@@ -34,19 +34,19 @@ public class MiningDeviceInfoBuilder : MiningDeviceBuilder<MiningDeviceInfoBuild
         return this;
     }
 
-    public MiningDeviceInfoBuilder WithPreset(Action<PresetBuilder> configure)
+    public MiningDeviceInfoBuilder WithPreset(Func<PresetBuilder, PresetBuilder> configure)
     {
         var builder = new PresetBuilder();
-        configure(builder);
+        builder = configure(builder);
         _preset = builder.Build();
         _presetId = _preset.Id;
         return this;
     }
 
-    public MiningDeviceInfoBuilder WithFlightSheet(Action<FlightSheetBuilder> configure)
+    public MiningDeviceInfoBuilder WithFlightSheet(Func<FlightSheetBuilder, FlightSheetBuilder> configure)
     {
         var builder = new FlightSheetBuilder();
-        configure(builder);
+        builder = configure(builder);
         _flightSheet = builder.Build();
         _flightSheetId = _flightSheet.Id;
         return this;

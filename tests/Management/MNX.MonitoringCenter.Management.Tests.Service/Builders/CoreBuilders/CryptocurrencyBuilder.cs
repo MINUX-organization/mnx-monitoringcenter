@@ -37,10 +37,10 @@ public class CryptocurrencyBuilder
         return this;
     }
 
-    public CryptocurrencyBuilder WithAlgorithm(Action<AlgorithmBuilder>? configure = null)
+    public CryptocurrencyBuilder WithAlgorithm(Func<AlgorithmBuilder, AlgorithmBuilder> configure)
     {
         var builder = new AlgorithmBuilder();
-        configure?.Invoke(builder);
+        builder = configure(builder);
         _algorithm = builder.Build();
         _algorithmId = _algorithm.Id;
         return this;
