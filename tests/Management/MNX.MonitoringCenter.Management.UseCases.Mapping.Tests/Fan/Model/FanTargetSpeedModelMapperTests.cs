@@ -6,10 +6,10 @@ using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overcl
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Fan.Model;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Model;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Fan;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Fan.Model;
 
 [TestFixture]
-public class FanTargetSpeedModelMapperTests
+public sealed class FanTargetSpeedModelMapperTests
 {
     private IFanOverclockingModelMapper<FanOverclockingWithTargetSpeedModel, FanOverclockingWithTargetSpeed>
         _fanOverclockingWithTargetSpeedMapper;
@@ -25,9 +25,7 @@ public class FanTargetSpeedModelMapperTests
     {
         // Arrange
 
-        var fanOverclockingModel = new FanOverclockingWithTargetSpeedModelBuilder()
-            .WithTargetSpeed(100)
-            .Build();
+        var fanOverclockingModel = CreateFanOverclockingWithTargetSpeedModel();
 
 
         // Act
@@ -56,9 +54,7 @@ public class FanTargetSpeedModelMapperTests
         // Arrange
 
         var fanOverclockingId = Guid.NewGuid();
-        var fanOverclockingModel = new FanOverclockingWithTargetSpeedModelBuilder()
-            .WithTargetSpeed(100)
-            .Build();
+        var fanOverclockingModel = CreateFanOverclockingWithTargetSpeedModel();
 
 
         // Act
@@ -86,9 +82,7 @@ public class FanTargetSpeedModelMapperTests
     {
         // Arrange
 
-        var fanOverclockingCore = new FanOverclockingWithTargetSpeedBuilder()
-            .WithTargetSpeed(100)
-            .Build();
+        var fanOverclockingCore = CreateFanOverclockingWithTargetSpeed();
 
 
         // Act
@@ -107,5 +101,19 @@ public class FanTargetSpeedModelMapperTests
             var fanOverclockingModel = (FanOverclockingWithTargetSpeedModel)mappedFanOverclockingModel;
             Assert.That(fanOverclockingModel.TargetSpeed, Is.EqualTo(fanOverclockingCore.TargetSpeed));
         });
+    }
+
+    private FanOverclockingWithTargetSpeedModel CreateFanOverclockingWithTargetSpeedModel()
+    {
+        return new FanOverclockingWithTargetSpeedModelBuilder()
+            .WithTargetSpeed(100)
+            .Build();
+    }
+
+    private FanOverclockingWithTargetSpeed CreateFanOverclockingWithTargetSpeed()
+    {
+        return new FanOverclockingWithTargetSpeedBuilder()
+            .WithTargetSpeed(100)
+            .Build();
     }
 }

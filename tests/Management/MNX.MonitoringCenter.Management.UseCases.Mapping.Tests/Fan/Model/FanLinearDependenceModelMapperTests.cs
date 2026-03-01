@@ -5,10 +5,10 @@ using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overcl
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Fan.Model;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Model;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Fan;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Fan.Model;
 
 [TestFixture]
-public class FanLinearDependenceModelMapperTests
+public sealed class FanLinearDependenceModelMapperTests
 {
     private IFanOverclockingModelMapper<FanOverclockingWithLinearDependenceModel, FanOverclockingWithLinearDependence>
         _fanOverclockingWithLinearDependenceMapper;
@@ -24,23 +24,7 @@ public class FanLinearDependenceModelMapperTests
     {
         // Arrange
 
-        var fanOverclockingModel = new FanOverclockingWithLinearDependenceModelBuilder()
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(30)
-                           .WithTemperatureValueTarget(25))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(45)
-                           .WithTemperatureValueTarget(40))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(60)
-                           .WithTemperatureValueTarget(50))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(75)
-                           .WithTemperatureValueTarget(65))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(100)
-                           .WithTemperatureValueTarget(75))
-            .Build();
+        var fanOverclockingModel = CreateFanOverclockingWithLinearDependenceModel();
 
 
         // Act
@@ -69,23 +53,7 @@ public class FanLinearDependenceModelMapperTests
         // Arrange
 
         var fanOverclockingId = Guid.NewGuid();
-        var fanOverclockingModel = new FanOverclockingWithLinearDependenceModelBuilder()
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(30)
-                           .WithTemperatureValueTarget(25))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(45)
-                           .WithTemperatureValueTarget(40))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(60)
-                           .WithTemperatureValueTarget(50))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(75)
-                           .WithTemperatureValueTarget(65))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(100)
-                           .WithTemperatureValueTarget(75))
-            .Build();
+        var fanOverclockingModel = CreateFanOverclockingWithLinearDependenceModel();
 
 
         // Act
@@ -113,7 +81,52 @@ public class FanLinearDependenceModelMapperTests
     {
         // Arrange
 
-        var fanOverclockingCore = new FanOverclockingWithLinearDependenceBuilder()
+        var fanOverclockingCore = CreateFanOverclockingWithLinearDependence();
+
+
+        // Act
+
+        var mappedFanOverclocking = _fanOverclockingWithLinearDependenceMapper.MapToModel(fanOverclockingCore);
+
+
+        // Assert
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(mappedFanOverclocking, Is.Not.Null);
+            Assert.That(mappedFanOverclocking.FanOverclockingType, Is.EqualTo(fanOverclockingCore.Type));
+            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithLinearDependenceModel>());
+
+            var fanOverclockingModel = (FanOverclockingWithLinearDependenceModel)mappedFanOverclocking;
+            Assert.That(fanOverclockingModel.TargetPoints.Select(x => (x.FanSpeedValueTarget, x.TemperatureValueTarget)),
+                Is.EqualTo(fanOverclockingCore.TargetPoints.Select(x => (x.FanSpeedValueTarget, x.TemperatureValueTarget))));
+        });
+    }
+
+    private FanOverclockingWithLinearDependenceModel CreateFanOverclockingWithLinearDependenceModel()
+    {
+        return new FanOverclockingWithLinearDependenceModelBuilder()
+            .AddTargetPoint(targetPoint =>
+                targetPoint.WithFanSpeedValueTarget(30)
+                           .WithTemperatureValueTarget(25))
+            .AddTargetPoint(targetPoint =>
+                targetPoint.WithFanSpeedValueTarget(45)
+                           .WithTemperatureValueTarget(40))
+            .AddTargetPoint(targetPoint =>
+                targetPoint.WithFanSpeedValueTarget(60)
+                           .WithTemperatureValueTarget(50))
+            .AddTargetPoint(targetPoint =>
+                targetPoint.WithFanSpeedValueTarget(75)
+                           .WithTemperatureValueTarget(65))
+            .AddTargetPoint(targetPoint =>
+                targetPoint.WithFanSpeedValueTarget(100)
+                           .WithTemperatureValueTarget(75))
+            .Build();
+    }
+
+    private FanOverclockingWithLinearDependence CreateFanOverclockingWithLinearDependence()
+    {
+        return new FanOverclockingWithLinearDependenceBuilder()
             .AddTargetPoint(targetPoint =>
                 targetPoint.WithFanSpeedValueTarget(30)
                            .WithTemperatureValueTarget(25)
@@ -135,24 +148,5 @@ public class FanLinearDependenceModelMapperTests
                            .WithTemperatureValueTarget(75)
                            .WithPointIndex(4))
             .Build();
-
-
-        // Act
-
-        var mappedFanOverclocking = _fanOverclockingWithLinearDependenceMapper.MapToModel(fanOverclockingCore);
-
-
-        // Assert
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedFanOverclocking, Is.Not.Null);
-            Assert.That(mappedFanOverclocking.FanOverclockingType, Is.EqualTo(fanOverclockingCore.Type));
-            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithLinearDependenceModel>());
-
-            var fanOverclockingModel = (FanOverclockingWithLinearDependenceModel)mappedFanOverclocking;
-            Assert.That(fanOverclockingModel.TargetPoints.Select(x => (x.FanSpeedValueTarget, x.TemperatureValueTarget)),
-                Is.EqualTo(fanOverclockingCore.TargetPoints.Select(x => (x.FanSpeedValueTarget, x.TemperatureValueTarget))));
-        });
     }
 }

@@ -5,10 +5,10 @@ using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overcl
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Model.Cpu;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Overclocking;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Overclocking.Model;
 
 [TestFixture]
-public class CpuOverclockingModelMapperTests
+public sealed class CpuOverclockingModelMapperTests
 {
     private IOverclockingModelMapper<CpuOverclockingModel, CpuOverclocking> _cpuOverclockingModelMapper;
 

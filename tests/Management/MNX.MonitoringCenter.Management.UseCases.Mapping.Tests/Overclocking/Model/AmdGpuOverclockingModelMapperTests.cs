@@ -11,7 +11,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Model;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Model.Gpu;
 using Moq;
 
-namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Overclocking;
+namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Overclocking.Model;
 
 [TestFixture]
 public sealed class AmdGpuOverclockingModelMapperTests
