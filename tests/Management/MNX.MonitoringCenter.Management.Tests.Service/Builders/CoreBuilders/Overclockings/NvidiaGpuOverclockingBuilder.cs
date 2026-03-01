@@ -78,7 +78,7 @@ public class NvidiaGpuOverclockingBuilder :
         return this;
     }
     
-    public override IOverclocking Build()
+    public override NvidiaGpuOverclocking Build()
     {
         return new NvidiaGpuOverclocking
         {

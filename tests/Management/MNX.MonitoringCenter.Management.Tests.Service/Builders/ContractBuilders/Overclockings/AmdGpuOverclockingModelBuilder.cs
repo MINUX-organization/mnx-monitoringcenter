@@ -89,7 +89,7 @@ public class AmdGpuOverclockingModelBuilder :
         return this;
     }
 
-    public AmdGpuOverclockingModelBuilder WithEnhancedOverclock(bool enhancedOverclock)
+    public AmdGpuOverclockingModelBuilder WithEnhancedOverclock(bool enhancedOverclock = true)
     {
         _enhancedOverclock = enhancedOverclock;
         return this;
@@ -113,7 +113,7 @@ public class AmdGpuOverclockingModelBuilder :
         return this;
     }
 
-    public override IOverclockingModel Build()
+    public override AmdGpuOverclockingModel Build()
     {
         return new AmdGpuOverclockingModel
         {
