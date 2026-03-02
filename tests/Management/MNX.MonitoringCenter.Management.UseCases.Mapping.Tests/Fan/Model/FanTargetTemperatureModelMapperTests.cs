@@ -19,14 +19,10 @@ public sealed class FanTargetTemperatureModelMapperTests
         _fanOverclockingWithTargetTemperatureMapper = new FanTargetTemperatureModelMapper();
     }
 
-    [Test]
-    public void MapToCoreEntity_ValidModel_ReturnsCoreEntity()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockingModels))]
+    public void MapToCoreEntity_ValidModel_ReturnsCoreEntity(FanOverclockingWithTargetTemperatureModel fanOverclockingModel)
     {
         // Arrange
-
-        var fanOverclockingModel = CreateFanOverclockingWithTargetTemperatureModel();
-
-
         // Act
 
         var mappedFanOverclocking = _fanOverclockingWithTargetTemperatureMapper.MapToCoreEntity(fanOverclockingModel);
@@ -49,13 +45,12 @@ public sealed class FanTargetTemperatureModelMapperTests
         });
     }
 
-    [Test]
-    public void MapToCoreEntity_ValidModelAndId_ReturnsCoreEntity()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockingModels))]
+    public void MapToCoreEntity_ValidModelAndId_ReturnsCoreEntity(FanOverclockingWithTargetTemperatureModel fanOverclockingModel)
     {
         // Arrange
 
         var fanOverclockingId = Guid.NewGuid();
-        var fanOverclockingModel = CreateFanOverclockingWithTargetTemperatureModel();
 
 
         // Act
@@ -80,14 +75,10 @@ public sealed class FanTargetTemperatureModelMapperTests
         });
     }
 
-    [Test]
-    public void MapToModel_ValidCoreEntity_ReturnsModel()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockings))]
+    public void MapToModel_ValidCoreEntity_ReturnsModel(FanOverclockingWithTargetTemperature fanOverclockingCore)
     {
         // Arrange
-
-        var fanOverclockingCore = CreateFanOverclockingWithTargetTemperature();
-
-
         // Act
 
         var mappedFanOverclockingModel = _fanOverclockingWithTargetTemperatureMapper.MapToModel(fanOverclockingCore);
@@ -109,23 +100,32 @@ public sealed class FanTargetTemperatureModelMapperTests
         });
     }
     
-    private FanOverclockingWithTargetTemperatureModel CreateFanOverclockingWithTargetTemperatureModel()
+    private static class FanOverclockingTestCases
     {
-        return new FanOverclockingWithTargetTemperatureModelBuilder()
-            .WithMaxTargetSpeed(100)
-            .WithMinTargetSpeed(20)
-            .WithTargetCoreTemperature(70)
-            .WithTargetMemoryTemperature(60)
-            .Build();
-    }
+        public static IEnumerable<FanOverclockingWithTargetTemperatureModel> FanOverclockingModels
+        {
+            get
+            {
+                yield return new FanOverclockingWithTargetTemperatureModelBuilder()
+                    .WithMaxTargetSpeed(100)
+                    .WithMinTargetSpeed(20)
+                    .WithTargetCoreTemperature(70)
+                    .WithTargetMemoryTemperature(60)
+                    .Build();
+            }
+        }
 
-    private FanOverclockingWithTargetTemperature CreateFanOverclockingWithTargetTemperature()
-    {
-        return new FanOverclockingWithTargetTemperatureBuilder()
-            .WithMaxTargetSpeed(100)
-            .WithMinTargetSpeed(20)
-            .WithTargetCoreTemperature(70)
-            .WithTargetMemoryTemperature(60)
-            .Build();
+        public static IEnumerable<FanOverclockingWithTargetTemperature> FanOverclockings
+        {
+            get
+            {
+                yield return new FanOverclockingWithTargetTemperatureBuilder()
+                    .WithMaxTargetSpeed(100)
+                    .WithMinTargetSpeed(20)
+                    .WithTargetCoreTemperature(70)
+                    .WithTargetMemoryTemperature(60)
+                    .Build();
+            }
+        }
     }
 }

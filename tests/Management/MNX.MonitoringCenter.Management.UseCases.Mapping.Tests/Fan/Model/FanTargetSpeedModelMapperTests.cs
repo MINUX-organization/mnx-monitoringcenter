@@ -20,14 +20,10 @@ public sealed class FanTargetSpeedModelMapperTests
         _fanOverclockingWithTargetSpeedMapper = new FanTargetSpeedModelMapper();
     }
 
-    [Test]
-    public void MapToCoreEntity_ValidModel_ReturnsCoreEntity()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockingModels))]
+    public void MapToCoreEntity_ValidModel_ReturnsCoreEntity(FanOverclockingWithTargetSpeedModel fanOverclockingModel)
     {
         // Arrange
-
-        var fanOverclockingModel = CreateFanOverclockingWithTargetSpeedModel();
-
-
         // Act
 
         var mappedFanOverclocking = _fanOverclockingWithTargetSpeedMapper.MapToCoreEntity(fanOverclockingModel);
@@ -48,13 +44,12 @@ public sealed class FanTargetSpeedModelMapperTests
         });
     }
 
-    [Test]
-    public void MapToCoreEntity_ValidModelAndId_ReturnsCoreEntity()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockingModels))]
+    public void MapToCoreEntity_ValidModelAndId_ReturnsCoreEntity(FanOverclockingWithTargetSpeedModel fanOverclockingModel)
     {
         // Arrange
 
         var fanOverclockingId = Guid.NewGuid();
-        var fanOverclockingModel = CreateFanOverclockingWithTargetSpeedModel();
 
 
         // Act
@@ -77,14 +72,10 @@ public sealed class FanTargetSpeedModelMapperTests
         });
     }
 
-    [Test]
-    public void MapToModel_ValidCoreEntity_ReturnsModel()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockings))]
+    public void MapToModel_ValidCoreEntity_ReturnsModel(FanOverclockingWithTargetSpeed fanOverclockingCore)
     {
         // Arrange
-
-        var fanOverclockingCore = CreateFanOverclockingWithTargetSpeed();
-
-
         // Act
 
         var mappedFanOverclockingModel = _fanOverclockingWithTargetSpeedMapper.MapToModel(fanOverclockingCore);
@@ -103,17 +94,36 @@ public sealed class FanTargetSpeedModelMapperTests
         });
     }
 
-    private FanOverclockingWithTargetSpeedModel CreateFanOverclockingWithTargetSpeedModel()
+    private static class FanOverclockingTestCases
     {
-        return new FanOverclockingWithTargetSpeedModelBuilder()
-            .WithTargetSpeed(100)
-            .Build();
-    }
+        public static IEnumerable<FanOverclockingWithTargetSpeedModel> FanOverclockingModels
+        {
+            get
+            {
+                yield return new FanOverclockingWithTargetSpeedModelBuilder()
+                    .WithTargetSpeed(100)
+                    .Build();
+                yield return new FanOverclockingWithTargetSpeedModelBuilder()
+                    .WithTargetSpeed(50)
+                    .Build();
+                yield return new FanOverclockingWithTargetSpeedModelBuilder()
+                    .Build();
+            }
+        }
 
-    private FanOverclockingWithTargetSpeed CreateFanOverclockingWithTargetSpeed()
-    {
-        return new FanOverclockingWithTargetSpeedBuilder()
-            .WithTargetSpeed(100)
-            .Build();
+        public static IEnumerable<FanOverclockingWithTargetSpeed> FanOverclockings
+        {
+            get
+            {
+                yield return new FanOverclockingWithTargetSpeedBuilder()
+                    .WithTargetSpeed(100)
+                    .Build();
+                yield return new FanOverclockingWithTargetSpeedBuilder()
+                    .WithTargetSpeed(50)
+                    .Build();
+                yield return new FanOverclockingWithTargetSpeedBuilder()
+                    .Build();
+            }
+        }
     }
 }

@@ -19,14 +19,10 @@ public sealed class FanLinearDependenceModelMapperTests
         _fanOverclockingWithLinearDependenceMapper = new FanLinearDependenceModelMapper();
     }
 
-    [Test]
-    public void MapToCoreEntity_ValidModel_ReturnsCoreEntity()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockingModels))]
+    public void MapToCoreEntity_ValidModel_ReturnsCoreEntity(FanOverclockingWithLinearDependenceModel fanOverclockingModel)
     {
         // Arrange
-
-        var fanOverclockingModel = CreateFanOverclockingWithLinearDependenceModel();
-
-
         // Act
 
         var mappedFanOverclocking = _fanOverclockingWithLinearDependenceMapper.MapToCoreEntity(fanOverclockingModel);
@@ -47,13 +43,12 @@ public sealed class FanLinearDependenceModelMapperTests
         });
     }
 
-    [Test]
-    public void MapToCoreEntity_ValidModelAndId_ReturnsCoreEntity()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockingModels))]
+    public void MapToCoreEntity_ValidModelAndId_ReturnsCoreEntity(FanOverclockingWithLinearDependenceModel fanOverclockingModel)
     {
         // Arrange
 
         var fanOverclockingId = Guid.NewGuid();
-        var fanOverclockingModel = CreateFanOverclockingWithLinearDependenceModel();
 
 
         // Act
@@ -76,14 +71,10 @@ public sealed class FanLinearDependenceModelMapperTests
         });
     }
 
-    [Test]
-    public void MapToModel_ValidCoreEntity_ReturnsModel()
+    [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockings))]
+    public void MapToModel_ValidCoreEntity_ReturnsModel(FanOverclockingWithLinearDependence fanOverclockingCore)
     {
         // Arrange
-
-        var fanOverclockingCore = CreateFanOverclockingWithLinearDependence();
-
-
         // Act
 
         var mappedFanOverclocking = _fanOverclockingWithLinearDependenceMapper.MapToModel(fanOverclockingCore);
@@ -103,50 +94,59 @@ public sealed class FanLinearDependenceModelMapperTests
         });
     }
 
-    private FanOverclockingWithLinearDependenceModel CreateFanOverclockingWithLinearDependenceModel()
+    private static class FanOverclockingTestCases
     {
-        return new FanOverclockingWithLinearDependenceModelBuilder()
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(30)
-                           .WithTemperatureValueTarget(25))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(45)
-                           .WithTemperatureValueTarget(40))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(60)
-                           .WithTemperatureValueTarget(50))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(75)
-                           .WithTemperatureValueTarget(65))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(100)
-                           .WithTemperatureValueTarget(75))
-            .Build();
-    }
+        public static IEnumerable<FanOverclockingWithLinearDependenceModel> FanOverclockingModels
+        {
+            get
+            {
+                yield return new FanOverclockingWithLinearDependenceModelBuilder()
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(30)
+                                   .WithTemperatureValueTarget(25))
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(45)
+                                   .WithTemperatureValueTarget(40))
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(60)
+                                   .WithTemperatureValueTarget(50))
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(75)
+                                   .WithTemperatureValueTarget(65))
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(100)
+                                   .WithTemperatureValueTarget(75))
+                    .Build();
+            }
+        }
 
-    private FanOverclockingWithLinearDependence CreateFanOverclockingWithLinearDependence()
-    {
-        return new FanOverclockingWithLinearDependenceBuilder()
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(30)
-                           .WithTemperatureValueTarget(25)
-                           .WithPointIndex(0))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(45)
-                           .WithTemperatureValueTarget(40)
-                           .WithPointIndex(1))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(60)
-                           .WithTemperatureValueTarget(50)
-                           .WithPointIndex(2))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(75)
-                           .WithTemperatureValueTarget(65)
-                           .WithPointIndex(3))
-            .AddTargetPoint(targetPoint =>
-                targetPoint.WithFanSpeedValueTarget(100)
-                           .WithTemperatureValueTarget(75)
-                           .WithPointIndex(4))
-            .Build();
+        public static IEnumerable<FanOverclockingWithLinearDependence> FanOverclockings
+        {
+            get
+            {
+                yield return new FanOverclockingWithLinearDependenceBuilder()
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(30)
+                                   .WithTemperatureValueTarget(25)
+                                   .WithPointIndex(0))
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(45)
+                                   .WithTemperatureValueTarget(40)
+                                   .WithPointIndex(1))
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(60)
+                                   .WithTemperatureValueTarget(50)
+                                   .WithPointIndex(2))
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(75)
+                                   .WithTemperatureValueTarget(65)
+                                   .WithPointIndex(3))
+                    .AddTargetPoint(targetPoint =>
+                        targetPoint.WithFanSpeedValueTarget(100)
+                                   .WithTemperatureValueTarget(75)
+                                   .WithPointIndex(4))
+                    .Build();
+            }
+        }
     }
 }
