@@ -5,10 +5,10 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilder
 public class FanOverclockingWithTargetTemperatureModelBuilder :
     BaseFanOverclockingModelBuilder<FanOverclockingWithTargetTemperatureModelBuilder, FanOverclockingWithTargetTemperatureModel>
 {
-    private int _maxTargetSpeed = 0;
-    private int _minTargetSpeed = 0;
-    private int _targetCoreTemperature = 0;
-    private int _targetMemoryTemperature = 0;
+    protected int _maxTargetSpeed = 0;
+    protected int _minTargetSpeed = 0;
+    protected int _targetCoreTemperature = 0;
+    protected int _targetMemoryTemperature = 0;
 
     public FanOverclockingWithTargetTemperatureModelBuilder WithMaxTargetSpeed(int maxTargetSpeed)
     {

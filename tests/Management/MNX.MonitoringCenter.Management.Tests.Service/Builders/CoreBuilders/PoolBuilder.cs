@@ -7,13 +7,13 @@ public class PoolBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _domain = $"www.pool-domain{_counter++}";
-    private int _port = 8080;
-    private bool _tls = false;
-    private Guid? _ownerId = null;
-    private Guid _cryptocurrencyId = Guid.NewGuid();
-    private Cryptocurrency? _cryptocurrency = null;
+    protected Guid _id = Guid.NewGuid();
+    protected string _domain = $"www.pool-domain{_counter++}";
+    protected int _port = 8080;
+    protected bool _tls = false;
+    protected Guid? _ownerId = null;
+    protected Guid _cryptocurrencyId = Guid.NewGuid();
+    protected Cryptocurrency? _cryptocurrency = null;
 
     public PoolBuilder WithId(Guid id)
     {

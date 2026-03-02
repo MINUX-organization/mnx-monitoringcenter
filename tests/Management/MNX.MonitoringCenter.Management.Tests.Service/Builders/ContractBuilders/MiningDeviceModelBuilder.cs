@@ -7,18 +7,18 @@ public class MiningDeviceModelBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _manufacturer = $"MiningDeviceManufacturer_{_counter}";
-    private string _model = $"MiningDeviceModel_{_counter++}";
-    private string _type = MiningDeviceType.GPU.ToString();
-    private FlightSheetConfirmationState _flightSheetConfirmationState = FlightSheetConfirmationState.Unconfirmed;
-    private Guid? _flightSheetId = null;
-    private string? _flightSheetName = null;
-    private bool _isOnline = false;
-    private string? _minerName = null;
-    private string? _minerVersion = null;
-    private string? _presetName = null;
-    private Guid _rigId = Guid.NewGuid();
+    protected Guid _id = Guid.NewGuid();
+    protected string _manufacturer = $"MiningDeviceManufacturer_{_counter}";
+    protected string _model = $"MiningDeviceModel_{_counter++}";
+    protected string _type = MiningDeviceType.GPU.ToString();
+    protected FlightSheetConfirmationState _flightSheetConfirmationState = FlightSheetConfirmationState.Unconfirmed;
+    protected Guid? _flightSheetId = null;
+    protected string? _flightSheetName = null;
+    protected bool _isOnline = false;
+    protected string? _minerName = null;
+    protected string? _minerVersion = null;
+    protected string? _presetName = null;
+    protected Guid _rigId = Guid.NewGuid();
 
     public MiningDeviceModelBuilder WithId(Guid id)
     {

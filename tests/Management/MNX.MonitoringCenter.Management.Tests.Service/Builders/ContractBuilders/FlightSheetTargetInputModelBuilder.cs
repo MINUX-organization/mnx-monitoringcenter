@@ -6,8 +6,8 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilder
 
 public class FlightSheetTargetInputModelBuilder
 {
-    private MiningConfigInputModel? _miningConfig = null;
-    private Guid _minerId = Guid.NewGuid();
+    protected MiningConfigInputModel? _miningConfig = null;
+    protected Guid _minerId = Guid.NewGuid();
 
     public FlightSheetTargetInputModelBuilder WithMiningConfig(Func<MiningConfigInputModel> factory)
     {

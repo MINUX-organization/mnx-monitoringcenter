@@ -6,9 +6,9 @@ public class MinerAlgorithmBuilder
 {
     private static int _counter = 1;
 
-    private string _name = $"MinerAlgorithm_{_counter++}";
-    private Guid _algorithmId = Guid.NewGuid();
-    private Guid _minerId = Guid.NewGuid();
+    protected string _name = $"MinerAlgorithm_{_counter++}";
+    protected Guid _algorithmId = Guid.NewGuid();
+    protected Guid _minerId = Guid.NewGuid();
 
     public MinerAlgorithmBuilder WithName(string name)
     {

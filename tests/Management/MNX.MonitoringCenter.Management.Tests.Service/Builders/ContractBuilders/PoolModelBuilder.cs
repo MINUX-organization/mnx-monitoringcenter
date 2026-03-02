@@ -6,13 +6,13 @@ public class PoolModelBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _domain = $"www.pool-model-domain{_counter++}";
-    private string _cryptocurrency = $"CryptocurrencyName_{_counter}";
-    private Guid _cryptocurrencyId = Guid.NewGuid();
-    private Guid? _ownerId = null;
-    private int _port = 8080 + _counter++;
-    private bool _tls = false;
+    protected Guid _id = Guid.NewGuid();
+    protected string _domain = $"www.pool-model-domain{_counter++}";
+    protected string _cryptocurrency = $"CryptocurrencyName_{_counter}";
+    protected Guid _cryptocurrencyId = Guid.NewGuid();
+    protected Guid? _ownerId = null;
+    protected int _port = 8080 + _counter++;
+    protected bool _tls = false;
 
     public PoolModelBuilder WithId(Guid id)
     {

@@ -6,12 +6,12 @@ public class CryptocurrencyBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _fullName = $"Crypto_{_counter}";
-    private string _shortName = $"C_{_counter++}";
-    private Guid _algorithmId = Guid.NewGuid();
-    private Guid? _ownerId = null;
-    private Algorithm? _algorithm = null;
+    protected Guid _id = Guid.NewGuid();
+    protected string _fullName = $"Crypto_{_counter}";
+    protected string _shortName = $"C_{_counter++}";
+    protected Guid _algorithmId = Guid.NewGuid();
+    protected Guid? _ownerId = null;
+    protected Algorithm? _algorithm = null;
 
     public CryptocurrencyBuilder WithId(Guid id)
     {

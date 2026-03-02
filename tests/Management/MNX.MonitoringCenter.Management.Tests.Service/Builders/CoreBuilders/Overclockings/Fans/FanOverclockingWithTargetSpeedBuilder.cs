@@ -5,7 +5,7 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Ov
 public class FanOverclockingWithTargetSpeedBuilder :
     BaseFanOverclockingBuilder<FanOverclockingWithTargetSpeedBuilder, FanOverclockingWithTargetSpeed>
 {
-    private int _targetSpeed = 0;
+    protected int _targetSpeed = 0;
 
     public FanOverclockingWithTargetSpeedBuilder WithTargetSpeed(int targetSpeed)
     {

@@ -6,9 +6,9 @@ public class AlgorithmBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _name = $"Algorithm_{_counter++}";
-    private Guid? _ownerId = null;
+    protected Guid _id = Guid.NewGuid();
+    protected string _name = $"Algorithm_{_counter++}";
+    protected Guid? _ownerId = null;
 
     public AlgorithmBuilder WithId(Guid id)
     {

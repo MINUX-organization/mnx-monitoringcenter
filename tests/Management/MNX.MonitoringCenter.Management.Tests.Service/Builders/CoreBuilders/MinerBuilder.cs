@@ -8,17 +8,17 @@ public class MinerBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _name = $"Miner_{_counter}";
-    private string _installationUrl = $"www.install_{_counter}.com";
-    private string _version = $"1.0.{_counter++}";
-    private MiningModeEnum _miningMode = MiningModeEnum.Single;
-    private Guid? _ownerId = null;
-    private MinerTypeEnum _minerType => _ownerId is null ? MinerTypeEnum.Integrated : MinerTypeEnum.Custom;
-    private DeviceTypeManufacturerCombination _supportedDevices = DeviceTypeManufacturerCombination.None;
-    private List<MinerAlgorithm> _supportedAlgorithms = [];
-    private string? _walletWorkerTemplate = null;
-    private string? _poolTemplate = null;
+    protected Guid _id = Guid.NewGuid();
+    protected string _name = $"Miner_{_counter}";
+    protected string _installationUrl = $"www.install_{_counter}.com";
+    protected string _version = $"1.0.{_counter++}";
+    protected MiningModeEnum _miningMode = MiningModeEnum.Single;
+    protected Guid? _ownerId = null;
+    protected MinerTypeEnum _minerType => _ownerId is null ? MinerTypeEnum.Integrated : MinerTypeEnum.Custom;
+    protected DeviceTypeManufacturerCombination _supportedDevices = DeviceTypeManufacturerCombination.None;
+    protected List<MinerAlgorithm> _supportedAlgorithms = [];
+    protected string? _walletWorkerTemplate = null;
+    protected string? _poolTemplate = null;
 
     public MinerBuilder WithId(Guid id)
     {

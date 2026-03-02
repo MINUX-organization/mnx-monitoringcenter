@@ -4,9 +4,9 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Ov
 
 public class FanGraphicPointBuilder
 {
-    private int _pointIndex = 0;
-    private int _fanSpeedValueTarget = 0;
-    private int _temperatureValueTarget = 0;
+    protected int _pointIndex = 0;
+    protected int _fanSpeedValueTarget = 0;
+    protected int _temperatureValueTarget = 0;
 
     public FanGraphicPointBuilder WithFanSpeedValueTarget(int fanSpeedValueTarget)
     {

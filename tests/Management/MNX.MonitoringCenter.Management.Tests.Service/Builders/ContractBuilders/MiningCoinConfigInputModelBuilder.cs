@@ -4,9 +4,9 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilder
 
 public class MiningCoinConfigInputModelBuilder
 {
-    private Guid _poolId = Guid.NewGuid();
-    private Guid _walletId = Guid.NewGuid();
-    private string? _poolPassword = null;
+    protected Guid _poolId = Guid.NewGuid();
+    protected Guid _walletId = Guid.NewGuid();
+    protected string? _poolPassword = null;
 
     public MiningCoinConfigInputModelBuilder WithPoolId(Guid poolId)
     {

@@ -8,11 +8,11 @@ using Miner = Core.Mining.Miner.Miner;
 
 public class FlightSheetTargetBuilder
 {
-    private Guid _id = Guid.NewGuid();
-    private BaseMiningConfig? _miningConfig = null;
-    private Guid _flightSheetId = Guid.NewGuid();
-    private Guid _minerId = Guid.NewGuid();
-    private Miner? _miner = null;
+    protected Guid _id = Guid.NewGuid();
+    protected BaseMiningConfig? _miningConfig = null;
+    protected Guid _flightSheetId = Guid.NewGuid();
+    protected Guid _minerId = Guid.NewGuid();
+    protected Miner? _miner = null;
 
     public FlightSheetTargetBuilder WithId(Guid id)
     {

@@ -5,9 +5,9 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilder
 
 public class MiningCoinConfigModelBuilder
 {
-    private WalletModel? _wallet = null;
-    private PoolModel? _pool = null;
-    private string? _poolPassword = null;
+    protected WalletModel? _wallet = null;
+    protected PoolModel? _pool = null;
+    protected string? _poolPassword = null;
 
     public MiningCoinConfigModelBuilder WithWallet(Func<WalletModelBuilder, WalletModelBuilder> configure)
     {

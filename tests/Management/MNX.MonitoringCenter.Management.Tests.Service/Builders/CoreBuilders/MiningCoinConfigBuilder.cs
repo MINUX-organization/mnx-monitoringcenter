@@ -7,12 +7,12 @@ using Wallet = Core.Mining.Wallet;
 
 public class MiningCoinConfigBuilder
 {
-    private Guid _id = Guid.NewGuid();
-    private Guid _walletId = Guid.NewGuid();
-    private Wallet? _wallet = null;
-    private Guid _poolId = Guid.NewGuid();
-    private Pool? _pool = null;
-    private string? _poolPassword = null;
+    protected Guid _id = Guid.NewGuid();
+    protected Guid _walletId = Guid.NewGuid();
+    protected Wallet? _wallet = null;
+    protected Guid _poolId = Guid.NewGuid();
+    protected Pool? _pool = null;
+    protected string? _poolPassword = null;
 
     public MiningCoinConfigBuilder WithId(Guid id)
     {

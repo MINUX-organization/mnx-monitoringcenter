@@ -6,9 +6,9 @@ public class WalletInputModelBuilder
 {
     private static int _counter = 1;
 
-    private string _name = $"WalletInputModelName_{_counter}";
-    private Guid _cryptocurrencyId = Guid.NewGuid();
-    private string _address = $"WalletInputModelAddress{_counter++}";
+    protected string _name = $"WalletInputModelName_{_counter}";
+    protected Guid _cryptocurrencyId = Guid.NewGuid();
+    protected string _address = $"WalletInputModelAddress{_counter++}";
 
     public WalletInputModelBuilder WithName(string name)
     {

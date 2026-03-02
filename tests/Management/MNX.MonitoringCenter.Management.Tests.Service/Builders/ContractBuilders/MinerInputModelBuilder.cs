@@ -8,13 +8,13 @@ public class MinerInputModelBuilder
 {
     private static int _counter = 1;
 
-    private string _name = $"MinerInputModelName_{_counter}";
-    private string _version = $"1.0.{_counter}";
-    private string _installUrl = $"www.install-miner-input-{_counter}.com";
-    private DeviceTypeManufacturerCombination _supportedDevices = DeviceTypeManufacturerCombination.None;
-    private string _poolTemplate = $"PoolTemplateMinerInput{_counter}";
-    private string _walletWorkerTemplate = $"WalletWorkerTemplateMinerInput{_counter++}";
-    private MiningModeEnum _miningMode = MiningModeEnum.Single;
+    protected string _name = $"MinerInputModelName_{_counter}";
+    protected string _version = $"1.0.{_counter}";
+    protected string _installUrl = $"www.install-miner-input-{_counter}.com";
+    protected DeviceTypeManufacturerCombination _supportedDevices = DeviceTypeManufacturerCombination.None;
+    protected string _poolTemplate = $"PoolTemplateMinerInput{_counter}";
+    protected string _walletWorkerTemplate = $"WalletWorkerTemplateMinerInput{_counter++}";
+    protected MiningModeEnum _miningMode = MiningModeEnum.Single;
 
     public MinerInputModelBuilder WithName(string name)
     {

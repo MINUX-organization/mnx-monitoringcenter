@@ -6,13 +6,13 @@ public class PresetBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _name = $"PresetName_{_counter}";
-    private string _deviceName = $"DeviceName_{_counter++}";
-    private Guid _ownerId = Guid.NewGuid();
-    private bool _isVisible = false;
-    private Guid _overclockingId = Guid.NewGuid();
-    private IOverclocking? _overclocking = null;
+    protected Guid _id = Guid.NewGuid();
+    protected string _name = $"PresetName_{_counter}";
+    protected string _deviceName = $"DeviceName_{_counter++}";
+    protected Guid _ownerId = Guid.NewGuid();
+    protected bool _isVisible = false;
+    protected Guid _overclockingId = Guid.NewGuid();
+    protected IOverclocking? _overclocking = null;
 
     public PresetBuilder WithId(Guid id)
     {

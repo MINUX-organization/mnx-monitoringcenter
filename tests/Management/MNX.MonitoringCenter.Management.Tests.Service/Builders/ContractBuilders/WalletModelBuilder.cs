@@ -6,11 +6,11 @@ public class WalletModelBuilder
 {
     private static int _counter = 1;
     
-    private Guid _id = Guid.NewGuid();
-    private string _name = $"WalletModelName_{_counter}";
-    private string _address = $"WalletModelAddress_{_counter}";
-    private Guid _cryptocurrencyId = Guid.NewGuid();
-    private string _cryptocurrency = $"CryptocurrencyName_{_counter++}";
+    protected Guid _id = Guid.NewGuid();
+    protected string _name = $"WalletModelName_{_counter}";
+    protected string _address = $"WalletModelAddress_{_counter}";
+    protected Guid _cryptocurrencyId = Guid.NewGuid();
+    protected string _cryptocurrency = $"CryptocurrencyName_{_counter++}";
 
     public WalletModelBuilder WithId(Guid id)
     {

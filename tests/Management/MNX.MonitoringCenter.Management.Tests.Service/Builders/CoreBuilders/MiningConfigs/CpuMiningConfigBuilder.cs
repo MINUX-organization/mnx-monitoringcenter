@@ -4,8 +4,8 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Mi
 
 public class CpuMiningConfigBuilder : MiningConfigBuilder<CpuMiningConfigBuilder, CpuMiningConfig>
 {
-    private int? _threads = 1;
-    private int? _hugePages = 0;
+    protected int? _threads = 1;
+    protected int? _hugePages = 0;
 
     public CpuMiningConfigBuilder WithThreads(int? threads)
     {

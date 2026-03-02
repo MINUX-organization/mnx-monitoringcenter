@@ -6,6 +6,7 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests;
+
 [TestFixture]
 public sealed class PoolMapperTests
 {

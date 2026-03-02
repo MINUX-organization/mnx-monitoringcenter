@@ -6,8 +6,8 @@ public class FlightSheetInputModelBuilder
 {
     private static int _counter = 1;
 
-    private string _name = $"FlightSheetInputModelName_{_counter++}";
-    private readonly List<FlightSheetTargetInputModel> _targets = new(0);
+    protected string _name = $"FlightSheetInputModelName_{_counter++}";
+    protected readonly List<FlightSheetTargetInputModel> _targets = new(0);
 
     public FlightSheetInputModelBuilder WithName(string name)
     {

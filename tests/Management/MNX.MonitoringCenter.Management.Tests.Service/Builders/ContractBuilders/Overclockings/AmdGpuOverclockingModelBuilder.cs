@@ -7,21 +7,21 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilder
 public class AmdGpuOverclockingModelBuilder :
     BaseOverclockingModelBuilder<AmdGpuOverclockingModelBuilder, AmdGpuOverclockingModel>
 {
-    private IFanOverclockingModel? _fanOverclocking = null;
-    private int _powerLimit = 0;
-    private int _coreClockLock = 0;
-    private int _coreClockState = 0;
-    private int _coreVoltage = 0;
-    private int _coreVoltageOffset = 0;
-    private int _memoryClockLock = 0;
-    private int _memoryClockState = 0;
-    private int _memoryVoltage = 0;
-    private int _memoryControllerVoltage = 0;
-    private string? _memoryTweak = null;
-    private bool _enhancedOverclock = false;
-    private bool _alternativeDownVoltage = false;
-    private int _socFrequency = 0;
-    private int _socVoltage = 0;
+    protected IFanOverclockingModel? _fanOverclocking = null;
+    protected int _powerLimit = 0;
+    protected int _coreClockLock = 0;
+    protected int _coreClockState = 0;
+    protected int _coreVoltage = 0;
+    protected int _coreVoltageOffset = 0;
+    protected int _memoryClockLock = 0;
+    protected int _memoryClockState = 0;
+    protected int _memoryVoltage = 0;
+    protected int _memoryControllerVoltage = 0;
+    protected string? _memoryTweak = null;
+    protected bool _enhancedOverclock = false;
+    protected bool _alternativeDownVoltage = false;
+    protected int _socFrequency = 0;
+    protected int _socVoltage = 0;
 
     public AmdGpuOverclockingModelBuilder WithFanOverclocking(Func<IFanOverclockingModel> factory)
     {

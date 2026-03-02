@@ -6,16 +6,16 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilder
 public class NvidiaGpuOverclockingModelBuilder :
     BaseOverclockingModelBuilder<NvidiaGpuOverclockingModelBuilder, NvidiaGpuOverclockingModel>
 {
-    private IFanOverclockingModel? _fanOverclocking = null;
-    private int _coreClockLock = 0;
-    private int _coreClockOffset = 0;
-    private int _coreVoltage = 0;
-    private int _coreVoltageOffset = 0;
-    private int _memoryClockLock = 0;
-    private int _memoryClockOffset = 0;
-    private int _memoryVoltage = 0;
-    private int _memoryVoltageOffset = 0;
-    private int _powerLimit = 0;
+    protected IFanOverclockingModel? _fanOverclocking = null;
+    protected int _coreClockLock = 0;
+    protected int _coreClockOffset = 0;
+    protected int _coreVoltage = 0;
+    protected int _coreVoltageOffset = 0;
+    protected int _memoryClockLock = 0;
+    protected int _memoryClockOffset = 0;
+    protected int _memoryVoltage = 0;
+    protected int _memoryVoltageOffset = 0;
+    protected int _powerLimit = 0;
 
     public NvidiaGpuOverclockingModelBuilder WithFanOverclocking(Func<IFanOverclockingModel> factory)
     {

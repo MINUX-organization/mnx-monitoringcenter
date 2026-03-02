@@ -6,10 +6,10 @@ public class PoolInputModelBuilder
 {
     private static int _counter = 1;
 
-    private bool _tls = false;
-    private string _domain = $"www.pool-input-domain-{_counter}";
-    private int _port = 8080 + _counter++;
-    private Guid _cryptocurrencyId = Guid.NewGuid();
+    protected bool _tls = false;
+    protected string _domain = $"www.pool-input-domain-{_counter}";
+    protected int _port = 8080 + _counter++;
+    protected Guid _cryptocurrencyId = Guid.NewGuid();
 
     public PoolInputModelBuilder WithTls(bool tls = true)
     {

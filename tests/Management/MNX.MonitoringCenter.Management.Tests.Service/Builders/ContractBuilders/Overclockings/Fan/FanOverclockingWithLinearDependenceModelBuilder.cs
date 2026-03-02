@@ -5,7 +5,7 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilder
 public class FanOverclockingWithLinearDependenceModelBuilder
     : BaseFanOverclockingModelBuilder<FanOverclockingWithLinearDependenceModelBuilder, FanOverclockingWithLinearDependenceModel>
 {
-    private readonly List<FanGraphicPointModel> _targetPoints = [];
+    protected readonly List<FanGraphicPointModel> _targetPoints = [];
 
     public FanOverclockingWithLinearDependenceModelBuilder AddTargetPoint(
         Func<FanGraphicPointModelBuilder, FanGraphicPointModelBuilder> configure)

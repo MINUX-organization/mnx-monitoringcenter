@@ -5,7 +5,7 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilder
 public class FanOverclockingWithTargetSpeedModelBuilder :
     BaseFanOverclockingModelBuilder<FanOverclockingWithTargetSpeedModelBuilder, FanOverclockingWithTargetSpeedModel>
 {
-    private int _targetSpeed = 0;
+    protected int _targetSpeed = 0;
 
     public FanOverclockingWithTargetSpeedModelBuilder WithTargetSpeed(int targetSpeed)
     {

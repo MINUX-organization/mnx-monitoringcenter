@@ -6,9 +6,9 @@ public class CryptocurrencyInputModelBuilder
 {
     private static int _counter = 1;
 
-    private string _fullName = $"CryptocurrencyInputFullName_{_counter}";
-    private string _shortName = $"CryptoInShortName_{_counter++}";
-    private Guid _algorithmId = Guid.NewGuid();
+    protected string _fullName = $"CryptocurrencyInputFullName_{_counter}";
+    protected string _shortName = $"CryptoInShortName_{_counter++}";
+    protected Guid _algorithmId = Guid.NewGuid();
 
     public CryptocurrencyInputModelBuilder WithFullName(string fullName)
     {

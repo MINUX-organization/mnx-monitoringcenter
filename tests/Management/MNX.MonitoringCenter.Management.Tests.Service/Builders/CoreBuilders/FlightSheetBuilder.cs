@@ -8,10 +8,10 @@ public class FlightSheetBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _name = $"FlightSheet_{_counter++}";
-    private Guid _ownerId = Guid.NewGuid();
-    private List<FlightSheetTarget> _targets = new(0);
+    protected Guid _id = Guid.NewGuid();
+    protected string _name = $"FlightSheet_{_counter++}";
+    protected Guid _ownerId = Guid.NewGuid();
+    protected List<FlightSheetTarget> _targets = new(0);
 
     public FlightSheetBuilder WithId(Guid id)
     {

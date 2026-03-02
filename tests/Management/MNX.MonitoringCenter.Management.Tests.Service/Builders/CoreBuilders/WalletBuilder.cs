@@ -7,12 +7,12 @@ public class WalletBuilder
 {
     private static int _counter = 1;
 
-    private Guid _id = Guid.NewGuid();
-    private string _address = $"WalletAddress_{_counter}";
-    private string _name = $"WalletName_{_counter++}";
-    private Guid _ownerId = Guid.NewGuid();
-    private Guid _cryptocurrencyId = Guid.NewGuid();
-    private Cryptocurrency? _cryptocurrency = null;
+    protected Guid _id = Guid.NewGuid();
+    protected string _address = $"WalletAddress_{_counter}";
+    protected string _name = $"WalletName_{_counter++}";
+    protected Guid _ownerId = Guid.NewGuid();
+    protected Guid _cryptocurrencyId = Guid.NewGuid();
+    protected Cryptocurrency? _cryptocurrency = null;
 
     public WalletBuilder WithId(Guid id)
     {
