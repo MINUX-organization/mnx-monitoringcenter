@@ -43,6 +43,7 @@ public interface IAlgorithmRepository
                       string name,
                       CancellationToken cancellationToken);
 
+    // TODO: Именование метода не отражает его суть.
     /// <summary>
     /// Получить признак существования алгоритма по наименованию,
     /// чей идентификатор не равен идентификатору алгоритма,

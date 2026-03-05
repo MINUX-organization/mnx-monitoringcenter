@@ -117,10 +117,7 @@ public sealed class NvidiaGpuOverclockingInventoryMapperTests
             .WithCoreClockOffset(120)
             .WithCoreVoltage(900)
             .WithCoreVoltageOffset(-50)
-            .WithMemoryClockLock()
             .WithMemoryClockOffset(800)
-            .WithMemoryVoltage()
-            .WithMemoryVoltageOffset()
             .WithFanSpeed(65)
             .WithPowerLimit(105)
             .Build();
