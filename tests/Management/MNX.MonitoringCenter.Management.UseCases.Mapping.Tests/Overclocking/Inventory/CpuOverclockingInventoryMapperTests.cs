@@ -38,12 +38,12 @@ public sealed class CpuOverclockingInventoryMapperTests
 
         // Assert
 
+        Assert.That(mappedCoreCpuOverclocking, Is.Not.Null);
+        Assert.That(mappedCoreCpuOverclocking, Is.TypeOf<CpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedCoreCpuOverclocking, Is.Not.Null);
             Assert.That(mappedCoreCpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedCoreCpuOverclocking.TargetDeviceType, Is.EqualTo(OverclockingTargetDeviceType.CPU));
-            Assert.That(mappedCoreCpuOverclocking, Is.TypeOf<CpuOverclocking>());
 
             var coreCpuOverclocking = (CpuOverclocking)mappedCoreCpuOverclocking;
             Assert.That(coreCpuOverclocking.CoreClockLock, Is.EqualTo(inventoryCpuOverclocking.CoreClockLock));
@@ -69,11 +69,10 @@ public sealed class CpuOverclockingInventoryMapperTests
 
         // Assert
 
+        Assert.That(mappedInventoryCpuOverclocking, Is.Not.Null);
+        Assert.That(mappedInventoryCpuOverclocking, Is.TypeOf<InventoryCpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedInventoryCpuOverclocking, Is.Not.Null);
-            Assert.That(mappedInventoryCpuOverclocking, Is.TypeOf<InventoryCpuOverclocking>());
-
             var inventoryCpuOverclocking = (InventoryCpuOverclocking)mappedInventoryCpuOverclocking;
             Assert.That(inventoryCpuOverclocking.CoreClockLock, Is.EqualTo(coreCpuOverclocking.CoreClockLock));
             Assert.That(inventoryCpuOverclocking.CoreVoltage, Is.EqualTo(coreCpuOverclocking.CoreVoltage));

@@ -30,12 +30,12 @@ public sealed class FanTargetTemperatureModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclocking, Is.Not.Null);
+        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclocking, Is.Not.Null);
             Assert.That(mappedFanOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedFanOverclocking.Type, Is.EqualTo(fanOverclockingModel.FanOverclockingType));
-            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
 
             var fanOverclocking = (FanOverclockingWithTargetTemperature)mappedFanOverclocking;
             Assert.That(fanOverclocking.MaxTargetSpeed, Is.EqualTo(fanOverclockingModel.MaxTargetSpeed));
@@ -60,12 +60,12 @@ public sealed class FanTargetTemperatureModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclocking, Is.Not.Null);
+        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclocking, Is.Not.Null);
             Assert.That(mappedFanOverclocking.Id, Is.EqualTo(fanOverclockingId));
             Assert.That(mappedFanOverclocking.Type, Is.EqualTo(fanOverclockingModel.FanOverclockingType));
-            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
 
             var fanOverclocking = (FanOverclockingWithTargetTemperature)mappedFanOverclocking;
             Assert.That(fanOverclocking.MaxTargetSpeed, Is.EqualTo(fanOverclockingModel.MaxTargetSpeed));
@@ -86,11 +86,11 @@ public sealed class FanTargetTemperatureModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclockingModel, Is.Not.Null);
+        Assert.That(mappedFanOverclockingModel, Is.TypeOf<FanOverclockingWithTargetTemperatureModel>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclockingModel, Is.Not.Null);
             Assert.That(mappedFanOverclockingModel.FanOverclockingType, Is.EqualTo(fanOverclockingCore.Type));
-            Assert.That(mappedFanOverclockingModel, Is.TypeOf<FanOverclockingWithTargetTemperatureModel>());
 
             var fanOverclockingModel = (FanOverclockingWithTargetTemperatureModel)mappedFanOverclockingModel;
             Assert.That(fanOverclockingModel.MaxTargetSpeed, Is.EqualTo(fanOverclockingCore.MaxTargetSpeed));

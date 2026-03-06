@@ -5,10 +5,10 @@ using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Agent;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Fan.Agent;
 
-using AgentFanOverclocking = FanOverclockingWithLinearDependence;
-using CoreFanOverclocking = Core.Overclocking.Gpu.Fan.FanOverclockingWithLinearDependence;
 using AgentFanGraphicPoint = FanGraphicPoint;
+using AgentFanOverclocking = FanOverclockingWithLinearDependence;
 using CoreFanGraphicPoint = Core.Overclocking.Gpu.Fan.FanGraphicPoint;
+using CoreFanOverclocking = Core.Overclocking.Gpu.Fan.FanOverclockingWithLinearDependence;
 
 [TestFixture]
 public sealed class FanLinearDependenceAgentMapperTests
@@ -53,11 +53,10 @@ public sealed class FanLinearDependenceAgentMapperTests
 
         // Assert
 
+        Assert.That(mappedAgentFanOverclocking, Is.Not.Null);
+        Assert.That(mappedAgentFanOverclocking, Is.TypeOf<AgentFanOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedAgentFanOverclocking, Is.Not.Null);
-            Assert.That(mappedAgentFanOverclocking, Is.TypeOf<AgentFanOverclocking>());
-
             var agentFanOverclocking = (AgentFanOverclocking)mappedAgentFanOverclocking;
             AssertTargets(coreFanOverclocking.TargetPoints, agentFanOverclocking.TargetPoints);
         });

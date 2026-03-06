@@ -25,6 +25,7 @@ public sealed class MinerMapperTests
     public void MapToCoreEntity_ValidMinerInputModel_ReturnMiner()
     {
         // Arrange
+
         var inputModel = new MinerInputModelBuilder()
             .WithSupportedDevices(DeviceTypeManufacturerCombination.NvidiaGpu)
             .WithMiningMode(MiningModeEnum.Dual)
@@ -38,9 +39,10 @@ public sealed class MinerMapperTests
 
 
         // Assert
+
+        Assert.That(mappedEntity, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedEntity, Is.Not.Null);
             Assert.That(mappedEntity.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedEntity.Name, Is.EqualTo(inputModel.Name));
             Assert.That(mappedEntity.Version, Is.EqualTo(inputModel.Version));
@@ -79,9 +81,11 @@ public sealed class MinerMapperTests
 
 
         // Assert
+
+        Assert.That(mappedModel, Is.Not.Null);
+        Assert.That(mappedModel.SupportedAlgorithms, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedModel, Is.Not.Null);
             Assert.That(mappedModel.Id, Is.EqualTo(miner.Id));
             Assert.That(mappedModel.Name, Is.EqualTo(miner.Name));
             Assert.That(mappedModel.Version, Is.EqualTo(miner.Version));
@@ -91,7 +95,6 @@ public sealed class MinerMapperTests
             Assert.That(mappedModel.OwnerId, Is.EqualTo(miner.OwnerId));
             Assert.That(mappedModel.PoolTemplate, Is.EqualTo(miner.PoolTemplate));
             Assert.That(mappedModel.WalletWorkerTemplate, Is.EqualTo(miner.WalletWorkerTemplate));
-            Assert.That(mappedModel.SupportedAlgorithms, Is.Not.Null);
             Assert.That(mappedModel.SupportedAlgorithms, Is.Not.Empty);
             Assert.That(mappedModel.SupportedAlgorithms, Has.Count.EqualTo(miner.SupportedAlgorithms.Count));
             CheckSupportedAlgorithms(miner.SupportedAlgorithms, mappedModel.SupportedAlgorithms);

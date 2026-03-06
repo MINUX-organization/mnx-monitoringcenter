@@ -36,9 +36,9 @@ public sealed class CpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedOverclocking, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedOverclocking, Is.Not.Null);
             Assert.That(mappedOverclocking.TargetDeviceType, Is.EqualTo(cpuOverclockingModel.TargetDeviceType));
             Assert.That(mappedOverclocking, Is.TypeOf<CpuOverclocking>());
 
@@ -72,9 +72,9 @@ public sealed class CpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedCpuOverclocking, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedCpuOverclocking, Is.Not.Null);
             Assert.That(mappedCpuOverclocking.TargetDeviceType, Is.EqualTo(cpuOverclockingModel.TargetDeviceType));
             Assert.That(mappedCpuOverclocking, Is.TypeOf<CpuOverclocking>());
 
@@ -103,11 +103,11 @@ public sealed class CpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedCpuOverclockingModel, Is.Not.Null);
+        Assert.That(mappedCpuOverclockingModel, Is.TypeOf<CpuOverclockingModel>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedCpuOverclockingModel, Is.Not.Null);
             Assert.That(mappedCpuOverclockingModel.TargetDeviceType, Is.EqualTo(cpuOverclocking.TargetDeviceType));
-            Assert.That(mappedCpuOverclockingModel, Is.TypeOf<CpuOverclockingModel>());
 
             var cpuOverclockingModel = (CpuOverclockingModel)mappedCpuOverclockingModel;
             Assert.That(cpuOverclockingModel.CoreClockLock, Is.EqualTo(cpuOverclocking.CoreClockLock));

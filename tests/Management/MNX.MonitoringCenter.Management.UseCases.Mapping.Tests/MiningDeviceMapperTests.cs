@@ -39,9 +39,9 @@ public sealed class MiningDeviceMapperTests
 
         // Assert
 
+        Assert.That(mappedModel, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedModel, Is.Not.Null);
             Assert.That(mappedModel.Id, Is.EqualTo(deviceInfo.Id));
             Assert.That(mappedModel.Manufacturer, Is.EqualTo(deviceInfo.Manufacturer));
             Assert.That(mappedModel.Model, Is.EqualTo(deviceInfo.Model));

@@ -35,9 +35,12 @@ public sealed class AgentCommandsMapperTests
     {
         // Arrange
         // Act
+
         var mappedData = _agentCommandsMapper.MapToWorkerSettings(data);
 
+
         // Assert
+
         Assert.That(mappedData, Is.Not.Null);
         Assert.That(mappedData, Is.Not.Empty);
         Assert.That(mappedData, Has.Count.EqualTo(data.Count));
@@ -47,12 +50,12 @@ public sealed class AgentCommandsMapperTests
             var expectedFlightSheet = data[i].FlightSheet;
             var checkingSettingsModel = mappedData[i].SettingsModel;
 
+            Assert.That(mappedData[i], Is.Not.Null);
+            Assert.That(checkingSettingsModel, Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(mappedData[i], Is.Not.Null);
                 Assert.That(mappedData[i].WorkerId, Is.EqualTo(data[i].Device.Id));
 
-                Assert.That(checkingSettingsModel, Is.Not.Null);
                 Assert.That(checkingSettingsModel.MinerName, Is.EqualTo(expectedFlightSheet.Miner.Name));
                 Assert.That(checkingSettingsModel.MinerVersion, Is.EqualTo(expectedFlightSheet.Miner.Version));
                 Assert.That(checkingSettingsModel.AdditionalArguments, Is.EqualTo(expectedFlightSheet.MiningConfig.AdditionalArguments));
@@ -70,9 +73,9 @@ public sealed class AgentCommandsMapperTests
 
         for (int i = 0; i < expected.Count; i++)
         {
+            Assert.That(checking[i], Is.Not.Null);
             Assert.Multiple(() =>
             {
-                Assert.That(checking[i], Is.Not.Null);
                 Assert.That(checking[i].WalletAddress, Is.EqualTo(expected[i].Wallet.Address));
                 Assert.That(checking[i].AlgorithmName, Is.EqualTo(expected[i].Wallet.Cryptocurrency.Algorithm.Name));
                 Assert.That(checking[i].PoolHost, Is.EqualTo(expected[i].Pool.Domain));

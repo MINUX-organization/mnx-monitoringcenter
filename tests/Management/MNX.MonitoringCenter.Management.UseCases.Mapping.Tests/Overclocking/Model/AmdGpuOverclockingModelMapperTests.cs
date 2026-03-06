@@ -50,12 +50,12 @@ public sealed class AmdGpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedAmdGpuOverclocking, Is.Not.Null);
+        Assert.That(mappedAmdGpuOverclocking, Is.TypeOf<AmdGpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedAmdGpuOverclocking, Is.Not.Null);
             Assert.That(mappedAmdGpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedAmdGpuOverclocking.TargetDeviceType, Is.EqualTo(amdGpuOverclockingModel.TargetDeviceType));
-            Assert.That(mappedAmdGpuOverclocking, Is.TypeOf<AmdGpuOverclocking>());
 
             var amdGpuOverclocking = (AmdGpuOverclocking)mappedAmdGpuOverclocking;
             Assert.That(amdGpuOverclocking.PowerLimit, Is.EqualTo(amdGpuOverclockingModel.PowerLimit));
@@ -98,12 +98,12 @@ public sealed class AmdGpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedAmdGpuOverclocking, Is.Not.Null);
+        Assert.That(mappedAmdGpuOverclocking, Is.TypeOf<AmdGpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedAmdGpuOverclocking, Is.Not.Null);
             Assert.That(mappedAmdGpuOverclocking.Id, Is.EqualTo(originalGpuOverclocking.Id));
             Assert.That(mappedAmdGpuOverclocking.TargetDeviceType, Is.EqualTo(amdGpuOverclockingModel.TargetDeviceType));
-            Assert.That(mappedAmdGpuOverclocking, Is.TypeOf<AmdGpuOverclocking>());
 
             var amdGpuOverclocking = (AmdGpuOverclocking)mappedAmdGpuOverclocking;
             Assert.That(amdGpuOverclocking.PowerLimit, Is.EqualTo(amdGpuOverclockingModel.PowerLimit));
@@ -145,11 +145,11 @@ public sealed class AmdGpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedAmdGpuOverclockingModel, Is.Not.Null);
+        Assert.That(mappedAmdGpuOverclockingModel, Is.TypeOf<AmdGpuOverclockingModel>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedAmdGpuOverclockingModel, Is.Not.Null);
             Assert.That(mappedAmdGpuOverclockingModel.TargetDeviceType, Is.EqualTo(amdGpuOverclocking.TargetDeviceType));
-            Assert.That(mappedAmdGpuOverclockingModel, Is.TypeOf<AmdGpuOverclockingModel>());
 
             var amdGpuOverclockingModel = (AmdGpuOverclockingModel)mappedAmdGpuOverclockingModel;
             Assert.That(amdGpuOverclockingModel.PowerLimit, Is.EqualTo(amdGpuOverclocking.PowerLimit));

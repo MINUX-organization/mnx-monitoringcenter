@@ -36,12 +36,12 @@ public sealed class AmdGpuOverclockingInventoryMapperTests
 
         // Assert
 
+        Assert.That(mappedCoreGpuOverclocking, Is.Not.Null);
+        Assert.That(mappedCoreGpuOverclocking, Is.TypeOf<CoreAmdGpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedCoreGpuOverclocking, Is.Not.Null);
             Assert.That(mappedCoreGpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedCoreGpuOverclocking.TargetDeviceType, Is.EqualTo(OverclockingTargetDeviceType.AmdGPU));
-            Assert.That(mappedCoreGpuOverclocking, Is.TypeOf<CoreAmdGpuOverclocking>());
 
             var coreGpuOverclocking = (CoreAmdGpuOverclocking)mappedCoreGpuOverclocking;
             Assert.That(coreGpuOverclocking.CoreClockLock, Is.EqualTo(inventoryGpuOverclocking.CoreClockLock));
@@ -76,11 +76,10 @@ public sealed class AmdGpuOverclockingInventoryMapperTests
 
         // Assert
 
+        Assert.That(mappedInventoryGpuOverclocking, Is.Not.Null);
+        Assert.That(mappedInventoryGpuOverclocking, Is.TypeOf<InventoryAmdGpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedInventoryGpuOverclocking, Is.Not.Null);
-            Assert.That(mappedInventoryGpuOverclocking, Is.TypeOf<InventoryAmdGpuOverclocking>());
-
             var inventoryGpuOverclocking = (InventoryAmdGpuOverclocking)mappedInventoryGpuOverclocking;
             Assert.That(inventoryGpuOverclocking.CoreClockLock, Is.EqualTo(coreGpuOverclocking.CoreClockLock)); ;
             Assert.That(inventoryGpuOverclocking.CoreClockState, Is.EqualTo(coreGpuOverclocking.CoreClockState));

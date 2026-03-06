@@ -31,6 +31,7 @@ public sealed class MiningConfigMapperTests
     public void MapToCoreEntity_ValidCpuMiningConfigInputModels_ReturnMiningConfigs(MiningConfigInputModel data)
     {
         // Arrange
+
         var cpuData = (CpuMiningConfigInputModel)data;
         var hugePages = cpuData.HugePages;
         var threadsCount = cpuData.ThreadsCount;
@@ -43,9 +44,9 @@ public sealed class MiningConfigMapperTests
 
         // Assert
 
+        Assert.That(mappedData, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedData, Is.Not.Null);
             Assert.That(mappedData, Is.TypeOf<CpuMiningConfig>());
 
             var mappedCpuConfig = (CpuMiningConfig)mappedData;
@@ -70,9 +71,9 @@ public sealed class MiningConfigMapperTests
 
         // Assert
 
+        Assert.That(mappedData, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedData, Is.Not.Null);
             Assert.That(mappedData, Is.TypeOf<GpuMiningConfig>());
 
             var mappedGpuConfig = (GpuMiningConfig)mappedData;
@@ -98,9 +99,9 @@ public sealed class MiningConfigMapperTests
 
         // Assert
 
+        Assert.That(mappedModel, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedModel, Is.Not.Null);
             Assert.That(mappedModel, Is.TypeOf<CpuMiningConfigModel>());
 
             var cpuMappedModel = (CpuMiningConfigModel)mappedModel;
@@ -123,9 +124,9 @@ public sealed class MiningConfigMapperTests
 
         // Assert
 
+        Assert.That(mappedModel, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedModel, Is.Not.Null);
             Assert.That(mappedModel, Is.TypeOf<GpuMiningConfigModel>());
 
             var gpuMappedModel = (GpuMiningConfigModel)mappedModel;

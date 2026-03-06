@@ -36,9 +36,9 @@ public sealed class PoolMapperTests
 
         // Assert
 
+        Assert.That(mappedPool, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedPool, Is.Not.Null);
             Assert.That(mappedPool.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedPool.Tls, Is.EqualTo(addPoolCommand.Model.Tls));
             Assert.That(mappedPool.IsDomain(), Is.EqualTo(false));
@@ -67,9 +67,9 @@ public sealed class PoolMapperTests
 
         // Assert
 
+        Assert.That(mappedPool, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedPool, Is.Not.Null);
             Assert.That(mappedPool.Id, Is.EqualTo(editPoolCommand.Id));
             Assert.That(mappedPool.Tls, Is.EqualTo(editPoolCommand.Model.Tls));
             Assert.That(mappedPool.IsDomain(), Is.EqualTo(false));
@@ -100,9 +100,9 @@ public sealed class PoolMapperTests
 
         // Assert
 
+        Assert.That(mappedModel, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedModel, Is.Not.Null);
             Assert.That(mappedModel.Id, Is.EqualTo(pool.Id));
             Assert.That(mappedModel.OwnerId, Is.EqualTo(pool.OwnerId));
             Assert.That(mappedModel.Tls, Is.EqualTo(pool.Tls));

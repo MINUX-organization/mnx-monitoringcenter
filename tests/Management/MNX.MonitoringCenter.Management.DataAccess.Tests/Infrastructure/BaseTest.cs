@@ -45,7 +45,10 @@ public abstract class BaseTest
     public async Task OneTimeTearDown()
     {
         if (Context is not null)
+        {
             await Context.DisposeAsync();
+            await _connection.DisposeAsync();
+        }
 
         await IntegrationTestContainer.StopAsync();
     }

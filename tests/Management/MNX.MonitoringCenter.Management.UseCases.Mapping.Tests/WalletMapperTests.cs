@@ -34,9 +34,9 @@ public sealed class WalletMapperTests
 
         // Assert
 
+        Assert.That(mappedWallet, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedWallet, Is.Not.Null);
             Assert.That(mappedWallet.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedWallet.Name, Is.EqualTo(addWalletCommand.Model.Name));
             Assert.That(mappedWallet.Address, Is.EqualTo(addWalletCommand.Model.Address));
@@ -63,9 +63,9 @@ public sealed class WalletMapperTests
 
         // Assert
 
+        Assert.That(mappedWallet, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedWallet, Is.Not.Null);
             Assert.That(mappedWallet.Id, Is.EqualTo(editWalletCommand.Id));
             Assert.That(mappedWallet.Name, Is.EqualTo(editWalletCommand.Model.Name));
             Assert.That(mappedWallet.Address, Is.EqualTo(editWalletCommand.Model.Address));
@@ -93,9 +93,9 @@ public sealed class WalletMapperTests
 
         // Assert
 
+        Assert.That(mappedModel, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedModel, Is.Not.Null);
             Assert.That(mappedModel.Id, Is.EqualTo(wallet.Id));
             Assert.That(mappedModel.Name, Is.EqualTo(wallet.Name));
             Assert.That(mappedModel.Address, Is.EqualTo(wallet.Address));

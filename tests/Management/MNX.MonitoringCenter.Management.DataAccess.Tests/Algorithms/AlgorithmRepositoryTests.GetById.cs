@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.DataAccess.Algorithm;
-using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Algorithms;
 
@@ -28,9 +27,9 @@ public partial class AlgorithmRepositoryTests
 
         // Assert
 
+        Assert.That(checkingAlgorithm, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(checkingAlgorithm, Is.Not.Null);
             Assert.That(checkingAlgorithm.Id, Is.EqualTo(algorithm.Id));
             Assert.That(checkingAlgorithm.OwnerId, Is.EqualTo(algorithm.OwnerId));
             Assert.That(checkingAlgorithm.Name, Is.EqualTo(algorithm.Name));
@@ -57,9 +56,9 @@ public partial class AlgorithmRepositoryTests
 
         // Assert
 
+        Assert.That(checkingAlgorithm, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(checkingAlgorithm, Is.Not.Null);
             Assert.That(checkingAlgorithm.Id, Is.EqualTo(algorithm.Id));
             Assert.That(checkingAlgorithm.Name, Is.EqualTo(algorithm.Name));
             Assert.That(checkingAlgorithm.OwnerId, Is.Null);

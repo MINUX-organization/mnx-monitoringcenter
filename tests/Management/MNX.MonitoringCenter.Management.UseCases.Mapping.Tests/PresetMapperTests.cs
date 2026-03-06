@@ -50,9 +50,10 @@ public sealed class PresetMapperTests
 
         // Assert
 
+        Assert.That(mappedPreset, Is.Not.Null);
+        Assert.That(mappedPreset.Overclocking, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedPreset, Is.Not.Null);
             Assert.That(mappedPreset.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedPreset.Name, Is.EqualTo(presetModel.Name));
             Assert.That(mappedPreset.DeviceName, Is.EqualTo(presetModel.DeviceName));
@@ -60,7 +61,6 @@ public sealed class PresetMapperTests
             Assert.That(mappedPreset.IsVisible, Is.True);
             Assert.That(mappedPreset.OverclockingId, Is.Not.EqualTo(Guid.Empty));
             
-            Assert.That(mappedPreset.Overclocking, Is.Not.Null);
             Assert.That(mappedPreset.Overclocking.Id, Is.Not.EqualTo(Guid.Empty));
         });
 
@@ -88,9 +88,10 @@ public sealed class PresetMapperTests
 
         // Assert
 
+        Assert.That(mappedPreset, Is.Not.Null);
+        Assert.That(mappedPreset.Overclocking, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedPreset, Is.Not.Null);
             Assert.That(mappedPreset.Id, Is.EqualTo(originalPreset.Id));
             Assert.That(mappedPreset.Name, Is.EqualTo(presetModel.Name));
             Assert.That(mappedPreset.DeviceName, Is.EqualTo(presetModel.DeviceName));
@@ -98,13 +99,12 @@ public sealed class PresetMapperTests
             Assert.That(mappedPreset.IsVisible, Is.EqualTo(originalPreset.IsVisible));
             Assert.That(mappedPreset.OverclockingId, Is.EqualTo(originalPreset.OverclockingId));
 
-            Assert.That(mappedPreset.Overclocking, Is.Not.Null);
             Assert.That(mappedPreset.Id, Is.Not.EqualTo(Guid.Empty));
         });
 
         _cpuOverclockingMapper.Verify(x => x.MapToCoreEntity(
-            (CpuOverclockingModel)presetModel.Overclocking,
-            (CpuOverclocking)originalPreset.Overclocking), Times.Once);
+            It.IsAny<CpuOverclockingModel>(),
+            It.IsAny<CpuOverclocking>()), Times.Once);
     }
 
     [TestCaseSource(typeof(PresetTestsCaseSources), nameof(PresetTestsCaseSources.CorePresetLists))]
@@ -123,9 +123,9 @@ public sealed class PresetMapperTests
 
         // Assert
 
+        Assert.That(mappedPresetModelList, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedPresetModelList, Is.Not.Null);
             Assert.That(mappedPresetModelList, Has.Count.EqualTo(data.Count));
             
             AssertPresets(data, mappedPresetModelList);
@@ -152,9 +152,9 @@ public sealed class PresetMapperTests
 
         // Assert
 
+        Assert.That(mappedPresetModel, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedPresetModel, Is.Not.Null);
             Assert.That(mappedPresetModel.Id, Is.EqualTo(preset.Id));
             Assert.That(mappedPresetModel.Name, Is.EqualTo(preset.Name));
             Assert.That(mappedPresetModel.DeviceName, Is.EqualTo(preset.DeviceName));

@@ -49,12 +49,12 @@ public sealed class NvidiaGpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedNvidiaCpuOverclocking, Is.Not.Null);
+        Assert.That(mappedNvidiaCpuOverclocking, Is.TypeOf<NvidiaGpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedNvidiaCpuOverclocking, Is.Not.Null);
             Assert.That(mappedNvidiaCpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedNvidiaCpuOverclocking.TargetDeviceType, Is.EqualTo(nvidiaGpuOverclockingModel.TargetDeviceType));
-            Assert.That(mappedNvidiaCpuOverclocking, Is.TypeOf<NvidiaGpuOverclocking>());
 
             var nvidiaGpuOverclocking = (NvidiaGpuOverclocking)mappedNvidiaCpuOverclocking;
             Assert.That(nvidiaGpuOverclocking.CoreClockLock, Is.EqualTo(nvidiaGpuOverclockingModel.CoreClockLock));
@@ -95,12 +95,12 @@ public sealed class NvidiaGpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedGpuOverclocking, Is.Not.Null);
+        Assert.That(mappedGpuOverclocking, Is.TypeOf<NvidiaGpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedGpuOverclocking, Is.Not.Null);
             Assert.That(mappedGpuOverclocking.Id, Is.EqualTo(originalGpuOverclocking.Id));
             Assert.That(mappedGpuOverclocking.TargetDeviceType, Is.EqualTo(nvidiaGpuOverclockingModel.TargetDeviceType));
-            Assert.That(mappedGpuOverclocking, Is.TypeOf<NvidiaGpuOverclocking>());
 
             var nvidiaGpuOverclocking = (NvidiaGpuOverclocking)mappedGpuOverclocking;
             Assert.That(nvidiaGpuOverclocking.PowerLimit, Is.EqualTo(nvidiaGpuOverclockingModel.PowerLimit));
@@ -138,11 +138,11 @@ public sealed class NvidiaGpuOverclockingModelMapperTests
 
         // Assert
 
+        Assert.That(mappedNvidiaGpuOverclockingModel, Is.Not.Null);
+        Assert.That(mappedNvidiaGpuOverclockingModel, Is.TypeOf<NvidiaGpuOverclockingModel>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedNvidiaGpuOverclockingModel, Is.Not.Null);
             Assert.That(mappedNvidiaGpuOverclockingModel.TargetDeviceType, Is.EqualTo(nvidiaGpuOverclocking.TargetDeviceType));
-            Assert.That(mappedNvidiaGpuOverclockingModel, Is.TypeOf<NvidiaGpuOverclockingModel>());
 
             var nvidiaGpuOverclockingModel = (NvidiaGpuOverclockingModel)mappedNvidiaGpuOverclockingModel;
             Assert.That(nvidiaGpuOverclockingModel.PowerLimit, Is.EqualTo(nvidiaGpuOverclocking.PowerLimit));

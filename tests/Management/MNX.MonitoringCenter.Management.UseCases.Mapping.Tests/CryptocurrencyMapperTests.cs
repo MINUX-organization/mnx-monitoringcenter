@@ -32,9 +32,9 @@ public sealed class CryptocurrencyMapperTests
 
         // Assert
 
+        Assert.That(mappedEntity, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedEntity, Is.Not.Null);
             Assert.That(mappedEntity.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedEntity.ShortName, Is.EqualTo(model.ShortName));
             Assert.That(mappedEntity.FullName, Is.EqualTo(model.FullName));
@@ -62,9 +62,9 @@ public sealed class CryptocurrencyMapperTests
 
         // Assert
 
+        Assert.That(mappedModel, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedModel, Is.Not.Null);
             Assert.That(mappedModel.Id, Is.EqualTo(cryptocurrency.Id));
             Assert.That(mappedModel.ShortName, Is.EqualTo(cryptocurrency.ShortName));
             Assert.That(mappedModel.FullName, Is.EqualTo(cryptocurrency.FullName));

@@ -65,9 +65,9 @@ public sealed class FlightSheetMapperTests
 
         // Assert
 
+        Assert.That(mappedFlightSheet, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFlightSheet, Is.Not.Null);
             Assert.That(mappedFlightSheet.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedFlightSheet.Name, Is.EqualTo(flightSheetInputModel.Name));
             Assert.That(mappedFlightSheet.OwnerId, Is.EqualTo(userId));
@@ -116,9 +116,9 @@ public sealed class FlightSheetMapperTests
 
         // Assert
 
+        Assert.That(mappedFlightSheet, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFlightSheet, Is.Not.Null);
             Assert.That(mappedFlightSheet.Id, Is.EqualTo(commandId));
             Assert.That(mappedFlightSheet.OwnerId, Is.EqualTo(userId));
             Assert.That(mappedFlightSheet.Name, Is.EqualTo(editFlightSheetCommand.Model.Name));
@@ -156,9 +156,10 @@ public sealed class FlightSheetMapperTests
 
 
         // Assert
+
+        Assert.That(mappedFlightSheet, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFlightSheet, Is.Not.Null);
             Assert.That(mappedFlightSheet.Id, Is.EqualTo(flightSheet.Id));
             Assert.That(mappedFlightSheet.Name, Is.EqualTo(flightSheet.Name));
             Assert.That(mappedFlightSheet.Targets, Has.Count.EqualTo(flightSheet.Targets.Count));

@@ -38,12 +38,12 @@ public sealed class NvidiaGpuOverclockingInventoryMapperTests
 
         // Assert
 
+        Assert.That(mappedCoreGpuOverclocking, Is.Not.Null);
+        Assert.That(mappedCoreGpuOverclocking, Is.TypeOf<CoreNvidiaGpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedCoreGpuOverclocking, Is.Not.Null);
             Assert.That(mappedCoreGpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedCoreGpuOverclocking.TargetDeviceType, Is.EqualTo(OverclockingTargetDeviceType.NvidiaGPU));
-            Assert.That(mappedCoreGpuOverclocking, Is.TypeOf<CoreNvidiaGpuOverclocking>());
 
             var coreGpuOverclocking = (CoreNvidiaGpuOverclocking)mappedCoreGpuOverclocking;
             Assert.That(coreGpuOverclocking.PowerLimit, Is.EqualTo(inventoryGpuOverclocking.PowerLimit));
@@ -80,11 +80,10 @@ public sealed class NvidiaGpuOverclockingInventoryMapperTests
 
         // Assert
 
+        Assert.That(mappedInventoryGpuOverclocking, Is.Not.Null);
+        Assert.That(mappedInventoryGpuOverclocking, Is.TypeOf<InventoryNvidiaGpuOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedInventoryGpuOverclocking, Is.Not.Null);
-            Assert.That(mappedInventoryGpuOverclocking, Is.TypeOf<InventoryNvidiaGpuOverclocking>());
-
             var inventoryGpuOverclocking = (InventoryNvidiaGpuOverclocking)mappedInventoryGpuOverclocking;
             Assert.That(inventoryGpuOverclocking.PowerLimit, Is.EqualTo(coreGpuOverclocking.PowerLimit));
             Assert.That(inventoryGpuOverclocking.CoreClockLock, Is.EqualTo(coreGpuOverclocking.CoreClockLock));
