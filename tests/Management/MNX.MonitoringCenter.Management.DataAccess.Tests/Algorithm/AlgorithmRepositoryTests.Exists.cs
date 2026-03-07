@@ -1,6 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
-namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Algorithms;
+namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Algorithm;
 
 public partial class AlgorithmRepositoryTests
 {

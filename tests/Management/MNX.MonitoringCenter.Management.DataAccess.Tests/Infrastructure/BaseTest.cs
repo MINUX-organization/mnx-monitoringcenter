@@ -38,7 +38,10 @@ public abstract class BaseTest
     public async Task ResetDatabase()
     {
         if (_respawner is not null && _connection is not null)
+        {
             await _respawner.ResetAsync(_connection);
+            Context.ChangeTracker.Clear();
+        }
     }
 
     [OneTimeTearDown]

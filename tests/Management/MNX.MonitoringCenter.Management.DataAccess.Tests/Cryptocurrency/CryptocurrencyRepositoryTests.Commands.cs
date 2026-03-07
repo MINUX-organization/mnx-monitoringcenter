@@ -60,6 +60,7 @@ public partial class CryptocurrencyRepositoryTests
 
         Context.ChangeTracker.Clear();
 
+
         // Act
 
         var exception = Assert.ThrowsAsync<DbUpdateException>(async () =>
@@ -71,6 +72,7 @@ public partial class CryptocurrencyRepositoryTests
                     algo.WithOwner(userId))
                 .Build());
         });
+
 
         // Assert
         
@@ -93,11 +95,13 @@ public partial class CryptocurrencyRepositoryTests
                 algo.WithOwner(userId))
             .Build());
 
+
         // Act
 
         await _cryptocurrencyRepository.Remove(cryptocurrencyId, userId);
         var checkingCryptocurrency = await _cryptocurrencyRepository
             .GetAvailableById(cryptocurrencyId, userId, default);
+
 
         // Assert
 

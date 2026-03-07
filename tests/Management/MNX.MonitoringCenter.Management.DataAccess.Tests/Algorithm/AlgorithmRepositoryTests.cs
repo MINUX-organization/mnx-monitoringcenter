@@ -2,7 +2,7 @@
 using MNX.MonitoringCenter.Management.DataAccess.Tests.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 
-namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Algorithms;
+namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Algorithm;
 
 public partial class AlgorithmRepositoryTests : BaseTest
 {

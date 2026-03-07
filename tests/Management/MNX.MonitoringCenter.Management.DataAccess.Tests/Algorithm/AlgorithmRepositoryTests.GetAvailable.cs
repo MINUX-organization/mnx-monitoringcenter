@@ -1,7 +1,7 @@
 ﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases;
 
-namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Algorithms;
+namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Algorithm;
 
 using Algorithm = Core.Mining.Algorithm;
 
