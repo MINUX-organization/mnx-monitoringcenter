@@ -15,6 +15,11 @@ public class MinerAlgorithmRepository : IMinerAlgorithmRepository
         _context = context ?? throw new ArgumentNullException(nameof(context));
     }
 
+    public List<MinerAlgorithm> GetAll()
+    {
+        return _context.MinerAlgorithms.AsNoTracking().ToList();
+    }
+
     /// <inheritdoc/>
     public IAsyncEnumerable<MinerAlgorithm> GetMinerAlgorithmsByAlgorithmId(Guid id)
     {
