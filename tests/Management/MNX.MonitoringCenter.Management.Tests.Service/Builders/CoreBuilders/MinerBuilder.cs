@@ -74,11 +74,13 @@ public class MinerBuilder
         return this;
     }
 
-    public MinerBuilder AddAlgorithm(Func<MinerAlgorithmBuilder, MinerAlgorithmBuilder> configure)
+    public MinerBuilder AddAlgorithm(Func<MinerAlgorithmBuilder, MinerAlgorithmBuilder>? configure = null)
     {
         var builder = new MinerAlgorithmBuilder();
-        builder = configure(builder);
-        _supportedAlgorithms.Add(builder.Build());
+        builder = configure?.Invoke(builder) ?? builder;
+        _supportedAlgorithms.Add(builder
+            .WithMinerId(_id)
+            .Build());
         return this;
     }
 

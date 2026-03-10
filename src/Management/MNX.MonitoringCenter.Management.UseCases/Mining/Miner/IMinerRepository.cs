@@ -40,6 +40,7 @@ public interface IMinerRepository
     /// <returns> Признак существования майнера. </returns>
     Task<bool> Exists(Guid userId, string minerName, string minerVersion, CancellationToken cancellationToken);
 
+    // TODO: По именованию метода операция не является очевидной в данном методе.
     /// <summary>
     /// Проверить существование майнера по идентификатору пользователя и наименованию майнера,
     /// исключая майнер с идентификатором, равным minerId.

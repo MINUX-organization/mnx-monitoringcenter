@@ -99,8 +99,7 @@ public sealed class MiningDeviceMapperTests
                                                          .WithVersion(minerVersion)
                                                          .WithMiningMode(MiningModeEnum.Triple)
                                                          .WithSupportedDevices(DeviceTypeManufacturerCombination.NvidiaGpu)
-                                                         .AddAlgorithm(algo =>
-                                                            algo.WithMinerId(minerId))))
+                                                         .AddAlgorithm()))
                                    .AddTarget(target =>
                                         target.WithMiningConfig(() =>
                                               {
@@ -120,8 +119,7 @@ public sealed class MiningDeviceMapperTests
                                               .WithMiner(miner =>
                                                 miner.WithMiningMode(MiningModeEnum.Dual)
                                                      .WithSupportedDevices(DeviceTypeManufacturerCombination.NvidiaGpu)
-                                                     .AddAlgorithm(algo =>
-                                                        algo.WithMinerId(minerId)))))
+                                                     .AddAlgorithm())))
                     .WithDeviceType(MiningDeviceType.GPU)
                     .WithLifeCycleStatus(MiningDeviceLifeCycleStatus.Offline)
                     .WithPreset(preset =>

@@ -69,9 +69,9 @@ public sealed class MinerMapperTests
             .WithOwner()
             .WithPoolTemplate("{template1, template2, template3, template4}")
             .WithWalletWorkerTemplate("{tempalte5, template6, template7}")
-            .AddAlgorithm(algo => algo.WithMinerId(minerId))
-            .AddAlgorithm(algo => algo.WithMinerId(minerId))
-            .AddAlgorithm(algo => algo.WithMinerId(minerId))
+            .AddAlgorithm()
+            .AddAlgorithm()
+            .AddAlgorithm()
             .Build();
 
 
