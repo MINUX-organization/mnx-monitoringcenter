@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Data.Common;
 
-namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Infrastructure;
+namespace MNX.MonitoringCenter.Management.DataAccess.Tests;
 
 public abstract class BaseTest
 {

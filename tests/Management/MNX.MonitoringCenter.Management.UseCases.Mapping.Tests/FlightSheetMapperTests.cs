@@ -216,7 +216,6 @@ public sealed class FlightSheetMapperTests
         return
         [
             new FlightSheetTargetBuilder()
-                .WithFlightSheetId(flightSheetId)
                 .WithMiner(miner =>
                     miner.WithId(minerId)
                          .WithOwner(userId)
@@ -246,7 +245,6 @@ public sealed class FlightSheetMapperTests
                 })
                 .Build(),
             new FlightSheetTargetBuilder()
-                .WithFlightSheetId(flightSheetId)
                 .WithMiner(miner =>
                     miner.WithId(minerId)
                          .WithOwner(userId)

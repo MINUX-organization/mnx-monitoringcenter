@@ -1,5 +1,4 @@
 ﻿using MNX.MonitoringCenter.Management.DataAccess.Pool;
-using MNX.MonitoringCenter.Management.DataAccess.Tests.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Pool;

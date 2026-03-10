@@ -24,7 +24,7 @@ public sealed class NvidiaGpuOverclockingInventoryMapperTests
     }
 
     [Test]
-    public void MapToCoreEntity()
+    public void MapToCoreEntity_ValidInventoryModel_ReturnsCoreEntity()
     {
         // Arrange
 
@@ -66,7 +66,7 @@ public sealed class NvidiaGpuOverclockingInventoryMapperTests
     }
 
     [Test]
-    public void MapToModel()
+    public void MapToModel_ValidCoreEntity_ReturnsInventoryModel()
     {
         // Arrange
 
@@ -116,7 +116,10 @@ public sealed class NvidiaGpuOverclockingInventoryMapperTests
             .WithCoreClockOffset(120)
             .WithCoreVoltage(900)
             .WithCoreVoltageOffset(-50)
+            .WithMemoryClockLock()
             .WithMemoryClockOffset(800)
+            .WithMemoryVoltage()
+            .WithMemoryVoltageOffset()
             .WithFanSpeed(65)
             .WithPowerLimit(105)
             .Build();

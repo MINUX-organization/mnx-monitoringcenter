@@ -1,5 +1,4 @@
 ﻿using MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
-using MNX.MonitoringCenter.Management.DataAccess.Tests.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Cryptocurrency;

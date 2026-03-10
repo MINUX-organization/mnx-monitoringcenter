@@ -46,7 +46,12 @@ public class WalletBuilder
         _cryptocurrencyId = _cryptocurrency.Id;
         return this;
     }
-
+    public WalletBuilder WithCryptocurrency(Cryptocurrency cryptocurrency)
+    {
+        _cryptocurrency = cryptocurrency;
+        _cryptocurrencyId = cryptocurrency.Id;
+        return this;
+    }
     public Wallet Build()
     {
         return new Wallet

@@ -3,7 +3,6 @@ using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
 using MNX.MonitoringCenter.Management.DataAccess.Mapping;
 using MNX.MonitoringCenter.Management.DataAccess.Preset;
-using MNX.MonitoringCenter.Management.DataAccess.Tests.Infrastructure;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings.Fans;

@@ -1,6 +1,6 @@
 ﻿using Testcontainers.PostgreSql;
 
-namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Infrastructure;
+namespace MNX.MonitoringCenter.Management.DataAccess.Tests;
 
 public static class IntegrationTestContainer
 {

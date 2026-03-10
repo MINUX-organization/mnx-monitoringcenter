@@ -125,8 +125,7 @@ public sealed class AgentCommandsMapperTests
                             .WithId(flightSheet1Id)
                             .WithName("FlightSheet1")
                             .AddTarget(target =>
-                                target.WithFlightSheetId(flightSheet1Id)
-                                      .WithMiningConfig(() =>
+                                target.WithMiningConfig(() =>
                                       {
                                           return new GpuMiningConfigBuilder()
                                             .WithAdditionalArguments("Argument1, Argument2")
@@ -159,8 +158,7 @@ public sealed class AgentCommandsMapperTests
                         new FlightSheetBuilder()
                             .WithId(flightSheet2Id)
                             .AddTarget(target =>
-                                target.WithFlightSheetId(flightSheet2Id)
-                                      .WithMiningConfig(() =>
+                                target.WithMiningConfig(() =>
                                       {
                                           return new GpuMiningConfigBuilder()
                                             .WithAdditionalArguments("Argument1, Argument2")
@@ -193,8 +191,7 @@ public sealed class AgentCommandsMapperTests
                         new FlightSheetBuilder()
                             .WithId(flightSheet3Id)
                             .AddTarget(target =>
-                                target.WithFlightSheetId(flightSheet3Id)
-                                      .WithMiner(miner =>
+                                target.WithMiner(miner =>
                                         miner.WithId(guids.MinerId)
                                              .WithOwner(guids.UserId)
                                              .WithSupportedDevices(DeviceTypeManufacturerCombination.IntelCpu)

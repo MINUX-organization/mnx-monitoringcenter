@@ -80,8 +80,7 @@ public sealed class MiningDeviceMapperTests
                         flightSheet.WithId(flightSheetId)
                                    .WithOwnerId(ownerId)
                                    .AddTarget(target =>
-                                        target.WithFlightSheetId(flightSheetId)
-                                              .WithMiningConfig(() =>
+                                        target.WithMiningConfig(() =>
                                               {
                                                   return new GpuMiningConfigBuilder()
                                                         .WithConfigFileContent("content")
@@ -103,8 +102,7 @@ public sealed class MiningDeviceMapperTests
                                                          .AddAlgorithm(algo =>
                                                             algo.WithMinerId(minerId))))
                                    .AddTarget(target =>
-                                        target.WithFlightSheetId(flightSheetId)
-                                              .WithMiningConfig(() =>
+                                        target.WithMiningConfig(() =>
                                               {
                                                   return new CpuMiningConfigBuilder()
                                                         .WithConfigFileContent("content")

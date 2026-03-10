@@ -77,14 +77,9 @@ public partial class PresetRepositoryTests
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.Preset))]
-    public void Update_NonexistentPreset_ShouldThrowAnPostgresException(Preset data)
+    public void Update_NonexistentPreset_ShouldThrowAnDbUpdateConcurrencyException(Preset data)
     {
         // Arrange
-
-        var presetId = data.Id;
-        var userId = PresetsTestCaseSource.UserId;
-
-
         // Act
 
         var exception = Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>

@@ -1,7 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.DataAccess.Algorithm;
 using MNX.MonitoringCenter.Management.DataAccess.Miner;
 using MNX.MonitoringCenter.Management.DataAccess.MinerAlgorithm;
-using MNX.MonitoringCenter.Management.DataAccess.Tests.Infrastructure;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Miner;
 

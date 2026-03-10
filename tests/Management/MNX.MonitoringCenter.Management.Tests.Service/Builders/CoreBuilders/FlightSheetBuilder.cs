@@ -35,7 +35,9 @@ public class FlightSheetBuilder
     {
         var builder = new FlightSheetTargetBuilder();
         builder = configure(builder);
-        _targets.Add(builder.Build());
+        _targets.Add(builder
+            .WithFlightSheetId(_id)
+            .Build());
         return this;
     }
 
