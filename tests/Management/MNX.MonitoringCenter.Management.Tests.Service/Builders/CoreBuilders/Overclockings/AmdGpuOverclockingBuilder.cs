@@ -29,7 +29,7 @@ public class AmdGpuOverclockingBuilder :
         return this;
     }
 
-    public AmdGpuOverclockingBuilder WithAlternativeDownVoltage(bool alternativeDownVoltage)
+    public AmdGpuOverclockingBuilder WithAlternativeDownVoltage(bool alternativeDownVoltage = true)
     {
         _alternativeDownVoltage = alternativeDownVoltage;
         return this;

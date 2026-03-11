@@ -4,7 +4,7 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Mi
 
 using MiningDevice = Core.Mining.MiningDevice.MiningDevice;
 
-public class MiningDeviceBuilder<TBuilder>
+public abstract class MiningDeviceBuilder<TBuilder>
     where TBuilder : MiningDeviceBuilder<TBuilder>
 {
     protected static int _counter = 1;
@@ -45,15 +45,5 @@ public class MiningDeviceBuilder<TBuilder>
         return (TBuilder)this;
     }
 
-    public virtual MiningDevice Build()
-    {
-        return new MiningDevice
-        {
-            Id = _id,
-            Manufacturer = _manufacturer,
-            Model = _model,
-            OwnerId = _ownerId,
-            Type = _type,
-        };
-    }
+    public abstract MiningDevice Build();
 }
