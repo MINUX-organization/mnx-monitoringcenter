@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
+﻿using MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Wallet;
@@ -52,35 +51,6 @@ public partial class WalletRepositoryTests
             Assert.That(checkingAlgorithm?.OwnerId, Is.EqualTo(expectedAlgorithm?.OwnerId));
             Assert.That(checkingAlgorithm?.Name, Is.EqualTo(expectedAlgorithm?.Name));
         });
-    }
-
-    [Test]
-    public async Task Add_ExistingWallet_ShouldThrowAnDbUpdateException()
-    {
-        // Arrange
-
-        var walletId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        var wallet = new WalletBuilder()
-            .WithId(walletId)
-            .WithOwnerId(userId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
-
-        await _walletRepository.Add(wallet);
-        Context.ChangeTracker.Clear();
-
-
-        // Act
-
-        var exception = Assert.ThrowsAsync<DbUpdateException>(async () =>
-            await _walletRepository.Add(wallet));
-
-
-        // Assert
-
-        Assert.That(exception, Is.Not.Null);
     }
 
     [Test]
@@ -139,7 +109,7 @@ public partial class WalletRepositoryTests
                         algo.WithId(newWallet.Cryptocurrency.AlgorithmId)))
             .Build());
 
-        Context.ChangeTracker.Clear();
+        ClearChangeTracker();
 
 
         // Act

@@ -6,8 +6,11 @@ public class GpuMiningConfigBuilder : MiningConfigBuilder<GpuMiningConfigBuilder
 {
     public override GpuMiningConfig Build()
     {
-        var entity = new GpuMiningConfig();
-        ApplyBaseProperties(entity);
-        return entity;
+        return new GpuMiningConfig()
+        {
+            AdditionalArguments = _additionalArguments,
+            ConfigFileContent = _configFileContent,
+            CoinConfigs = _coinConfigs,
+        };
     }
 }

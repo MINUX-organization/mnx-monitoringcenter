@@ -22,14 +22,13 @@ public class CpuMiningConfigModelBuilder :
 
     public override BaseMiningConfigModel Build()
     {
-        var (additionalArguments, configFileContent, coinConfigs) = GetBaseData();
         return new CpuMiningConfigModel
         {
-            AdditionalArguments = additionalArguments,
-            ConfigFileContent = configFileContent,
+            AdditionalArguments = _additionalArguments,
+            ConfigFileContent = _configFileContent,
             HugePages = _hugePages,
             ThreadsCount = _threadsCount,
-            CoinConfigs = coinConfigs
+            CoinConfigs = _coinConfigs
         };
     }
 }

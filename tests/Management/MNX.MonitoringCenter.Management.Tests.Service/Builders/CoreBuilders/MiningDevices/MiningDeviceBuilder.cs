@@ -7,7 +7,7 @@ using MiningDevice = Core.Mining.MiningDevice.MiningDevice;
 public abstract class MiningDeviceBuilder<TBuilder>
     where TBuilder : MiningDeviceBuilder<TBuilder>
 {
-    protected static int _counter = 1;
+    private static int _counter = 1;
 
     protected Guid _id = Guid.NewGuid();
     protected string _manufacturer = $"DeviceManufacturer_{_counter}";

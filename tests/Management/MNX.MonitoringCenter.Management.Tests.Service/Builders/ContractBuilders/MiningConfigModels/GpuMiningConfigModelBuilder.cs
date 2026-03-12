@@ -7,12 +7,11 @@ public class GpuMiningConfigModelBuilder :
 {
     public override BaseMiningConfigModel Build()
     {
-        var (additionalArguments, configFileContent, coinConfigs) = GetBaseData();
         return new GpuMiningConfigModel
         {
-            AdditionalArguments = additionalArguments,
-            ConfigFileContent = configFileContent,
-            CoinConfigs = coinConfigs
+            AdditionalArguments = _additionalArguments,
+            ConfigFileContent = _configFileContent,
+            CoinConfigs = _coinConfigs
         };
     }
 }

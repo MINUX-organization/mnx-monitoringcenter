@@ -46,6 +46,13 @@ public class CryptocurrencyBuilder
         return this;
     }
 
+    public CryptocurrencyBuilder WithAlgorithm(Algorithm algorithm)
+    {
+        _algorithm = algorithm;
+        _algorithmId = algorithm.Id;
+        return this;
+    }
+
     public Cryptocurrency Build()
     {
         return new Cryptocurrency

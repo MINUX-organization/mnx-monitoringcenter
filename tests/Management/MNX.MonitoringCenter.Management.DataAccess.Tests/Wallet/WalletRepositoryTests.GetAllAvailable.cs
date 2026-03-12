@@ -3,8 +3,6 @@ using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Wallet;
 
-using Wallet = Core.Mining.Wallet;
-
 public partial class WalletRepositoryTests
 {
     [TestCaseSource(typeof(WalletsTestCaseSource), nameof(WalletsTestCaseSource.WalletLists))]
@@ -62,35 +60,6 @@ public partial class WalletRepositoryTests
                 Assert.That(checkingCryptocurrency?.ShortName, Is.EqualTo(expectedCryptocurrency?.ShortName));
                 Assert.That(checkingCryptocurrency?.AlgorithmId, Is.EqualTo(expectedCryptocurrency?.AlgorithmId));
             });
-        }
-    }
-
-    private static class WalletsTestCaseSource
-    {
-        public static Guid UserId = Guid.NewGuid();
-
-        public static IEnumerable<List<Wallet>> WalletLists
-        {
-            get
-            {
-                yield return
-                [
-                    new WalletBuilder()
-                        .WithOwnerId(UserId)
-                        .WithCryptocurrency(crypto =>
-                            crypto.WithAlgorithm())
-                        .Build(),
-                    new WalletBuilder()
-                        .WithOwnerId(UserId)
-                        .WithCryptocurrency(crypto =>
-                            crypto.WithAlgorithm())
-                        .Build(),
-                    new WalletBuilder()
-                        .WithCryptocurrency(crypto =>
-                            crypto.WithAlgorithm())
-                        .Build(),
-                ];
-            }
         }
     }
 }

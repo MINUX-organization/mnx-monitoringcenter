@@ -127,24 +127,19 @@ public sealed class FanLinearDependenceModelMapperTests
                 yield return new FanOverclockingWithLinearDependenceBuilder()
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(30)
-                                   .WithTemperatureValueTarget(25)
-                                   .WithPointIndex(0))
+                                   .WithTemperatureValueTarget(25))
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(45)
-                                   .WithTemperatureValueTarget(40)
-                                   .WithPointIndex(1))
+                                   .WithTemperatureValueTarget(40))
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(60)
-                                   .WithTemperatureValueTarget(50)
-                                   .WithPointIndex(2))
+                                   .WithTemperatureValueTarget(50))
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(75)
-                                   .WithTemperatureValueTarget(65)
-                                   .WithPointIndex(3))
+                                   .WithTemperatureValueTarget(65))
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(100)
-                                   .WithTemperatureValueTarget(75)
-                                   .WithPointIndex(4))
+                                   .WithTemperatureValueTarget(75))
                     .Build();
             }
         }

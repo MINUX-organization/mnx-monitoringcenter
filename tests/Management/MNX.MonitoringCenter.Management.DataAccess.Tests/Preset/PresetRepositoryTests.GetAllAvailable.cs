@@ -30,7 +30,7 @@ public partial class PresetRepositoryTests
 
         Assert.That(checkingPresets, Is.Not.Null);
         Assert.That(checkingPresets, Has.Count.EqualTo(expectedCount));
-        AssertPresetsWithNvidiaGpuOverclocking(query.ToList(), checkingPresets);
+        AssertPresetsWithNvidiaGpuOverclocking([.. query], checkingPresets);
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.PresetsWithNvidiaGpuOverclocking))]
@@ -59,7 +59,7 @@ public partial class PresetRepositoryTests
 
         Assert.That(checkingPresets, Is.Not.Null);
         Assert.That(checkingPresets, Has.Count.EqualTo(expectedCount));
-        AssertPresetsWithNvidiaGpuOverclocking(query.ToList(), checkingPresets);
+        AssertPresetsWithNvidiaGpuOverclocking([.. query], checkingPresets);
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.PresetsWithNvidiaGpuOverclocking))]

@@ -8,10 +8,10 @@ public class FanOverclockingWithLinearDependenceModelBuilder
     protected readonly List<FanGraphicPointModel> _targetPoints = [];
 
     public FanOverclockingWithLinearDependenceModelBuilder AddTargetPoint(
-        Func<FanGraphicPointModelBuilder, FanGraphicPointModelBuilder> configure)
+        Func<FanGraphicPointModelBuilder, FanGraphicPointModelBuilder>? configure = null)
     {
         var builder = new FanGraphicPointModelBuilder();
-        builder = configure(builder);
+        builder = configure?.Invoke(builder) ?? builder;
         _targetPoints.Add(builder.Build());
         return this;
     }

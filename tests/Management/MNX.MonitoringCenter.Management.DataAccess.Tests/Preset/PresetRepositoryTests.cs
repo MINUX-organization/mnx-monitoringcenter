@@ -31,8 +31,8 @@ public partial class PresetRepositoryTests : BaseTest
 
     private static void AssertPresetsWithNvidiaGpuOverclocking(List<Preset> expected, List<Preset> checking)
     {
-        expected = expected.OrderBy(x => x.Name).ToList();
-        checking = checking.OrderBy(x => x.Name).ToList();
+        expected = [..expected.OrderBy(x => x.Name)];
+        checking = [..checking.OrderBy(x => x.Name)];
 
         for (var i = 0; i < expected.Count; i++)
         {
@@ -195,7 +195,6 @@ public partial class PresetRepositoryTests : BaseTest
 
         public static IEnumerable<Preset> Preset
         {
-            // CPU-разгон на данный момент не поддерживается.
             get
             {
                 yield return new PresetBuilder()
@@ -231,32 +230,25 @@ public partial class PresetRepositoryTests : BaseTest
                             .WithFanOverclocking(() =>
                                 new FanOverclockingWithLinearDependenceBuilder()
                                     .AddTargetPoint(point =>
-                                        point.WithPointIndex(0)
-                                             .WithFanSpeedValueTarget(35)
+                                        point.WithFanSpeedValueTarget(35)
                                              .WithTemperatureValueTarget(40))
                                     .AddTargetPoint(point =>
-                                        point.WithPointIndex(0)
-                                             .WithFanSpeedValueTarget(45)
+                                        point.WithFanSpeedValueTarget(45)
                                              .WithTemperatureValueTarget(50))
                                     .AddTargetPoint(point =>
-                                        point.WithPointIndex(0)
-                                             .WithFanSpeedValueTarget(55)
+                                        point.WithFanSpeedValueTarget(55)
                                              .WithTemperatureValueTarget(60))
                                     .AddTargetPoint(point =>
-                                        point.WithPointIndex(0)
-                                             .WithFanSpeedValueTarget(65)
+                                        point.WithFanSpeedValueTarget(65)
                                              .WithTemperatureValueTarget(70))
                                     .AddTargetPoint(point =>
-                                        point.WithPointIndex(0)
-                                             .WithFanSpeedValueTarget(75)
+                                        point.WithFanSpeedValueTarget(75)
                                              .WithTemperatureValueTarget(80))
                                     .AddTargetPoint(point =>
-                                        point.WithPointIndex(0)
-                                             .WithFanSpeedValueTarget(85)
+                                        point.WithFanSpeedValueTarget(85)
                                              .WithTemperatureValueTarget(90))
                                     .AddTargetPoint(point =>
-                                        point.WithPointIndex(0)
-                                             .WithFanSpeedValueTarget(100)
+                                        point.WithFanSpeedValueTarget(100)
                                              .WithTemperatureValueTarget(100))
                                     .Build())
                             .Build())

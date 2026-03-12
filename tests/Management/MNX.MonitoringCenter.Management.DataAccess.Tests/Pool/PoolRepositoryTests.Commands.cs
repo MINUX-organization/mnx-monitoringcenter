@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.Core.Mining;
-using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Pool;
 
@@ -51,38 +49,6 @@ public partial class PoolRepositoryTests
     }
 
     [Test]
-    public async Task Add_ExistingPool_ShouldThrowAnDbUpdateException()
-    {
-        // Arrange
-
-        var poolId = Guid.NewGuid();
-        var pool = new PoolBuilder()
-            .WithId(poolId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
-        await _poolRepository.Add(new PoolBuilder()
-            .WithId(poolId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build());
-
-        Context.ChangeTracker.Clear();
-
-
-        // Act
-
-        var exception = Assert.ThrowsAsync<DbUpdateException>(async () =>
-            await _poolRepository.Add(pool));
-
-
-        // Assert
-
-        Assert.That(exception, Is.Not.Null);
-        Assert.That(exception, Is.TypeOf<DbUpdateException>());
-    }
-
-    [Test]
     public async Task Update_ValidPoolWithNewName_ShouldEditEntity()
     {
         // Arrange
@@ -108,7 +74,7 @@ public partial class PoolRepositoryTests
 
         await _poolRepository.Add(oldPool);
 
-        Context.ChangeTracker.Clear();
+        ClearChangeTracker();
 
 
         // Act

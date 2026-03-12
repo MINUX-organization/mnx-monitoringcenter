@@ -31,19 +31,33 @@ public class FlightSheetBuilder
         return this;
     }
 
-    public FlightSheetBuilder AddTarget(Func<FlightSheetTargetBuilder, FlightSheetTargetBuilder> configure)
+    public FlightSheetBuilder AddTarget(Func<FlightSheetTargetBuilder, FlightSheetTargetBuilder>? configure = null)
     {
         var builder = new FlightSheetTargetBuilder();
-        builder = configure(builder);
+        builder = configure?.Invoke(builder) ?? builder;
         _targets.Add(builder
             .WithFlightSheetId(_id)
             .Build());
         return this;
     }
 
+    public FlightSheetBuilder AddTarget(FlightSheetTarget target)
+    {
+        _targets.Add(target);
+        return this;
+    }
+
     public FlightSheetBuilder WithTargets(Func<List<FlightSheetTarget>> factory)
     {
+        _targets.Clear();
         _targets.AddRange(factory());
+        return this;
+    }
+
+    public FlightSheetBuilder WithTargets(List<FlightSheetTarget> targets)
+    {
+        _targets.Clear();
+        _targets.AddRange(targets);
         return this;
     }
 

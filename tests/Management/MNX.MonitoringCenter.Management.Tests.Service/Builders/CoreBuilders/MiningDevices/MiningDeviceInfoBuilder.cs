@@ -61,6 +61,13 @@ public class MiningDeviceInfoBuilder : MiningDeviceBuilder<MiningDeviceInfoBuild
         return this;
     }
 
+    public MiningDeviceInfoBuilder WithFlightSheet(FlightSheet flightSheet)
+    {
+        _flightSheet = flightSheet;
+        _flightSheetId = flightSheet.Id;
+        return this;
+    }
+
     public override MiningDeviceInfo Build()
     {
         return new MiningDeviceInfo

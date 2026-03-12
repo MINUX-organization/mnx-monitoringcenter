@@ -29,6 +29,12 @@ public class AmdGpuOverclockingBuilder :
         return this;
     }
 
+    public AmdGpuOverclockingBuilder WithFanOverclocking(IFanOverclocking fanOverclocking)
+    {
+        _fanOverclocking = fanOverclocking;
+        return this;
+    }
+
     public AmdGpuOverclockingBuilder WithAlternativeDownVoltage(bool alternativeDownVoltage = true)
     {
         _alternativeDownVoltage = alternativeDownVoltage;

@@ -51,6 +51,13 @@ public class PresetBuilder
         return this;
     }
 
+    public PresetBuilder WithOverclocking(IOverclocking overclocking)
+    {
+        _overclocking = overclocking;
+        _overclockingId = overclocking.Id;
+        return this;
+    }
+
     public Preset Build()
     {
         return new Preset

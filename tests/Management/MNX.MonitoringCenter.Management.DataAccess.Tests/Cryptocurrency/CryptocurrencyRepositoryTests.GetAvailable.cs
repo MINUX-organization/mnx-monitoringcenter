@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
-using MNX.MonitoringCenter.Management.UseCases;
+﻿using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Cryptocurrency;
 
@@ -87,35 +86,6 @@ public partial class CryptocurrencyRepositoryTests
                 Assert.That(checking[i].Algorithm?.OwnerId, Is.EqualTo(expected[i].Algorithm?.OwnerId));
                 Assert.That(checking[i].Algorithm?.Name, Is.EqualTo(expected[i].Algorithm?.Name));
             });
-        }
-    }
-
-    private static class CryptocurrencyTestCaseSource
-    {
-        public static Guid UserId = Guid.NewGuid();
-
-        public static IEnumerable<List<Cryptocurrency>> CryptocurrencyList
-        {
-            get
-            {
-                yield return
-                [
-                    new CryptocurrencyBuilder()
-                        .WithOwner(UserId)
-                        .WithAlgorithm(algo =>
-                            algo.WithOwner(UserId))
-                        .Build(),
-                    new CryptocurrencyBuilder()
-                        .WithOwner(UserId)
-                        .WithAlgorithm(algo =>
-                            algo.WithOwner(UserId))
-                        .Build(),
-                    new CryptocurrencyBuilder()
-                        .WithAlgorithm(algo =>
-                            algo.WithName("DomainAlgorithm_1"))
-                        .Build()
-                ];
-            }
         }
     }
 }

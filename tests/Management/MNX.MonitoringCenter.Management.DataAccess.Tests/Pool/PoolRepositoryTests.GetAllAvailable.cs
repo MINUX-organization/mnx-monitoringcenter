@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
-using MNX.MonitoringCenter.Management.UseCases;
+﻿using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Pool;
 
@@ -84,35 +83,6 @@ public partial class PoolRepositoryTests
                 Assert.That(checkingCryptocurrency?.ShortName, Is.EqualTo(expectedCryptocurrency?.ShortName));
                 Assert.That(checkingCryptocurrency?.AlgorithmId, Is.EqualTo(expectedCryptocurrency?.AlgorithmId));
             });
-        }
-    }
-
-    private static class PoolsTestCaseSource
-    {
-        public static Guid UserId = Guid.NewGuid();
-
-        public static IEnumerable<List<Pool>> Pools
-        {
-            get
-            {
-                yield return
-                [
-                    new PoolBuilder()
-                        .WithOwner(UserId)
-                        .WithCryptocurrency(crypto =>
-                            crypto.WithAlgorithm())
-                        .Build(),
-                    new PoolBuilder()
-                        .WithOwner(UserId)
-                        .WithCryptocurrency(crypto =>
-                            crypto.WithAlgorithm())
-                        .Build(),
-                    new PoolBuilder()
-                        .WithCryptocurrency(crypto =>
-                            crypto.WithAlgorithm())
-                        .Build(),
-                ];
-            }
         }
     }
 }

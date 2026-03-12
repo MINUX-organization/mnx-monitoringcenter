@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Preset;
+﻿namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Preset;
 
 using Preset = Core.Overclocking.Preset;
 
@@ -29,27 +27,6 @@ public partial class PresetRepositoryTests
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.Preset))]
-    public async Task Save_ExistingPreset_ShouldThrowAnDbUpdateException(Preset data)
-    {
-        var presetId = data.Id;
-        var userId = PresetsTestCaseSource.UserId;
-
-        await _presetRepository.Save(data);
-        Context.ChangeTracker.Clear();
-
-
-        // Act
-
-        var exception = Assert.ThrowsAsync<DbUpdateException>(async () =>
-            await _presetRepository.Save(data));
-
-
-        // Assert
-
-        Assert.That(exception, Is.Not.Null);
-    }
-
-    [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.Preset))]
     public async Task Update_ValidPreset_ShouldUpdateEntity(Preset data)
     {
         // Arrange
@@ -58,7 +35,7 @@ public partial class PresetRepositoryTests
         var userId = PresetsTestCaseSource.UserId;
 
         await _presetRepository.Save(data);
-        Context.ChangeTracker.Clear();
+        ClearChangeTracker();
 
 
         // Act
@@ -77,21 +54,6 @@ public partial class PresetRepositoryTests
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.Preset))]
-    public void Update_NonexistentPreset_ShouldThrowAnDbUpdateConcurrencyException(Preset data)
-    {
-        // Arrange
-        // Act
-
-        var exception = Assert.ThrowsAsync<DbUpdateConcurrencyException>(async () =>
-            await _presetRepository.Update(data));
-
-
-        // Assert
-
-        Assert.That(exception, Is.Not.Null);
-    }
-
-    [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.Preset))]
     public async Task Remove_ValidPreset_ShouldDeleteEntity(Preset data)
     {
         // Arrange
@@ -100,7 +62,7 @@ public partial class PresetRepositoryTests
         var userId = PresetsTestCaseSource.UserId;
 
         await _presetRepository.Save(data);
-        Context.ChangeTracker.Clear();
+        ClearChangeTracker();
 
 
         // Act

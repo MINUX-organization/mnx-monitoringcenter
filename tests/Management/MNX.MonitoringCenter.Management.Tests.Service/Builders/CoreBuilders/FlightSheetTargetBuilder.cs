@@ -31,12 +31,25 @@ public class FlightSheetTargetBuilder
         return this;
     }
 
-    public FlightSheetTargetBuilder WithMiner(Func<MinerBuilder, MinerBuilder> configure)
+    public FlightSheetTargetBuilder WithMiningConfig(BaseMiningConfig config)
+    {
+        _miningConfig = config;
+        return this;
+    }
+
+    public FlightSheetTargetBuilder WithMiner(Func<MinerBuilder, MinerBuilder>? configure = null)
     {
         var builder = new MinerBuilder();
-        builder = configure(builder);
+        builder = configure?.Invoke(builder) ?? builder;
         _miner = builder.Build();
         _minerId = _miner.Id;
+        return this;
+    }
+
+    public FlightSheetTargetBuilder WithMiner(Miner miner)
+    {
+        _miner = miner;
+        _minerId = miner.Id;
         return this;
     }
 

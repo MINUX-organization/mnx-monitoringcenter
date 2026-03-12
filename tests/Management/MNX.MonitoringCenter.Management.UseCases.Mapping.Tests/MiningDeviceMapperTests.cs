@@ -1,6 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
@@ -133,16 +131,13 @@ public sealed class MiningDeviceMapperTests
                                     {
                                         return new FanOverclockingWithLinearDependenceBuilder()
                                             .AddTargetPoint(point =>
-                                                point.WithPointIndex(0)
-                                                     .WithFanSpeedValueTarget(20)
+                                                point.WithFanSpeedValueTarget(20)
                                                      .WithTemperatureValueTarget(35))
                                             .AddTargetPoint(point =>
-                                                point.WithPointIndex(1)
-                                                     .WithFanSpeedValueTarget(50)
+                                                point.WithFanSpeedValueTarget(50)
                                                      .WithTemperatureValueTarget(65))
                                             .AddTargetPoint(point =>
-                                                point.WithPointIndex(2)
-                                                     .WithFanSpeedValueTarget(100)
+                                                point.WithFanSpeedValueTarget(100)
                                                      .WithTemperatureValueTarget(80))
                                             .Build();
                                     })

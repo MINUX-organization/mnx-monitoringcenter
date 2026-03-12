@@ -7,6 +7,7 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 public class MinerBuilder
 {
     private static int _counter = 1;
+    private MinerTypeEnum _minerType => _ownerId is null ? MinerTypeEnum.Integrated : MinerTypeEnum.Custom;
 
     protected Guid _id = Guid.NewGuid();
     protected string _name = $"Miner_{_counter}";
@@ -14,7 +15,6 @@ public class MinerBuilder
     protected string _version = $"1.0.{_counter++}";
     protected MiningModeEnum _miningMode = MiningModeEnum.Single;
     protected Guid? _ownerId = null;
-    protected MinerTypeEnum _minerType => _ownerId is null ? MinerTypeEnum.Integrated : MinerTypeEnum.Custom;
     protected DeviceTypeManufacturerCombination _supportedDevices = DeviceTypeManufacturerCombination.None;
     protected List<MinerAlgorithm> _supportedAlgorithms = [];
     protected string? _walletWorkerTemplate = null;
@@ -81,6 +81,26 @@ public class MinerBuilder
         _supportedAlgorithms.Add(builder
             .WithMinerId(_id)
             .Build());
+        return this;
+    }
+
+    public MinerBuilder AddAlgorithm(MinerAlgorithm algorithm)
+    {
+        _supportedAlgorithms.Add(algorithm);
+        return this;
+    }
+
+    public MinerBuilder WithAlgorithms(Func<List<MinerAlgorithm>> factory)
+    {
+        _supportedAlgorithms.Clear();
+        _supportedAlgorithms.AddRange(factory());
+        return this;
+    }
+
+    public MinerBuilder WithAlgorithms(List<MinerAlgorithm> algorithms)
+    {
+        _supportedAlgorithms.Clear();
+        _supportedAlgorithms.AddRange(algorithms);
         return this;
     }
 

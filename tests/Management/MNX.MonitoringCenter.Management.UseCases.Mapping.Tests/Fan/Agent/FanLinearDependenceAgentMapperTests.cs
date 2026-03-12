@@ -28,20 +28,16 @@ public sealed class FanLinearDependenceAgentMapperTests
 
         var coreFanOverclocking = new FanOverclockingWithLinearDependenceBuilder()
             .AddTargetPoint(point =>
-                point.WithPointIndex(0)
-                     .WithFanSpeedValueTarget(40)
+                point.WithFanSpeedValueTarget(40)
                      .WithTemperatureValueTarget(30))
             .AddTargetPoint(point =>
-                point.WithPointIndex(1)
-                     .WithFanSpeedValueTarget(55)
+                point.WithFanSpeedValueTarget(55)
                      .WithTemperatureValueTarget(45))
             .AddTargetPoint(point =>
-                point.WithPointIndex(2)
-                     .WithFanSpeedValueTarget(70)
+                point.WithFanSpeedValueTarget(70)
                      .WithTemperatureValueTarget(60))
             .AddTargetPoint(point =>
-                point.WithPointIndex(3)
-                     .WithFanSpeedValueTarget(85)
+                point.WithFanSpeedValueTarget(85)
                      .WithTemperatureValueTarget(75))
             .Build();
 

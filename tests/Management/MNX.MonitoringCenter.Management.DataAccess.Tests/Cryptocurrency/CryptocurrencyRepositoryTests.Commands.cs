@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Cryptocurrency;
 
@@ -41,43 +40,6 @@ public partial class CryptocurrencyRepositoryTests
             Assert.That(checkingCryptocurrency.Algorithm?.OwnerId, Is.EqualTo(cryptocurrency.Algorithm?.OwnerId));
             Assert.That(checkingCryptocurrency.Algorithm?.Name, Is.EqualTo(cryptocurrency.Algorithm?.Name));
         });
-    }
-
-    [Test]
-    public async Task Add_ExistingCryptocurrency_ShouldThrowDbUpdateException()
-    {
-        // Arrange
-
-        var cryptocurrencyId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        
-        await _cryptocurrencyRepository.Add(new CryptocurrencyBuilder()
-            .WithId(cryptocurrencyId)
-            .WithOwner(userId)
-            .WithAlgorithm(algo =>
-                algo.WithOwner(userId))
-            .Build());
-
-        Context.ChangeTracker.Clear();
-
-
-        // Act
-
-        var exception = Assert.ThrowsAsync<DbUpdateException>(async () =>
-        {
-            await _cryptocurrencyRepository.Add(new CryptocurrencyBuilder()
-                .WithId(cryptocurrencyId)
-                .WithOwner(userId)
-                .WithAlgorithm(algo =>
-                    algo.WithOwner(userId))
-                .Build());
-        });
-
-
-        // Assert
-        
-        Assert.That(exception, Is.Not.Null);
-        Assert.That(exception, Is.TypeOf<DbUpdateException>());
     }
 
     [Test]

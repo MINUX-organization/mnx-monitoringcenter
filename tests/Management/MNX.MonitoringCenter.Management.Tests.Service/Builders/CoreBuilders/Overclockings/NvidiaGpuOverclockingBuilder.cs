@@ -24,6 +24,12 @@ public class NvidiaGpuOverclockingBuilder :
         return this;
     }
 
+    public NvidiaGpuOverclockingBuilder WithFanOverclocking(IFanOverclocking fanOverclocking)
+    {
+        _fanOverclocking = fanOverclocking;
+        return this;
+    }
+
     public NvidiaGpuOverclockingBuilder WithCoreClockLock(int coreClockLock)
     {
         _coreClockLock = coreClockLock;

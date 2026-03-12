@@ -73,31 +73,4 @@ public partial class MinerAlgorithmRepositoryTests
             });
         }
     }
-
-    private static class MinerAlgorithmsTestCaseSource
-    {
-        public static Guid AlgorithmId = Guid.NewGuid();
-
-        public static IEnumerable<List<MinerAlgorithm>> MinerAlgorithmsWithAlgorithmId
-        {
-            get
-            {
-                yield return
-                [
-                    new MinerAlgorithmBuilder()
-                        .WithAlgorithmId(AlgorithmId)
-                        .Build(),
-                    new MinerAlgorithmBuilder()
-                        .WithAlgorithmId(AlgorithmId)
-                        .Build(),
-                    new MinerAlgorithmBuilder()
-                        .WithAlgorithmId(AlgorithmId)
-                        .Build(),
-                    new MinerAlgorithmBuilder()
-                        .WithAlgorithmId(AlgorithmId)
-                        .Build(),
-                ];
-            }
-        }
-    }
 }

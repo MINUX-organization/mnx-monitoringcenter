@@ -10,13 +10,6 @@ public abstract class MiningConfigBuilder<TBuilder, TEntity>
     protected string? _configFileContent = "default";
     protected readonly List<MiningCoinConfig> _coinConfigs = new(0);
 
-    protected void ApplyBaseProperties(TEntity entity)
-    {
-        entity.AdditionalArguments = _additionalArguments;
-        entity.ConfigFileContent = _configFileContent;
-        entity.CoinConfigs = _coinConfigs.ToList();
-    }
-
     public TBuilder WithAdditionalArguments(string? arguments)
     {
         _additionalArguments = arguments;
@@ -29,11 +22,29 @@ public abstract class MiningConfigBuilder<TBuilder, TEntity>
         return (TBuilder)this;
     }
 
-    public TBuilder AddCoinConfig(Func<MiningCoinConfigBuilder, MiningCoinConfigBuilder> configure)
+    public TBuilder AddCoinConfig(Func<MiningCoinConfigBuilder, MiningCoinConfigBuilder>? configure = null)
     {
         var builder = new MiningCoinConfigBuilder();
-        builder = configure(builder);
+        builder = configure?.Invoke(builder) ?? builder;
         _coinConfigs.Add(builder.Build());
+        return (TBuilder)this;
+    }
+
+    public TBuilder AddCoinConfig(MiningCoinConfig coinConfig)
+    {
+        _coinConfigs.Add(coinConfig);
+        return (TBuilder)this;
+    }
+
+    public TBuilder WithCoinConfigs(Func<List<MiningCoinConfig>> factory)
+    {
+        _coinConfigs.AddRange(factory());
+        return (TBuilder)this;
+    }
+
+    public TBuilder WithCoinConfigs(IList<MiningCoinConfig> coinConfigs)
+    {
+        _coinConfigs.AddRange(coinConfigs);
         return (TBuilder)this;
     }
 

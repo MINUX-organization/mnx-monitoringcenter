@@ -35,7 +35,7 @@ public partial class MinerRepositoryTests
         var newMiner = CreateNewMiner(data);
 
         await PrepareDataBase(data);
-        Context.ChangeTracker.Clear();
+        ClearChangeTracker();
 
 
         // Act

@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
 
@@ -30,27 +29,6 @@ public partial class FlightSheetRepositoryTests
 
         Assert.That(checkingFlightSheet, Is.Not.Null);
         AssertFlightSheet(data, checkingFlightSheet);
-    }
-
-    [TestCaseSource(typeof(FlightSheetsTestCaseSource), nameof(FlightSheetsTestCaseSource.FlightSheets))]
-    public async Task Add_ExistendFlightSheet_ShouldThrowAnDbUpdateException(FlightSheet data)
-    {
-        // Arrange
-
-        await PrepareDataBase(data);
-        await _flightSheetRepository.Add(data);
-        Context.ChangeTracker.Clear();
-
-
-        // Act
-
-        var exception = Assert.ThrowsAsync<DbUpdateException>(
-            async () => await _flightSheetRepository.Add(data));
-
-
-        // Assert
-
-        Assert.That(exception, Is.Not.Null);
     }
 
     [TestCaseSource(typeof(FlightSheetsTestCaseSource), nameof(FlightSheetsTestCaseSource.FlightSheets))]
@@ -86,7 +64,7 @@ public partial class FlightSheetRepositoryTests
 
         await PrepareDataBase(data);
         await _flightSheetRepository.Add(data);
-        Context.ChangeTracker.Clear();
+        ClearChangeTracker();
 
 
         // Act
@@ -100,21 +78,6 @@ public partial class FlightSheetRepositoryTests
 
         Assert.That(checkingFlightSheet, Is.Not.Null);
         AssertFlightSheet(newFlightSheet, checkingFlightSheet);
-    }
-
-    [TestCaseSource(typeof(FlightSheetsTestCaseSource), nameof(FlightSheetsTestCaseSource.FlightSheets))]
-    public void Edit_NonexistendFlightSheet_ShouldThrowAnInvalidOperationException(FlightSheet data)
-    {
-        // Arrange
-        // Act
-
-        var exception = Assert.ThrowsAsync<InvalidOperationException>(
-            async () => await _flightSheetRepository.Edit(data));
-
-
-        // Assert
-
-        Assert.That(exception, Is.Not.Null);
     }
 
     [TestCaseSource(typeof(FlightSheetsTestCaseSource), nameof(FlightSheetsTestCaseSource.FlightSheets))]

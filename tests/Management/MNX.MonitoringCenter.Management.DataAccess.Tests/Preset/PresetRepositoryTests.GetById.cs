@@ -54,7 +54,7 @@ public partial class PresetRepositoryTests
         Assert.That(checkingPreset, Is.Null);
     }
 
-    private void AssertPreset(Preset expected, Preset checking)
+    private static void AssertPreset(Preset expected, Preset checking)
     {
         Assert.Multiple(() =>
         {

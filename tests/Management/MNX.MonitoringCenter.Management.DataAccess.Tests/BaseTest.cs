@@ -11,6 +11,11 @@ public abstract class BaseTest
 
     protected Context Context;
 
+    protected void ClearChangeTracker()
+    {
+        Context.ChangeTracker.Clear();
+    }
+
     [OneTimeSetUp]
     public async Task OneTimeSetUp()
     {
