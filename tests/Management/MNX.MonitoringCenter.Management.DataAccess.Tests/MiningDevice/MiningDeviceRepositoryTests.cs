@@ -54,12 +54,14 @@ public partial class MiningDeviceRepositoryTests : BaseTest
         var presets = data
             .Select(x => x.Preset)
             .OfType<Preset>()
-            .DistinctBy(x => x.Id);
+            .DistinctBy(x => x.Id)
+            .ToList();
 
         var flightSheets = data
             .Select(x => x.FlightSheet)
             .OfType<FlightSheet>()
-            .DistinctBy(x => x.Id);
+            .DistinctBy(x => x.Id)
+            .ToList();
 
         foreach (var preset in presets)
             await _presetRepository.Save(preset);
@@ -90,8 +92,8 @@ public partial class MiningDeviceRepositoryTests : BaseTest
         Assert.That(checking, Is.Not.Null);
         Assert.That(checking, Has.Count.EqualTo(expected.Count));
 
-        expected = [.. expected.Where(x => x is not null).OrderBy(x => x.Id)];
-        checking = [.. checking.Where(x => x is not null).OrderBy(x => x.Id)];
+        expected = [.. expected.OrderBy(x => x.Id)];
+        checking = [.. checking.OrderBy(x => x.Id)];
 
         for (var i = 0; i < expected.Count; i++)
         {
@@ -123,8 +125,8 @@ public partial class MiningDeviceRepositoryTests : BaseTest
         Assert.That(checking, Is.Not.Null);
         Assert.That(checking, Has.Count.EqualTo(expected.Count));
 
-        expected = [.. expected.Where(x => x is not null).OrderBy(x => x.Name)];
-        checking = [.. checking.Where(x => x is not null).OrderBy(x => x.Name)];
+        expected = [.. expected.OrderBy(x => x.Name)];
+        checking = [.. checking.OrderBy(x => x.Name)];
 
         for (var i = 0; i < expected.Count; i++)
         {
@@ -297,12 +299,11 @@ public partial class MiningDeviceRepositoryTests : BaseTest
     {
         if (expected is null) return;
 
-
         Assert.That(checking, Is.Not.Null);
         Assert.That(checking, Has.Count.EqualTo(expected.Count));
 
-        expected = [.. expected.Where(x => x is not null).OrderBy(x => x.Name)];
-        checking = [.. checking.Where(x => x is not null).OrderBy(x => x.Name)];
+        expected = [.. expected.OrderBy(x => x.Name)];
+        checking = [.. checking.OrderBy(x => x.Name)];
 
         for (var i = 0; i < expected.Count; i++)
         {
@@ -453,7 +454,7 @@ public partial class MiningDeviceRepositoryTests : BaseTest
         public static Guid RigId = Guid.NewGuid();
         public static Guid PresetId = Guid.NewGuid();
 
-        public static IEnumerable<List<MiningDeviceInfo>> MiningDeviceLists
+        public static IEnumerable<List<MiningDeviceInfo>> MiningDeviceListsWithVisiblePreset
         {
             get
             {
@@ -509,7 +510,7 @@ public partial class MiningDeviceRepositoryTests : BaseTest
             }
         }
 
-        public static IEnumerable<List<MiningDeviceInfo>> GpuDevicesWithUnionPreset
+        public static IEnumerable<List<MiningDeviceInfo>> GpuDevicesWithUnionVisiblePreset
         {
             get
             {

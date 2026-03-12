@@ -6,7 +6,7 @@ using MiningDeviceInfo = Core.Mining.MiningDevice.MiningDeviceInfo;
 
 public partial class MiningDeviceRepositoryTests
 {
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
     public async Task GetAvailable_ValidUserId_ReturnsEntitiesList(List<MiningDeviceInfo> data)
     {
         // Arrange
@@ -35,7 +35,7 @@ public partial class MiningDeviceRepositoryTests
                       [.. checkingDevices.Select(x => x.Preset)]);
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
     public async Task GetAvailable_InvalidUserId_ReturnsEmptyList(List<MiningDeviceInfo> data)
     {
         // Arrange
@@ -57,7 +57,7 @@ public partial class MiningDeviceRepositoryTests
         Assert.That(checkingDevices, Is.Empty);
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.GpuDevicesWithUnionPreset))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.GpuDevicesWithUnionVisiblePreset))]
     public async Task GetAvailableByPresetId_ValidPresetIdAndUserId_ReturnsEntitiesList(List<MiningDeviceInfo> data)
     {
         // Arrange
@@ -84,7 +84,7 @@ public partial class MiningDeviceRepositoryTests
         AssertDevices([.. query], checkingDevices);
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.GpuDevicesWithUnionPreset))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.GpuDevicesWithUnionVisiblePreset))]
     public async Task GetAvailableByPresetId_InvalidPresetIdAndUserId_ReturnsEmptyList(List<MiningDeviceInfo> data)
     {
         // Arrange

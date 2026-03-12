@@ -1,13 +1,14 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.MiningDevice;
 
 public partial class MiningDeviceRepositoryTests
 {
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
     public async Task SetPreset_ValidPresetIdAndDeviceIds_ShouldSetPresetToDevices(List<MiningDeviceInfo> data)
     {
         // Arrange
@@ -17,10 +18,10 @@ public partial class MiningDeviceRepositoryTests
         var userId = MiningDevicesTestCaseSource.UserId;
 
         await PrepareDataBase(data);
-        await _presetRepository.Save(
-            new PresetBuilder()
-                .WithId(presetId)
-                .Build());
+        await _presetRepository.Save(new PresetBuilder()
+            .WithId(presetId)
+            .WithOverclocking(() => new AmdGpuOverclockingBuilder().Build())
+            .Build());
 
 
         // Act
@@ -40,17 +41,20 @@ public partial class MiningDeviceRepositoryTests
         }
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
-    public async Task SetPreset_InvalidPresetIdAndDeviceIds_ShouldNotSetPresetToDevices(List<MiningDeviceInfo> data)
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
+    public async Task SetPreset_InvalidDeviceIds_ShouldNotSetPresetToDevices(List<MiningDeviceInfo> data)
     {
         // Arrange
 
-        var deviceIds = data.Select(x => x.Id);
+        var deviceIds = data.Select(x => Guid.NewGuid());
         var presetId = Guid.NewGuid();
         var userId = MiningDevicesTestCaseSource.UserId;
 
         await PrepareDataBase(data);
-        await _presetRepository.Save(new PresetBuilder() .Build());
+        await _presetRepository.Save(new PresetBuilder()
+            .WithId(presetId)
+            .WithOverclocking(() => new AmdGpuOverclockingBuilder().Build())
+            .Build());
 
 
         // Act
@@ -66,7 +70,7 @@ public partial class MiningDeviceRepositoryTests
         Assert.That(checkingDevices, Is.Empty);
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
     public async Task SetFlightSheet_ValidDeviceIdsAndFlightSheetId_ShouldSetFlightSheetOnDevices(List<MiningDeviceInfo> data)
     {
         // Arrange
@@ -98,7 +102,7 @@ public partial class MiningDeviceRepositoryTests
         }
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
     public async Task SetFlightSheet_InvalidDeviceIdsAndFlightSheetId_ShouldNotSetFlight(List<MiningDeviceInfo> data)
     {
         // Arrange
@@ -125,7 +129,7 @@ public partial class MiningDeviceRepositoryTests
         }
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
     public async Task RemoveFlightSheet_ValidDeviceIds_ShouldRemoveFlightSheetsFromDevices(List<MiningDeviceInfo> data)
     {
         // Arrange
@@ -157,7 +161,7 @@ public partial class MiningDeviceRepositoryTests
         }
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
     public async Task ConfirmFlightSheet_ValidDeviceIds_ShouldConfirmFlightSheetStatuses(List<MiningDeviceInfo> data)
     {
         // Arrange
@@ -188,7 +192,7 @@ public partial class MiningDeviceRepositoryTests
         }
     }
 
-    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceLists))]
+    [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
     public async Task SetFlightSheetConfirmationStateToError_ValidDeviceIds_ShouldSetConfirmationStateToError(List<MiningDeviceInfo> data)
     {
         // Arrange
