@@ -1,4 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions.FlightSheet;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
 
@@ -27,8 +28,7 @@ public partial class FlightSheetRepositoryTests
 
         // Assert
 
-        Assert.That(checkingFlightSheet, Is.Not.Null);
-        AssertFlightSheet(data, checkingFlightSheet);
+        checkingFlightSheet.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(FlightSheetsTestCaseSource), nameof(FlightSheetsTestCaseSource.FlightSheets))]
@@ -76,8 +76,7 @@ public partial class FlightSheetRepositoryTests
 
         // Assert
 
-        Assert.That(checkingFlightSheet, Is.Not.Null);
-        AssertFlightSheet(newFlightSheet, checkingFlightSheet);
+        checkingFlightSheet.ShouldBeEqualTo(newFlightSheet);
     }
 
     [TestCaseSource(typeof(FlightSheetsTestCaseSource), nameof(FlightSheetsTestCaseSource.FlightSheets))]
@@ -102,27 +101,5 @@ public partial class FlightSheetRepositoryTests
         // Assert
 
         Assert.That(checkingFlightSheet, Is.Null);
-    }
-
-    private async Task PrepareDataBase(FlightSheet data)
-    {
-        var cryptocurrencies = data.Targets
-            .SelectMany(x => x.MiningConfig.CoinConfigs
-                .SelectMany(x => new[]
-                {
-                    x.Wallet?.Cryptocurrency,
-                    x.Pool?.Cryptocurrency,
-                }))
-            .ToList();
-
-        foreach (var cryptocurrency in cryptocurrencies)
-        {
-
-            if (cryptocurrency is not null &&
-                cryptocurrency.Algorithm is not null)
-            {
-                await _cryptocurrencyRepository.Add(cryptocurrency);
-            }
-        }
     }
 }

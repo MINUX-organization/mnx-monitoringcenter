@@ -16,6 +16,12 @@ public partial class PoolRepositoryTests : BaseTest
         _poolRepository = new PoolRepository(Context);
     }
 
+    private async Task PrepareDataBase(List<Pool> data)
+    {
+        foreach (var item in data)
+            await _poolRepository.Add(item);
+    }
+
     private static class PoolsTestCaseSource
     {
         public static Guid UserId = Guid.NewGuid();

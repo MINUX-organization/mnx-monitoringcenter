@@ -4,6 +4,8 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Cryptocurrency;
 
+using Cryptocurrency = Core.Mining.Cryptocurrency;
+
 public partial class CryptocurrencyRepositoryTests : BaseTest
 {
     private ICryptocurrencyRepository _cryptocurrencyRepository;

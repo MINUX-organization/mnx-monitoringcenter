@@ -1,4 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.MinerAlgorithm;
 
@@ -27,9 +27,7 @@ public partial class MinerAlgorithmRepositoryTests
 
         // Assert
 
-        Assert.That(checkingMinerAlgorithms, Is.Not.Null);
-        Assert.That(checkingMinerAlgorithms, Has.Count.EqualTo(expectedCount));
-        AssertMinerAlgorithms(data, checkingMinerAlgorithms);
+        checkingMinerAlgorithms.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(MinerAlgorithmsTestCaseSource), nameof(MinerAlgorithmsTestCaseSource.MinerAlgorithmsWithAlgorithmId))]
@@ -53,24 +51,6 @@ public partial class MinerAlgorithmRepositoryTests
 
         // Assert
 
-        Assert.That(checkingMinerAlgorithms, Is.Not.Null);
-        Assert.That(checkingMinerAlgorithms, Has.Count.EqualTo(expectedCount));
-        AssertMinerAlgorithms([.. query], checkingMinerAlgorithms);
-    }
-
-    private static void AssertMinerAlgorithms(List<MinerAlgorithm> expected, List<MinerAlgorithm> checking)
-    {
-        expected = [.. expected.OrderBy(x => x.Name)];
-        checking = [.. checking.OrderBy(x => x.Name)];
-
-        for (var i = 0; i < expected.Count; i++)
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(checking[i].AlgorithmId, Is.EqualTo(expected[i].AlgorithmId));
-                Assert.That(checking[i].MinerId, Is.EqualTo(expected[i].MinerId));
-                Assert.That(checking[i].Name, Is.EqualTo(expected[i].Name));
-            });
-        }
+        checkingMinerAlgorithms.ShouldBeEqualTo(query);
     }
 }

@@ -1,7 +1,9 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Wallet;
+
+using Wallet = Core.Mining.Wallet;
 
 public partial class WalletRepositoryTests
 {
@@ -12,15 +14,17 @@ public partial class WalletRepositoryTests
 
         var userId = WalletsTestCaseSource.UserId;
         var specification = new Specification(userId);
-        var expectedCount = data
-            .Where(x => x.OwnerId == userId)
-            .Count();
 
-        foreach (var item in data)
+        var query = data.Where(x => x.OwnerId == userId);
+
+        await PrepareDataBase(data);
+
+        // Зануляем алгоритмы в ожидаемом результате,
+        // так как GetAllAvailable не возвращает Algorithm.
+        foreach (var wallet in query)
         {
-            await _walletRepository.Add(item);
+            wallet.Cryptocurrency!.Algorithm = null;
         }
-
 
         // Act
 
@@ -31,35 +35,6 @@ public partial class WalletRepositoryTests
 
         // Assert
 
-        Assert.That(checkingList, Is.Not.Null);
-        Assert.That(checkingList, Has.Count.EqualTo(expectedCount));
-
-        AssertWallets(data.Where(x => x.OwnerId == userId).ToList(), checkingList);
-    }
-
-    private static void AssertWallets(List<Wallet> expected, List<Wallet> checking)
-    {
-        expected = expected.OrderBy(x => x.Name).ToList();
-        checking = checking.OrderBy(x => x.Name).ToList();
-
-        for (var i = 0; i < expected.Count; i++)
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(checking[i].Id, Is.EqualTo(expected[i].Id));
-                Assert.That(checking[i].OwnerId, Is.EqualTo(expected[i].OwnerId));
-                Assert.That(checking[i].Name, Is.EqualTo(expected[i].Name));
-                Assert.That(checking[i].Address, Is.EqualTo(expected[i].Address));
-                Assert.That(checking[i].CryptocurrencyId, Is.EqualTo(expected[i].CryptocurrencyId));
-
-                var expectedCryptocurrency = expected[i].Cryptocurrency;
-                var checkingCryptocurrency = checking[i].Cryptocurrency;
-                Assert.That(checkingCryptocurrency?.Id, Is.EqualTo(expectedCryptocurrency?.Id));
-                Assert.That(checkingCryptocurrency?.OwnerId, Is.EqualTo(expectedCryptocurrency?.OwnerId));
-                Assert.That(checkingCryptocurrency?.FullName, Is.EqualTo(expectedCryptocurrency?.FullName));
-                Assert.That(checkingCryptocurrency?.ShortName, Is.EqualTo(expectedCryptocurrency?.ShortName));
-                Assert.That(checkingCryptocurrency?.AlgorithmId, Is.EqualTo(expectedCryptocurrency?.AlgorithmId));
-            });
-        }
+        checkingList.ShouldBeEqualTo(query);
     }
 }

@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.UseCases;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Preset;
 
@@ -31,6 +32,6 @@ public partial class PresetRepositoryTests
         Assert.That(checkingPresetGroups, Has.Count.EqualTo(expectedCount));
 
         var checkingPresets = checkingPresetGroups.SelectMany(x => x).ToList();
-        AssertPresetsWithNvidiaGpuOverclocking(data, checkingPresets);
+        checkingPresets.ShouldBeEqualTo(data);
     }
 }

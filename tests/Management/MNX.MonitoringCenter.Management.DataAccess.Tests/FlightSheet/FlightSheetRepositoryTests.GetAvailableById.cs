@@ -1,4 +1,6 @@
-﻿namespace MNX.MonitoringCenter.Management.DataAccess.Tests.FlightSheet;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions.FlightSheet;
+
+namespace MNX.MonitoringCenter.Management.DataAccess.Tests.FlightSheet;
 
 using FlightSheet = Core.Mining.FlightSheet.FlightSheet;
 
@@ -23,8 +25,7 @@ public partial class FlightSheetRepositoryTests
 
         // Assert
 
-        Assert.That(checkingFlightSheet, Is.Not.Null);
-        AssertFlightSheet(data, checkingFlightSheet);
+        checkingFlightSheet.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(FlightSheetsTestCaseSource), nameof(FlightSheetsTestCaseSource.FlightSheets))]

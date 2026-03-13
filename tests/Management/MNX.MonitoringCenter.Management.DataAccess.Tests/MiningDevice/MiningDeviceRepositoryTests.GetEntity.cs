@@ -1,4 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions.Overclocking;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.MiningDevice;
 
@@ -22,8 +24,7 @@ public partial class MiningDeviceRepositoryTests
 
         // Assert
 
-        Assert.That(checkingDevice, Is.Not.Null);
-        AssertDevice(data, checkingDevice);
+        checkingDevice.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDevices))]
@@ -66,8 +67,7 @@ public partial class MiningDeviceRepositoryTests
 
         // Assert
 
-        Assert.That(checkingDevice, Is.Not.Null);
-        AssertDevice(data, checkingDevice);
+        checkingDevice.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDevicesWithOnlineStatus))]
@@ -113,7 +113,7 @@ public partial class MiningDeviceRepositoryTests
         // Assert
 
         Assert.That(checkingOverclocking, Is.Not.Null);
-        AssertOverclocking(overclocking!, checkingOverclocking);
+        checkingOverclocking.ShouldBeEquivalentTo(overclocking);
     }
 
     [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDevicesWithOverclockings))]

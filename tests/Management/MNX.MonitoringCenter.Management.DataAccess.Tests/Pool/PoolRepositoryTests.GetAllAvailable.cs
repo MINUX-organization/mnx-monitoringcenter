@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.UseCases;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Pool;
 
@@ -13,22 +14,22 @@ public partial class PoolRepositoryTests
 
         var specification = new Specification(PoolsTestCaseSource.UserId);
 
+        await PrepareDataBase(data);
+
         foreach (var item in data)
-        {
-            await _poolRepository.Add(item);
-        }
+            item.Cryptocurrency!.Algorithm = null;
 
 
         // Act
 
-        var checkingPoolsList = await _poolRepository.GetAllAvailable(specification).ToListAsync();
+        var checkingPoolsList = await _poolRepository
+            .GetAllAvailable(specification)
+            .ToListAsync();
 
 
         // Assert
 
-        Assert.That(checkingPoolsList, Is.Not.Null);
-        Assert.That(checkingPoolsList, Has.Count.EqualTo(data.Count));
-        AssertPools(data, checkingPoolsList);
+        checkingPoolsList.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.Pools))]
@@ -41,10 +42,9 @@ public partial class PoolRepositoryTests
                                     x.OwnerId is null);
         var expectedCount = query.Count();
 
+        await PrepareDataBase(data);
         foreach (var item in data)
-        {
-            await _poolRepository.Add(item);
-        }
+            item.Cryptocurrency!.Algorithm = null;
 
 
         // Act
@@ -54,35 +54,6 @@ public partial class PoolRepositoryTests
 
         // Assert
 
-        Assert.That(checkingPools, Is.Not.Null);
-        Assert.That(checkingPools, Has.Count.EqualTo(expectedCount));
-        AssertPools(query.ToList(), checkingPools);
-    }
-
-    private void AssertPools(List<Pool> expected, List<Pool> checking)
-    {
-        expected = expected.OrderBy(x => x.Domain).ToList();
-        checking = checking.OrderBy(x => x.Domain).ToList();
-
-        for (var i = 0; i < expected.Count; i++)
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(checking[i].Id, Is.EqualTo(expected[i].Id));
-                Assert.That(checking[i].Tls, Is.EqualTo(expected[i].Tls));
-                Assert.That(checking[i].Domain, Is.EqualTo(expected[i].Domain));
-                Assert.That(checking[i].Port, Is.EqualTo(expected[i].Port));
-                Assert.That(checking[i].OwnerId, Is.EqualTo(expected[i].OwnerId));
-                Assert.That(checking[i].CryptocurrencyId, Is.EqualTo(expected[i].CryptocurrencyId));
-
-                var expectedCryptocurrency = expected[i].Cryptocurrency;
-                var checkingCryptocurrency = checking[i].Cryptocurrency;
-                Assert.That(checkingCryptocurrency?.Id, Is.EqualTo(expectedCryptocurrency?.Id));
-                Assert.That(checkingCryptocurrency?.OwnerId, Is.EqualTo(expectedCryptocurrency?.OwnerId));
-                Assert.That(checkingCryptocurrency?.FullName, Is.EqualTo(expectedCryptocurrency?.FullName));
-                Assert.That(checkingCryptocurrency?.ShortName, Is.EqualTo(expectedCryptocurrency?.ShortName));
-                Assert.That(checkingCryptocurrency?.AlgorithmId, Is.EqualTo(expectedCryptocurrency?.AlgorithmId));
-            });
-        }
+        checkingPools.ShouldBeEqualTo(query);
     }
 }

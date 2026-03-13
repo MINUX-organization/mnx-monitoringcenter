@@ -1,5 +1,6 @@
 ﻿namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Preset;
 
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 using Preset = Core.Overclocking.Preset;
 
 public partial class PresetRepositoryTests
@@ -23,7 +24,7 @@ public partial class PresetRepositoryTests
         // Assert
 
         Assert.That(checkingPreset, Is.Not.Null);
-        AssertPreset(data, checkingPreset);
+        checkingPreset.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.Preset))]
@@ -50,7 +51,7 @@ public partial class PresetRepositoryTests
         // Assert
 
         Assert.That(checkingPreset, Is.Not.Null);
-        AssertPreset(data, checkingPreset);
+        checkingPreset.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.Preset))]

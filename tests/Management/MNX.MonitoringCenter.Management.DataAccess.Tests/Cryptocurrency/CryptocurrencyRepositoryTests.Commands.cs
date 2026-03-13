@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Cryptocurrency;
 
@@ -28,18 +29,7 @@ public partial class CryptocurrencyRepositoryTests
 
         // Assert
 
-        Assert.That(checkingCryptocurrency, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(checkingCryptocurrency.Id, Is.EqualTo(cryptocurrencyId));
-            Assert.That(checkingCryptocurrency.OwnerId, Is.EqualTo(userId));
-            Assert.That(checkingCryptocurrency.FullName, Is.EqualTo(cryptocurrency.FullName));
-            Assert.That(checkingCryptocurrency.ShortName, Is.EqualTo(cryptocurrency.ShortName));
-            Assert.That(checkingCryptocurrency.AlgorithmId, Is.EqualTo(cryptocurrency.AlgorithmId));
-            Assert.That(checkingCryptocurrency.Algorithm?.Id, Is.EqualTo(cryptocurrency.Algorithm?.Id));
-            Assert.That(checkingCryptocurrency.Algorithm?.OwnerId, Is.EqualTo(cryptocurrency.Algorithm?.OwnerId));
-            Assert.That(checkingCryptocurrency.Algorithm?.Name, Is.EqualTo(cryptocurrency.Algorithm?.Name));
-        });
+        checkingCryptocurrency.ShouldBeEqualTo(cryptocurrency);
     }
 
     [Test]

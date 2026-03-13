@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MNX.MonitoringCenter.Management.Contracts.AlgorithmBinding;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.MinerAlgorithm;
 
@@ -26,9 +27,7 @@ public partial class MinerAlgorithmRepositoryTests
 
         // Assert
 
-        Assert.That(checkingMinerAlgorithms, Is.Not.Null);
-        Assert.That(checkingMinerAlgorithms, Has.Count.EqualTo(data.Count));
-        AssertMinerAlgorithms(data, checkingMinerAlgorithms);
+        checkingMinerAlgorithms.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(MinerAlgorithmsTestCaseSource), nameof(MinerAlgorithmsTestCaseSource.MinerAlgorithmsWithAlgorithmId))]
@@ -78,32 +77,29 @@ public partial class MinerAlgorithmRepositoryTests
 
         // Assert
 
+        relativeBindings = [.. relativeBindings.OrderBy(x => x.MinerId)];
+        checkingMinerAlgorithms = [.. checkingMinerAlgorithms.OrderBy(x => x.MinerId)];
+
         Assert.That(checkingMinerAlgorithms, Is.Not.Null);
         Assert.That(checkingMinerAlgorithms, Is.Not.Empty);
-        AssertMinerAlgorithms(relativeBindings, checkingMinerAlgorithms, algorithmId);
-    }
-
-    private static void AssertMinerAlgorithms(List<RelativeNameBindingModel> expected, List<MinerAlgorithm> checking, Guid expectedAlgorithmId)
-    {
-        expected = [.. expected.OrderBy(x => x.RelativeName)];
-        checking = [.. checking.OrderBy(x => x.Name)];
-
-        for (var i = 0; i < expected.Count; i++)
+        for (var i = 0; i < relativeBindings.Count; i++)
         {
             Assert.Multiple(() =>
             {
-                Assert.That(checking[i].AlgorithmId, Is.EqualTo(expectedAlgorithmId));
-                Assert.That(checking[i].MinerId, Is.EqualTo(expected[i].MinerId));
-                Assert.That(checking[i].Name, Is.EqualTo(expected[i].RelativeName));
+                Assert.That(checkingMinerAlgorithms[i].AlgorithmId, Is.EqualTo(algorithmId));
+                Assert.That(checkingMinerAlgorithms[i].MinerId, Is.EqualTo(relativeBindings[i].MinerId));
+                Assert.That(checkingMinerAlgorithms[i].Name, Is.EqualTo(relativeBindings[i].RelativeName));
             });
         }
     }
 
-    private List<RelativeNameBindingModel> CreateRelativeNameBindingModels(Guid[] minerIds)
+    private static List<RelativeNameBindingModel> CreateRelativeNameBindingModels(Guid[] minerIds)
     {
         var result = new List<RelativeNameBindingModel>();
         for (var i = 0; i < minerIds.Length; i++)
+        {
             result.Add(new RelativeNameBindingModel($"NewAlgorithmName_{i}", minerIds[i]));
+        }
         return result;
     }
 }

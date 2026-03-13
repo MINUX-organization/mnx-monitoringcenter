@@ -1,5 +1,6 @@
 ﻿namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Miner;
 
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 using Miner = Core.Mining.Miner.Miner;
 
 public partial class MinerRepositoryTests
@@ -21,8 +22,7 @@ public partial class MinerRepositoryTests
 
         // Assert
 
-        Assert.That(checkingMiner, Is.Not.Null);
-        AssertMiner(data, checkingMiner);
+        checkingMiner.ShouldBeEqualTo(data);
     }
 
     [TestCaseSource(typeof(MinersTestCaseSource), nameof(MinersTestCaseSource.Miners))]

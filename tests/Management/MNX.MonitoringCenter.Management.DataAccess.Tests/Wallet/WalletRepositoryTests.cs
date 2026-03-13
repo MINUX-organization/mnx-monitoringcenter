@@ -16,6 +16,14 @@ public partial class WalletRepositoryTests : BaseTest
         _walletRepository = new WalletRepository(Context);
     }
 
+    private async Task PrepareDataBase(List<Wallet> data)
+    {
+        foreach (var item in data)
+        {
+            await _walletRepository.Add(item);
+        }
+    }
+
     private static class WalletsTestCaseSource
     {
         public static Guid UserId = Guid.NewGuid();

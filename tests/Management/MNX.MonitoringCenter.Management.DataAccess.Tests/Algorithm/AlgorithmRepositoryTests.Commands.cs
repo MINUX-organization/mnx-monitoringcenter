@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Algorithm;
 
@@ -28,13 +29,7 @@ public partial class AlgorithmRepositoryTests
 
         // Assert
 
-        Assert.That(checkingAlgorithm, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(checkingAlgorithm.Id, Is.EqualTo(algorithmId));
-            Assert.That(checkingAlgorithm.Name, Is.EqualTo(algorithmName));
-            Assert.That(checkingAlgorithm.OwnerId, Is.EqualTo(userId));
-        });
+        checkingAlgorithm.ShouldBeEqualTo(algorithm);
     }
 
     [Test]
@@ -44,12 +39,10 @@ public partial class AlgorithmRepositoryTests
 
         var algorithmId = Guid.NewGuid();
         var userId = Guid.NewGuid();
-        var algorithmName = "Algo_1";
 
         await _algorithmRepository.AddAsync(new AlgorithmBuilder()
             .WithId(algorithmId)
             .WithOwner(userId)
-            .WithName(algorithmName)
             .Build());
 
 
@@ -71,13 +64,17 @@ public partial class AlgorithmRepositoryTests
 
         var algorithmId = Guid.NewGuid();
         var userId = Guid.NewGuid();
-        var oldName = "Algo_1";
         var newName = "NewAlgorithm_1";
+
+        var newAlgorithm = new AlgorithmBuilder()
+            .WithId(algorithmId)
+            .WithOwner(userId)
+            .WithName("NewAlgorithm_1")
+            .Build();
 
         await _algorithmRepository.AddAsync(new AlgorithmBuilder()
             .WithId(algorithmId)
             .WithOwner(userId)
-            .WithName(oldName)
             .Build());
 
 
@@ -89,12 +86,6 @@ public partial class AlgorithmRepositoryTests
 
         // Assert
 
-        Assert.That(checkingAlgorithm, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(checkingAlgorithm.Name, Is.EqualTo(newName));
-            Assert.That(checkingAlgorithm.Id, Is.EqualTo(algorithmId));
-            Assert.That(checkingAlgorithm.OwnerId, Is.EqualTo(userId));
-        });
+        checkingAlgorithm.ShouldBeEqualTo(newAlgorithm);
     }
 }

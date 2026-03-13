@@ -1,4 +1,6 @@
-﻿using MNX.MonitoringCenter.Management.UseCases;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions.FlightSheet;
+using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.MiningDevice;
 
@@ -17,6 +19,9 @@ public partial class MiningDeviceRepositoryTests
 
         await PrepareDataBase(data);
 
+        foreach (var item in data)
+            item.Preset.Overclocking = null;
+
 
         // Act
 
@@ -26,13 +31,11 @@ public partial class MiningDeviceRepositoryTests
 
         // Assert
 
-        Assert.That(checkingDevices, Is.Not.Null);
-        Assert.That(checkingDevices, Has.Count.EqualTo(expectedCount));
-        AssertDevices([.. query], checkingDevices);
-        AssertFlightSheets([.. query.Select(x => x.FlightSheet)],
-                           [..checkingDevices.Select(x => x.FlightSheet)]);
-        AssertPresets([.. query.Select(x => x.Preset)],
-                      [.. checkingDevices.Select(x => x.Preset)]);
+        checkingDevices.ShouldBeEqualTo(query);
+        checkingDevices.Select(x => x.FlightSheet)
+            .ShouldBeEqualTo(query.Select(x => x.FlightSheet));
+        checkingDevices.Select(x => x.Preset)
+            .ShouldBeEqualTo(query.Select(x => x.Preset));
     }
 
     [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.MiningDeviceListsWithVisiblePreset))]
@@ -79,9 +82,7 @@ public partial class MiningDeviceRepositoryTests
 
         // Assert
 
-        Assert.That(checkingDevices, Is.Not.Null);
-        Assert.That(checkingDevices, Has.Count.EqualTo(expectedCount));
-        AssertDevices([.. query], checkingDevices);
+        checkingDevices.ShouldBeEqualTo(query);
     }
 
     [TestCaseSource(typeof(MiningDevicesTestCaseSource), nameof(MiningDevicesTestCaseSource.GpuDevicesWithUnionVisiblePreset))]

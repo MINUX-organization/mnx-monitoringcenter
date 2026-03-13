@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.UseCases;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Preset;
 
@@ -30,7 +31,7 @@ public partial class PresetRepositoryTests
 
         Assert.That(checkingPresets, Is.Not.Null);
         Assert.That(checkingPresets, Has.Count.EqualTo(expectedCount));
-        AssertPresetsWithNvidiaGpuOverclocking([.. query], checkingPresets);
+        checkingPresets.ShouldBeEqualTo(query);
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.PresetsWithNvidiaGpuOverclocking))]
@@ -59,7 +60,7 @@ public partial class PresetRepositoryTests
 
         Assert.That(checkingPresets, Is.Not.Null);
         Assert.That(checkingPresets, Has.Count.EqualTo(expectedCount));
-        AssertPresetsWithNvidiaGpuOverclocking([.. query], checkingPresets);
+        checkingPresets.ShouldBeEqualTo(query);
     }
 
     [TestCaseSource(typeof(PresetsTestCaseSource), nameof(PresetsTestCaseSource.PresetsWithNvidiaGpuOverclocking))]
@@ -82,13 +83,5 @@ public partial class PresetRepositoryTests
 
         Assert.That(checkingPresets, Is.Not.Null);
         Assert.That(checkingPresets, Is.Empty);
-    }
-
-    private async Task PrepareDataBase(List<Preset> data)
-    {
-        foreach (var preset in data)
-        {
-            await _presetRepository.Save(preset);
-        }
     }
 }

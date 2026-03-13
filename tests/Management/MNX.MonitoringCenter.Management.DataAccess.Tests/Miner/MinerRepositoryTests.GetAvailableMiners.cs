@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.UseCases;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Miner;
 
@@ -26,9 +27,7 @@ public partial class MinerRepositoryTests
 
         // Assert
 
-        Assert.That(checkingMiners, Is.Not.Null);
-        Assert.That(checkingMiners, Has.Count.EqualTo(expectedCount));
-        AssertMiners([.. query], checkingMiners);
+        checkingMiners.ShouldBeEqualTo(query);
     }
 
     [TestCaseSource(typeof(MinersTestCaseSource), nameof(MinersTestCaseSource.MinerLists))]
@@ -52,8 +51,6 @@ public partial class MinerRepositoryTests
 
         // Assert
 
-        Assert.That(checkingMiners, Is.Not.Null);
-        Assert.That(checkingMiners, Has.Count.EqualTo(expectedCount));
-        AssertMiners([.. query], checkingMiners);
+        checkingMiners.ShouldBeEqualTo(query);
     }
 }
