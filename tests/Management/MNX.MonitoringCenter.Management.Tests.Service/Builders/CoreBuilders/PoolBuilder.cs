@@ -45,12 +45,19 @@ public class PoolBuilder
         return this;
     }
 
-    public PoolBuilder WithCryptocurrency(Func<CryptocurrencyBuilder, CryptocurrencyBuilder> configure)
+    public PoolBuilder WithCryptocurrency(Func<CryptocurrencyBuilder, CryptocurrencyBuilder>? configure = null)
     {
         var builder = new CryptocurrencyBuilder();
-        builder = configure(builder);
+        builder = configure?.Invoke(builder) ?? builder;
         _cryptocurrency = builder.Build();
         _cryptocurrencyId = _cryptocurrency.Id;
+        return this;
+    }
+
+    public PoolBuilder WithCryptocurrency(Cryptocurrency cryptocurrency)
+    {
+        _cryptocurrency = cryptocurrency;
+        _cryptocurrencyId = cryptocurrency.Id;
         return this;
     }
 

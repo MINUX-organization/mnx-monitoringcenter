@@ -22,12 +22,11 @@ public class CpuMiningConfigInputModelBuilder :
 
     public override MiningConfigInputModel Build()
     {
-        var (additionalArgument, configFileContent, coinConfigs) = GetBaseValues();
         return new CpuMiningConfigInputModel()
         {
-            AdditionalArguments = additionalArgument,
-            ConfigFileContent = configFileContent,
-            CoinConfigs = coinConfigs,
+            AdditionalArguments = _additionalArguments,
+            ConfigFileContent = _configFileContent,
+            CoinConfigs = _coinConfigs,
             HugePages = _hugePages,
             ThreadsCount = _threadsCount
         };

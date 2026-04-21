@@ -1,5 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Cpu;
-using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions.Overclocking;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.OuterModelBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Inventory.Cpu;
@@ -38,17 +38,7 @@ public sealed class CpuOverclockingInventoryMapperTests
 
         // Assert
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedCoreCpuOverclocking, Is.Not.Null);
-            Assert.That(mappedCoreCpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedCoreCpuOverclocking.TargetDeviceType, Is.EqualTo(OverclockingTargetDeviceType.CPU));
-            Assert.That(mappedCoreCpuOverclocking, Is.TypeOf<CpuOverclocking>());
-
-            var coreCpuOverclocking = (CpuOverclocking)mappedCoreCpuOverclocking;
-            Assert.That(coreCpuOverclocking.CoreClockLock, Is.EqualTo(inventoryCpuOverclocking.CoreClockLock));
-            Assert.That(coreCpuOverclocking.CoreVoltage, Is.EqualTo(inventoryCpuOverclocking.CoreVoltage));
-        });
+        mappedCoreCpuOverclocking.ShouldBeEquivalentTo(inventoryCpuOverclocking);
     }
 
     [Test]
@@ -69,14 +59,6 @@ public sealed class CpuOverclockingInventoryMapperTests
 
         // Assert
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedInventoryCpuOverclocking, Is.Not.Null);
-            Assert.That(mappedInventoryCpuOverclocking, Is.TypeOf<InventoryCpuOverclocking>());
-
-            var inventoryCpuOverclocking = (InventoryCpuOverclocking)mappedInventoryCpuOverclocking;
-            Assert.That(inventoryCpuOverclocking.CoreClockLock, Is.EqualTo(coreCpuOverclocking.CoreClockLock));
-            Assert.That(inventoryCpuOverclocking.CoreVoltage, Is.EqualTo(coreCpuOverclocking.CoreVoltage));
-        });
+        mappedInventoryCpuOverclocking.ShouldBeEquivalentTo(coreCpuOverclocking);
     }
 }

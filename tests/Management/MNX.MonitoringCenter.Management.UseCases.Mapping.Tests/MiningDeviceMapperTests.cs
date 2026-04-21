@@ -1,8 +1,7 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningDevices;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
@@ -39,22 +38,7 @@ public sealed class MiningDeviceMapperTests
 
         // Assert
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedModel, Is.Not.Null);
-            Assert.That(mappedModel.Id, Is.EqualTo(deviceInfo.Id));
-            Assert.That(mappedModel.Manufacturer, Is.EqualTo(deviceInfo.Manufacturer));
-            Assert.That(mappedModel.Model, Is.EqualTo(deviceInfo.Model));
-            Assert.That(mappedModel.Type, Is.EqualTo(deviceInfo.Type.ToString()));
-            Assert.That(mappedModel.RigId, Is.EqualTo(deviceInfo.RigId));
-            Assert.That(mappedModel.FlightSheetId, Is.EqualTo(deviceInfo.FlightSheetId));
-            Assert.That(mappedModel.FlightSheetName, Is.EqualTo(deviceInfo.FlightSheet.Name));
-            Assert.That(mappedModel.FlightSheetConfirmationState, Is.EqualTo(deviceInfo.FlightSheetConfirmationState));
-            Assert.That(mappedModel.PresetName, Is.EqualTo(deviceInfo.Preset.Name));
-            Assert.That(mappedModel.MinerName, Is.EqualTo(checkingMinerName));
-            Assert.That(mappedModel.MinerVersion, Is.EqualTo(checkingMinerVersion));
-            Assert.That(mappedModel.IsOnline, Is.EqualTo(deviceInfo.IsOnline));
-        });
+        mappedModel.ShouldBeEqualTo(deviceInfo, (checkingMinerName, checkingMinerVersion));
     }
 
     private static class MiningDeviceTestCases
@@ -80,8 +64,7 @@ public sealed class MiningDeviceMapperTests
                         flightSheet.WithId(flightSheetId)
                                    .WithOwnerId(ownerId)
                                    .AddTarget(target =>
-                                        target.WithFlightSheetId(flightSheetId)
-                                              .WithMiningConfig(() =>
+                                        target.WithMiningConfig(() =>
                                               {
                                                   return new GpuMiningConfigBuilder()
                                                         .WithConfigFileContent("content")
@@ -100,11 +83,9 @@ public sealed class MiningDeviceMapperTests
                                                          .WithVersion(minerVersion)
                                                          .WithMiningMode(MiningModeEnum.Triple)
                                                          .WithSupportedDevices(DeviceTypeManufacturerCombination.NvidiaGpu)
-                                                         .AddAlgorithm(algo =>
-                                                            algo.WithMinerId(minerId))))
+                                                         .AddAlgorithm()))
                                    .AddTarget(target =>
-                                        target.WithFlightSheetId(flightSheetId)
-                                              .WithMiningConfig(() =>
+                                        target.WithMiningConfig(() =>
                                               {
                                                   return new CpuMiningConfigBuilder()
                                                         .WithConfigFileContent("content")
@@ -122,8 +103,7 @@ public sealed class MiningDeviceMapperTests
                                               .WithMiner(miner =>
                                                 miner.WithMiningMode(MiningModeEnum.Dual)
                                                      .WithSupportedDevices(DeviceTypeManufacturerCombination.NvidiaGpu)
-                                                     .AddAlgorithm(algo =>
-                                                        algo.WithMinerId(minerId)))))
+                                                     .AddAlgorithm())))
                     .WithDeviceType(MiningDeviceType.GPU)
                     .WithLifeCycleStatus(MiningDeviceLifeCycleStatus.Offline)
                     .WithPreset(preset =>
@@ -137,16 +117,13 @@ public sealed class MiningDeviceMapperTests
                                     {
                                         return new FanOverclockingWithLinearDependenceBuilder()
                                             .AddTargetPoint(point =>
-                                                point.WithPointIndex(0)
-                                                     .WithFanSpeedValueTarget(20)
+                                                point.WithFanSpeedValueTarget(20)
                                                      .WithTemperatureValueTarget(35))
                                             .AddTargetPoint(point =>
-                                                point.WithPointIndex(1)
-                                                     .WithFanSpeedValueTarget(50)
+                                                point.WithFanSpeedValueTarget(50)
                                                      .WithTemperatureValueTarget(65))
                                             .AddTargetPoint(point =>
-                                                point.WithPointIndex(2)
-                                                     .WithFanSpeedValueTarget(100)
+                                                point.WithFanSpeedValueTarget(100)
                                                      .WithTemperatureValueTarget(80))
                                             .Build();
                                     })

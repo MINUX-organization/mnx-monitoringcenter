@@ -36,13 +36,9 @@ public sealed class FanTargetSpeedAgentMapperTests
 
         // Assert
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedAgentFanOverclocking, Is.Not.Null);
-            Assert.That(mappedAgentFanOverclocking, Is.TypeOf<AgentFanOverclocking>());
-
-            var agentFanOverclocking = (AgentFanOverclocking)mappedAgentFanOverclocking;
-            Assert.That(agentFanOverclocking.TargetSpeed, Is.EqualTo(coreFanOverclocking.TargetSpeed));
-        });
+        Assert.That(mappedAgentFanOverclocking, Is.Not.Null);
+        Assert.That(mappedAgentFanOverclocking, Is.TypeOf<AgentFanOverclocking>());
+        var agentFanOverclocking = (AgentFanOverclocking)mappedAgentFanOverclocking;
+        Assert.That(agentFanOverclocking.TargetSpeed, Is.EqualTo(coreFanOverclocking.TargetSpeed));
     }
 }

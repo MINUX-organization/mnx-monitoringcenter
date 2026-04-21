@@ -16,10 +16,10 @@ public class FlightSheetInputModelBuilder
     }
 
     public FlightSheetInputModelBuilder AddFlightSheetTarget(
-        Func<FlightSheetTargetInputModelBuilder, FlightSheetTargetInputModelBuilder> configure)
+        Func<FlightSheetTargetInputModelBuilder, FlightSheetTargetInputModelBuilder>? configure = null)
     {
         var builder = new FlightSheetTargetInputModelBuilder();
-        builder = configure(builder);
+        builder = configure?.Invoke(builder) ?? builder;
         _targets.Add(builder.Build());
         return this;
     }

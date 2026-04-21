@@ -8,15 +8,15 @@ public class FanGraphicPointBuilder
     protected int _fanSpeedValueTarget = 0;
     protected int _temperatureValueTarget = 0;
 
-    public FanGraphicPointBuilder WithFanSpeedValueTarget(int fanSpeedValueTarget)
+    internal FanGraphicPointBuilder WithPointIndex(int pointIndex)
     {
-        _fanSpeedValueTarget = fanSpeedValueTarget;
+        _pointIndex = pointIndex;
         return this;
     }
 
-    public FanGraphicPointBuilder WithPointIndex(int pointIndex)
+    public FanGraphicPointBuilder WithFanSpeedValueTarget(int fanSpeedValueTarget)
     {
-        _pointIndex = pointIndex;
+        _fanSpeedValueTarget = fanSpeedValueTarget;
         return this;
     }
 

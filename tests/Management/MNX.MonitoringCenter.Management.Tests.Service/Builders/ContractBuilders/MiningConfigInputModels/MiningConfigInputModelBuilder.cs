@@ -10,13 +10,6 @@ public abstract class MiningConfigInputModelBuilder<TBuilder, TEntity>
     protected string? _additionalArguments = null;
     protected string? _configFileContent = null;
 
-    protected (string? additionalArguments, string? configFileContent, List<MiningCoinConfigInputModel> coinConfigs)
-        GetBaseValues() => (
-            _additionalArguments,
-            _configFileContent,
-            _coinConfigs
-        );
-
     public TBuilder WithAdditionalArguments(string? additionalArguments)
     {
         _additionalArguments = additionalArguments;
@@ -29,10 +22,11 @@ public abstract class MiningConfigInputModelBuilder<TBuilder, TEntity>
         return (TBuilder)this;
     }
 
-    public TBuilder AddCoinConfig(Func<MiningCoinConfigInputModelBuilder, MiningCoinConfigInputModelBuilder> configure)
+    public TBuilder AddCoinConfig(
+        Func<MiningCoinConfigInputModelBuilder, MiningCoinConfigInputModelBuilder>? configure = null)
     {
         var builder = new MiningCoinConfigInputModelBuilder();
-        builder = configure(builder);
+        builder = configure?.Invoke(builder) ?? builder;
         _coinConfigs.Add(builder.Build());
         return (TBuilder)this;
     }

@@ -5,10 +5,10 @@ using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Agent;
 
 namespace MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.Fan.Agent;
 
-using AgentFanOverclocking = FanOverclockingWithLinearDependence;
-using CoreFanOverclocking = Core.Overclocking.Gpu.Fan.FanOverclockingWithLinearDependence;
 using AgentFanGraphicPoint = FanGraphicPoint;
+using AgentFanOverclocking = FanOverclockingWithLinearDependence;
 using CoreFanGraphicPoint = Core.Overclocking.Gpu.Fan.FanGraphicPoint;
+using CoreFanOverclocking = Core.Overclocking.Gpu.Fan.FanOverclockingWithLinearDependence;
 
 [TestFixture]
 public sealed class FanLinearDependenceAgentMapperTests
@@ -28,20 +28,16 @@ public sealed class FanLinearDependenceAgentMapperTests
 
         var coreFanOverclocking = new FanOverclockingWithLinearDependenceBuilder()
             .AddTargetPoint(point =>
-                point.WithPointIndex(0)
-                     .WithFanSpeedValueTarget(40)
+                point.WithFanSpeedValueTarget(40)
                      .WithTemperatureValueTarget(30))
             .AddTargetPoint(point =>
-                point.WithPointIndex(1)
-                     .WithFanSpeedValueTarget(55)
+                point.WithFanSpeedValueTarget(55)
                      .WithTemperatureValueTarget(45))
             .AddTargetPoint(point =>
-                point.WithPointIndex(2)
-                     .WithFanSpeedValueTarget(70)
+                point.WithFanSpeedValueTarget(70)
                      .WithTemperatureValueTarget(60))
             .AddTargetPoint(point =>
-                point.WithPointIndex(3)
-                     .WithFanSpeedValueTarget(85)
+                point.WithFanSpeedValueTarget(85)
                      .WithTemperatureValueTarget(75))
             .Build();
 
@@ -53,11 +49,10 @@ public sealed class FanLinearDependenceAgentMapperTests
 
         // Assert
 
+        Assert.That(mappedAgentFanOverclocking, Is.Not.Null);
+        Assert.That(mappedAgentFanOverclocking, Is.TypeOf<AgentFanOverclocking>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedAgentFanOverclocking, Is.Not.Null);
-            Assert.That(mappedAgentFanOverclocking, Is.TypeOf<AgentFanOverclocking>());
-
             var agentFanOverclocking = (AgentFanOverclocking)mappedAgentFanOverclocking;
             AssertTargets(coreFanOverclocking.TargetPoints, agentFanOverclocking.TargetPoints);
         });

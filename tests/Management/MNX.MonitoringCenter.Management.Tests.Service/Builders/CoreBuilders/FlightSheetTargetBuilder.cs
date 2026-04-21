@@ -1,6 +1,5 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
-using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
 
 namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
@@ -14,6 +13,12 @@ public class FlightSheetTargetBuilder
     protected Guid _minerId = Guid.NewGuid();
     protected Miner? _miner = null;
 
+    internal FlightSheetTargetBuilder WithFlightSheetId(Guid flightSheetId)
+    {
+        _flightSheetId = flightSheetId;
+        return this;
+    }
+
     public FlightSheetTargetBuilder WithId(Guid id)
     {
         _id = id;
@@ -26,18 +31,25 @@ public class FlightSheetTargetBuilder
         return this;
     }
 
-    public FlightSheetTargetBuilder WithFlightSheetId(Guid flightSheetId)
+    public FlightSheetTargetBuilder WithMiningConfig(BaseMiningConfig config)
     {
-        _flightSheetId = flightSheetId;
+        _miningConfig = config;
         return this;
     }
 
-    public FlightSheetTargetBuilder WithMiner(Func<MinerBuilder, MinerBuilder> configure)
+    public FlightSheetTargetBuilder WithMiner(Func<MinerBuilder, MinerBuilder>? configure = null)
     {
         var builder = new MinerBuilder();
-        builder = configure(builder);
+        builder = configure?.Invoke(builder) ?? builder;
         _miner = builder.Build();
         _minerId = _miner.Id;
+        return this;
+    }
+
+    public FlightSheetTargetBuilder WithMiner(Miner miner)
+    {
+        _miner = miner;
+        _minerId = miner.Id;
         return this;
     }
 
@@ -47,7 +59,7 @@ public class FlightSheetTargetBuilder
         {
             Id = _id,
             MiningConfig = _miningConfig ??
-                throw new ArgumentException("It's nessesary to initialize mining config"),
+                throw new ArgumentException("At least one MiningConfig is nessesary to initialize FlightSheetTarget"),
             FlightSheetId = _flightSheetId,
             MinerId = _minerId,
             Miner = _miner,

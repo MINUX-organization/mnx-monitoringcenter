@@ -30,12 +30,12 @@ public sealed class FanLinearDependenceModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclocking, Is.Not.Null);
+        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithLinearDependence>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclocking, Is.Not.Null);
             Assert.That(mappedFanOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedFanOverclocking.Type, Is.EqualTo(fanOverclockingModel.FanOverclockingType));
-            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithLinearDependence>());
 
             var fanOverclockingCore = (FanOverclockingWithLinearDependence)mappedFanOverclocking;
             Assert.That(fanOverclockingCore.TargetPoints.Select(x => (x.FanSpeedValueTarget, x.TemperatureValueTarget)),
@@ -58,12 +58,12 @@ public sealed class FanLinearDependenceModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclocking, Is.Not.Null);
+        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithLinearDependence>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclocking, Is.Not.Null);
             Assert.That(mappedFanOverclocking.Id, Is.EqualTo(fanOverclockingId));
             Assert.That(mappedFanOverclocking.Type, Is.EqualTo(fanOverclockingModel.FanOverclockingType));
-            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithLinearDependence>());
 
             var fanOverclockingCore = (FanOverclockingWithLinearDependence)mappedFanOverclocking;
             Assert.That(fanOverclockingCore.TargetPoints.Select(x => (x.FanSpeedValueTarget, x.TemperatureValueTarget)),
@@ -82,11 +82,11 @@ public sealed class FanLinearDependenceModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclocking, Is.Not.Null);
+        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithLinearDependenceModel>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclocking, Is.Not.Null);
             Assert.That(mappedFanOverclocking.FanOverclockingType, Is.EqualTo(fanOverclockingCore.Type));
-            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithLinearDependenceModel>());
 
             var fanOverclockingModel = (FanOverclockingWithLinearDependenceModel)mappedFanOverclocking;
             Assert.That(fanOverclockingModel.TargetPoints.Select(x => (x.FanSpeedValueTarget, x.TemperatureValueTarget)),
@@ -127,24 +127,19 @@ public sealed class FanLinearDependenceModelMapperTests
                 yield return new FanOverclockingWithLinearDependenceBuilder()
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(30)
-                                   .WithTemperatureValueTarget(25)
-                                   .WithPointIndex(0))
+                                   .WithTemperatureValueTarget(25))
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(45)
-                                   .WithTemperatureValueTarget(40)
-                                   .WithPointIndex(1))
+                                   .WithTemperatureValueTarget(40))
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(60)
-                                   .WithTemperatureValueTarget(50)
-                                   .WithPointIndex(2))
+                                   .WithTemperatureValueTarget(50))
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(75)
-                                   .WithTemperatureValueTarget(65)
-                                   .WithPointIndex(3))
+                                   .WithTemperatureValueTarget(65))
                     .AddTargetPoint(targetPoint =>
                         targetPoint.WithFanSpeedValueTarget(100)
-                                   .WithTemperatureValueTarget(75)
-                                   .WithPointIndex(4))
+                                   .WithTemperatureValueTarget(75))
                     .Build();
             }
         }

@@ -23,11 +23,12 @@ public class CpuMiningConfigBuilder : MiningConfigBuilder<CpuMiningConfigBuilder
     {
         var entity = new CpuMiningConfig()
         {
+            AdditionalArguments = _additionalArguments,
+            ConfigFileContent = _configFileContent,
+            CoinConfigs = _coinConfigs,
             ThreadsCount = _threads,
             HugePages = _hugePages
         };
-
-        ApplyBaseProperties(entity);
 
         return entity;
     }

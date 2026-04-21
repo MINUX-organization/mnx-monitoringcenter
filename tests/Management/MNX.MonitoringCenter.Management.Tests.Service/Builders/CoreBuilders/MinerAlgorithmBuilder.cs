@@ -10,6 +10,12 @@ public class MinerAlgorithmBuilder
     protected Guid _algorithmId = Guid.NewGuid();
     protected Guid _minerId = Guid.NewGuid();
 
+    internal MinerAlgorithmBuilder WithMinerId(Guid minerId)
+    {
+        _minerId = minerId;
+        return this;
+    }
+
     public MinerAlgorithmBuilder WithName(string name)
     {
         _name = name;
@@ -19,12 +25,6 @@ public class MinerAlgorithmBuilder
     public MinerAlgorithmBuilder WithAlgorithmId(Guid algorithmId)
     {
         _algorithmId = algorithmId;
-        return this;
-    }
-
-    public MinerAlgorithmBuilder WithMinerId(Guid minerId)
-    {
-        _minerId = minerId;
         return this;
     }
 

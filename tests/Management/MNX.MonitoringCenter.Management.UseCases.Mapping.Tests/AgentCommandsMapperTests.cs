@@ -1,7 +1,6 @@
-﻿using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
-using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
+﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
@@ -35,52 +34,13 @@ public sealed class AgentCommandsMapperTests
     {
         // Arrange
         // Act
+
         var mappedData = _agentCommandsMapper.MapToWorkerSettings(data);
 
+
         // Assert
-        Assert.That(mappedData, Is.Not.Null);
-        Assert.That(mappedData, Is.Not.Empty);
-        Assert.That(mappedData, Has.Count.EqualTo(data.Count));
 
-        for (int i = 0; i < data.Count; i++)
-        {
-            var expectedFlightSheet = data[i].FlightSheet;
-            var checkingSettingsModel = mappedData[i].SettingsModel;
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(mappedData[i], Is.Not.Null);
-                Assert.That(mappedData[i].WorkerId, Is.EqualTo(data[i].Device.Id));
-
-                Assert.That(checkingSettingsModel, Is.Not.Null);
-                Assert.That(checkingSettingsModel.MinerName, Is.EqualTo(expectedFlightSheet.Miner.Name));
-                Assert.That(checkingSettingsModel.MinerVersion, Is.EqualTo(expectedFlightSheet.Miner.Version));
-                Assert.That(checkingSettingsModel.AdditionalArguments, Is.EqualTo(expectedFlightSheet.MiningConfig.AdditionalArguments));
-                Assert.That(checkingSettingsModel.ConfigFileContent, Is.EqualTo(expectedFlightSheet.MiningConfig.ConfigFileContent));
-
-                Assert.That(checkingSettingsModel.CoinConfigs, Is.Not.Null);
-                AssertCoinConfigs(expectedFlightSheet.MiningConfig.CoinConfigs, checkingSettingsModel.CoinConfigs);
-            });
-        }
-    }
-
-    private static void AssertCoinConfigs(List<MiningCoinConfig> expected, List<MiningCoinConfigModel> checking)
-    {
-        Assert.That(checking, Has.Count.EqualTo(expected.Count));
-
-        for (int i = 0; i < expected.Count; i++)
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(checking[i], Is.Not.Null);
-                Assert.That(checking[i].WalletAddress, Is.EqualTo(expected[i].Wallet.Address));
-                Assert.That(checking[i].AlgorithmName, Is.EqualTo(expected[i].Wallet.Cryptocurrency.Algorithm.Name));
-                Assert.That(checking[i].PoolHost, Is.EqualTo(expected[i].Pool.Domain));
-                Assert.That(checking[i].PoolPort, Is.EqualTo(expected[i].Pool.Port));
-                Assert.That(checking[i].Tls, Is.EqualTo(expected[i].Pool.Tls));
-                Assert.That(checking[i].PoolPassword, Is.EqualTo(expected[i].PoolPassword));
-            });
-        }
+        mappedData.ShouldBeEqual(data);
     }
 
     private class DeviceFLightSheetCollectionsTestData
@@ -122,8 +82,7 @@ public sealed class AgentCommandsMapperTests
                             .WithId(flightSheet1Id)
                             .WithName("FlightSheet1")
                             .AddTarget(target =>
-                                target.WithFlightSheetId(flightSheet1Id)
-                                      .WithMiningConfig(() =>
+                                target.WithMiningConfig(() =>
                                       {
                                           return new GpuMiningConfigBuilder()
                                             .WithAdditionalArguments("Argument1, Argument2")
@@ -156,8 +115,7 @@ public sealed class AgentCommandsMapperTests
                         new FlightSheetBuilder()
                             .WithId(flightSheet2Id)
                             .AddTarget(target =>
-                                target.WithFlightSheetId(flightSheet2Id)
-                                      .WithMiningConfig(() =>
+                                target.WithMiningConfig(() =>
                                       {
                                           return new GpuMiningConfigBuilder()
                                             .WithAdditionalArguments("Argument1, Argument2")
@@ -190,8 +148,7 @@ public sealed class AgentCommandsMapperTests
                         new FlightSheetBuilder()
                             .WithId(flightSheet3Id)
                             .AddTarget(target =>
-                                target.WithFlightSheetId(flightSheet3Id)
-                                      .WithMiner(miner =>
+                                target.WithMiner(miner =>
                                         miner.WithId(guids.MinerId)
                                              .WithOwner(guids.UserId)
                                              .WithSupportedDevices(DeviceTypeManufacturerCombination.IntelCpu)

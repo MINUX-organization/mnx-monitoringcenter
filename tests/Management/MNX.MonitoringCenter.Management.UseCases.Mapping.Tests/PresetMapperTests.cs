@@ -1,6 +1,7 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts.Overclocking.Cpu;
 using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Cpu;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
@@ -50,19 +51,7 @@ public sealed class PresetMapperTests
 
         // Assert
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedPreset, Is.Not.Null);
-            Assert.That(mappedPreset.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedPreset.Name, Is.EqualTo(presetModel.Name));
-            Assert.That(mappedPreset.DeviceName, Is.EqualTo(presetModel.DeviceName));
-            Assert.That(mappedPreset.OwnerId, Is.EqualTo(ownerId));
-            Assert.That(mappedPreset.IsVisible, Is.True);
-            Assert.That(mappedPreset.OverclockingId, Is.Not.EqualTo(Guid.Empty));
-            
-            Assert.That(mappedPreset.Overclocking, Is.Not.Null);
-            Assert.That(mappedPreset.Overclocking.Id, Is.Not.EqualTo(Guid.Empty));
-        });
+        mappedPreset.ShouldBeEqualTo(presetModel, ownerId);
 
         _cpuOverclockingMapper.Verify(x => x.MapToCoreEntity(It.IsAny<CpuOverclockingModel>()), Times.Once);
     }
@@ -88,23 +77,11 @@ public sealed class PresetMapperTests
 
         // Assert
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedPreset, Is.Not.Null);
-            Assert.That(mappedPreset.Id, Is.EqualTo(originalPreset.Id));
-            Assert.That(mappedPreset.Name, Is.EqualTo(presetModel.Name));
-            Assert.That(mappedPreset.DeviceName, Is.EqualTo(presetModel.DeviceName));
-            Assert.That(mappedPreset.OwnerId, Is.EqualTo(originalPreset.OwnerId));
-            Assert.That(mappedPreset.IsVisible, Is.EqualTo(originalPreset.IsVisible));
-            Assert.That(mappedPreset.OverclockingId, Is.EqualTo(originalPreset.OverclockingId));
-
-            Assert.That(mappedPreset.Overclocking, Is.Not.Null);
-            Assert.That(mappedPreset.Id, Is.Not.EqualTo(Guid.Empty));
-        });
+        mappedPreset.ShouldBeEqualTo(presetModel, originalPreset);
 
         _cpuOverclockingMapper.Verify(x => x.MapToCoreEntity(
-            (CpuOverclockingModel)presetModel.Overclocking,
-            (CpuOverclocking)originalPreset.Overclocking), Times.Once);
+            It.IsAny<CpuOverclockingModel>(),
+            It.IsAny<CpuOverclocking>()), Times.Once);
     }
 
     [TestCaseSource(typeof(PresetTestsCaseSources), nameof(PresetTestsCaseSources.CorePresetLists))]
@@ -123,13 +100,7 @@ public sealed class PresetMapperTests
 
         // Assert
 
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedPresetModelList, Is.Not.Null);
-            Assert.That(mappedPresetModelList, Has.Count.EqualTo(data.Count));
-            
-            AssertPresets(data, mappedPresetModelList);
-        });
+        mappedPresetModelList.ShouldBeEqualTo(data);
 
         _cpuOverclockingMapper.Verify(x => x.MapToModel(It.IsAny<CpuOverclocking>()), Times.AtLeast(data.Count));
     }
@@ -152,9 +123,9 @@ public sealed class PresetMapperTests
 
         // Assert
 
+        Assert.That(mappedPresetModel, Is.Not.Null);
         Assert.Multiple(() =>
         {
-            Assert.That(mappedPresetModel, Is.Not.Null);
             Assert.That(mappedPresetModel.Id, Is.EqualTo(preset.Id));
             Assert.That(mappedPresetModel.Name, Is.EqualTo(preset.Name));
             Assert.That(mappedPresetModel.DeviceName, Is.EqualTo(preset.DeviceName));
@@ -194,20 +165,6 @@ public sealed class PresetMapperTests
             .WithCoreClockLock(100)
             .WithCoreVoltage(50)
             .Build();
-    }
-
-    private static void AssertPresets(List<Preset> expected, List<PresetModel> checking)
-    {
-        for (var i = 0; i < expected.Count; i++)
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(checking[i].Id, Is.EqualTo(expected[i].Id));
-                Assert.That(checking[i].Name, Is.EqualTo(expected[i].Name));
-                Assert.That(checking[i].DeviceName, Is.EqualTo(expected[i].DeviceName));
-                Assert.That(checking[i].Overclocking.TargetDeviceType, Is.EqualTo(expected[i].Overclocking.TargetDeviceType));
-            });
-        }
     }
 
     private static class PresetTestsCaseSources

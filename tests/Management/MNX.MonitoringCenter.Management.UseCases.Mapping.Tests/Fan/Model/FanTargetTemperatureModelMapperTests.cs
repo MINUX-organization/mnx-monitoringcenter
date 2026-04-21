@@ -1,5 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts.Overclocking.Gpu.Fan;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions.FanModels;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.Overclockings.Fan;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings.Fans;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Fan.Model;
@@ -30,18 +31,15 @@ public sealed class FanTargetTemperatureModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclocking, Is.Not.Null);
+        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclocking, Is.Not.Null);
             Assert.That(mappedFanOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
             Assert.That(mappedFanOverclocking.Type, Is.EqualTo(fanOverclockingModel.FanOverclockingType));
-            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
 
             var fanOverclocking = (FanOverclockingWithTargetTemperature)mappedFanOverclocking;
-            Assert.That(fanOverclocking.MaxTargetSpeed, Is.EqualTo(fanOverclockingModel.MaxTargetSpeed));
-            Assert.That(fanOverclocking.MinTargetSpeed, Is.EqualTo(fanOverclockingModel.MinTargetSpeed));
-            Assert.That(fanOverclocking.TargetCoreTemperature, Is.EqualTo(fanOverclockingModel.TargetCoreTemperature));
-            Assert.That(fanOverclocking.TargetMemoryTemperature, Is.EqualTo(fanOverclockingModel.TargetMemoryTemperature));
+            fanOverclocking.ShouldBeEqualTo(fanOverclockingModel);
         });
     }
 
@@ -60,18 +58,14 @@ public sealed class FanTargetTemperatureModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclocking, Is.Not.Null);
+        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclocking, Is.Not.Null);
-            Assert.That(mappedFanOverclocking.Id, Is.EqualTo(fanOverclockingId));
-            Assert.That(mappedFanOverclocking.Type, Is.EqualTo(fanOverclockingModel.FanOverclockingType));
-            Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
+            mappedFanOverclocking.ShouldBeEqualTo(fanOverclockingModel, fanOverclockingId);
 
             var fanOverclocking = (FanOverclockingWithTargetTemperature)mappedFanOverclocking;
-            Assert.That(fanOverclocking.MaxTargetSpeed, Is.EqualTo(fanOverclockingModel.MaxTargetSpeed));
-            Assert.That(fanOverclocking.MinTargetSpeed, Is.EqualTo(fanOverclockingModel.MinTargetSpeed));
-            Assert.That(fanOverclocking.TargetCoreTemperature, Is.EqualTo(fanOverclockingModel.TargetCoreTemperature));
-            Assert.That(fanOverclocking.TargetMemoryTemperature, Is.EqualTo(fanOverclockingModel.TargetMemoryTemperature));
+            fanOverclocking.ShouldBeEqualTo(fanOverclockingModel);
         });
     }
 
@@ -86,17 +80,14 @@ public sealed class FanTargetTemperatureModelMapperTests
 
         // Assert
 
+        Assert.That(mappedFanOverclockingModel, Is.Not.Null);
+        Assert.That(mappedFanOverclockingModel, Is.TypeOf<FanOverclockingWithTargetTemperatureModel>());
         Assert.Multiple(() =>
         {
-            Assert.That(mappedFanOverclockingModel, Is.Not.Null);
             Assert.That(mappedFanOverclockingModel.FanOverclockingType, Is.EqualTo(fanOverclockingCore.Type));
-            Assert.That(mappedFanOverclockingModel, Is.TypeOf<FanOverclockingWithTargetTemperatureModel>());
 
             var fanOverclockingModel = (FanOverclockingWithTargetTemperatureModel)mappedFanOverclockingModel;
-            Assert.That(fanOverclockingModel.MaxTargetSpeed, Is.EqualTo(fanOverclockingCore.MaxTargetSpeed));
-            Assert.That(fanOverclockingModel.MinTargetSpeed, Is.EqualTo(fanOverclockingCore.MinTargetSpeed));
-            Assert.That(fanOverclockingModel.TargetCoreTemperature, Is.EqualTo(fanOverclockingCore.TargetCoreTemperature));
-            Assert.That(fanOverclockingModel.TargetMemoryTemperature, Is.EqualTo(fanOverclockingCore.TargetMemoryTemperature));
+            fanOverclockingModel.ShouldBeEqualTo(fanOverclockingCore);
         });
     }
     
