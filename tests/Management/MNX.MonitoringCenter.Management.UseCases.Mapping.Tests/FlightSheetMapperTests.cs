@@ -1,9 +1,9 @@
-﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
-using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
+﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet.MiningConfigs;
 using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions.FlightSheet;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.MiningConfigInputModels;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.MiningConfigModels;
@@ -65,14 +65,7 @@ public sealed class FlightSheetMapperTests
 
         // Assert
 
-        Assert.That(mappedFlightSheet, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedFlightSheet.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedFlightSheet.Name, Is.EqualTo(flightSheetInputModel.Name));
-            Assert.That(mappedFlightSheet.OwnerId, Is.EqualTo(userId));
-            CheckFlightSheetTargets(flightSheetInputModel.Targets, mappedFlightSheet.Targets);
-        });
+        mappedFlightSheet.ShouldBeEqualTo(flightSheetInputModel, userId);
 
         _miningConfigMapperMock.Verify(x => 
             x.MapToCoreEntity(gpuMiningConfigInputModel), Times.Once);
@@ -116,14 +109,7 @@ public sealed class FlightSheetMapperTests
 
         // Assert
 
-        Assert.That(mappedFlightSheet, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedFlightSheet.Id, Is.EqualTo(commandId));
-            Assert.That(mappedFlightSheet.OwnerId, Is.EqualTo(userId));
-            Assert.That(mappedFlightSheet.Name, Is.EqualTo(editFlightSheetCommand.Model.Name));
-            CheckFlightSheetTargets(editFlightSheetCommand.Model.Targets, mappedFlightSheet.Targets);
-        });
+        mappedFlightSheet.ShouldBeEqualTo(editFlightSheetCommand);
 
         _miningConfigMapperMock.Verify(x => 
             x.MapToCoreEntity(gpuMiningConfigInputModel), Times.Once);
@@ -141,7 +127,7 @@ public sealed class FlightSheetMapperTests
         var flightSheet = new FlightSheetBuilder()
             .WithId(flightSheetId)
             .WithOwnerId(userId)
-            .WithTargets(() => CreateFlightSheetTargets(flightSheetId, userId))
+            .WithTargets(() => CreateFlightSheetTargets(userId))
             .Build();
 
         _miningConfigMapperMock.Setup(x => x.MapToModel(It.IsAny<GpuMiningConfig>()))
@@ -157,14 +143,7 @@ public sealed class FlightSheetMapperTests
 
         // Assert
 
-        Assert.That(mappedFlightSheet, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedFlightSheet.Id, Is.EqualTo(flightSheet.Id));
-            Assert.That(mappedFlightSheet.Name, Is.EqualTo(flightSheet.Name));
-            Assert.That(mappedFlightSheet.Targets, Has.Count.EqualTo(flightSheet.Targets.Count));
-            CheckFlightSheetTargetModels(flightSheet.Targets, mappedFlightSheet.Targets);
-        });
+        mappedFlightSheet.ShouldBeEqualTo(flightSheet);
 
         _miningConfigMapperMock.Verify(x => 
             x.MapToModel(It.IsAny<GpuMiningConfig>()), Times.Once);
@@ -172,45 +151,7 @@ public sealed class FlightSheetMapperTests
             x.MapToModel(It.IsAny<CpuMiningConfig>()), Times.Once);
     }
 
-    private static void CheckFlightSheetTargetModels(List<FlightSheetTarget> expected, List<FlightSheetTargetModel> checking)
-    {
-        for (int i = 0; i < expected.Count; i++)
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(checking[i].Miner.Id, Is.EqualTo(expected[i].MinerId));
-                Assert.That(checking[i].Miner.Name, Is.EqualTo(expected[i].Miner.Name));
-                Assert.That(checking[i].Miner.Version, Is.EqualTo(expected[i].Miner.Version));
-                Assert.That(checking[i].Miner.SupportedDevices, Is.EqualTo(expected[i].Miner.SupportedDevices));
-                Assert.That(checking[i].Miner.OwnerId, Is.EqualTo(expected[i].Miner.OwnerId));
-                Assert.That(checking[i].Miner.InstallationUrl, Is.EqualTo(expected[i].Miner.InstallationUrl));
-                Assert.That(checking[i].Miner.PoolTemplate, Is.EqualTo(expected[i].Miner.PoolTemplate));
-                Assert.That(checking[i].Miner.WalletWorkerTemplate, Is.EqualTo(expected[i].Miner.WalletWorkerTemplate));
-                Assert.That(checking[i].Miner.MiningMode, Is.EqualTo(expected[i].Miner.MiningMode));
-                Assert.That(checking[i].Miner.SupportedAlgorithms, Has.Count.EqualTo(expected[i].Miner.SupportedAlgorithms.Count));
-                Assert.That(checking[i].MiningConfig, Is.Not.Null);
-            });
-        }
-    }
-
-    private static void CheckFlightSheetTargets(List<FlightSheetTargetInputModel> expected, List<FlightSheetTarget> checking)
-    {
-        for (int i = 0; i < expected.Count; i++)
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(checking[i].Id, Is.Not.EqualTo(Guid.Empty));
-                Assert.That(checking[i].DeviceType, Is.EqualTo(expected[i].MiningConfig.DeviceType));
-                Assert.That(checking[i].MinerId, Is.EqualTo(expected[i].MinerId));
-                Assert.That(checking[i].Miner, Is.Null);
-                Assert.That(checking[i].FlightSheetId, Is.Not.EqualTo(Guid.Empty));
-                Assert.That(checking[i].MiningConfig, Is.Not.Null);
-                Assert.That(checking[i].MiningConfig.DeviceType, Is.EqualTo(expected[i].MiningConfig.DeviceType));
-            });
-        }
-    }
-
-    private static List<FlightSheetTarget> CreateFlightSheetTargets(Guid flightSheetId, Guid userId)
+    private static List<FlightSheetTarget> CreateFlightSheetTargets(Guid userId)
     {
         var minerId = Guid.NewGuid();
         return

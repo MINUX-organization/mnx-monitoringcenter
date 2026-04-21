@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Wallet;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
@@ -28,22 +29,15 @@ public sealed class WalletMapperTests
             Guid.NewGuid()
         );
 
+
         // Act
 
         var mappedWallet = _walletMapper.MapToCoreEntity(addWalletCommand);
 
+
         // Assert
 
-        Assert.That(mappedWallet, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedWallet.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedWallet.Name, Is.EqualTo(addWalletCommand.Model.Name));
-            Assert.That(mappedWallet.Address, Is.EqualTo(addWalletCommand.Model.Address));
-            Assert.That(mappedWallet.CryptocurrencyId, Is.EqualTo(addWalletCommand.Model.CryptocurrencyId));
-            Assert.That(mappedWallet.Cryptocurrency, Is.Null);
-            Assert.That(mappedWallet.OwnerId, Is.EqualTo(addWalletCommand.UserId));
-        });
+        mappedWallet.ShouldBeEqualTo(addWalletCommand);
     }
 
     [Test]
@@ -57,28 +51,22 @@ public sealed class WalletMapperTests
             Guid.NewGuid()
         );
 
+
         // Act
+
 
         var mappedWallet = _walletMapper.MapToCoreEntity(editWalletCommand);
 
         // Assert
 
-        Assert.That(mappedWallet, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedWallet.Id, Is.EqualTo(editWalletCommand.Id));
-            Assert.That(mappedWallet.Name, Is.EqualTo(editWalletCommand.Model.Name));
-            Assert.That(mappedWallet.Address, Is.EqualTo(editWalletCommand.Model.Address));
-            Assert.That(mappedWallet.CryptocurrencyId, Is.EqualTo(editWalletCommand.Model.CryptocurrencyId));
-            Assert.That(mappedWallet.Cryptocurrency, Is.Null);
-            Assert.That(mappedWallet.OwnerId, Is.EqualTo(editWalletCommand.UserId));
-        });
+        mappedWallet.ShouldBeEqualTo(editWalletCommand);
     }
 
     [Test]
     public void MapToModel_ValidWallet_ReturnWalletModel()
     {
         // Arrange
+
         var wallet = new WalletBuilder()
             .WithCryptocurrency(crypto =>
                 crypto.WithOwner()
@@ -91,16 +79,9 @@ public sealed class WalletMapperTests
 
         var mappedModel = _walletMapper.MapToModel(wallet);
 
+
         // Assert
 
-        Assert.That(mappedModel, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedModel.Id, Is.EqualTo(wallet.Id));
-            Assert.That(mappedModel.Name, Is.EqualTo(wallet.Name));
-            Assert.That(mappedModel.Address, Is.EqualTo(wallet.Address));
-            Assert.That(mappedModel.CryptocurrencyId, Is.EqualTo(wallet.CryptocurrencyId));
-            Assert.That(mappedModel.Cryptocurrency, Is.EqualTo(wallet.Cryptocurrency.FullName));
-        });
+        mappedModel.ShouldBeEqualTo(wallet);
     }
 }

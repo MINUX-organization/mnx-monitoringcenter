@@ -6,7 +6,7 @@ using Algorithm = Core.Mining.Algorithm;
 
 public static class AlgorithmAssertions
 {
-    public static void ShouldBeEqualTo(this IEnumerable<Algorithm?> checking, IEnumerable<Algorithm?> expected)
+    public static void ShouldBeEqualTo(this IEnumerable<Algorithm?>? checking, IEnumerable<Algorithm?>? expected)
     {
         if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
 

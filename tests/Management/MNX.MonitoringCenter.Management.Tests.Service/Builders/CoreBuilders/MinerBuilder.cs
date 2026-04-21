@@ -7,7 +7,7 @@ namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 public class MinerBuilder
 {
     private static int _counter = 1;
-    private MinerTypeEnum _minerType => _ownerId is null ? MinerTypeEnum.Integrated : MinerTypeEnum.Custom;
+    private MinerTypeEnum MinerType => _ownerId is null ? MinerTypeEnum.Integrated : MinerTypeEnum.Custom;
 
     protected Guid _id = Guid.NewGuid();
     protected string _name = $"Miner_{_counter}";
@@ -52,7 +52,7 @@ public class MinerBuilder
 
     public MinerBuilder WithOwner(Guid? ownerId = null)
     {
-        _ownerId = ownerId;
+        _ownerId = ownerId ?? Guid.NewGuid();
         return this;
     }
 
@@ -114,7 +114,7 @@ public class MinerBuilder
             Version = _version,
             MiningMode = _miningMode,
             OwnerId = _ownerId,
-            Type = _minerType,
+            Type = MinerType,
             SupportedDevices = _supportedDevices,
             SupportedAlgorithms = _supportedAlgorithms,
             WalletWorkerTemplate = _walletWorkerTemplate,

@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Pool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool;
@@ -36,18 +37,7 @@ public sealed class PoolMapperTests
 
         // Assert
 
-        Assert.That(mappedPool, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedPool.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedPool.Tls, Is.EqualTo(addPoolCommand.Model.Tls));
-            Assert.That(mappedPool.IsDomain(), Is.EqualTo(false));
-            Assert.That(mappedPool.CryptocurrencyId, Is.EqualTo(addPoolCommand.Model.CryptocurrencyId));
-            Assert.That(mappedPool.Cryptocurrency, Is.Null);
-            Assert.That(mappedPool.OwnerId, Is.EqualTo(addPoolCommand.UserId));
-            Assert.That(mappedPool.Domain, Is.EqualTo(addPoolCommand.Model.Domain));
-            Assert.That(mappedPool.Port, Is.EqualTo(addPoolCommand.Model.Port));
-        });
+        mappedPool.ShouldBeEqualTo(addPoolCommand);
     }
 
     [Test]
@@ -67,18 +57,7 @@ public sealed class PoolMapperTests
 
         // Assert
 
-        Assert.That(mappedPool, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedPool.Id, Is.EqualTo(editPoolCommand.Id));
-            Assert.That(mappedPool.Tls, Is.EqualTo(editPoolCommand.Model.Tls));
-            Assert.That(mappedPool.IsDomain(), Is.EqualTo(false));
-            Assert.That(mappedPool.OwnerId, Is.EqualTo(editPoolCommand.UserId));
-            Assert.That(mappedPool.Domain, Is.EqualTo(editPoolCommand.Model.Domain));
-            Assert.That(mappedPool.Port, Is.EqualTo(editPoolCommand.Model.Port));
-            Assert.That(mappedPool.CryptocurrencyId, Is.EqualTo(editPoolCommand.Model.CryptocurrencyId));
-            Assert.That(mappedPool.Cryptocurrency, Is.Null);
-        });
+        mappedPool.ShouldBeEqualTo(editPoolCommand);
     }
 
     [Test]
@@ -100,16 +79,6 @@ public sealed class PoolMapperTests
 
         // Assert
 
-        Assert.That(mappedModel, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedModel.Id, Is.EqualTo(pool.Id));
-            Assert.That(mappedModel.OwnerId, Is.EqualTo(pool.OwnerId));
-            Assert.That(mappedModel.Tls, Is.EqualTo(pool.Tls));
-            Assert.That(mappedModel.Domain, Is.EqualTo(pool.Domain));
-            Assert.That(mappedModel.Port, Is.EqualTo(pool.Port));
-            Assert.That(mappedModel.CryptocurrencyId, Is.EqualTo(pool.CryptocurrencyId));
-            Assert.That(mappedModel.Cryptocurrency, Is.EqualTo(pool.Cryptocurrency.FullName));
-        });
+        mappedModel.ShouldBeEqualTo(pool);
     }
 }

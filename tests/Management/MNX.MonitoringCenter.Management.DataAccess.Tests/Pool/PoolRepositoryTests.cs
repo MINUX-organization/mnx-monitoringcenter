@@ -26,7 +26,7 @@ public partial class PoolRepositoryTests : BaseTest
     {
         public static Guid UserId = Guid.NewGuid();
 
-        public static IEnumerable<List<Pool>> Pools
+        public static IEnumerable<List<Pool>> PoolLists
         {
             get
             {
@@ -47,6 +47,31 @@ public partial class PoolRepositoryTests : BaseTest
                             crypto.WithAlgorithm())
                         .Build(),
                 ];
+            }
+        }
+
+        public static IEnumerable<Pool> Pools
+        {
+            get
+            {
+                yield return new PoolBuilder()
+                    .WithOwner(UserId)
+                    .WithCryptocurrency(crypto => crypto.WithAlgorithm())
+                    .Build();
+                yield return new PoolBuilder()
+                    .WithOwner(UserId)
+                    .WithCryptocurrency(crypto => crypto.WithAlgorithm(algo => algo.WithOwner(UserId)))
+                    .Build();
+            }
+        }
+
+        public static IEnumerable<Pool> DomainPools
+        {
+            get
+            {
+                yield return new PoolBuilder()
+                    .WithCryptocurrency(crypto => crypto.WithAlgorithm())
+                    .Build();
             }
         }
     }

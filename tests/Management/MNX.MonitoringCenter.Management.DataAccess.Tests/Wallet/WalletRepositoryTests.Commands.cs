@@ -1,51 +1,41 @@
-﻿using MNX.MonitoringCenter.Management.DataAccess.Cryptocurrency;
-using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Wallet;
 
+using Wallet = Core.Mining.Wallet;
+
 public partial class WalletRepositoryTests
 {
-    [Test]
-    public async Task Add_ValidWallet_ShouldAddNewEntity()
+    [TestCaseSource(typeof(WalletsTestCaseSource), nameof(WalletsTestCaseSource.Wallets))]
+    public async Task Add_ValidWallet_ShouldAddNewEntity(Wallet data)
     {
         // Arrange
 
-        var walletId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        var wallet = new WalletBuilder()
-            .WithId(walletId)
-            .WithOwnerId(userId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
+        var walletId = data.Id;
+        var userId = WalletsTestCaseSource.UserId;
 
 
         // Act
 
-        await _walletRepository.Add(wallet);
+        await _walletRepository.Add(data);
         var checkingWallet = await _walletRepository
             .GetAvailableById(walletId, userId, default);
 
 
         // Assert
 
-        checkingWallet.ShouldBeEqualTo(wallet);
+        checkingWallet.ShouldBeEqualTo(data);
     }
 
-    [Test]
-    public async Task Remove_ValidIdAndUserId_ShouldRemoveEntity()
+    [TestCaseSource(typeof(WalletsTestCaseSource), nameof(WalletsTestCaseSource.Wallets))]
+    public async Task Remove_ValidIdAndUserId_ShouldRemoveEntity(Wallet data)
     {
         // Arrange
 
-        var walletId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        await _walletRepository.Add(new WalletBuilder()
-            .WithId(walletId)
-            .WithOwnerId(userId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build());
+        var walletId = data.Id;
+        var userId = WalletsTestCaseSource.UserId;
+        await _walletRepository.Add(data);
 
 
         // Act
@@ -60,23 +50,13 @@ public partial class WalletRepositoryTests
         Assert.That(checkingWallet, Is.Null);
     }
 
-    [Test]
-    public async Task Update_ValidWallet_ShouldUpdateEntity()
+    [TestCaseSource(typeof(WalletsTestCaseSource), nameof(WalletsTestCaseSource.Wallets))]
+    public async Task Update_ValidWallet_ShouldUpdateEntity(Wallet data)
     {
         // Arrange
 
-        var cryptocurrencyRepository = new CryptocurrencyRepository(Context);
-
-        var walletId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        var newWallet = new WalletBuilder()
-            .WithId(walletId)
-            .WithOwnerId(userId)
-            .WithName("NewWalletName_2")
-            .WithAddress("NewWalletAddress_2")
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
+        var walletId = data.Id;
+        var userId = WalletsTestCaseSource.UserId;
 
         await _walletRepository.Add(new WalletBuilder()
             .WithId(walletId)
@@ -84,9 +64,9 @@ public partial class WalletRepositoryTests
             .WithName("OldWalletName_1")
             .WithAddress("OldWalletAddress_1")
             .WithCryptocurrency(crypto =>
-                crypto.WithId(newWallet.CryptocurrencyId)
+                crypto.WithId(data.CryptocurrencyId)
                       .WithAlgorithm(algo =>
-                        algo.WithId(newWallet.Cryptocurrency.AlgorithmId)))
+                        algo.WithId(data.Cryptocurrency.AlgorithmId)))
             .Build());
 
         ClearChangeTracker();
@@ -94,13 +74,13 @@ public partial class WalletRepositoryTests
 
         // Act
 
-        await _walletRepository.Update(newWallet);
+        await _walletRepository.Update(data);
         var checkingWallet = await _walletRepository
             .GetAvailableById(walletId, userId, default);
 
 
         // Assert
 
-        checkingWallet.ShouldBeEqualTo(newWallet);
+        checkingWallet.ShouldBeEqualTo(data);
     }
 }

@@ -1,25 +1,19 @@
 ﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
-using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Pool;
 
+using Pool = Core.Mining.Pool;
+
 public partial class PoolRepositoryTests
 {
-    [Test]
-    public async Task GetAvailableById_ValidIdAndUserId_ReturnsUsersEntity()
+    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.Pools))]
+    public async Task GetAvailableById_ValidIdAndUserId_ReturnsUsersEntity(Pool data)
     {
         // Arrange
 
-        var poolId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        var pool = new PoolBuilder()
-            .WithId(poolId)
-            .WithOwner(userId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
-
-        await _poolRepository.Add(pool);
+        var poolId = data.Id;
+        var userId = PoolsTestCaseSource.UserId;
+        await _poolRepository.Add(data);
 
 
         // Act
@@ -29,24 +23,18 @@ public partial class PoolRepositoryTests
 
         // Assert
 
-        checkingPool.ShouldBeEqualTo(pool);
+        checkingPool.ShouldBeEqualTo(data);
     }
 
-    [Test]
-    public async Task GetAvailableById_ValidIdAndInvalidUserId_ReturnsDomainEntity()
+    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.DomainPools))]
+    public async Task GetAvailableById_ValidIdAndInvalidUserId_ReturnsDomainEntity(Pool data)
     {
         // Arrange
 
-        var poolId = Guid.NewGuid();
+        var poolId = data.Id;
         var userId = Guid.NewGuid();
-        var pool = new PoolBuilder()
-            .WithId(poolId)
-            .WithTls()
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
 
-        await _poolRepository.Add(pool);
+        await _poolRepository.Add(data);
 
 
         // Act
@@ -57,22 +45,18 @@ public partial class PoolRepositoryTests
 
         // Assert
 
-        checkingPool.ShouldBeEqualTo(pool);
+        checkingPool.ShouldBeEqualTo(data);
     }
 
-    [Test]
-    public async Task GetAvailableById_InvalidIdAndUserId_ReturnsNull()
+    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.Pools))]
+    public async Task GetAvailableById_InvalidIdAndUserId_ReturnsNull(Pool data)
     {
         // Arrange
 
         var poolId = Guid.NewGuid();
         var userId = Guid.NewGuid();
-        var pool = new PoolBuilder()
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
 
-        await _poolRepository.Add(pool);
+        await _poolRepository.Add(data);
 
 
         // Act

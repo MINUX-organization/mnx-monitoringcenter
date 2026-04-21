@@ -43,5 +43,20 @@ public partial class CryptocurrencyRepositoryTests : BaseTest
                 ];
             }
         }
+
+        public static IEnumerable<Cryptocurrency> CustomCryptocurrencies
+        {
+            get
+            {
+                yield return new CryptocurrencyBuilder()
+                    .WithOwner(UserId)
+                    .WithAlgorithm(algo => algo.WithName("DomainAlgorithm_1"))
+                    .Build();
+                yield return new CryptocurrencyBuilder()
+                    .WithOwner(UserId)
+                    .WithAlgorithm(algo => algo.WithOwner(UserId))
+                    .Build();
+            }
+        }
     }
 }

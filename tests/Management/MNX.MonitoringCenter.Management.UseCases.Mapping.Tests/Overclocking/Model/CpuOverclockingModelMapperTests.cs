@@ -1,5 +1,6 @@
 ﻿using MNX.MonitoringCenter.Management.Contracts.Overclocking.Cpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Cpu;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions.Overclocking;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Model.Cpu;
@@ -36,17 +37,7 @@ public sealed class CpuOverclockingModelMapperTests
 
         // Assert
 
-        Assert.That(mappedOverclocking, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedOverclocking.TargetDeviceType, Is.EqualTo(cpuOverclockingModel.TargetDeviceType));
-            Assert.That(mappedOverclocking, Is.TypeOf<CpuOverclocking>());
-
-            var cpuOverclocking = (CpuOverclocking)mappedOverclocking;
-            Assert.That(cpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(cpuOverclocking.CoreClockLock, Is.EqualTo(cpuOverclockingModel.CoreClockLock));
-            Assert.That(cpuOverclocking.CoreVoltage, Is.EqualTo(cpuOverclockingModel.CoreVoltage));
-        });
+        mappedOverclocking.ShouldBeEquivalentTo(cpuOverclockingModel);
     }
 
     [Test]
@@ -72,17 +63,7 @@ public sealed class CpuOverclockingModelMapperTests
 
         // Assert
 
-        Assert.That(mappedCpuOverclocking, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedCpuOverclocking.TargetDeviceType, Is.EqualTo(cpuOverclockingModel.TargetDeviceType));
-            Assert.That(mappedCpuOverclocking, Is.TypeOf<CpuOverclocking>());
-
-            var cpuOverclocking = (CpuOverclocking)mappedCpuOverclocking;
-            Assert.That(cpuOverclocking.Id, Is.EqualTo(cpuOverclockingOriginal.Id));
-            Assert.That(cpuOverclocking.CoreClockLock, Is.EqualTo(cpuOverclockingModel.CoreClockLock));
-            Assert.That(cpuOverclocking.CoreVoltage, Is.EqualTo(cpuOverclockingModel.CoreVoltage));
-        });
+        mappedCpuOverclocking.ShouldBeEquivalentTo(cpuOverclockingModel, cpuOverclockingOriginal.Id);
     }
 
     [Test]
@@ -103,15 +84,6 @@ public sealed class CpuOverclockingModelMapperTests
 
         // Assert
 
-        Assert.That(mappedCpuOverclockingModel, Is.Not.Null);
-        Assert.That(mappedCpuOverclockingModel, Is.TypeOf<CpuOverclockingModel>());
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedCpuOverclockingModel.TargetDeviceType, Is.EqualTo(cpuOverclocking.TargetDeviceType));
-
-            var cpuOverclockingModel = (CpuOverclockingModel)mappedCpuOverclockingModel;
-            Assert.That(cpuOverclockingModel.CoreClockLock, Is.EqualTo(cpuOverclocking.CoreClockLock));
-            Assert.That(cpuOverclockingModel.CoreVoltage, Is.EqualTo(cpuOverclocking.CoreVoltage));
-        });
+        mappedCpuOverclockingModel.ShouldBeEquivalentTo(cpuOverclocking);
     }
 }

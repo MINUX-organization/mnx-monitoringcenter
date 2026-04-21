@@ -1,51 +1,40 @@
 ﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
-using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Cryptocurrency;
 
+using Cryptocurrency = Core.Mining.Cryptocurrency;
+
 public partial class CryptocurrencyRepositoryTests
 {
-    [Test]
-    public async Task Add_ValidCryptocurrency_ShoudAddEntity()
+    [TestCaseSource(typeof(CryptocurrencyTestCaseSource), nameof(CryptocurrencyTestCaseSource.CustomCryptocurrencies))]
+    public async Task Add_ValidCryptocurrency_ShoudAddEntity(Cryptocurrency data)
     {
         // Arrange
 
-        var cryptocurrencyId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        var cryptocurrency = new CryptocurrencyBuilder()
-            .WithId(cryptocurrencyId)
-            .WithOwner(userId)
-            .WithAlgorithm(algo =>
-                algo.WithOwner(userId))
-            .Build();
-
+        var cryptocurrencyId = data.Id;
+        var userId = CryptocurrencyTestCaseSource.UserId;
 
         // Act
 
-        await _cryptocurrencyRepository.Add(cryptocurrency);
+        await _cryptocurrencyRepository.Add(data);
         var checkingCryptocurrency = await _cryptocurrencyRepository
             .GetAvailableById(cryptocurrencyId, userId, default);
         
 
         // Assert
 
-        checkingCryptocurrency.ShouldBeEqualTo(cryptocurrency);
+        checkingCryptocurrency.ShouldBeEqualTo(data);
     }
 
-    [Test]
-    public async Task Remove_ValidCryptocurrency_ShouldRemove()
+    [TestCaseSource(typeof(CryptocurrencyTestCaseSource), nameof(CryptocurrencyTestCaseSource.CustomCryptocurrencies))]
+    public async Task Remove_ValidCryptocurrency_ShouldRemove(Cryptocurrency data)
     {
         // Arrange
         
-        var cryptocurrencyId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
+        var cryptocurrencyId = data.Id;
+        var userId = CryptocurrencyTestCaseSource.UserId;
 
-        await _cryptocurrencyRepository.Add(new CryptocurrencyBuilder()
-            .WithId(cryptocurrencyId)
-            .WithOwner(userId)
-            .WithAlgorithm(algo =>
-                algo.WithOwner(userId))
-            .Build());
+        await _cryptocurrencyRepository.Add(data);
 
 
         // Act

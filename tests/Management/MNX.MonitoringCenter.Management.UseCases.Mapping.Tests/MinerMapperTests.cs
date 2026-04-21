@@ -101,7 +101,7 @@ public sealed class MinerMapperTests
         });
     }
 
-    private void CheckSupportedAlgorithms(List<Algorithm> expected, List<MinerAlgorithmModel> checking)
+    private static void CheckSupportedAlgorithms(List<Algorithm> expected, List<MinerAlgorithmModel> checking)
     {
         for (int i = 0; i < expected.Count; i++)
         {

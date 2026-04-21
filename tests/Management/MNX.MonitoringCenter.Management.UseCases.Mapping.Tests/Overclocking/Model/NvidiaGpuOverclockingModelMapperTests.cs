@@ -2,6 +2,7 @@
 using MNX.MonitoringCenter.Management.Contracts.Overclocking.Gpu.Fan;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions.Overclocking;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.Overclockings.Fan;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
@@ -49,24 +50,7 @@ public sealed class NvidiaGpuOverclockingModelMapperTests
 
         // Assert
 
-        Assert.That(mappedNvidiaCpuOverclocking, Is.Not.Null);
-        Assert.That(mappedNvidiaCpuOverclocking, Is.TypeOf<NvidiaGpuOverclocking>());
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedNvidiaCpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedNvidiaCpuOverclocking.TargetDeviceType, Is.EqualTo(nvidiaGpuOverclockingModel.TargetDeviceType));
-
-            var nvidiaGpuOverclocking = (NvidiaGpuOverclocking)mappedNvidiaCpuOverclocking;
-            Assert.That(nvidiaGpuOverclocking.CoreClockLock, Is.EqualTo(nvidiaGpuOverclockingModel.CoreClockLock));
-            Assert.That(nvidiaGpuOverclocking.CoreClockOffset, Is.EqualTo(nvidiaGpuOverclockingModel.CoreClockOffset));
-            Assert.That(nvidiaGpuOverclocking.PowerLimit, Is.EqualTo(nvidiaGpuOverclockingModel.PowerLimit));
-            Assert.That(nvidiaGpuOverclocking.CoreVoltage, Is.EqualTo(nvidiaGpuOverclockingModel.CoreVoltage));
-            Assert.That(nvidiaGpuOverclocking.CoreVoltageOffset, Is.EqualTo(nvidiaGpuOverclockingModel.CoreVoltageOffset));
-            Assert.That(nvidiaGpuOverclocking.MemoryClockLock, Is.EqualTo(nvidiaGpuOverclockingModel.MemoryClockLock));
-            Assert.That(nvidiaGpuOverclocking.MemoryClockOffset, Is.EqualTo(nvidiaGpuOverclockingModel.MemoryClockOffset));
-            Assert.That(nvidiaGpuOverclocking.MemoryVoltage, Is.EqualTo(nvidiaGpuOverclockingModel.MemoryVoltage));
-            Assert.That(nvidiaGpuOverclocking.MemoryVoltageOffset, Is.EqualTo(nvidiaGpuOverclockingModel.MemoryVoltageOffset));
-        });
+        mappedNvidiaCpuOverclocking.ShouldBeEquivalentTo(nvidiaGpuOverclockingModel);
 
         _fanOverclockingMapper.Verify(x => x.MapToCoreEntity(fanOverclockingWithTargetSpeedModel), Times.Once);
     }
@@ -95,24 +79,7 @@ public sealed class NvidiaGpuOverclockingModelMapperTests
 
         // Assert
 
-        Assert.That(mappedGpuOverclocking, Is.Not.Null);
-        Assert.That(mappedGpuOverclocking, Is.TypeOf<NvidiaGpuOverclocking>());
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedGpuOverclocking.Id, Is.EqualTo(originalGpuOverclocking.Id));
-            Assert.That(mappedGpuOverclocking.TargetDeviceType, Is.EqualTo(nvidiaGpuOverclockingModel.TargetDeviceType));
-
-            var nvidiaGpuOverclocking = (NvidiaGpuOverclocking)mappedGpuOverclocking;
-            Assert.That(nvidiaGpuOverclocking.PowerLimit, Is.EqualTo(nvidiaGpuOverclockingModel.PowerLimit));
-            Assert.That(nvidiaGpuOverclocking.CoreClockLock, Is.EqualTo(nvidiaGpuOverclockingModel.CoreClockLock));
-            Assert.That(nvidiaGpuOverclocking.CoreClockOffset, Is.EqualTo(nvidiaGpuOverclockingModel.CoreClockOffset));
-            Assert.That(nvidiaGpuOverclocking.CoreVoltage, Is.EqualTo(nvidiaGpuOverclockingModel.CoreVoltage));
-            Assert.That(nvidiaGpuOverclocking.CoreVoltageOffset, Is.EqualTo(nvidiaGpuOverclockingModel.CoreVoltageOffset));
-            Assert.That(nvidiaGpuOverclocking.MemoryClockLock, Is.EqualTo(nvidiaGpuOverclockingModel.MemoryClockLock));
-            Assert.That(nvidiaGpuOverclocking.MemoryClockOffset, Is.EqualTo(nvidiaGpuOverclockingModel.MemoryClockOffset));
-            Assert.That(nvidiaGpuOverclocking.MemoryVoltage, Is.EqualTo(nvidiaGpuOverclockingModel.MemoryVoltage));
-            Assert.That(nvidiaGpuOverclocking.MemoryVoltageOffset, Is.EqualTo(nvidiaGpuOverclockingModel.MemoryVoltageOffset));
-        });
+        mappedGpuOverclocking.ShouldBeEquivalentTo(nvidiaGpuOverclockingModel);
 
         _fanOverclockingMapper.Verify(x => x.MapToCoreEntity(
             fanOverclockingWithTargetSpeedModel,
@@ -138,23 +105,7 @@ public sealed class NvidiaGpuOverclockingModelMapperTests
 
         // Assert
 
-        Assert.That(mappedNvidiaGpuOverclockingModel, Is.Not.Null);
-        Assert.That(mappedNvidiaGpuOverclockingModel, Is.TypeOf<NvidiaGpuOverclockingModel>());
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedNvidiaGpuOverclockingModel.TargetDeviceType, Is.EqualTo(nvidiaGpuOverclocking.TargetDeviceType));
-
-            var nvidiaGpuOverclockingModel = (NvidiaGpuOverclockingModel)mappedNvidiaGpuOverclockingModel;
-            Assert.That(nvidiaGpuOverclockingModel.PowerLimit, Is.EqualTo(nvidiaGpuOverclocking.PowerLimit));
-            Assert.That(nvidiaGpuOverclockingModel.CoreClockLock, Is.EqualTo(nvidiaGpuOverclocking.CoreClockLock));
-            Assert.That(nvidiaGpuOverclockingModel.CoreClockOffset, Is.EqualTo(nvidiaGpuOverclocking.CoreClockOffset));
-            Assert.That(nvidiaGpuOverclockingModel.CoreVoltage, Is.EqualTo(nvidiaGpuOverclocking.CoreVoltage));
-            Assert.That(nvidiaGpuOverclockingModel.CoreVoltageOffset, Is.EqualTo(nvidiaGpuOverclocking.CoreVoltageOffset));
-            Assert.That(nvidiaGpuOverclockingModel.MemoryClockLock, Is.EqualTo(nvidiaGpuOverclocking.MemoryClockLock));
-            Assert.That(nvidiaGpuOverclockingModel.MemoryClockOffset, Is.EqualTo(nvidiaGpuOverclocking.MemoryClockOffset));
-            Assert.That(nvidiaGpuOverclockingModel.MemoryVoltage, Is.EqualTo(nvidiaGpuOverclocking.MemoryVoltage));
-            Assert.That(nvidiaGpuOverclockingModel.MemoryVoltage, Is.EqualTo(nvidiaGpuOverclocking.MemoryVoltage));
-        });
+        mappedNvidiaGpuOverclockingModel.ShouldBeEquivalentTo(nvidiaGpuOverclocking);
 
         _fanOverclockingMapper.Verify(x => x.MapToModel(fanOverclockingWithTargetSpeed), Times.Once);
     }

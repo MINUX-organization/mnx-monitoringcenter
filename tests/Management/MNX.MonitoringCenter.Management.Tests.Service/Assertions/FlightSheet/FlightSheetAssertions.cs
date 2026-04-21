@@ -1,5 +1,8 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
+﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.EditFightSheet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models;
 using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Management.Tests.Service.Assertions.FlightSheet;
@@ -126,5 +129,44 @@ public static partial class FlightSheetAssertions
                 AssertCpuMiningConfig(e, c);
                 break;
         }
+    }
+
+    public static void ShouldBeEqualTo(this FlightSheet? checking, FlightSheetInputModel? expected, Guid expectedUserId)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking.Id, Is.Not.EqualTo(Guid.Empty));
+            Assert.That(checking.Name, Is.EqualTo(expected.Name));
+            Assert.That(checking.OwnerId, Is.EqualTo(expectedUserId));
+            expected.Targets.ShouldBeEqualTo(checking.Targets);
+        });
+    }
+
+    public static void ShouldBeEqualTo(this FlightSheet? checking, EditFlightSheetCommand? expected)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking.Id, Is.EqualTo(expected.Id));
+            Assert.That(checking.OwnerId, Is.EqualTo(expected.UserId));
+            Assert.That(checking.Name, Is.EqualTo(expected.Model.Name));
+            expected.Model.Targets.ShouldBeEqualTo(checking.Targets);
+        });
+    }
+
+    public static void ShouldBeEqualTo(this FlightSheetModel? checking, FlightSheet? expected)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking.Id, Is.EqualTo(expected.Id));
+            Assert.That(checking.Name, Is.EqualTo(expected.Name));
+            Assert.That(checking.Targets, Has.Count.EqualTo(expected.Targets.Count));
+            expected.Targets.ShouldBeEqualTo(checking.Targets);
+        });
     }
 }

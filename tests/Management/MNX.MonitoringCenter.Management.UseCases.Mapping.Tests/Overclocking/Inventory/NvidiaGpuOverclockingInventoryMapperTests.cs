@@ -1,5 +1,4 @@
-﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
-using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions.Overclocking;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.OuterModelBuilders.Overclockings;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Overclocking.Inventory.Gpu;
@@ -38,31 +37,7 @@ public sealed class NvidiaGpuOverclockingInventoryMapperTests
 
         // Assert
 
-        Assert.That(mappedCoreGpuOverclocking, Is.Not.Null);
-        Assert.That(mappedCoreGpuOverclocking, Is.TypeOf<CoreNvidiaGpuOverclocking>());
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedCoreGpuOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedCoreGpuOverclocking.TargetDeviceType, Is.EqualTo(OverclockingTargetDeviceType.NvidiaGPU));
-
-            var coreGpuOverclocking = (CoreNvidiaGpuOverclocking)mappedCoreGpuOverclocking;
-            Assert.That(coreGpuOverclocking.PowerLimit, Is.EqualTo(inventoryGpuOverclocking.PowerLimit));
-            Assert.That(coreGpuOverclocking.CoreClockLock, Is.EqualTo(inventoryGpuOverclocking.CoreClockLock));
-            Assert.That(coreGpuOverclocking.CoreClockOffset, Is.EqualTo(inventoryGpuOverclocking.CoreClockOffset));
-            Assert.That(coreGpuOverclocking.CoreVoltage, Is.EqualTo(inventoryGpuOverclocking.CoreVoltage));
-            Assert.That(coreGpuOverclocking.CoreVoltageOffset, Is.EqualTo(inventoryGpuOverclocking.CoreVoltageOffset));
-            Assert.That(coreGpuOverclocking.MemoryClockLock, Is.EqualTo(inventoryGpuOverclocking.MemoryClockLock));
-            Assert.That(coreGpuOverclocking.MemoryClockOffset, Is.EqualTo(inventoryGpuOverclocking.MemoryClockOffset));
-            Assert.That(coreGpuOverclocking.MemoryVoltage, Is.EqualTo(inventoryGpuOverclocking.MemoryVoltage));
-            Assert.That(coreGpuOverclocking.MemoryVoltageOffset, Is.EqualTo(inventoryGpuOverclocking.MemoryVoltageOffset));
-
-            Assert.That(coreGpuOverclocking.FanOverclocking, Is.Not.Null);
-            Assert.That(coreGpuOverclocking.FanOverclocking.Type, Is.EqualTo(FanOverclockingType.TargetSpeed));
-            Assert.That(coreGpuOverclocking.FanOverclocking, Is.TypeOf<FanOverclockingWithTargetSpeed>());
-
-            var coreFanOverclocking = (FanOverclockingWithTargetSpeed)coreGpuOverclocking.FanOverclocking;
-            Assert.That(coreFanOverclocking.TargetSpeed, Is.EqualTo(inventoryGpuOverclocking.FanSpeed));
-        });
+        mappedCoreGpuOverclocking.ShouldBeEquivalentTo(inventoryGpuOverclocking);
     }
 
     [Test]
@@ -80,21 +55,7 @@ public sealed class NvidiaGpuOverclockingInventoryMapperTests
 
         // Assert
 
-        Assert.That(mappedInventoryGpuOverclocking, Is.Not.Null);
-        Assert.That(mappedInventoryGpuOverclocking, Is.TypeOf<InventoryNvidiaGpuOverclocking>());
-        Assert.Multiple(() =>
-        {
-            var inventoryGpuOverclocking = (InventoryNvidiaGpuOverclocking)mappedInventoryGpuOverclocking;
-            Assert.That(inventoryGpuOverclocking.PowerLimit, Is.EqualTo(coreGpuOverclocking.PowerLimit));
-            Assert.That(inventoryGpuOverclocking.CoreClockLock, Is.EqualTo(coreGpuOverclocking.CoreClockLock));
-            Assert.That(inventoryGpuOverclocking.CoreClockOffset, Is.EqualTo(coreGpuOverclocking.CoreClockOffset));
-            Assert.That(inventoryGpuOverclocking.CoreVoltage, Is.EqualTo(coreGpuOverclocking.CoreVoltage));
-            Assert.That(inventoryGpuOverclocking.CoreVoltageOffset, Is.EqualTo(coreGpuOverclocking.CoreVoltageOffset));
-            Assert.That(inventoryGpuOverclocking.MemoryClockLock, Is.EqualTo(coreGpuOverclocking.MemoryClockLock));
-            Assert.That(inventoryGpuOverclocking.MemoryClockOffset, Is.EqualTo(coreGpuOverclocking.MemoryClockOffset));
-            Assert.That(inventoryGpuOverclocking.MemoryVoltage, Is.EqualTo(coreGpuOverclocking.MemoryVoltage));
-            Assert.That(inventoryGpuOverclocking.MemoryVoltageOffset, Is.EqualTo(coreGpuOverclocking.MemoryVoltageOffset));
-        });
+        mappedInventoryGpuOverclocking.ShouldBeEquivalentTo(coreGpuOverclocking);
     }
 
     private CoreNvidiaGpuOverclocking CreateCoreNvidiaGpuOverclocking()

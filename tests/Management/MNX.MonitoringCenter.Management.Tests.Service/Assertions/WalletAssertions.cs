@@ -1,4 +1,8 @@
-﻿using NUnit.Framework;
+﻿using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.Core.Mining;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.AddWallet;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet.Commands.EditWallet;
+using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 
@@ -36,6 +40,50 @@ public static class WalletAssertions
             Assert.That(checking.Address, Is.EqualTo(expected.Address));
             Assert.That(checking.CryptocurrencyId, Is.EqualTo(expected.CryptocurrencyId));
             checking.Cryptocurrency.ShouldBeEqualTo(expected.Cryptocurrency);
+        });
+    }
+
+    public static void ShouldBeEqualTo(this Wallet? checking, AddWalletCommand? expected)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking!.Id, Is.Not.EqualTo(Guid.Empty));
+            Assert.That(checking.Name, Is.EqualTo(expected!.Model.Name));
+            Assert.That(checking.Address, Is.EqualTo(expected.Model.Address));
+            Assert.That(checking.CryptocurrencyId, Is.EqualTo(expected.Model.CryptocurrencyId));
+            Assert.That(checking.Cryptocurrency, Is.Null);
+            Assert.That(checking.OwnerId, Is.EqualTo(expected.UserId));
+        });
+    }
+
+    public static void ShouldBeEqualTo(this Wallet? checking, EditWalletCommand? expected)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
+            Assert.That(checking.Name, Is.EqualTo(expected.Model.Name));
+            Assert.That(checking.Address, Is.EqualTo(expected.Model.Address));
+            Assert.That(checking.CryptocurrencyId, Is.EqualTo(expected.Model.CryptocurrencyId));
+            Assert.That(checking.Cryptocurrency, Is.Null);
+            Assert.That(checking.OwnerId, Is.EqualTo(expected.UserId));
+        });
+    }
+
+    public static void ShouldBeEqualTo(this WalletModel? checking, Wallet? expected)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
+            Assert.That(checking.Name, Is.EqualTo(expected.Name));
+            Assert.That(checking.Address, Is.EqualTo(expected.Address));
+            Assert.That(checking.CryptocurrencyId, Is.EqualTo(expected.CryptocurrencyId));
+            Assert.That(checking.Cryptocurrency, Is.EqualTo(expected.Cryptocurrency.FullName));
         });
     }
 }

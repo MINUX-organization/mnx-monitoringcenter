@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Cryptocurrency;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Cryptocurrency;
@@ -32,16 +33,7 @@ public sealed class CryptocurrencyMapperTests
 
         // Assert
 
-        Assert.That(mappedEntity, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedEntity.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedEntity.ShortName, Is.EqualTo(model.ShortName));
-            Assert.That(mappedEntity.FullName, Is.EqualTo(model.FullName));
-            Assert.That(mappedEntity.OwnerId, Is.EqualTo(userId));
-            Assert.That(mappedEntity.AlgorithmId, Is.EqualTo(model.AlgorithmId));
-            Assert.That(mappedEntity.Algorithm, Is.Null);
-        });
+        mappedEntity.ShouldBeEqualTo(model, userId);
     }
 
     [Test]
@@ -62,17 +54,6 @@ public sealed class CryptocurrencyMapperTests
 
         // Assert
 
-        Assert.That(mappedModel, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedModel.Id, Is.EqualTo(cryptocurrency.Id));
-            Assert.That(mappedModel.ShortName, Is.EqualTo(cryptocurrency.ShortName));
-            Assert.That(mappedModel.FullName, Is.EqualTo(cryptocurrency.FullName));
-            Assert.That(mappedModel.OwnerId, Is.EqualTo(cryptocurrency.OwnerId));
-            Assert.That(mappedModel.Algorithm, Is.Not.Null);
-            Assert.That(mappedModel.Algorithm.Id, Is.EqualTo(cryptocurrency.AlgorithmId));
-            Assert.That(mappedModel.Algorithm.Name, Is.EqualTo(cryptocurrency.Algorithm.Name));
-            Assert.That(mappedModel.Algorithm.OwnerId, Is.EqualTo(cryptocurrency.Algorithm.OwnerId));
-        });
+        mappedModel.ShouldBeEqualTo(cryptocurrency);
     }
 }

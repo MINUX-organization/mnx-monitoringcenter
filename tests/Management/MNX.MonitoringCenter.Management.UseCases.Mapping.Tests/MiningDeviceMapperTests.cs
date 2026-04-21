@@ -1,6 +1,7 @@
 ﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner.Enums;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice.Enums;
+using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningConfigs;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.MiningDevices;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings;
@@ -37,22 +38,7 @@ public sealed class MiningDeviceMapperTests
 
         // Assert
 
-        Assert.That(mappedModel, Is.Not.Null);
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedModel.Id, Is.EqualTo(deviceInfo.Id));
-            Assert.That(mappedModel.Manufacturer, Is.EqualTo(deviceInfo.Manufacturer));
-            Assert.That(mappedModel.Model, Is.EqualTo(deviceInfo.Model));
-            Assert.That(mappedModel.Type, Is.EqualTo(deviceInfo.Type.ToString()));
-            Assert.That(mappedModel.RigId, Is.EqualTo(deviceInfo.RigId));
-            Assert.That(mappedModel.FlightSheetId, Is.EqualTo(deviceInfo.FlightSheetId));
-            Assert.That(mappedModel.FlightSheetName, Is.EqualTo(deviceInfo.FlightSheet.Name));
-            Assert.That(mappedModel.FlightSheetConfirmationState, Is.EqualTo(deviceInfo.FlightSheetConfirmationState));
-            Assert.That(mappedModel.PresetName, Is.EqualTo(deviceInfo.Preset.Name));
-            Assert.That(mappedModel.MinerName, Is.EqualTo(checkingMinerName));
-            Assert.That(mappedModel.MinerVersion, Is.EqualTo(checkingMinerVersion));
-            Assert.That(mappedModel.IsOnline, Is.EqualTo(deviceInfo.IsOnline));
-        });
+        mappedModel.ShouldBeEqualTo(deviceInfo, (checkingMinerName, checkingMinerVersion));
     }
 
     private static class MiningDeviceTestCases

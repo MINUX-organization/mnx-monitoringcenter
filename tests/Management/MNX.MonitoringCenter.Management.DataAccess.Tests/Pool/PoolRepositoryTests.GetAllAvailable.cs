@@ -7,7 +7,7 @@ using Pool = Core.Mining.Pool;
 
 public partial class PoolRepositoryTests
 {
-    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.Pools))]
+    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.PoolLists))]
     public async Task GetAllAvailable_ValidUserId_ReturnsAvailablePools(List<Pool> data)
     {
         // Arrange
@@ -32,7 +32,7 @@ public partial class PoolRepositoryTests
         checkingPoolsList.ShouldBeEqualTo(data);
     }
 
-    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.Pools))]
+    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.PoolLists))]
     public async Task GetAllAvailable_InvalidUserId_ReturnsAvailablePools(List<Pool> data)
     {
         // Arrange

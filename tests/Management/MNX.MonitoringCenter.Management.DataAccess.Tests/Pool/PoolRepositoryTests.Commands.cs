@@ -3,60 +3,50 @@ using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Pool;
 
+using Pool = Core.Mining.Pool;
+
 public partial class PoolRepositoryTests
 {
-    [Test]
-    public async Task Add_ValidPool_ShouldAddEntity()
+    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.Pools))]
+    public async Task Add_ValidPool_ShouldAddEntity(Pool data)
     {
         // Arrange
 
-        var poolId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        var pool = new PoolBuilder()
-            .WithId(poolId)
-            .WithOwner(userId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
+        var poolId = data.Id;
+        var userId = PoolsTestCaseSource.UserId;
 
 
         // Act
 
-        await _poolRepository.Add(pool);
+        await _poolRepository.Add(data);
         var checkingPool = await _poolRepository
             .GetAvailableById(poolId, userId, default);
 
 
         // Assert
 
-        checkingPool.ShouldBeEqualTo(pool);
+        checkingPool.ShouldBeEqualTo(data);
     }
 
-    [Test]
-    public async Task Update_ValidPoolWithNewName_ShouldEditEntity()
+    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.Pools))]
+    public async Task Update_ValidPoolWithNewName_ShouldEditEntity(Pool data)
     {
         // Arrange
 
-        var poolId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        var oldPool = new PoolBuilder()
-            .WithId(poolId)
-            .WithOwner(userId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build();
+        var poolId = data.Id;
+        var userId = PoolsTestCaseSource.UserId;
         var newPool = new PoolBuilder()
             .WithId(poolId)
             .WithOwner(userId)
             .WithDomain("www.new-pool-install.com")
             .WithPort(12345)
             .WithCryptocurrency(crypto =>
-                crypto.WithId(oldPool.CryptocurrencyId)
+                crypto.WithId(data.CryptocurrencyId)
                       .WithAlgorithm(algo =>
-                        algo.WithId(oldPool.Cryptocurrency!.AlgorithmId)))
+                        algo.WithId(data.Cryptocurrency!.AlgorithmId)))
             .Build();
 
-        await _poolRepository.Add(oldPool);
+        await _poolRepository.Add(data);
 
         ClearChangeTracker();
 
@@ -73,19 +63,14 @@ public partial class PoolRepositoryTests
         checkingPool.ShouldBeEqualTo(newPool);
     }
 
-    [Test]
-    public async Task Remove_ValidPoolId_ShouldRemoveEntity()
+    [TestCaseSource(typeof(PoolsTestCaseSource), nameof(PoolsTestCaseSource.Pools))]
+    public async Task Remove_ValidPoolId_ShouldRemoveEntity(Pool data)
     {
         // Arrange
 
-        var poolId = Guid.NewGuid();
-        var userId = Guid.NewGuid();
-        await _poolRepository.Add(new PoolBuilder()
-            .WithId(poolId)
-            .WithOwner(userId)
-            .WithCryptocurrency(crypto =>
-                crypto.WithAlgorithm())
-            .Build());
+        var poolId = data.Id;
+        var userId = PoolsTestCaseSource.UserId;
+        await _poolRepository.Add(data);
 
 
         // Act

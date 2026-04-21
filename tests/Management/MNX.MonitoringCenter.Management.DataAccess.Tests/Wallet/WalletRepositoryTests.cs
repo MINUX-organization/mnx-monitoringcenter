@@ -51,5 +51,24 @@ public partial class WalletRepositoryTests : BaseTest
                 ];
             }
         }
+
+        public static IEnumerable<Wallet> Wallets
+        {
+            get
+            {
+                yield return new WalletBuilder()
+                    .WithOwnerId(UserId)
+                    .WithCryptocurrency(crypto => crypto.WithAlgorithm().WithOwner(UserId))
+                    .Build();
+                yield return new WalletBuilder()
+                    .WithOwnerId(UserId)
+                    .WithCryptocurrency(crypto => crypto.WithAlgorithm(algo => algo.WithOwner(UserId)).WithOwner(UserId))
+                    .Build();
+                yield return new WalletBuilder()
+                    .WithOwnerId(UserId)
+                    .WithCryptocurrency()
+                    .Build();
+            }
+        }
     }
 }

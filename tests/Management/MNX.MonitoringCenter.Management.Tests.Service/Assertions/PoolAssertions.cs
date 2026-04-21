@@ -1,4 +1,7 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining;
+﻿using MNX.MonitoringCenter.Management.Contracts;
+using MNX.MonitoringCenter.Management.Core.Mining;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
 using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Management.Tests.Service.Assertions;
@@ -38,6 +41,56 @@ public static class PoolAssertions
             Assert.That(checking.Tls, Is.EqualTo(expected.Tls));
             Assert.That(checking.CryptocurrencyId, Is.EqualTo(expected.CryptocurrencyId));
             checking.Cryptocurrency.ShouldBeEqualTo(expected.Cryptocurrency);
+        });
+    }
+
+    public static void ShouldBeEqualTo(this Pool? checking, AddPoolCommand? expected)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking.Id, Is.Not.EqualTo(Guid.Empty));
+            Assert.That(checking.Tls, Is.EqualTo(expected.Model.Tls));
+            Assert.That(checking.IsDomain(), Is.EqualTo(false));
+            Assert.That(checking.CryptocurrencyId, Is.EqualTo(expected.Model.CryptocurrencyId));
+            Assert.That(checking.Cryptocurrency, Is.Null);
+            Assert.That(checking.OwnerId, Is.EqualTo(expected.UserId));
+            Assert.That(checking.Domain, Is.EqualTo(expected.Model.Domain));
+            Assert.That(checking.Port, Is.EqualTo(expected.Model.Port));
+        });
+    }
+
+    public static void ShouldBeEqualTo(this Pool? checking, EditPoolCommand? expected)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
+            Assert.That(checking.Tls, Is.EqualTo(expected.Model.Tls));
+            Assert.That(checking.IsDomain(), Is.EqualTo(false));
+            Assert.That(checking.OwnerId, Is.EqualTo(expected.UserId));
+            Assert.That(checking.Domain, Is.EqualTo(expected.Model.Domain));
+            Assert.That(checking.Port, Is.EqualTo(expected.Model.Port));
+            Assert.That(checking.CryptocurrencyId, Is.EqualTo(expected.Model.CryptocurrencyId));
+            Assert.That(checking.Cryptocurrency, Is.Null);
+        });
+    }
+
+    public static void ShouldBeEqualTo(this PoolModel? checking, Pool? expected)
+    {
+        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(checking.Id, Is.EqualTo(expected.Id));
+            Assert.That(checking.OwnerId, Is.EqualTo(expected.OwnerId));
+            Assert.That(checking.Tls, Is.EqualTo(expected.Tls));
+            Assert.That(checking.Domain, Is.EqualTo(expected.Domain));
+            Assert.That(checking.Port, Is.EqualTo(expected.Port));
+            Assert.That(checking.CryptocurrencyId, Is.EqualTo(expected.CryptocurrencyId));
+            Assert.That(checking.Cryptocurrency, Is.EqualTo(expected.Cryptocurrency.FullName));
         });
     }
 }
