@@ -6,9 +6,9 @@ namespace MNX.MonitoringCenter.Inventory.UseCases.RigInventory.RigInventoryValid
 /// <summary>
 /// Валидатор параметров сущности <see cref="NetworkAdapter"/>
 /// </summary>
-public class NetworkAdaperModelValidator : AbstractValidator<NetworkAdapter>
+public class NetworkAdapterModelValidator : AbstractValidator<NetworkAdapter>
 {
-    public NetworkAdaperModelValidator()
+    public NetworkAdapterModelValidator()
     {
         RuleFor(model => model.Information)
             .NotNull()
