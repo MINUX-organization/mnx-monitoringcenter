@@ -3,7 +3,7 @@ using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Overclocking;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 using MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 
-namespace MNX.MonitoringCenter.RigsApi.Service.Tests;
+namespace MNX.MonitoringCenter.RigsApi.Service.Tests.RigInventoryMsgConsumer;
 
 internal static class RigInventoryTestCaseSources
 {

@@ -15,7 +15,6 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
     private IModel? _channel;
     private AsyncEventingBasicConsumer? _consumer;
 
-    private string? _queueName;
     private CancellationTokenSource? _cts;
 
     private readonly TaskCompletionSource _started = new(TaskCreationOptions.RunContinuationsAsynchronously);
@@ -41,21 +40,41 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
         if (_channel is not null)
             throw new InvalidOperationException("Consumer already started");
 
-        _queueName = queueName;
-
         _cts = CancellationTokenSource.CreateLinkedTokenSource(externalCt);
 
         _channel = _connection.CreateModel();
+
+        var dlxName = $"{queueName}_dlx";
+        _channel.ExchangeDeclare(
+            exchange: dlxName,
+            type: ExchangeType.Fanout,
+            durable: false,
+            autoDelete: false);
+
+        var errorQueue = $"{queueName}_error";
+
+        _channel.QueueDeclare(
+            queue: errorQueue,
+            durable: false,
+            exclusive: false,
+            autoDelete: false);
+
+        _channel.QueueBind(
+            queue: errorQueue,
+            exchange: dlxName,
+            routingKey: "");
 
         _channel.QueueDeclare(
             queue: queueName,
             durable: false,
             exclusive: false,
             autoDelete: false,
-            arguments: null);
+            arguments: new Dictionary<string, object>
+            {
+            { "x-dead-letter-exchange", dlxName }
+            });
 
         _consumer = new AsyncEventingBasicConsumer(_channel);
-
         _consumer.Received += HandleMessageAsync;
 
         _channel.BasicConsume(
@@ -68,23 +87,6 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
         return Task.CompletedTask;
     }
 
-    public async Task StopAsync()
-    {
-        if (_channel is null) return;
-
-        _cts?.Cancel();
-
-        _consumer!.Received -= HandleMessageAsync;
-
-        _channel.Close();
-        _channel.Dispose();
-
-        _channel = null;
-        _consumer = null;
-
-        await Task.CompletedTask;
-    }
-
     public async ValueTask DisposeAsync()
     {
         await StopAsync();
@@ -93,8 +95,6 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
 
         _cts?.Dispose();
     }
-
-    public Task WaitUntilStartedAsync() => _started.Task;
 
     private async Task HandleMessageAsync(object sender, BasicDeliverEventArgs ea)
     {
@@ -121,5 +121,22 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
 
             _channel?.BasicNack(ea.DeliveryTag, multiple: false, requeue: false);
         }
+    }
+
+    private async Task StopAsync()
+    {
+        if (_channel is null) return;
+
+        _cts?.Cancel();
+
+        _consumer!.Received -= HandleMessageAsync;
+
+        _channel.Close();
+        _channel.Dispose();
+
+        _channel = null;
+        _consumer = null;
+
+        await Task.CompletedTask;
     }
 }
