@@ -1,7 +1,5 @@
-using EasyNetQ.AutoSubscribe;
 using FluentAssertions;
 using MediatR;
-using MessagePack;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.Application.UseCases.DI;
 using MNX.MonitoringCenter.Inventory.Contracts;
@@ -10,27 +8,31 @@ using MNX.MonitoringCenter.Inventory.UseCases;
 using MNX.MonitoringCenter.Inventory.UseCases.RigInventory;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
 using Moq;
-using RabbitMQ.Client;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Tests.RigInventoryMsgConsumer;
 
 internal class RigInventoryMsgConsumerTests
 {
-    private RabbitFixture _rabbit;
+    private IMessageBrokerFixture _broker;
     private Mock<IRigRepository> _repositoryMock;
 
+    [OneTimeSetUp]
+    public async Task OneTimeSetUp()
+    {
+        _broker = GlobalMessageBrokerFixture.Broker;
+    }
+
     [SetUp]
-    public async Task SetUp()
+    public Task SetUp()
     {
         _repositoryMock = new Mock<IRigRepository>();
-        _rabbit = new RabbitFixture();
-        await _rabbit.StartAsync();
+        return Task.CompletedTask;
     }
 
     [TearDown]
     public async Task TearDown()
     {
-        await RigInventorySavedEventNotificationHandler.ClearEvents();
+        await RigInventorySavedEventHandler.ClearEvents();
     }
 
     [TestCaseSource(typeof(RigInventoryTestCaseSources), nameof(RigInventoryTestCaseSources.ValidRigInventoryMessages))]
@@ -63,7 +65,8 @@ internal class RigInventoryMsgConsumerTests
                 saved.Add(inventory);
             });
 
-        var host = CreateHost();
+        var host = ConsumerService.CreateHost<RigInventoryMsg>(
+            _broker, DefaultRegistrations(), typeof(SaveRigInventoryCommand), typeof(SaveRigInventoryCommandHandler));
         var queueName = $"rig_inventory_queue_{Guid.NewGuid()}";
 
         await host.StartAsync(queueName);
@@ -71,8 +74,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await PublishAsync(queueName, Serialize(data)!);
-        await Task.Delay(TimeSpan.FromSeconds(1));
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(data)!, _broker);
 
 
         // Assert
@@ -95,7 +97,7 @@ internal class RigInventoryMsgConsumerTests
             Assert.That(capturedInventory.Software.AgentVersion, Is.EqualTo("1.0.1"));
             Assert.That(saved, Has.Count.EqualTo(1));
 
-            RigInventorySavedEventNotificationHandler.Events.Should().HaveCount(1);
+            RigInventorySavedEventHandler.Events.Should().HaveCount(1);
         }
 
         await host.DisposeAsync();
@@ -119,7 +121,8 @@ internal class RigInventoryMsgConsumerTests
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
 
-        var host = CreateHost();
+        var host = ConsumerService.CreateHost<RigInventoryMsg>(
+            _broker, DefaultRegistrations(), typeof(SaveRigInventoryCommand), typeof(SaveRigInventoryCommandHandler));
         var queueName = $"rig_inventory_queue_{Guid.NewGuid()}";
 
         await host.StartAsync(queueName);
@@ -127,8 +130,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await PublishAsync(queueName, Serialize(data)!);
-        await Task.Delay(TimeSpan.FromSeconds(1));
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(data)!, _broker);
 
 
         // Assert
@@ -146,7 +148,7 @@ internal class RigInventoryMsgConsumerTests
                 It.IsAny<CancellationToken>()),
             Times.Never);
 
-        RigInventorySavedEventNotificationHandler.Events.Should().HaveCount(0);
+        RigInventorySavedEventHandler.Events.Should().HaveCount(0);
 
         await host.DisposeAsync();
     }
@@ -169,7 +171,8 @@ internal class RigInventoryMsgConsumerTests
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
 
-        var host = CreateHost();
+        var host = ConsumerService.CreateHost<RigInventoryMsg>(
+            _broker, DefaultRegistrations(), typeof(SaveRigInventoryCommand), typeof(SaveRigInventoryCommandHandler));
         var queueName = $"rig_inventory_queue_{Guid.NewGuid()}";
 
         await host.StartAsync(queueName);
@@ -177,8 +180,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await PublishAsync(queueName, Serialize(data)!);
-        await Task.Delay(TimeSpan.FromSeconds(1));
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(data)!, _broker);
 
 
         // Assert
@@ -196,64 +198,20 @@ internal class RigInventoryMsgConsumerTests
                 It.IsAny<CancellationToken>()),
             Times.Never);
 
-        RigInventorySavedEventNotificationHandler.Events.Should().HaveCount(0);
+        RigInventorySavedEventHandler.Events.Should().HaveCount(0);
 
         await host.DisposeAsync();
     }
 
-    private static byte[]? Serialize(object message)
+    private Action<IServiceCollection> DefaultRegistrations()
     {
-        var options = MessagePackSerializerOptions.Standard
-            .WithResolver(MessagePack.Resolvers.ContractlessStandardResolver.Instance);
-        return MessagePackSerializer.Serialize(message, options);
-    }
-
-    private ServiceProvider CreateServiceProvider()
-    {
-        IServiceCollection services = new ServiceCollection();
-        services.AddLogging();
-        services.AddMediatR(cfg =>
+        return services =>
         {
-            cfg.RegisterServicesFromAssemblies(
-                typeof(SaveRigInventoryCommandHandler).Assembly,
-                typeof(SaveRigInventoryCommand).Assembly);
-        });
-        services.AddValidationPipelines(typeof(SaveRigInventoryCommand).Assembly,
-            typeof(SaveRigInventoryCommandValidator).Assembly);
-
-        services.AddTransient<IConsumeAsync<RigInventoryMsg>, AgentMsgConsumer>();
-        services.AddScoped(_ => _repositoryMock.Object);
-
-        services.AddTransient<INotificationHandler<RigInventorySavedEvent>, RigInventorySavedEventNotificationHandler>();
-
-        return services.BuildServiceProvider();
-    }
-
-    private ConsumerHost<RigInventoryMsg> CreateHost()
-    {
-        return new ConsumerHost<RigInventoryMsg>(
-            CreateServiceProvider(),
-            _rabbit.Host,
-            _rabbit.Port);
-    }
-
-    private async Task PublishAsync(string queueName, byte[] body)
-    {
-        var factory = new ConnectionFactory
-        {
-            HostName = _rabbit.Host,
-            Port = _rabbit.Port,
-            UserName = "guest",
-            Password = "guest",
+            services.AddConsumer<RigInventoryMsg, AgentMsgConsumer>();
+            services.AddValidationPipelines(typeof(SaveRigInventoryCommand).Assembly,
+                typeof(SaveRigInventoryCommandValidator).Assembly);
+            services.AddScoped(_ => _repositoryMock.Object);
+            services.AddTransient<INotificationHandler<RigInventorySavedEvent>, RigInventorySavedEventHandler>();
         };
-
-        using var connection = factory.CreateConnection();
-        using var channel = connection.CreateModel();
-
-        channel.BasicPublish(
-            exchange: "",
-            routingKey: queueName,
-            basicProperties: null,
-            body: body);
     }
 }

@@ -3,7 +3,7 @@ using MNX.MonitoringCenter.Management.UseCases;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Tests.ApplyWorkerSettingsCommandResultConsumer;
 
-internal class MiningDeviceStateChangedEventNotificationHandler : INotificationHandler<MiningDeviceStateChangedEvent>
+internal class MiningDeviceStateChangedEventHandler : INotificationHandler<MiningDeviceStateChangedEvent>
 {
     public static readonly List<MiningDeviceStateChangedEvent> Events = [];
 

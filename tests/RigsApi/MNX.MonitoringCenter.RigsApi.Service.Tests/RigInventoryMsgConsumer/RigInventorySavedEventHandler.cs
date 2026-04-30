@@ -3,7 +3,7 @@ using MNX.MonitoringCenter.Inventory.UseCases;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Tests.RigInventoryMsgConsumer;
 
-internal class RigInventorySavedEventNotificationHandler : INotificationHandler<RigInventorySavedEvent>
+internal class RigInventorySavedEventHandler : INotificationHandler<RigInventorySavedEvent>
 {
     public static readonly List<RigInventorySavedEvent> Events = [];
 

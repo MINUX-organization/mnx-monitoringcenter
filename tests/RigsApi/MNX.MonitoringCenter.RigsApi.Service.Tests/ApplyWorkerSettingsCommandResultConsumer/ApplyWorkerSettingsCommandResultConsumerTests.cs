@@ -1,7 +1,5 @@
-﻿using EasyNetQ.AutoSubscribe;
-using FluentAssertions;
+﻿using FluentAssertions;
 using MediatR;
-using MessagePack;
 using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
@@ -10,27 +8,31 @@ using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice;
 using MNX.MonitoringCenter.Management.UseCases.Mining.MiningDevice.Commands.ConfirmFlightSheet;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
 using Moq;
-using RabbitMQ.Client;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Tests.ApplyWorkerSettingsCommandResultConsumer;
 
 internal class ApplyWorkerSettingsCommandResultConsumerTests
 {
-    private RabbitFixture _rabbit;
+    private IMessageBrokerFixture _broker;
     private Mock<IMiningDeviceRepository> _repositoryMock;
 
+    [OneTimeSetUp]
+    public async Task OneTimeSetUp()
+    {
+        _broker = GlobalMessageBrokerFixture.Broker;
+    }
+
     [SetUp]
-    public async Task SetUp()
+    public Task SetUp()
     {
         _repositoryMock = new Mock<IMiningDeviceRepository>();
-        _rabbit = new RabbitFixture();
-        await _rabbit.StartAsync();
+        return Task.CompletedTask;
     }
 
     [TearDown]
-    public async Task TearDown()
+    public Task TearDown()
     {
-        await MiningDeviceStateChangedEventNotificationHandler.ClearEvents();
+        return MiningDeviceStateChangedEventHandler.ClearEvents();
     }
 
     [Test]
@@ -59,10 +61,8 @@ internal class ApplyWorkerSettingsCommandResultConsumerTests
                 capturedDevice = miningDeviceInfo;
             });
 
-        var host = new ConsumerHost<ApplyWorkerSettingsCommandResult>(
-            CreateServiceProvider(),
-            _rabbit.Host,
-            _rabbit.Port);
+        var host = ConsumerService.CreateHost<ApplyWorkerSettingsCommandResult>(
+            _broker, DefaultRegistrations(), typeof(ConfirmFlightSheetCommand));
         var queueName = $"queue_{successfullyIds[0]}";
 
         await host.StartAsync(queueName);
@@ -72,8 +72,7 @@ internal class ApplyWorkerSettingsCommandResultConsumerTests
 
         // Act
 
-        await PublishAsync(queueName, Serialize(message)!);
-        await Task.Delay(1000);
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -82,53 +81,18 @@ internal class ApplyWorkerSettingsCommandResultConsumerTests
         _repositoryMock.Verify(x => x.SetFlightSheetConfirmationStateToError(unsuccessfullyIds), Times.Never);
         _repositoryMock.Verify(x => x.GetById(successfullyIds[0], It.IsAny<CancellationToken>()), Times.Once);
 
-        MiningDeviceStateChangedEventNotificationHandler.Events.Should().HaveCount(1);
+        MiningDeviceStateChangedEventHandler.Events.Should().HaveCount(1);
 
         await host.DisposeAsync();
     }
 
-    private ServiceProvider CreateServiceProvider()
+    private Action<IServiceCollection> DefaultRegistrations()
     {
-        IServiceCollection services = new ServiceCollection();
-        services.AddLogging();
-        services.AddMediatR(cfg =>
+        return services =>
         {
-            cfg.RegisterServicesFromAssemblies(
-                typeof(ConfirmFlightSheetCommand).Assembly
-            );
-        });
-        services.AddTransient<IConsumeAsync<ApplyWorkerSettingsCommandResult>, AgentMsgConsumer>();
-        services.AddScoped(_ => _repositoryMock.Object);
-
-        services.AddTransient<INotificationHandler<MiningDeviceStateChangedEvent>, MiningDeviceStateChangedEventNotificationHandler>();
-
-        return services.BuildServiceProvider();
-    }
-
-    private async Task PublishAsync(string queueName, byte[] body)
-    {
-        var factory = new ConnectionFactory
-        {
-            HostName = _rabbit.Host,
-            Port = _rabbit.Port,
-            UserName = "guest",
-            Password = "guest",
+            services.AddConsumer<ApplyWorkerSettingsCommandResult, AgentMsgConsumer>();
+            services.AddScoped(_ => _repositoryMock.Object);
+            services.AddTransient<INotificationHandler<MiningDeviceStateChangedEvent>, MiningDeviceStateChangedEventHandler>();
         };
-
-        using var connection = factory.CreateConnection();
-        using var channel = connection.CreateModel();
-
-        channel.BasicPublish(
-            exchange: "",
-            routingKey: queueName,
-            basicProperties: null,
-            body: body);
-    }
-
-    private static byte[]? Serialize(object message)
-    {
-        var options = MessagePackSerializerOptions.Standard
-            .WithResolver(MessagePack.Resolvers.ContractlessStandardResolver.Instance);
-        return MessagePackSerializer.Serialize(message, options);
     }
 }

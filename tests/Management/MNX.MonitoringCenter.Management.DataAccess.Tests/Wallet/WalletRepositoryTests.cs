@@ -1,5 +1,7 @@
-﻿using MNX.MonitoringCenter.Management.DataAccess.Wallet;
+﻿using MNX.MonitoringCenter.Management.DataAccess.Algorithm;
+using MNX.MonitoringCenter.Management.DataAccess.Wallet;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
+using MNX.MonitoringCenter.Management.UseCases.Mining.Algorithm;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Wallet;
 
 namespace MNX.MonitoringCenter.Management.DataAccess.Tests.Wallet;
@@ -66,7 +68,7 @@ public partial class WalletRepositoryTests : BaseTest
                     .Build();
                 yield return new WalletBuilder()
                     .WithOwnerId(UserId)
-                    .WithCryptocurrency()
+                    .WithCryptocurrency(crypto => crypto.WithAlgorithm().WithOwner(UserId))
                     .Build();
             }
         }

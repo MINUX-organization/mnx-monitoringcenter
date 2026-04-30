@@ -46,7 +46,6 @@ public class AgentMsgConsumer :
     /// <param name="cancellationToken"> Токен отмены. </param>
     public Task ConsumeAsync(StartMiningCommandResult message, CancellationToken cancellationToken = default)
     {
-        //return Task.CompletedTask;
         return message.IsSuccess
             ? _mediator.Send(new UseCases.RigState.Mining.StartMiningCommand(new RigId(message.RigId)), cancellationToken)
             : _mediator.Send(new TerminateStartMiningCommand(new RigId(message.RigId)), cancellationToken);

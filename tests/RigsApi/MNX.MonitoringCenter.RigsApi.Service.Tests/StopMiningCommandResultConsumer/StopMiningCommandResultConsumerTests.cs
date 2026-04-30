@@ -1,31 +1,41 @@
-﻿using EasyNetQ.AutoSubscribe;
-using MessagePack;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using MNX.MonitoringCenter.Management.Agent.Commands.Mining;
 using MNX.MonitoringCenter.RigsApi.Core;
+using MNX.MonitoringCenter.RigsApi.Core.DomainEvents.Mining;
 using MNX.MonitoringCenter.RigsApi.Core.Services;
 using MNX.MonitoringCenter.RigsApi.Core.ValueObjects;
 using MNX.MonitoringCenter.RigsApi.GrainWrapper;
 using MNX.MonitoringCenter.RigsApi.GrainWrapper.Services;
 using MNX.MonitoringCenter.RigsApi.Service.Consumers;
+using MNX.MonitoringCenter.RigsApi.UseCases.RigState.Mining;
 using Moq;
-using RabbitMQ.Client;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Tests.StopMiningCommandResultConsumer;
 
 internal class StopMiningCommandResultConsumerTests
 {
-    private RabbitFixture _rabbit;
+    private IMessageBrokerFixture _broker;
     private Mock<IRigGrainFactory> _grainFactoryMock;
     private Mock<IRigRepository> _repositoryMock;
 
-    [SetUp]
-    public async Task SetUp()
+    [OneTimeSetUp]
+    public async Task OneTimeSetUp()
     {
-        _rabbit = new RabbitFixture();
+        _broker = GlobalMessageBrokerFixture.Broker;
+    }
+
+    [SetUp]
+    public Task SetUp()
+    {
         _grainFactoryMock = new Mock<IRigGrainFactory>();
         _repositoryMock = new Mock<IRigRepository>();
-        await _rabbit.StartAsync();
+        return Task.CompletedTask;
+    }
+
+    [TearDown]
+    public Task TearDown()
+    {
+        return MiningStoppedEventHandler.ClearEvents();
     }
 
     [Test]
@@ -53,7 +63,8 @@ internal class StopMiningCommandResultConsumerTests
                 capturedGrain = grain;
             });
 
-        var host = CreateHost();
+        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+            _broker, Registrations(), typeof(UseCases.RigState.Mining.StopMiningCommand));
         var queueName = $"queue_{rig.Id}";
 
         await host.StartAsync(queueName);
@@ -63,8 +74,7 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await PublishAsync(queueName, Serialize(message)!);
-        await Task.Delay(1000);
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -109,7 +119,8 @@ internal class StopMiningCommandResultConsumerTests
                 capturedGrain = grain;
             });
 
-        var host = CreateHost();
+        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+            _broker, Registrations(), typeof(UseCases.RigState.Mining.StopMiningCommand));
         var queueName = $"queue_{rig.Id}";
 
         await host.StartAsync(queueName);
@@ -119,8 +130,7 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await PublishAsync(queueName, Serialize(message)!);
-        await Task.Delay(1000);
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -155,7 +165,8 @@ internal class StopMiningCommandResultConsumerTests
             It.IsAny<Rig>(),
             It.Is<CancellationToken>(x => x == default)));
 
-        var host = CreateHost();
+        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+            _broker, Registrations(), typeof(UseCases.RigState.Mining.StopMiningCommand));
         var queueName = $"queue_{Guid.NewGuid()}";
 
         await host.StartAsync(queueName);
@@ -165,8 +176,7 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await PublishAsync(queueName, Serialize(message)!);
-        await Task.Delay(1000);
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -183,56 +193,139 @@ internal class StopMiningCommandResultConsumerTests
         await host.DisposeAsync();
     }
 
-    private ServiceProvider CreateServiceProvider()
+    [Test]
+    public async Task ConsumeUnsuccessfully_RigFound_ShouldProcessMessage()
     {
-        IServiceCollection services = new ServiceCollection();
-        services.AddLogging();
-        services.AddMediatR(cfg =>
-        {
-            cfg.RegisterServicesFromAssemblies(
-                typeof(UseCases.RigState.Mining.StopMiningCommand).Assembly
-            );
-        });
-        services.AddTransient<IConsumeAsync<StopMiningCommandResult>, AgentMsgConsumer>();
-        services.AddScoped(_ => _repositoryMock.Object);
-        services.AddScoped(_ => _grainFactoryMock.Object);
+        // Arrange
 
-        return services.BuildServiceProvider();
+        var rig = new Rig(new RigId(Guid.NewGuid()), Guid.NewGuid(), "RigName_1");
+        rig.InitiateStartMining(rig.OwnerId);
+        rig.StartMining();
+        rig.InitiateStopMining(rig.OwnerId);
+
+        IRigGrain? capturedGrain = null;
+
+        var grain = new RigGrain(rig, _repositoryMock.Object);
+        _grainFactoryMock
+            .Setup(x => x.GetGrain(rig.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(grain)
+            .Callback<RigId, CancellationToken>((id, token) =>
+            {
+                capturedGrain = grain;
+            });
+
+        _repositoryMock.Setup(x => x.Update(rig, default)).Returns(Task.CompletedTask);
+
+        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+            _broker, Registrations(), typeof(TerminateStopMiningCommand));
+        var queueName = $"rig_{rig.Id}";
+
+        await host.StartAsync(queueName);
+        var message = new StopMiningCommandResult(rig.Id, false);
+
+
+        // Act
+
+        await ConsumerService.PublishAsync(
+            queueName, ConsumerService.Serialize(message)!, _broker);
+
+
+        // Assert
+
+        Assert.That(capturedGrain, Is.Not.Null);
+
+        _grainFactoryMock.Verify(x => x.GetGrain(rig.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(x => x.Update(rig, default), Times.Once);
+
+        await host.DisposeAsync();
     }
 
-    private static byte[]? Serialize(object message)
+    [Test]
+    public async Task ConsumeUnsuccessfully_RigFound_ShouldThrowException()
     {
-        var options = MessagePackSerializerOptions.Standard
-            .WithResolver(MessagePack.Resolvers.ContractlessStandardResolver.Instance);
-        return MessagePackSerializer.Serialize(message, options);
+        // Arrange
+
+        var rig = new Rig(new RigId(Guid.NewGuid()), Guid.NewGuid(), "RigName_1");
+        rig.InitiateStartMining(rig.OwnerId);
+        rig.StartMining();
+        rig.InitiateStopMining(rig.OwnerId);
+
+        IRigGrain? capturedGrain = null;
+
+        var grain = new RigGrain(rig, _repositoryMock.Object);
+        _grainFactoryMock
+            .Setup(x => x.GetGrain(rig.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(grain)
+            .Callback<RigId, CancellationToken>((id, token) =>
+            {
+                capturedGrain = grain;
+            });
+
+        _repositoryMock.Setup(x => x.Update(rig, default)).ThrowsAsync(new Exception("Test exception"));
+
+        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+            _broker, Registrations(), typeof(TerminateStopMiningCommand));
+        var queueName = $"rig_{rig.Id}";
+
+        await host.StartAsync(queueName);
+        var message = new StopMiningCommandResult(rig.Id, false);
+
+
+        // Act
+
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+
+
+        // Assert
+
+        Assert.That(capturedGrain, Is.Not.Null);
+
+        _grainFactoryMock.Verify(x => x.GetGrain(rig.Id, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(x => x.Update(rig, default), Times.Once);
+
+        await host.DisposeAsync();
     }
 
-    private async Task PublishAsync(string queueName, byte[] body)
+    [Test]
+    public async Task ConsumeUnsuccessfully_RigNotFound_ShouldNotProcessMessage()
     {
-        var factory = new ConnectionFactory
+        // Arrange
+
+        var rigId = new RigId(Guid.NewGuid());
+
+        _grainFactoryMock.Setup(x => x.GetGrain(rigId, It.IsAny<CancellationToken>()))
+            .ReturnsAsync((IRigGrain?)null);
+        _repositoryMock.Setup(x => x.Update(It.IsAny<Rig>(), default)).Returns(Task.CompletedTask);
+
+        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+            _broker, Registrations(), typeof(TerminateStopMiningCommand));
+        var queueName = $"rig_{rigId}";
+
+        await host.StartAsync(queueName);
+        var message = new StopMiningCommandResult(rigId, false);
+
+
+        // Act
+
+        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+
+
+        // Assert
+
+        _grainFactoryMock.Verify(x => x.GetGrain(rigId, It.IsAny<CancellationToken>()), Times.Once);
+        _repositoryMock.Verify(x => x.Update(It.IsAny<Rig>(), default), Times.Never);
+
+        await host.DisposeAsync();
+    }
+
+    private Action<IServiceCollection> Registrations()
+    {
+        return services =>
         {
-            HostName = _rabbit.Host,
-            Port = _rabbit.Port,
-            UserName = "guest",
-            Password = "guest",
+            services.AddEventHandler<MiningStoppedEvent, MiningStoppedEventHandler>();
+            services.AddConsumer<StopMiningCommandResult, AgentMsgConsumer>();
+            services.AddScoped(_ => _repositoryMock.Object);
+            services.AddScoped(_ => _grainFactoryMock.Object);
         };
-
-        using var connection = factory.CreateConnection();
-        using var channel = connection.CreateModel();
-
-        channel.BasicPublish(
-            exchange: "",
-            routingKey: queueName,
-            basicProperties: null,
-            body: body);
-    }
-
-    private ConsumerHost<StopMiningCommandResult> CreateHost()
-    {
-        return new ConsumerHost<StopMiningCommandResult>(
-            CreateServiceProvider(),
-            _rabbit.Host,
-            _rabbit.Port
-        );
     }
 }
