@@ -61,7 +61,7 @@ internal class StartMiningCommandResultConsumerTests
                 capturedRigGrain = grain;
             });
 
-        var host = ConsumerService.CreateHost<StartMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StartMiningCommandResult>(
             _broker, Registrations(), typeof(UseCases.RigState.Mining.StartMiningCommand));
         var queueName = $"rig_inventory_queue_{rig.Id}";
 
@@ -72,7 +72,7 @@ internal class StartMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -109,7 +109,7 @@ internal class StartMiningCommandResultConsumerTests
                 capturedRigGrain = grain;
             });
 
-        var host = ConsumerService.CreateHost<StartMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StartMiningCommandResult>(
             _broker, Registrations(), typeof(UseCases.RigState.Mining.StartMiningCommand));
 
         var queueName = $"rig_inventory_queue_{rig.Id}";
@@ -120,7 +120,7 @@ internal class StartMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -157,7 +157,7 @@ internal class StartMiningCommandResultConsumerTests
             It.IsAny<CancellationToken>()))
             .ReturnsAsync((IRigGrain?)null);
 
-        var host = ConsumerService.CreateHost<StartMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StartMiningCommandResult>(
             _broker, Registrations(), typeof(UseCases.RigState.Mining.StartMiningCommand));
 
         var queueName = $"rig_inventory_queue_{rig.Id}";
@@ -168,7 +168,7 @@ internal class StartMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -208,7 +208,7 @@ internal class StartMiningCommandResultConsumerTests
 
         _repositoryMock.Setup(x => x.Update(rig, default)).Returns(Task.CompletedTask);
 
-        var host = ConsumerService.CreateHost<StartMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StartMiningCommandResult>(
             _broker, Registrations(), typeof(TerminateStartMiningCommand));
         var queueName = $"rig_{rig.Id}";
 
@@ -218,8 +218,8 @@ internal class StartMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(
-            queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(
+            queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -253,7 +253,7 @@ internal class StartMiningCommandResultConsumerTests
 
         _repositoryMock.Setup(x => x.Update(rig, default)).ThrowsAsync(new Exception("Test exception"));
 
-        var host = ConsumerService.CreateHost<StartMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StartMiningCommandResult>(
             _broker, Registrations(), typeof(TerminateStartMiningCommand));
         var queueName = $"rig_{rig.Id}";
 
@@ -263,7 +263,7 @@ internal class StartMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -287,7 +287,7 @@ internal class StartMiningCommandResultConsumerTests
             .ReturnsAsync((IRigGrain?)null);
         _repositoryMock.Setup(x => x.Update(It.IsAny<Rig>(), default)).Returns(Task.CompletedTask);
 
-        var host = ConsumerService.CreateHost<StartMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StartMiningCommandResult>(
             _broker, Registrations(), typeof(TerminateStartMiningCommand));
         var queueName = $"rig_{rigId}";
 
@@ -297,7 +297,7 @@ internal class StartMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert

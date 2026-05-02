@@ -14,11 +14,8 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
 
     private IModel? _channel;
     private AsyncEventingBasicConsumer? _consumer;
-
     private CancellationTokenSource? _cts;
 
-    private readonly TaskCompletionSource _started = new(TaskCreationOptions.RunContinuationsAsynchronously);
-    
     public ConsumerHost(IServiceProvider serviceProvider, string host, int port)
     {
         _serviceProvider = serviceProvider;
@@ -71,18 +68,18 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
             autoDelete: false,
             arguments: new Dictionary<string, object>
             {
-            { "x-dead-letter-exchange", dlxName }
+                {
+                    "x-dead-letter-exchange", dlxName
+                }
             });
 
         _consumer = new AsyncEventingBasicConsumer(_channel);
-        _consumer.Received += HandleMessageAsync;
+        _consumer.Received += HandleMessage;
 
         _channel.BasicConsume(
             queue: queueName,
             autoAck: false,
             consumer: _consumer);
-
-        _started.TrySetResult();
 
         return Task.CompletedTask;
     }
@@ -96,7 +93,7 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
         _cts?.Dispose();
     }
 
-    private async Task HandleMessageAsync(object sender, BasicDeliverEventArgs ea)
+    private async Task HandleMessage(object sender, BasicDeliverEventArgs ea)
     {
         if (_channel is null || _cts is null) return;
 
@@ -129,7 +126,7 @@ public sealed class ConsumerHost<T> : IAsyncDisposable where T : class
 
         _cts?.Cancel();
 
-        _consumer!.Received -= HandleMessageAsync;
+        _consumer!.Received -= HandleMessage;
 
         _channel.Close();
         _channel.Dispose();

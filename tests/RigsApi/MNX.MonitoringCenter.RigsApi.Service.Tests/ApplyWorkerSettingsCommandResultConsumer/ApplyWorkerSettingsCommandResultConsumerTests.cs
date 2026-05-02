@@ -61,7 +61,7 @@ internal class ApplyWorkerSettingsCommandResultConsumerTests
                 capturedDevice = miningDeviceInfo;
             });
 
-        var host = ConsumerService.CreateHost<ApplyWorkerSettingsCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<ApplyWorkerSettingsCommandResult>(
             _broker, DefaultRegistrations(), typeof(ConfirmFlightSheetCommand));
         var queueName = $"queue_{successfullyIds[0]}";
 
@@ -72,7 +72,7 @@ internal class ApplyWorkerSettingsCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert

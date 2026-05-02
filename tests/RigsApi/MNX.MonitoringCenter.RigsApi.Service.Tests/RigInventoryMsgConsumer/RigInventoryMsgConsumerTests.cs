@@ -30,9 +30,9 @@ internal class RigInventoryMsgConsumerTests
     }
 
     [TearDown]
-    public async Task TearDown()
+    public Task TearDown()
     {
-        await RigInventorySavedEventHandler.ClearEvents();
+        return RigInventorySavedEventHandler.ClearEvents();
     }
 
     [TestCaseSource(typeof(RigInventoryTestCaseSources), nameof(RigInventoryTestCaseSources.ValidRigInventoryMessages))]
@@ -65,7 +65,7 @@ internal class RigInventoryMsgConsumerTests
                 saved.Add(inventory);
             });
 
-        var host = ConsumerService.CreateHost<RigInventoryMsg>(
+        var host = TestsEnvironmentService.CreateHost<RigInventoryMsg>(
             _broker, DefaultRegistrations(), typeof(SaveRigInventoryCommand), typeof(SaveRigInventoryCommandHandler));
         var queueName = $"rig_inventory_queue_{Guid.NewGuid()}";
 
@@ -74,7 +74,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(data)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(data)!, _broker);
 
 
         // Assert
@@ -121,7 +121,7 @@ internal class RigInventoryMsgConsumerTests
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
 
-        var host = ConsumerService.CreateHost<RigInventoryMsg>(
+        var host = TestsEnvironmentService.CreateHost<RigInventoryMsg>(
             _broker, DefaultRegistrations(), typeof(SaveRigInventoryCommand), typeof(SaveRigInventoryCommandHandler));
         var queueName = $"rig_inventory_queue_{Guid.NewGuid()}";
 
@@ -130,7 +130,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(data)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(data)!, _broker);
 
 
         // Assert
@@ -171,7 +171,7 @@ internal class RigInventoryMsgConsumerTests
             It.IsAny<CancellationToken>()))
             .ReturnsAsync(1);
 
-        var host = ConsumerService.CreateHost<RigInventoryMsg>(
+        var host = TestsEnvironmentService.CreateHost<RigInventoryMsg>(
             _broker, DefaultRegistrations(), typeof(SaveRigInventoryCommand), typeof(SaveRigInventoryCommandHandler));
         var queueName = $"rig_inventory_queue_{Guid.NewGuid()}";
 
@@ -180,7 +180,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(data)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(data)!, _broker);
 
 
         // Assert

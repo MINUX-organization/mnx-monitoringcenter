@@ -34,7 +34,7 @@ internal class AgentRegisteredMsgConsumerTests
         var rigId = Guid.NewGuid();
         _repositoryMock.Setup(x => x.Add(It.IsAny<Rig>(), It.IsAny<CancellationToken>()));
 
-        var host = ConsumerService.CreateHost<AgentRegisteredMsg>(
+        var host = TestsEnvironmentService.CreateHost<AgentRegisteredMsg>(
             _broker, DefaultRegistrations(), typeof(AddRigCommand));
         var queueName = $"rig_{rigId}";
 
@@ -50,7 +50,7 @@ internal class AgentRegisteredMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert

@@ -6,14 +6,8 @@ using RabbitMQ.Client;
 
 namespace MNX.MonitoringCenter.RigsApi.Service.Tests;
 
-internal static class ConsumerService
+internal static class TestsEnvironmentService
 {
-    public static ConsumerHost<T> CreateHost<T>(IServiceProvider provider, IMessageBrokerFixture brokerFixture)
-        where T : class
-    {
-        return new ConsumerHost<T>(provider, brokerFixture.Host, brokerFixture.Port);
-    }
-
     public static ConsumerHost<T> CreateHost<T>(IMessageBrokerFixture broker, Action<IServiceCollection> configure, params Type[] commandTypes)
         where T : class
     {
@@ -21,7 +15,7 @@ internal static class ConsumerService
         return new ConsumerHost<T>(provider, broker.Host, broker.Port);
     }
 
-    public static async Task PublishAsync(string queueName, byte[] body, IMessageBrokerFixture brokerFixture)
+    public static async Task Publish(string queueName, byte[] body, IMessageBrokerFixture brokerFixture)
     {
         var factory = new ConnectionFactory
         {

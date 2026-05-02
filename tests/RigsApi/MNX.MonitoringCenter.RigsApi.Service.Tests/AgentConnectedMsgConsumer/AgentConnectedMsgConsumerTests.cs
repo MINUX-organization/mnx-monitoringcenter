@@ -62,7 +62,7 @@ internal class AgentConnectedMsgConsumerTests
 
         _repositoryMock.Setup(x => x.Update(rig, default));
 
-        var host = ConsumerService.CreateHost<AgentConnectedMsg>(
+        var host = TestsEnvironmentService.CreateHost<AgentConnectedMsg>(
             _broker, DefaultRegistrations(), typeof(TurnOnCommand));
 
         var queueName = $"rig_{rig.Id}";
@@ -73,7 +73,7 @@ internal class AgentConnectedMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -102,7 +102,7 @@ internal class AgentConnectedMsgConsumerTests
 
         _repositoryMock.Setup(x => x.Update(It.IsAny<Rig>(), default));
 
-        var host = ConsumerService.CreateHost<AgentConnectedMsg>(
+        var host = TestsEnvironmentService.CreateHost<AgentConnectedMsg>(
             _broker, DefaultRegistrations(), typeof(TurnOnCommand));
 
         var queueName = $"rig_{rigId}";
@@ -113,7 +113,7 @@ internal class AgentConnectedMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -150,7 +150,7 @@ internal class AgentConnectedMsgConsumerTests
             .Setup(x => x.Update(rig, default))
             .ThrowsAsync(new Exception("Test exception"));
 
-        var host = ConsumerService.CreateHost<AgentConnectedMsg>(
+        var host = TestsEnvironmentService.CreateHost<AgentConnectedMsg>(
             _broker, DefaultRegistrations(), typeof(TurnOnCommand));
 
         var queueName = $"rig_{rig.Id}";
@@ -161,7 +161,7 @@ internal class AgentConnectedMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert

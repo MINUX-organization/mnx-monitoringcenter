@@ -62,7 +62,7 @@ internal class AgentDisconnectedMsgConsumerTests
 
         _repositoryMock.Setup(x => x.Update(rig, default));
 
-        var host = ConsumerService.CreateHost<AgentDisconnectedMsg>(_broker, Registrations(), typeof(PowerOffCommand));
+        var host = TestsEnvironmentService.CreateHost<AgentDisconnectedMsg>(_broker, Registrations(), typeof(PowerOffCommand));
         var queueName = $"rig_{rig.Id}";
 
         await host.StartAsync(queueName);
@@ -71,7 +71,7 @@ internal class AgentDisconnectedMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -99,7 +99,7 @@ internal class AgentDisconnectedMsgConsumerTests
 
         _repositoryMock.Setup(x => x.Update(It.IsAny<Rig>(), default));
 
-        var host = ConsumerService.CreateHost<AgentDisconnectedMsg>(_broker, Registrations(), typeof(PowerOffCommand));
+        var host = TestsEnvironmentService.CreateHost<AgentDisconnectedMsg>(_broker, Registrations(), typeof(PowerOffCommand));
         var queueName = $"rig_{rigId}";
 
         await host.StartAsync(queueName);
@@ -108,7 +108,7 @@ internal class AgentDisconnectedMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -146,7 +146,7 @@ internal class AgentDisconnectedMsgConsumerTests
             .Setup(x => x.Update(rig, default))
             .ThrowsAsync(new Exception("Test exception"));
 
-        var host = ConsumerService.CreateHost<AgentDisconnectedMsg>(_broker, Registrations(), typeof(PowerOffCommand));
+        var host = TestsEnvironmentService.CreateHost<AgentDisconnectedMsg>(_broker, Registrations(), typeof(PowerOffCommand));
         var queueName = $"rig_{rig.Id}";
 
         await host.StartAsync(queueName);
@@ -155,7 +155,7 @@ internal class AgentDisconnectedMsgConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert

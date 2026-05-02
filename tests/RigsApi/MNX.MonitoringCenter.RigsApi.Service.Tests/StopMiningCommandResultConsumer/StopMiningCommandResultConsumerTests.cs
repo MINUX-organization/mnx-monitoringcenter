@@ -63,7 +63,7 @@ internal class StopMiningCommandResultConsumerTests
                 capturedGrain = grain;
             });
 
-        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StopMiningCommandResult>(
             _broker, Registrations(), typeof(UseCases.RigState.Mining.StopMiningCommand));
         var queueName = $"queue_{rig.Id}";
 
@@ -74,7 +74,7 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -119,7 +119,7 @@ internal class StopMiningCommandResultConsumerTests
                 capturedGrain = grain;
             });
 
-        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StopMiningCommandResult>(
             _broker, Registrations(), typeof(UseCases.RigState.Mining.StopMiningCommand));
         var queueName = $"queue_{rig.Id}";
 
@@ -130,7 +130,7 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -165,7 +165,7 @@ internal class StopMiningCommandResultConsumerTests
             It.IsAny<Rig>(),
             It.Is<CancellationToken>(x => x == default)));
 
-        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StopMiningCommandResult>(
             _broker, Registrations(), typeof(UseCases.RigState.Mining.StopMiningCommand));
         var queueName = $"queue_{Guid.NewGuid()}";
 
@@ -176,7 +176,7 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -216,7 +216,7 @@ internal class StopMiningCommandResultConsumerTests
 
         _repositoryMock.Setup(x => x.Update(rig, default)).Returns(Task.CompletedTask);
 
-        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StopMiningCommandResult>(
             _broker, Registrations(), typeof(TerminateStopMiningCommand));
         var queueName = $"rig_{rig.Id}";
 
@@ -226,8 +226,8 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(
-            queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(
+            queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -263,7 +263,7 @@ internal class StopMiningCommandResultConsumerTests
 
         _repositoryMock.Setup(x => x.Update(rig, default)).ThrowsAsync(new Exception("Test exception"));
 
-        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StopMiningCommandResult>(
             _broker, Registrations(), typeof(TerminateStopMiningCommand));
         var queueName = $"rig_{rig.Id}";
 
@@ -273,7 +273,7 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
@@ -297,7 +297,7 @@ internal class StopMiningCommandResultConsumerTests
             .ReturnsAsync((IRigGrain?)null);
         _repositoryMock.Setup(x => x.Update(It.IsAny<Rig>(), default)).Returns(Task.CompletedTask);
 
-        var host = ConsumerService.CreateHost<StopMiningCommandResult>(
+        var host = TestsEnvironmentService.CreateHost<StopMiningCommandResult>(
             _broker, Registrations(), typeof(TerminateStopMiningCommand));
         var queueName = $"rig_{rigId}";
 
@@ -307,7 +307,7 @@ internal class StopMiningCommandResultConsumerTests
 
         // Act
 
-        await ConsumerService.PublishAsync(queueName, ConsumerService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
 
 
         // Assert
