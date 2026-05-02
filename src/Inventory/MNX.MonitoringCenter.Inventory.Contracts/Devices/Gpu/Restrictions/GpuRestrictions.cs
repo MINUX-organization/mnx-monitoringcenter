@@ -1,4 +1,5 @@
 ﻿using MessagePack;
+using System.Text.Json.Serialization;
 
 namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Gpu.Restrictions;
 

@@ -1,6 +1,4 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices;
-
-namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
+﻿namespace MNX.MonitoringCenter.Inventory.Contracts.Devices.Motherboard;
 
 /// <summary>
 /// Информация о поддерживаемой оперативной памяти.

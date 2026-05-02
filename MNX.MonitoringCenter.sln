@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.7.34202.233
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11716.220 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{B019F5E8-535B-4FBB-9495-B64EF4079E92}"
 EndProject
@@ -68,6 +68,18 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MNX.MonitoringCenter.Management.UseCases.Mapping", "src\Management\MNX.MonitoringCenter.Management.Mapping\MNX.MonitoringCenter.Management.UseCases.Mapping.csproj", "{B65FC74B-C7E0-4D54-93A2-18CAEC95A1D7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.RigsApi.Contracts.Events", "src\MNX.MonitoringCenter.RigsApi.Contracts.Events\MNX.MonitoringCenter.RigsApi.Contracts.Events.csproj", "{B3D70E56-B680-469D-8032-CB1843C19D1B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Management", "Management", "{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Management.UseCases.Mapping.Tests", "tests\Management\MNX.MonitoringCenter.Management.UseCases.Mapping.Tests\MNX.MonitoringCenter.Management.UseCases.Mapping.Tests.csproj", "{AEC2E2D2-7FB2-4AEA-8210-57AB35E96267}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Management.Tests.Service", "tests\Management\MNX.MonitoringCenter.Management.Tests.Service\MNX.MonitoringCenter.Management.Tests.Service.csproj", "{055A0233-0B7E-4C13-AD8E-220D01910BBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Management.DataAccess.Tests", "tests\Management\MNX.MonitoringCenter.Management.DataAccess.Tests\MNX.MonitoringCenter.Management.DataAccess.Tests.csproj", "{408B96B7-88FA-461C-8355-67479206D7CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.Management.UseCases.Tests", "tests\Management\MNX.MonitoringCenter.Management.UseCases.Tests\MNX.MonitoringCenter.Management.UseCases.Tests.csproj", "{2AE97254-D6E2-408A-BE3F-B3120993A296}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MNX.MonitoringCenter.RigsApi.Service.Tests", "tests\RigsApi\MNX.MonitoringCenter.RigsApi.Service.Tests\MNX.MonitoringCenter.RigsApi.Service.Tests.csproj", "{126CA36B-5EA8-47C1-BD99-C5B9CC33BDA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -179,6 +191,26 @@ Global
 		{B3D70E56-B680-469D-8032-CB1843C19D1B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B3D70E56-B680-469D-8032-CB1843C19D1B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B3D70E56-B680-469D-8032-CB1843C19D1B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEC2E2D2-7FB2-4AEA-8210-57AB35E96267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEC2E2D2-7FB2-4AEA-8210-57AB35E96267}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEC2E2D2-7FB2-4AEA-8210-57AB35E96267}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEC2E2D2-7FB2-4AEA-8210-57AB35E96267}.Release|Any CPU.Build.0 = Release|Any CPU
+		{055A0233-0B7E-4C13-AD8E-220D01910BBB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{055A0233-0B7E-4C13-AD8E-220D01910BBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{055A0233-0B7E-4C13-AD8E-220D01910BBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{055A0233-0B7E-4C13-AD8E-220D01910BBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{408B96B7-88FA-461C-8355-67479206D7CF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{408B96B7-88FA-461C-8355-67479206D7CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{408B96B7-88FA-461C-8355-67479206D7CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{408B96B7-88FA-461C-8355-67479206D7CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AE97254-D6E2-408A-BE3F-B3120993A296}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AE97254-D6E2-408A-BE3F-B3120993A296}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AE97254-D6E2-408A-BE3F-B3120993A296}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AE97254-D6E2-408A-BE3F-B3120993A296}.Release|Any CPU.Build.0 = Release|Any CPU
+		{126CA36B-5EA8-47C1-BD99-C5B9CC33BDA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{126CA36B-5EA8-47C1-BD99-C5B9CC33BDA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{126CA36B-5EA8-47C1-BD99-C5B9CC33BDA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{126CA36B-5EA8-47C1-BD99-C5B9CC33BDA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -215,6 +247,12 @@ Global
 		{A4AB0DA0-8426-46F7-AB7B-CB373A2880D3} = {0B788845-9795-4316-881A-7D19D0FC9E8E}
 		{B65FC74B-C7E0-4D54-93A2-18CAEC95A1D7} = {9C628EEF-6EAA-4451-83D8-74D9E717C558}
 		{B3D70E56-B680-469D-8032-CB1843C19D1B} = {B019F5E8-535B-4FBB-9495-B64EF4079E92}
+		{36D591C7-65C7-A0D1-1CBC-10CDE441BDC8} = {0971EE51-2886-44E6-8FA4-11B606DBFD61}
+		{AEC2E2D2-7FB2-4AEA-8210-57AB35E96267} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{055A0233-0B7E-4C13-AD8E-220D01910BBB} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{408B96B7-88FA-461C-8355-67479206D7CF} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{2AE97254-D6E2-408A-BE3F-B3120993A296} = {36D591C7-65C7-A0D1-1CBC-10CDE441BDC8}
+		{126CA36B-5EA8-47C1-BD99-C5B9CC33BDA9} = {0B788845-9795-4316-881A-7D19D0FC9E8E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4FBECFB8-CC2B-400B-A406-389D1F31BF93}

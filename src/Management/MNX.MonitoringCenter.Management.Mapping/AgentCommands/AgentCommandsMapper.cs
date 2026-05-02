@@ -32,11 +32,11 @@ public class AgentCommandsMapper : IAgentCommandsMapper
 
         foreach (var model in models)
         {
-            var settigsModel = MapTargetToSettings(model.FlightSheet);
+            var settingsModel = MapTargetToSettings(model.FlightSheet);
             var worker = new WorkerSettings()
             {
                 WorkerId = model.Device.Id,
-                SettingsModel = settigsModel
+                SettingsModel = settingsModel
             };
             workerSettings.Add(worker);
         }

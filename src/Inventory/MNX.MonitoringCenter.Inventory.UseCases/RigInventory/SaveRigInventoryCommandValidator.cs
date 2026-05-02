@@ -67,7 +67,7 @@ public class SaveRigInventoryCommandValidator : AbstractValidator<SaveRigInvento
                                 !string.IsNullOrEmpty(adapter.GlobalIP) &&
                                 !string.IsNullOrEmpty(adapter.LocalIP)))
                             .WithMessage($"At least one {nameof(NetworkAdapter)} must have whole IPs (local and global)")
-                            .ForEach(x => x.SetValidator(new NetworkAdaperModelValidator()));
+                            .ForEach(x => x.SetValidator(new NetworkAdapterModelValidator()));
 
                         RuleFor(x => x.Message.Inventory.Motherboard)
                             .NotNull()

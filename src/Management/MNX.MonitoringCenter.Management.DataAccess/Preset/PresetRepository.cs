@@ -40,6 +40,7 @@ public class PresetRepository : IPresetRepository
                           OwnerId = preset.OwnerId,
                           Name = preset.Name,
                           DeviceName = preset.DeviceName,
+                          IsVisible = preset.IsVisible,
                           OverclockingId = overclocking.Id,
                           Overclocking = _mapper.Map<IOverclocking>(overclocking)
                       };
@@ -64,6 +65,7 @@ public class PresetRepository : IPresetRepository
                           OwnerId = preset.OwnerId,
                           Name = preset.Name,
                           DeviceName = preset.DeviceName,
+                          IsVisible = preset.IsVisible,
                           OverclockingId = overclocking.Id,
                           Overclocking = _mapper.Map<IOverclocking>(overclocking)
                       };

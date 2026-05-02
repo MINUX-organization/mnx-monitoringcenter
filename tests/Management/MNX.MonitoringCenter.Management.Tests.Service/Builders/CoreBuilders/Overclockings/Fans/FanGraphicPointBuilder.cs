@@ -1,0 +1,38 @@
+﻿using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
+
+namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings.Fans;
+
+public class FanGraphicPointBuilder
+{
+    protected int _pointIndex = 0;
+    protected int _fanSpeedValueTarget = 0;
+    protected int _temperatureValueTarget = 0;
+
+    internal FanGraphicPointBuilder WithPointIndex(int pointIndex)
+    {
+        _pointIndex = pointIndex;
+        return this;
+    }
+
+    public FanGraphicPointBuilder WithFanSpeedValueTarget(int fanSpeedValueTarget)
+    {
+        _fanSpeedValueTarget = fanSpeedValueTarget;
+        return this;
+    }
+
+    public FanGraphicPointBuilder WithTemperatureValueTarget(int temperatureValueTarget)
+    {
+        _temperatureValueTarget = temperatureValueTarget;
+        return this;
+    }
+
+    public FanGraphicPoint Build()
+    {
+        return new FanGraphicPoint
+        {
+            FanSpeedValueTarget = _fanSpeedValueTarget,
+            PointIndex = _pointIndex,
+            TemperatureValueTarget = _temperatureValueTarget,
+        };
+    }
+}

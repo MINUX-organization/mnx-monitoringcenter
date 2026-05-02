@@ -1,0 +1,32 @@
+﻿using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.MiningConfigInputModels;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models;
+using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models.MiningConfig;
+
+namespace MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
+
+public class FlightSheetTargetInputModelBuilder
+{
+    protected MiningConfigInputModel? _miningConfig = null;
+    protected Guid _minerId = Guid.NewGuid();
+
+    public FlightSheetTargetInputModelBuilder WithMiningConfig(Func<MiningConfigInputModel> factory)
+    {
+        _miningConfig = factory();
+        return this;
+    }
+
+    public FlightSheetTargetInputModelBuilder WithMinerId(Guid minerId)
+    {
+        _minerId = minerId;
+        return this;
+    }
+
+    public FlightSheetTargetInputModel Build()
+    {
+        return new FlightSheetTargetInputModel
+        {
+            MinerId = _minerId,
+            MiningConfig = _miningConfig ?? new GpuMiningConfigInputModelBuilder().Build()
+        };
+    }
+}

@@ -30,7 +30,6 @@ public class MinerMapper : IMinerMapper
     /// <inheritdoc/>
     public MinerModel MapToModel(Miner entity)
     {
-
         var algorithms = new List<MinerAlgorithmModel>();
         foreach (var item in entity.SupportedAlgorithms)
         {
