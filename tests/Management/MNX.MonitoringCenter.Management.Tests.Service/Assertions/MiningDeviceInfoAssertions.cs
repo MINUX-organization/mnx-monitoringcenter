@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Contracts.MiningDevice;
 using MNX.MonitoringCenter.Management.Core.Mining.MiningDevice;
 using NUnit.Framework;
 
@@ -9,8 +10,13 @@ public static class MiningDeviceInfoAssertions
     public static void ShouldBeEqualTo(this IEnumerable<MiningDeviceInfo?>? checking,
         IEnumerable<MiningDeviceInfo?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .Where(x => x is not null)
             .OrderBy(x => x!.Id)
@@ -29,8 +35,13 @@ public static class MiningDeviceInfoAssertions
 
     public static void ShouldBeEqualTo(this MiningDeviceInfo? checking, MiningDeviceInfo? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
@@ -48,8 +59,13 @@ public static class MiningDeviceInfoAssertions
 
     public static void ShouldBeEqualTo(this MiningDeviceModel? checking, MiningDeviceInfo? expected, (string MinerName, string MinerVersion) expectedParams)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking.Id, Is.EqualTo(expected.Id));

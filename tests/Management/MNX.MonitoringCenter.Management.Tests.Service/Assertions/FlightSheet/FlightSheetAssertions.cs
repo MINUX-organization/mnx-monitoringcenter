@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.EditFightSheet;
@@ -14,8 +15,13 @@ public static partial class FlightSheetAssertions
     public static void ShouldBeEqualTo(this IEnumerable<FlightSheet?>? checking,
         IEnumerable<FlightSheet?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .OfType<FlightSheet>()
             .OrderBy(x => x!.Id)
@@ -34,8 +40,13 @@ public static partial class FlightSheetAssertions
 
     public static void ShouldBeEqualTo(this FlightSheet? checking, FlightSheet? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
@@ -48,8 +59,13 @@ public static partial class FlightSheetAssertions
     public static void ShouldBeEqualTo(this IEnumerable<FlightSheetTarget?>? checking,
         IEnumerable<FlightSheetTarget?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .OfType<FlightSheetTarget>()
             .OrderBy(x => x.Id)
@@ -68,8 +84,13 @@ public static partial class FlightSheetAssertions
 
     public static void ShouldBeEqualTo(this FlightSheetTarget? checking, FlightSheetTarget? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
@@ -85,8 +106,13 @@ public static partial class FlightSheetAssertions
     public static void ShouldBeEqualTo(this IEnumerable<BaseMiningConfig?>? checking,
         IEnumerable<BaseMiningConfig?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .OfType<BaseMiningConfig>()
             .OrderBy(x => x.DeviceType)
@@ -109,8 +135,13 @@ public static partial class FlightSheetAssertions
 
     public static void ShouldBeEqualTo(this BaseMiningConfig? checking, BaseMiningConfig? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.DeviceType, Is.EqualTo(expected!.DeviceType));
@@ -133,8 +164,13 @@ public static partial class FlightSheetAssertions
 
     public static void ShouldBeEqualTo(this FlightSheet? checking, FlightSheetInputModel? expected, Guid expectedUserId)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking.Id, Is.Not.EqualTo(Guid.Empty));
@@ -146,8 +182,13 @@ public static partial class FlightSheetAssertions
 
     public static void ShouldBeEqualTo(this FlightSheet? checking, EditFlightSheetCommand? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking.Id, Is.EqualTo(expected.Id));
@@ -159,8 +200,13 @@ public static partial class FlightSheetAssertions
 
     public static void ShouldBeEqualTo(this FlightSheetModel? checking, FlightSheet? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking.Id, Is.EqualTo(expected.Id));

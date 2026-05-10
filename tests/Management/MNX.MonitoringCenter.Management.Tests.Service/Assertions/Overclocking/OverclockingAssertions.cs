@@ -1,9 +1,8 @@
-﻿using MNX.MonitoringCenter.Inventory.Contracts.Devices.Cpu;
+﻿using FluentAssertions;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking.Cpu;
 using MNX.MonitoringCenter.Management.Contracts.Overclocking.Gpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking;
-using MNX.MonitoringCenter.Management.Core.Overclocking.Cpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Enums;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
 using NUnit.Framework;
@@ -15,8 +14,13 @@ public static partial class OverclockingAssertions
     public static void ShouldBeEquivalentTo(this IEnumerable<IOverclocking?>? checking,
         IEnumerable<IOverclocking?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!.Where(x => x is not null)
             .OrderBy(x => x!.Id)
             .ToList();
@@ -33,8 +37,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, IOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
@@ -60,8 +69,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, Inventory.Contracts.Devices.Gpu.Overclocking.NvidiaGpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Core.Overclocking.Gpu.NvidiaGpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -90,8 +104,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this Inventory.Contracts.Devices.Overclocking? checking, Core.Overclocking.Gpu.NvidiaGpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Inventory.Contracts.Devices.Gpu.Overclocking.NvidiaGpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -110,8 +129,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, Inventory.Contracts.Devices.Gpu.Overclocking.AmdGpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Core.Overclocking.Gpu.AmdGpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -138,8 +162,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this Inventory.Contracts.Devices.Overclocking? checking, Core.Overclocking.Gpu.AmdGpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Inventory.Contracts.Devices.Gpu.Overclocking.AmdGpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -163,8 +192,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, Inventory.Contracts.Devices.Cpu.CpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Core.Overclocking.Cpu.CpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -179,8 +213,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this Inventory.Contracts.Devices.Overclocking? checking, Core.Overclocking.Cpu.CpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Inventory.Contracts.Devices.Cpu.CpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -192,8 +231,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, AmdGpuOverclockingModel? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Core.Overclocking.Gpu.AmdGpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -220,8 +264,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, AmdGpuOverclockingModel? expected, Guid originalId)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Core.Overclocking.Gpu.AmdGpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -248,8 +297,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclockingModel? checking, Core.Overclocking.Gpu.AmdGpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<AmdGpuOverclockingModel>());
         Assert.Multiple(() =>
         {
@@ -275,8 +329,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, NvidiaGpuOverclockingModel? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Core.Overclocking.Gpu.NvidiaGpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -298,8 +357,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, Core.Overclocking.Gpu.NvidiaGpuOverclocking? expected, Guid originalId)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<Core.Overclocking.Gpu.NvidiaGpuOverclocking>());
         Assert.Multiple(() =>
         {
@@ -321,8 +385,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclockingModel? checking, Core.Overclocking.Gpu.NvidiaGpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.Not.Null);
         Assert.That(checking, Is.TypeOf<NvidiaGpuOverclockingModel>());
         Assert.Multiple(() =>
@@ -344,8 +413,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, CpuOverclockingModel? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.TargetDeviceType, Is.EqualTo(expected!.TargetDeviceType));
@@ -360,8 +434,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclocking? checking, CpuOverclockingModel? expected, Guid originalId)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.TargetDeviceType, Is.EqualTo(expected!.TargetDeviceType));
@@ -376,8 +455,13 @@ public static partial class OverclockingAssertions
 
     public static void ShouldBeEquivalentTo(this IOverclockingModel? checking, Core.Overclocking.Cpu.CpuOverclocking? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking, Is.TypeOf<CpuOverclockingModel>());
         Assert.Multiple(() =>
         {

@@ -74,7 +74,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(data)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, data, _broker);
 
 
         // Assert
@@ -130,7 +130,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(data)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, data, _broker);
 
 
         // Assert
@@ -180,7 +180,7 @@ internal class RigInventoryMsgConsumerTests
 
         // Act
 
-        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(data)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, data, _broker);
 
 
         // Assert

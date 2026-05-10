@@ -90,7 +90,7 @@ public class MiningConfigMapper : IMiningConfigMapper
         throw new NotImplementedException($"Device type {model.DeviceType} is not supported");
     }
 
-    private List<MiningCoinConfig> MapInputCoinConfigsToCore(List<MiningCoinConfigInputModel> models)
+    private static List<MiningCoinConfig> MapInputCoinConfigsToCore(List<MiningCoinConfigInputModel> models)
     {
         var coinConfigs = new List<MiningCoinConfig>();
         foreach (var model in models)

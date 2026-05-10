@@ -72,7 +72,7 @@ internal class ApplyWorkerSettingsCommandResultConsumerTests
 
         // Act
 
-        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, message, _broker);
 
 
         // Assert

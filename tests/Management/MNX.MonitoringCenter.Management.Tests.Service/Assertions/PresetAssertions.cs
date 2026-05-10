@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Contracts.Presets;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Contracts.Presets;
 using MNX.MonitoringCenter.Management.Tests.Service.Assertions.Overclocking;
 using MNX.MonitoringCenter.Management.UseCases.Overclocking.Presets.Commands;
 using NUnit.Framework;
@@ -11,8 +12,13 @@ public static class PresetAssertions
 {
     public static void ShouldBeEqualTo(this IEnumerable<Preset?>? checking, IEnumerable<Preset?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .Where(x => x is not null)
             .OrderBy(x => x!.Id)
@@ -32,8 +38,13 @@ public static class PresetAssertions
 
     public static void ShouldBeEqualTo(this IEnumerable<PresetModel?>? checking, IEnumerable<Preset?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .Where(x => x is not null)
             .OrderBy(x => x!.Id)
@@ -53,8 +64,13 @@ public static class PresetAssertions
 
     public static void ShouldBeEqualTo(this Preset? checking, Preset? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
@@ -69,8 +85,13 @@ public static class PresetAssertions
 
     public static void ShouldBeEqualTo(this Preset? checking, PresetInputModel? expected, Guid expectedOwnerId)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking.Overclocking, Is.Not.Null);
         Assert.Multiple(() =>
         {
@@ -87,8 +108,13 @@ public static class PresetAssertions
 
     public static void ShouldBeEqualTo(this Preset? checking, PresetInputModel? expected, Preset originalPreset)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.That(checking.Overclocking, Is.Not.Null);
         Assert.Multiple(() =>
         {
@@ -105,8 +131,13 @@ public static class PresetAssertions
 
     public static void ShouldBeEqualTo(this PresetModel? checking, Preset? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking.Id, Is.EqualTo(expected.Id));

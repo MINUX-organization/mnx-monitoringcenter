@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Overclocking;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Core.Overclocking;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Cpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
@@ -63,8 +64,13 @@ public static partial class OverclockingAssertions
 
     private static void AssertFan(IFanOverclocking? expected, IFanOverclocking? checking)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));

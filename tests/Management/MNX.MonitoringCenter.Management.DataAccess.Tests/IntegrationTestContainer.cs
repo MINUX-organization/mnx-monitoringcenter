@@ -39,6 +39,7 @@ public static class IntegrationTestContainer
         if (Container is not null)
         {
             await Container.StopAsync();
+            await Container.DisposeAsync();
             _container = null;
         }
     }

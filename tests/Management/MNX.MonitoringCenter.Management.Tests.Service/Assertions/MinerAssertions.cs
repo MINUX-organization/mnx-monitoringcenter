@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Core.Mining.Miner;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Core.Mining.Miner;
 using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Management.Tests.Service.Assertions;
@@ -7,8 +8,13 @@ public static class MinerAssertions
 {
     public static void ShouldBeEqualTo(this IEnumerable<Miner?>? checking, IEnumerable<Miner?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .Where(x => x is not null)
             .OrderBy(x => x!.Id)
@@ -27,8 +33,13 @@ public static class MinerAssertions
 
     public static void ShouldBeEqualTo(this Miner? checking, Miner? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));

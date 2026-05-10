@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Wallet;
@@ -37,7 +38,15 @@ public sealed class WalletMapperTests
 
         // Assert
 
-        mappedWallet.ShouldBeEqualTo(addWalletCommand);
+        mappedWallet.Should().Satisfy<Core.Mining.Wallet>(x =>
+        {
+            x.Id.Should().NotBe(Guid.Empty);
+            x.Name.Should().Be(addWalletCommand.Model.Name);
+            x.Address.Should().Be(addWalletCommand.Model.Address);
+            x.CryptocurrencyId.Should().Be(addWalletCommand.Model.CryptocurrencyId);
+            x.OwnerId.Should().Be(addWalletCommand.UserId);
+            x.Cryptocurrency.Should().BeNull();
+        });
     }
 
     [Test]
@@ -59,7 +68,15 @@ public sealed class WalletMapperTests
 
         // Assert
 
-        mappedWallet.ShouldBeEqualTo(editWalletCommand);
+        mappedWallet.Should().Satisfy<Core.Mining.Wallet>(x =>
+        {
+            x.Id.Should().Be(editWalletCommand.Id);
+            x.Name.Should().Be(editWalletCommand.Model.Name);
+            x.Address.Should().Be(editWalletCommand.Model.Address);
+            x.CryptocurrencyId.Should().Be(editWalletCommand.Model.CryptocurrencyId);
+            x.Cryptocurrency.Should().BeNull();
+            x.OwnerId.Should().Be(editWalletCommand.UserId);
+        });
     }
 
     [Test]
@@ -82,6 +99,13 @@ public sealed class WalletMapperTests
 
         // Assert
 
-        mappedModel.ShouldBeEqualTo(wallet);
+        mappedModel.Should().Satisfy<WalletModel>(x =>
+        {
+            x.Id.Should().Be(wallet.Id);
+            x.Name.Should().Be(wallet.Name);
+            x.Address.Should().Be(wallet.Address);
+            x.CryptocurrencyId.Should().Be(wallet.CryptocurrencyId);
+            x.Cryptocurrency.Should().Be(wallet.Cryptocurrency!.FullName);
+        });
     }
 }

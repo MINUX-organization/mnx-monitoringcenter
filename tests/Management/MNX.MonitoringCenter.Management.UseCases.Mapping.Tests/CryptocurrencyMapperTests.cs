@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Tests.Service.Assertions;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Cryptocurrency;
@@ -33,7 +34,16 @@ public sealed class CryptocurrencyMapperTests
 
         // Assert
 
-        mappedEntity.ShouldBeEqualTo(model, userId);
+        mappedEntity.Should().NotBeNull();
+        mappedEntity.Should().Satisfy<Core.Mining.Cryptocurrency>(x =>
+        {
+            x.Id.Should().NotBe(Guid.Empty);
+            x.ShortName.Should().Be(model.ShortName);
+            x.FullName.Should().Be(model.FullName);
+            x.OwnerId.Should().Be(userId);
+            x.AlgorithmId.Should().Be(model.AlgorithmId);
+            x.Algorithm.Should().BeNull();
+        });
     }
 
     [Test]
@@ -54,6 +64,20 @@ public sealed class CryptocurrencyMapperTests
 
         // Assert
 
-        mappedModel.ShouldBeEqualTo(cryptocurrency);
+        mappedModel.Should().NotBeNull();
+        mappedModel.Should().Satisfy<CryptocurrencyModel>(x =>
+        {
+            x.Id.Should().Be(cryptocurrency.Id);
+            x.ShortName.Should().Be(cryptocurrency.ShortName);
+            x.FullName.Should().Be(cryptocurrency.FullName);
+            x.OwnerId.Should().Be(cryptocurrency.OwnerId);
+            x.Algorithm.Should().NotBeNull();
+            x.Algorithm.Should().Satisfy<Core.Mining.Algorithm>(y =>
+            {
+                y.Id.Should().Be(cryptocurrency.AlgorithmId);
+                y.Name.Should().Be(cryptocurrency.Algorithm!.Name);
+                y.OwnerId.Should().Be(cryptocurrency.Algorithm!.OwnerId);
+            });
+        });
     }
 }

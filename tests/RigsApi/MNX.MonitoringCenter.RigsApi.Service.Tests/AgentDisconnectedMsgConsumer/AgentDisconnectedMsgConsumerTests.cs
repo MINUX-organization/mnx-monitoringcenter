@@ -71,7 +71,7 @@ internal class AgentDisconnectedMsgConsumerTests
 
         // Act
 
-        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, message, _broker);
 
 
         // Assert
@@ -108,7 +108,7 @@ internal class AgentDisconnectedMsgConsumerTests
 
         // Act
 
-        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, message, _broker);
 
 
         // Assert
@@ -155,7 +155,7 @@ internal class AgentDisconnectedMsgConsumerTests
 
         // Act
 
-        await TestsEnvironmentService.Publish(queueName, TestsEnvironmentService.Serialize(message)!, _broker);
+        await TestsEnvironmentService.Publish(queueName, message, _broker);
 
 
         // Assert

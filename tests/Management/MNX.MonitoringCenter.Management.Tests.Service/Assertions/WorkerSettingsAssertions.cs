@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Agent.Commands.Mining.ApplySettings.Models;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet;
 using NUnit.Framework;
@@ -9,8 +10,13 @@ public static class WorkerSettingsAssertions
 {
     public static void ShouldBeEqual(this List<WorkerSettings>? checking, List<DeviceFLightSheet>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .Where(x => x is not null)
             .OrderBy(x => x!.Device.Id)

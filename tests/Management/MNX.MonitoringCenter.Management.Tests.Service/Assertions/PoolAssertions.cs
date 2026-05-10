@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Contracts;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Contracts;
 using MNX.MonitoringCenter.Management.Core.Mining;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.AddPool;
 using MNX.MonitoringCenter.Management.UseCases.Mining.Pool.Commands.EditPool;
@@ -10,8 +11,13 @@ public static class PoolAssertions
 {
     public static void ShouldBeEqualTo(this IEnumerable<Pool?>? checking, IEnumerable<Pool?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!
             .Where(x => x is not null)
             .OrderBy(x => x!.Id)
@@ -30,8 +36,13 @@ public static class PoolAssertions
 
     public static void ShouldBeEqualTo(this Pool? checking, Pool? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
@@ -46,8 +57,13 @@ public static class PoolAssertions
 
     public static void ShouldBeEqualTo(this Pool? checking, AddPoolCommand? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking.Id, Is.Not.EqualTo(Guid.Empty));
@@ -63,8 +79,13 @@ public static class PoolAssertions
 
     public static void ShouldBeEqualTo(this Pool? checking, EditPoolCommand? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
@@ -80,8 +101,13 @@ public static class PoolAssertions
 
     public static void ShouldBeEqualTo(this PoolModel? checking, Pool? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking.Id, Is.EqualTo(expected.Id));

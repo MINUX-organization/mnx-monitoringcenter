@@ -1,6 +1,6 @@
-﻿using MNX.MonitoringCenter.Management.Contracts.Overclocking.Gpu.Fan;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Contracts.Overclocking.Gpu.Fan;
 using MNX.MonitoringCenter.Management.Core.Overclocking.Gpu.Fan;
-using MNX.MonitoringCenter.Management.Tests.Service.Assertions.FanModels;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.ContractBuilders.Overclockings.Fan;
 using MNX.MonitoringCenter.Management.Tests.Service.Builders.CoreBuilders.Overclockings.Fans;
 using MNX.MonitoringCenter.Management.UseCases.Mapping.Fan.Model;
@@ -30,17 +30,17 @@ public sealed class FanTargetTemperatureModelMapperTests
 
 
         // Assert
+        var fan = mappedFanOverclocking
+            .Should().BeOfType<FanOverclockingWithTargetTemperature>()
+            .Which;
 
-        Assert.That(mappedFanOverclocking, Is.Not.Null);
-        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedFanOverclocking.Id, Is.Not.EqualTo(Guid.Empty));
-            Assert.That(mappedFanOverclocking.Type, Is.EqualTo(fanOverclockingModel.FanOverclockingType));
+        fan.Id.Should().NotBe(Guid.Empty);
+        fan.Type.Should().Be(fanOverclockingModel.FanOverclockingType);
 
-            var fanOverclocking = (FanOverclockingWithTargetTemperature)mappedFanOverclocking;
-            fanOverclocking.ShouldBeEqualTo(fanOverclockingModel);
-        });
+        fan.MaxTargetSpeed.Should().Be(fanOverclockingModel.MaxTargetSpeed);
+        fan.MinTargetSpeed.Should().Be(fanOverclockingModel.MinTargetSpeed);
+        fan.TargetCoreTemperature.Should().Be(fanOverclockingModel.TargetCoreTemperature);
+        fan.TargetMemoryTemperature.Should().Be(fanOverclockingModel.TargetMemoryTemperature);
     }
 
     [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockingModels))]
@@ -58,15 +58,17 @@ public sealed class FanTargetTemperatureModelMapperTests
 
         // Assert
 
-        Assert.That(mappedFanOverclocking, Is.Not.Null);
-        Assert.That(mappedFanOverclocking, Is.TypeOf<FanOverclockingWithTargetTemperature>());
-        Assert.Multiple(() =>
-        {
-            mappedFanOverclocking.ShouldBeEqualTo(fanOverclockingModel, fanOverclockingId);
+        var fan = mappedFanOverclocking
+            .Should().BeOfType<FanOverclockingWithTargetTemperature>()
+            .Which;
 
-            var fanOverclocking = (FanOverclockingWithTargetTemperature)mappedFanOverclocking;
-            fanOverclocking.ShouldBeEqualTo(fanOverclockingModel);
-        });
+        fan.Id.Should().Be(fanOverclockingId);
+        fan.Type.Should().Be(fanOverclockingModel.FanOverclockingType);
+
+        fan.MaxTargetSpeed.Should().Be(fanOverclockingModel.MaxTargetSpeed);
+        fan.MinTargetSpeed.Should().Be(fanOverclockingModel.MinTargetSpeed);
+        fan.TargetCoreTemperature.Should().Be(fanOverclockingModel.TargetCoreTemperature);
+        fan.TargetMemoryTemperature.Should().Be(fanOverclockingModel.TargetMemoryTemperature);
     }
 
     [TestCaseSource(typeof(FanOverclockingTestCases), nameof(FanOverclockingTestCases.FanOverclockings))]
@@ -80,15 +82,15 @@ public sealed class FanTargetTemperatureModelMapperTests
 
         // Assert
 
-        Assert.That(mappedFanOverclockingModel, Is.Not.Null);
-        Assert.That(mappedFanOverclockingModel, Is.TypeOf<FanOverclockingWithTargetTemperatureModel>());
-        Assert.Multiple(() =>
-        {
-            Assert.That(mappedFanOverclockingModel.FanOverclockingType, Is.EqualTo(fanOverclockingCore.Type));
+        var fan = mappedFanOverclockingModel
+            .Should().BeOfType<FanOverclockingWithTargetTemperatureModel>()
+            .Which;
 
-            var fanOverclockingModel = (FanOverclockingWithTargetTemperatureModel)mappedFanOverclockingModel;
-            fanOverclockingModel.ShouldBeEqualTo(fanOverclockingCore);
-        });
+        fan.FanOverclockingType.Should().Be(fanOverclockingCore.Type);
+        fan.MaxTargetSpeed.Should().Be(fanOverclockingCore.MaxTargetSpeed);
+        fan.MinTargetSpeed.Should().Be(fanOverclockingCore.MinTargetSpeed);
+        fan.TargetCoreTemperature.Should().Be(fanOverclockingCore.TargetCoreTemperature);
+        fan.TargetMemoryTemperature.Should().Be(fanOverclockingCore.TargetMemoryTemperature);
     }
     
     private static class FanOverclockingTestCases

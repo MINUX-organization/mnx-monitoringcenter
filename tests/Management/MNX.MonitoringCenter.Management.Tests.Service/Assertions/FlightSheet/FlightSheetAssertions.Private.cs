@@ -1,4 +1,5 @@
-﻿using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
+﻿using FluentAssertions;
+using MNX.MonitoringCenter.Management.Contracts.FlightSheet;
 using MNX.MonitoringCenter.Management.Core.Mining.FlightSheet.Target;
 using MNX.MonitoringCenter.Management.Core.Mining.Miner.Configs;
 using MNX.MonitoringCenter.Management.UseCases.Mining.FlightSheet.Commands.Models;
@@ -25,8 +26,13 @@ public static partial class FlightSheetAssertions
     private static void ShouldBeEqualTo(this IEnumerable<MiningCoinConfig?>? checking,
         IEnumerable<MiningCoinConfig?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected!.Where(x => x is not null)
             .OrderBy(x => x!.Id)
             .ToList();
@@ -43,8 +49,13 @@ public static partial class FlightSheetAssertions
 
     private static void ShouldBeEqualTo(this MiningCoinConfig? checking, MiningCoinConfig? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         Assert.Multiple(() =>
         {
             Assert.That(checking!.Id, Is.EqualTo(expected!.Id));

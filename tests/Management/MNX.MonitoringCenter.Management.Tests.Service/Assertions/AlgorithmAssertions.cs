@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using FluentAssertions;
+using NUnit.Framework;
 
 namespace MNX.MonitoringCenter.Management.Tests.Service.Assertions;
 
@@ -8,8 +9,13 @@ public static class AlgorithmAssertions
 {
     public static void ShouldBeEqualTo(this IEnumerable<Algorithm?>? checking, IEnumerable<Algorithm?>? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
+        if (expected is null)
+        {
+            checking.Should().BeNull();
+            return;
+        }
 
+        checking.Should().NotBeNull();
         var expectedList = expected
             .Where(x => x is not null)
             .OrderBy(x => x!.Id)
@@ -28,13 +34,18 @@ public static class AlgorithmAssertions
 
     public static void ShouldBeEqualTo(this Algorithm? checking, Algorithm? expected)
     {
-        if (!AssertionHelper.AssertNullConsistency(expected, checking)) return;
-
-        Assert.Multiple(() =>
+        if (expected is null)
         {
-            Assert.That(checking!.Id, Is.EqualTo(expected!.Id));
-            Assert.That(checking.Name, Is.EqualTo(checking.Name));
-            Assert.That(checking.OwnerId, Is.EqualTo(checking.OwnerId));
+            checking.Should().BeNull();
+            return;
+        }
+
+        checking.Should().NotBeNull();
+        checking.Should().Satisfy<Algorithm>(x =>
+        {
+            x.Id.Should().Be(expected.Id);
+            x.Name.Should().Be(expected.Name);
+            x.OwnerId.Should().Be(expected.OwnerId);
         });
     }
 }

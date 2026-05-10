@@ -15,8 +15,10 @@ internal static class TestsEnvironmentService
         return new ConsumerHost<T>(provider, broker.Host, broker.Port);
     }
 
-    public static async Task Publish(string queueName, byte[] body, IMessageBrokerFixture brokerFixture)
+    public static async Task Publish(string queueName, object message, IMessageBrokerFixture brokerFixture)
     {
+        var body = Serialize(message);
+
         var factory = new ConnectionFactory
         {
             HostName = brokerFixture.Host,
@@ -35,13 +37,6 @@ internal static class TestsEnvironmentService
             body: body);
 
         await Task.Delay(1000);
-    }
-
-    public static byte[]? Serialize(object message)
-    {
-        var options = MessagePackSerializerOptions.Standard
-            .WithResolver(MessagePack.Resolvers.ContractlessStandardResolver.Instance);
-        return MessagePackSerializer.Serialize(message, options);
     }
 
     public static IServiceCollection AddEventHandler<TEvent, TEventHandler>(this IServiceCollection services)
@@ -76,4 +71,12 @@ internal static class TestsEnvironmentService
 
         return services.BuildServiceProvider();
     }
+
+    private static byte[]? Serialize(object message)
+    {
+        var options = MessagePackSerializerOptions.Standard
+            .WithResolver(MessagePack.Resolvers.ContractlessStandardResolver.Instance);
+        return MessagePackSerializer.Serialize(message, options);
+    }
+
 }
